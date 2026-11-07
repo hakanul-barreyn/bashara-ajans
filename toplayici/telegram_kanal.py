@@ -15,6 +15,7 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 
@@ -98,6 +99,12 @@ def bulten_metni(b, site):
 
 def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    # Anahtarla birlikte fazladan metin yapıştırıldıysa ("Use this token ... HTTP API:", boşluk, satır sonu) yalnızca anahtarı al
+    m = re.search(r"\d{6,12}:[A-Za-z0-9_-]{30,}", token)
+    if m:
+        token = m.group(0)
+    elif token:
+        log(f"Telegram: TELEGRAM_BOT_TOKEN beklenen biçimde değil ({len(token)} karakter; '12345678:ABC…' gibi olmalı)")
     kanal = os.environ.get("TELEGRAM_KANAL", "").strip()
     if not token or not kanal:
         if token or kanal:
