@@ -301,11 +301,13 @@
     if (!liste.length || olaySec) return;
     const ust = el("div", "slayt-ust");
     const bh = el("h2", "bolum", "Gündem"); bh.appendChild(el("span", "bolum-ek", " · birden fazla kaynağın yazdığı olaylar")); ust.appendChild(bh);
-    const okl = el("div", "slayt-oklar");
-    const geri = el("button", "slayt-ok", "‹"), ileri = el("button", "slayt-ok", "›");
-    geri.type = ileri.type = "button"; geri.setAttribute("aria-label", "Önceki olay"); ileri.setAttribute("aria-label", "Sonraki olay");
-    okl.append(geri, ileri); ust.appendChild(okl); kutu.appendChild(ust);
+    kutu.appendChild(ust);
+    const cerceve = el("div", "slayt-cerceve");
     const iz = el("div", "slaytlar"); iz.setAttribute("aria-roledescription", "slayt gösterisi");
+    const OK = (d) => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + (d < 0 ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7") + '"/></svg>';
+    const geri = el("button", "slayt-ok geri"), ileri = el("button", "slayt-ok ileri");
+    geri.type = ileri.type = "button"; geri.innerHTML = OK(-1); ileri.innerHTML = OK(1);
+    geri.setAttribute("aria-label", "Önceki olay"); ileri.setAttribute("aria-label", "Sonraki olay");
     liste.forEach((o, n) => {
       const kp = kapsama(o);
       const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
@@ -315,7 +317,7 @@
         arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
       sl.appendChild(arka);
       const ic = el("div", "slayt-ic");
-      ic.appendChild(el("span", "slayt-sayi", kp.toplam + " kaynak · son " + once(o.son)));
+      ic.appendChild(el("span", "slayt-sayi", (n + 1) + " / " + liste.length + " · " + kp.toplam + " kaynak · son " + once(o.son)));
       ic.appendChild(el("h3", null, o.baslik));
       if (o.not) ic.appendChild(el("p", null, o.not.length > 220 ? o.not.slice(0, 217) + "…" : o.not));
       ic.appendChild(bakisMatrisi(o, true) || cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
@@ -325,27 +327,42 @@
       sl.appendChild(ic);
       iz.appendChild(sl);
     });
-    kutu.appendChild(iz);
-    const noktalar = el("div", "slayt-noktalar");
-    liste.forEach((o, n) => { const d = el("button"); d.type = "button"; d.setAttribute("aria-label", (n + 1) + ". olay"); d.onclick = () => git(n, true); noktalar.appendChild(d); });
+    cerceve.append(iz, geri, ileri);
+    kutu.appendChild(cerceve);
+    const noktalar = el("div", "slayt-noktalar"); noktalar.setAttribute("role", "tablist");
+    liste.forEach((o, n) => {
+      const d = el("button"); d.type = "button"; d.setAttribute("role", "tab");
+      d.setAttribute("aria-label", (n + 1) + ". olay: " + o.baslik); d.title = o.baslik;
+      d.appendChild(el("span", "nokta-ic"));
+      d.addEventListener("click", () => git(n, true));
+      noktalar.appendChild(d);
+    });
     kutu.appendChild(noktalar);
+    const isaretle = () => {
+      [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === slaytNo));
+      geri.disabled = false; ileri.disabled = false;
+    };
+    let kendim = 0; // kendi kaydırmamız sürerken kaydırma olayı seçimi geri almasın
     const git = (n, el_) => {
       slaytNo = (n + liste.length) % liste.length;
-      iz.scrollTo({ left: iz.children[slaytNo].offsetLeft - iz.offsetLeft, behavior: AZ_HAREKET ? "auto" : "smooth" });
-      [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === slaytNo));
+      kendim = Date.now();
+      iz.scrollTo({ left: slaytNo * iz.clientWidth, behavior: AZ_HAREKET ? "auto" : "smooth" });
+      isaretle();
       if (el_) yeniden();
     };
     geri.onclick = () => git(slaytNo - 1, true); ileri.onclick = () => git(slaytNo + 1, true);
     iz.addEventListener("scroll", () => {
+      if (Date.now() - kendim < 700) return;
       const n = Math.round(iz.scrollLeft / Math.max(1, iz.clientWidth));
-      if (n !== slaytNo && n < liste.length) { slaytNo = n; [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === n)); }
+      if (n !== slaytNo && n >= 0 && n < liste.length) { slaytNo = n; isaretle(); }
     }, { passive: true });
+    kutu.onkeydown = (e) => { if (e.key === "ArrowLeft") { e.stopPropagation(); git(slaytNo - 1, true); } if (e.key === "ArrowRight") { e.stopPropagation(); git(slaytNo + 1, true); } };
     let dur = false;
     kutu.addEventListener("mouseenter", () => (dur = true)); kutu.addEventListener("mouseleave", () => (dur = false));
     kutu.addEventListener("focusin", () => (dur = true)); kutu.addEventListener("focusout", () => (dur = false));
     const yeniden = () => { clearInterval(slaytZaman); if (!AZ_HAREKET && liste.length > 1) slaytZaman = setInterval(() => { if (!dur && !document.hidden) git(slaytNo + 1); }, 7000); };
     slaytNo = Math.min(slaytNo, liste.length - 1);
-    requestAnimationFrame(() => { iz.scrollLeft = iz.children[slaytNo].offsetLeft - iz.offsetLeft; [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === slaytNo)); });
+    requestAnimationFrame(() => { iz.scrollLeft = slaytNo * iz.clientWidth; isaretle(); });
     yeniden();
   }
 
