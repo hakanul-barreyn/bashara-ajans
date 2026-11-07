@@ -51,7 +51,10 @@
   function avatar(k, ek) {
     const a = el("div", "avatar " + k.tur + (ek ? " " + ek : ""), bas(k.ad));
     const host = (() => { try { return new URL(k.url).hostname; } catch (e) { return ""; } })();
-    const kaynaklarim = [(logolar[k.id] || {}).url, host && "https://icons.duckduckgo.com/ip3/" + host + ".ico"].filter(Boolean);
+    const ddg = host && "https://icons.duckduckgo.com/ip3/" + host + ".ico";
+    const AK = window.AKTAR || ((u) => u);
+    // Önce aktarıcıdan; İsrail merkezli yayınlarda kaynağın kendi sunucusuna hiç gidilmez
+    const kaynaklarim = [(logolar[k.id] || {}).url && AK((logolar[k.id] || {}).url, 96), ddg && AK(ddg, 96), k.bolge !== "İsrail" && ddg].filter(Boolean);
     if (kaynaklarim.length) {
       const img = document.createElement("img"); img.alt = ""; img.loading = "lazy"; img.referrerPolicy = "no-referrer"; img.decoding = "async";
       let i = 0; img.src = kaynaklarim[0];
@@ -174,8 +177,11 @@
     const kutu = el("div", "gorsel" + (k.hassas ? " hassas" : ""));
     if (h.gorsel) {
       const img = document.createElement("img");
-      img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.referrerPolicy = "no-referrer"; img.src = h.gorsel;
-      img.onerror = () => yerTutucu(kutu, k);
+      img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.referrerPolicy = "no-referrer";
+      img.src = (window.AKTAR || ((u) => u))(h.gorsel, 900);
+      // Aktarıcı getiremezse: İsrail merkezli yayınlarda yer tutucu, diğerlerinde doğrudan kaynaktan bir kez dene
+      let dogrudan = false;
+      img.onerror = () => { if (!dogrudan && k.bolge !== "İsrail" && img.src !== h.gorsel) { dogrudan = true; img.src = h.gorsel; } else yerTutucu(kutu, k); };
       kutu.appendChild(img);
       kutu.appendChild(el("span", "kredi", "Görsel: " + k.ad));
       const ac = el("button", "ac", k.hassas ? "Sahadan görsel; ağır olabilir. Göstermek için dokun" : "Görseli göstermek için dokun"); ac.type = "button";
@@ -336,7 +342,7 @@
       const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
       const gh = o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
       const arka = el("div", "slayt-arka");
-      if (gh) { const img = document.createElement("img"); img.src = gh.gorsel; img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.onerror = () => img.remove(); arka.appendChild(img);
+      if (gh) { const img = document.createElement("img"); img.src = (window.AKTAR || ((u) => u))(gh.gorsel, 1400); img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.onerror = () => img.remove(); arka.appendChild(img);
         arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
       sl.appendChild(arka);
       const ic = el("div", "slayt-ic");

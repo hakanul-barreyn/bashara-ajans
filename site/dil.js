@@ -11,6 +11,12 @@
   if (!dil) { var n = (navigator.language || "tr").toLowerCase(); dil = n.indexOf("tr") === 0 ? "tr" : "en"; }
   try { localStorage.setItem("zbs-dil", dil); } catch (e) {}
   window.DIL = dil; window.YEREL = DILLER[dil].yerel;
+  // Görsel aktarıcı: haber görselleri ve logolar kaynak siteden değil wsrv.nl üzerinden yüklenir;
+  // böylece kaynak siteler (İsrail yayınları dahil) okurun IP adresini görmez. Görseller küçültülüp sıkıştırılır.
+  window.AKTAR = function (url, w) {
+    if (!url || !/^https?:\/\//.test(url)) return url;
+    return "https://wsrv.nl/?url=" + encodeURIComponent(url) + "&w=" + (w || 900) + "&we&output=webp&q=78";
+  };
   document.documentElement.lang = dil; document.documentElement.dir = DILLER[dil].yon;
 
   // ---------------------------------------------------------------- İngilizce sözlük

@@ -25,7 +25,7 @@
   }
   let LG={};fetch("data/logolar.json?t="+Math.floor(Date.now()/36e5)).then(r=>r.json()).then(d=>{LG=d||{};document.querySelectorAll(".avatar[data-k]").forEach(a=>logoTak(a,K.find(x=>String(x.id)===a.dataset.k)));}).catch(()=>{});
   function logoTak(a,k){if(!k||a.querySelector("img"))return;let host="";try{host=new URL(k.url).hostname;}catch(e){}
-    const L=[(LG[k.id]||{}).url,host&&"https://icons.duckduckgo.com/ip3/"+host+".ico"].filter(Boolean);if(!L.length)return;
+    const AK=window.AKTAR||(u=>u),dd=host&&"https://icons.duckduckgo.com/ip3/"+host+".ico";const L=[(LG[k.id]||{}).url&&AK((LG[k.id]||{}).url,96),dd&&AK(dd,96),k.bolge!=="İsrail"&&dd].filter(Boolean);if(!L.length)return;
     const img=document.createElement("img");img.alt="";img.loading="lazy";img.referrerPolicy="no-referrer";let i=0;img.src=L[0];
     img.onerror=()=>{i++;if(i<L.length)img.src=L[i];else img.remove();};img.onload=()=>{if(img.naturalWidth<8)img.onerror();else a.classList.add("logolu");};a.appendChild(img);}
   function avatarK(k){const a=el("div","avatar "+k.tur,bas(k.ad));a.dataset.k=k.id;logoTak(a,k);return a;}
