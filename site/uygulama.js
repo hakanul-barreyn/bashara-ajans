@@ -11,6 +11,9 @@
   const SAYFA = 30;
   const BAYRAK = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
   const MARKA_AD = (window.MARKA && window.MARKA.ad) || "ZBS";
+  const BAYRAK_AE = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
+  // Uyarı bayrağı: İsrail merkezli yayınlar (muhalif basın hariç) ve kaynaklar.json'da bayrak alanı olanlar
+  const bayrakHTML = (k) => k.bayrak === "ae" ? BAYRAK_AE : (k.bolge === "İsrail" && !k.bayraksiz ? BAYRAK : "");
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
@@ -433,7 +436,7 @@
         const r = el("div", "kim-satir");
         const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
-        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail" && !k.bayraksiz) ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); if (ROZETLI[k.tur]) ad.appendChild(el("span", "rozet sahip", ROZETLI[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
+        const ad = el("div", "kim-ad"); if (bayrakHTML(k)) ad.insertAdjacentHTML("afterbegin", bayrakHTML(k)); ad.append(k.ad); if (ROZETLI[k.tur]) ad.appendChild(el("span", "rozet sahip", ROZETLI[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
         if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const bv = o.bakislar && o.bakislar[h.id];
@@ -478,7 +481,7 @@
     ust.appendChild(avatar(k));
     const kim = el("div", "kim");
     const adEl = el("span", "ad", k.ad);
-    if (k.bolge === "İsrail" && !k.bayraksiz) adEl.insertAdjacentHTML("afterbegin", BAYRAK);
+    if (bayrakHTML(k)) adEl.insertAdjacentHTML("afterbegin", bayrakHTML(k));
     kim.appendChild(adEl);
     const yer = el("span", "yer", k.sehir + " · ");
     const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString("tr-TR"); yer.appendChild(z);
