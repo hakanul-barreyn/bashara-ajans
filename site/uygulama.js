@@ -567,7 +567,6 @@
     if (!h.gnews) {
       if (h.arsiv) ey.appendChild(eylem("Arşivlendi ✓", h.arsiv, "arsivli"));
       else ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + h.url));
-      ey.appendChild(eylem("archive.today", "https://archive.ph/?run=1&url=" + encodeURIComponent(h.url)));
     }
     ey.appendChild(paylasDugme(h));
     g.appendChild(ey);
