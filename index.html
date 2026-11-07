@@ -6,48 +6,57 @@
 <title>ZBS</title>
 <meta name="description" content="Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="site/stil.css">
 </head>
 <body>
 <header class="ust">
-  <div class="ust-ic">
-    <a class="marka" href="./" aria-label="ZBS ana sayfa"><span class="logo" aria-hidden="true"></span>ZBS</a>
-    <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
-    <nav class="menu"><a href="kaynaklar.html">Kaynaklar</a></nav>
-  </div>
+  <a class="marka" href="./" aria-label="ZBS ana sayfa">
+    <span class="logo" aria-hidden="true"></span>
+    <span class="marka-ad">ZBS</span>
+  </a>
+  <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
+  <div class="canli" id="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
+  <nav class="menu"><a href="kaynaklar.html">Kaynaklar</a></nav>
 </header>
 
 <main class="duzen">
   <section class="harita-kutu" aria-label="Harita">
     <div id="harita" role="application" aria-label="Yayın organlarının haritası"></div>
-    <p class="harita-not">Daire büyüklüğü şehirdeki yayınlardan gelen haber sayısını gösterir. Bir şehre tıklayınca akış o şehre süzülür.</p>
+    <div class="harita-efsane">
+      <span><i class="nokta"></i> Daire büyüklüğü = haber sayısı</span>
+      <span>Şehre tıkla, akış o şehre süzülsün</span>
+    </div>
   </section>
 
   <section class="akis-kutu" aria-label="Haber akışı">
-    <div class="durum" id="durum">Haberler yükleniyor…</div>
+    <div class="sayilar" id="sayilar"></div>
+
     <div class="suzgec">
-      <div class="satir" id="fBolge" role="group" aria-label="Bölge"></div>
-      <div class="satir">
-        <label class="anahtar"><input type="checkbox" id="fIlgili" checked> Yalnızca Filistin ve bölgeyle ilgili</label>
-        <label class="anahtar"><input type="checkbox" id="fOzet"> Yalnızca Türkçe özeti olanlar</label>
-      </div>
-      <div class="satir">
+      <div class="ara-kutu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
-        <button class="cip sil" id="fSehir" type="button" hidden></button>
+      </div>
+      <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
+      <div class="secenekler">
+        <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Filistin ve bölgeyle ilgili</label>
+        <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Yalnızca Türkçe özetli</label>
+        <button class="sehir-cip" id="fSehir" type="button" hidden></button>
       </div>
     </div>
+
     <div id="akis" class="akis" aria-live="polite"></div>
     <button class="daha" id="daha" type="button" hidden>Daha fazla göster</button>
+
+    <footer class="alt">
+      <p>ZBS haberleri kaynaklardan otomatik toplar ve Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberin altında orijinaline bağlantı var. Yayınların kime ait olduğunu ve hangi çizgide durduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin.</p>
+    </footer>
   </section>
 </main>
 
-<footer class="alt">
-  <p>ZBS haberleri kaynaklardan otomatik toplar ve Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberin altında orijinaline bağlantı var. Kaynakların kim olduğunu ve hangi çizgide durduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin.</p>
-</footer>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="site/uygulama.js"></script>
 </body>
 </html>
