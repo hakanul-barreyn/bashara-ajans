@@ -472,12 +472,18 @@ def gdelt_topla(kaynaklar):
     alanlar = {}
     for k in kaynaklar:
         alanlar.setdefault(alan_adi(k["url"]), []).append(k)
-    liste = list(alanlar)
+    liste = sorted(alanlar)
+    # GitHub sunucuları GDELT'i paylaşımlı IP'den çağırdığı için sık sık 429 alınıyor.
+    # Her çalıştırmada başlangıç grubu kaydırılır; böylece reddedilen gruplar sonraki çalıştırmalarda önce sorulur.
+    gruplar = [liste[i:i + 8] for i in range(0, len(liste), 8)]
+    if gruplar:
+        kay = int(time.time() // 900) % len(gruplar)
+        gruplar = gruplar[kay:] + gruplar[:kay]
     sonuc = {}
-    for i in range(0, len(liste), 8):
+    ret = 0
+    for grup in gruplar:
         if time.time() - BASLANGIC > CALISMA_SURESI - 60:
             break
-        grup = liste[i:i + 8]
         q = "(" + " OR ".join(f"domainis:{a}" for a in grup) + ")"
         url = GDELT + "?" + urllib.parse.urlencode({"query": q, "mode": "artlist", "format": "json", "maxrecords": "250",
                                                      "timespan": "24h", "sort": "datedesc"})
@@ -485,6 +491,18 @@ def gdelt_topla(kaynaklar):
             log("GDELT robots.txt tarafından engelli")
             return sonuc
         kod, metin, _ = getir(url, zaman=40)
+        for bekle in (20, 45):
+            if kod != 429 or time.time() - BASLANGIC > CALISMA_SURESI - 120:
+                break
+            time.sleep(bekle)
+            kod, metin, _ = getir(url, zaman=40)
+        if kod == 429:
+            ret += 1
+            if ret >= 3:
+                log("GDELT üst üste reddediyor; kalan gruplar sonraki çalıştırmaya kaldı")
+                break
+        else:
+            ret = 0
         if kod == 200:
             try:
                 for m in json.loads(metin).get("articles", []):
