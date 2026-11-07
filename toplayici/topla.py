@@ -34,6 +34,7 @@ import ekler  # noqa: E402
 import marka  # noqa: E402
 import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
+import diller  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
@@ -938,6 +939,11 @@ def main():
             gunluk_istek(durum, 1)
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
             if isinstance(sonuc, list):
+                try:
+                    if gunluk_istek(durum) < GEMINI_GUNLUK - 30 and diller.olay_cevir(anahtar, model, sonuc, lambda: gunluk_istek(durum, 1), log=log):
+                        durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+                except Exception as e:
+                    log(f"Olay çevirisi hatası: {e}")
                 yaz(OLAYLAR, {"guncellendi": SIMDI.isoformat(), "olaylar": sonuc})
                 try:
                     log(f"Kanıt defteri: {ekler.kanit_guncelle(KOK, sonuc, eski)} yeni ölçüm")
@@ -961,6 +967,17 @@ def main():
         with ThreadPoolExecutor(max_workers=8) as ex:
             list(ex.map(gorsel_tamamla, eksik))
         log(f"{sum(1 for h in eksik if h.get('gorsel'))}/{len(eksik)} habere görsel bulundu")
+
+    # Özetleri sitenin diğer dillerine çevir (ayrı ve ucuz geçiş; geriye dönük de doldurur)
+    if model and anahtar and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI):
+        try:
+            _, kota = diller.cevir(anahtar, model, eski,
+                                   butce_var=lambda: time.time() - BASLANGIC < 11 * 60 and gunluk_istek(durum) < GEMINI_GUNLUK - 60,
+                                   sayac=lambda: gunluk_istek(durum, 1), log=log)
+            if kota:
+                durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+        except Exception as e:
+            log(f"Çeviri hatası: {e}")
 
     # Olay kümelerini haberlere işle
     olay_veri = oku(OLAYLAR, {"olaylar": []})

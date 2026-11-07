@@ -10,8 +10,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611080300">
-<script src="site/marka.js?v=202611080300"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080330">
+<script src="site/dil.js?v=202611080330"></script>
+<script src="site/marka.js?v=202611080330"></script>
 <style>
 /* Hakkımızda: okunur tek sütun metin, bakış ölçeği görseli, bölüm kartları */
 .sayfa{max-width:860px;margin:0 auto;padding:28px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:20px}
@@ -58,6 +59,7 @@
   </div>
 </header>
 <main class="sayfa">
+<div data-dil="tr">
   <h1>Hakkımızda</h1>
   <p class="giris"><span data-marka="ad">ZBS</span>, Mağrip’ten Körfez’e, Meşrik’ten Anadolu’ya bölgenin basınını ve bölge hakkında yazan dünya basınını izleyen, haberleri Türkçe özetleyen otomatik bir haber takip sitesidir. Bu sayfada nereden baktığımızı ve bunu nasıl ölçtüğümüzü açıkça yazıyoruz.</p>
   <nav class="icindekiler" aria-label="Bu sayfada">
@@ -120,6 +122,70 @@
       <li>Ziyaretleri çerez kullanmadan ve kimseyi tek tek izlemeden, açık kaynaklı <a href="https://www.goatcounter.com/">GoatCounter</a> ile sayıyoruz. Yalnızca hangi sayfanın kaç kez okunduğunu, okurların hangi ülkeden ve hangi bağlantıdan geldiğini görüyoruz; kişisel veri saklamıyoruz.</li>
     </ul>
   </section>
+</div>
+<div data-dil="en" hidden>
+  <h1>About</h1>
+  <p class="giris"><span data-marka="ad">ZBS</span> is an automated news-monitoring site that follows the press of the region, from the Maghreb to the Gulf and from the Mashriq to Anatolia, as well as the world press writing about it, and summarizes the stories. On this page we state openly where we stand and how we measure it.</p>
+  <nav class="icindekiler" aria-label="On this page">
+    <a href="#ilke-en">Our principle</a><a href="#bakis-en">Perspective scale</a><a href="#cizgi-en">Editorial line</a><a href="#kanit-en">Evidence</a><a href="#isleyis-en">How it works</a>
+  </nav>
+
+  <section class="bolumk" id="ilke-en">
+    <h2>Our principle: we start from the Palestinian perspective</h2>
+    <p class="ilke">When we weigh a story, the zero point of our scale is the perspective of the Palestinian people.</p>
+    <p>No story is written “from nowhere”. The language that the big agencies and the Western press present as “neutral” is often the frame of the powerful, that is, of the Israeli and US governments: occupation becomes “conflict”, siege becomes a “security measure”, killed civilians become “collateral damage”. We do not accept this language as the zero point.</p>
+    <p>Instead, we take the experience of the people living under occupation and bombardment as the starting point, our <b>point of neutrality</b>. When we assess an outlet's perspective, the question we ask is: how far does this story move away from the eyes of those who lived it?</p>
+    <p>This is a position, and we do not hide it. When readers know where we stand, they can weigh the news for themselves.</p>
+  </section>
+
+  <section class="bolumk" id="bakis-en">
+    <h2>Perspective scale</h2>
+    <p>On the “who reported it how” pages, every headline is placed on a three-step scale. The criterion is not the topic of the story but the outlet's <b>own language</b>.</p>
+    <div class="olcek" role="list">
+      <div class="basamak" role="listitem"><span class="top" style="background:#2b8a5e">0</span><small>Starting point</small><b>Palestinian perspective</b><span>Centres Palestinian or Arab victims and Palestinian or resistance sources, or describes Israeli and US actions in critical language (“occupation”, “massacre”, “genocide”, “martyr”, “aggression”, “siege”, “strangle”).</span></div>
+      <div class="basamak" role="listitem"><span class="top" style="background:#8f979c">1</span><small>One step away</small><b>Relay</b><span>Relays one side's statement (US, Israel, Iran, Hamas…) in quotation marks or with “said, announced”, without adding its own judgement. Reporting a US or Israeli announcement neutrally belongs here.</span></div>
+      <div class="basamak" role="listitem"><span class="top" style="background:#4a72c4">2</span><small>Farthest</small><b>Israeli / US perspective</b><span>Adopts the Israeli or US frame in the outlet's own voice: uses their terms without quotation marks (“terrorists”, “terror infrastructure”, “operation”, “Iran's proxies”), endorses the action, or pushes Palestinian and Arab casualties into the background.</span></div>
+    </div>
+    <p>Undecided headlines count as “relay”. An example of how the same event can look from the three steps:</p>
+    <div class="ornekler">
+      <div class="ornekk"><span class="bakis-cip" style="background:#2b8a5e">Palestinian perspective</span><i>“Having failed at sea, the US sets up a land task force to strangle Iran”</i></div>
+      <div class="ornekk"><span class="bakis-cip" style="background:#8f979c">Relay</span><i>“CENTCOM announced a new task force targeting Iran's land routes”</i></div>
+      <div class="ornekk"><span class="bakis-cip" style="background:#4a72c4">Israeli / US perspective</span><i>“US moves to cut off weapons flow to Iran's proxies”</i></div>
+    </div>
+    <p class="not-kucuk">Headlines are placed on the scale by AI, which can make mistakes. On every event page we show each outlet's original headline next to it, so readers can check the label themselves.</p>
+  </section>
+
+  <section class="bolumk" id="cizgi-en">
+    <h2>Editorial line</h2>
+    <p>The perspective scale looks at single headlines. The editorial line is an outlet's overall stance, and it is an editorial judgement. We use three groups:</p>
+    <ul>
+      <li><b>Anti-imperialist / decolonial:</b> outlets that define Israel's presence in Palestine as occupation and settler colonialism, call the war on Gaza a genocide, and oppose US and NATO hegemony.</li>
+      <li><b>Middle / mainstream:</b> outlets that sometimes criticise Israel but do not follow a systematic anti-imperialist line; news agencies; media of states with mixed alignments. Regional outlets close to governments that have normalised with Israel (UAE, Morocco, Egypt, Jordan, Saudi Arabia) and Lebanon's plural press are here too: they can report from an anti-imperialist and a colonial frame on the same day, and the perspective scale shows where each headline falls.</li>
+      <li><b>Comprador collaborators and imperialists:</b> outlets whose reporting mostly follows the frame of the US and Israeli governments: the Israeli mainstream and right, the big Western media organisations, and diaspora channels on the same line. This red label is given only where that line is clearly followed.</li>
+    </ul>
+    <p>Borderline outlets are marked “contested”. You can see the assessment of every outlet on the <a href="kaynaklar.html">Sources</a> page.</p>
+  </section>
+
+  <section class="bolumk" id="kanit-en">
+    <h2>Evidence</h2>
+    <p>We do not just state an assessment. Every outlet card carries two kinds of evidence:</p>
+    <ol>
+      <li><b>Documented evidence:</b> internal memos, style guides, ownership records, media-monitoring reports and staff testimony, each linked to its source. We also show documents that contradict our classification as “counter-evidence”.</li>
+      <li><b>Measured discourse:</b> where each of the outlet's headlines in our event comparisons falls on the perspective scale. If the measurement does not match the editorial-line assessment, we say so on the card and review the assessment.</li>
+    </ol>
+  </section>
+
+  <section class="bolumk" id="isleyis-en">
+    <h2>How it works</h2>
+    <ul>
+      <li>Every 15 minutes the collector reads the news sitemaps, RSS feeds and Telegram channels of more than 180 outlets. Who the outlets are, where they are and who owns them is on the <a href="kaynaklar.html">Sources</a> page.</li>
+      <li>Summaries, translations and event groupings are written by AI. Summaries do not replace the source; every story links to the original and has archive buttons.</li>
+      <li>We do not store the sources' texts; the headline, the summary and the link remain. Past days are in the <a href="arsiv.html">Archive</a>.</li>
+      <li>Every week, month and year we publish an automatic bulletin: who covered what and how much, what the Israeli and Western press did not see, how the same event was told differently. Bulletins are in the <a href="almanak.html">Almanac</a> and can be downloaded as text and data.</li>
+      <li>We count visits without cookies and without tracking anyone individually, using the open-source <a href="https://www.goatcounter.com/">GoatCounter</a>. We only see how often each page is read and which country and link readers come from; we store no personal data.</li>
+    </ul>
+  </section>
+</div>
 </main>
 </body>
 </html>

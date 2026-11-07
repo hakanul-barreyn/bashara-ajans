@@ -10,6 +10,13 @@
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
   const SAYFA = 30;
   const BAYRAK = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
+  // Dil: içerik alanları seçilen dilden okunur; arayüz metinlerini site/dil.js çevirir
+  const DL = window.DIL || "tr", YR = window.YEREL || "tr-TR";
+  const BT = (h) => (DL === "tr" ? h.baslik_tr : h["baslik_" + DL]);
+  const OZ = (h) => (DL === "tr" ? h.ozet_tr : h["ozet_" + DL]);
+  const OB = (o) => (DL !== "tr" && o["baslik_" + DL]) || o.baslik;
+  const ON = (o) => (DL !== "tr" && o["not_" + DL]) || o.not;
+  const OY = (o, id) => (DL !== "tr" && (o["yorumlar_" + DL] || {})[id]) || (o.yorumlar || {})[id];
   const MARKA_AD = (window.MARKA && window.MARKA.ad) || "ZBS";
   const BAYRAK_AE = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
   // Uyarı bayrağı: İsrail merkezli yayınlar (muhalif basın hariç) ve kaynaklar.json'da bayrak alanı olanlar
@@ -140,11 +147,11 @@
       const k = kaynaklar[h.kaynak]; if (!k || h.atla) return false;
       if (bolge !== "Tümü" && (k.kamp || k.bolge) !== bolge) return false;
       if (ilgili && !h.ilgili) return false;
-      if (ozetli && !h.ozet_tr) return false;
+      if (ozetli && !OZ(h)) return false;
       if (sadeceAnaliz && h.nitelik !== "analiz") return false;
       if (konu && !(h.etiket || []).includes(konu)) return false;
       if (ara) {
-        const m = [h.baslik_tr, h.ozet_tr, h.baslik_orj, k.ad, k.sehir, k.ulke].join(" ").toLocaleLowerCase("tr");
+        const m = [h.baslik_tr, h.ozet_tr, BT(h), OZ(h), h.baslik_orj, k.ad, k.sehir, k.ulke].join(" ").toLocaleLowerCase("tr");
         if (!m.includes(ara)) return false;
       }
       return true;
@@ -185,7 +192,7 @@
     const kutu = el("span", "paylas");
     const b = el("button", "eylem", "Paylaş"); b.type = "button"; b.setAttribute("aria-expanded", "false");
     const menu = el("span", "paylas-menu"); menu.hidden = true;
-    const url = kalici(h.id), metin = (h.baslik_tr || h.baslik_orj) + " · " + kaynaklar[h.kaynak].ad;
+    const url = kalici(h.id), metin = (BT(h) || h.baslik_orj) + " · " + kaynaklar[h.kaynak].ad;
     const bag = (l, u) => { const a = el("a", null, l); a.href = u; a.target = "_blank"; a.rel = "noopener"; menu.appendChild(a); };
     const kop = el("button", null, "Bağlantıyı kopyala"); kop.type = "button";
     kop.onclick = async () => { try { await navigator.clipboard.writeText(url); kop.textContent = "Kopyalandı"; } catch (e) { prompt("Bağlantı", url); } setTimeout(() => (kop.textContent = "Bağlantıyı kopyala"), 2000); };
@@ -195,7 +202,7 @@
     bag("X", "https://x.com/intent/post?text=" + encodeURIComponent(metin) + "&url=" + encodeURIComponent(url));
     b.onclick = async (e) => {
       e.stopPropagation();
-      if (navigator.share && tel()) { try { await navigator.share({ title: metin, text: h.ozet_tr || "", url }); } catch (x) {} return; }
+      if (navigator.share && tel()) { try { await navigator.share({ title: metin, text: OZ(h) || "", url }); } catch (x) {} return; }
       menu.hidden = !menu.hidden; b.setAttribute("aria-expanded", String(!menu.hidden));
     };
     kutu.append(b, menu);
@@ -223,7 +230,7 @@
   // grubun Filistin bakışından ortalama uzaklığı (0 = başlangıç noktası, 2 = İsrail / ABD bakışı).
   const UZAK = { filistin: 0, aktarim: 1, israil: 2 };
   function uzaklikMetni(u) {
-    const t = u.toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const t = u.toLocaleString(YR, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     return t + (u < 0.5 ? " · başlangıçta" : u < 1.5 ? " · bir adım uzak" : " · en uzak");
   }
   function bakisMatrisi(o, kisa) {
@@ -234,7 +241,7 @@
       const h = haberIdx[i], k = h && kaynaklar[h.kaynak], v = b[i];
       if (!k || !v) return;
       const g = kampAd(k); satir[g] = satir[g] || { filistin: [], aktarim: [], israil: [], n: 0 };
-      satir[g][v].push(k.ad + ": " + (h.baslik_orj || h.baslik_tr || "")); satir[g].n++;
+      satir[g][v].push(k.ad + ": " + (h.baslik_orj || BT(h) || "")); satir[g].n++;
     });
     let gruplar = KAMP_SIRA.filter((g) => satir[g]);
     if (!gruplar.length) return null;
@@ -256,7 +263,7 @@
       sat.appendChild(kare);
       const u = (r.aktarim.length + 2 * r.israil.length) / r.n;
       const um = el("span", "uzaklik"); um.style.color = u < 0.5 ? BAKIS_RENK.filistin : u < 1.5 ? "" : BAKIS_RENK.israil;
-      um.textContent = kisa ? u.toLocaleString("tr-TR", { maximumFractionDigits: 1 }) : uzaklikMetni(u);
+      um.textContent = kisa ? u.toLocaleString(YR, { maximumFractionDigits: 1 }) : uzaklikMetni(u);
       um.title = "Filistin bakışından ortalama uzaklık: 0 başlangıç noktası, 1 aktarım, 2 İsrail / ABD bakışı";
       sat.appendChild(um); kutu.appendChild(sat);
     });
@@ -334,8 +341,8 @@
       sl.appendChild(arka);
       const ic = el("div", "slayt-ic");
       ic.appendChild(el("span", "slayt-sayi", (n + 1) + " / " + liste.length + " · " + kp.toplam + " kaynak · son " + once(o.son)));
-      ic.appendChild(el("h3", null, o.baslik));
-      if (o.not) ic.appendChild(el("p", null, o.not.length > 220 ? o.not.slice(0, 217) + "…" : o.not));
+      ic.appendChild(el("h3", null, OB(o)));
+      if (ON(o)) ic.appendChild(el("p", null, ON(o).length > 220 ? ON(o).slice(0, 217) + "…" : ON(o)));
       ic.appendChild(bakisMatrisi(o, true) || cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
       const kn = korNokta(kp); if (kn) ic.appendChild(el("span", "kor-nokta", kn));
       const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
@@ -348,7 +355,7 @@
     const noktalar = el("div", "slayt-noktalar"); noktalar.setAttribute("role", "tablist");
     liste.forEach((o, n) => {
       const d = el("button"); d.type = "button"; d.setAttribute("role", "tab");
-      d.setAttribute("aria-label", (n + 1) + ". olay: " + o.baslik); d.title = o.baslik;
+      d.setAttribute("aria-label", (n + 1) + ". olay: " + OB(o)); d.title = OB(o);
       d.appendChild(el("span", "nokta-ic"));
       d.addEventListener("click", () => git(n, true));
       noktalar.appendChild(d);
@@ -388,7 +395,7 @@
     const kutu = $("analizler"); kutu.innerHTML = "";
     const liste = haberler.filter((h) => h.nitelik === "analiz" && h.ilgili && !h.atla && kaynaklar[h.kaynak] && dk(h.tarih) < 72 * 60
       && (bolge === "Tümü" || (kaynaklar[h.kaynak].kamp || kaynaklar[h.kaynak].bolge) === bolge))
-      .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || (!!b.ozet_tr - !!a.ozet_tr) || (a.tarih < b.tarih ? 1 : -1))
+      .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || (!!OZ(b) - !!OZ(a)) || (a.tarih < b.tarih ? 1 : -1))
       .slice(0, 12);
     kutu.hidden = !liste.length || !!olaySec || sadeceAnaliz;
     if (kutu.hidden) return;
@@ -403,9 +410,9 @@
       const u = el("div", "kart-ust"); u.appendChild(avatar(k));
       const kim = el("div", "kim"); kim.appendChild(el("span", "ad", k.ad)); kim.appendChild(el("span", "yer", k.sehir + " · " + once(h.tarih))); u.appendChild(kim);
       a.appendChild(u);
-      if (h.baslik_tr) a.appendChild(el("h3", null, h.baslik_tr));
+      if (BT(h)) a.appendChild(el("h3", null, BT(h)));
       else { const b = el("h3", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; a.appendChild(b); }
-      if (h.ozet_tr) a.appendChild(el("p", null, h.ozet_tr));
+      if (OZ(h)) a.appendChild(el("p", null, OZ(h)));
       else a.appendChild(el("p", "cevirisiz", "Türkçe özet sırada"));
       const e = el("div", "eylemler");
       const git = el("a", "eylem ana", "Yazıyı oku ↗"); git.href = h.url; git.target = "_blank"; git.rel = "noopener"; e.appendChild(git);
@@ -424,7 +431,7 @@
     ust.appendChild(el("span", "olay-sayi", kp.toplam + " kaynak · " + o.haberler.length + " haber"));
     const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = () => { olaySec = null; ciz(true); };
     ust.appendChild(kap); b.appendChild(ust);
-    b.appendChild(el("h2", null, o.baslik));
+    b.appendChild(el("h2", null, OB(o)));
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
     // Gecikme: İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi?
     {
@@ -435,11 +442,11 @@
       let metin = null;
       if (ic != null && ds == null) metin = "İsrail ve Batı basını bu olayı henüz yazmadı.";
       else if (ic != null && ds != null) { const sa = (ds - ic) / 36e5;
-        metin = Math.abs(sa) < 0.25 ? "İki taraf da aynı saatlerde yazdı." : sa > 0 ? "İsrail ve Batı basını " + (sa < 1 ? Math.round(sa * 60) + " dakika" : sa.toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " saat") + " sonra yazdı."
-          : "İsrail ve Batı basını bölge basınından " + (-sa < 1 ? Math.round(-sa * 60) + " dakika" : (-sa).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " saat") + " önce yazdı."; }
+        metin = Math.abs(sa) < 0.25 ? "İki taraf da aynı saatlerde yazdı." : sa > 0 ? "İsrail ve Batı basını " + (sa < 1 ? Math.round(sa * 60) + " dakika" : sa.toLocaleString(YR, { maximumFractionDigits: 1 }) + " saat") + " sonra yazdı."
+          : "İsrail ve Batı basını bölge basınından " + (-sa < 1 ? Math.round(-sa * 60) + " dakika" : (-sa).toLocaleString(YR, { maximumFractionDigits: 1 }) + " saat") + " önce yazdı."; }
       if (metin) b.appendChild(el("p", "ilk-haber gecikme", "⏱ " + metin));
     }
-    if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
+    if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString(YR, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
     const mat = bakisMatrisi(o, false); if (mat) b.appendChild(mat);
     const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Kaynakların çizgisi");
     denge.classList.add("denge"); b.appendChild(denge);
@@ -448,7 +455,7 @@
     iki.appendChild(cubuk(kp.tur, TUR_RENK, kp.toplam, "Kaynakların sahipliği"));
     b.appendChild(iki);
     const kn = korNokta(kp); if (kn) b.appendChild(el("span", "kor-nokta", kn));
-    if (o.not) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(o.not); b.appendChild(n); }
+    if (ON(o)) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(ON(o)); b.appendChild(n); }
     // kaynak kaynak liste, bölge grubuna göre
     const gruplar = {};
     o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[cizgiAd(k)] = gruplar[cizgiAd(k)] || []).push(h); });
@@ -461,11 +468,11 @@
         const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
         const ad = el("div", "kim-ad"); if (bayrakHTML(k)) ad.insertAdjacentHTML("afterbegin", bayrakHTML(k)); ad.append(k.ad); if (ROZETLI[k.tur]) ad.appendChild(el("span", "rozet sahip", ROZETLI[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
-        ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
-        if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
+        ic.appendChild(el("div", "kim-baslik", BT(h) || h.baslik_orj));
+        if (BT(h) && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const bv = o.bakislar && o.bakislar[h.id];
         if (bv) { const c = el("span", "bakis-cip", BAKIS[bv]); c.style.background = BAKIS_RENK[bv]; ad.appendChild(c); }
-        const y = o.yorumlar && o.yorumlar[h.id]; if (y) ic.appendChild(el("div", "kim-yorum", y));
+        const y = OY(o, h.id); if (y) ic.appendChild(el("div", "kim-yorum", y));
         const l = el("a", "kim-bag", (h.gnews ? "Kaynağa git (Google Haberler üzerinden)" : "Kaynağa git") + " ↗"); l.href = h.url; l.target = "_blank"; l.rel = "noopener"; ic.appendChild(l);
         r.appendChild(ic); sec.appendChild(r);
       });
@@ -489,7 +496,7 @@
       son.forEach((h) => {
         const a = el("a", "serit-oge"); a.href = "#h-" + h.id;
         a.appendChild(el("b", null, kaynaklar[h.kaynak] ? kaynaklar[h.kaynak].ad : ""));
-        const t = el("span", null, h.baslik_tr || h.baslik_orj); if (!h.baslik_tr) t.dir = "auto"; a.appendChild(t);
+        const t = el("span", null, BT(h) || h.baslik_orj); if (!BT(h)) t.dir = "auto"; a.appendChild(t);
         p.appendChild(a);
       });
       return p;
@@ -510,7 +517,7 @@
     if (bayrakHTML(k)) adEl.insertAdjacentHTML("afterbegin", bayrakHTML(k));
     kim.appendChild(adEl);
     const yer = el("span", "yer", k.sehir + " · ");
-    const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString("tr-TR"); yer.appendChild(z);
+    const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString(YR); yer.appendChild(z);
     kim.appendChild(yer); ust.appendChild(kim);
     const roz = el("div", "rozetler");
     if (dk(h.tarih) < 30 && !k.son_dakika) roz.appendChild(el("span", "rozet yeni", "YENİ"));
@@ -521,10 +528,10 @@
     if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));
     ust.appendChild(roz);
     g.appendChild(ust);
-    if (h.baslik_tr) {
-      g.appendChild(el("h2", null, h.baslik_tr));
-      if (h.ozet_tr) g.appendChild(el("p", null, h.ozet_tr));
-      if (h.ceviri_tr) {
+    if (BT(h)) {
+      g.appendChild(el("h2", null, BT(h)));
+      if (OZ(h)) g.appendChild(el("p", null, OZ(h)));
+      if (h.ceviri_tr && DL === "tr") {
         const d = document.createElement("details"); d.className = "ceviri";
         d.appendChild(el("summary", null, "Açıklamanın tam çevirisi"));
         // [[ATLANDI: …]] : çevrilmeyen cümle; kapalı bir kutuda, dokununca özgün dilinde açılır
@@ -648,9 +655,9 @@
     }
     if (basaDon) { if (window.scrollY > 0) window.scrollTo({ top: 0 }); } else window.scrollTo({ top: kaydir });
     const s = $("sayilar"); s.innerHTML = ""; s.hidden = !!secOlay;
-    s.appendChild(el("b", null, gor.length.toLocaleString("tr-TR"))); s.append(" haber · ");
-    s.appendChild(el("b", null, gor.filter((h) => h.ozet_tr).length.toLocaleString("tr-TR"))); s.append(" Türkçe · ");
-    s.appendChild(el("b", null, gor.filter((h) => dk(h.tarih) < 60).length.toLocaleString("tr-TR"))); s.append(" son saatte");
+    s.appendChild(el("b", null, gor.length.toLocaleString(YR))); s.append(" haber · ");
+    s.appendChild(el("b", null, gor.filter((h) => OZ(h)).length.toLocaleString(YR))); s.append(" Türkçe · ");
+    s.appendChild(el("b", null, gor.filter((h) => dk(h.tarih) < 60).length.toLocaleString(YR))); s.append(" son saatte");
     $("canliMetin").textContent = guncellendi ? "Güncellendi · " + once(guncellendi) : "Canlı";
     if (aktifId && !gor.slice(0, kac).some((h) => h.id === aktifId)) aktifId = null;
     if (aktifId) { const k = document.querySelector('.haber[data-id="' + aktifId + '"]'); if (k) k.classList.add("aktif"); }

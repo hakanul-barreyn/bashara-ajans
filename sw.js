@@ -1,7 +1,7 @@
 // ZBS hizmet çalışanı: sayfa iskeletini önbellekte tutar, haber verisini her zaman ağdan ister.
 // Ağ yoksa son görülen veriyi gösterir.
-const SURUM = "zbs-202611080300";
-const ISKELET = ["./", "index.html", "kaynaklar.html", "arsiv.html", "hakkimizda.html", "almanak.html", "manifest.webmanifest", "site/logo.svg", "site/simge-192.png"];
+const SURUM = "zbs-202611080330";
+const ISKELET = ["./", "index.html", "kaynaklar.html", "arsiv.html", "hakkimizda.html", "almanak.html", "site/dil.js", "manifest.webmanifest", "site/logo.svg", "site/simge-192.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(SURUM).then((c) => c.addAll(ISKELET)).then(() => self.skipWaiting()));

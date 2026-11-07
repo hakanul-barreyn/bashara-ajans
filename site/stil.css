@@ -427,3 +427,12 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .atlandi-ozgun{display:none;font-size:.88rem;color:var(--k-ink);background:#fff;border-radius:6px;padding:6px 8px}
 .atlandi.acik .atlandi-ozgun{display:block}
 .atlandi.acik{background:#f7f2e2}
+
+/* dil seçici */
+.dil-sec{display:flex;gap:2px;background:var(--yuzey2);border-radius:999px;padding:3px;flex:none}
+.dil-sec button{border:0;background:transparent;color:var(--ink2);font:600 .74rem var(--mono);padding:4px 8px;border-radius:999px;cursor:pointer}
+.dil-sec button[aria-pressed="true"]{background:var(--kart);color:var(--ink);box-shadow:var(--golge)}
+.dil-uyari{grid-column:1/-1;margin:0;background:var(--k-amber-acik);color:var(--k-amber);border-radius:12px;padding:10px 14px;font-size:.86rem}
+@media (max-width:520px){.dil-sec button{padding:4px 6px;font-size:.68rem}}
+[data-dil][hidden]{display:none!important}
+.sayfa>div[data-dil]{display:flex;flex-direction:column;gap:20px}
