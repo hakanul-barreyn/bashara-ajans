@@ -23,15 +23,35 @@
 
   // ---------------------------------------------------- harita
   const koyu = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const harita = L.map("harita", { worldCopyJump: true, zoomControl: true, minZoom: 2, maxZoom: 9 })
-    .fitBounds([[12, -12], [55, 58]]);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/" + (koyu ? "dark_all" : "light_all") + "/{z}/{x}/{y}{r}.png", {
-    subdomains: "abcd", maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  }).addTo(harita);
-  const katman = L.layerGroup().addTo(harita);
+  let katman = null;
+  try {
+    const harita = L.map("harita", { worldCopyJump: true, zoomControl: true, minZoom: 2, maxZoom: 9 });
+    harita.fitBounds([[12, -12], [55, 58]]);
+    const carto = L.tileLayer("https://{s}.basemaps.cartocdn.com/" + (koyu ? "dark_all" : "light_all") + "/{z}/{x}/{y}{r}.png", {
+      subdomains: "abcd", maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    }).addTo(harita);
+    // CARTO karoları gelmezse OpenStreetMap'in kendi karolarına geç
+    let hata = 0;
+    carto.on("tileerror", () => {
+      if (++hata !== 4) return;
+      harita.removeLayer(carto);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(harita);
+    });
+    katman = L.layerGroup().addTo(harita);
+    window.addEventListener("resize", () => harita.invalidateSize());
+    setTimeout(() => harita.invalidateSize(), 300);
+  } catch (e) {
+    // Harita kütüphanesi yüklenemezse akış yine çalışsın
+    const h = document.getElementById("harita");
+    h.textContent = "Harita yüklenemedi. Haber akışı çalışmaya devam ediyor.";
+    h.style.cssText += ";display:flex;align-items:center;justify-content:center;color:var(--soluk);padding:16px;text-align:center";
+  }
 
   function haritaCiz(liste) {
+    if (!katman) return;
     katman.clearLayers();
     const sayac = {};
     Object.values(kaynaklar).forEach((k) => {
