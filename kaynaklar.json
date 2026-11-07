@@ -545,7 +545,12 @@
   "liste": true,
   "notu": "Senin listende “Londra-Riyad”.",
   "id": 28,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://turkish.aawsat.com/feed",
+   "https://turkish.aawsat.com/rss.xml",
+   "https://turkish.aawsat.com/feed.xml"
+  ]
  },
  {
   "ad": "Al-Quds Al-Arabi",
@@ -1292,7 +1297,10 @@
   "liste": true,
   "notu": "",
   "id": 66,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.aa.com.tr/en/rss/default?cat=world"
+  ]
  },
  {
   "ad": "Anadolu Ajansı (Orta Doğu)",
@@ -1310,7 +1318,10 @@
   "liste": true,
   "notu": "",
   "id": 67,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.aa.com.tr/en/rss/default?cat=middle-east"
+  ]
  },
  {
   "ad": "TRT World",

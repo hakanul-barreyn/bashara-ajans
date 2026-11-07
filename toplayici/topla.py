@@ -40,7 +40,7 @@ UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
-KESIF_SURUMU = 2
+KESIF_SURUMU = 3
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 45)
 PARTI = 15
 YENIDEN_KESIF_GUN = 7
@@ -453,6 +453,21 @@ def kaynak_isle(k, durum):
         ogeler += tg
         if tg:
             d["son_basari"] = SIMDI.isoformat()
+    # Otomatik bulunan yol başka bir dilin ya da alt sitenin haberlerini getirmesin:
+    # kaynak adresi bir dil bölümüyse (/en/, /fr/ ...) yalnızca o bölümün haberlerini tut.
+    p = urllib.parse.urlsplit(k["url"])
+    ilk = p.path.strip("/").split("/")[0] if p.path.strip("/") else ""
+    host = p.netloc.lower().removeprefix("www.")
+    elle = set(k.get("besleme") or [])
+    if d.get("yontem") and d["yontem"].get("url") not in elle:
+        def uygun(o):
+            if o.get("telegram"):
+                return True
+            q = urllib.parse.urlsplit(o["url"])
+            if q.netloc.lower().removeprefix("www.") != host:
+                return False
+            return not (len(ilk) == 2 and not q.path.strip("/").startswith(ilk + "/"))
+        ogeler = [o for o in ogeler if uygun(o)]
     d["son_oge"] = len(ogeler)
     ogeler.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
     return k, d, ogeler[:KAYNAK_BASINA]
