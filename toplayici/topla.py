@@ -9,7 +9,7 @@ Her çalıştırmada:
 
 Yalnızca Python'un standart kütüphanesini kullanır. robots.txt kurallarına uyar; engellenen sayfayı atlar.
 Ortam değişkenleri: GEMINI_API_KEY (zorunlu değil; yoksa özet yazılmaz), GEMINI_MODEL (isteğe bağlı),
-OZET_SINIRI (bir çalıştırmada en fazla kaç özet, varsayılan 45).
+OZET_SINIRI (bir çalıştırmada en fazla kaç özet, varsayılan 100), GEMINI_GUNLUK (günlük istek bütçesi, varsayılan 900).
 """
 import datetime as dt
 import gzip
@@ -48,8 +48,9 @@ SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
 KESIF_SURUMU = 5
-OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 45)
-PARTI = 15
+OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 100)
+PARTI = 20  # bir istekte kaç haber; istek sayısı ücretsiz kotanın asıl sınırı olduğu için partiler büyük
+GEMINI_GUNLUK = int(os.environ.get("GEMINI_GUNLUK") or 900)  # Pasifik saatiyle gece yarısı sıfırlanan günlük kotanın altında kal
 YENIDEN_KESIF_GUN = 7
 CALISMA_SURESI = 9 * 60  # saniye; Actions işi bu süreyi aşmasın
 
@@ -663,6 +664,17 @@ def analiz_mi(url, k):
     return any(y in u for y in k.get("analiz_yolu", [])) or any(y in u.lower() for y in ANALIZ_YOLLARI)
 
 
+def gunluk_istek(durum, ekle=0):
+    """Bugün (Pasifik saatiyle) yapılan Gemini isteği sayısı; ekle>0 ise artırır."""
+    gun = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=8)).date().isoformat()
+    g = durum.get("_gemini_gun") or {}
+    if g.get("gun") != gun:
+        g = {"gun": gun, "n": 0}
+    g["n"] += ekle
+    durum["_gemini_gun"] = g
+    return g["n"]
+
+
 def gemini_ozetle(anahtar, model, parti):
     girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "dil": h["dil"], "baslik": h["baslik_orj"], "metin": h.get("_malzeme", "")}
              for h in parti]
@@ -845,6 +857,10 @@ def main():
                 if time.time() - BASLANGIC > CALISMA_SURESI:
                     break
                 parti = sira[i:i + PARTI]
+                if gunluk_istek(durum) >= GEMINI_GUNLUK - 60:   # kümeleme ve almanak için pay bırak
+                    log(f"Günlük Gemini bütçesi doldu ({GEMINI_GUNLUK}); kalan özetler yarına")
+                    break
+                gunluk_istek(durum, 1)
                 kod, sonuc = gemini_ozetle(anahtar, model, parti)
                 if kod == 429:
                     durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
@@ -873,7 +889,7 @@ def main():
                         yazilan += 1
                 time.sleep(4)  # dakika başı istek sınırına takılmamak için
             durum["_model"] = model
-            log(f"{yazilan} özet yazıldı ({model})")
+            log(f"{yazilan} özet yazıldı ({model}); bugün {gunluk_istek(durum)} Gemini isteği")
         elif not model:
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
 
@@ -882,6 +898,7 @@ def main():
         bekle = tarih_coz(durum.get("_gemini_bekle"))
         if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 4) \
                 and time.time() - BASLANGIC < CALISMA_SURESI:
+            gunluk_istek(durum, 1)
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
             if isinstance(sonuc, list):
                 yaz(OLAYLAR, {"guncellendi": SIMDI.isoformat(), "olaylar": sonuc})
@@ -970,7 +987,7 @@ def main():
     try:
         bekle = tarih_coz(durum.get("_gemini_bekle"))
         n, kota = almanak.bultenleri_guncelle(
-            KOK, kaynaklar, anahtar if not (bekle and bekle > SIMDI) else "", model, SIMDI,
+            KOK, kaynaklar, anahtar if not (bekle and bekle > SIMDI) and gunluk_istek(durum) < GEMINI_GUNLUK else "", model, SIMDI,
             sure_var=lambda: time.time() - BASLANGIC < 12 * 60, log=log)
         if kota:
             durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
