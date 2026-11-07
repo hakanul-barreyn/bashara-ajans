@@ -42,7 +42,7 @@ UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
-KESIF_SURUMU = 4
+KESIF_SURUMU = 5
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 45)
 PARTI = 15
 YENIDEN_KESIF_GUN = 7
@@ -365,7 +365,10 @@ def kesfet(k):
             sonuc["yontem"] = r
             break
 
-    # Telegram adayları (sayfada bağlantı bulunamadıysa)
+    # Sayfada bulunan kanal gerçekten mesaj veriyor mu? Vermiyorsa adaylara geç.
+    if sonuc["telegram"] and not cek_telegram(sonuc["telegram"]):
+        sonuc["telegram"] = None
+    # Telegram adayları (sayfada çalışan bağlantı bulunamadıysa)
     if not sonuc["telegram"]:
         for h in k.get("telegram_aday") or []:
             if cek_telegram(h):
@@ -430,10 +433,12 @@ def kesfet(k):
     # 5) Son çare: Google Haberler araması (Telegram kanalı bulunduysa gerek yok)
     if not sonuc["telegram"]:
         gn = gnews_adresi(k)
-        if izinli(gn):
-            kod, metin, _ = getir(gn)
-            if kod == 200 and gnews_coz(metin):
-                sonuc["yontem"] = {"tip": "gnews", "url": gn}
+        izin = izinli(gn)
+        kod, metin, _ = getir(gn) if izin else (0, "", gn)
+        n = len(gnews_coz(metin)) if kod == 200 else 0
+        if n:
+            sonuc["yontem"] = {"tip": "gnews", "url": gn}
+        log(f"Google Haberler denemesi · {k['ad']}: izin={izin} kod={kod} haber={n}")
     return sonuc
 
 
