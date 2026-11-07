@@ -4127,5 +4127,36 @@
   "resmi_grup": "İslami Cihad",
   "cizgi": "ad",
   "hassas": true
+ },
+ {
+  "id": 188,
+  "ad": "Haksöz Haber",
+  "url": "https://www.haksozhaber.net/",
+  "sehir": "İstanbul",
+  "ulke": "Türkiye",
+  "bolge": "Anadolu-Türkiye",
+  "lat": 41.01,
+  "lon": 28.97,
+  "dil": "tr",
+  "tur": "grup",
+  "profil": "1991’den bu yana “Kur’an’ın aydınlığına doğru” şiarıyla yayımlanan aylık Haksöz dergisinin haber sitesi. Türkiye’deki İslami hareket çevresinin yayın organlarından; Filistin, ümmet ve emperyalizm karşıtlığı başlıca gündemleri. Haberin yanında yorum ve analiz yazıları da yayımlar.",
+  "cizgi": "ad"
+ },
+ {
+  "id": 189,
+  "ad": "İktibas Dergisi",
+  "url": "https://iktibasdergisi.com/",
+  "sehir": "Ankara",
+  "ulke": "Türkiye",
+  "bolge": "Anadolu-Türkiye",
+  "lat": 39.92,
+  "lon": 32.85,
+  "dil": "tr",
+  "tur": "grup",
+  "profil": "1 Ocak 1981’den bu yana Ankara’da yayımlanan aylık İslami dergi; kurucusu Ercümend Özkan. Kendini radikal İslamcı ve ümmetçi bir çizgide tanımlar. Yazarlar ve Perspektif bölümlerinde ağırlıkla görüş ve analiz yazıları yayımlar.",
+  "cizgi": "ad",
+  "analiz_yolu": [
+   "iktibasdergisi.com/20"
+  ]
  }
 ]
