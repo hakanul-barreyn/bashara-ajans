@@ -869,7 +869,9 @@ def main():
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
                        and h.get("deneme", 0) < 3),
                       key=lambda h: (h.get("eklendi") or h["tarih"]) if h["tarih"][11:19] == "00:00:00" else h["tarih"], reverse=True)
-        sira = sorted(sira, key=lambda h: (not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
+        kmap_ = {k["id"]: k for k in kaynaklar}
+        sd = lambda h: bool((kmap_.get(h["kaynak"]) or {}).get("son_dakika") or h.get("resmi_grup"))
+        sira = sorted(sira, key=lambda h: (not sd(h), not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
         if model and sira:
             with ThreadPoolExecutor(max_workers=8) as ex:
                 list(ex.map(malzeme_hazirla, sira))
@@ -886,6 +888,10 @@ def main():
                     break
                 gunluk_istek(durum, 1)
                 kod, sonuc = gemini_ozetle(anahtar, model, parti)
+                if kod in (500, 503, 0):   # sunucu geçici olarak meşgul: kısa bekleyip bir kez daha dene
+                    time.sleep(12)
+                    gunluk_istek(durum, 1)
+                    kod, sonuc = gemini_ozetle(anahtar, model, parti)
                 if kod == 429:
                     durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
                     log("Gemini kotası doldu; bir saat sonra yeniden denenecek")
