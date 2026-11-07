@@ -423,7 +423,8 @@
       const e = el("div", "eylemler");
       const git = el("a", "eylem ana", "Yazıyı oku ↗"); git.href = h.url; git.target = "_blank"; git.rel = "noopener"; e.appendChild(git);
       a.appendChild(e);
-      a.addEventListener("click", (ev) => { if (!ev.target.closest("a")) a.classList.toggle("acik"); });
+      // Kartın herhangi bir yerine tıklamak yazıyı kaynağında açar (sürükleme sonrası tıklama yutulur)
+      a.addEventListener("click", (ev) => { if (!ev.target.closest("a") && /^https?:\/\//.test(h.url)) window.open(h.url, "_blank", "noopener"); });
       iz.appendChild(a);
     });
     kutu.appendChild(iz);
