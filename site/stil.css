@@ -420,3 +420,10 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .ceviri summary{cursor:pointer;font-weight:700;font-size:.82rem;color:var(--k-amber)}
 .ceviri p{margin:6px 0 0;color:var(--k-ink)}
 .ceviri .ceviri-not{font-size:.74rem;color:var(--k-soluk)}
+
+/* çevrilmeyen cümle: kazı-aç gibi kapalı kutu, dokununca özgün metin */
+.atlandi{display:inline-flex;flex-direction:column;gap:4px;margin:2px 0;max-width:100%;text-align:start;border:1px dashed #b9a46a;background:repeating-linear-gradient(135deg,#efe7cf 0 8px,#e6dcbd 8px 16px);color:#5b4a14;border-radius:8px;padding:4px 10px;font:inherit;font-size:.8rem;cursor:pointer}
+.atlandi-ust{font-weight:700}
+.atlandi-ozgun{display:none;font-size:.88rem;color:var(--k-ink);background:#fff;border-radius:6px;padding:6px 8px}
+.atlandi.acik .atlandi-ozgun{display:block}
+.atlandi.acik{background:#f7f2e2}

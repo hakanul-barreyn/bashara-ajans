@@ -527,8 +527,23 @@
       if (h.ceviri_tr) {
         const d = document.createElement("details"); d.className = "ceviri";
         d.appendChild(el("summary", null, "Açıklamanın tam çevirisi"));
-        h.ceviri_tr.split(/\n+/).forEach((p) => p.trim() && d.appendChild(el("p", null, p.trim())));
-        d.appendChild(el("p", "ceviri-not", (k.resmi_grup || k.ad) + "’nin kendi metninin yapay zekâ ile yapılmış çevirisi. Sivillere şiddet çağrısı içeren bölümler çevrilmez."));
+        // [[ATLANDI: …]] : çevrilmeyen cümle; kapalı bir kutuda, dokununca özgün dilinde açılır
+        h.ceviri_tr.split(/\n+/).forEach((par) => {
+          if (!par.trim()) return;
+          const p = el("p");
+          par.split(/(\[\[ATLANDI:[\s\S]*?\]\]|\[sivillere şiddet çağrısı içeren bölüm çevrilmedi\])/).forEach((x) => {
+            const m = /^\[\[ATLANDI:([\s\S]*?)\]\]$/.exec(x);
+            if (m || x.startsWith("[sivillere")) {
+              const b = el("button", "atlandi"); b.type = "button";
+              b.appendChild(el("span", "atlandi-ust", "Çevrilmedi: sivillere şiddet çağrısı içeriyor" + (m ? " · özgün metni görmek için dokun" : "")));
+              if (m) { const o = el("span", "atlandi-ozgun", m[1].trim()); o.dir = "auto"; b.appendChild(o); }
+              b.onclick = (e) => { e.stopPropagation(); if (m) b.classList.toggle("acik"); };
+              p.appendChild(b);
+            } else if (x) p.append(x);
+          });
+          d.appendChild(p);
+        });
+        d.appendChild(el("p", "ceviri-not", (k.resmi_grup || k.ad) + "’nin kendi metninin yapay zekâ ile yapılmış çevirisi. Silah taşımayan sivillerin öldürülmesine çağıran ya da bunu kutlayan cümleler çevrilmez; kapalı kutuda özgün dilinde durur."));
         d.addEventListener("click", (e) => e.stopPropagation());
         g.appendChild(d);
       }
