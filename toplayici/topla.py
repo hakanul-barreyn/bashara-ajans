@@ -42,7 +42,7 @@ UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
-KESIF_SURUMU = 3
+KESIF_SURUMU = 4
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 45)
 PARTI = 15
 YENIDEN_KESIF_GUN = 7
@@ -427,10 +427,42 @@ def kesfet(k):
             sonuc["yontem"] = {"tip": "wp", "url": wp}
             return sonuc
 
+    # 5) Son çare: Google Haberler araması (Telegram kanalı bulunduysa gerek yok)
+    if not sonuc["telegram"]:
+        gn = gnews_adresi(k)
+        if izinli(gn):
+            kod, metin, _ = getir(gn)
+            if kod == 200 and gnews_coz(metin):
+                sonuc["yontem"] = {"tip": "gnews", "url": gn}
     return sonuc
 
 
 # ---------------------------------------------------------------- çekme
+GN_DIL = {"ar": ("ar", "EG", "EG:ar"), "en": ("en-US", "US", "US:en"), "fr": ("fr", "FR", "FR:fr"), "tr": ("tr", "TR", "TR:tr"),
+          "he": ("he", "IL", "IL:he"), "es": ("es", "ES", "ES:es"), "ca": ("es", "ES", "ES:es"), "it": ("it", "IT", "IT:it"),
+          "de": ("de", "DE", "DE:de")}
+
+
+def gnews_adresi(k):
+    """Kaynağın kendi sitesine ulaşılamadığında son çare: Google Haberler'in o alan adı için RSS araması."""
+    p = urllib.parse.urlsplit(k["url"])
+    alan = p.netloc.lower().removeprefix("www.")
+    yol = p.path.strip("/")
+    q = f"site:{alan}" + (f"/{yol}" if yol and len(yol.split("/")[0]) == 2 else "") + " when:2d"
+    hl, gl, ceid = GN_DIL.get(k["dil"], GN_DIL["en"])
+    return "https://news.google.com/rss/search?" + urllib.parse.urlencode({"q": q, "hl": hl, "gl": gl, "ceid": ceid})
+
+
+def gnews_coz(metin):
+    ogeler = besleme_coz(metin)
+    for o in ogeler:
+        o["baslik"] = re.sub(r"\s+-\s+[^-]{2,80}$", "", o["baslik"]).strip()  # sondaki " - Yayın Adı"
+        o["giris"] = ""
+        o["gorsel"] = None
+        o["gnews"] = True
+    return ogeler
+
+
 def cek(yontem):
     if not yontem or not izinli(yontem["url"]):
         return None
@@ -443,6 +475,8 @@ def cek(yontem):
         return besleme_coz(metin)
     if yontem["tip"] == "wp":
         return wp_coz(metin)
+    if yontem["tip"] == "gnews":
+        return gnews_coz(metin)
     return None
 
 
@@ -458,8 +492,11 @@ def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
     son_kesif = tarih_coz(d.get("kesif")) or SIMDI - dt.timedelta(days=99)
     gecen = SIMDI - son_kesif
-    if d.get("surum") != KESIF_SURUMU:
-        gerek = True
+    if d.get("surum") != KESIF_SURUMU and (not d.get("son_basari") or (SIMDI - tarih_coz(d["son_basari"])).days >= 1):
+        gerek = True  # yeni keşif yöntemleri yalnızca çalışmayan kaynaklarda denensin
+    elif d.get("surum") != KESIF_SURUMU:
+        d["surum"] = KESIF_SURUMU
+        gerek = False
     elif d.get("yontem"):
         gerek = d.get("hata", 0) >= 3 or gecen.days >= YENIDEN_KESIF_GUN
     else:
@@ -489,7 +526,7 @@ def kaynak_isle(k, durum):
     ilk = p.path.strip("/").split("/")[0] if p.path.strip("/") else ""
     host = p.netloc.lower().removeprefix("www.")
     elle = set(k.get("besleme") or [])
-    if d.get("yontem") and d["yontem"].get("url") not in elle:
+    if d.get("yontem") and d["yontem"].get("url") not in elle and d["yontem"].get("tip") != "gnews":
         def uygun(o):
             if o.get("telegram"):
                 return True
@@ -538,6 +575,7 @@ Kurallar:
 - ozet: Türkçe, 2-3 cümle. Tamamen kendi cümlelerinle yaz; kaynaktan cümle kopyalama. Doğrudan alıntı gerekiyorsa en fazla bir tane ve 10 kelimeyi geçmesin.
 - Yalnızca verilen metindeki bilgileri kullan, bilgi ekleme, yorum katma.
 - İddiaları sahibine atfet ("... göre", "... açıkladı"). Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
+- metin alanı boşsa yalnızca başlıkta yazanı Türkçe bir cümleyle aktar; başlıkta olmayan hiçbir bilgi ekleme.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
 - Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."]}]
@@ -574,7 +612,7 @@ def gemini_ozetle(anahtar, model, parti):
 
 def malzeme_hazirla(h):
     m = h.get("giris") or ""
-    if (len(m) < 150 or not h.get("gorsel")) and not h.get("telegram") and izinli(h["url"]):
+    if (len(m) < 150 or not h.get("gorsel")) and not h.get("telegram") and not h.get("gnews") and izinli(h["url"]):
         kod, sayfa, _ = getir(h["url"], zaman=12, en_fazla=1_500_000)
         if kod == 200:
             if len(m) < 150:
@@ -632,6 +670,7 @@ def main():
                 "url": o["url"], "tarih": t.astimezone(dt.timezone.utc).isoformat(), "eklendi": SIMDI.isoformat(),
                 "baslik_orj": o["baslik"], "giris": o.get("giris", ""),
                 "telegram": bool(o.get("telegram")),
+                "gnews": bool(o.get("gnews")) or None,
                 "gorsel": o.get("gorsel"),
                 "ilgili": ilgili_mi(o["baslik"] + " " + o.get("giris", ""), k["dil"], k["bolge"]),
             }
@@ -703,7 +742,7 @@ def main():
 
     # Görseli olmayan özetli haberler için sayfadan paylaşım görselini bul (çalıştırma başına en fazla 40)
     eksik = [h for h in eski.values() if h.get("ozet_tr") and not h.get("gorsel") and not h.get("gorsel_denendi")
-             and not h.get("telegram")][:40]
+             and not h.get("telegram") and not h.get("gnews")][:40]
     if eksik and time.time() - BASLANGIC < CALISMA_SURESI:
         with ThreadPoolExecutor(max_workers=8) as ex:
             list(ex.map(gorsel_tamamla, eksik))
@@ -727,7 +766,7 @@ def main():
     if not (wb_bekle and wb_bekle > SIMDI):
         sira = [eski[i] for o in olay_veri.get("olaylar", []) for i in o["haberler"]
                 if i in eski and not (wb.get(i) or {}).get("url") and (wb.get(i) or {}).get("deneme", 0) < 3
-                and not eski[i].get("telegram")]
+                and not eski[i].get("telegram") and not eski[i].get("gnews")]
         kaydedilen = 0
         for h in sira[:8]:
             if time.time() - BASLANGIC > CALISMA_SURESI + 120:
