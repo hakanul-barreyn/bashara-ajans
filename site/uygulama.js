@@ -11,6 +11,7 @@
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let kaynaklar = {}, haberler = [], guncellendi = null, gor = [];
+  let bilinen = null; // önceki yüklemede görülen haber kimlikleri
   let bolge = "Tümü", sehir = null, ara = "", kac = SAYFA, aktifId = null;
   const $ = (id) => document.getElementById(id);
   const renk = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
@@ -211,6 +212,21 @@
     sonGozcu.observe(son);
   }
 
+  // Ekranın altında kalan kartlar, kaydırıp görünür olunca yumuşakça yukarı kayarak gelsin
+  let belirtici = null;
+  function belirt() {
+    if (AZ_HAREKET || !("IntersectionObserver" in window)) return;
+    if (belirtici) belirtici.disconnect();
+    belirtici = new IntersectionObserver((g) => g.forEach((x) => {
+      if (x.isIntersecting) { x.target.classList.add("gir"); x.target.classList.remove("bekle"); belirtici.unobserve(x.target); }
+    }), { rootMargin: "0px 0px -40px 0px" });
+    const alt = window.innerHeight;
+    document.querySelectorAll("#akis .haber:not(.goruldu)").forEach((k) => {
+      k.classList.add("goruldu");
+      if (k.getBoundingClientRect().top > alt) { k.classList.add("bekle"); belirtici.observe(k); }
+    });
+  }
+
   function ciz(basaDon, devam) {
     document.querySelectorAll("#fBolge .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === bolge));
     const sc = $("fSehir"); sc.hidden = !sehir; if (sehir) sc.textContent = sehir + "  ✕";
@@ -221,7 +237,11 @@
     akis.innerHTML = "";
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
-    gor.slice(0, kac).forEach((h, i) => { const k = haberCiz(h); if (i === 0) k.classList.add("manset"); akis.appendChild(k); });
+    gor.slice(0, kac).forEach((h, i) => {
+      const k = haberCiz(h); if (i === 0) k.classList.add("manset");
+      if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
+      akis.appendChild(k);
+    });
     if (gor.length > kac) akis.appendChild(el("p", "nota nota-son", "Yükleniyor…"));
     else if (gor.length) {
       const n = el("p", "nota"); n.append("Hepsi bu kadar. Yayınların kim olduğunu ");
@@ -236,7 +256,7 @@
     if (aktifId && !gor.slice(0, kac).some((h) => h.id === aktifId)) aktifId = null;
     if (aktifId) { const k = document.querySelector('.haber[data-id="' + aktifId + '"]'); if (k) k.classList.add("aktif"); }
     haritaCiz(liste);
-    sonrakiYukle();
+    sonrakiYukle(); belirt();
     if (basaDon && gor[0] && !devam) aktifEt(gor[0].id, true);
   }
 
@@ -253,6 +273,7 @@
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
       guncellendi = h.guncellendi;
       ciz(ilk); ilk = false;
+      bilinen = new Set(haberler.map((x) => x.id));
     } catch (e) {
       $("canliMetin").textContent = "Veri okunamadı";
     }

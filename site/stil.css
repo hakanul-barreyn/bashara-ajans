@@ -12,6 +12,7 @@
   --f:"Plus Jakarta Sans", "Segoe UI", Roboto, system-ui, sans-serif;
   --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
   --ust:60px;
+  --kanat:clamp(16px,5vw,72px);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -23,7 +24,7 @@ button{font:inherit}
 
 /* üst şerit */
 .ust{position:sticky;top:0;z-index:1000;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--cizgi)}
-.ust-ic{max-width:1480px;margin:0 auto;height:var(--ust);display:flex;align-items:center;gap:14px;padding:0 max(20px,env(safe-area-inset-right,0px)) 0 max(20px,env(safe-area-inset-left,0px))}
+.ust-ic{max-width:1360px;margin:0 auto;height:var(--ust);display:flex;align-items:center;gap:14px;padding:0 max(var(--kanat),env(safe-area-inset-right,0px)) 0 max(var(--kanat),env(safe-area-inset-left,0px))}
 .marka{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .logo{width:32px;height:32px;display:block;flex:none;border:0;border-radius:0;background:none}
 .marka-ad{font-weight:800;font-size:1.3rem;letter-spacing:.06em}
@@ -35,7 +36,7 @@ button{font:inherit}
 .menu a:hover{background:var(--cizgi)}
 
 /* düzen */
-.duzen{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;padding:0 max(20px,env(safe-area-inset-right,0px)) 48px max(20px,env(safe-area-inset-left,0px))}
+.duzen{max-width:1360px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(24px,3vw,44px);padding:0 max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px))}
 .akis-kutu{min-width:0}
 
 /* süzgeçler */
@@ -67,6 +68,11 @@ button{font:inherit}
 .akis > .bos,.akis > .nota{grid-column:1/-1}
 .haber{background:var(--kart);color:var(--k-ink);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;
   box-shadow:0 1px 0 rgba(255,255,255,.04),0 12px 30px rgba(0,0,0,.35);transition:transform .18s,box-shadow .18s}
+.haber.bekle{opacity:0;transform:translateY(28px) scale(.985)}
+.haber.gir{transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .18s}
+@keyframes taze{0%{opacity:0;transform:translateY(-14px)}100%{opacity:1;transform:none}}
+.haber.taze{animation:taze .6s cubic-bezier(.2,.8,.2,1)}
+.haber.taze .govde::before{content:"Yeni geldi";align-self:flex-start;font-family:var(--mono);font-size:.64rem;color:#fff;background:var(--k-yesil);padding:2px 8px;border-radius:999px}
 .haber:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.04),0 18px 40px rgba(0,0,0,.45)}
 .haber.aktif{box-shadow:0 0 0 3px var(--yesil),0 18px 40px rgba(0,0,0,.45)}
 .haber.manset{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
