@@ -9,8 +9,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611080045">
-<script src="site/marka.js?v=202611080045"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080055">
+<script src="site/marka.js?v=202611080055"></script>
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
@@ -96,7 +96,7 @@
 <script>
 (function(){
   const REG=["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","İsrail’de muhalif basın","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
-  const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:"karşı taraf"};
+  const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:""};
   const DIL={ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
   const CIZ={ad:"Antiemperyalist / dekolonyal",ara:"Ara / ana akım",ik:"İşbirlikçi kompradorlar ve emperyalistler"};
   const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress",gnews:"Google Haberler araması (son çare)"};
@@ -159,7 +159,7 @@
         u.appendChild(avatarK(k));const w=el("div");const ad=el("div","kk-ad");if(k.bolge==="İsrail"&&!k.bayraksiz)ad.insertAdjacentHTML("afterbegin",BAYRAK);
         const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
-        const rz=el("div","rozetler");rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
+        const rz=el("div","rozetler");if(TUR[k.tur])rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
         const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));

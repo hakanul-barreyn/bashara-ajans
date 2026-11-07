@@ -3,7 +3,7 @@
 (function () {
   "use strict";
   const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "İsrail’de muhalif basın", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
-  const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "karşı taraf" };
+  const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "özel" };
   // Kartlarda yalnızca okura bir şey söyleyen sahiplik bilgisi gösterilir; ayrıntısı Kaynaklar sayfasında
   const ROZETLI = { resmi: "devlet", grup: "bağlı" };
   const DIL = { ar: "Arapça", en: "İngilizce", fr: "Fransızca", tr: "Türkçe", he: "İbranice", es: "İspanyolca", ca: "Katalanca", it: "İtalyanca", de: "Almanca" };
@@ -195,8 +195,8 @@
     "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
     "İspanya": "Batı", "İtalya": "Batı", "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Diğer" };
   const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
-  const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Karşı taraf" };
-  const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3", "Karşı taraf": "#4a5560" };
+  const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Özel" };
+  const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3" };
   const kampAd = (k) => k.kamp || KAMP[k.bolge] || "Diğer";
   const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
   const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İşbirlikçi kompradorlar ve emperyalistler": "#c9544e" };
@@ -269,7 +269,7 @@
     if (kp.toplam < 3) return null;
     const ad = kp.cizgi[CIZGI.ad] || 0, ik = kp.cizgi[CIZGI.ik] || 0;
     if (ik / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla işbirlikçi ve emperyalist çizgideki yayınlar yazdı (%" + Math.round((100 * ik) / kp.toplam) + ").";
-    if (ad / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla antiemperyalist çizgideki yayınlar yazdı; ana akım ve karşı taraf sessiz (%" + Math.round((100 * ad) / kp.toplam) + ").";
+    if (ad / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla antiemperyalist çizgideki yayınlar yazdı; ana akım ve işbirlikçi çizgideki yayınlar az yazdı (%" + Math.round((100 * ad) / kp.toplam) + ").";
     const en = Object.entries(kp.kamp).sort((a, b) => b[1] - a[1])[0];
     const arap = (kp.kamp["Filistin"] || 0) + (kp.kamp["Arap dünyası"] || 0);
     const bati = (kp.kamp["Batı"] || 0) + (kp.kamp["İsrail"] || 0);
