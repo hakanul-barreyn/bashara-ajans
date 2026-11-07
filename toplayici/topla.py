@@ -32,6 +32,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from konular import ilgili_mi  # noqa: E402
 import ekler  # noqa: E402
 import marka  # noqa: E402
+import almanak  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
@@ -763,6 +764,7 @@ def main():
     # Özetler
     anahtar = os.environ.get("GEMINI_API_KEY", "").strip()
     bekle = tarih_coz(durum.get("_gemini_bekle"))
+    model = None
     if anahtar and not (bekle and bekle > SIMDI):
         model = gemini_model(anahtar)
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
@@ -844,6 +846,10 @@ def main():
         for i in o["haberler"]:
             if i in eski:
                 eski[i]["olay"] = o["id"]
+    try:
+        log(f"Olay arşivi: {almanak.olay_arsivle(KOK, olay_veri.get('olaylar', []), eski)} olay işlendi")
+    except Exception as e:
+        log(f"Olay arşivi hatası: {e}")
 
     # Birden fazla kaynağın yazdığı olayların haberlerini Wayback Machine'e kaydet
     wb = durum.setdefault("_wayback", {})
@@ -890,6 +896,16 @@ def main():
         log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")
     except Exception as e:  # arşiv hatası toplamayı durdurmasın
         log(f"Arşiv/RSS hatası: {e}")
+    # Almanak: biten hafta / ay / yıl için kesin bülten, sürenler için günlük taslak
+    try:
+        bekle = tarih_coz(durum.get("_gemini_bekle"))
+        n, kota = almanak.bultenleri_guncelle(
+            KOK, kaynaklar, anahtar if not (bekle and bekle > SIMDI) else "", model, SIMDI,
+            sure_var=lambda: time.time() - BASLANGIC < 12 * 60, log=log)
+        if kota:
+            durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+    except Exception as e:
+        log(f"Almanak hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
     yaz(DURUM, durum)
     log(f"{len(tut)} haber kaydedildi; süre {int(time.time() - BASLANGIC)} sn")

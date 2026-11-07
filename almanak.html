@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f3ef">
+<title data-marka-sablon="{ad} Almanak">ZBS Almanak</title>
+<meta name="description" content="Haftalık, aylık ve yıllık bültenler: kim neyi yazdı, kim neyi görmedi, kim nasıl anlattı.">
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611072330">
+<script src="site/marka.js?v=202611072330"></script>
+<style>
+/* Almanak: solda dönem listesi, sağda bülten; sayılar grafik, yorum düz metin */
+.sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px}
+.sayfa>h1{grid-column:1/-1;margin:0;font-size:1.8rem;letter-spacing:-.01em}
+.sayfa>.giris{grid-column:1/-1;margin:-14px 0 0;color:var(--soluk);max-width:72ch}
+.yanlik{position:sticky;top:calc(var(--ust) + 16px);align-self:start;display:flex;flex-direction:column;gap:10px}
+.sekmeler{display:flex;gap:4px;background:var(--yuzey2);padding:4px;border-radius:12px}
+.sekmeler button{flex:1;border:0;background:transparent;color:var(--ink2);font-size:.82rem;font-weight:600;padding:7px 4px;border-radius:9px;cursor:pointer}
+.sekmeler button[aria-pressed="true"]{background:var(--kart);color:var(--ink);box-shadow:var(--golge)}
+.donemler{display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - var(--ust) - 140px);overflow-y:auto}
+.donemler button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:transparent;color:var(--ink2);padding:9px 10px;border-radius:10px;cursor:pointer;text-align:left;font-size:.88rem}
+.donemler button:hover{background:var(--yuzey)}
+.donemler button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.donemler small{font-family:var(--mono);font-size:.68rem;opacity:.7}
+.icerik{min-width:0;display:flex;flex-direction:column;gap:16px}
+.kart2{background:var(--kart);box-shadow:var(--golge);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.kart2 h2{margin:0;font-size:1.05rem}
+.kart2 p{margin:0;color:var(--k-ink2);max-width:72ch}
+.bas-ust{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:.74rem;color:var(--k-soluk)}
+.taslak{background:var(--k-amber-acik);color:var(--k-amber);padding:2px 8px;border-radius:999px}
+.bulten-baslik{margin:0;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.2;letter-spacing:-.015em;text-wrap:balance}
+.indir{font-size:.8rem;font-weight:600}
+.bekliyor{font-size:.86rem;color:var(--k-soluk)!important;font-style:italic}
+/* uzaklık çizelgesi: 0–2 ekseninde her grup bir nokta */
+.eksen{display:flex;flex-direction:column;gap:10px}
+.e-satir{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) 3.2rem;gap:12px;align-items:center}
+.e-ad{font-size:.86rem;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.e-ad small{font-family:var(--mono);font-weight:400;color:var(--k-soluk);margin-left:6px;font-size:.68rem}
+.e-cizgi{position:relative;height:22px}
+.e-cizgi::before{content:"";position:absolute;left:0;right:0;top:10px;height:3px;border-radius:3px;background:linear-gradient(90deg,#2b8a5e,#a7aeb3 50%,#4a72c4);opacity:.35}
+.e-nokta{position:absolute;top:3px;width:17px;height:17px;margin-left:-8.5px;border-radius:50%;border:3px solid var(--kart);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.e-deger{font-family:var(--mono);font-size:.8rem;text-align:right}
+.e-olcek{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) 3.2rem;gap:12px;font-family:var(--mono);font-size:.66rem;color:var(--k-soluk)}
+.e-olcek div{display:flex;justify-content:space-between}
+.alt-baslik{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--k-soluk);margin-top:6px}
+/* görülmeyenler */
+.olay-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.olay-liste li{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--k-cizgi);font-size:.9rem}
+.olay-liste .t{font-family:var(--mono);font-size:.7rem;color:var(--k-soluk)}
+.olay-liste b{font-weight:600;flex:1 1 18rem;min-width:0}
+.kc{font-family:var(--mono);font-size:.66rem;padding:1px 7px;border-radius:999px;color:#fff}
+/* konu tablosu */
+.tablo-kutu{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th{text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--k-soluk);padding:6px 8px;border-bottom:1px solid var(--k-cizgi)}
+td{padding:7px 8px;border-bottom:1px solid var(--k-cizgi);color:var(--k-ink2);font-variant-numeric:tabular-nums}
+td.sayi{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
+.oran{display:flex;align-items:center;gap:8px;min-width:9rem}
+.oran i{display:block;height:8px;border-radius:4px;background:#4a72c4}
+.oran span{font-family:var(--mono);font-size:.76rem}
+/* nasıl anlatıldı */
+.anlat{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid var(--k-cizgi)}
+.anlat:last-child{border-bottom:0}
+.anlat h3{margin:0;font-size:.98rem}
+.iki{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.iki h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--k-soluk)}
+.orn{display:flex;flex-direction:column;gap:2px;padding:6px 0;font-size:.84rem}
+.orn .y{font-weight:700;font-size:.78rem;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.orn .b{font-style:italic;color:var(--k-ink2)}
+.orn .c{color:var(--k-soluk);font-size:.8rem}
+.bos2{color:var(--soluk);padding:40px 0}
+@media (max-width:820px){
+  .sayfa{grid-template-columns:minmax(0,1fr);gap:16px}
+  .yanlik{position:static}
+  .donemler{flex-direction:row;overflow-x:auto;max-height:none}
+  .donemler button{flex:none}
+  .iki{grid-template-columns:minmax(0,1fr)}
+  .e-satir,.e-olcek{grid-template-columns:minmax(0,7.5rem) minmax(0,1fr) 2.6rem;gap:8px}
+  .kart2{padding:16px}
+}
+</style>
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
+    <p class="slogan">Almanak</p>
+    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a><a href="hakkimizda.html">Hakkımızda</a></nav>
+  </div>
+</header>
+<main class="sayfa">
+  <h1>Almanak</h1>
+  <p class="giris">Her hafta, ay ve yıl için otomatik bülten: kim neyi ne kadar yazdı, İsrail ve Batı basını neyi görmedi, aynı olay nasıl farklı anlatıldı. Sayılar ölçümdür; yorum metnini yapay zekâ bu sayılara bakarak yazar. Süren dönemlerin bülteni günde bir yenilenen taslaktır.</p>
+  <aside class="yanlik">
+    <div class="sekmeler" id="sekmeler" role="group" aria-label="Bülten türü"></div>
+    <nav class="donemler" id="donemler" aria-label="Dönemler"></nav>
+  </aside>
+  <section class="icerik" id="icerik"><p class="bos2">Yükleniyor…</p></section>
+</main>
+<script>
+(function(){
+  const $=(i)=>document.getElementById(i);
+  const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+  const TUR={haftalik:"Haftalık",aylik:"Aylık",yillik:"Yıllık"};
+  const KR={"Filistin":"#2b8a5e","Arap dünyası":"#6fae92","İran ve Yemen":"#c39a35","Türkiye":"#c9544e","İsrail":"#4a72c4","Batı":"#8d969e","Diğer":"#6b746f",
+    "Antiemperyalist / dekolonyal":"#2b8a5e","Ara / ana akım":"#8d969e","İşbirlikçi kompradorlar ve emperyalistler":"#c9544e"};
+  const BK={filistin:"Filistin bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#2b8a5e",aktarim:"#8f979c",israil:"#4a72c4"};
+  const sayi=(n,d)=>Number(n).toLocaleString("tr-TR",{maximumFractionDigits:d==null?1:d});
+  let dizin=[],tur="haftalik",secili=null;
+
+  function eksen(baslik,liste){
+    const k=el("div","eksen");if(baslik)k.appendChild(el("div","alt-baslik",baslik));
+    liste.filter(x=>x.uzaklik!=null).forEach(x=>{
+      const s=el("div","e-satir");const a=el("span","e-ad",x.ad);a.title=x.ad;a.appendChild(el("small",null,x.n+" haber"));s.appendChild(a);
+      const c=el("div","e-cizgi");const n=el("i","e-nokta");n.style.left=(50*x.uzaklik)+"%";n.style.background=KR[x.ad]||"#6b746f";
+      n.title=x.ad+": "+x.filistin+" Filistin bakışı, "+x.aktarim+" aktarım, "+x.israil+" İsrail / ABD bakışı";c.appendChild(n);s.appendChild(c);
+      const d=el("span","e-deger",sayi(x.uzaklik,2));d.style.color=x.uzaklik<0.5?BR.filistin:x.uzaklik>=1.5?BR.israil:"";s.appendChild(d);k.appendChild(s);});
+    const o=el("div","e-olcek");o.appendChild(el("span"));const ic=el("div");["0 · Filistin bakışı","1 · aktarım","2 · İsrail / ABD"].forEach(t=>ic.appendChild(el("span",null,t)));o.appendChild(ic);o.appendChild(el("span"));k.appendChild(o);
+    return k;
+  }
+  function kamplar(o){const f=el("span");Object.entries(o.kamplar).forEach(([a,n])=>{const c=el("span","kc",a+" "+n);c.style.background=KR[a]||"#6b746f";f.appendChild(c);f.append(" ");});return f;}
+
+  function ciz(b){
+    const k=$("icerik");k.innerHTML="";const s=b.istatistik,a=b.anlati||{};
+    // başlık
+    const ust=el("article","kart2");const bu=el("div","bas-ust");bu.append(TUR[b.tur]+" · "+b.ad);if(b.taslak)bu.appendChild(el("span","taslak","taslak · "+new Date(b.uretildi).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+" itibarıyla"));
+    bu.append(" · "+sayi(s.haber_sayisi,0)+" haber · "+s.olay_sayisi+" olay");ust.appendChild(bu);
+    ust.appendChild(el("h2","bulten-baslik",a.baslik||b.ad));
+    (a.ozet||[]).forEach(p=>ust.appendChild(el("p",null,p)));
+    if(!b.anlati)ust.appendChild(el("p","bekliyor","Yorum metni henüz yazılmadı; yapay zekâ kotası açılınca eklenecek. Aşağıdaki sayılar hazır."));
+    const ind=el("a","indir","Bülteni metin olarak indir (.md) ↓");ind.href="data/bulten/"+b.tur+"/"+b.anahtar+".md";ind.setAttribute("download","");ust.appendChild(ind);
+    k.appendChild(ust);
+    // uzaklık
+    const u=el("article","kart2");u.appendChild(el("h2",null,"Kim, Filistin bakışından ne kadar uzak anlattı"));
+    u.appendChild(el("p",null,"Olay karşılaştırmalarına giren başlıkların ortalaması. 0 Filistin bakışı, 1 aktarım, 2 İsrail / ABD bakışı. Noktanın üzerine gelince dağılımı görürsün."));
+    u.appendChild(eksen("Bölgeye göre",s.kamp_bakis));if(s.cizgi_bakis.length)u.appendChild(eksen("Yayın çizgisine göre",s.cizgi_bakis));
+    k.appendChild(u);
+    // görülmeyenler
+    const g=el("article","kart2");g.appendChild(el("h2",null,"İsrail ve Batı basınının görmedikleri"));
+    if(a.gorulmeyenler)g.appendChild(el("p",null,a.gorulmeyenler));
+    g.appendChild(el("p","bekliyor","Bölge basınında en az üç yayının yazdığı, İsrail ve Batı basınında hiç yer bulmayan olaylar:"));
+    const ul=el("ul","olay-liste");s.gormeyen_israil_bati.forEach(o=>{const li=el("li");li.appendChild(el("span","t",o.tarih));li.appendChild(el("b",null,o.baslik));li.appendChild(kamplar(o));ul.appendChild(li);});
+    if(!s.gormeyen_israil_bati.length)ul.appendChild(el("li",null,"Bu dönemde böyle bir olay yok."));g.appendChild(ul);
+    if(s.gormeyen_bolge.length){g.appendChild(el("div","alt-baslik","Tersi: yalnızca İsrail ve Batı basınının yazdıkları"));const u2=el("ul","olay-liste");s.gormeyen_bolge.forEach(o=>{const li=el("li");li.appendChild(el("span","t",o.tarih));li.appendChild(el("b",null,o.baslik));li.appendChild(kamplar(o));u2.appendChild(li);});g.appendChild(u2);}
+    k.appendChild(g);
+    // konular
+    if(s.konular.length){const t=el("article","kart2");t.appendChild(el("h2",null,"Kim hangi konuya ne kadar yer verdi"));
+      t.appendChild(el("p",null,"Her grubun kendi haberleri içinde o konuya ayırdığı pay. Oran 1’in altındaysa İsrail ve Batı basını konuyu bölge basınından daha az işlemiş demektir."));
+      const kt=el("div","tablo-kutu");const tb=el("table");tb.innerHTML="<thead><tr><th>Konu</th><th>Bölge basını</th><th>İsrail ve Batı</th><th>Oran</th></tr></thead>";const bd=el("tbody");
+      const enb=Math.max(1,...s.konular.map(x=>x.oran||0));
+      s.konular.forEach(x=>{const r=el("tr");r.appendChild(el("td",null,x.konu));r.appendChild(el("td","sayi","%"+sayi(x.bolge_ici_pay)+" · "+x.bolge_ici));r.appendChild(el("td","sayi","%"+sayi(x.israil_bati_pay)+" · "+x.israil_bati));
+        const oc=el("td");const ob=el("div","oran");const i=el("i");i.style.width=Math.max(2,60*(x.oran||0)/enb)+"px";i.style.background=(x.oran||0)<1?"#c9544e":"#4a72c4";ob.appendChild(i);ob.appendChild(el("span",null,x.oran==null?"–":sayi(x.oran,2)+"×"));oc.appendChild(ob);r.appendChild(oc);bd.appendChild(r);});
+      tb.appendChild(bd);kt.appendChild(tb);t.appendChild(kt);k.appendChild(t);}
+    // nasıl anlatıldı
+    const n=el("article","kart2");n.appendChild(el("h2",null,"Nasıl anlatıldı"));
+    (a.nasil_anlatildi||[]).forEach(x=>{const d=el("div","anlat");d.appendChild(el("h3",null,x.konu));d.appendChild(el("p",null,x.metin));n.appendChild(d);});
+    n.appendChild(el("div","alt-baslik","En çok yazılan olaylardan başlık örnekleri"));
+    s.buyuk_olaylar.filter(o=>o.ornekler.bolge_ici.length||o.ornekler.israil_bati.length).slice(0,6).forEach(o=>{
+      const d=el("div","anlat");d.appendChild(el("h3",null,o.baslik));const iki=el("div","iki");
+      [["bolge_ici","Bölge basını"],["israil_bati","İsrail ve Batı basını"]].forEach(([y,l])=>{const c=el("div");c.appendChild(el("h4",null,l));
+        if(!o.ornekler[y].length)c.appendChild(el("div","orn c","Bu olayı yazmadı."));
+        o.ornekler[y].forEach(e=>{const r=el("div","orn");const yy=el("span","y",e.yayin);if(e.bakis){const cp=el("span","bakis-cip",BK[e.bakis]);cp.style.background=BR[e.bakis];yy.appendChild(cp);}r.appendChild(yy);
+          const bb=el("span","b",e.baslik);bb.dir="auto";r.appendChild(bb);if(e.cerceve)r.appendChild(el("span","c",e.cerceve));c.appendChild(r);});iki.appendChild(c);});
+      d.appendChild(iki);n.appendChild(d);});
+    k.appendChild(n);
+    // yayınlar
+    if(s.yayin_yakin.length){const y=el("article","kart2");y.appendChild(el("h2",null,"Yayınlar"));y.appendChild(el("p",null,"En az dört başlığı ölçülen yayınlar arasında Filistin bakışına en yakın ve en uzak olanlar."));
+      y.appendChild(eksen("En yakın",s.yayin_yakin));y.appendChild(eksen("En uzak",s.yayin_uzak));k.appendChild(y);}
+    if(a.veri_notu)k.appendChild(el("p","bekliyor",a.veri_notu));
+  }
+  async function ac(x){secili=x;history.replaceState(null,"","#"+x.tur+"-"+x.anahtar);listele();
+    $("icerik").innerHTML='<p class="bos2">Yükleniyor…</p>';
+    try{ciz(await fetch("data/bulten/"+x.tur+"/"+x.anahtar+".json?t="+Date.now()).then(r=>r.json()));}catch(e){$("icerik").innerHTML='<p class="bos2">Bülten okunamadı.</p>';}}
+  function listele(){
+    const sk=$("sekmeler");sk.innerHTML="";Object.entries(TUR).forEach(([t,l])=>{const b=el("button",null,l);b.type="button";b.setAttribute("aria-pressed",t===tur);b.onclick=()=>{tur=t;const ilk=dizin.find(x=>x.tur===t);if(ilk)ac(ilk);else listele();};sk.appendChild(b);});
+    const d=$("donemler");d.innerHTML="";const l=dizin.filter(x=>x.tur===tur);
+    if(!l.length)d.appendChild(el("p","bos2","Bu türde henüz bülten yok."));
+    l.forEach(x=>{const b=el("button");b.type="button";b.setAttribute("aria-pressed",secili===x);b.appendChild(el("span",null,x.ad));b.appendChild(el("small",null,(x.taslak?"taslak · ":"")+x.haber+" haber"));b.onclick=()=>ac(x);d.appendChild(b);});
+  }
+  fetch("data/bulten/dizin.json?t="+Date.now()).then(r=>r.json()).then(d=>{dizin=d;
+    if(!d.length){listele();$("icerik").innerHTML='<p class="bos2">İlk bülten toplayıcının bir sonraki çalışmasında yazılacak.</p>';return;}
+    const m=/^#(haftalik|aylik|yillik)-(.+)$/.exec(location.hash);const x=(m&&d.find(y=>y.tur===m[1]&&y.anahtar===m[2]))||d.find(y=>y.tur==="haftalik")||d[0];tur=x.tur;ac(x);
+  }).catch(()=>{listele();$("icerik").innerHTML='<p class="bos2">İlk bülten toplayıcının bir sonraki çalışmasında yazılacak.</p>';});
+})();
+</script>
+</body>
+</html>
