@@ -10,8 +10,11 @@
   const BAYRAK = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let kaynaklar = {}, haberler = [], guncellendi = null, gor = [];
+  const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
+  let kaynaklar = {}, haberler = [], guncellendi = null, gor = [], olaylar = [], olayHarita = {};
+  let konu = null, olaySec = null, odakId = null;
   let bilinen = null; // önceki yüklemede görülen haber kimlikleri
+  let haberIdx = {};
   let bolge = "Tümü", sehir = null, ara = "", kac = SAYFA, aktifId = null;
   const $ = (id) => document.getElementById(id);
   const renk = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
@@ -116,6 +119,7 @@
       if (bolge !== "Tümü" && k.bolge !== bolge) return false;
       if (ilgili && !h.ilgili) return false;
       if (ozetli && !h.ozet_tr) return false;
+      if (konu && !(h.etiket || []).includes(konu)) return false;
       if (ara) {
         const m = [h.baslik_tr, h.ozet_tr, h.baslik_orj, k.ad, k.sehir, k.ulke].join(" ").toLocaleLowerCase("tr");
         if (!m.includes(ara)) return false;
@@ -153,6 +157,70 @@
     return kutu;
   }
 
+  function kalici(id) { return location.origin + location.pathname + "#h-" + id; }
+  function paylasDugme(h) {
+    const kutu = el("span", "paylas");
+    const b = el("button", "eylem", "Paylaş"); b.type = "button"; b.setAttribute("aria-expanded", "false");
+    const menu = el("span", "paylas-menu"); menu.hidden = true;
+    const url = kalici(h.id), metin = (h.baslik_tr || h.baslik_orj) + " · " + kaynaklar[h.kaynak].ad;
+    const bag = (l, u) => { const a = el("a", null, l); a.href = u; a.target = "_blank"; a.rel = "noopener"; menu.appendChild(a); };
+    const kop = el("button", null, "Bağlantıyı kopyala"); kop.type = "button";
+    kop.onclick = async () => { try { await navigator.clipboard.writeText(url); kop.textContent = "Kopyalandı"; } catch (e) { prompt("Bağlantı", url); } setTimeout(() => (kop.textContent = "Bağlantıyı kopyala"), 2000); };
+    menu.appendChild(kop);
+    bag("WhatsApp", "https://wa.me/?text=" + encodeURIComponent(metin + " " + url));
+    bag("Telegram", "https://t.me/share/url?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(metin));
+    bag("X", "https://x.com/intent/post?text=" + encodeURIComponent(metin) + "&url=" + encodeURIComponent(url));
+    b.onclick = async (e) => {
+      e.stopPropagation();
+      if (navigator.share && tel()) { try { await navigator.share({ title: metin, text: h.ozet_tr || "", url }); } catch (x) {} return; }
+      menu.hidden = !menu.hidden; b.setAttribute("aria-expanded", String(!menu.hidden));
+    };
+    kutu.append(b, menu);
+    return kutu;
+  }
+
+  function olayAc(id) { olaySec = id; ciz(true); }
+
+  function gundemCiz() {
+    const kutu = $("gundem"); kutu.innerHTML = "";
+    const liste = olaylar.filter((o) => o.haberler.some((i) => haberIdx[i])).slice(0, 10);
+    kutu.hidden = !liste.length || !!olaySec;
+    if (!liste.length) return;
+    kutu.appendChild(el("h2", "bolum", "Gündem: birden fazla kaynağın yazdığı olaylar"));
+    const serit = el("div", "gundem-serit");
+    liste.forEach((o) => {
+      const b = el("button", "olay-kart"); b.type = "button"; b.onclick = () => olayAc(o.id);
+      b.appendChild(el("span", "olay-sayi", o.kaynak_sayisi + " kaynak"));
+      b.appendChild(el("span", "olay-ad", o.baslik));
+      const av = el("span", "olay-avatarlar");
+      [...new Set(o.haberler.map((i) => haberIdx[i] && haberIdx[i].kaynak).filter(Boolean))].slice(0, 6).forEach((kid) => {
+        const k = kaynaklar[kid]; if (k) { const a = el("span", "avatar " + k.tur, bas(k.ad)); a.title = k.ad; av.appendChild(a); }
+      });
+      b.appendChild(av);
+      serit.appendChild(b);
+    });
+    kutu.appendChild(serit);
+  }
+
+  function seritCiz() {
+    const son = haberler.filter((h) => h.ilgili && !h.atla && dk(h.tarih) < 90).slice(0, 14);
+    const s = $("serit"); s.hidden = !son.length;
+    document.documentElement.style.setProperty("--serit", son.length ? "38px" : "0px");
+    const ic = $("seritIc"); ic.innerHTML = "";
+    const parca = () => {
+      const p = el("span", "serit-parca");
+      son.forEach((h) => {
+        const a = el("a", "serit-oge"); a.href = "#h-" + h.id;
+        a.appendChild(el("b", null, kaynaklar[h.kaynak] ? kaynaklar[h.kaynak].ad : ""));
+        const t = el("span", null, h.baslik_tr || h.baslik_orj); if (!h.baslik_tr) t.dir = "auto"; a.appendChild(t);
+        p.appendChild(a);
+      });
+      return p;
+    };
+    ic.appendChild(parca()); ic.appendChild(parca());
+    ic.style.animationDuration = Math.max(40, son.length * 9) + "s";
+  }
+
   function haberCiz(h) {
     const k = kaynaklar[h.kaynak];
     const kart = el("article", "haber"); kart.dataset.id = h.id;
@@ -180,10 +248,23 @@
       const b = el("h2", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; g.appendChild(b);
       g.appendChild(el("span", "cevirisiz", (DIL[k.dil] || k.dil) + " · Türkçe özet " + (h.ilgili ? "sırada" : "yazılmadı")));
     }
+    if (h.etiket && h.etiket.length) {
+      const et = el("div", "etiketler");
+      h.etiket.forEach((t) => { const b = el("button", "etiket", "#" + t); b.type = "button"; b.onclick = () => { konu = t; kac = SAYFA; ciz(true); }; et.appendChild(b); });
+      g.appendChild(et);
+    }
+    const o = h.olay && olayHarita[h.olay];
+    if (o && !olaySec) {
+      const b = el("button", "olay-bag", "Bu olayı " + o.kaynak_sayisi + " kaynak yazdı · nasıl anlattıklarını gör →"); b.type = "button";
+      b.onclick = () => olayAc(o.id);
+      g.appendChild(b);
+    }
     const ey = el("div", "eylemler");
     ey.appendChild(eylem(h.telegram ? "Telegram’da aç ↗" : "Kaynağa git ↗", h.url, "ana"));
-    ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + h.url));
+    if (h.arsiv) ey.appendChild(eylem("Arşivlendi ✓", h.arsiv, "arsivli"));
+    else ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + h.url));
     ey.appendChild(eylem("archive.today", "https://archive.ph/?run=1&url=" + encodeURIComponent(h.url)));
+    ey.appendChild(paylasDugme(h));
     g.appendChild(ey);
     kart.appendChild(g);
     kart.addEventListener("click", (e) => { if (!e.target.closest("a,button")) aktifEt(h.id, true); });
@@ -230,15 +311,37 @@
   function ciz(basaDon, devam) {
     document.querySelectorAll("#fBolge .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === bolge));
     const sc = $("fSehir"); sc.hidden = !sehir; if (sehir) sc.textContent = sehir + "  ✕";
+    document.querySelectorAll("#fKonu .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === (konu || "")));
     const liste = suz();
-    gor = sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste;
+    const secOlay = olaySec && olayHarita[olaySec];
+    if (olaySec && !secOlay) olaySec = null;
+    gor = secOlay ? secOlay.haberler.map((i) => haberIdx[i]).filter((h) => h && kaynaklar[h.kaynak])
+      : (sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste);
+    const odak = odakId && haberIdx[odakId];
+    if (odak && !secOlay) gor = [odak, ...gor.filter((h) => h.id !== odakId)];
     const akis = $("akis");
     const kaydir = window.scrollY;
     akis.innerHTML = "";
+    gundemCiz(); seritCiz();
+    if (secOlay) {
+      const b = el("div", "olay-baslik");
+      const ust = el("div", "olay-ust");
+      ust.appendChild(el("span", "olay-sayi", secOlay.kaynak_sayisi + " kaynak · " + secOlay.haberler.length + " haber"));
+      const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = () => { olaySec = null; ciz(true); };
+      ust.appendChild(kap); b.appendChild(ust);
+      b.appendChild(el("h2", null, secOlay.baslik));
+      if (secOlay.not) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(secOlay.not); b.appendChild(n); }
+      b.appendChild(el("p", "olay-uyari", "Bu not, başlıklar karşılaştırılarak yapay zekâyla yazıldı. Haberlerin tamamı için kaynaklara git."));
+      akis.appendChild(b);
+    } else if (odakId && !odak) {
+      const n = el("p", "bos"); n.append("Paylaşılan haber artık akışta değil (akış son iki günü gösteriyor). ");
+      const a = el("a", null, "Arşivde ara"); a.href = "arsiv.html"; n.appendChild(a); akis.appendChild(n);
+    }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
     gor.slice(0, kac).forEach((h, i) => {
-      const k = haberCiz(h); if (i === 0) k.classList.add("manset");
+      const k = haberCiz(h); if (i === 0 && !secOlay) k.classList.add("manset");
+      if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
       if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
       akis.appendChild(k);
     });
@@ -258,6 +361,7 @@
     haritaCiz(liste);
     sonrakiYukle(); belirt();
     if (basaDon && gor[0] && !devam) aktifEt(gor[0].id, true);
+    const sk = $("fKonuSil"); sk.hidden = !konu; if (konu) sk.textContent = "#" + konu + "  ✕";
   }
 
   // ---------------------------------------------------- veri
@@ -265,13 +369,17 @@
   async function yukle() {
     const t = Date.now();
     try {
-      const [k, h] = await Promise.all([
+      const [k, h, o] = await Promise.all([
         fetch("kaynaklar.json?t=" + t).then((r) => r.json()),
         fetch("data/haberler.json?t=" + t).then((r) => r.json()),
+        fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
       ]);
+      olaylar = o.olaylar || []; olayHarita = {}; olaylar.forEach((x) => (olayHarita[x.id] = x));
       kaynaklar = {}; k.forEach((x) => (kaynaklar[x.id] = x));
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
       guncellendi = h.guncellendi;
+      haberIdx = {}; haberler.forEach((x) => (haberIdx[x.id] = x));
+      hashOku();
       ciz(ilk); ilk = false;
       bilinen = new Set(haberler.map((x) => x.id));
     } catch (e) {
@@ -285,6 +393,16 @@
     c.onclick = () => { bolge = b; sehir = null; kac = SAYFA; ciz(true); };
     $("fBolge").appendChild(c);
   });
+  [["", "Tüm konular"], ...KONULAR.map((k) => [k, k])].forEach(([k, l]) => {
+    const c = el("button", "cip", l); c.type = "button"; c.dataset.k = k;
+    c.onclick = () => { konu = k || null; kac = SAYFA; ciz(true); };
+    $("fKonu").appendChild(c);
+  });
+  $("fKonuSil").onclick = () => { konu = null; ciz(true); };
+  function hashOku() { const m = /^#h-([0-9a-f]+)$/.exec(location.hash); odakId = m ? m[1] : null; }
+  window.addEventListener("hashchange", () => { hashOku(); olaySec = null; ciz(true); });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".paylas")) document.querySelectorAll(".paylas-menu").forEach((m) => (m.hidden = true)); });
+  if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   $("fIlgili").onchange = $("fOzet").onchange = () => { kac = SAYFA; ciz(true); };
   const bul = $("fBulanik");
   bul.checked = oku("zbs-bulanik") === "1";

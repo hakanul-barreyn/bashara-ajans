@@ -30,11 +30,13 @@ from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(__file__))
 from konular import ilgili_mi  # noqa: E402
+import ekler  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
 HABERLER = os.path.join(KOK, "data", "haberler.json")
 DURUM = os.path.join(KOK, "data", "durum.json")
+OLAYLAR = os.path.join(KOK, "data", "olaylar.json")
 
 UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
@@ -537,8 +539,10 @@ Kurallar:
 - Yalnızca verilen metindeki bilgileri kullan, bilgi ekleme, yorum katma.
 - İddiaları sahibine atfet ("... göre", "... açıkladı"). Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
-- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "..."}]
+- etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
+- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."]}]
 """
+TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
 
 
 def gemini_ozetle(anahtar, model, parti):
@@ -669,12 +673,31 @@ def main():
                     else:
                         h["baslik_tr"] = temiz(c.get("baslik"), 200)
                         h["ozet_tr"] = temiz(c.get("ozet"), 700)
+                        et = [e for e in (c.get("etiketler") or []) if e in ekler.ETIKETLER][:3]
+                        if et:
+                            h["etiket"] = et
                         yazilan += 1
                 time.sleep(4)  # dakika başı istek sınırına takılmamak için
             durum["_model"] = model
             log(f"{yazilan} özet yazıldı ({model})")
         elif not model:
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
+
+        # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
+        son_olay = tarih_coz(durum.get("_olay_son"))
+        bekle = tarih_coz(durum.get("_gemini_bekle"))
+        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55)) \
+                and time.time() - BASLANGIC < CALISMA_SURESI:
+            sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
+            if isinstance(sonuc, list):
+                yaz(OLAYLAR, {"guncellendi": SIMDI.isoformat(), "olaylar": sonuc})
+                durum["_olay_son"] = SIMDI.isoformat()
+                log(f"{len(sonuc)} olay kümesi çıkarıldı")
+            elif sonuc == 429:
+                durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+                log("Olay kümeleme: Gemini kotası doldu")
+            else:
+                log(f"Olay kümeleme yapılamadı ({sonuc})")
     elif not anahtar:
         log("GEMINI_API_KEY yok; özet yazılmadı")
 
@@ -685,6 +708,42 @@ def main():
         with ThreadPoolExecutor(max_workers=8) as ex:
             list(ex.map(gorsel_tamamla, eksik))
         log(f"{sum(1 for h in eksik if h.get('gorsel'))}/{len(eksik)} habere görsel bulundu")
+
+    # Olay kümelerini haberlere işle
+    olay_veri = oku(OLAYLAR, {"olaylar": []})
+    for h in eski.values():
+        h.pop("olay", None)
+    for o in olay_veri.get("olaylar", []):
+        for i in o["haberler"]:
+            if i in eski:
+                eski[i]["olay"] = o["id"]
+
+    # Birden fazla kaynağın yazdığı olayların haberlerini Wayback Machine'e kaydet
+    wb = durum.setdefault("_wayback", {})
+    for hid, kayit in wb.items():
+        if hid in eski and kayit.get("url"):
+            eski[hid]["arsiv"] = kayit["url"]
+    wb_bekle = tarih_coz(durum.get("_wayback_bekle"))
+    if not (wb_bekle and wb_bekle > SIMDI):
+        sira = [eski[i] for o in olay_veri.get("olaylar", []) for i in o["haberler"]
+                if i in eski and i not in wb and not eski[i].get("telegram")]
+        kaydedilen = 0
+        for h in sira[:8]:
+            if time.time() - BASLANGIC > CALISMA_SURESI + 120:
+                break
+            sonuc = ekler.wayback_kaydet(h["url"])
+            if sonuc == "KOTA":
+                durum["_wayback_bekle"] = (SIMDI + dt.timedelta(minutes=30)).isoformat()
+                log("Wayback kotası doldu; yarım saat sonra yeniden denenecek")
+                break
+            wb[h["id"]] = {"zaman": SIMDI.isoformat(), "url": sonuc}
+            if sonuc:
+                h["arsiv"] = sonuc
+                kaydedilen += 1
+        if sira:
+            log(f"Wayback: {kaydedilen}/{min(len(sira), 8)} haber arşivlendi")
+    for hid in [i for i, k in wb.items() if (SIMDI - (tarih_coz(k.get("zaman")) or SIMDI)).days > 3]:
+        wb.pop(hid, None)
 
     # Kaydet: eski haberleri at, ham metinleri temizle
     tut = [h for h in eski.values() if (tarih_coz(h["tarih"]) or SIMDI) >= sinir]
@@ -697,6 +756,12 @@ def main():
         else:
             h["giris"] = h.get("giris", "")[:300]
     yaz(HABERLER, {"guncellendi": SIMDI.isoformat(), "haberler": tut})
+    try:
+        gun = ekler.arsive_yaz(KOK, tut)
+        ekler.rss_yaz(KOK, tut, SIMDI)
+        log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")
+    except Exception as e:  # arşiv hatası toplamayı durdurmasın
+        log(f"Arşiv/RSS hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
     yaz(DURUM, durum)
     log(f"{len(tut)} haber kaydedildi; süre {int(time.time() - BASLANGIC)} sn")

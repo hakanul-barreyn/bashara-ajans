@@ -23,7 +23,7 @@ concurrency:
 jobs:
   topla:
     runs-on: ubuntu-latest
-    timeout-minutes: 14
+    timeout-minutes: 16
     environment:
       name: github-pages
       url: ${{ steps.yayin.outputs.page_url }}
@@ -55,14 +55,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          V="$RUNNER_TEMP/veri"
-          rm -rf "$V" && mkdir -p "$V" && cp -r data "$V/"
+          # Önceki veri commit'inin üzerine tek bir commit olarak yaz; yalnızca değişen dosyalar gönderilir
+          V="$RUNNER_TEMP/veri"; rm -rf "$V"
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git clone -q --depth 1 --branch veri "$ADRES" "$V" 2>/dev/null; then YENI=0; else mkdir -p "$V" && git -C "$V" init -q -b veri && YENI=1; fi
+          rm -rf "$V/data" && cp -r data "$V/"
           cd "$V"
-          git init -q -b veri
           git add -A
-          git -c user.name="zbs-toplayici" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -q -m "Veri: $(date -u +'%Y-%m-%d %H:%M') UTC"
-          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" veri
+          KIM=(-c user.name="zbs-toplayici" -c user.email="41898282+github-actions[bot]@users.noreply.github.com")
+          if [ "$YENI" = 1 ]; then git "${KIM[@]}" commit -q -m "Veri"; else git "${KIM[@]}" commit -q --amend -m "Veri: $(date -u +'%Y-%m-%d %H:%M') UTC"; fi
+          git push -q -f "$ADRES" veri
 
       - uses: actions/configure-pages@v5
 

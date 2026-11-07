@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c110e">
+<title>ZBS Arşiv</title>
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611071759">
+<style>
+/* Arşiv: solda günler, sağda o günün Türkçe özetleri; kompakt, okunur liste */
+.sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px}
+.sayfa h1{grid-column:1/-1;margin:0;font-size:1.8rem;letter-spacing:-.01em}
+.sayfa .giris{grid-column:1/-1;margin:-18px 0 0;color:var(--soluk);max-width:70ch}
+.gunler{position:sticky;top:calc(var(--ust) + 16px);align-self:start;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - var(--ust) - 40px);overflow-y:auto}
+.gunler button{display:flex;justify-content:space-between;gap:8px;border:0;background:transparent;color:var(--ink2);padding:8px 10px;border-radius:10px;cursor:pointer;text-align:left;font-size:.9rem}
+.gunler button:hover{background:var(--yuzey)}
+.gunler button[aria-pressed="true"]{background:var(--kart);color:var(--k-ink);font-weight:700}
+.gunler .n{font-family:var(--mono);font-size:.74rem;color:var(--soluk)}
+.gunler button[aria-pressed="true"] .n{color:var(--k-soluk)}
+.liste{min-width:0;display:flex;flex-direction:column;gap:12px}
+.ust-arac{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ust-arac .ara-kutu{flex:1 1 260px}
+.ust-arac select{font:inherit;font-size:.9rem;padding:10px 12px;border:1px solid var(--cizgi);border-radius:12px;background:var(--yuzey);color:var(--ink)}
+.kayit{background:var(--kart);color:var(--k-ink);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:3.4rem minmax(0,1fr);gap:4px 14px}
+.kayit .saat{font-family:var(--mono);font-size:.8rem;color:var(--k-soluk);padding-top:2px;font-variant-numeric:tabular-nums}
+.kayit .ic{min-width:0;display:flex;flex-direction:column;gap:6px}
+.kayit .kaynak{font-size:.78rem;font-weight:700;color:var(--k-ink2)}
+.kayit h2{margin:0;font-size:1.02rem;line-height:1.35}
+.kayit p{margin:0;font-size:.9rem;color:var(--k-ink2)}
+.kayit .eylemler a{font-size:.74rem}
+.durum-satir{font-family:var(--mono);font-size:.76rem;color:var(--soluk)}
+@media (max-width:760px){.sayfa{grid-template-columns:1fr;gap:16px}.gunler{position:static;flex-direction:row;overflow-x:auto;max-height:none}.gunler button{flex:none;flex-direction:column;gap:0}}
+</style>
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad">ZBS</span></a>
+    <p class="slogan">Arşiv</p>
+    <nav class="menu"><a href="./">Akış</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+<main class="sayfa">
+  <h1>Arşiv</h1>
+  <p class="giris">Türkçe özeti yazılmış bütün haberler gün gün burada saklanıyor. Kaynakların ham metni saklanmaz; özet, başlık ve orijinal bağlantı kalır.</p>
+  <nav class="gunler" id="gunler" aria-label="Günler"></nav>
+  <section class="liste">
+    <div class="ust-arac">
+      <div class="ara-kutu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ara" id="ara" type="search" placeholder="Bu günün haberlerinde ara" aria-label="Ara"></div>
+      <select id="konu" aria-label="Konu"><option value="">Tüm konular</option></select>
+    </div>
+    <div class="durum-satir" id="durum">Yükleniyor…</div>
+    <div id="kayitlar" class="liste"></div>
+  </section>
+</main>
+<script>
+(function(){
+  const $=(i)=>document.getElementById(i);
+  const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+  let gun=null, kayitlar=[], ara="", konu="";
+  const gunAd=(g)=>new Date(g+"T12:00:00Z").toLocaleDateString("tr-TR",{day:"numeric",month:"long",weekday:"short"});
+  function ciz(){
+    const k=$("kayitlar"); k.innerHTML="";
+    const liste=kayitlar.filter(x=>(!konu||(x.etiket||[]).includes(konu))&&(!ara||[x.baslik_tr,x.ozet_tr,x.kaynak_ad].join(" ").toLocaleLowerCase("tr").includes(ara)));
+    $("durum").textContent=gunAd(gun)+" · "+liste.length+" haber";
+    liste.forEach(x=>{
+      const r=el("article","kayit"); r.id="h-"+x.id;
+      r.appendChild(el("div","saat",new Date(x.tarih).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})));
+      const ic=el("div","ic");
+      ic.appendChild(el("span","kaynak",x.kaynak_ad+((x.etiket||[]).length?" · #"+x.etiket.join(" #"):"")));
+      ic.appendChild(el("h2",null,x.baslik_tr)); ic.appendChild(el("p",null,x.ozet_tr));
+      const e=el("div","eylemler");
+      const a=el("a","eylem ana","Kaynağa git ↗");a.href=x.url;a.target="_blank";a.rel="noopener";e.appendChild(a);
+      const w=el("a","eylem"+(x.arsiv?" arsivli":""),x.arsiv?"Arşivlendi ✓":"Wayback’te ara");w.href=x.arsiv||("https://web.archive.org/web/*/"+x.url);w.target="_blank";w.rel="noopener";e.appendChild(w);
+      ic.appendChild(e); r.appendChild(ic); k.appendChild(r);
+    });
+    if(!liste.length) k.appendChild(el("p","bos","Bu günde eşleşen haber yok."));
+  }
+  async function gunAc(g){
+    gun=g; history.replaceState(null,"","#gun-"+g);
+    document.querySelectorAll("#gunler button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g===g));
+    $("durum").textContent="Yükleniyor…";
+    try{ kayitlar=await fetch("data/arsiv/"+g+".json?t="+Date.now()).then(r=>r.json()); }catch(e){ kayitlar=[]; }
+    const konular=new Set(); kayitlar.forEach(x=>(x.etiket||[]).forEach(t=>konular.add(t)));
+    const s=$("konu"); const onceki=s.value; s.innerHTML='<option value="">Tüm konular</option>';
+    [...konular].sort((a,b)=>a.localeCompare(b,"tr")).forEach(t=>{const o=el("option",null,t);o.value=t;s.appendChild(o);});
+    s.value=konular.has(onceki)?onceki:""; konu=s.value; ciz();
+  }
+  fetch("data/arsiv/dizin.json?t="+Date.now()).then(r=>r.json()).then(d=>{
+    const n=$("gunler");
+    if(!d.length){$("durum").textContent="Arşiv henüz boş. İlk özetler yazıldıkça burada birikecek.";return;}
+    d.forEach(x=>{const b=el("button");b.type="button";b.dataset.g=x.gun;b.appendChild(el("span",null,gunAd(x.gun)));b.appendChild(el("span","n",x.sayi));b.onclick=()=>gunAc(x.gun);n.appendChild(b);});
+    const m=/^#gun-(\d{4}-\d{2}-\d{2})$/.exec(location.hash);
+    gunAc(m&&d.some(x=>x.gun===m[1])?m[1]:d[0].gun);
+  }).catch(()=>{$("durum").textContent="Arşiv henüz boş. İlk özetler yazıldıkça burada birikecek.";});
+  let t; $("ara").addEventListener("input",e=>{clearTimeout(t);t=setTimeout(()=>{ara=e.target.value.trim().toLocaleLowerCase("tr");ciz();},150);});
+  $("konu").onchange=e=>{konu=e.target.value;ciz();};
+})();
+</script>
+</body>
+</html>

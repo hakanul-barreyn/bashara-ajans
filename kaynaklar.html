@@ -3,149 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0c110e">
 <title>ZBS Kaynakları</title>
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611071759">
 <style>
-/* Ajans kaynak defteri: üstte özet ve onay notları, yapışkan filtre şeridi, bölgelere göre gruplanmış kaynak satırları */
-:root{
-  --bg:#eef1ec; --card:#fbfcfa; --ink:#17201a; --muted:#56635a; --line:#d2d9d1;
-  --accent:#1e5a3c; --accent-soft:#dcebe1; --red:#a8322a; --red-soft:#f5e1de;
-  --amber:#875c08; --amber-soft:#f4ead2; --blue:#2c5079; --blue-soft:#e0e8f2;
-  --f-disp:"Newsreader", Georgia, "Times New Roman", serif;
-  --f-body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
-  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121814; --card:#19211c; --ink:#e3eae4; --muted:#9caaa0; --line:#2b362f;
-  --accent:#7cc39b; --accent-soft:#1c3327; --red:#ee8a7e; --red-soft:#3a201d;
-  --amber:#e2b55a; --amber-soft:#33290f; --blue:#94b8e3; --blue-soft:#1b2838; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#121814; --card:#19211c; --ink:#e3eae4; --muted:#9caaa0; --line:#2b362f;
-  --accent:#7cc39b; --accent-soft:#1c3327; --red:#ee8a7e; --red-soft:#3a201d;
-  --amber:#e2b55a; --amber-soft:#33290f; --blue:#94b8e3; --blue-soft:#1b2838; color-scheme:dark}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
-.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
-h1{font-family:var(--f-disp);font-weight:650;font-size:clamp(1.7rem,4vw,2.4rem);margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
-.lede{color:var(--muted);max-width:70ch;margin:0 0 18px}
-.stats{display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--f-mono);font-size:.85rem;color:var(--muted);margin:0 0 18px}
-.stats b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
-.notes{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:14px 18px;margin:0 0 22px}
-.notes h2{font-family:var(--f-mono);font-weight:500;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 8px}
-.notes ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:80ch}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.85rem;color:var(--muted);margin:0 0 6px}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.row-f{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.row-f .lab{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
-.chip{font-family:var(--f-body);font-size:.82rem;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:4px 10px;border-radius:999px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
-.chip:focus-visible,.search:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.search{flex:1 1 220px;min-width:0;font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink)}
-section{margin-top:26px}
-section h2{font-family:var(--f-disp);font-weight:650;font-size:1.3rem;margin:0 0 8px;display:flex;align-items:baseline;gap:10px}
-section h2 span{font-family:var(--f-mono);font-size:.8rem;font-weight:400;color:var(--muted)}
-.list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.src{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:4px 20px;padding:12px 4px;border-bottom:1px solid var(--line)}
-.who{min-width:0;display:flex;flex-direction:column;gap:3px}
-.name{font-weight:600;font-size:1rem;line-height:1.3}
-.name a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
-.name a:hover{color:var(--accent);text-decoration-color:var(--accent)}
-.bayrak{width:18px;height:13px;vertical-align:-2px;margin-right:6px;display:inline-block}
-.place{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
-.what{min-width:0;display:flex;flex-direction:column;gap:6px}
-.what p{margin:0;max-width:72ch}
-.tags{display:flex;flex-wrap:wrap;gap:5px;font-size:.74rem}
-.t{padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);font-family:var(--f-mono)}
-.t.resmi{color:var(--red);background:var(--red-soft);border-color:transparent}
-.t.grup{color:var(--ink);background:transparent;border-color:var(--muted)}
-.t.izle{color:var(--ink);background:var(--line);border-color:transparent}
-.t.bagimsiz,.t.koop{color:var(--accent);background:var(--accent-soft);border-color:transparent}
-.t.ozel{color:var(--muted)}
-.t.q{color:var(--amber);background:var(--amber-soft);border-color:transparent;font-weight:500}
-.t.mine{border-color:var(--accent);color:var(--accent)}
-.note{font-size:.88rem;color:var(--amber)}
-.note b{font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
-.empty{color:var(--muted);font-style:italic}
-.foot{margin-top:32px;font-size:.9rem;color:var(--muted);max-width:75ch}
-@media (max-width:640px){.src{grid-template-columns:1fr}}
+/* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
+.sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
+.sayfa h1{margin:0;font-size:1.8rem;letter-spacing:-.01em}
+.giris{margin:-8px 0 0;color:var(--soluk);max-width:72ch}
+.saglik{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.saglik button{text-align:left;border:1px solid var(--cizgi);background:var(--yuzey);color:var(--ink);border-radius:14px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.saglik button[aria-pressed="true"]{border-color:var(--ink2);background:var(--yuzey2)}
+.saglik b{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
+.saglik span{font-size:.78rem;color:var(--soluk);display:flex;align-items:center;gap:6px}
+.nokta{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.d-iyi{background:#3ccf82}.d-sessiz{background:#f2b84b}.d-kopuk{background:#ff5a5f}.d-yok{background:#6b7a72}
+.arac{display:flex;flex-direction:column;gap:10px;position:sticky;top:var(--ust);background:var(--bg);padding:10px 0;z-index:5}
+.grup h2{margin:14px 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soluk)}
+.izgara{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kk{background:var(--kart);color:var(--k-ink);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.kk-ust{display:flex;align-items:center;gap:10px;min-width:0}
+.kk-ad{font-weight:700;min-width:0}
+.kk-ad a{color:var(--k-ink);text-decoration:none}
+.kk-ad a:hover{text-decoration:underline}
+.kk-yer{font-size:.76rem;color:var(--k-soluk)}
+.kk p{margin:0;font-size:.9rem;color:var(--k-ink2)}
+.kk .izleme{font-family:var(--mono);font-size:.72rem;color:var(--k-soluk)}
+.kk .izleme .nokta{margin-right:6px;vertical-align:1px}
+.kk .not{font-size:.8rem;color:var(--k-amber)}
+@media (max-width:820px){.saglik{grid-template-columns:repeat(2,minmax(0,1fr))}.izgara{grid-template-columns:1fr}}
 </style>
-
 </head>
 <body>
-<div class="wrap">
-  <h1>ZBS Kaynakları</h1>
-  <p class="lede">ZBS’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. <a href="./">Haber akışına dön</a>.</p>
-  <div class="stats" id="stats"></div>
-
-  <div class="legend">
-    <span><span class="t resmi">devlet / resmî</span></span>
-    <span><span class="t grup">parti, örgüt ya da yönetime bağlı</span></span>
-    <span><span class="t bagimsiz">bağımsız</span></span>
-    <span><span class="t koop">kooperatif / vakıf</span></span>
-    <span><span class="t ozel">özel / ticari</span></span>
-    <span><span class="t izle">karşı tarafı izleme</span></span>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad">ZBS</span></a>
+    <p class="slogan">Kaynaklar</p>
+    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a></nav>
   </div>
-
-  <div class="bar">
-    <div class="row-f" id="fRegion" role="group" aria-label="Bölge"><span class="lab">Bölge</span></div>
-    <div class="row-f" id="fType" role="group" aria-label="Tür"><span class="lab">Tür</span></div>
-    <div class="row-f"><input class="search" id="q" type="search" placeholder="Ad, şehir ya da profil ara" aria-label="Ara"></div>
+</header>
+<main class="sayfa">
+  <h1>Kaynaklar</h1>
+  <p class="giris">ZBS’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. Kartlardaki renkli nokta, toplayıcının o kaynağı en son ne zaman okuyabildiğini gösterir.</p>
+  <div class="saglik" id="saglik"></div>
+  <div class="arac">
+    <div class="ara-kutu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ara" id="ara" type="search" placeholder="Ad, şehir ya da profil ara" aria-label="Ara"></div>
+    <div class="bolgeler" id="bolgeler" role="group" aria-label="Bölge"></div>
   </div>
-
-  <div id="out"></div>
-
-  <p class="foot">“İzleme” satırı toplayıcının o kaynağı hangi yolla okuduğunu gösterir: haber site haritası, RSS, WordPress ya da Telegram. “Yol bulunamadı” yazan kaynaklar şimdilik akışa haber getirmiyor.</p>
-</div>
-
+  <div id="liste"></div>
+</main>
 <script>
-let D = [], DUR = {};
-const REG = ["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
-const TYP = {resmi:"devlet / resmî",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif / vakıf",ozel:"özel",izle:"karşı tarafı izleme"};
-const LANG = {ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
-let reg="all", typ="all", term="";
-function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
-function chips(box,items,get,set){items.forEach(([k,l])=>{const b=el("button","chip",l);b.type="button";b.dataset.k=k;b.onclick=()=>{set(k);render();};box.appendChild(b);});}
-function kur(){
-chips(document.getElementById("fRegion"),[["all","Tümü"],...REG.map(r=>[r,r]),["?","Kontrol bekleyen"]],()=>reg,k=>reg=k);
-chips(document.getElementById("fType"),[["all","Tümü"],...Object.entries(TYP),["tg","Telegram"],["mine","Senin listen"]],()=>typ,k=>typ=k);
-document.getElementById("q").addEventListener("input",e=>{term=e.target.value.trim().toLocaleLowerCase("tr");render();});
-const s=document.getElementById("stats");
-[[D.length,"kaynak"],[D.filter(d=>d.liste).length,"senin listenden"],[D.length-D.filter(d=>d.liste).length,"yeni eklenen"],[new Set(D.map(d=>d.sehir)).size,"şehir"],[D.filter(d=>d.dog==="?").length,"kontrol bekliyor"]].forEach(([n,l])=>{const x=el("span");x.appendChild(el("b",null,n));x.append(" "+l);s.appendChild(x);});
-function render(){
-  document.querySelectorAll("#fRegion .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===reg));
-  document.querySelectorAll("#fType .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===typ));
-  const out=document.getElementById("out"); out.innerHTML="";
-  const ok=d=>(reg==="all"||(reg==="?"?d.dog==="?":d.bolge===reg))&&(typ==="all"||(typ==="tg"?d.tg:typ==="mine"?d.liste:d.tur===typ))&&(!term||[d.ad,d.sehir,d.ulke,d.profil,d.notu,d.url].join(" ").toLocaleLowerCase("tr").includes(term));
-  REG.forEach(r=>{
-    const items=D.filter(d=>d.bolge===r&&ok(d)); if(!items.length) return;
-    const sec=el("section"); const h=el("h2",null,r); h.appendChild(el("span",null,items.length+" kaynak")); sec.appendChild(h);
-    const list=el("div","list");
-    items.forEach(d=>{
-      const row=el("div","src"), who=el("div","who"), what=el("div","what");
-      const n=el("div","name"); if(d.bolge==="İsrail") n.insertAdjacentHTML("afterbegin",'<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>'); const a=el("a",null,d.ad); a.href=d.url; a.target="_blank"; a.rel="noopener"; n.appendChild(a); who.appendChild(n);
-      who.appendChild(el("div","place",d.sehir+(d.ulke&&d.ulke!==d.sehir?", "+d.ulke:"")+" · "+(LANG[d.dil]||d.dil)));
-      what.appendChild(el("p",null,d.profil));
-      const t=el("div","tags"); t.appendChild(el("span","t "+d.tur,TYP[d.tur]));
-      if(d.dog==="D") t.appendChild(el("span","t bagimsiz","doğrulandı"));
-      if(d.dog==="?") t.appendChild(el("span","t q","kontrol"));
-      if(d.tg) t.appendChild(el("span","t","Telegram"));
-      if(d.liste) t.appendChild(el("span","t mine","senin listen"));
-      what.appendChild(t);
-      {const du=DUR[String(d.id)]||{};const y=du.yontem&&du.yontem.tip;const ad={harita:'haber site haritası',besleme:'RSS / Atom',wp:'WordPress'}[y];const parts=[];if(ad)parts.push(ad);if(du.telegram)parts.push('Telegram (@'+du.telegram+')');const iz=el('div','place','İzleme: '+(parts.length?parts.join(' + '):(du.kesif?'yol bulunamadı':'henüz denenmedi'))+(du.son_basari?' · son okuma '+new Date(du.son_basari).toLocaleString('tr-TR'):''));what.appendChild(iz);}
-      if(d.notu){const no=el("div","note"); no.appendChild(el("b",null,"Not")); no.append(d.notu); what.appendChild(no);}
-      row.append(who,what); list.appendChild(row);
-    });
-    sec.appendChild(list); out.appendChild(sec);
-  });
-  if(!out.children.length) out.appendChild(el("p","empty","Bu filtrede kaynak yok."));
-}
-render();
-}
-Promise.all([fetch('kaynaklar.json?t='+Date.now()).then(r=>r.json()),fetch('data/durum.json?t='+Date.now()).then(r=>r.json()).catch(()=>({}))]).then(([k,d])=>{D=k;DUR=d;kur();}).catch(()=>{document.getElementById('out').textContent='Kaynak listesi okunamadı.';});
+(function(){
+  const REG=["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
+  const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:"karşı taraf"};
+  const DIL={ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
+  const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress"};
+  const DURUM={iyi:"Çalışıyor",sessiz:"Sessiz (6 saatten uzun)",kopuk:"Okunamıyor",yok:"Henüz denenmedi"};
+  const BAYRAK='<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
+  const $=(i)=>document.getElementById(i);
+  const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+  const bas=(ad)=>{const k=ad.replace(/^(The|Al|El|La|Le|Il|L’|Der|Die)[\s-]+/i,"").replace(/[^\p{L}\p{N} ]/gu," ").trim().split(/\s+/);return((k[0]||"")[0]+((k[1]||"")[0]||(k[0]||"")[1]||"")).toUpperCase();};
+  let K=[],D={},N={},bolge="Tümü",ara="",sDurum=null;
+  function saglik(k){const d=D[String(k.id)]||{};if(!d.kesif)return"yok";if(!d.son_basari)return"kopuk";const s=(Date.now()-new Date(d.son_basari))/36e5;return s<6?"iyi":s<48?"sessiz":"kopuk";}
+  function once(iso){const d=(Date.now()-new Date(iso))/6e4;if(d<60)return Math.max(1,Math.round(d))+" dk önce";if(d<1440)return Math.round(d/60)+" sa önce";return Math.round(d/1440)+" gün önce";}
+  function ust(){
+    const s=$("saglik");s.innerHTML="";
+    Object.keys(DURUM).forEach(k=>{const b=el("button");b.type="button";b.setAttribute("aria-pressed",sDurum===k);
+      b.appendChild(el("b",null,K.filter(x=>saglik(x)===k).length));const sp=el("span");const n=el("i","nokta d-"+k);sp.appendChild(n);sp.append(DURUM[k]);b.appendChild(sp);
+      b.onclick=()=>{sDurum=sDurum===k?null:k;ciz();};s.appendChild(b);});
+  }
+  function ciz(){
+    ust();
+    document.querySelectorAll("#bolgeler .cip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===bolge));
+    const L=$("liste");L.innerHTML="";
+    const ok=k=>(bolge==="Tümü"||k.bolge===bolge)&&(!sDurum||saglik(k)===sDurum)&&(!ara||[k.ad,k.sehir,k.ulke,k.profil,k.url].join(" ").toLocaleLowerCase("tr").includes(ara));
+    let n=0;
+    REG.forEach(r=>{const ks=K.filter(k=>k.bolge===r&&ok(k));if(!ks.length)return;n+=ks.length;
+      const g=el("section","grup");g.appendChild(el("h2",null,r+" · "+ks.length));const iz=el("div","izgara");
+      ks.forEach(k=>{const c=el("article","kk"),u=el("div","kk-ust");
+        u.appendChild(el("div","avatar "+k.tur,bas(k.ad)));const w=el("div");const ad=el("div","kk-ad");if(k.bolge==="İsrail")ad.insertAdjacentHTML("afterbegin",BAYRAK);
+        const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
+        w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
+        const rz=el("div","rozetler");rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
+        c.appendChild(el("p",null,k.profil));
+        const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
+        const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);
+        iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı")+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
+        c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));iz.appendChild(c);});
+      g.appendChild(iz);L.appendChild(g);});
+    if(!n)L.appendChild(el("p","bos","Bu süzgeçle eşleşen kaynak yok."));
+  }
+  Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]}))])
+  .then(([k,d,h])=>{K=k;D=d;(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
+    ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});ciz();})
+  .catch(()=>{$("liste").textContent="Kaynak listesi okunamadı.";});
+  let t;$("ara").addEventListener("input",e=>{clearTimeout(t);t=setTimeout(()=>{ara=e.target.value.trim().toLocaleLowerCase("tr");ciz();},150);});
+})();
 </script>
-
 </body>
 </html>

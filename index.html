@@ -7,21 +7,28 @@
 <title>ZBS</title>
 <meta name="description" content="Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.">
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="site/simge-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="ZBS" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="site/stil.css?v=202611071746">
+<link rel="stylesheet" href="site/stil.css?v=202611071759">
 </head>
 <body>
 <header class="ust">
   <div class="ust-ic">
     <a class="marka" href="./" aria-label="ZBS ana sayfa">
-      <img class="logo" src="site/logo.svg?v=202611071746" alt="" width="32" height="32">
+      <img class="logo" src="site/logo.svg?v=202611071759" alt="" width="32" height="32">
       <span class="marka-ad">ZBS</span>
     </a>
     <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
     <div class="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
-    <nav class="menu"><a href="kaynaklar.html">Kaynaklar</a></nav>
+    <nav class="menu"><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+  <div class="serit" id="serit" hidden>
+    <span class="serit-etiket"><span class="nabiz" aria-hidden="true"></span>Son dakika</span>
+    <div class="serit-kutu"><div class="serit-ic" id="seritIc"></div></div>
   </div>
 </header>
 
@@ -33,14 +40,17 @@
         <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
       </div>
       <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
+      <div class="bolgeler konular" id="fKonu" role="group" aria-label="Konu"></div>
       <div class="secenekler">
         <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
         <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
         <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
         <span class="sayilar" id="sayilar"></span>
         <button class="sehir-cip" id="fSehir" type="button" hidden></button>
+        <button class="sehir-cip" id="fKonuSil" type="button" hidden></button>
       </div>
     </div>
+    <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
     <div class="akis" id="akis" aria-live="polite"></div>
   </section>
 
@@ -51,7 +61,7 @@
       <p class="yan-not">Bir habere tıkla, harita o haberin şehrine gitsin. Bir şehre tıkla, akış o şehre süzülsün.</p>
       <h3>En çok haber gelen şehirler</h3>
       <ol class="sehirler" id="sehirler"></ol>
-      <p class="yan-not">ZBS haberleri kaynaklardan otomatik toplar, Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı var. Yayınların kim olduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin.</p>
+      <p class="yan-not">ZBS haberleri kaynaklardan otomatik toplar, Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı var. Yayınların kim olduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin. Türkçe özetleri <a href="data/rss.xml">RSS</a> ile de takip edebilirsin.</p>
     </div>
   </aside>
 </main>
@@ -62,6 +72,6 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/uygulama.js?v=202611071746"></script>
+<script src="site/uygulama.js?v=202611071759"></script>
 </body>
 </html>
