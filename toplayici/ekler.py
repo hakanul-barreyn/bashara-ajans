@@ -9,7 +9,9 @@ import urllib.error
 import urllib.request
 
 GEMINI = "https://generativelanguage.googleapis.com/v1beta"
-UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
+import marka  # noqa: E402
+MARKA = marka.oku()
+UA = (re.sub(r"[^A-Za-z0-9]+", "-", MARKA["kisa_ad"]).strip("-") or "haber") + "-haber-toplayici/1.0 (+https://github.com)"
 
 ETIKETLER = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır",
              "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum",
@@ -53,12 +55,11 @@ Kurallar:
 - baslik: olayı anlatan, tarafsız, en fazla 12 kelimelik Türkçe başlık.
 - not: 1-3 cümlelik Türkçe çerçeve notu. Kaynakların olayı nasıl farklı anlattığını betimle: hangi kaynak hangi kelimeyi seçti (özgün kelimeyi tırnak içinde, en fazla 4 kelime), kimin açıklamasını öne çıkardı, hangi bilgiyi verdi ya da vermedi. Yalnızca verilen başlıklardan çıkarılabilecekleri yaz. Hüküm verme, hangi kaynağın haklı olduğunu söyleme. Kaynaklar aynı şekilde anlatıyorsa bunu kısaca söyle.
 - yorumlar: gruptaki HER haber için o kaynağın olayı nasıl sunduğunu anlatan en fazla 18 kelimelik Türkçe betimleme. Hangi kelimeyi seçtiğini (özgün kelime tırnak içinde, en fazla 4 kelime), kimi kaynak gösterdiğini ya da neyi öne çıkardığını yaz. Hüküm verme, "taraflı" gibi nitelemeler kullanma.
-- bakislar: gruptaki HER haber için başlığın olayı kimin bakış açısından sunduğunu tek kelimeyle yaz:
-  "filistin" = Filistinli/Arap kurbanları, Filistinli ya da direniş kaynaklarını merkeze alıyor; "işgal", "katliam", "soykırım", "şehit" gibi ifadeler kullanıyor.
-  "aktarim" = birden çok tarafın açıklamasını aktarıyor ya da olguyu bir tarafın çerçevesini benimsemeden veriyor.
-  "israil" = İsrail ya da ABD resmî açıklamalarını merkeze alıyor; "terörist", "operasyon", "güvenlik" gibi onların ifadelerini kullanıyor ya da Filistinli kayıpları geri plana itiyor.
-  Konu Filistin–İsrail değilse (örneğin İran, Yemen, Lübnan) aynı mantığı "direniş ekseni ya da Arap tarafı" ile "İsrail–ABD tarafı" arasında uygula.
-- En önemli en fazla 20 olayı, en çok kaynağın yazdığından başlayarak sırala.
+- bakislar: gruptaki HER haber için başlığın olayı kimin çerçevesiyle sunduğunu tek kelimeyle yaz. Ölçüt, haberin KONUSU değil, yayının KENDİ dilidir:
+  "filistin" = Filistinli/Arap kurbanları ya da direniş kaynaklarını merkeze alıyor; ya da İsrail/ABD eylemini eleştirel dille anlatıyor ("işgal", "katliam", "soykırım", "şehit", "saldırganlık", "abluka", "boğmak", "başarısız" gibi).
+  "aktarim" = bir tarafın (ABD, İsrail, İran, Hamas…) açıklamasını tırnak ya da "…dedi/duyurdu" kalıbıyla, kendi yargısını katmadan aktarıyor. Bir ABD ya da İsrail duyurusunu yansız haberleştirmek "aktarim"dır, "israil" değildir.
+  "israil" = İsrail ya da ABD çerçevesini yayının kendi sesiyle benimsiyor: onların ifadelerini tırnaksız kullanıyor ("terörist", "terör altyapısı", "operasyon", "İran'ın vekilleri"), eylemi olumluyor ya da Filistinli/Arap kayıpları geri plana itiyor.
+  Kararsız kalırsan "aktarim" yaz.
 - Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}}]
 """
 
@@ -151,7 +152,7 @@ def rss_yaz(kok, haberler, simdi):
             f"<source url=\"{e(site)}data/rss.xml\">{e(h['kaynak_ad'])}</source>"
             f"<description>{e(aciklama)}</description></item>")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>'
-           f"<title>ZBS</title><link>{e(site)}</link><language>tr</language>"
+           f"<title>{e(MARKA['ad'])}</title><link>{e(site)}</link><language>tr</language>"
            "<description>Mağrip’ten Körfez’e basının Türkçe takibi</description>"
            f"<lastBuildDate>{simdi.strftime('%a, %d %b %Y %H:%M:%S +0000')}</lastBuildDate>"
            + "".join(ogeler) + "</channel></rss>\n")

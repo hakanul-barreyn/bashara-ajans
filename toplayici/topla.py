@@ -31,6 +31,7 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(__file__))
 from konular import ilgili_mi  # noqa: E402
 import ekler  # noqa: E402
+import marka  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
@@ -38,7 +39,8 @@ HABERLER = os.path.join(KOK, "data", "haberler.json")
 DURUM = os.path.join(KOK, "data", "durum.json")
 OLAYLAR = os.path.join(KOK, "data", "olaylar.json")
 
-UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
+MARKA = marka.oku()
+UA = (re.sub(r"[^A-Za-z0-9]+", "-", MARKA["kisa_ad"]).strip("-") or "haber") + "-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
@@ -708,6 +710,10 @@ def yaz(yol, veri):
 
 
 def main():
+    try:
+        marka.uygula()
+    except Exception as e:
+        log(f"Marka uygulanamadı: {e}")
     kaynaklar = oku(KAYNAKLAR, [])
     durum = oku(DURUM, {})
     eski = {h["id"]: h for h in oku(HABERLER, {}).get("haberler", [])}
@@ -802,7 +808,7 @@ def main():
         # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
         son_olay = tarih_coz(durum.get("_olay_son"))
         bekle = tarih_coz(durum.get("_gemini_bekle"))
-        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 3) \
+        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 4) \
                 and time.time() - BASLANGIC < CALISMA_SURESI:
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
             if isinstance(sonuc, list):
@@ -812,7 +818,7 @@ def main():
                 except Exception as e:
                     log(f"Kanıt defteri hatası: {e}")
                 durum["_olay_son"] = SIMDI.isoformat()
-                durum["_olay_surum"] = 3
+                durum["_olay_surum"] = 4
                 log(f"{len(sonuc)} olay kümesi çıkarıldı")
             elif sonuc == 429:
                 durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()

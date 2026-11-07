@@ -3,26 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c110e">
-<title>ZBS</title>
-<meta name="description" content="Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.">
+<meta name="theme-color" content="#f4f3ef">
+<title data-marka-sablon="{ad}">ZBS</title>
+<meta name="description" data-marka-sablon="{aciklama}" data-marka-oznitelik="content" content="Mağrip&#x27;ten Körfez&#x27;e, Meşrik&#x27;ten Anadolu&#x27;ya basının Türkçe takibi.">
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="site/simge-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="alternate" type="application/rss+xml" title="ZBS" href="data/rss.xml">
+<link rel="alternate" type="application/rss+xml" data-marka-sablon="{ad}" data-marka-oznitelik="title" title="ZBS" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="site/stil.css?v=202611071855">
+<link rel="stylesheet" href="site/stil.css?v=202611072130">
+<script src="site/marka.js?v=202611072100"></script>
 </head>
 <body>
+<!-- Arka plandaki harita: şehirler haber geldikçe yanıp söner, karta gelince o kartın şehri parlar -->
+<div class="zemin" aria-hidden="true"><svg id="zemin" preserveAspectRatio="xMidYMid slice"></svg></div>
+
 <header class="ust">
   <div class="ust-ic">
-    <a class="marka" href="./" aria-label="ZBS ana sayfa">
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa">
       <img class="logo" src="site/logo.svg?v=202611071855" alt="" width="32" height="32">
-      <span class="marka-ad">ZBS</span>
+      <span class="marka-ad" data-marka="ad">ZBS</span>
     </a>
-    <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
+    <p class="slogan" data-marka="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
     <div class="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
     <nav class="menu"><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
   </div>
@@ -33,45 +36,31 @@
 </header>
 
 <main class="duzen">
-  <section class="akis-kutu" aria-label="Haber akışı">
-    <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
-    <div class="suzgec">
+  <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
+  <div class="suzgec">
+    <div class="suzgec-ust">
       <div class="ara-kutu">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
       </div>
-      <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
-      <div class="bolgeler konular" id="fKonu" role="group" aria-label="Konu"></div>
-      <div class="secenekler">
-        <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
-        <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
-        <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
-        <span class="sayilar" id="sayilar"></span>
-        <button class="sehir-cip" id="fSehir" type="button" hidden></button>
-        <button class="sehir-cip" id="fKonuSil" type="button" hidden></button>
-      </div>
+      <label class="secim"><span>Şehir</span><select id="fSehirSec" aria-label="Şehir"><option value="">Tüm şehirler</option></select></label>
     </div>
-    <div class="akis" id="akis" aria-live="polite"></div>
-  </section>
-
-  <aside class="yan" id="yan" aria-label="Harita">
-    <div class="yan-ic">
-      <div class="yan-baslik"><h2>Haberler nereden geliyor</h2><button class="kapat" id="haritaKapat" type="button" aria-label="Haritayı kapat">✕</button></div>
-      <div class="harita-cerceve"><div id="harita" role="application" aria-label="Yayın organlarının haritası"></div></div>
-      <p class="yan-not">Bir habere tıkla, harita o haberin şehrine gitsin. Bir şehre tıkla, akış o şehre süzülsün.</p>
-      <h3>En çok haber gelen şehirler</h3>
-      <ol class="sehirler" id="sehirler"></ol>
-      <p class="yan-not">ZBS haberleri kaynaklardan otomatik toplar, Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı var. Yayınların kim olduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin. Türkçe özetleri <a href="data/rss.xml">RSS</a> ile de takip edebilirsin.</p>
+    <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
+    <div class="bolgeler konular" id="fKonu" role="group" aria-label="Konu"></div>
+    <div class="secenekler">
+      <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
+      <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
+      <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
+      <button class="sehir-cip" id="fSehir" type="button" hidden></button>
+      <button class="sehir-cip" id="fKonuSil" type="button" hidden></button>
+      <span class="sayilar" id="sayilar"></span>
     </div>
-  </aside>
+  </div>
+  <div class="akis" id="akis" aria-live="polite"></div>
+  <p class="alt-not"><span data-marka="ad">ZBS</span> haberleri kaynaklardan otomatik toplar, Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı var. Yayınların kim olduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin. Türkçe özetleri <a href="data/rss.xml">RSS</a> ile de takip edebilirsin. Sınırlar: <a href="https://www.naturalearthdata.com/">Natural Earth</a>.</p>
 </main>
 
-<button class="harita-ac" id="haritaAc" type="button">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"/></svg>Harita
-</button>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/uygulama.js?v=202611071855"></script>
+<script src="site/uygulama.js?v=202611072130"></script>
 </body>
 </html>

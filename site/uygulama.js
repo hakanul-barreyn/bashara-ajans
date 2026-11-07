@@ -1,5 +1,5 @@
-// ZBS sayfa kodu: haber kartları ortada, harita ve şehir listesi yanda.
-// Bir habere tıklayınca ya da üzerine gelince harita o haberin şehrine uçar. Veri 5 dakikada bir yenilenir.
+// Sayfa kodu: haber akışı tek sütunda; bölge haritası sayfanın arkasında sabit bir zemin.
+// Bir kartın üzerine gelince arkadaki haritada o haberin şehri parlar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
   const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
@@ -8,6 +8,7 @@
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
   const SAYFA = 30;
   const BAYRAK = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
+  const MARKA_AD = (window.MARKA && window.MARKA.ad) || "ZBS";
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
@@ -37,77 +38,66 @@
     return ((k[0] || "")[0] + ((k[1] || "")[0] || (k[0] || "")[1] || "")).toUpperCase();
   }
 
-  // ---------------------------------------------------- harita
-  let harita = null, katman = null;
-  try {
-    harita = L.map("harita", { worldCopyJump: true, zoomControl: true, minZoom: 2, maxZoom: 8, zoomSnap: 0.25 });
-    harita.fitBounds([[12, -12], [52, 58]]);
-    harita.attributionControl.setPrefix(false).addAttribution('Sınırlar: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+  // ---------------------------------------------------- arka plan haritası
+  // Leaflet yok: bölgeyi eşdikdörtgen izdüşümle tek bir SVG'ye çizeriz. Harita sayfanın arkasında sabit durur;
+  // haber gelen şehirler nokta olur, son bir saatte haber gelenler nabız gibi atar, üzerine gelinen kartın şehri parlar.
+  const ZB = { bat: -24, dogu: 76, kuzey: 62, guney: 2, olcek: 10 };
+  const zx = (lon) => (lon - ZB.bat) * ZB.olcek, zy = (lat) => (ZB.kuzey - lat) * ZB.olcek;
+  const zemin = $("zemin"), SVGNS = "http://www.w3.org/2000/svg";
+  const zEl = (t, at) => { const e = document.createElementNS(SVGNS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
+  let zNoktalar = null;
+  if (zemin) {
+    zemin.setAttribute("viewBox", "0 0 " + (ZB.dogu - ZB.bat) * ZB.olcek + " " + (ZB.kuzey - ZB.guney) * ZB.olcek);
+    const kara = zEl("g", { class: "z-kara" }); zNoktalar = zEl("g", { class: "z-noktalar" });
+    zemin.append(kara, zNoktalar);
     fetch(DUNYA).then((r) => r.json()).then((topo) => {
-      const ulkeler = topojson.feature(topo, topo.objects.countries);
-      // 180. boylamı kesen ülkeler (Rusya, Fiji) yatay şerit çizmesin; Antarktika’yı çizme.
-      const duzelt = (halka) => {
-        const x = halka.map((p) => p[0]);
-        if (Math.max(...x) - Math.min(...x) > 180) halka.forEach((p) => { if (p[0] < 0) p[0] += 360; });
+      const halka = (h) => {
+        let xs = h.map((p) => p[0]);
+        if (Math.max(...xs) < ZB.bat - 5 || Math.min(...xs) > ZB.dogu + 5) return "";
+        const ys = h.map((p) => p[1]);
+        if (Math.max(...ys) < ZB.guney - 5 || Math.min(...ys) > ZB.kuzey + 5) return "";
+        return "M" + h.map((p) => zx(p[0]).toFixed(1) + "," + zy(p[1]).toFixed(1)).join("L") + "Z";
       };
-      ulkeler.features = ulkeler.features.filter((f) => f.id !== "010" && f.properties.name !== "Antarctica");
-      ulkeler.features.forEach((f) => {
+      let d = "";
+      topojson.feature(topo, topo.objects.countries).features.forEach((f) => {
         const g = f.geometry; if (!g) return;
-        if (g.type === "Polygon") g.coordinates.forEach(duzelt);
-        if (g.type === "MultiPolygon") g.coordinates.forEach((p) => p.forEach(duzelt));
+        const poli = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+        poli.forEach((p) => p.forEach((h) => (d += halka(h))));
       });
-      L.geoJSON(ulkeler, {
-        interactive: false,
-        style: () => ({ color: renk("--sinir"), weight: 0.8, fillColor: renk("--kara"), fillOpacity: 1 }),
-      }).addTo(harita).bringToBack();
+      kara.appendChild(zEl("path", { d }));
     }).catch(() => {});
-    katman = L.layerGroup().addTo(harita);
-    window.addEventListener("resize", () => harita.invalidateSize());
-    setTimeout(() => harita.invalidateSize(), 300);
-  } catch (e) {
-    const h = $("harita"); h.innerHTML = "";
-    h.appendChild(el("div", "harita-hata", "Harita yüklenemedi. Haber akışı çalışmaya devam ediyor."));
-  }
-
-  function ucur(lat, lon) {
-    if (!harita) return;
-    const z = Math.max(harita.getZoom(), 3.5);
-    if (AZ_HAREKET) harita.setView([lat, lon], z); else harita.flyTo([lat, lon], z, { duration: 0.9 });
   }
 
   function haritaCiz(liste) {
-    if (!katman) return;
-    katman.clearLayers();
     const sayac = {};
-    Object.values(kaynaklar).forEach((k) => {
-      if (bolge !== "Tümü" && k.bolge !== bolge) return;
-      const s = (sayac[k.sehir] = sayac[k.sehir] || { lat: k.lat, lon: k.lon, n: 0, yayin: new Set() });
-      s.yayin.add(k.ad);
+    liste.forEach((h) => {
+      const k = kaynaklar[h.kaynak]; if (!k || k.lat == null) return;
+      const s = (sayac[k.sehir] = sayac[k.sehir] || { lat: k.lat, lon: k.lon, n: 0, taze: 0 });
+      s.n++; if (dk(h.tarih) < 60) s.taze++;
     });
-    liste.forEach((h) => { const k = kaynaklar[h.kaynak]; if (k && sayac[k.sehir]) sayac[k.sehir].n++; });
-    const aktif = aktifId && haberler.find((h) => h.id === aktifId);
-    const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
-    const yesil = renk("--yesil"), kirmizi = renk("--kirmizi");
     const sirali = Object.entries(sayac).sort((a, b) => b[1].n - a[1].n);
-    // Yan sütundaki şehir listesi
-    const ol = $("sehirler"); ol.innerHTML = "";
-    const enCok = (sirali[0] && sirali[0][1].n) || 1;
-    sirali.filter(([, s]) => s.n).slice(0, 10).forEach(([ad, s]) => {
-      const li = el("li"), b = el("button"); b.type = "button"; b.setAttribute("aria-pressed", ad === sehir);
-      b.appendChild(el("span", "ad", ad));
-      const c = el("span", "cubuk"), i = el("i"); i.style.width = Math.max(4, (100 * s.n) / enCok) + "%"; c.appendChild(i); b.appendChild(c);
-      b.appendChild(el("span", "n", s.n));
-      b.onclick = () => { sehir = ad === sehir ? null : ad; kac = SAYFA; document.body.classList.remove("harita-acik"); ciz(true); ucur(s.lat, s.lon); };
-      li.appendChild(b); ol.appendChild(li);
-    });
-    sirali.forEach(([ad, s]) => {
-      const vurgu = ad === sehir || ad === aktifSehir, c = vurgu ? kirmizi : yesil;
-      const r = 4 + Math.sqrt(s.n) * 1.8;
-      if (s.n) katman.addLayer(L.circleMarker([s.lat, s.lon], { radius: r + (vurgu ? 10 : 6), stroke: false, fillColor: c, fillOpacity: vurgu ? 0.22 : 0.12, interactive: false }));
-      const m = L.circleMarker([s.lat, s.lon], { radius: r, weight: vurgu ? 2.5 : 1.5, color: c, fillColor: c, fillOpacity: s.n ? 0.65 : 0.15 });
-      m.bindTooltip("<b>" + ad + "</b> · " + s.n + " haber · " + s.yayin.size + " yayın", { direction: "top", offset: [0, -r] });
-      m.on("click", () => { sehir = ad === sehir ? null : ad; kac = SAYFA; document.body.classList.remove("harita-acik"); ciz(true); });
-      katman.addLayer(m);
+    // Şehir seçici
+    const sec = $("fSehirSec");
+    if (sec) {
+      sec.innerHTML = ""; sec.appendChild(new Option("Tüm şehirler", ""));
+      const adlar = sirali.map(([ad]) => ad);
+      if (sehir && !adlar.includes(sehir)) adlar.unshift(sehir);
+      adlar.forEach((ad) => sec.appendChild(new Option(ad + (sayac[ad] ? " · " + sayac[ad].n : ""), ad)));
+      sec.value = sehir || "";
+    }
+    if (!zNoktalar) return;
+    zNoktalar.innerHTML = "";
+    const aktif = aktifId && haberIdx[aktifId];
+    const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
+    sirali.slice().reverse().forEach(([ad, s]) => {
+      if (s.lon < ZB.bat || s.lon > ZB.dogu || s.lat < ZB.guney || s.lat > ZB.kuzey) return;
+      const x = zx(s.lon), y = zy(s.lat), r = 3 + Math.sqrt(s.n) * 1.3;
+      const vurgu = ad === sehir || ad === aktifSehir;
+      const g = zEl("g", { class: "z-sehir" + (vurgu ? " vurgu" : "") + (s.taze ? " taze" : "") });
+      if (s.taze) g.appendChild(zEl("circle", { class: "z-nabiz", cx: x, cy: y, r: r }));
+      g.appendChild(zEl("circle", { class: "z-nokta", cx: x, cy: y, r: r }));
+      if (vurgu) { const t = zEl("text", { x: x + r + 6, y: y + 4 }); t.textContent = ad; g.appendChild(t); }
+      zNoktalar.appendChild(g);
     });
   }
 
@@ -185,15 +175,15 @@
   const KAMP = { "Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası", "Mağrip": "Arap dünyası",
     "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
     "İspanya": "Batı", "İtalya": "Batı", "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Diğer" };
-  const KAMP_RENK = { "Filistin": "#1fa463", "Arap dünyası": "#7fc8a9", "İran ve Yemen": "#c9a227", "Türkiye": "#e4312b", "İsrail": "#3b6fd8", "Batı": "#9aa7b4", "Diğer": "#5f6b66" };
+  const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
   const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Karşı taraf" };
-  const TUR_RENK = { "Devlet": "#e05a5a", "Bağlı": "#8c8f8d", "Bağımsız": "#2fbf71", "Özel": "#6d89a3", "Karşı taraf": "#d9dfdb" };
+  const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3", "Karşı taraf": "#4a5560" };
   const kampAd = (k) => KAMP[k.bolge] || "Diğer";
   const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
-  const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#1fa463", "Ara / ana akım": "#9aa7b4", "İşbirlikçi kompradorlar ve emperyalistler": "#e05a5a" };
+  const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İşbirlikçi kompradorlar ve emperyalistler": "#c9544e" };
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
   const BAKIS = { filistin: "Filistin / Arap bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
-  const BAKIS_RENK = { filistin: "#1fa463", aktarim: "#8d989f", israil: "#3b6fd8" };
+  const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
   const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"];
 
   // Bölge gruplarına göre, haberlerin kimin bakış açısından anlatıldığı
@@ -271,7 +261,7 @@
     kutu.hidden = !liste.length || !!olaySec;
     if (!liste.length || olaySec) return;
     const ust = el("div", "slayt-ust");
-    ust.appendChild(el("h2", "bolum", "Gündem · birden fazla kaynağın yazdığı olaylar"));
+    const bh = el("h2", "bolum", "Gündem"); bh.appendChild(el("span", "bolum-ek", " · birden fazla kaynağın yazdığı olaylar")); ust.appendChild(bh);
     const okl = el("div", "slayt-oklar");
     const geri = el("button", "slayt-ok", "‹"), ileri = el("button", "slayt-ok", "›");
     geri.type = ileri.type = "button"; geri.setAttribute("aria-label", "Önceki olay"); ileri.setAttribute("aria-label", "Sonraki olay");
@@ -362,7 +352,7 @@
       });
       b.appendChild(sec);
     });
-    const yontem = el("p", "olay-uyari"); yontem.append("Denge çubuğu ZBS’nin her yayına verdiği editoryal çizgi değerlendirmesine dayanır; ölçütleri ");
+    const yontem = el("p", "olay-uyari"); yontem.append("Denge çubuğu " + MARKA_AD + "’nin her yayına verdiği editoryal çizgi değerlendirmesine dayanır; ölçütleri ");
     const ya = el("a", null, "Kaynaklar"); ya.href = "kaynaklar.html#cizgi"; yontem.appendChild(ya); yontem.append(" sayfasında."); b.appendChild(yontem);
     b.appendChild(el("p", "olay-uyari", "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git."));
     return b;
@@ -449,7 +439,7 @@
     document.querySelectorAll(".haber.aktif").forEach((x) => x.classList.remove("aktif"));
     const kart = document.querySelector('.haber[data-id="' + id + '"]'); if (kart) kart.classList.add("aktif");
     const h = haberler.find((x) => x.id === id); const k = h && kaynaklar[h.kaynak];
-    if (k) { ucur(k.lat, k.lon); haritaCiz(suz()); }
+    if (k) haritaCiz(suz());
   }
 
   let sonGozcu = null;
@@ -571,8 +561,7 @@
   let bekle;
   $("fAra").addEventListener("input", (e) => { clearTimeout(bekle); bekle = setTimeout(() => { ara = e.target.value.trim().toLocaleLowerCase("tr"); kac = SAYFA; ciz(true); }, 180); });
   $("fSehir").onclick = () => { sehir = null; ciz(true); };
-  $("haritaAc").onclick = () => { document.body.classList.add("harita-acik"); setTimeout(() => harita && harita.invalidateSize(), 350); };
-  $("haritaKapat").onclick = () => document.body.classList.remove("harita-acik");
+  $("fSehirSec").onchange = (e) => { sehir = e.target.value || null; kac = SAYFA; ciz(true); };
   document.addEventListener("keydown", (e) => {
     if (e.target.matches("input,textarea")) return;
     const i = gor.findIndex((h) => h.id === aktifId);

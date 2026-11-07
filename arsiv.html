@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c110e">
-<title>ZBS Arşiv</title>
+<meta name="theme-color" content="#f4f3ef">
+<title data-marka-sablon="{ad} Arşiv">ZBS Arşiv</title>
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611071855">
+<link rel="stylesheet" href="site/stil.css?v=202611072130">
+<script src="site/marka.js?v=202611072100"></script>
 <style>
 /* Arşiv: solda günler, sağda o günün Türkçe özetleri; kompakt, okunur liste */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px}
@@ -18,14 +19,15 @@
 .gunler{position:sticky;top:calc(var(--ust) + 16px);align-self:start;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - var(--ust) - 40px);overflow-y:auto}
 .gunler button{display:flex;justify-content:space-between;gap:8px;border:0;background:transparent;color:var(--ink2);padding:8px 10px;border-radius:10px;cursor:pointer;text-align:left;font-size:.9rem}
 .gunler button:hover{background:var(--yuzey)}
-.gunler button[aria-pressed="true"]{background:var(--kart);color:var(--k-ink);font-weight:700}
+.gunler button[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:700}
+.gunler button[aria-pressed="true"] .n{color:var(--bg)!important;opacity:.7}
 .gunler .n{font-family:var(--mono);font-size:.74rem;color:var(--soluk)}
 .gunler button[aria-pressed="true"] .n{color:var(--k-soluk)}
 .liste{min-width:0;display:flex;flex-direction:column;gap:12px}
 .ust-arac{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .ust-arac .ara-kutu{flex:1 1 260px}
 .ust-arac select{font:inherit;font-size:.9rem;padding:10px 12px;border:1px solid var(--cizgi);border-radius:12px;background:var(--yuzey);color:var(--ink)}
-.kayit{background:var(--kart);color:var(--k-ink);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:3.4rem minmax(0,1fr);gap:4px 14px}
+.kayit{background:var(--kart);color:var(--k-ink);box-shadow:var(--golge);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:3.4rem minmax(0,1fr);gap:4px 14px}
 .kayit .saat{font-family:var(--mono);font-size:.8rem;color:var(--k-soluk);padding-top:2px;font-variant-numeric:tabular-nums}
 .kayit .ic{min-width:0;display:flex;flex-direction:column;gap:6px}
 .kayit .kaynak{font-size:.78rem;font-weight:700;color:var(--k-ink2)}
@@ -39,7 +41,7 @@
 <body>
 <header class="ust">
   <div class="ust-ic">
-    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad">ZBS</span></a>
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
     <p class="slogan">Arşiv</p>
     <nav class="menu"><a href="./">Akış</a><a href="kaynaklar.html">Kaynaklar</a></nav>
   </div>

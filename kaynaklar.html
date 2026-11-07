@@ -3,23 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c110e">
-<title>ZBS Kaynakları</title>
+<meta name="theme-color" content="#f4f3ef">
+<title data-marka-sablon="{ad} Kaynakları">ZBS Kaynakları</title>
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611071855">
+<link rel="stylesheet" href="site/stil.css?v=202611072130">
+<script src="site/marka.js?v=202611072100"></script>
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
 .sayfa h1{margin:0;font-size:1.8rem;letter-spacing:-.01em}
-.yontem{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;scroll-margin-top:calc(var(--ust) + 16px)}
+.yontem{background:var(--kart);box-shadow:var(--golge);border:1px solid var(--cizgi);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;scroll-margin-top:calc(var(--ust) + 16px)}
 .yontem h2{margin:0;font-size:1rem}
 .yontem p{margin:0;color:var(--ink2);max-width:80ch;font-size:.92rem}
 .yontem ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.9rem;color:var(--ink2);max-width:90ch}
-.cz{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:999px;margin-right:8px;color:#0c110e;font-weight:500}
-.cz-ad{background:#1fa463}.cz-ara{background:#9aa7b4}.cz-ik{background:#e05a5a}
+.cz{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:999px;margin-right:8px;color:#fff;font-weight:500}
+.cz-ad{background:#2b8a5e}.cz-ara{background:#7f8b96}.cz-ik{background:#c9544e}
 .cz-t{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk)}
 .kanit{border-top:1px solid var(--k-cizgi);padding-top:8px;display:flex;flex-direction:column;gap:6px}
 .kanit-ust{font-size:.76rem;color:var(--k-soluk)}.kanit-ust b{color:var(--k-ink)}
@@ -39,11 +40,11 @@
 .saglik b{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
 .saglik span{font-size:.78rem;color:var(--soluk);display:flex;align-items:center;gap:6px}
 .nokta{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.d-iyi{background:#3ccf82}.d-sessiz{background:#f2b84b}.d-kopuk{background:#ff5a5f}.d-yok{background:#6b7a72}
-.arac{display:flex;flex-direction:column;gap:10px;position:sticky;top:var(--ust);background:var(--bg);padding:10px 0;z-index:5}
+.d-iyi{background:#2f9e68}.d-sessiz{background:#d99a2b}.d-kopuk{background:#cf5650}.d-yok{background:#a3aaa5}
+.arac{display:flex;flex-direction:column;gap:10px;padding:4px 0}
 .grup h2{margin:14px 0 10px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soluk)}
 .izgara{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.kk{background:var(--kart);color:var(--k-ink);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.kk{background:var(--kart);color:var(--k-ink);box-shadow:var(--golge);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
 .kk-ust{display:flex;align-items:center;gap:10px;min-width:0}
 .kk-ad{font-weight:700;min-width:0}
 .kk-ad a{color:var(--k-ink);text-decoration:none}
@@ -53,35 +54,36 @@
 .kk .izleme{font-family:var(--mono);font-size:.72rem;color:var(--k-soluk)}
 .kk .izleme .nokta{margin-right:6px;vertical-align:1px}
 .kk .not{font-size:.8rem;color:var(--k-amber)}
-@media (max-width:820px){.saglik{grid-template-columns:repeat(2,minmax(0,1fr))}.izgara{grid-template-columns:1fr}}
+@media (max-width:820px){.saglik{grid-template-columns:repeat(2,minmax(0,1fr))}.izgara{grid-template-columns:minmax(0,1fr)}}
+.kk{min-width:0;overflow-wrap:anywhere}
 .belgeler{display:flex;flex-direction:column;gap:6px;font-size:.82rem;border-top:1px solid var(--k-cizgi,#dfe3de);padding-top:10px}
 .belgeler ul{margin:0;padding:0 0 0 1.1em;display:flex;flex-direction:column;gap:6px;color:var(--k-ink2)}
 .belgeler li.karsi{list-style:circle}
 .belgeler .b-tur{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:6px;background:#e4e8e3;color:#3d4842}
 .belgeler li.karsi .b-tur{background:#dff2e7;color:#156b40}
-.belgeler a{white-space:nowrap}
+.belgeler a{white-space:normal}
 </style>
 </head>
 <body>
 <header class="ust">
   <div class="ust-ic">
-    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad">ZBS</span></a>
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
     <p class="slogan">Kaynaklar</p>
     <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a></nav>
   </div>
 </header>
 <main class="sayfa">
   <h1>Kaynaklar</h1>
-  <p class="giris">ZBS’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. Kartlardaki renkli nokta, toplayıcının o kaynağı en son ne zaman okuyabildiğini gösterir.</p>
+  <p class="giris"><span data-marka="ad">ZBS</span>’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. Kartlardaki renkli nokta, toplayıcının o kaynağı en son ne zaman okuyabildiğini gösterir.</p>
   <section class="yontem" id="cizgi">
     <h2>Çizgi değerlendirmesi nasıl yapıldı</h2>
-    <p>“Kim nasıl yazdı” sayfasındaki denge çubuğu, ZBS’nin her yayına verdiği <b>editoryal bir değerlendirmeye</b> dayanır. Bu bir olgu değil, görüştür; ölçütlerini açıkça yazıyoruz ki okur kendisi tartabilsin.</p>
+    <p>“Kim nasıl yazdı” sayfasındaki denge çubuğu, <span data-marka="ad">ZBS</span>’nin her yayına verdiği <b>editoryal bir değerlendirmeye</b> dayanır. Bu bir olgu değil, görüştür; ölçütlerini açıkça yazıyoruz ki okur kendisi tartabilsin.</p>
     <ul>
       <li><span class="cz cz-ad">Antiemperyalist / dekolonyal</span> İsrail’in Filistin’deki varlığını işgal ve yerleşimci sömürgecilik olarak tanımlayan, Gazze’deki savaşı soykırım olarak adlandıran, ABD ve NATO hegemonyasına karşı çıkan ya da “direniş ekseni”nin yayın organı olan yayınlar.</li>
       <li><span class="cz cz-ara">Ara / ana akım</span> İsrail’i zaman zaman eleştirse de sistemik bir antiemperyalist çizgi izlemeyen yayınlar; haber ajansları; dengeleri karışık devletlerin yayın organları.</li>
       <li><span class="cz cz-ik">İşbirlikçi kompradorlar ve emperyalistler</span> Haberciliği ağırlıkla ABD ve İsrail hükümetlerinin çerçevesini izleyen yayınlar; İsrail ana akımı ve sağı; İsrail’le normalleşmiş hükümetlerin (BAE, Fas, Mısır, Ürdün, Suudi Arabistan) çizgisindeki yayınlar.</li>
     </ul>
-    <p><b>Kanıt:</b> Her yayın kartının altındaki “Ölçülmüş söylem” bölümü, ZBS’nin olay karşılaştırmalarında o yayının başlıklarını kimin bakış açısından kurduğunu sayar ve örnek başlıkları özgün dilleriyle gösterir. Değerlendirme bir görüştür; ölçüm ise okurun kendisinin kontrol edebileceği kayıttır. Ölçüm değerlendirmeyle uyuşmadığında bunu kartta açıkça yazarız.</p>
+    <p><b>Kanıt:</b> Her yayın kartının altındaki “Ölçülmüş söylem” bölümü, <span data-marka="ad">ZBS</span>’nin olay karşılaştırmalarında o yayının başlıklarını kimin bakış açısından kurduğunu sayar ve örnek başlıkları özgün dilleriyle gösterir. Değerlendirme bir görüştür; ölçüm ise okurun kendisinin kontrol edebileceği kayıttır. Ölçüm değerlendirmeyle uyuşmadığında bunu kartta açıkça yazarız.</p>
     <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Bir değerlendirmeye itirazın varsa bize yaz.</p>
   </section>
   <div class="saglik" id="saglik"></div>
@@ -104,7 +106,7 @@
   const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
   const bas=(ad)=>{const k=ad.replace(/^(The|Al|El|La|Le|Il|L’|Der|Die)[\s-]+/i,"").replace(/[^\p{L}\p{N} ]/gu," ").trim().split(/\s+/);return((k[0]||"")[0]+((k[1]||"")[0]||(k[0]||"")[1]||"")).toUpperCase();};
   let K=[],D={},N={},KN={},bolge="Tümü",ara="",sDurum=null;
-  const BK={filistin:"Filistin / Arap bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#1fa463",aktarim:"#8d989f",israil:"#3b6fd8"};
+  const BK={filistin:"Filistin / Arap bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#2b8a5e",aktarim:"#a7aeb3",israil:"#4a72c4"};
   const KTUR={belge:"İç belge",araştırma:"Araştırma",sahiplik:"Sahiplik",personel:"Kadro",tanıklık:"Çalışan tanıklığı",söylem:"Söylem",devlet:"Yasal çerçeve",karşı:"Karşı kanıt"};
   function belgeler(k){
     const L=k.kanitlar||[];if(!L.length&&k.cizgi!=="ik"&&!k.cizgi_tartismali)return null;
@@ -118,7 +120,7 @@
     const d=KN[String(k.id)],kutu=el("div","kanit");
     if(!d||!d.olcum.length){kutu.appendChild(el("span","kanit-yok","Henüz ölçüm yok: bu yayının başlıkları bir olay karşılaştırmasına girdikçe burada birikecek."));return kutu;}
     const n=d.olcum.length,c={filistin:0,aktarim:0,israil:0};d.olcum.forEach(x=>c[x[2]]++);
-    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · ZBS’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
+    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
     const bar=el("div","kanit-cubuk");Object.keys(c).forEach(v=>{if(!c[v])return;const i=el("i");i.style.width=(100*c[v]/n)+"%";i.style.background=BR[v];i.title=BK[v]+": "+c[v];bar.appendChild(i);});kutu.appendChild(bar);
     const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);
     if(n>=5){const fi=c.filistin/n,is=c.israil/n;
