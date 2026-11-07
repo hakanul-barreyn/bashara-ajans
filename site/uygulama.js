@@ -2,11 +2,12 @@
 // Okunan kart değiştikçe harita o haberin şehrine uçar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
-  const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran-Yemen", "Mağrip", "Anadolu", "İsrail", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
+  const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
   const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "karşı taraf" };
   const DIL = { ar: "Arapça", en: "İngilizce", fr: "Fransızca", tr: "Türkçe", he: "İbranice", es: "İspanyolca", ca: "Katalanca", it: "İtalyanca", de: "Almanca" };
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
   const SAYFA = 30;
+  const BAYRAK = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let kaynaklar = {}, haberler = [], guncellendi = null, gor = [];
@@ -154,7 +155,9 @@
     const ust = el("div", "kart-ust");
     ust.appendChild(el("div", "avatar " + k.tur, bas(k.ad)));
     const kim = el("div", "kim");
-    kim.appendChild(el("span", "ad", k.ad));
+    const adEl = el("span", "ad", k.ad);
+    if (k.bolge === "İsrail") adEl.insertAdjacentHTML("afterbegin", BAYRAK);
+    kim.appendChild(adEl);
     const yer = el("span", "yer", k.sehir + " · ");
     const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString("tr-TR"); yer.appendChild(z);
     kim.appendChild(yer); ust.appendChild(kim);
