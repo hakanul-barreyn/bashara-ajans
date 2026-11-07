@@ -403,3 +403,10 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .rozet.sahip{color:var(--k-ink2);background:var(--k-yuzey2);border-color:transparent}
 .avatar.resmi,.avatar.bagimsiz,.avatar.koop{background:var(--k-yuzey2);color:var(--k-ink2)}
 .avatar.izle{background:var(--k-yuzey2);color:var(--k-ink2)}
+
+/* arka plan haritasında sessizlik halkaları */
+.z-sessiz circle{fill:none;stroke:var(--z-vurgu);stroke-width:2;stroke-opacity:.55;transform-box:fill-box;transform-origin:center;animation:z-sessiz 3.2s ease-in-out infinite}
+.z-sessiz .z-sessiz-ic{fill:var(--z-vurgu);fill-opacity:.6;stroke:none;animation:none}
+@keyframes z-sessiz{0%,100%{transform:scale(1);stroke-opacity:.55}50%{transform:scale(1.6);stroke-opacity:.15}}
+.ilk-haber.gecikme{color:var(--k-kirmizi)}
+.rozet.resmi{color:var(--k-ink2);background:var(--k-yuzey2);border-color:transparent}

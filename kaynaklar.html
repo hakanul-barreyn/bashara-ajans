@@ -9,8 +9,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611080125">
-<script src="site/marka.js?v=202611080125"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080140">
+<script src="site/marka.js?v=202611080140"></script>
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
@@ -23,7 +23,7 @@
 .cz-ad{background:#2b8a5e}.cz-ara{background:#7f8b96}.cz-ik{background:#c9544e}
 .cz-t{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk)}
 .kanit{border-top:1px solid var(--k-cizgi);padding-top:8px;display:flex;flex-direction:column;gap:6px}
-.kanit-ust{font-size:.76rem;color:var(--k-soluk)}.kanit-ust b{color:var(--k-ink)}
+.kanit-ust{font-size:.76rem;color:var(--k-soluk);display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}.egri-kucuk{margin-left:auto;display:inline-flex}.kanit-ust b{color:var(--k-ink)}
 .kanit-yok{font-size:.76rem;color:var(--k-soluk)}
 .kanit-cubuk{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--k-yuzey2);gap:2px}.kanit-cubuk i{display:block;height:100%}
 .kanit-efsane{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.72rem;color:var(--k-ink2)}.kanit-efsane span{display:flex;align-items:center;gap:5px}.kanit-efsane i{width:8px;height:8px;border-radius:2px;display:inline-block}
@@ -128,7 +128,12 @@
     const d=KN[String(k.id)],kutu=el("div","kanit");
     if(!d||!d.olcum.length){kutu.appendChild(el("span","kanit-yok","Henüz ölçüm yok: bu yayının başlıkları bir olay karşılaştırmasına girdikçe burada birikecek."));return kutu;}
     const n=d.olcum.length,c={filistin:0,aktarim:0,israil:0};d.olcum.forEach(x=>c[x[2]]++);
-    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
+    const egri=(()=>{const U={filistin:0,aktarim:1,israil:2},H={};d.olcum.forEach(([,t,v])=>{const g=new Date(t+"T12:00:00Z");const p=new Date(g);p.setUTCDate(g.getUTCDate()-((g.getUTCDay()+6)%7));const k=p.toISOString().slice(0,10);(H[k]=H[k]||[]).push(U[v]);});
+      const ks=Object.keys(H).sort().filter(k=>H[k].length>=3);if(ks.length<2)return null;const W=160,Hh=34,x=i=>4+(W-8)*i/(ks.length-1),y=v=>4+(Hh-8)*v/2;
+      const d2=ks.map((k,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(H[k].reduce((a,b)=>a+b,0)/H[k].length).toFixed(1)).join("");
+      const sp=document.createElement("span");sp.className="egri-kucuk";sp.title="Haftalık ortalama uzaklık (üst 0 = Filistin bakışı, alt 2 = İsrail / ABD bakışı): "+ks.map(k=>k+" "+(H[k].reduce((a,b)=>a+b,0)/H[k].length).toFixed(2)).join(", ");
+      sp.innerHTML='<svg viewBox="0 0 '+W+' '+Hh+'" width="'+W+'" height="'+Hh+'"><line x1="4" x2="'+(W-4)+'" y1="'+y(1)+'" y2="'+y(1)+'" stroke="#e0dfd8"/><path d="'+d2+'" fill="none" stroke="#1d2421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';return sp;})();
+    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");if(egri)ust.appendChild(egri);kutu.appendChild(ust);
     const bar=el("div","kanit-cubuk");Object.keys(c).forEach(v=>{if(!c[v])return;const i=el("i");i.style.width=(100*c[v]/n)+"%";i.style.background=BR[v];i.title=BK[v]+": "+c[v];bar.appendChild(i);});kutu.appendChild(bar);
     const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);
     if(n>=5){const fi=c.filistin/n,is=c.israil/n;

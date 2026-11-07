@@ -54,6 +54,31 @@ def gonder(token, kanal, metin):
         return False, True
 
 
+def gorsel_gonder(token, kanal, png_yol, aciklama):
+    """sendPhoto (multipart). Döndürür: (başarılı mı, geçici hata mı)"""
+    global SON_HATA
+    sinir = "----zbs" + os.urandom(8).hex()
+    with open(png_yol, "rb") as f:
+        resim = f.read()
+    parcalar = []
+    for ad, deger in (("chat_id", kanal), ("caption", aciklama[:1024]), ("parse_mode", "HTML")):
+        parcalar.append(f'--{sinir}\r\nContent-Disposition: form-data; name="{ad}"\r\n\r\n{deger}\r\n'.encode())
+    parcalar.append(f'--{sinir}\r\nContent-Disposition: form-data; name="photo"; filename="bulten.png"\r\nContent-Type: image/png\r\n\r\n'.encode()
+                    + resim + b"\r\n")
+    parcalar.append(f"--{sinir}--\r\n".encode())
+    istek = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendPhoto", data=b"".join(parcalar),
+                                   headers={"Content-Type": f"multipart/form-data; boundary={sinir}"})
+    try:
+        with urllib.request.urlopen(istek, timeout=40) as r:
+            return json.loads(r.read()).get("ok", False), False
+    except urllib.error.HTTPError as e:
+        SON_HATA = f"{e.code}"
+        return False, e.code == 429 or e.code >= 500
+    except Exception as e:
+        SON_HATA = type(e).__name__
+        return False, True
+
+
 def _e(s):
     return html.escape(str(s or ""), quote=False)
 
@@ -192,7 +217,13 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
         for tur, _, nesne, ek in adaylar[-GONDERI_SINIRI:]:
             metin = (olay_metni(nesne, haberler, kaynaklar, site) if tur == "olay"
                      else analiz_metni(nesne, ek, site) if tur == "analiz" else bulten_metni(nesne, site))
-            ok, gecici = gonder(token, kanal, metin)
+            png = os.path.join(kok, (nesne.get("indir") or {}).get("png") or "") if tur == "bulten" else ""
+            if png and os.path.isfile(png):
+                ok, gecici = gorsel_gonder(token, kanal, png, metin)
+                if not ok and not gecici:
+                    ok, gecici = gonder(token, kanal, metin)
+            else:
+                ok, gecici = gonder(token, kanal, metin)
             if ok:
                 isaretle(tur, nesne, ek)
                 gonderilen += 1

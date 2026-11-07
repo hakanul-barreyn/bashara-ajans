@@ -108,6 +108,17 @@
     }
     if (!zNoktalar) return;
     zNoktalar.innerHTML = "";
+    // Sessizlik halkaları: bölge basınının yazdığı ama İsrail ve Batı basınının hiç yazmadığı güncel olayların yerleri
+    const DIS_K = new Set(["İsrail", "Batı"]);
+    olaylar.forEach((o) => {
+      const y = o.yer; if (!y || y.lon < ZB.bat || y.lon > ZB.dogu || y.lat < ZB.guney || y.lat > ZB.kuzey) return;
+      const ks = o.haberler.map((i) => haberIdx[i] && kaynaklar[haberIdx[i].kaynak]).filter(Boolean);
+      if (ks.length < 3 || ks.some((k) => DIS_K.has(kampAd(k)))) return;
+      const g = zEl("g", { class: "z-sessiz" });
+      g.appendChild(zEl("circle", { cx: zx(y.lon), cy: zy(y.lat), r: 14 }));
+      g.appendChild(zEl("circle", { class: "z-sessiz-ic", cx: zx(y.lon), cy: zy(y.lat), r: 4 }));
+      zNoktalar.appendChild(g);
+    });
     const aktif = aktifId && haberIdx[aktifId];
     const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
     sirali.slice().reverse().forEach(([ad, s]) => {
@@ -415,6 +426,19 @@
     ust.appendChild(kap); b.appendChild(ust);
     b.appendChild(el("h2", null, o.baslik));
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
+    // Gecikme: İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi?
+    {
+      const DIS_K = new Set(["İsrail", "Batı"]), IC_K = new Set(["Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"]);
+      let ic = null, ds = null;
+      o.haberler.forEach((i) => { const h = haberIdx[i], k = h && kaynaklar[h.kaynak]; if (!k) return; const t = Date.parse(h.tarih), c = kampAd(k);
+        if (IC_K.has(c) && (ic == null || t < ic)) ic = t; if (DIS_K.has(c) && (ds == null || t < ds)) ds = t; });
+      let metin = null;
+      if (ic != null && ds == null) metin = "İsrail ve Batı basını bu olayı henüz yazmadı.";
+      else if (ic != null && ds != null) { const sa = (ds - ic) / 36e5;
+        metin = Math.abs(sa) < 0.25 ? "İki taraf da aynı saatlerde yazdı." : sa > 0 ? "İsrail ve Batı basını " + (sa < 1 ? Math.round(sa * 60) + " dakika" : sa.toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " saat") + " sonra yazdı."
+          : "İsrail ve Batı basını bölge basınından " + (-sa < 1 ? Math.round(-sa * 60) + " dakika" : (-sa).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " saat") + " önce yazdı."; }
+      if (metin) b.appendChild(el("p", "ilk-haber gecikme", "⏱ " + metin));
+    }
     if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
     const mat = bakisMatrisi(o, false); if (mat) b.appendChild(mat);
     const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Kaynakların çizgisi");

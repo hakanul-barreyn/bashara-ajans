@@ -645,9 +645,10 @@ Kurallar:
 - metin alanı boşsa yalnızca başlıkta yazanı Türkçe bir cümleyle aktar; başlıkta olmayan hiçbir bilgi ekleme.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
+- kayip: metin bu olayda ÖLDÜRÜLEN ya da ölen insan sayısı veriyorsa {"filistinli": sayı, "israilli": sayı}; yalnızca metinde açıkça yazan ölü sayısını yaz (yaralıları sayma), olmayan tarafı null bırak; hiç ölü sayısı yoksa null. Toplam savaş bilançosu değil, bu haberin bildirdiği olayın ölüleri.
 - nitelik: metin bir olayı aktarmaktan çok yorumluyor, tartışıyor ya da derinlemesine inceliyorsa (analiz, köşe yazısı, görüş, uzun rapor) "analiz", değilse "haber".
 - Analizlerde ozet 3-4 cümle olsun ve yazının ana savını, dayandığı gerekçeyi ve vardığı sonucu ver ("Yazara göre ...").
-- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz"}]
+- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz", "kayip": null}]
 """
 TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
 
@@ -886,6 +887,18 @@ def main():
                             h["etiket"] = et
                         if str(c.get("nitelik") or "").strip().lower() == "analiz":
                             h["nitelik"] = "analiz"
+                        ky = c.get("kayip")
+                        if isinstance(ky, dict):
+                            temiz_k = {}
+                            for t in ("filistinli", "israilli"):
+                                try:
+                                    v = int(ky.get(t)) if ky.get(t) is not None else None
+                                except (TypeError, ValueError):
+                                    v = None
+                                if v is not None and 0 < v < 100000:
+                                    temiz_k[t] = v
+                            if temiz_k:
+                                h["kayip"] = temiz_k
                         yazilan += 1
                 time.sleep(4)  # dakika başı istek sınırına takılmamak için
             durum["_model"] = model

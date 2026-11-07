@@ -60,7 +60,8 @@ Kurallar:
   "aktarim" = bir tarafın (ABD, İsrail, İran, Hamas…) açıklamasını tırnak ya da "…dedi/duyurdu" kalıbıyla, kendi yargısını katmadan aktarıyor. Bir ABD ya da İsrail duyurusunu yansız haberleştirmek "aktarim"dır, "israil" değildir.
   "israil" = İsrail ya da ABD çerçevesini yayının kendi sesiyle benimsiyor: onların ifadelerini tırnaksız kullanıyor ("terörist", "terör altyapısı", "operasyon", "İran'ın vekilleri"), eylemi olumluyor ya da Filistinli/Arap kayıpları geri plana itiyor.
   Kararsız kalırsan "aktarim" yaz.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}}]
+- yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
 """
 
 
@@ -87,7 +88,15 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
         ids.sort(key=lambda i: var[i]["tarih"], reverse=True)
         oid = "o" + hashlib.sha1(",".join(sorted(ids)).encode()).hexdigest()[:10]
         yor = g.get("yorumlar") if isinstance(g.get("yorumlar"), dict) else {}
+        yer = None
+        y = g.get("yer")
+        try:
+            if isinstance(y, dict) and -90 <= float(y.get("lat")) <= 90 and -180 <= float(y.get("lon")) <= 180:
+                yer = {"ad": str(y.get("ad") or "")[:60], "lat": round(float(y["lat"]), 2), "lon": round(float(y["lon"]), 2)}
+        except (TypeError, ValueError):
+            yer = None
         olaylar.append({
+            "yer": yer,
             "id": oid, "baslik": str(g.get("baslik") or "")[:160], "not": str(g.get("not") or "")[:700],
             "haberler": ids, "kaynak_sayisi": len(kaynaklar), "son": var[ids[0]]["tarih"],
             "ilk": var[ids[-1]]["tarih"],
@@ -100,7 +109,8 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
 
 
 # ---------------------------------------------------------------- arşiv
-ARSIV_ALANLAR = ("id", "kaynak", "kaynak_ad", "url", "tarih", "baslik_tr", "ozet_tr", "etiket", "gorsel", "arsiv", "telegram", "nitelik")
+ARSIV_ALANLAR = ("id", "kaynak", "kaynak_ad", "url", "tarih", "baslik_tr", "ozet_tr", "etiket", "gorsel", "arsiv", "telegram",
+                 "nitelik", "baslik_orj", "dil", "kayip")
 
 
 def arsive_yaz(kok, haberler):
