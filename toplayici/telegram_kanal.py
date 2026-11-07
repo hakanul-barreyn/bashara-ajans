@@ -21,6 +21,7 @@ import urllib.request
 import marka
 
 GONDERI_SINIRI = 6
+SON_HATA = ""
 OLAY_EN_AZ_KAYNAK = 3
 BAKIS = {"filistin": "Filistin bakışı", "aktarim": "aktarım", "israil": "İsrail / ABD bakışı"}
 
@@ -40,8 +41,15 @@ def gonder(token, kanal, metin):
         with urllib.request.urlopen(istek, timeout=20) as r:
             return json.loads(r.read()).get("ok", False), False
     except urllib.error.HTTPError as e:
-        return False, e.code == 429
-    except Exception:
+        try:
+            aciklama = json.loads(e.read().decode()).get("description", "")
+        except Exception:
+            aciklama = ""
+        global SON_HATA
+        SON_HATA = f"{e.code} {aciklama}".strip()
+        return False, e.code == 429 or e.code >= 500
+    except Exception as e:
+        SON_HATA = type(e).__name__
         return False, True
 
 
@@ -120,7 +128,13 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
             gonderilen += 1
             log(f"Telegram: duyuru gönderildi ({d['id']})")
         else:
-            log(f"Telegram: duyuru gönderilemedi ({d['id']}); kanal adı ve botun yöneticiliği kontrol edilmeli")
+            ipucu = {"chat not found": "kanal adı yanlış ya da kanal gizli (herkese açık kullanıcı adı gerekli)",
+                     "not enough rights": "bot kanalda yönetici değil ya da 'mesaj gönder' yetkisi kapalı",
+                     "bot is not a member": "bot kanala eklenmemiş",
+                     "Unauthorized": "bot anahtarı yanlış ya da iptal edilmiş"}
+            neden = next((v for k, v in ipucu.items() if k.lower() in SON_HATA.lower()), "")
+            log(f"Telegram: duyuru gönderilemedi ({d['id']}): {SON_HATA}" + (f" → {neden}" if neden else ""))
+            log(f"Telegram: kullanılan kanal adı {kanal[:2]}…{kanal[-3:]} ({len(kanal)} karakter)")
             if not gecici:
                 return 0
             break
