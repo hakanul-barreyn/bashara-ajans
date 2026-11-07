@@ -9,11 +9,18 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611071821">
+<link rel="stylesheet" href="site/stil.css?v=202611071842">
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
 .sayfa h1{margin:0;font-size:1.8rem;letter-spacing:-.01em}
+.yontem{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;scroll-margin-top:calc(var(--ust) + 16px)}
+.yontem h2{margin:0;font-size:1rem}
+.yontem p{margin:0;color:var(--ink2);max-width:80ch;font-size:.92rem}
+.yontem ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.9rem;color:var(--ink2);max-width:90ch}
+.cz{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:999px;margin-right:8px;color:#0c110e;font-weight:500}
+.cz-ad{background:#1fa463}.cz-ara{background:#9aa7b4}.cz-ik{background:#e05a5a}
+.cz-t{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk)}
 .giris{margin:-8px 0 0;color:var(--soluk);max-width:72ch}
 .saglik{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .saglik button{text-align:left;border:1px solid var(--cizgi);background:var(--yuzey);color:var(--ink);border-radius:14px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
@@ -49,6 +56,16 @@
 <main class="sayfa">
   <h1>Kaynaklar</h1>
   <p class="giris">ZBS’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. Kartlardaki renkli nokta, toplayıcının o kaynağı en son ne zaman okuyabildiğini gösterir.</p>
+  <section class="yontem" id="cizgi">
+    <h2>Çizgi değerlendirmesi nasıl yapıldı</h2>
+    <p>“Kim nasıl yazdı” sayfasındaki denge çubuğu, ZBS’nin her yayına verdiği <b>editoryal bir değerlendirmeye</b> dayanır. Bu bir olgu değil, görüştür; ölçütlerini açıkça yazıyoruz ki okur kendisi tartabilsin.</p>
+    <ul>
+      <li><span class="cz cz-ad">Antiemperyalist / dekolonyal</span> İsrail’in Filistin’deki varlığını işgal ve yerleşimci sömürgecilik olarak tanımlayan, Gazze’deki savaşı soykırım olarak adlandıran, ABD ve NATO hegemonyasına karşı çıkan ya da “direniş ekseni”nin yayın organı olan yayınlar.</li>
+      <li><span class="cz cz-ara">Ara / ana akım</span> İsrail’i zaman zaman eleştirse de sistemik bir antiemperyalist çizgi izlemeyen yayınlar; haber ajansları; dengeleri karışık devletlerin yayın organları.</li>
+      <li><span class="cz cz-ik">İşbirlikçi kompradorlar ve emperyalistler</span> Haberciliği ağırlıkla ABD ve İsrail hükümetlerinin çerçevesini izleyen yayınlar; İsrail ana akımı ve sağı; İsrail’le normalleşmiş hükümetlerin (BAE, Fas, Mısır, Ürdün, Suudi Arabistan) çizgisindeki yayınlar.</li>
+    </ul>
+    <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Bir değerlendirmeye itirazın varsa bize yaz.</p>
+  </section>
   <div class="saglik" id="saglik"></div>
   <div class="arac">
     <div class="ara-kutu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="ara" id="ara" type="search" placeholder="Ad, şehir ya da profil ara" aria-label="Ara"></div>
@@ -61,6 +78,7 @@
   const REG=["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
   const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:"karşı taraf"};
   const DIL={ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
+  const CIZ={ad:"Antiemperyalist / dekolonyal",ara:"Ara / ana akım",ik:"İşbirlikçi kompradorlar ve emperyalistler"};
   const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress",gnews:"Google Haberler araması (son çare)"};
   const DURUM={iyi:"Çalışıyor",sessiz:"Sessiz (6 saatten uzun)",kopuk:"Okunamıyor",yok:"Henüz denenmedi"};
   const BAYRAK='<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
@@ -80,7 +98,7 @@
     ust();
     document.querySelectorAll("#bolgeler .cip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===bolge));
     const L=$("liste");L.innerHTML="";
-    const ok=k=>(bolge==="Tümü"||k.bolge===bolge)&&(!sDurum||saglik(k)===sDurum)&&(!ara||[k.ad,k.sehir,k.ulke,k.profil,k.url].join(" ").toLocaleLowerCase("tr").includes(ara));
+    const ok=k=>(bolge==="Tümü"||k.bolge===bolge||("cz-"+(k.cizgi||"ara"))===bolge)&&(!sDurum||saglik(k)===sDurum)&&(!ara||[k.ad,k.sehir,k.ulke,k.profil,k.url].join(" ").toLocaleLowerCase("tr").includes(ara));
     let n=0;
     REG.forEach(r=>{const ks=K.filter(k=>k.bolge===r&&ok(k));if(!ks.length)return;n+=ks.length;
       const g=el("section","grup");g.appendChild(el("h2",null,r+" · "+ks.length));const iz=el("div","izgara");
@@ -89,6 +107,7 @@
         const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
         const rz=el("div","rozetler");rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
+        const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
         const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);
@@ -99,7 +118,8 @@
   }
   Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]}))])
   .then(([k,d,h])=>{K=k;D=d;(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
-    ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});ciz();})
+    ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});
+    Object.entries(CIZ).forEach(([k,l])=>{const b=el("button","cip",l);b.type="button";b.dataset.k="cz-"+k;b.onclick=()=>{bolge="cz-"+k;ciz();};$("bolgeler").appendChild(b);});ciz();})
   .catch(()=>{$("liste").textContent="Kaynak listesi okunamadı.";});
   let t;$("ara").addEventListener("input",e=>{clearTimeout(t);t=setTimeout(()=>{ara=e.target.value.trim().toLocaleLowerCase("tr");ciz();},150);});
 })();

@@ -295,3 +295,7 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .dagilimlar{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.slaytlar{scroll-behavior:auto}}
+.denge{padding-top:4px}
+.denge .dagilim-cubuk{height:14px}
+.kim-bolge{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk);font-weight:400}
+.olay-uyari a{color:var(--ink2)}

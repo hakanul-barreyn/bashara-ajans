@@ -189,17 +189,23 @@
   const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Karşı taraf" };
   const TUR_RENK = { "Devlet": "#e05a5a", "Bağlı": "#8c8f8d", "Bağımsız": "#2fbf71", "Özel": "#6d89a3", "Karşı taraf": "#d9dfdb" };
   const kampAd = (k) => KAMP[k.bolge] || "Diğer";
+  const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
+  const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#1fa463", "Ara / ana akım": "#9aa7b4", "İşbirlikçi kompradorlar ve emperyalistler": "#e05a5a" };
+  const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
 
   function kapsama(o) {
     const ks = new Map();
     o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (k && !ks.has(k.id)) ks.set(k.id, k); });
-    const kamp = {}, tur = {};
-    ks.forEach((k) => { const a = kampAd(k); kamp[a] = (kamp[a] || 0) + 1; const t = TUR_GRUP[k.tur] || "Özel"; tur[t] = (tur[t] || 0) + 1; });
-    return { kamp, tur, toplam: ks.size };
+    const kamp = {}, tur = {}, cizgi = {};
+    ks.forEach((k) => { const a = kampAd(k); kamp[a] = (kamp[a] || 0) + 1; const t = TUR_GRUP[k.tur] || "Özel"; tur[t] = (tur[t] || 0) + 1; const c = cizgiAd(k); cizgi[c] = (cizgi[c] || 0) + 1; });
+    return { kamp, tur, cizgi, toplam: ks.size };
   }
 
   function korNokta(kp) {
     if (kp.toplam < 3) return null;
+    const ad = kp.cizgi[CIZGI.ad] || 0, ik = kp.cizgi[CIZGI.ik] || 0;
+    if (ik / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla işbirlikçi ve emperyalist çizgideki yayınlar yazdı (%" + Math.round((100 * ik) / kp.toplam) + ").";
+    if (ad / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla antiemperyalist çizgideki yayınlar yazdı; ana akım ve karşı taraf sessiz (%" + Math.round((100 * ad) / kp.toplam) + ").";
     const en = Object.entries(kp.kamp).sort((a, b) => b[1] - a[1])[0];
     const arap = (kp.kamp["Filistin"] || 0) + (kp.kamp["Arap dünyası"] || 0);
     const bati = (kp.kamp["Batı"] || 0) + (kp.kamp["İsrail"] || 0);
@@ -250,7 +256,7 @@
       ic.appendChild(el("span", "slayt-sayi", kp.toplam + " kaynak · son " + once(o.son)));
       ic.appendChild(el("h3", null, o.baslik));
       if (o.not) ic.appendChild(el("p", null, o.not.length > 220 ? o.not.slice(0, 217) + "…" : o.not));
-      ic.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam));
+      ic.appendChild(cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
       const kn = korNokta(kp); if (kn) ic.appendChild(el("span", "kor-nokta", kn));
       const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
       ic.appendChild(b);
@@ -292,6 +298,8 @@
     b.appendChild(el("h2", null, o.baslik));
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
     if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
+    const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Denge: kaynakların çizgisi");
+    denge.classList.add("denge"); b.appendChild(denge);
     const iki = el("div", "dagilimlar");
     iki.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam, "Kaynakların bölgesi"));
     iki.appendChild(cubuk(kp.tur, TUR_RENK, kp.toplam, "Kaynakların sahipliği"));
@@ -300,16 +308,16 @@
     if (o.not) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(o.not); b.appendChild(n); }
     // kaynak kaynak liste, bölge grubuna göre
     const gruplar = {};
-    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[kampAd(k)] = gruplar[kampAd(k)] || []).push(h); });
-    Object.keys(KAMP_RENK).filter((g) => gruplar[g]).forEach((g) => {
+    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[cizgiAd(k)] = gruplar[cizgiAd(k)] || []).push(h); });
+    Object.keys(CIZGI_RENK).filter((g) => gruplar[g]).forEach((g) => {
       const sec = el("section", "kim-grup");
-      const hb = el("h3"); const nk = el("i"); nk.style.background = KAMP_RENK[g]; hb.appendChild(nk); hb.append(g); sec.appendChild(hb);
+      const hb = el("h3"); const nk = el("i"); nk.style.background = CIZGI_RENK[g]; hb.appendChild(nk); hb.append(g); sec.appendChild(hb);
       gruplar[g].forEach((h) => {
         const k = kaynaklar[h.kaynak];
         const r = el("div", "kim-satir");
         const a = el("div", "avatar " + k.tur, bas(k.ad)); r.appendChild(a);
         const ic = el("div", "kim-ic");
-        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ic.appendChild(ad);
+        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
         if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const y = o.yorumlar && o.yorumlar[h.id]; if (y) ic.appendChild(el("div", "kim-yorum", y));
@@ -318,6 +326,8 @@
       });
       b.appendChild(sec);
     });
+    const yontem = el("p", "olay-uyari"); yontem.append("Denge çubuğu ZBS’nin her yayına verdiği editoryal çizgi değerlendirmesine dayanır; ölçütleri ");
+    const ya = el("a", null, "Kaynaklar"); ya.href = "kaynaklar.html#cizgi"; yontem.appendChild(ya); yontem.append(" sayfasında."); b.appendChild(yontem);
     b.appendChild(el("p", "olay-uyari", "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git."));
     return b;
   }
