@@ -6,7 +6,7 @@ window.MARKA = {
   "kisa_ad": "ZBS",
   "slogan": "Mağrip’ten Körfez’e basının Türkçe takibi",
   "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
-  "goatcounter": ""
+  "goatcounter": "zbshaber"
 };
 
 // Sayfadaki data-marka="ad|kisa_ad|slogan|aciklama" öğelerini ve {ad} geçen başlıkları doldurur.
