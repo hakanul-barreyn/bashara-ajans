@@ -35,6 +35,18 @@
     harita.attributionControl.setPrefix(false).addAttribution('Sınırlar: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
     fetch(DUNYA).then((r) => r.json()).then((topo) => {
       const ulkeler = topojson.feature(topo, topo.objects.countries);
+      // 180. boylamı kesen ülkeler (Rusya, Fiji) haritada yatay şerit çiziyor:
+      // böyle halkalarda batı boylamlarını 360 derece doğuya kaydır. Antarktika’yı çizme.
+      const duzelt = (halka) => {
+        const x = halka.map((p) => p[0]);
+        if (Math.max(...x) - Math.min(...x) > 180) halka.forEach((p) => { if (p[0] < 0) p[0] += 360; });
+      };
+      ulkeler.features = ulkeler.features.filter((f) => f.id !== "010" && f.properties.name !== "Antarctica");
+      ulkeler.features.forEach((f) => {
+        const g = f.geometry; if (!g) return;
+        if (g.type === "Polygon") g.coordinates.forEach(duzelt);
+        if (g.type === "MultiPolygon") g.coordinates.forEach((p) => p.forEach(duzelt));
+      });
       L.geoJSON(ulkeler, {
         interactive: false,
         style: () => ({ color: renk("--sinir"), weight: 0.8, fillColor: renk("--kara"), fillOpacity: 1 }),
