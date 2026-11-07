@@ -40,7 +40,7 @@ def uygula(kok=KOK):
     except Exception:
         pass
     e = lambda s: html.escape(str(s), quote=False)
-    for ad in ("index.html", "arsiv.html", "kaynaklar.html"):
+    for ad in ("index.html", "arsiv.html", "kaynaklar.html", "hakkimizda.html"):
         p = os.path.join(kok, ad)
         if not os.path.exists(p):
             continue

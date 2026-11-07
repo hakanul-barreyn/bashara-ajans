@@ -319,3 +319,13 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .matris.kisa .matris-ad small{display:none}
   .slayt-dugme{font-size:.86rem;padding:9px 16px}
 }
+/* dar telefon: dört bağlantılı menü sığsın */
+@media (max-width:520px){
+  .ust-ic{gap:8px}
+  .canli{display:none}
+  .marka{flex:none}
+  .marka-ad{font-size:1.1rem}
+  .menu{margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;gap:4px}
+  .menu::-webkit-scrollbar{display:none}
+  .menu a{padding:6px 9px;font-size:.8rem}
+}

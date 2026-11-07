@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f3ef">
+<title data-marka-sablon="{ad} Hakkında">ZBS Hakkında</title>
+<meta name="description" content="Yayın ilkemiz: Filistin bakışı başlangıç noktamızdır. Haberleri nasıl topladığımız, bakışı ve çizgiyi nasıl ölçtüğümüz.">
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611072200">
+<script src="site/marka.js?v=202611072200"></script>
+<style>
+/* Hakkımızda: okunur tek sütun metin, bakış ölçeği görseli, bölüm kartları */
+.sayfa{max-width:860px;margin:0 auto;padding:28px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:20px}
+.sayfa h1{margin:0;font-size:clamp(1.8rem,4vw,2.4rem);letter-spacing:-.015em;text-wrap:balance}
+.giris{margin:-6px 0 0;font-size:1.05rem;color:var(--ink2);max-width:66ch}
+.icindekiler{display:flex;flex-wrap:wrap;gap:6px}
+.icindekiler a{font-size:.82rem;font-weight:600;text-decoration:none;color:var(--ink2);border:1px solid var(--cizgi);background:var(--yuzey);padding:6px 12px;border-radius:999px}
+.icindekiler a:hover{border-color:var(--soluk);color:var(--ink)}
+.bolumk{background:var(--kart);box-shadow:var(--golge);border-radius:18px;padding:22px 24px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:calc(var(--ust) + 16px)}
+.bolumk h2{margin:0;font-size:1.2rem;letter-spacing:-.01em}
+.bolumk p,.bolumk li{margin:0;color:var(--k-ink2);font-size:.96rem;max-width:68ch}
+.bolumk ul,.bolumk ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+.ilke{border-left:4px solid var(--yesil);padding:4px 0 4px 14px;font-size:1.05rem!important;color:var(--k-ink)!important;font-weight:600}
+/* bakış ölçeği: başlangıç noktası solda, uzaklaştıkça sağa */
+.olcek{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:4px;position:relative}
+.olcek::before{content:"";position:absolute;left:16px;right:16px;top:15px;height:3px;border-radius:3px;background:linear-gradient(90deg,#2b8a5e,#a7aeb3 50%,#4a72c4)}
+.basamak{position:relative;display:flex;flex-direction:column;gap:6px;padding:0 12px 0 0}
+.basamak .top{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:.78rem;font-weight:500;position:relative;z-index:1;box-shadow:0 0 0 4px var(--kart)}
+.basamak b{font-size:.95rem;color:var(--k-ink);margin-top:4px}
+.basamak small{font-family:var(--mono);font-size:.68rem;color:var(--k-soluk);text-transform:uppercase;letter-spacing:.06em}
+.basamak span{font-size:.86rem;color:var(--k-ink2)}
+.ornekler{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ornekk{border:1px solid var(--k-cizgi);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--k-ink2)}
+.ornekk i{font-style:italic;color:var(--k-ink)}
+.ornekk .bakis-cip{align-self:flex-start}
+.not-kucuk{font-size:.8rem!important;color:var(--k-soluk)!important}
+@media (max-width:700px){
+  .olcek{grid-template-columns:minmax(0,1fr);gap:14px}
+  .olcek::before{left:15px;right:auto;top:16px;bottom:16px;width:3px;height:auto;background:linear-gradient(180deg,#2b8a5e,#a7aeb3 50%,#4a72c4)}
+  .basamak{display:grid;grid-template-columns:33px minmax(0,1fr);column-gap:12px;padding:0}
+  .basamak .top{grid-row:1/span 3}
+  .basamak b{margin-top:0}
+  .ornekler{grid-template-columns:minmax(0,1fr)}
+  .bolumk{padding:18px}
+}
+</style>
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
+    <p class="slogan">Hakkımızda</p>
+    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+<main class="sayfa">
+  <h1>Hakkımızda</h1>
+  <p class="giris"><span data-marka="ad">ZBS</span>, Mağrip’ten Körfez’e, Meşrik’ten Anadolu’ya bölgenin basınını ve bölge hakkında yazan dünya basınını izleyen, haberleri Türkçe özetleyen otomatik bir haber takip sitesidir. Bu sayfada nereden baktığımızı ve bunu nasıl ölçtüğümüzü açıkça yazıyoruz.</p>
+  <nav class="icindekiler" aria-label="Bu sayfada">
+    <a href="#ilke">Yayın ilkemiz</a><a href="#bakis">Bakış ölçeği</a><a href="#cizgi">Yayın çizgisi</a><a href="#kanit">Kanıt</a><a href="#isleyis">Nasıl çalışıyoruz</a>
+  </nav>
+
+  <section class="bolumk" id="ilke">
+    <h2>Yayın ilkemiz: başlangıç noktamız Filistin bakışı</h2>
+    <p class="ilke">Bir haberi tartarken ölçünün sıfır noktası olarak Filistin halkının bakışını alıyoruz.</p>
+    <p>Hiçbir haber “hiçbir yerden” yazılmaz. Büyük ajansların ve Batı basınının “tarafsız” diye sunduğu dil çoğu zaman güçlü olanın, yani İsrail ve ABD hükümetlerinin çerçevesidir: işgal “çatışma”, abluka “güvenlik önlemi”, öldürülen siviller “ikincil kayıp” olur. Biz bu dili sıfır noktası kabul etmiyoruz.</p>
+    <p>Bunun yerine, işgal altında yaşayan ve bombalanan halkın deneyimini başlangıç noktası, yani <b>tarafsızlık noktası</b> olarak alıyoruz. Bir yayının bakışını değerlendirirken sorduğumuz soru şudur: bu haber, olayı yaşayanların gözünden ne kadar uzaklaşıyor?</p>
+    <p>Bu bir görüştür ve bunu saklamıyoruz. Okur bizim nereden baktığımızı bildiğinde, haberleri kendisi tartabilir.</p>
+  </section>
+
+  <section class="bolumk" id="bakis">
+    <h2>Bakış ölçeği</h2>
+    <p>“Kim nasıl yazdı” sayfalarında her başlık üç basamaklı bir ölçeğe yerleştirilir. Ölçüt, haberin konusu değil, yayının <b>kendi dilidir</b>.</p>
+    <div class="olcek" role="list">
+      <div class="basamak" role="listitem"><span class="top" style="background:#2b8a5e">0</span><small>Başlangıç noktası</small><b>Filistin bakışı</b><span>Filistinli ya da Arap kurbanları, Filistinli ya da direniş kaynaklarını merkeze alıyor; ya da İsrail ve ABD’nin eylemini eleştirel dille anlatıyor (“işgal”, “katliam”, “soykırım”, “şehit”, “saldırganlık”, “abluka”, “boğmak”).</span></div>
+      <div class="basamak" role="listitem"><span class="top" style="background:#8f979c">1</span><small>Bir adım uzak</small><b>Aktarım</b><span>Bir tarafın (ABD, İsrail, İran, Hamas…) açıklamasını tırnak ya da “dedi, duyurdu” kalıbıyla, kendi yargısını katmadan aktarıyor. Bir ABD ya da İsrail duyurusunu yansız haberleştirmek bu basamaktadır.</span></div>
+      <div class="basamak" role="listitem"><span class="top" style="background:#4a72c4">2</span><small>En uzak</small><b>İsrail / ABD bakışı</b><span>İsrail ya da ABD çerçevesini yayının kendi sesiyle benimsiyor: onların ifadelerini tırnaksız kullanıyor (“terörist”, “terör altyapısı”, “operasyon”, “İran’ın vekilleri”), eylemi olumluyor ya da Filistinli ve Arap kayıpları geri plana itiyor.</span></div>
+    </div>
+    <p>Kararsız kalınan başlıklar “aktarım” sayılır. Aynı olayın üç basamaktan nasıl görünebileceğine bir örnek:</p>
+    <div class="ornekler">
+      <div class="ornekk"><span class="bakis-cip" style="background:#2b8a5e">Filistin bakışı</span><i>“Denizde başarısız olan ABD, İran’ı boğmak için karada görev gücü kuruyor”</i></div>
+      <div class="ornekk"><span class="bakis-cip" style="background:#8f979c">Aktarım</span><i>“CENTCOM, İran’ın kara yollarına yönelik yeni bir görev gücü kurduğunu duyurdu”</i></div>
+      <div class="ornekk"><span class="bakis-cip" style="background:#4a72c4">İsrail / ABD bakışı</span><i>“ABD, İran’ın vekillerine silah akışını kesmek için harekete geçti”</i></div>
+    </div>
+    <p class="not-kucuk">Başlıkları ölçeğe yapay zekâ yerleştirir; hata yapabilir. Her olay sayfasında her yayının özgün başlığını yanında gösteriyoruz ki etiketi okur kendisi denetleyebilsin.</p>
+  </section>
+
+  <section class="bolumk" id="cizgi">
+    <h2>Yayın çizgisi</h2>
+    <p>Bakış ölçeği tek tek başlıklara bakar. Yayın çizgisi ise bir yayın organının genel duruşudur ve editoryal bir değerlendirmedir. Üç gruba ayırıyoruz:</p>
+    <ul>
+      <li><b>Antiemperyalist / dekolonyal:</b> İsrail’in Filistin’deki varlığını işgal ve yerleşimci sömürgecilik olarak tanımlayan, Gazze’deki savaşı soykırım olarak adlandıran, ABD ve NATO hegemonyasına karşı çıkan yayınlar.</li>
+      <li><b>Ara / ana akım:</b> İsrail’i zaman zaman eleştirse de sistemik bir antiemperyalist çizgi izlemeyen yayınlar, haber ajansları, dengeleri karışık devletlerin yayın organları.</li>
+      <li><b>İşbirlikçi kompradorlar ve emperyalistler:</b> Haberciliği ağırlıkla ABD ve İsrail hükümetlerinin çerçevesini izleyen yayınlar; İsrail ana akımı ve sağı; İsrail’le normalleşmiş hükümetlerin çizgisindeki yayınlar.</li>
+    </ul>
+    <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Her yayının değerlendirmesini <a href="kaynaklar.html">Kaynaklar</a> sayfasında görebilirsin.</p>
+  </section>
+
+  <section class="bolumk" id="kanit">
+    <h2>Kanıt</h2>
+    <p>Bir değerlendirmeyi yalnızca söylemekle yetinmiyoruz. Her yayın kartında iki tür kanıt var:</p>
+    <ol>
+      <li><b>Belgelenmiş kanıtlar:</b> İç yazışmalar, yazım kılavuzları, sahiplik kayıtları, medya izleme raporları ve çalışan tanıklıkları; her biri kaynağına bağlantıyla. Sınıflandırmamızla çelişen belgeleri de “karşı kanıt” olarak gösteriyoruz.</li>
+      <li><b>Ölçülmüş söylem:</b> Yayının olay karşılaştırmalarına giren her başlığının bakış ölçeğindeki yeri. Ölçüm yayının çizgi değerlendirmesiyle uyuşmazsa kartta bunu açıkça yazıyoruz ve değerlendirmeyi gözden geçiriyoruz.</li>
+    </ol>
+  </section>
+
+  <section class="bolumk" id="isleyis">
+    <h2>Nasıl çalışıyoruz</h2>
+    <ul>
+      <li>Toplayıcı her 15 dakikada bir 180’i aşkın yayının haber site haritalarını, RSS beslemelerini ve Telegram kanallarını okur. Yayınların kim olduğunu, nerede olduklarını ve kime ait olduklarını <a href="kaynaklar.html">Kaynaklar</a> sayfasında yazıyoruz.</li>
+      <li>Türkçe özetleri ve olay gruplarını yapay zekâ yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı ve arşiv düğmeleri var.</li>
+      <li>Kaynakların metnini saklamıyoruz; başlık, Türkçe özet ve bağlantı kalır. Geçmiş günler <a href="arsiv.html">Arşiv</a>’de.</li>
+      <li>Türkçe özetleri <a href="data/rss.xml">RSS</a> ile takip edebilirsin.</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

@@ -182,7 +182,7 @@
   const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
   const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İşbirlikçi kompradorlar ve emperyalistler": "#c9544e" };
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
-  const BAKIS = { filistin: "Filistin / Arap bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
+  const BAKIS = { filistin: "Filistin bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
   const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
   const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"];
 
@@ -213,6 +213,10 @@
     const ef = el("div", "dagilim-efsane");
     Object.entries(BAKIS).forEach(([v, l]) => { const x = el("span"); const nk = el("i"); nk.style.background = BAKIS_RENK[v]; x.appendChild(nk); x.append(l); ef.appendChild(x); });
     kutu.appendChild(ef);
+    if (!kisa) {
+      const n = el("p", "olay-uyari"); n.append("Ölçeğin başlangıç noktası Filistin bakışıdır; aktarım bir adım, İsrail / ABD bakışı en uzak basamaktır. ");
+      const a = el("a", null, "Bakış ölçeği nasıl işliyor"); a.href = "hakkimizda.html#bakis"; n.appendChild(a); kutu.appendChild(n);
+    }
     return kutu;
   }
 
@@ -353,7 +357,7 @@
       b.appendChild(sec);
     });
     const yontem = el("p", "olay-uyari"); yontem.append("Denge çubuğu " + MARKA_AD + "’nin her yayına verdiği editoryal çizgi değerlendirmesine dayanır; ölçütleri ");
-    const ya = el("a", null, "Kaynaklar"); ya.href = "kaynaklar.html#cizgi"; yontem.appendChild(ya); yontem.append(" sayfasında."); b.appendChild(yontem);
+    const ya = el("a", null, "Hakkımızda"); ya.href = "hakkimizda.html#cizgi"; yontem.appendChild(ya); yontem.append(" sayfasında."); b.appendChild(yontem);
     b.appendChild(el("p", "olay-uyari", "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git."));
     return b;
   }

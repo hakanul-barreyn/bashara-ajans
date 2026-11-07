@@ -9,8 +9,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611072130">
-<script src="site/marka.js?v=202611072100"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611072200">
+<script src="site/marka.js?v=202611072200"></script>
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
@@ -69,7 +69,7 @@
   <div class="ust-ic">
     <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
     <p class="slogan">Kaynaklar</p>
-    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a></nav>
+    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a><a href="hakkimizda.html">Hakkımızda</a></nav>
   </div>
 </header>
 <main class="sayfa">
@@ -84,7 +84,7 @@
       <li><span class="cz cz-ik">İşbirlikçi kompradorlar ve emperyalistler</span> Haberciliği ağırlıkla ABD ve İsrail hükümetlerinin çerçevesini izleyen yayınlar; İsrail ana akımı ve sağı; İsrail’le normalleşmiş hükümetlerin (BAE, Fas, Mısır, Ürdün, Suudi Arabistan) çizgisindeki yayınlar.</li>
     </ul>
     <p><b>Kanıt:</b> Her yayın kartının altındaki “Ölçülmüş söylem” bölümü, <span data-marka="ad">ZBS</span>’nin olay karşılaştırmalarında o yayının başlıklarını kimin bakış açısından kurduğunu sayar ve örnek başlıkları özgün dilleriyle gösterir. Değerlendirme bir görüştür; ölçüm ise okurun kendisinin kontrol edebileceği kayıttır. Ölçüm değerlendirmeyle uyuşmadığında bunu kartta açıkça yazarız.</p>
-    <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Bir değerlendirmeye itirazın varsa bize yaz.</p>
+    <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Başlıkların bakışını ölçerken Filistin bakışını başlangıç noktası alıyoruz; ayrıntısı <a href="hakkimizda.html#ilke">Hakkımızda</a> sayfasında.</p>
   </section>
   <div class="saglik" id="saglik"></div>
   <div class="arac">
@@ -106,7 +106,7 @@
   const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
   const bas=(ad)=>{const k=ad.replace(/^(The|Al|El|La|Le|Il|L’|Der|Die)[\s-]+/i,"").replace(/[^\p{L}\p{N} ]/gu," ").trim().split(/\s+/);return((k[0]||"")[0]+((k[1]||"")[0]||(k[0]||"")[1]||"")).toUpperCase();};
   let K=[],D={},N={},KN={},bolge="Tümü",ara="",sDurum=null;
-  const BK={filistin:"Filistin / Arap bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#2b8a5e",aktarim:"#a7aeb3",israil:"#4a72c4"};
+  const BK={filistin:"Filistin bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#2b8a5e",aktarim:"#a7aeb3",israil:"#4a72c4"};
   const KTUR={belge:"İç belge",araştırma:"Araştırma",sahiplik:"Sahiplik",personel:"Kadro",tanıklık:"Çalışan tanıklığı",söylem:"Söylem",devlet:"Yasal çerçeve",karşı:"Karşı kanıt"};
   function belgeler(k){
     const L=k.kanitlar||[];if(!L.length&&k.cizgi!=="ik"&&!k.cizgi_tartismali)return null;
