@@ -427,6 +427,36 @@
       iz.appendChild(a);
     });
     kutu.appendChild(iz);
+    surukle(iz);
+  }
+
+  // Yatay şeridi fareyle kartın gövdesinden tutup kaydırma (dokunmatikte tarayıcı zaten kaydırır).
+  // Sürükleme olduysa ardından gelen tıklama yutulur: kart açılmaz, bağlantı açılmaz.
+  function surukle(iz) {
+    let x0 = 0, s0 = 0, basili = false, kaydi = false;
+    iz.addEventListener("dragstart", (e) => e.preventDefault());
+    iz.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      basili = true; kaydi = false; x0 = e.clientX; s0 = iz.scrollLeft;
+    });
+    iz.addEventListener("pointermove", (e) => {
+      if (!basili) return;
+      const dx = e.clientX - x0;
+      if (!kaydi && Math.abs(dx) > 5) { kaydi = true; iz.classList.add("suruk"); try { iz.setPointerCapture(e.pointerId); } catch (_) {} }
+      if (kaydi) { iz.scrollLeft = s0 - dx; e.preventDefault(); }
+    });
+    const birak = () => {
+      if (!basili) return; basili = false;
+      if (kaydi) {
+        iz.classList.remove("suruk");
+        const yut = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+        iz.addEventListener("click", yut, { capture: true, once: true });
+        setTimeout(() => iz.removeEventListener("click", yut, { capture: true }), 50);
+      }
+    };
+    iz.addEventListener("pointerup", birak);
+    iz.addEventListener("pointercancel", birak);
+    iz.addEventListener("lostpointercapture", birak);
   }
 
   // ---------------------------------------------------- olay ayrıntısı: kim nasıl yazdı

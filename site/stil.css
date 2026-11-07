@@ -376,6 +376,9 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .analiz-kart.acik p{-webkit-line-clamp:unset;display:block}
 .analiz-kart .eylemler{margin-top:auto}
 @media (max-width:820px){.analiz-serit{grid-auto-columns:84%}}
+@media (hover:hover) and (pointer:fine){.analiz-serit{cursor:grab}.analiz-serit .analiz-kart{cursor:inherit}}
+.analiz-serit.suruk{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.analiz-serit.suruk *{cursor:grabbing!important}
 /* manşet slaytı: oklar slaytın üzerinde, noktalar dokunulabilir */
 .slayt-cerceve{position:relative}
 .slayt-ok{position:absolute;top:50%;z-index:3;width:48px;height:48px;margin-top:-24px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
