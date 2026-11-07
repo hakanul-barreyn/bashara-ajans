@@ -691,7 +691,7 @@
   "notu": "",
   "id": 27,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "söylem",
@@ -724,7 +724,7 @@
    "https://turkish.aawsat.com/rss.xml",
    "https://turkish.aawsat.com/feed.xml"
   ],
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "söylem",
@@ -844,7 +844,7 @@
   "telegram_aday": [
    "AlArabiya_Eng"
   ],
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "söylem",
@@ -883,7 +883,7 @@
    "https://www.arabnews.com/rss.xml"
   ],
   "telegram_aday": [],
-  "cizgi": "ik"
+  "cizgi": "ara"
  },
  {
   "ad": "The National",
@@ -902,7 +902,7 @@
   "notu": "",
   "id": 35,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "bayrak": "ae"
  },
  {
@@ -941,7 +941,7 @@
   "notu": "",
   "id": 37,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "cizgi_tartismali": true,
   "kanitlar": [
    {
@@ -970,7 +970,7 @@
   "notu": "",
   "id": 38,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "sahiplik",
@@ -1453,7 +1453,7 @@
   "notu": "",
   "id": 60,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "cizgi_tartismali": true
  },
  {
@@ -1473,7 +1473,7 @@
   "notu": "",
   "id": 61,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "sahiplik",
@@ -2940,7 +2940,7 @@
   "notu": "",
   "id": 130,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "cizgi_tartismali": true
  },
  {
@@ -3123,7 +3123,7 @@
   "notu": "",
   "id": 139,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "cizgi_tartismali": true
  },
  {
@@ -3143,7 +3143,7 @@
   "notu": "",
   "id": 140,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "cizgi_tartismali": true
  },
  {
@@ -3163,7 +3163,7 @@
   "notu": "",
   "id": 141,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "bayrak": "ae"
  },
  {
@@ -3183,7 +3183,7 @@
   "notu": "",
   "id": 142,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "bayrak": "ae"
  },
  {
@@ -3320,7 +3320,7 @@
   "notu": "",
   "id": 149,
   "telegram": null,
-  "cizgi": "ik",
+  "cizgi": "ara",
   "kanitlar": [
    {
     "tur": "sahiplik",
@@ -3447,7 +3447,7 @@
   "notu": "",
   "id": 154,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ara"
  },
  {
   "ad": "Le Desk",
