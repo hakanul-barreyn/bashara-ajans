@@ -5,7 +5,8 @@ window.MARKA = {
   "ad": "ZBS",
   "kisa_ad": "ZBS",
   "slogan": "Mağrip’ten Körfez’e basının Türkçe takibi",
-  "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi."
+  "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
+  "goatcounter": ""
 };
 
 // Sayfadaki data-marka="ad|kisa_ad|slogan|aciklama" öğelerini ve {ad} geçen başlıkları doldurur.
@@ -22,4 +23,11 @@ window.MARKA = {
     });
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", doldur); else doldur();
+  // Ziyaret sayacı (GoatCounter): çerez kullanmaz; yalnızca "goatcounter" alanı doluysa yüklenir
+  if (M.goatcounter && /^[a-z0-9-]+$/.test(M.goatcounter)) {
+    var g = document.createElement("script");
+    g.async = true; g.src = "https://gc.zgo.at/count.js";
+    g.setAttribute("data-goatcounter", "https://" + M.goatcounter + ".goatcounter.com/count");
+    document.head.appendChild(g);
+  }
 })();
