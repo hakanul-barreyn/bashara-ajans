@@ -423,7 +423,23 @@
   "notu": "Senin listende “Kudüs (Batı)”.",
   "id": 20,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "personel",
+    "metin": "Mart 2023'te genel yayın yönetmenliğine getirilen Avi Mayer daha önce İsrail ordusunun sözcülük biriminde görev yapmış; Amerikan Yahudi Komitesi'nin iletişim direktörlüğünü ve Yahudi Ajansı sözcülüğünü yürütmüştü.",
+    "kaynak": "The Jewish Chronicle",
+    "url": "https://thejc.com/news/israel/american-pro-israel-activist-appointed-editor-of-jerusalem-post-ft72gf6h",
+    "tarih": "2023-03"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "Ynetnews",
@@ -442,7 +458,23 @@
   "notu": "",
   "id": 21,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "belge",
+    "metin": "2000 numaralı dosyadaki ses kayıtlarında Ynet'in bağlı olduğu Yedioth Ahronoth'un yayıncısı Arnon Mozes, rakibi Israel Hayom'un kısıtlanması karşılığında Netanyahu'ya daha olumlu haber vaat ediyor.",
+    "kaynak": "The Jerusalem Post",
+    "url": "https://www.jpost.com/israel-news/benjamin-netanyahu/yedioth-publisher-to-netanyahu-ill-do-everything-for-you-to-remain-pm-478040",
+    "tarih": "2017-01"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "Ynet (İbranice)",
@@ -461,7 +493,23 @@
   "notu": "",
   "id": 22,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "belge",
+    "metin": "2000 numaralı dosyadaki ses kayıtlarında Ynet'in bağlı olduğu Yedioth Ahronoth'un yayıncısı Arnon Mozes, rakibi Israel Hayom'un kısıtlanması karşılığında Netanyahu'ya daha olumlu haber vaat ediyor.",
+    "kaynak": "The Jerusalem Post",
+    "url": "https://www.jpost.com/israel-news/benjamin-netanyahu/yedioth-publisher-to-netanyahu-ill-do-everything-for-you-to-remain-pm-478040",
+    "tarih": "2017-01"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "i24NEWS",
@@ -480,7 +528,23 @@
   "notu": "",
   "id": 23,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Kanalın sahibi telekom patronu Patrick Drahi, 2014'te Başbakan Netanyahu'dan kanalın İsrail'de yayın yapmasına izin verilmesini istedi.",
+    "kaynak": "Globes",
+    "url": "https://en.globes.co.il/en/article-drahi-asks-netanyahu-to-air-i24news-in-israel-1000918748",
+    "tarih": "2014-02-20"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "The Times of Israel",
@@ -499,7 +563,16 @@
   "notu": "",
   "id": 24,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "Al Jazeera English",
@@ -519,7 +592,23 @@
   "id": 25,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "karşı",
+    "metin": "İsrail, Mayıs 2024'te çıkardığı yasayla kanalı yasakladı, bürolarına baskın yaptı ve yasağı defalarca uzattı; gerekçe olarak Gazze haberlerini gösterdi.",
+    "kaynak": "The New Arab",
+    "url": "https://www.newarab.com/news/israel-bans-al-jazeera-over-gaza-war-coverage",
+    "tarih": "2024-05"
+   },
+   {
+    "tur": "söylem",
+    "metin": "Arab Reform Initiative'e göre kanalın anlatısı Al Arabiya'nınkinin aksine en başından itibaren \"net\"ti. Kanal Katar devletine ait; dış politika konularında Katar'ın çizgisine yakın olduğu için tartışmalı.",
+    "kaynak": "Arab Reform Initiative",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Al Jazeera Arabic",
@@ -539,7 +628,23 @@
   "id": 26,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "karşı",
+    "metin": "İsrail, Mayıs 2024'te çıkardığı yasayla kanalı yasakladı, bürolarına baskın yaptı ve yasağı defalarca uzattı; gerekçe olarak Gazze haberlerini gösterdi.",
+    "kaynak": "The New Arab",
+    "url": "https://www.newarab.com/news/israel-bans-al-jazeera-over-gaza-war-coverage",
+    "tarih": "2024-05"
+   },
+   {
+    "tur": "söylem",
+    "metin": "Arab Reform Initiative'e göre kanalın anlatısı Al Arabiya'nınkinin aksine en başından itibaren \"net\"ti. Kanal Katar devletine ait; dış politika konularında Katar'ın çizgisine yakın olduğu için tartışmalı.",
+    "kaynak": "Arab Reform Initiative",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Asharq Al-Awsat",
@@ -558,7 +663,16 @@
   "notu": "",
   "id": 27,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "söylem",
+    "metin": "Suudi sermayeli kanallar Gazze savaşı sırasında İsrailli siyasetçilere sık sık ekran verdi. Aynı Suudi grubun (SRMG) kanalı Asharq News, \"Hamas yok edilmeli\" diyen eski başbakan Ehud Barak'ı konuk etti. Gazetenin kendisi ise bu dönemde Mahmud Abbas'la röportaj yaptı.",
+    "kaynak": "Al-Monitor",
+    "url": "https://www.al-monitor.com/originals/2024/03/saudi-media-hosting-more-israeli-figures-gaza-war",
+    "tarih": "2024-03-14"
+   }
+  ]
  },
  {
   "ad": "Asharq Al-Awsat Türkçe",
@@ -582,7 +696,16 @@
    "https://turkish.aawsat.com/rss.xml",
    "https://turkish.aawsat.com/feed.xml"
   ],
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "söylem",
+    "metin": "Suudi sermayeli kanallar Gazze savaşı sırasında İsrailli siyasetçilere sık sık ekran verdi. Aynı Suudi grubun (SRMG) kanalı Asharq News, \"Hamas yok edilmeli\" diyen eski başbakan Ehud Barak'ı konuk etti.",
+    "kaynak": "Al-Monitor",
+    "url": "https://www.al-monitor.com/originals/2024/03/saudi-media-hosting-more-israeli-figures-gaza-war",
+    "tarih": "2024-03-14"
+   }
+  ]
  },
  {
   "ad": "Al-Quds Al-Arabi",
@@ -693,7 +816,23 @@
   "telegram_aday": [
    "AlArabiya_Eng"
   ],
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "söylem",
+    "metin": "Suudi sermayeli kanallar Gazze savaşı sırasında İsrailli siyasetçilere sık sık ekran verdi: Knesset üyesi Danny Danon ateşkesin tıkanmasından Hamas'ı sorumlu tuttu, eski başbakan Ehud Olmert iki kez konuk oldu.",
+    "kaynak": "Al-Monitor",
+    "url": "https://www.al-monitor.com/originals/2024/03/saudi-media-hosting-more-israeli-figures-gaza-war",
+    "tarih": "2024-03-14"
+   },
+   {
+    "tur": "söylem",
+    "metin": "Analist Aziz Alghashian'a göre kanal kısa sürede İsrail'in misillemesine odaklandı. İsrailli yetkililere ekran vermesi, izleyiciyi İsrail'e adım adım alıştırma çabası olarak okunabilir.",
+    "kaynak": "Arab Reform Initiative",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Arab News",
@@ -774,7 +913,16 @@
   "id": 37,
   "telegram": null,
   "cizgi": "ik",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "Çoğu United Media Services'e (UMS) ait devlet denetimli Mısır yayınları, savaşı Sisi'yi Filistin'in hamisi gibi gösterecek biçimde aktardı ve Mısır-İsrail ilişkilerini geri planda tuttu; muhalif yayınlar ise İsrail'le askeri işbirliğini ve yardımın gecikmesini öne çıkardı.",
+    "kaynak": "Arab Reform Initiative (Kamal Tabikha)",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Egypt Today",
@@ -793,7 +941,23 @@
   "notu": "",
   "id": 38,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Yayının bağlı olduğu UMS grubu, CPJ'ye göre Mısır Genel İstihbarat Servisi'ne ait ve onunla yakından bağlantılı; grup hükümeti eleştiren programlara ve sunuculara yaptırım uyguladı.",
+    "kaynak": "CPJ",
+    "url": "https://cpj.org/2025/07/egypts-intelligence-controlled-media-company-retaliates-against-programs-hosts-critical-of-government/",
+    "tarih": "2025-07"
+   },
+   {
+    "tur": "araştırma",
+    "metin": "Çoğu United Media Services'e (UMS) ait devlet denetimli Mısır yayınları, savaşı Sisi'yi Filistin'in hamisi gibi gösterecek biçimde aktardı ve Mısır-İsrail ilişkilerini geri planda tuttu; muhalif yayınlar ise İsrail'le askeri işbirliğini ve yardımın gecikmesini öne çıkardı.",
+    "kaynak": "Arab Reform Initiative (Kamal Tabikha)",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Daily News Egypt",
@@ -832,7 +996,16 @@
   "id": 40,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "karşı",
+    "metin": "Arab Reform Initiative, Mada Masr ve Al-Manassa'yı Mısır'da Gazze savaşını dengeli aktarmaya çalışan az sayıdaki yayın arasında saydı.",
+    "kaynak": "Arab Reform Initiative",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Al-Manassa",
@@ -1271,7 +1444,16 @@
   "notu": "",
   "id": 61,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Sitenin sahibi Edit Holding. TelQuel ve Libération'a göre ortaklık yapısı Kral VI. Muhammed'in özel sekreteri Mounir Majidi'ye bağlanıyor. Le Monde yayın çizgisini \"aşırı milliyetçi\" diye nitelendirdi ve siteyi muhalif gazetecileri hedef alan \"karalama basını\" içinde saydı.",
+    "kaynak": "Vikipedi (TelQuel, Libération, Le Monde derlemesi)",
+    "url": "https://en.wikipedia.org/wiki/Le360",
+    "tarih": "2016"
+   }
+  ]
  },
  {
   "ad": "Business News",
@@ -1614,7 +1796,23 @@
   "notu": "",
   "id": 78,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "belge",
+    "metin": "Kasım 2023'te muhabirlere dağıtılan iç yazı \"soykırım\" ve \"etnik temizlik\" ifadelerini sınırlamayı, \"işgal altındaki topraklar\" ve \"Filistin\" adını kullanmamayı, Gazze'deki kampları \"mülteci kampı\" diye anmamayı istedi.",
+    "kaynak": "The Intercept",
+    "url": "https://theintercept.com/2024/04/15/nyt-israel-gaza-genocide-palestine-coverage/",
+    "tarih": "2024-04-15"
+   },
+   {
+    "tur": "araştırma",
+    "metin": "NYT, Washington Post ve LA Times'ın ilk altı haftalık Gazze haberlerini inceleyen analiz: İsrailli ölümler, ölü başına yaklaşık 16 kat daha sık anılmış; \"katliam\" kelimesi İsrailli kurbanlar için 125, Filistinliler için 2 kez kullanılmış; 1.100'ü aşkın haberin yalnızca 2 başlığında Gazzeli çocuklardan söz edilmiş.",
+    "kaynak": "The Intercept",
+    "url": "https://theintercept.com/2024/01/09/newspapers-israel-palestine-bias-new-york-times/",
+    "tarih": "2024-01-09"
+   }
+  ]
  },
  {
   "ad": "The Washington Post",
@@ -1638,7 +1836,16 @@
    "https://feeds.washingtonpost.com/rss/world"
   ],
   "telegram_aday": [],
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "NYT, Washington Post ve LA Times'ın ilk altı haftalık Gazze haberlerini inceleyen analiz: İsrailli ölümler, ölü başına yaklaşık 16 kat daha sık anılmış; \"katliam\" kelimesi İsrailli kurbanlar için 125, Filistinliler için 2 kez kullanılmış; 1.100'ü aşkın haberin yalnızca 2 başlığında Gazzeli çocuklardan söz edilmiş.",
+    "kaynak": "The Intercept",
+    "url": "https://theintercept.com/2024/01/09/newspapers-israel-palestine-bias-new-york-times/",
+    "tarih": "2024-01-09"
+   }
+  ]
  },
  {
   "ad": "Axios",
@@ -1657,7 +1864,16 @@
   "notu": "",
   "id": 80,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "personel",
+    "metin": "Axios'un İsrail ve dış politika muhabiri Barak Ravid, İsrail ordusunun sinyal istihbaratı birimi 8200'de analist olarak görev yaptı; 2025'ten beri aynı zamanda İsrail'in Kanal 12'sinin Washington muhabiri.",
+    "kaynak": "Vikipedi",
+    "url": "https://en.wikipedia.org/wiki/Barak_Ravid",
+    "tarih": "2025"
+   }
+  ]
  },
  {
   "ad": "Vox",
@@ -1735,7 +1951,16 @@
   "id": 84,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "söylem",
+    "metin": "NYT'nin \"soykırım\" kelimesini sınırlayan iç yazısını ve CNN'in Kudüs bürosu onay kuralını ilk kez bu yayın ortaya çıkardı; ana akım ABD basınının dil analizini de yayımladı.",
+    "kaynak": "The Intercept",
+    "url": "https://theintercept.com/2024/04/15/nyt-israel-gaza-genocide-palestine-coverage/",
+    "tarih": "2024-04-15"
+   }
+  ]
  },
  {
   "ad": "Associated Press",
@@ -1863,7 +2088,16 @@
   ],
   "telegram_aday": [],
   "cizgi": "ik",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "Centre for Media Monitoring'in 7 Ekim 2023 – 6 Ekim 2024 dönemini kapsayan 180 sayfalık raporu: Filistinli ölümler yaklaşık 34 kat fazla olduğu hâlde İsrailli ölümler, ölü başına yazılı haberlerde 33, yayında 19 kat daha sık anıldı.",
+    "kaynak": "The New Arab",
+    "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
+    "tarih": "2025-06"
+   }
+  ]
  },
  {
   "ad": "The Muslim News",
@@ -2299,7 +2533,16 @@
   "id": 112,
   "telegram": null,
   "cizgi": "ik",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "7 Ekim 2023 – 19 Ocak 2025 arasında Spiegel, Tagesschau, Zeit ve Bild'den 4.853 başlığı inceleyen analiz: başlıkların %43,3'ü İsrail hükümeti veya ordusu kaynaklı, yalnızca %5'i Filistin kaynaklı. Yayın bazında ayrı oran verilmedi.",
+    "kaynak": "Jacobin (Fabian Goldmann)",
+    "url": "https://jacobin.com/2025/08/germany-media-bias-gaza-israel",
+    "tarih": "2025-08"
+   }
+  ]
  },
  {
   "ad": "Süddeutsche Zeitung",
@@ -2342,7 +2585,16 @@
   "id": 114,
   "telegram": null,
   "cizgi": "ik",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "tanıklık",
+    "metin": "DW çalışanlarına göre Filistinli konuklar canlı yerine önceden kaydediliyor, İsrail'i savaş suçuyla suçlayan konuklar için sunuculara hazır cevaplar veriliyor ve yazım kılavuzu \"Filistin\" yerine \"Filistin toprakları\" denmesini istiyor. DW \"Filistin\" kelimesini yasakladığını reddetti.",
+    "kaynak": "Al Jazeera",
+    "url": "https://www.aljazeera.com/news/2024/12/19/as-gaza-war-rages-deutsche-welle-insiders-accuse-outlet-of-pro-israel-bias",
+    "tarih": "2024-12-19"
+   }
+  ]
  },
  {
   "ad": "Le Monde",
@@ -3037,7 +3289,23 @@
   "notu": "",
   "id": 149,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Yayının bağlı olduğu UMS grubu, CPJ'ye göre Mısır Genel İstihbarat Servisi'ne ait ve onunla yakından bağlantılı; grup hükümeti eleştiren programlara ve sunuculara yaptırım uyguladı.",
+    "kaynak": "CPJ",
+    "url": "https://cpj.org/2025/07/egypts-intelligence-controlled-media-company-retaliates-against-programs-hosts-critical-of-government/",
+    "tarih": "2025-07"
+   },
+   {
+    "tur": "araştırma",
+    "metin": "Çoğu United Media Services'e (UMS) ait devlet denetimli Mısır yayınları, savaşı Sisi'yi Filistin'in hamisi gibi gösterecek biçimde aktardı ve Mısır-İsrail ilişkilerini geri planda tuttu; muhalif yayınlar ise İsrail'le askeri işbirliğini ve yardımın gecikmesini öne çıkardı.",
+    "kaynak": "Arab Reform Initiative (Kamal Tabikha)",
+    "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
+    "tarih": "2023-12-22"
+   }
+  ]
  },
  {
   "ad": "Mehr",
@@ -3120,7 +3388,16 @@
   "notu": "",
   "id": 153,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Kanalın sahibi Londra merkezli Volant Media. The Guardian (31.10.2018), Suudi Veliaht Prensi Muhammed bin Selman'a yakın bir iş insanının kanalı finanse ettiğini; Wall Street Journal (8.2.2019) kanalın Suudi saray çevresince kurulup fonlandığını yazdı. Yönetim devlet finansmanını reddediyor.",
+    "kaynak": "Vikipedi (Guardian ve WSJ haberlerinin derlemesi)",
+    "url": "https://en.wikipedia.org/wiki/Iran_International",
+    "tarih": "2018-10-31"
+   }
+  ]
  },
  {
   "ad": "MAP",
@@ -3521,7 +3798,16 @@
   "id": 174,
   "telegram": null,
   "cizgi": "ik",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "7 Ekim 2023 – 19 Ocak 2025 arasında Spiegel, Tagesschau, Zeit ve Bild'den 4.853 başlığı inceleyen analiz: başlıkların %43,3'ü İsrail hükümeti veya ordusu kaynaklı, yalnızca %5'i Filistin kaynaklı. Yayın bazında ayrı oran verilmedi.",
+    "kaynak": "Jacobin (Fabian Goldmann)",
+    "url": "https://jacobin.com/2025/08/germany-media-bias-gaza-israel",
+    "tarih": "2025-08"
+   }
+  ]
  },
  {
   "ad": "Novara Media",
@@ -3616,7 +3902,16 @@
   "notu": "",
   "id": 179,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "belge",
+    "metin": "CNN'in yerleşik kuralına göre İsrail ve Filistin'le ilgili her haber yayından önce Kudüs bürosunun onayından geçiyor. Büro İsrail askeri sansürünün kurallarına tabi. CNN metinleri sansüre önceden göstermediğini söylüyor.",
+    "kaynak": "The Intercept",
+    "url": "https://theintercept.com/2024/01/04/cnn-israel-gaza-idf-reporting/",
+    "tarih": "2024-01-04"
+   }
+  ]
  },
  {
   "ad": "Dawn",
@@ -3673,7 +3968,30 @@
   "notu": "",
   "id": 182,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "sahiplik",
+    "metin": "Gazete, Netanyahu'nun yakın dostu sayılan Sheldon Adelson'a ait ücretsiz bir günlüktü. 2000 numaralı yolsuzluk dosyası, Netanyahu'nun daha olumlu haber karşılığında bu gazeteyi zayıflatmayı rakip Yedioth'la pazarlık ettiği iddiasını konu alıyor; Adelson 2017'de bu dosyada ifade verdi.",
+    "kaynak": "The Times of Israel",
+    "url": "https://www.timesofisrael.com/sheldon-adelson-gives-testimony-in-netanyahu-corruption-case/",
+    "tarih": "2017-05-25"
+   },
+   {
+    "tur": "söylem",
+    "metin": "İsrail'de Netanyahu'ya yakın yayın çizgisi nedeniyle \"Bibiton\" (Bibi'nin gazetesi) lakabıyla anılıyor.",
+    "kaynak": "The Forward",
+    "url": "https://forward.com/opinion/359673/explained-could-netanyahu-be-ousted-over-talks-with-sheldon-adelsons-media/",
+    "tarih": "2017-01"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  },
  {
   "ad": "N12",
@@ -3692,6 +4010,22 @@
   "notu": "",
   "id": 183,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "Gazeteci-akademisyen Ayala Panievsky'nin raporuna göre Kanal 12 ana haberinin savaşın ilk altı ayından alınan rastgele örnekleminde Gazze'deki sivil kayıplara yalnızca 4 kez değinildi. Dış haberler editörü Arad Nir savaşın bitmesi çağrısından sonra tartışma programından çıkarıldı. \"Gazze'den Sesler\" bölümü orduya iliştirilmiş muhabirle çekildi.",
+    "kaynak": "Mother Jones",
+    "url": "https://www.motherjones.com/politics/2025/10/israeli-media-gaza-channel-televsion-press-distorted-view",
+    "tarih": "2025-10"
+   },
+   {
+    "tur": "devlet",
+    "metin": "İsrail yasası \"güvenlik\" konulu her haberi yayından önce askeri sansüre sunmayı zorunlu kılıyor. Askeri sansür 2024'te 1.635 haberi tamamen yasakladı, 6.265 haberi kısmen kesti. İsrail merkezli bütün yayın organları bu kurala tabi.",
+    "kaynak": "+972 Magazine",
+    "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
+    "tarih": "2025-05"
+   }
+  ]
  }
 ]
