@@ -1,5 +1,5 @@
-// ZBS sayfa kodu: harita tüm sahneyi kaplar, haberler yüzen paneldeki kartlarda akar.
-// Okunan kart değiştikçe harita o haberin şehrine uçar. Veri 5 dakikada bir yenilenir.
+// ZBS sayfa kodu: haber kartları ortada, harita ve şehir listesi yanda.
+// Bir habere tıklayınca ya da üzerine gelince harita o haberin şehrine uçar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
   const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
@@ -14,7 +14,7 @@
   let bolge = "Tümü", sehir = null, ara = "", kac = SAYFA, aktifId = null;
   const $ = (id) => document.getElementById(id);
   const renk = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
-  const tel = () => window.matchMedia("(max-width:760px)").matches;
+  const tel = () => window.matchMedia("(max-width:820px)").matches;
   const sakla = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   const oku = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 
@@ -37,7 +37,7 @@
   let harita = null, katman = null;
   try {
     harita = L.map("harita", { worldCopyJump: true, zoomControl: true, minZoom: 2, maxZoom: 8, zoomSnap: 0.25 });
-    harita.fitBounds(tel() ? [[22, 0], [48, 50]] : [[10, -20], [56, 60]], { paddingBottomRight: tel() ? [0, 0] : [480, 0] });
+    harita.fitBounds([[12, -12], [52, 58]]);
     harita.attributionControl.setPrefix(false).addAttribution('Sınırlar: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
     fetch(DUNYA).then((r) => r.json()).then((topo) => {
       const ulkeler = topojson.feature(topo, topo.objects.countries);
@@ -65,17 +65,10 @@
     h.appendChild(el("div", "harita-hata", "Harita yüklenemedi. Haber akışı çalışmaya devam ediyor."));
   }
 
-  // Noktayı panelin örtmediği alanın ortasına getir
   function ucur(lat, lon) {
     if (!harita) return;
-    const z = Math.max(harita.getZoom(), 4);
-    const panel = $("panel");
-    let ofs = [0, 0];
-    if (tel()) ofs = [0, (panel.offsetHeight) / 2];
-    else ofs = [(panel.offsetWidth + 16) / 2, 0];
-    const p = harita.project([lat, lon], z).add(ofs);
-    const hedef = harita.unproject(p, z);
-    if (AZ_HAREKET) harita.setView(hedef, z); else harita.flyTo(hedef, z, { duration: 0.9 });
+    const z = Math.max(harita.getZoom(), 3.5);
+    if (AZ_HAREKET) harita.setView([lat, lon], z); else harita.flyTo([lat, lon], z, { duration: 0.9 });
   }
 
   function haritaCiz(liste) {
@@ -91,13 +84,25 @@
     const aktif = aktifId && haberler.find((h) => h.id === aktifId);
     const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
     const yesil = renk("--yesil"), kirmizi = renk("--kirmizi");
-    Object.entries(sayac).sort((a, b) => b[1].n - a[1].n).forEach(([ad, s]) => {
+    const sirali = Object.entries(sayac).sort((a, b) => b[1].n - a[1].n);
+    // Yan sütundaki şehir listesi
+    const ol = $("sehirler"); ol.innerHTML = "";
+    const enCok = (sirali[0] && sirali[0][1].n) || 1;
+    sirali.filter(([, s]) => s.n).slice(0, 10).forEach(([ad, s]) => {
+      const li = el("li"), b = el("button"); b.type = "button"; b.setAttribute("aria-pressed", ad === sehir);
+      b.appendChild(el("span", "ad", ad));
+      const c = el("span", "cubuk"), i = el("i"); i.style.width = Math.max(4, (100 * s.n) / enCok) + "%"; c.appendChild(i); b.appendChild(c);
+      b.appendChild(el("span", "n", s.n));
+      b.onclick = () => { sehir = ad === sehir ? null : ad; kac = SAYFA; document.body.classList.remove("harita-acik"); ciz(true); ucur(s.lat, s.lon); };
+      li.appendChild(b); ol.appendChild(li);
+    });
+    sirali.forEach(([ad, s]) => {
       const vurgu = ad === sehir || ad === aktifSehir, c = vurgu ? kirmizi : yesil;
       const r = 4 + Math.sqrt(s.n) * 1.8;
       if (s.n) katman.addLayer(L.circleMarker([s.lat, s.lon], { radius: r + (vurgu ? 10 : 6), stroke: false, fillColor: c, fillOpacity: vurgu ? 0.22 : 0.12, interactive: false }));
       const m = L.circleMarker([s.lat, s.lon], { radius: r, weight: vurgu ? 2.5 : 1.5, color: c, fillColor: c, fillOpacity: s.n ? 0.65 : 0.15 });
       m.bindTooltip("<b>" + ad + "</b> · " + s.n + " haber · " + s.yayin.size + " yayın", { direction: "top", offset: [0, -r] });
-      m.on("click", () => { sehir = ad === sehir ? null : ad; kac = SAYFA; ciz(true); });
+      m.on("click", () => { sehir = ad === sehir ? null : ad; kac = SAYFA; document.body.classList.remove("harita-acik"); ciz(true); });
       katman.addLayer(m);
     });
   }
@@ -181,11 +186,13 @@
     g.appendChild(ey);
     kart.appendChild(g);
     kart.addEventListener("click", (e) => { if (!e.target.closest("a,button")) aktifEt(h.id, true); });
+    let ust_ = null;
+    kart.addEventListener("mouseenter", () => { clearTimeout(ust_); ust_ = setTimeout(() => aktifEt(h.id), 350); });
+    kart.addEventListener("mouseleave", () => clearTimeout(ust_));
     return kart;
   }
 
   // ---------------------------------------------------- etkin kart ve harita takibi
-  let gozcu = null;
   function aktifEt(id, zorla) {
     if (id === aktifId && !zorla) return;
     aktifId = id;
@@ -194,22 +201,13 @@
     const h = haberler.find((x) => x.id === id); const k = h && kaynaklar[h.kaynak];
     if (k) { ucur(k.lat, k.lon); haritaCiz(suz()); }
   }
-  function gozle() {
-    if (gozcu) gozcu.disconnect();
-    if (!("IntersectionObserver" in window)) return;
-    gozcu = new IntersectionObserver((girdiler) => {
-      const gorunen = girdiler.filter((g) => g.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (gorunen) aktifEt(gorunen.target.dataset.id);
-    }, { root: $("akis"), threshold: [0.6] });
-    document.querySelectorAll("#akis .haber").forEach((k) => gozcu.observe(k));
-  }
 
   let sonGozcu = null;
   function sonrakiYukle() {
     if (sonGozcu) sonGozcu.disconnect();
     const son = $("akis").querySelector(".nota-son");
     if (!son || !("IntersectionObserver" in window)) return;
-    sonGozcu = new IntersectionObserver((g) => { if (g[0].isIntersecting) { kac += SAYFA; ciz(false, true); } }, { root: $("akis"), rootMargin: "400px" });
+    sonGozcu = new IntersectionObserver((g) => { if (g[0].isIntersecting) { kac += SAYFA; ciz(false, true); } }, { rootMargin: "600px" });
     sonGozcu.observe(son);
   }
 
@@ -219,17 +217,17 @@
     const liste = suz();
     gor = sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste;
     const akis = $("akis");
-    const kaydir = akis.scrollTop;
+    const kaydir = window.scrollY;
     akis.innerHTML = "";
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
-    gor.slice(0, kac).forEach((h) => akis.appendChild(haberCiz(h)));
+    gor.slice(0, kac).forEach((h, i) => { const k = haberCiz(h); if (i === 0) k.classList.add("manset"); akis.appendChild(k); });
     if (gor.length > kac) akis.appendChild(el("p", "nota nota-son", "Yükleniyor…"));
     else if (gor.length) {
       const n = el("p", "nota"); n.append("Hepsi bu kadar. Yayınların kim olduğunu ");
       const a = el("a", null, "Kaynaklar"); a.href = "kaynaklar.html"; n.appendChild(a); n.append(" sayfasında bulabilirsin."); akis.appendChild(n);
     }
-    if (basaDon) akis.scrollTop = 0; else akis.scrollTop = kaydir;
+    if (basaDon) { if (window.scrollY > 0) window.scrollTo({ top: 0 }); } else window.scrollTo({ top: kaydir });
     const s = $("sayilar"); s.innerHTML = "";
     s.appendChild(el("b", null, gor.length.toLocaleString("tr-TR"))); s.append(" haber · ");
     s.appendChild(el("b", null, gor.filter((h) => h.ozet_tr).length.toLocaleString("tr-TR"))); s.append(" Türkçe · ");
@@ -238,7 +236,7 @@
     if (aktifId && !gor.slice(0, kac).some((h) => h.id === aktifId)) aktifId = null;
     if (aktifId) { const k = document.querySelector('.haber[data-id="' + aktifId + '"]'); if (k) k.classList.add("aktif"); }
     haritaCiz(liste);
-    gozle(); sonrakiYukle();
+    sonrakiYukle();
     if (basaDon && gor[0] && !devam) aktifEt(gor[0].id, true);
   }
 
@@ -274,13 +272,12 @@
   let bekle;
   $("fAra").addEventListener("input", (e) => { clearTimeout(bekle); bekle = setTimeout(() => { ara = e.target.value.trim().toLocaleLowerCase("tr"); kac = SAYFA; ciz(true); }, 180); });
   $("fSehir").onclick = () => { sehir = null; ciz(true); };
-  // Telefonda kartlar kaydırılınca süzgeçleri gizle, en üste dönünce geri getir
-  $("akis").addEventListener("scroll", () => { $("panel").classList.toggle("kompakt", tel() && $("akis").scrollTop > 40); }, { passive: true });
-  $("tutamak").onclick = () => { $("panel").classList.toggle("kucuk"); setTimeout(() => harita && harita.invalidateSize(), 400); };
+  $("haritaAc").onclick = () => { document.body.classList.add("harita-acik"); setTimeout(() => harita && harita.invalidateSize(), 350); };
+  $("haritaKapat").onclick = () => document.body.classList.remove("harita-acik");
   document.addEventListener("keydown", (e) => {
     if (e.target.matches("input,textarea")) return;
     const i = gor.findIndex((h) => h.id === aktifId);
-    const git = (j) => { const h = gor[j]; if (!h) return; const k = document.querySelector('.haber[data-id="' + h.id + '"]'); if (k) k.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth", block: "start" }); };
+    const git = (j) => { const h = gor[j]; if (!h) return; const k = document.querySelector('.haber[data-id="' + h.id + '"]'); if (k) { k.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth", block: "center" }); aktifEt(h.id); } };
     if (e.key === "j" || e.key === "ArrowDown") { e.preventDefault(); git(i + 1); }
     if (e.key === "k" || e.key === "ArrowUp") { e.preventDefault(); git(Math.max(0, i - 1)); }
   });
