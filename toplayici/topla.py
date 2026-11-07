@@ -263,7 +263,7 @@ def wp_coz(metin):
     return cikti
 
 
-def telegram_coz(metin, kanal):
+def telegram_coz(metin, kanal, sinir=700):
     cikti = []
     for blok in re.split(r'<div class="tgme_widget_message_wrap', metin)[1:]:
         m = re.search(r'data-post="([^"]+)"', blok)
@@ -271,7 +271,7 @@ def telegram_coz(metin, kanal):
         y = re.search(r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', blok, re.S)
         if not (m and y):
             continue
-        metin_ = temiz(y.group(1), 700)
+        metin_ = temiz(y.group(1), sinir)
         if len(metin_) < 15:
             continue
         g = re.search(r"tgme_widget_message_photo_wrap[^>]+background-image:url\('([^']+)'\)", blok)
@@ -547,19 +547,19 @@ def cek(yontem):
     return None
 
 
-def cek_telegram(kanal):
+def cek_telegram(kanal, sinir=700):
     url = f"https://t.me/s/{kanal}"
     if not izinli(url):
         return []
     kod, metin, _ = getir(url)
-    return telegram_coz(metin, kanal) if kod == 200 else []
+    return telegram_coz(metin, kanal, sinir) if kod == 200 else []
 
 
 def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
     if k.get("sadece_telegram"):
         # Yalnızca Telegram kanalı olan kaynak: site keşfi yok, doğrudan kanalın açık sayfası okunur
-        tg = cek_telegram(k["sadece_telegram"])
+        tg = cek_telegram(k["sadece_telegram"], 4000 if k.get("resmi_grup") else 700)
         d.update({"yontem": None, "telegram": k["sadece_telegram"], "surum": KESIF_SURUMU, "son_oge": len(tg)})
         d.setdefault("kesif", SIMDI.isoformat())
         if tg:
@@ -654,13 +654,14 @@ Kurallar:
 - ozet: Türkçe, 2-3 cümle. Tamamen kendi cümlelerinle yaz; kaynaktan cümle kopyalama. Doğrudan alıntı gerekiyorsa en fazla bir tane ve 10 kelimeyi geçmesin.
 - Yalnızca verilen metindeki bilgileri kullan, bilgi ekleme, yorum katma.
 - İddiaları sahibine atfet ("... göre", "... açıkladı"). "kaynak_turu" alanı varsa metin o hareketin kendi açıklamasıdır: başlık ve özette bunu açıkça belirt ("Hamas açıkladı:", "FHKC'ye göre") ve iddiaları doğrulanmış bilgi gibi yazma. Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
+- ceviri: YALNIZCA "kaynak_turu" alanı olan (bir hareketin kendi açıklaması olan) metinlerde, metnin tamamının sadık Türkçe çevirisi. Özetleme, yorum katma, yumuşatma; hareketin kendi ifadelerini koru (örneğin "şehit", "direniş", "işgal" ve hareketin İsrail için kullandığı adlar olduğu gibi kalsın). Tek istisna: sivillere yönelik şiddete açık çağrı ya da sivillerin öldürülmesini kutlayan cümleler; bunların yerine "[sivillere şiddet çağrısı içeren bölüm çevrilmedi]" yaz. Diğer metinlerde ceviri alanını boş bırak.
 - metin alanı boşsa yalnızca başlıkta yazanı Türkçe bir cümleyle aktar; başlıkta olmayan hiçbir bilgi ekleme.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
 - kayip: metin bu olayda ÖLDÜRÜLEN ya da ölen insan sayısı veriyorsa {"filistinli": sayı, "israilli": sayı}; yalnızca metinde açıkça yazan ölü sayısını yaz (yaralıları sayma), olmayan tarafı null bırak; hiç ölü sayısı yoksa null. Toplam savaş bilançosu değil, bu haberin bildirdiği olayın ölüleri.
 - nitelik: metin bir olayı aktarmaktan çok yorumluyor, tartışıyor ya da derinlemesine inceliyorsa (analiz, köşe yazısı, görüş, uzun rapor) "analiz", değilse "haber".
 - Analizlerde ozet 3-4 cümle olsun ve yazının ana savını, dayandığı gerekçeyi ve vardığı sonucu ver ("Yazara göre ...").
-- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz", "kayip": null}]
+- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz", "kayip": null, "ceviri": ""}]
 """
 TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
 
@@ -725,7 +726,7 @@ def malzeme_hazirla(h):
                 m = (m + " " + sayfa_ozeti(sayfa)).strip()
             h["gorsel"] = h.get("gorsel") or gorsel_bul(sayfa, h["url"])
         h["gorsel_denendi"] = True
-    h["_malzeme"] = m[:1500]
+    h["_malzeme"] = m[:4000 if h.get("resmi_grup") else 1500]
 
 
 def logo_bul(k):
@@ -815,6 +816,8 @@ def main():
             h["nitelik"] = "analiz"
         if k.get("oncelik"):
             h["oncelik"] = True
+        if k.get("resmi_grup"):
+            h["resmi_grup"] = k["resmi_grup"]
 
     # Yayın logoları: ayda bir yenilenir, her çalıştırmada en çok 30 yayın
     logolar = oku(LOGOLAR, {})
@@ -868,10 +871,13 @@ def main():
             with ThreadPoolExecutor(max_workers=8) as ex:
                 list(ex.map(malzeme_hazirla, sira))
             yazilan = 0
-            for i in range(0, len(sira), PARTI):
+            # Tam çeviri isteyen resmî açıklamalar uzun yanıt üretir: onları 4'erli küçük partilerde gönder
+            grup = [h for h in sira if h.get("resmi_grup")]
+            normal = [h for h in sira if not h.get("resmi_grup")]
+            partiler = [grup[i:i + 4] for i in range(0, len(grup), 4)] + [normal[i:i + PARTI] for i in range(0, len(normal), PARTI)]
+            for parti in partiler:
                 if time.time() - BASLANGIC > CALISMA_SURESI:
                     break
-                parti = sira[i:i + PARTI]
                 if gunluk_istek(durum) >= GEMINI_GUNLUK - 60:   # kümeleme ve almanak için pay bırak
                     log(f"Günlük Gemini bütçesi doldu ({GEMINI_GUNLUK}); kalan özetler yarına")
                     break
@@ -901,6 +907,8 @@ def main():
                             h["etiket"] = et
                         if str(c.get("nitelik") or "").strip().lower() == "analiz":
                             h["nitelik"] = "analiz"
+                        if h.get("resmi_grup") and str(c.get("ceviri") or "").strip():
+                            h["ceviri_tr"] = str(c["ceviri"]).strip()[:6000]
                         ky = c.get("kayip")
                         if isinstance(ky, dict):
                             temiz_k = {}

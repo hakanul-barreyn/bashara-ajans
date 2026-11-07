@@ -524,6 +524,14 @@
     if (h.baslik_tr) {
       g.appendChild(el("h2", null, h.baslik_tr));
       if (h.ozet_tr) g.appendChild(el("p", null, h.ozet_tr));
+      if (h.ceviri_tr) {
+        const d = document.createElement("details"); d.className = "ceviri";
+        d.appendChild(el("summary", null, "Açıklamanın tam çevirisi"));
+        h.ceviri_tr.split(/\n+/).forEach((p) => p.trim() && d.appendChild(el("p", null, p.trim())));
+        d.appendChild(el("p", "ceviri-not", (k.resmi_grup || k.ad) + "’nin kendi metninin yapay zekâ ile yapılmış çevirisi. Sivillere şiddet çağrısı içeren bölümler çevrilmez."));
+        d.addEventListener("click", (e) => e.stopPropagation());
+        g.appendChild(d);
+      }
     } else {
       const b = el("h2", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; g.appendChild(b);
       g.appendChild(el("span", "cevirisiz", (DIL[k.dil] || k.dil) + " · Türkçe özet " + (h.ilgili ? "sırada" : "yazılmadı")));
