@@ -103,6 +103,28 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
     kay = durum.setdefault("_telegram", {"olay": [], "haber": {}, "bulten": {}})
     ilk_kez = not kay.get("basladi")
 
+    # Duyurular (depodaki duyurular.json): her biri bir kez, diğer iletilerden önce ve olduğu gibi gönderilir
+    gonderilen = 0
+    duyurular = []
+    try:
+        duyurular = json.load(open(os.path.join(kok, "duyurular.json"), encoding="utf-8"))
+    except Exception:
+        pass
+    giden = kay.setdefault("duyuru", {})
+    for d in duyurular:
+        if not d.get("id") or not d.get("metin") or d["id"] in giden:
+            continue
+        ok, gecici = gonder(token, kanal, _e(d["metin"]))
+        if ok:
+            giden[d["id"]] = simdi.isoformat()
+            gonderilen += 1
+            log(f"Telegram: duyuru gönderildi ({d['id']})")
+        else:
+            log(f"Telegram: duyuru gönderilemedi ({d['id']}); kanal adı ve botun yöneticiliği kontrol edilmeli")
+            if not gecici:
+                return 0
+            break
+
     # Aday iletiler, eskiden yeniye
     adaylar = []
     for o in olaylar:
@@ -140,7 +162,6 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
         else:
             kay["bulten"][ek] = simdi.isoformat()
 
-    gonderilen = 0
     if ilk_kez:
         for tur, _, nesne, ek in adaylar:
             isaretle(tur, nesne, ek)
