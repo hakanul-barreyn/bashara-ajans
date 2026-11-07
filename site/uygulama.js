@@ -2,7 +2,7 @@
 // Bir kartın üzerine gelince arkadaki haritada o haberin şehri parlar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
-  const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
+  const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "İsrail’de muhalif basın", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
   const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "karşı taraf" };
   const DIL = { ar: "Arapça", en: "İngilizce", fr: "Fransızca", tr: "Türkçe", he: "İbranice", es: "İspanyolca", ca: "Katalanca", it: "İtalyanca", de: "Almanca" };
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
@@ -122,7 +122,7 @@
     const ilgili = $("fIlgili").checked, ozetli = $("fOzet").checked;
     return haberler.filter((h) => {
       const k = kaynaklar[h.kaynak]; if (!k || h.atla) return false;
-      if (bolge !== "Tümü" && k.bolge !== bolge) return false;
+      if (bolge !== "Tümü" && (k.kamp || k.bolge) !== bolge) return false;
       if (ilgili && !h.ilgili) return false;
       if (ozetli && !h.ozet_tr) return false;
       if (sadeceAnaliz && h.nitelik !== "analiz") return false;
@@ -192,16 +192,16 @@
   const KAMP = { "Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası", "Mağrip": "Arap dünyası",
     "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
     "İspanya": "Batı", "İtalya": "Batı", "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Diğer" };
-  const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
+  const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
   const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Karşı taraf" };
   const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3", "Karşı taraf": "#4a5560" };
-  const kampAd = (k) => KAMP[k.bolge] || "Diğer";
+  const kampAd = (k) => k.kamp || KAMP[k.bolge] || "Diğer";
   const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
   const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İşbirlikçi kompradorlar ve emperyalistler": "#c9544e" };
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
   const BAKIS = { filistin: "Filistin bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
   const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
-  const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"];
+  const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"];
 
   // Bölge gruplarına göre bakış: her haber bir kare (sayı görünür kalsın), satırın sağında
   // grubun Filistin bakışından ortalama uzaklığı (0 = başlangıç noktası, 2 = İsrail / ABD bakışı).
@@ -354,7 +354,7 @@
   function analizCiz() {
     const kutu = $("analizler"); kutu.innerHTML = "";
     const liste = haberler.filter((h) => h.nitelik === "analiz" && h.ilgili && !h.atla && kaynaklar[h.kaynak] && dk(h.tarih) < 72 * 60
-      && (bolge === "Tümü" || kaynaklar[h.kaynak].bolge === bolge))
+      && (bolge === "Tümü" || (kaynaklar[h.kaynak].kamp || kaynaklar[h.kaynak].bolge) === bolge))
       .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || (!!b.ozet_tr - !!a.ozet_tr) || (a.tarih < b.tarih ? 1 : -1))
       .slice(0, 12);
     kutu.hidden = !liste.length || !!olaySec || sadeceAnaliz;
@@ -414,7 +414,7 @@
         const r = el("div", "kim-satir");
         const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
-        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
+        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail" && !k.bayraksiz) ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
         if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const bv = o.bakislar && o.bakislar[h.id];
@@ -459,7 +459,7 @@
     ust.appendChild(avatar(k));
     const kim = el("div", "kim");
     const adEl = el("span", "ad", k.ad);
-    if (k.bolge === "İsrail") adEl.insertAdjacentHTML("afterbegin", BAYRAK);
+    if (k.bolge === "İsrail" && !k.bayraksiz) adEl.insertAdjacentHTML("afterbegin", BAYRAK);
     kim.appendChild(adEl);
     const yer = el("span", "yer", k.sehir + " · ");
     const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString("tr-TR"); yer.appendChild(z);

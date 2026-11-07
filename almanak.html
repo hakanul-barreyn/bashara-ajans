@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611080015">
-<script src="site/marka.js?v=202611080015"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080025">
+<script src="site/marka.js?v=202611080025"></script>
 <style>
 /* Almanak: solda dönem listesi, sağda bülten; sayılar grafik, yorum düz metin */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px}
@@ -106,7 +106,7 @@ td.sayi{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:now
   const $=(i)=>document.getElementById(i);
   const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
   const TUR={haftalik:"Haftalık",aylik:"Aylık",yillik:"Yıllık"};
-  const KR={"Filistin":"#2b8a5e","Arap dünyası":"#6fae92","İran ve Yemen":"#c39a35","Türkiye":"#c9544e","İsrail":"#4a72c4","Batı":"#8d969e","Diğer":"#6b746f",
+  const KR={"Filistin":"#2b8a5e","Arap dünyası":"#6fae92","İran ve Yemen":"#c39a35","Türkiye":"#c9544e","İsrail":"#4a72c4","İsrail’de muhalif basın":"#8a7bc0","Batı":"#8d969e","Diğer":"#6b746f",
     "Antiemperyalist / dekolonyal":"#2b8a5e","Ara / ana akım":"#8d969e","İşbirlikçi kompradorlar ve emperyalistler":"#c9544e"};
   const BK={filistin:"Filistin bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#2b8a5e",aktarim:"#8f979c",israil:"#4a72c4"};
   const sayi=(n,d)=>Number(n).toLocaleString("tr-TR",{maximumFractionDigits:d==null?1:d});

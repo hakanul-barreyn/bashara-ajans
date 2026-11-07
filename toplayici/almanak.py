@@ -21,7 +21,7 @@ KAMP = {"Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap d�
         "Mağrip": "Arap dünyası", "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye",
         "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı", "İspanya": "Batı", "İtalya": "Batı",
         "Almanya": "Batı", "Fransa": "Batı"}
-KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"]
+KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"]
 BOLGE_ICI = {"Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"}   # bölgenin kendi basını
 DIS = {"Batı", "İsrail"}                                               # İsrail ve Batı basını
 UZAK = {"filistin": 0, "aktarim": 1, "israil": 2}
@@ -30,7 +30,7 @@ AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağu
 
 
 def kamp(k):
-    return KAMP.get((k or {}).get("bolge"), "Diğer")
+    return (k or {}).get("kamp") or KAMP.get((k or {}).get("bolge"), "Diğer")
 
 
 def _oku(yol, varsayilan):

@@ -415,7 +415,7 @@
   "lat": 32.08,
   "lon": 34.78,
   "dil": "en",
-  "tur": "izle",
+  "tur": "ozel",
   "profil": "1918’den beri yayımlanan, Schocken ailesine ait liberal-sol gazete. İşgal eleştirisinde İsrail basınının en açık sesi.",
   "dog": "B",
   "tg": false,
@@ -424,7 +424,15 @@
   "id": 19,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "kamp": "İsrail’de muhalif basın",
+  "bayraksiz": true,
+  "oncelik": true,
+  "analiz_yolu": [
+   "/ty-article-opinion",
+   "/ty-article-magazine",
+   "/opinion/"
+  ]
  },
  {
   "ad": "The Jerusalem Post",

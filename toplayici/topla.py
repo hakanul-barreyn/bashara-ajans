@@ -833,7 +833,8 @@ def main():
         model = gemini_model(anahtar)
         # Öncelikli yayınlar (Al-Akhbar gibi) ve analizler sıranın başına; geri kalanı en yeniden eskiye
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
-                       and h.get("deneme", 0) < 3), key=lambda h: h["tarih"], reverse=True)
+                       and h.get("deneme", 0) < 3),
+                      key=lambda h: (h.get("eklendi") or h["tarih"]) if h["tarih"][11:19] == "00:00:00" else h["tarih"], reverse=True)
         sira = sorted(sira, key=lambda h: (not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
         if model and sira:
             with ThreadPoolExecutor(max_workers=8) as ex:
