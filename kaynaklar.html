@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ZBS Kaynakları</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Ajans kaynak defteri: üstte özet ve onay notları, yapışkan filtre şeridi, bölgelere göre gruplanmış kaynak satırları */
+:root{
+  --bg:#eef1ec; --card:#fbfcfa; --ink:#17201a; --muted:#56635a; --line:#d2d9d1;
+  --accent:#1e5a3c; --accent-soft:#dcebe1; --red:#a8322a; --red-soft:#f5e1de;
+  --amber:#875c08; --amber-soft:#f4ead2; --blue:#2c5079; --blue-soft:#e0e8f2;
+  --f-disp:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121814; --card:#19211c; --ink:#e3eae4; --muted:#9caaa0; --line:#2b362f;
+  --accent:#7cc39b; --accent-soft:#1c3327; --red:#ee8a7e; --red-soft:#3a201d;
+  --amber:#e2b55a; --amber-soft:#33290f; --blue:#94b8e3; --blue-soft:#1b2838; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121814; --card:#19211c; --ink:#e3eae4; --muted:#9caaa0; --line:#2b362f;
+  --accent:#7cc39b; --accent-soft:#1c3327; --red:#ee8a7e; --red-soft:#3a201d;
+  --amber:#e2b55a; --amber-soft:#33290f; --blue:#94b8e3; --blue-soft:#1b2838; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+h1{font-family:var(--f-disp);font-weight:650;font-size:clamp(1.7rem,4vw,2.4rem);margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--muted);max-width:70ch;margin:0 0 18px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--f-mono);font-size:.85rem;color:var(--muted);margin:0 0 18px}
+.stats b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.notes{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:14px 18px;margin:0 0 22px}
+.notes h2{font-family:var(--f-mono);font-weight:500;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 8px}
+.notes ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.85rem;color:var(--muted);margin:0 0 6px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.row-f{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.row-f .lab{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{font-family:var(--f-body);font-size:.82rem;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:4px 10px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.chip:focus-visible,.search:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.search{flex:1 1 220px;min-width:0;font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink)}
+section{margin-top:26px}
+section h2{font-family:var(--f-disp);font-weight:650;font-size:1.3rem;margin:0 0 8px;display:flex;align-items:baseline;gap:10px}
+section h2 span{font-family:var(--f-mono);font-size:.8rem;font-weight:400;color:var(--muted)}
+.list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.src{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:4px 20px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.who{min-width:0;display:flex;flex-direction:column;gap:3px}
+.name{font-weight:600;font-size:1rem;line-height:1.3}
+.name a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.name a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.place{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.what{min-width:0;display:flex;flex-direction:column;gap:6px}
+.what p{margin:0;max-width:72ch}
+.tags{display:flex;flex-wrap:wrap;gap:5px;font-size:.74rem}
+.t{padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--muted);font-family:var(--f-mono)}
+.t.resmi{color:var(--red);background:var(--red-soft);border-color:transparent}
+.t.grup{color:var(--ink);background:transparent;border-color:var(--muted)}
+.t.izle{color:var(--ink);background:var(--line);border-color:transparent}
+.t.bagimsiz,.t.koop{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+.t.ozel{color:var(--muted)}
+.t.q{color:var(--amber);background:var(--amber-soft);border-color:transparent;font-weight:500}
+.t.mine{border-color:var(--accent);color:var(--accent)}
+.note{font-size:.88rem;color:var(--amber)}
+.note b{font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+.empty{color:var(--muted);font-style:italic}
+.foot{margin-top:32px;font-size:.9rem;color:var(--muted);max-width:75ch}
+@media (max-width:640px){.src{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <h1>ZBS Kaynakları</h1>
+  <p class="lede">ZBS’nin izlediği yayın organları: nerede oldukları, kime ait oldukları ve hangi çizgide durdukları. Her haberi okurken kimin sesini duyduğunu bil diye. <a href="./">Haber akışına dön</a>.</p>
+  <div class="stats" id="stats"></div>
+
+  <div class="legend">
+    <span><span class="t resmi">devlet / resmî</span></span>
+    <span><span class="t grup">parti, örgüt ya da yönetime bağlı</span></span>
+    <span><span class="t bagimsiz">bağımsız</span></span>
+    <span><span class="t koop">kooperatif / vakıf</span></span>
+    <span><span class="t ozel">özel / ticari</span></span>
+    <span><span class="t izle">karşı tarafı izleme</span></span>
+  </div>
+
+  <div class="bar">
+    <div class="row-f" id="fRegion" role="group" aria-label="Bölge"><span class="lab">Bölge</span></div>
+    <div class="row-f" id="fType" role="group" aria-label="Tür"><span class="lab">Tür</span></div>
+    <div class="row-f"><input class="search" id="q" type="search" placeholder="Ad, şehir ya da profil ara" aria-label="Ara"></div>
+  </div>
+
+  <div id="out"></div>
+
+  <p class="foot">“İzleme” satırı toplayıcının o kaynağı hangi yolla okuduğunu gösterir: haber site haritası, RSS, WordPress ya da Telegram. “Yol bulunamadı” yazan kaynaklar şimdilik akışa haber getirmiyor.</p>
+</div>
+
+<script>
+let D = [], DUR = {};
+const REG = ["Filistin","Meşrik","Körfez","Mısır","İran-Yemen","Mağrip","Anadolu","İsrail","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
+const TYP = {resmi:"devlet / resmî",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif / vakıf",ozel:"özel",izle:"karşı tarafı izleme"};
+const LANG = {ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
+let reg="all", typ="all", term="";
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+function chips(box,items,get,set){items.forEach(([k,l])=>{const b=el("button","chip",l);b.type="button";b.dataset.k=k;b.onclick=()=>{set(k);render();};box.appendChild(b);});}
+function kur(){
+chips(document.getElementById("fRegion"),[["all","Tümü"],...REG.map(r=>[r,r]),["?","Kontrol bekleyen"]],()=>reg,k=>reg=k);
+chips(document.getElementById("fType"),[["all","Tümü"],...Object.entries(TYP),["tg","Telegram"],["mine","Senin listen"]],()=>typ,k=>typ=k);
+document.getElementById("q").addEventListener("input",e=>{term=e.target.value.trim().toLocaleLowerCase("tr");render();});
+const s=document.getElementById("stats");
+[[D.length,"kaynak"],[D.filter(d=>d.liste).length,"senin listenden"],[D.length-D.filter(d=>d.liste).length,"yeni eklenen"],[new Set(D.map(d=>d.sehir)).size,"şehir"],[D.filter(d=>d.dog==="?").length,"kontrol bekliyor"]].forEach(([n,l])=>{const x=el("span");x.appendChild(el("b",null,n));x.append(" "+l);s.appendChild(x);});
+function render(){
+  document.querySelectorAll("#fRegion .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===reg));
+  document.querySelectorAll("#fType .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===typ));
+  const out=document.getElementById("out"); out.innerHTML="";
+  const ok=d=>(reg==="all"||(reg==="?"?d.dog==="?":d.bolge===reg))&&(typ==="all"||(typ==="tg"?d.tg:typ==="mine"?d.liste:d.tur===typ))&&(!term||[d.ad,d.sehir,d.ulke,d.profil,d.notu,d.url].join(" ").toLocaleLowerCase("tr").includes(term));
+  REG.forEach(r=>{
+    const items=D.filter(d=>d.bolge===r&&ok(d)); if(!items.length) return;
+    const sec=el("section"); const h=el("h2",null,r); h.appendChild(el("span",null,items.length+" kaynak")); sec.appendChild(h);
+    const list=el("div","list");
+    items.forEach(d=>{
+      const row=el("div","src"), who=el("div","who"), what=el("div","what");
+      const n=el("div","name"); const a=el("a",null,d.ad); a.href=d.url; a.target="_blank"; a.rel="noopener"; n.appendChild(a); who.appendChild(n);
+      who.appendChild(el("div","place",d.sehir+(d.ulke&&d.ulke!==d.sehir?", "+d.ulke:"")+" · "+(LANG[d.dil]||d.dil)));
+      what.appendChild(el("p",null,d.profil));
+      const t=el("div","tags"); t.appendChild(el("span","t "+d.tur,TYP[d.tur]));
+      if(d.dog==="D") t.appendChild(el("span","t bagimsiz","doğrulandı"));
+      if(d.dog==="?") t.appendChild(el("span","t q","kontrol"));
+      if(d.tg) t.appendChild(el("span","t","Telegram"));
+      if(d.liste) t.appendChild(el("span","t mine","senin listen"));
+      what.appendChild(t);
+      {const du=DUR[String(d.id)]||{};const y=du.yontem&&du.yontem.tip;const ad={harita:'haber site haritası',besleme:'RSS / Atom',wp:'WordPress'}[y];const parts=[];if(ad)parts.push(ad);if(du.telegram)parts.push('Telegram (@'+du.telegram+')');const iz=el('div','place','İzleme: '+(parts.length?parts.join(' + '):(du.kesif?'yol bulunamadı':'henüz denenmedi'))+(du.son_basari?' · son okuma '+new Date(du.son_basari).toLocaleString('tr-TR'):''));what.appendChild(iz);}
+      if(d.notu){const no=el("div","note"); no.appendChild(el("b",null,"Not")); no.append(d.notu); what.appendChild(no);}
+      row.append(who,what); list.appendChild(row);
+    });
+    sec.appendChild(list); out.appendChild(sec);
+  });
+  if(!out.children.length) out.appendChild(el("p","empty","Bu filtrede kaynak yok."));
+}
+render();
+}
+Promise.all([fetch('kaynaklar.json?t='+Date.now()).then(r=>r.json()),fetch('data/durum.json?t='+Date.now()).then(r=>r.json()).catch(()=>({}))]).then(([k,d])=>{D=k;DUR=d;kur();}).catch(()=>{document.getElementById('out').textContent='Kaynak listesi okunamadı.';});
+</script>
+
+</body>
+</html>

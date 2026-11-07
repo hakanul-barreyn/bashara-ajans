@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ZBS</title>
+<meta name="description" content="Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="site/stil.css">
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" aria-label="ZBS ana sayfa"><span class="logo" aria-hidden="true"></span>ZBS</a>
+    <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
+    <nav class="menu"><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+
+<main class="duzen">
+  <section class="harita-kutu" aria-label="Harita">
+    <div id="harita" role="application" aria-label="Yayın organlarının haritası"></div>
+    <p class="harita-not">Daire büyüklüğü şehirdeki yayınlardan gelen haber sayısını gösterir. Bir şehre tıklayınca akış o şehre süzülür.</p>
+  </section>
+
+  <section class="akis-kutu" aria-label="Haber akışı">
+    <div class="durum" id="durum">Haberler yükleniyor…</div>
+    <div class="suzgec">
+      <div class="satir" id="fBolge" role="group" aria-label="Bölge"></div>
+      <div class="satir">
+        <label class="anahtar"><input type="checkbox" id="fIlgili" checked> Yalnızca Filistin ve bölgeyle ilgili</label>
+        <label class="anahtar"><input type="checkbox" id="fOzet"> Yalnızca Türkçe özeti olanlar</label>
+      </div>
+      <div class="satir">
+        <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
+        <button class="cip sil" id="fSehir" type="button" hidden></button>
+      </div>
+    </div>
+    <div id="akis" class="akis" aria-live="polite"></div>
+    <button class="daha" id="daha" type="button" hidden>Daha fazla göster</button>
+  </section>
+</main>
+
+<footer class="alt">
+  <p>ZBS haberleri kaynaklardan otomatik toplar ve Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberin altında orijinaline bağlantı var. Kaynakların kim olduğunu ve hangi çizgide durduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="site/uygulama.js"></script>
+</body>
+</html>
