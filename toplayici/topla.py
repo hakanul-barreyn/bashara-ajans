@@ -162,7 +162,7 @@ def site_haritasi_coz(metin):
     for u in kok.iter():
         if yerel(u.tag) != "url":
             continue
-        loc = baslik = tarih = None
+        loc = baslik = tarih = gorsel = None
         for c in u.iter():
             t = yerel(c.tag)
             if t == "loc" and loc is None:
@@ -171,8 +171,12 @@ def site_haritasi_coz(metin):
                 baslik = c.text
             elif t in ("publication_date", "lastmod") and tarih is None:
                 tarih = c.text
+            elif t == "image" and gorsel is None:
+                for cc in c:
+                    if yerel(cc.tag) == "loc" and (cc.text or "").strip().startswith("http"):
+                        gorsel = cc.text.strip()
         if loc:
-            cikti.append({"url": loc, "baslik": temiz(baslik, 300), "tarih": tarih_coz(tarih), "giris": ""})
+            cikti.append({"url": loc, "baslik": temiz(baslik, 300), "tarih": tarih_coz(tarih), "giris": "", "gorsel": gorsel})
     return cikti
 
 
@@ -197,7 +201,7 @@ def besleme_coz(metin):
         t = yerel(it.tag)
         if t not in ("item", "entry"):
             continue
-        d = {"url": "", "baslik": "", "tarih": None, "giris": ""}
+        d = {"url": "", "baslik": "", "tarih": None, "giris": "", "gorsel": None}
         for c in it:
             ct = yerel(c.tag)
             if ct == "title":
@@ -213,8 +217,18 @@ def besleme_coz(metin):
                 d["url"] = c.text.strip()
             elif ct in ("pubdate", "published", "updated", "date") and d["tarih"] is None:
                 d["tarih"] = tarih_coz(c.text)
+            elif ct in ("content", "thumbnail", "enclosure") and c.get("url"):
+                if d["gorsel"]:
+                    continue
+                tip = (c.get("type") or c.get("medium") or "image").lower()
+                if "image" in tip or re.search(r"\.(jpe?g|png|webp)(\?|$)", c.get("url"), re.I):
+                    d["gorsel"] = c.get("url")
             elif ct in ("description", "summary", "encoded", "content") and not d["giris"]:
                 d["giris"] = temiz(c.text)
+                if not d["gorsel"]:
+                    m = re.search(r'<img[^>]+src=["\']([^"\']+)', c.text or "")
+                    if m and m.group(1).startswith("http"):
+                        d["gorsel"] = html.unescape(m.group(1))
         if d["url"] and d["baslik"]:
             cikti.append(d)
     return cikti
@@ -252,14 +266,28 @@ def telegram_coz(metin, kanal):
         metin_ = temiz(y.group(1), 700)
         if len(metin_) < 15:
             continue
+        g = re.search(r"tgme_widget_message_photo_wrap[^>]+background-image:url\('([^']+)'\)", blok)
         cikti.append({
             "url": "https://t.me/" + m.group(1),
             "baslik": metin_[:140] + ("…" if len(metin_) > 140 else ""),
             "tarih": tarih_coz(z.group(1)) if z else None,
             "giris": metin_,
             "telegram": True,
+            "gorsel": g.group(1) if g else None,
         })
     return cikti
+
+
+def gorsel_bul(html_, taban):
+    """Haber sayfasının paylaşım görseli (og:image ya da twitter:image). Yalnızca adresi alınır, görsel indirilmez."""
+    for ad in ("og:image", "og:image:url", "twitter:image", "twitter:image:src"):
+        m = re.search(r'<meta[^>]+(?:property|name)=["\']%s["\'][^>]*content=["\']([^"\']+)' % re.escape(ad), html_, re.I) \
+            or re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]*(?:property|name)=["\']%s["\']' % re.escape(ad), html_, re.I)
+        if m:
+            u = urllib.parse.urljoin(taban, html.unescape(m.group(1).strip()))
+            if u.startswith("http"):
+                return u
+    return None
 
 
 def sayfa_ozeti(html_):
@@ -542,11 +570,22 @@ def gemini_ozetle(anahtar, model, parti):
 
 def malzeme_hazirla(h):
     m = h.get("giris") or ""
-    if len(m) < 150 and not h.get("telegram") and izinli(h["url"]):
+    if (len(m) < 150 or not h.get("gorsel")) and not h.get("telegram") and izinli(h["url"]):
         kod, sayfa, _ = getir(h["url"], zaman=12, en_fazla=1_500_000)
         if kod == 200:
-            m = (m + " " + sayfa_ozeti(sayfa)).strip()
+            if len(m) < 150:
+                m = (m + " " + sayfa_ozeti(sayfa)).strip()
+            h["gorsel"] = h.get("gorsel") or gorsel_bul(sayfa, h["url"])
+        h["gorsel_denendi"] = True
     h["_malzeme"] = m[:1500]
+
+
+def gorsel_tamamla(h):
+    if izinli(h["url"]):
+        kod, sayfa, _ = getir(h["url"], zaman=12, en_fazla=1_500_000)
+        if kod == 200:
+            h["gorsel"] = gorsel_bul(sayfa, h["url"])
+    h["gorsel_denendi"] = True
 
 
 # ---------------------------------------------------------------- ana akış
@@ -589,6 +628,7 @@ def main():
                 "url": o["url"], "tarih": t.astimezone(dt.timezone.utc).isoformat(), "eklendi": SIMDI.isoformat(),
                 "baslik_orj": o["baslik"], "giris": o.get("giris", ""),
                 "telegram": bool(o.get("telegram")),
+                "gorsel": o.get("gorsel"),
                 "ilgili": ilgili_mi(o["baslik"] + " " + o.get("giris", ""), k["dil"], k["bolge"]),
             }
             yeni += 1
@@ -637,6 +677,14 @@ def main():
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
     elif not anahtar:
         log("GEMINI_API_KEY yok; özet yazılmadı")
+
+    # Görseli olmayan özetli haberler için sayfadan paylaşım görselini bul (çalıştırma başına en fazla 40)
+    eksik = [h for h in eski.values() if h.get("ozet_tr") and not h.get("gorsel") and not h.get("gorsel_denendi")
+             and not h.get("telegram")][:40]
+    if eksik and time.time() - BASLANGIC < CALISMA_SURESI:
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            list(ex.map(gorsel_tamamla, eksik))
+        log(f"{sum(1 for h in eksik if h.get('gorsel'))}/{len(eksik)} habere görsel bulundu")
 
     # Kaydet: eski haberleri at, ham metinleri temizle
     tut = [h for h in eski.values() if (tarih_coz(h["tarih"]) or SIMDI) >= sinir]

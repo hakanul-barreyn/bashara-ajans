@@ -9,55 +9,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="site/stil.css?v=202611071731">
+<link rel="stylesheet" href="site/stil.css?v=202611071737">
 </head>
 <body>
 <header class="ust">
   <a class="marka" href="./" aria-label="ZBS ana sayfa">
-    <img class="logo" src="site/logo.svg?v=202611071731" alt="" width="30" height="30">
+    <img class="logo" src="site/logo.svg?v=202611071737" alt="" width="32" height="32">
     <span class="marka-ad">ZBS</span>
   </a>
   <p class="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
-  <div class="canli" id="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
+  <div class="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
   <nav class="menu"><a href="kaynaklar.html">Kaynaklar</a></nav>
 </header>
 
-<main class="duzen">
-  <section class="harita-kutu" aria-label="Harita">
-    <div id="harita" role="application" aria-label="Yayın organlarının haritası"></div>
-    <div class="harita-efsane">
-      <span><i class="nokta"></i> Daire büyüklüğü = haber sayısı</span>
-      <span>Şehre tıkla, akış o şehre süzülsün</span>
-    </div>
-  </section>
+<main class="sahne">
+  <div id="harita" role="application" aria-label="Yayın organlarının haritası"></div>
 
-  <section class="akis-kutu" aria-label="Haber akışı">
-    <div class="sayilar" id="sayilar"></div>
-
-    <div class="suzgec">
+  <section class="panel" id="panel" aria-label="Haber akışı">
+    <div class="panel-ust">
+      <button class="tutamak" id="tutamak" type="button" aria-label="Paneli küçült ya da büyüt"><span></span></button>
       <div class="ara-kutu">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
       </div>
       <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
       <div class="secenekler">
-        <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Filistin ve bölgeyle ilgili</label>
-        <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Yalnızca Türkçe özetli</label>
-        <button class="sehir-cip" id="fSehir" type="button" hidden></button>
+        <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
+        <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
+        <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
       </div>
+      <div class="ozet-satir"><span id="sayilar"></span><button class="sehir-cip" id="fSehir" type="button" hidden></button></div>
     </div>
-
-    <div id="akis" class="akis" aria-live="polite"></div>
-    <button class="daha" id="daha" type="button" hidden>Daha fazla göster</button>
-
-    <footer class="alt">
-      <p>ZBS haberleri kaynaklardan otomatik toplar ve Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberin altında orijinaline bağlantı var. Yayınların kime ait olduğunu ve hangi çizgide durduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin.</p>
-    </footer>
+    <div class="reels" id="akis" aria-live="polite"></div>
   </section>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/uygulama.js?v=202611071731"></script>
+<script src="site/uygulama.js?v=202611071737"></script>
 </body>
 </html>
