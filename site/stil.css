@@ -299,3 +299,19 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .denge .dagilim-cubuk{height:14px}
 .kim-bolge{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk);font-weight:400}
 .olay-uyari a{color:var(--ink2)}
+/* bakış matrisi: her bölge grubunun haberleri kimin gözünden anlattığı */
+.matris{display:flex;flex-direction:column;gap:8px;padding:12px 0}
+.matris-satir{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr);align-items:center;gap:12px}
+.matris-ad{display:flex;align-items:center;gap:7px;font-size:.84rem;font-weight:600;min-width:0}
+.matris-ad i{width:9px;height:9px;border-radius:2px;display:inline-block;flex:none}
+.matris-ad small{font-family:var(--mono);font-weight:400;font-size:.66rem;color:var(--soluk);margin-left:auto}
+.matris .dagilim-cubuk{height:14px}
+.matris.kisa{padding:2px 0;gap:6px;max-width:560px}
+.matris.kisa .matris-satir{grid-template-columns:185px minmax(0,1fr)}
+.matris-ad{white-space:nowrap}
+.matris.kisa .matris-ad{color:#fff;font-size:.8rem}
+.matris.kisa .matris-ad small{color:rgba(255,255,255,.7)}
+.matris.kisa .dagilim-cubuk{height:10px;background:rgba(255,255,255,.12)}
+.slayt .matris .dagilim-efsane{color:rgba(255,255,255,.8)}
+.bakis-cip{font-family:var(--mono);font-size:.62rem;font-weight:500;color:#fff;padding:2px 8px;border-radius:999px}
+@media (max-width:820px){.matris-satir,.matris.kisa .matris-satir{grid-template-columns:112px minmax(0,1fr)}}

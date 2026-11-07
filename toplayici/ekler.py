@@ -53,8 +53,13 @@ Kurallar:
 - baslik: olayı anlatan, tarafsız, en fazla 12 kelimelik Türkçe başlık.
 - not: 1-3 cümlelik Türkçe çerçeve notu. Kaynakların olayı nasıl farklı anlattığını betimle: hangi kaynak hangi kelimeyi seçti (özgün kelimeyi tırnak içinde, en fazla 4 kelime), kimin açıklamasını öne çıkardı, hangi bilgiyi verdi ya da vermedi. Yalnızca verilen başlıklardan çıkarılabilecekleri yaz. Hüküm verme, hangi kaynağın haklı olduğunu söyleme. Kaynaklar aynı şekilde anlatıyorsa bunu kısaca söyle.
 - yorumlar: gruptaki HER haber için o kaynağın olayı nasıl sunduğunu anlatan en fazla 18 kelimelik Türkçe betimleme. Hangi kelimeyi seçtiğini (özgün kelime tırnak içinde, en fazla 4 kelime), kimi kaynak gösterdiğini ya da neyi öne çıkardığını yaz. Hüküm verme, "taraflı" gibi nitelemeler kullanma.
+- bakislar: gruptaki HER haber için başlığın olayı kimin bakış açısından sunduğunu tek kelimeyle yaz:
+  "filistin" = Filistinli/Arap kurbanları, Filistinli ya da direniş kaynaklarını merkeze alıyor; "işgal", "katliam", "soykırım", "şehit" gibi ifadeler kullanıyor.
+  "aktarim" = birden çok tarafın açıklamasını aktarıyor ya da olguyu bir tarafın çerçevesini benimsemeden veriyor.
+  "israil" = İsrail ya da ABD resmî açıklamalarını merkeze alıyor; "terörist", "operasyon", "güvenlik" gibi onların ifadelerini kullanıyor ya da Filistinli kayıpları geri plana itiyor.
+  Konu Filistin–İsrail değilse (örneğin İran, Yemen, Lübnan) aynı mantığı "direniş ekseni ya da Arap tarafı" ile "İsrail–ABD tarafı" arasında uygula.
 - En önemli en fazla 20 olayı, en çok kaynağın yazdığından başlayarak sırala.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}}]
 """
 
 
@@ -86,6 +91,8 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
             "haberler": ids, "kaynak_sayisi": len(kaynaklar), "son": var[ids[0]]["tarih"],
             "ilk": var[ids[-1]]["tarih"],
             "yorumlar": {i: str(yor.get(i))[:220] for i in ids if yor.get(i)},
+            "bakislar": {i: v for i, v in ((i, str((g.get("bakislar") or {}).get(i, "")).strip().lower()) for i in ids)
+                         if v in ("filistin", "aktarim", "israil")} if isinstance(g.get("bakislar"), dict) else {},
         })
     olaylar.sort(key=lambda o: (o["kaynak_sayisi"], o["son"]), reverse=True)
     return olaylar

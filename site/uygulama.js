@@ -192,6 +192,39 @@
   const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
   const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#1fa463", "Ara / ana akım": "#9aa7b4", "İşbirlikçi kompradorlar ve emperyalistler": "#e05a5a" };
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
+  const BAKIS = { filistin: "Filistin / Arap bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
+  const BAKIS_RENK = { filistin: "#1fa463", aktarim: "#8d989f", israil: "#3b6fd8" };
+  const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"];
+
+  // Bölge gruplarına göre, haberlerin kimin bakış açısından anlatıldığı
+  function bakisMatrisi(o, kisa) {
+    const b = o.bakislar || {};
+    if (!Object.keys(b).length) return null;
+    const satir = {};
+    o.haberler.forEach((i) => {
+      const h = haberIdx[i], k = h && kaynaklar[h.kaynak], v = b[i];
+      if (!k || !v) return;
+      const g = kampAd(k); satir[g] = satir[g] || { filistin: 0, aktarim: 0, israil: 0, n: 0 };
+      satir[g][v]++; satir[g].n++;
+    });
+    let gruplar = KAMP_SIRA.filter((g) => satir[g]);
+    if (!gruplar.length) return null;
+    if (kisa) gruplar = gruplar.sort((x, y) => satir[y].n - satir[x].n).slice(0, 4).sort((x, y) => KAMP_SIRA.indexOf(x) - KAMP_SIRA.indexOf(y));
+    const kutu = el("div", "matris" + (kisa ? " kisa" : ""));
+    if (!kisa) kutu.appendChild(el("span", "dagilim-ad", "Denge: kim, kimin gözünden anlattı"));
+    gruplar.forEach((g) => {
+      const r = satir[g], sat = el("div", "matris-satir");
+      const ad = el("span", "matris-ad"); const nk = el("i"); nk.style.background = KAMP_RENK[g]; ad.appendChild(nk); ad.append(g);
+      ad.appendChild(el("small", null, r.n + " haber")); sat.appendChild(ad);
+      const bar = el("div", "dagilim-cubuk");
+      ["filistin", "aktarim", "israil"].forEach((v) => { if (!r[v]) return; const i = el("i"); i.style.width = (100 * r[v]) / r.n + "%"; i.style.background = BAKIS_RENK[v]; i.title = BAKIS[v] + ": " + r[v]; bar.appendChild(i); });
+      sat.appendChild(bar); kutu.appendChild(sat);
+    });
+    const ef = el("div", "dagilim-efsane");
+    Object.entries(BAKIS).forEach(([v, l]) => { const x = el("span"); const nk = el("i"); nk.style.background = BAKIS_RENK[v]; x.appendChild(nk); x.append(l); ef.appendChild(x); });
+    kutu.appendChild(ef);
+    return kutu;
+  }
 
   function kapsama(o) {
     const ks = new Map();
@@ -256,7 +289,7 @@
       ic.appendChild(el("span", "slayt-sayi", kp.toplam + " kaynak · son " + once(o.son)));
       ic.appendChild(el("h3", null, o.baslik));
       if (o.not) ic.appendChild(el("p", null, o.not.length > 220 ? o.not.slice(0, 217) + "…" : o.not));
-      ic.appendChild(cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
+      ic.appendChild(bakisMatrisi(o, true) || cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
       const kn = korNokta(kp); if (kn) ic.appendChild(el("span", "kor-nokta", kn));
       const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
       ic.appendChild(b);
@@ -298,7 +331,8 @@
     b.appendChild(el("h2", null, o.baslik));
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
     if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
-    const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Denge: kaynakların çizgisi");
+    const mat = bakisMatrisi(o, false); if (mat) b.appendChild(mat);
+    const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Kaynakların çizgisi");
     denge.classList.add("denge"); b.appendChild(denge);
     const iki = el("div", "dagilimlar");
     iki.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam, "Kaynakların bölgesi"));
@@ -320,6 +354,8 @@
         const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
         if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
+        const bv = o.bakislar && o.bakislar[h.id];
+        if (bv) { const c = el("span", "bakis-cip", BAKIS[bv]); c.style.background = BAKIS_RENK[bv]; ad.appendChild(c); }
         const y = o.yorumlar && o.yorumlar[h.id]; if (y) ic.appendChild(el("div", "kim-yorum", y));
         const l = el("a", "kim-bag", (h.gnews ? "Kaynağa git (Google Haberler üzerinden)" : "Kaynağa git") + " ↗"); l.href = h.url; l.target = "_blank"; l.rel = "noopener"; ic.appendChild(l);
         r.appendChild(ic); sec.appendChild(r);
