@@ -329,3 +329,32 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .menu::-webkit-scrollbar{display:none}
   .menu a{padding:6px 9px;font-size:.8rem}
 }
+
+/* bakış matrisi: haber başına bir kare ve uzaklık puanı */
+.matris-bas{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.matris-bas-sag{font-size:.7rem;color:var(--soluk);font-family:var(--mono)}
+.matris .matris-satir{grid-template-columns:minmax(120px,170px) minmax(0,1fr) auto}
+.kareler{display:flex;flex-wrap:wrap;gap:3px;min-width:0}
+.kareler i{width:14px;height:14px;border-radius:3px;display:block}
+.uzaklik{font-family:var(--mono);font-size:.74rem;font-weight:500;color:var(--soluk);white-space:nowrap;text-align:right;min-width:9.5rem}
+.matris.kisa .matris-satir{grid-template-columns:185px minmax(0,1fr) auto}
+.matris.kisa .kareler i{width:11px;height:11px;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.matris.kisa .uzaklik{min-width:2rem;color:rgba(255,255,255,.85)!important;font-size:.8rem}
+.ef-not{color:var(--soluk);font-style:italic}
+@media (max-width:820px){
+  .matris .matris-satir{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
+  .matris .matris-ad{grid-column:1/-1}
+  .uzaklik{min-width:0}
+  .matris.kisa .matris-satir{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) auto}
+  .matris.kisa .matris-ad{grid-column:auto}
+  .matris-bas{flex-direction:column;gap:2px}
+}
+.matris.kisa .matris-satir{grid-template-columns:185px max-content max-content;column-gap:14px}
+@media (max-width:820px){
+  .matris:not(.kisa) .matris-satir{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"ad uz" "kare kare"}
+  .matris:not(.kisa) .matris-ad{grid-area:ad;grid-column:auto}
+  .matris:not(.kisa) .uzaklik{grid-area:uz}
+  .matris:not(.kisa) .kareler{grid-area:kare}
+  .matris:not(.kisa) .matris-ad small{margin-left:8px}
+  .matris.kisa .matris-satir{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) auto}
+}

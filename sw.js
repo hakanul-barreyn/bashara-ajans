@@ -1,6 +1,6 @@
 // ZBS hizmet çalışanı: sayfa iskeletini önbellekte tutar, haber verisini her zaman ağdan ister.
 // Ağ yoksa son görülen veriyi gösterir.
-const SURUM = "zbs-202611072200";
+const SURUM = "zbs-202611072300";
 const ISKELET = ["./", "index.html", "kaynaklar.html", "arsiv.html", "hakkimizda.html", "manifest.webmanifest", "site/logo.svg", "site/simge-192.png"];
 
 self.addEventListener("install", (e) => {

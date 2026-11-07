@@ -186,7 +186,13 @@
   const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
   const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "Diğer"];
 
-  // Bölge gruplarına göre, haberlerin kimin bakış açısından anlatıldığı
+  // Bölge gruplarına göre bakış: her haber bir kare (sayı görünür kalsın), satırın sağında
+  // grubun Filistin bakışından ortalama uzaklığı (0 = başlangıç noktası, 2 = İsrail / ABD bakışı).
+  const UZAK = { filistin: 0, aktarim: 1, israil: 2 };
+  function uzaklikMetni(u) {
+    const t = u.toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    return t + (u < 0.5 ? " · başlangıçta" : u < 1.5 ? " · bir adım uzak" : " · en uzak");
+  }
   function bakisMatrisi(o, kisa) {
     const b = o.bakislar || {};
     if (!Object.keys(b).length) return null;
@@ -194,24 +200,36 @@
     o.haberler.forEach((i) => {
       const h = haberIdx[i], k = h && kaynaklar[h.kaynak], v = b[i];
       if (!k || !v) return;
-      const g = kampAd(k); satir[g] = satir[g] || { filistin: 0, aktarim: 0, israil: 0, n: 0 };
-      satir[g][v]++; satir[g].n++;
+      const g = kampAd(k); satir[g] = satir[g] || { filistin: [], aktarim: [], israil: [], n: 0 };
+      satir[g][v].push(k.ad + ": " + (h.baslik_orj || h.baslik_tr || "")); satir[g].n++;
     });
     let gruplar = KAMP_SIRA.filter((g) => satir[g]);
     if (!gruplar.length) return null;
     if (kisa) gruplar = gruplar.sort((x, y) => satir[y].n - satir[x].n).slice(0, 4).sort((x, y) => KAMP_SIRA.indexOf(x) - KAMP_SIRA.indexOf(y));
     const kutu = el("div", "matris" + (kisa ? " kisa" : ""));
-    if (!kisa) kutu.appendChild(el("span", "dagilim-ad", "Denge: kim, kimin gözünden anlattı"));
+    if (!kisa) {
+      const bas = el("div", "matris-bas");
+      bas.appendChild(el("span", "dagilim-ad", "Denge: kim, kimin gözünden anlattı"));
+      bas.appendChild(el("span", "matris-bas-sag", "Filistin bakışından uzaklık (0–2)"));
+      kutu.appendChild(bas);
+    }
     gruplar.forEach((g) => {
       const r = satir[g], sat = el("div", "matris-satir");
       const ad = el("span", "matris-ad"); const nk = el("i"); nk.style.background = KAMP_RENK[g]; ad.appendChild(nk); ad.append(g);
       ad.appendChild(el("small", null, r.n + " haber")); sat.appendChild(ad);
-      const bar = el("div", "dagilim-cubuk");
-      ["filistin", "aktarim", "israil"].forEach((v) => { if (!r[v]) return; const i = el("i"); i.style.width = (100 * r[v]) / r.n + "%"; i.style.background = BAKIS_RENK[v]; i.title = BAKIS[v] + ": " + r[v]; bar.appendChild(i); });
-      sat.appendChild(bar); kutu.appendChild(sat);
+      const kare = el("div", "kareler"); kare.setAttribute("role", "img");
+      kare.setAttribute("aria-label", g + ": " + ["filistin", "aktarim", "israil"].filter((v) => r[v].length).map((v) => r[v].length + " " + BAKIS[v]).join(", "));
+      ["filistin", "aktarim", "israil"].forEach((v) => r[v].forEach((t) => { const i = el("i"); i.style.background = BAKIS_RENK[v]; i.title = BAKIS[v] + " · " + t; kare.appendChild(i); }));
+      sat.appendChild(kare);
+      const u = (r.aktarim.length + 2 * r.israil.length) / r.n;
+      const um = el("span", "uzaklik"); um.style.color = u < 0.5 ? BAKIS_RENK.filistin : u < 1.5 ? "" : BAKIS_RENK.israil;
+      um.textContent = kisa ? u.toLocaleString("tr-TR", { maximumFractionDigits: 1 }) : uzaklikMetni(u);
+      um.title = "Filistin bakışından ortalama uzaklık: 0 başlangıç noktası, 1 aktarım, 2 İsrail / ABD bakışı";
+      sat.appendChild(um); kutu.appendChild(sat);
     });
     const ef = el("div", "dagilim-efsane");
-    Object.entries(BAKIS).forEach(([v, l]) => { const x = el("span"); const nk = el("i"); nk.style.background = BAKIS_RENK[v]; x.appendChild(nk); x.append(l); ef.appendChild(x); });
+    Object.entries(BAKIS).forEach(([v, l]) => { const x = el("span"); const nk = el("i"); nk.style.background = BAKIS_RENK[v]; x.appendChild(nk); x.append(UZAK[v] + " · " + l); ef.appendChild(x); });
+    if (!kisa) ef.appendChild(el("span", "ef-not", "Her kare bir haber; üzerine gelince yayını ve başlığı görürsün."));
     kutu.appendChild(ef);
     if (!kisa) {
       const n = el("p", "olay-uyari"); n.append("Ölçeğin başlangıç noktası Filistin bakışıdır; aktarım bir adım, İsrail / ABD bakışı en uzak basamaktır. ");
