@@ -52,8 +52,9 @@ Kurallar:
 - Yalnızca gerçekten aynı olaya (aynı saldırı, aynı açıklama, aynı toplantı, aynı karar) ait haberleri birleştir; yalnızca konusu benzeyenleri birleştirme.
 - baslik: olayı anlatan, tarafsız, en fazla 12 kelimelik Türkçe başlık.
 - not: 1-3 cümlelik Türkçe çerçeve notu. Kaynakların olayı nasıl farklı anlattığını betimle: hangi kaynak hangi kelimeyi seçti (özgün kelimeyi tırnak içinde, en fazla 4 kelime), kimin açıklamasını öne çıkardı, hangi bilgiyi verdi ya da vermedi. Yalnızca verilen başlıklardan çıkarılabilecekleri yaz. Hüküm verme, hangi kaynağın haklı olduğunu söyleme. Kaynaklar aynı şekilde anlatıyorsa bunu kısaca söyle.
-- En önemli en fazla 25 olayı, en çok kaynağın yazdığından başlayarak sırala.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."]}]
+- yorumlar: gruptaki HER haber için o kaynağın olayı nasıl sunduğunu anlatan en fazla 18 kelimelik Türkçe betimleme. Hangi kelimeyi seçtiğini (özgün kelime tırnak içinde, en fazla 4 kelime), kimi kaynak gösterdiğini ya da neyi öne çıkardığını yaz. Hüküm verme, "taraflı" gibi nitelemeler kullanma.
+- En önemli en fazla 20 olayı, en çok kaynağın yazdığından başlayarak sırala.
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}}]
 """
 
 
@@ -79,9 +80,12 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
             continue
         ids.sort(key=lambda i: var[i]["tarih"], reverse=True)
         oid = "o" + hashlib.sha1(",".join(sorted(ids)).encode()).hexdigest()[:10]
+        yor = g.get("yorumlar") if isinstance(g.get("yorumlar"), dict) else {}
         olaylar.append({
             "id": oid, "baslik": str(g.get("baslik") or "")[:160], "not": str(g.get("not") or "")[:700],
             "haberler": ids, "kaynak_sayisi": len(kaynaklar), "son": var[ids[0]]["tarih"],
+            "ilk": var[ids[-1]]["tarih"],
+            "yorumlar": {i: str(yor.get(i))[:220] for i in ids if yor.get(i)},
         })
     olaylar.sort(key=lambda o: (o["kaynak_sayisi"], o["son"]), reverse=True)
     return olaylar

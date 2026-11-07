@@ -181,25 +181,145 @@
 
   function olayAc(id) { olaySec = id; ciz(true); }
 
+  // ---------------------------------------------------- kapsama analizi (Ground News benzeri)
+  const KAMP = { "Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası", "Mağrip": "Arap dünyası",
+    "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
+    "İspanya": "Batı", "İtalya": "Batı", "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Diğer" };
+  const KAMP_RENK = { "Filistin": "#1fa463", "Arap dünyası": "#7fc8a9", "İran ve Yemen": "#c9a227", "Türkiye": "#e4312b", "İsrail": "#3b6fd8", "Batı": "#9aa7b4", "Diğer": "#5f6b66" };
+  const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Karşı taraf" };
+  const TUR_RENK = { "Devlet": "#e05a5a", "Bağlı": "#8c8f8d", "Bağımsız": "#2fbf71", "Özel": "#6d89a3", "Karşı taraf": "#d9dfdb" };
+  const kampAd = (k) => KAMP[k.bolge] || "Diğer";
+
+  function kapsama(o) {
+    const ks = new Map();
+    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (k && !ks.has(k.id)) ks.set(k.id, k); });
+    const kamp = {}, tur = {};
+    ks.forEach((k) => { const a = kampAd(k); kamp[a] = (kamp[a] || 0) + 1; const t = TUR_GRUP[k.tur] || "Özel"; tur[t] = (tur[t] || 0) + 1; });
+    return { kamp, tur, toplam: ks.size };
+  }
+
+  function korNokta(kp) {
+    if (kp.toplam < 3) return null;
+    const en = Object.entries(kp.kamp).sort((a, b) => b[1] - a[1])[0];
+    const arap = (kp.kamp["Filistin"] || 0) + (kp.kamp["Arap dünyası"] || 0);
+    const bati = (kp.kamp["Batı"] || 0) + (kp.kamp["İsrail"] || 0);
+    if (en && en[1] / kp.toplam >= 0.7) return "Kör nokta: kaynakların %" + Math.round((100 * en[1]) / kp.toplam) + "’i " + en[0] + " basınından.";
+    if (!arap && bati) return "Kör nokta: Filistin ve Arap basını bu olayı yazmadı.";
+    if (!bati && arap) return "Kör nokta: Batı ve İsrail basını bu olayı yazmadı.";
+    return null;
+  }
+
+  function cubuk(dagilim, renkler, toplam, baslik) {
+    const kutu = el("div", "dagilim");
+    if (baslik) kutu.appendChild(el("span", "dagilim-ad", baslik));
+    const bar = el("div", "dagilim-cubuk"); bar.setAttribute("role", "img");
+    const sirali = Object.entries(dagilim).sort((a, b) => b[1] - a[1]);
+    bar.setAttribute("aria-label", sirali.map(([a, n]) => a + " " + n).join(", "));
+    sirali.forEach(([a, n]) => { const i = el("i"); i.style.width = (100 * n) / toplam + "%"; i.style.background = renkler[a] || "#777"; i.title = a + ": " + n + " kaynak"; bar.appendChild(i); });
+    kutu.appendChild(bar);
+    const ef = el("div", "dagilim-efsane");
+    sirali.forEach(([a, n]) => { const x = el("span"); const nk = el("i"); nk.style.background = renkler[a] || "#777"; x.appendChild(nk); x.append(a + " " + Math.round((100 * n) / toplam) + "%"); ef.appendChild(x); });
+    kutu.appendChild(ef);
+    return kutu;
+  }
+
+  // ---------------------------------------------------- manşet slaytları
+  let slaytZaman = null, slaytNo = 0;
   function gundemCiz() {
     const kutu = $("gundem"); kutu.innerHTML = "";
-    const liste = olaylar.filter((o) => o.haberler.some((i) => haberIdx[i])).slice(0, 10);
+    clearInterval(slaytZaman);
+    const liste = olaylar.filter((o) => o.haberler.filter((i) => haberIdx[i]).length >= 2).slice(0, 8);
     kutu.hidden = !liste.length || !!olaySec;
-    if (!liste.length) return;
-    kutu.appendChild(el("h2", "bolum", "Gündem: birden fazla kaynağın yazdığı olaylar"));
-    const serit = el("div", "gundem-serit");
-    liste.forEach((o) => {
-      const b = el("button", "olay-kart"); b.type = "button"; b.onclick = () => olayAc(o.id);
-      b.appendChild(el("span", "olay-sayi", o.kaynak_sayisi + " kaynak"));
-      b.appendChild(el("span", "olay-ad", o.baslik));
-      const av = el("span", "olay-avatarlar");
-      [...new Set(o.haberler.map((i) => haberIdx[i] && haberIdx[i].kaynak).filter(Boolean))].slice(0, 6).forEach((kid) => {
-        const k = kaynaklar[kid]; if (k) { const a = el("span", "avatar " + k.tur, bas(k.ad)); a.title = k.ad; av.appendChild(a); }
-      });
-      b.appendChild(av);
-      serit.appendChild(b);
+    if (!liste.length || olaySec) return;
+    const ust = el("div", "slayt-ust");
+    ust.appendChild(el("h2", "bolum", "Gündem · birden fazla kaynağın yazdığı olaylar"));
+    const okl = el("div", "slayt-oklar");
+    const geri = el("button", "slayt-ok", "‹"), ileri = el("button", "slayt-ok", "›");
+    geri.type = ileri.type = "button"; geri.setAttribute("aria-label", "Önceki olay"); ileri.setAttribute("aria-label", "Sonraki olay");
+    okl.append(geri, ileri); ust.appendChild(okl); kutu.appendChild(ust);
+    const iz = el("div", "slaytlar"); iz.setAttribute("aria-roledescription", "slayt gösterisi");
+    liste.forEach((o, n) => {
+      const kp = kapsama(o);
+      const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
+      const gh = o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews);
+      const arka = el("div", "slayt-arka");
+      if (gh) { const img = document.createElement("img"); img.src = gh.gorsel; img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.onerror = () => img.remove(); arka.appendChild(img);
+        arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
+      sl.appendChild(arka);
+      const ic = el("div", "slayt-ic");
+      ic.appendChild(el("span", "slayt-sayi", kp.toplam + " kaynak · son " + once(o.son)));
+      ic.appendChild(el("h3", null, o.baslik));
+      if (o.not) ic.appendChild(el("p", null, o.not.length > 220 ? o.not.slice(0, 217) + "…" : o.not));
+      ic.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam));
+      const kn = korNokta(kp); if (kn) ic.appendChild(el("span", "kor-nokta", kn));
+      const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
+      ic.appendChild(b);
+      sl.appendChild(ic);
+      iz.appendChild(sl);
     });
-    kutu.appendChild(serit);
+    kutu.appendChild(iz);
+    const noktalar = el("div", "slayt-noktalar");
+    liste.forEach((o, n) => { const d = el("button"); d.type = "button"; d.setAttribute("aria-label", (n + 1) + ". olay"); d.onclick = () => git(n, true); noktalar.appendChild(d); });
+    kutu.appendChild(noktalar);
+    const git = (n, el_) => {
+      slaytNo = (n + liste.length) % liste.length;
+      iz.scrollTo({ left: iz.children[slaytNo].offsetLeft - iz.offsetLeft, behavior: AZ_HAREKET ? "auto" : "smooth" });
+      [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === slaytNo));
+      if (el_) yeniden();
+    };
+    geri.onclick = () => git(slaytNo - 1, true); ileri.onclick = () => git(slaytNo + 1, true);
+    iz.addEventListener("scroll", () => {
+      const n = Math.round(iz.scrollLeft / Math.max(1, iz.clientWidth));
+      if (n !== slaytNo && n < liste.length) { slaytNo = n; [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === n)); }
+    }, { passive: true });
+    let dur = false;
+    kutu.addEventListener("mouseenter", () => (dur = true)); kutu.addEventListener("mouseleave", () => (dur = false));
+    kutu.addEventListener("focusin", () => (dur = true)); kutu.addEventListener("focusout", () => (dur = false));
+    const yeniden = () => { clearInterval(slaytZaman); if (!AZ_HAREKET && liste.length > 1) slaytZaman = setInterval(() => { if (!dur && !document.hidden) git(slaytNo + 1); }, 7000); };
+    slaytNo = Math.min(slaytNo, liste.length - 1);
+    requestAnimationFrame(() => { iz.scrollLeft = iz.children[slaytNo].offsetLeft - iz.offsetLeft; [...noktalar.children].forEach((d, j) => d.setAttribute("aria-current", j === slaytNo)); });
+    yeniden();
+  }
+
+  // ---------------------------------------------------- olay ayrıntısı: kim nasıl yazdı
+  function olayAyrinti(o) {
+    const b = el("div", "olay-baslik");
+    const kp = kapsama(o);
+    const ust = el("div", "olay-ust");
+    ust.appendChild(el("span", "olay-sayi", kp.toplam + " kaynak · " + o.haberler.length + " haber"));
+    const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = () => { olaySec = null; ciz(true); };
+    ust.appendChild(kap); b.appendChild(ust);
+    b.appendChild(el("h2", null, o.baslik));
+    const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
+    if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
+    const iki = el("div", "dagilimlar");
+    iki.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam, "Kaynakların bölgesi"));
+    iki.appendChild(cubuk(kp.tur, TUR_RENK, kp.toplam, "Kaynakların sahipliği"));
+    b.appendChild(iki);
+    const kn = korNokta(kp); if (kn) b.appendChild(el("span", "kor-nokta", kn));
+    if (o.not) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(o.not); b.appendChild(n); }
+    // kaynak kaynak liste, bölge grubuna göre
+    const gruplar = {};
+    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[kampAd(k)] = gruplar[kampAd(k)] || []).push(h); });
+    Object.keys(KAMP_RENK).filter((g) => gruplar[g]).forEach((g) => {
+      const sec = el("section", "kim-grup");
+      const hb = el("h3"); const nk = el("i"); nk.style.background = KAMP_RENK[g]; hb.appendChild(nk); hb.append(g); sec.appendChild(hb);
+      gruplar[g].forEach((h) => {
+        const k = kaynaklar[h.kaynak];
+        const r = el("div", "kim-satir");
+        const a = el("div", "avatar " + k.tur, bas(k.ad)); r.appendChild(a);
+        const ic = el("div", "kim-ic");
+        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ic.appendChild(ad);
+        ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
+        if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
+        const y = o.yorumlar && o.yorumlar[h.id]; if (y) ic.appendChild(el("div", "kim-yorum", y));
+        const l = el("a", "kim-bag", (h.gnews ? "Kaynağa git (Google Haberler üzerinden)" : "Kaynağa git") + " ↗"); l.href = h.url; l.target = "_blank"; l.rel = "noopener"; ic.appendChild(l);
+        r.appendChild(ic); sec.appendChild(r);
+      });
+      b.appendChild(sec);
+    });
+    b.appendChild(el("p", "olay-uyari", "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git."));
+    return b;
   }
 
   function seritCiz() {
@@ -317,7 +437,7 @@
     const liste = suz();
     const secOlay = olaySec && olayHarita[olaySec];
     if (olaySec && !secOlay) olaySec = null;
-    gor = secOlay ? secOlay.haberler.map((i) => haberIdx[i]).filter((h) => h && kaynaklar[h.kaynak])
+    gor = secOlay ? []
       : (sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste);
     const odak = odakId && haberIdx[odakId];
     if (odak && !secOlay) gor = [odak, ...gor.filter((h) => h.id !== odakId)];
@@ -326,21 +446,13 @@
     akis.innerHTML = "";
     gundemCiz(); seritCiz();
     if (secOlay) {
-      const b = el("div", "olay-baslik");
-      const ust = el("div", "olay-ust");
-      ust.appendChild(el("span", "olay-sayi", secOlay.kaynak_sayisi + " kaynak · " + secOlay.haberler.length + " haber"));
-      const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = () => { olaySec = null; ciz(true); };
-      ust.appendChild(kap); b.appendChild(ust);
-      b.appendChild(el("h2", null, secOlay.baslik));
-      if (secOlay.not) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(secOlay.not); b.appendChild(n); }
-      b.appendChild(el("p", "olay-uyari", "Bu not, başlıklar karşılaştırılarak yapay zekâyla yazıldı. Haberlerin tamamı için kaynaklara git."));
-      akis.appendChild(b);
+      akis.appendChild(olayAyrinti(secOlay));
     } else if (odakId && !odak) {
       const n = el("p", "bos"); n.append("Paylaşılan haber artık akışta değil (akış son iki günü gösteriyor). ");
       const a = el("a", null, "Arşivde ara"); a.href = "arsiv.html"; n.appendChild(a); akis.appendChild(n);
     }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
-    else if (!gor.length) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
+    else if (!gor.length && !secOlay) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
     gor.slice(0, kac).forEach((h, i) => {
       const k = haberCiz(h); if (i === 0 && !secOlay) k.classList.add("manset");
       if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
@@ -353,7 +465,7 @@
       const a = el("a", null, "Kaynaklar"); a.href = "kaynaklar.html"; n.appendChild(a); n.append(" sayfasında bulabilirsin."); akis.appendChild(n);
     }
     if (basaDon) { if (window.scrollY > 0) window.scrollTo({ top: 0 }); } else window.scrollTo({ top: kaydir });
-    const s = $("sayilar"); s.innerHTML = "";
+    const s = $("sayilar"); s.innerHTML = ""; s.hidden = !!secOlay;
     s.appendChild(el("b", null, gor.length.toLocaleString("tr-TR"))); s.append(" haber · ");
     s.appendChild(el("b", null, gor.filter((h) => h.ozet_tr).length.toLocaleString("tr-TR"))); s.append(" Türkçe · ");
     s.appendChild(el("b", null, gor.filter((h) => dk(h.tarih) < 60).length.toLocaleString("tr-TR"))); s.append(" son saatte");
