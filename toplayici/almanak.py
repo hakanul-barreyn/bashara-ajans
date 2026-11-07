@@ -463,7 +463,7 @@ def anlati_yaz(anahtar_api, model, ad, ist):
     kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI.replace("{ad}", ad) + girdi, zaman=100)
     if kod != 200 or not isinstance(cevap, dict):
         return kod, None
-    temiz = lambda s, n: re.sub(r"\s+", " ", str(s or "")).strip()[:n]
+    temiz = lambda s, n: ekler.guvenli(s)[:n]
     return 200, {
         "baslik": temiz(cevap.get("baslik"), 140),
         "ozet": [temiz(p, 1500) for p in (cevap.get("ozet") or []) if p][:4],

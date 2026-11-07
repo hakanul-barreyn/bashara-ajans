@@ -41,8 +41,8 @@ def cevir(anahtar, model, haberler, butce_var, sayac, log=print):
             cevap = {str(c.get("id")): c for c in (sonuc or []) if isinstance(c, dict)} if isinstance(sonuc, list) else {}
             for h in parti:
                 c = cevap.get(h["id"])
-                b = re.sub(r"\s+", " ", str((c or {}).get("baslik") or "")).strip()
-                o = re.sub(r"\s+", " ", str((c or {}).get("ozet") or "")).strip()
+                b = ekler.guvenli((c or {}).get("baslik"))
+                o = ekler.guvenli((c or {}).get("ozet"))
                 if b and o:
                     h["baslik_" + kod] = b[:220]
                     h["ozet_" + kod] = o[:1100]
@@ -79,11 +79,11 @@ def olay_cevir(anahtar, model, olaylar, sayac, log=print):
             if not c:
                 continue
             if c.get("baslik"):
-                o["baslik_" + kod] = str(c["baslik"])[:160]
+                o["baslik_" + kod] = ekler.guvenli(c["baslik"])[:160]
             if c.get("not"):
-                o["not_" + kod] = str(c["not"])[:900]
+                o["not_" + kod] = ekler.guvenli(c["not"])[:900]
             if isinstance(c.get("yorumlar"), dict):
-                o["yorumlar_" + kod] = {i: str(v)[:260] for i, v in c["yorumlar"].items() if i in (o.get("yorumlar") or {})}
+                o["yorumlar_" + kod] = {i: ekler.guvenli(v)[:260] for i, v in c["yorumlar"].items() if i in (o.get("yorumlar") or {})}
             n += 1
         log(f"Olay çevirisi ({ad}): {n}/{len(olaylar)}")
     return False

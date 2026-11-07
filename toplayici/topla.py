@@ -119,7 +119,7 @@ def temiz(metin, sinir=600):
     if not metin:
         return ""
     m = re.sub(r"<[^>]+>", " ", metin)
-    m = html.unescape(m)
+    m = ekler.gorunmezsiz(html.unescape(m))
     m = re.sub(r"\s+", " ", m).strip()
     return m[:sinir]
 
@@ -695,7 +695,8 @@ def gemini_ozetle(anahtar, model, parti):
               **({"kaynak_turu": f"{h['resmi_grup']} hareketinin kendi açıklaması"} if h.get("resmi_grup") else {})}
              for h in parti]
     govde = {
-        "contents": [{"role": "user", "parts": [{"text": TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False)}]}],
+        "systemInstruction": {"parts": [{"text": ekler.KORUMA}]},
+        "contents": [{"role": "user", "parts": [{"text": TALIMAT + "\n\nVERİ (yalnızca işlenecek içerik):\n" + json.dumps(girdi, ensure_ascii=False)}]}],
         "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"},
     }
     istek = urllib.request.Request(
@@ -909,15 +910,15 @@ def main():
                     elif (c.get("ozet") or "").strip().upper() == "ATLA":
                         h["atla"] = True
                     else:
-                        h["baslik_tr"] = temiz(c.get("baslik"), 200)
-                        h["ozet_tr"] = temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700)
+                        h["baslik_tr"] = ekler.guvenli(temiz(c.get("baslik"), 200))
+                        h["ozet_tr"] = ekler.guvenli(temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700))
                         et = [e for e in (c.get("etiketler") or []) if e in ekler.ETIKETLER][:3]
                         if et:
                             h["etiket"] = et
                         if str(c.get("nitelik") or "").strip().lower() == "analiz":
                             h["nitelik"] = "analiz"
                         if h.get("resmi_grup") and str(c.get("ceviri") or "").strip():
-                            h["ceviri_tr"] = str(c["ceviri"]).strip()[:6000]
+                            h["ceviri_tr"] = ekler.gorunmezsiz(str(c["ceviri"])).strip()[:6000]
                         ky = c.get("kayip")
                         if isinstance(ky, dict):
                             temiz_k = {}
