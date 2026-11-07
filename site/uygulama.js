@@ -647,8 +647,13 @@
     $("fKonu").appendChild(c);
   });
   $("fKonuSil").onclick = () => { konu = null; ciz(true); };
-  function hashOku() { const m = /^#h-([0-9a-f]+)$/.exec(location.hash); odakId = m ? m[1] : null; }
-  window.addEventListener("hashchange", () => { hashOku(); olaySec = null; ciz(true); });
+  function hashOku() {
+    const m = /^#h-([0-9a-f]+)$/.exec(location.hash); odakId = m ? m[1] : null;
+    // #o-<haber kimliği>: o haberin bulunduğu olayın "kim nasıl yazdı" sayfası (Telegram bağlantıları)
+    const o = /^#o-([0-9a-f]+)$/.exec(location.hash);
+    if (o) { const ol = olaylar.find((x) => x.haberler.includes(o[1])); if (ol) olaySec = ol.id; }
+  }
+  window.addEventListener("hashchange", () => { olaySec = null; hashOku(); ciz(true); });
   document.addEventListener("click", (e) => { if (!e.target.closest(".paylas")) document.querySelectorAll(".paylas-menu").forEach((m) => (m.hidden = true)); });
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   $("fIlgili").onchange = $("fOzet").onchange = () => { kac = SAYFA; ciz(true); };

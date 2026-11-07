@@ -33,6 +33,7 @@ from konular import ilgili_mi  # noqa: E402
 import ekler  # noqa: E402
 import marka  # noqa: E402
 import almanak  # noqa: E402
+import telegram_kanal  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
@@ -975,6 +976,11 @@ def main():
             durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
     except Exception as e:
         log(f"Almanak hatası: {e}")
+    # Sitenin Telegram kanalına gündem, öncelikli analizler ve bültenler
+    try:
+        telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Telegram hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
     yaz(DURUM, durum)
     log(f"{len(tut)} haber kaydedildi; süre {int(time.time() - BASLANGIC)} sn")
