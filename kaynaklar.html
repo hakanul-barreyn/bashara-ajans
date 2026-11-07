@@ -110,7 +110,7 @@
         const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
-        const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);
+        const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);if(d.gdelt&&!yol.length)yol.push("GDELT haber veritabanı");
         iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı")+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
         c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));iz.appendChild(c);});
       g.appendChild(iz);L.appendChild(g);});

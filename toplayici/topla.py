@@ -430,15 +430,6 @@ def kesfet(k):
             sonuc["yontem"] = {"tip": "wp", "url": wp}
             return sonuc
 
-    # 5) Son çare: Google Haberler araması (Telegram kanalı bulunduysa gerek yok)
-    if not sonuc["telegram"]:
-        gn = gnews_adresi(k)
-        izin = izinli(gn)
-        kod, metin, _ = getir(gn) if izin else (0, "", gn)
-        n = len(gnews_coz(metin)) if kod == 200 else 0
-        if n:
-            sonuc["yontem"] = {"tip": "gnews", "url": gn}
-        log(f"Google Haberler denemesi · {k['ad']}: izin={izin} kod={kod} haber={n}")
     return sonuc
 
 
@@ -466,6 +457,53 @@ def gnews_coz(metin):
         o["gorsel"] = None
         o["gnews"] = True
     return ogeler
+
+
+GDELT = "https://api.gdeltproject.org/api/v2/doc/doc"
+
+
+def alan_adi(url):
+    return urllib.parse.urlsplit(url).netloc.lower().removeprefix("www.")
+
+
+def gdelt_topla(kaynaklar):
+    """Sessiz kaynakların son 24 saatteki haberlerini GDELT'ten toplu sorgularla çeker.
+    GDELT asıl haber adreslerini, başlıkları ve paylaşım görsellerini verir. 5 saniyede bir istek sınırına uyulur."""
+    alanlar = {}
+    for k in kaynaklar:
+        alanlar.setdefault(alan_adi(k["url"]), []).append(k)
+    liste = list(alanlar)
+    sonuc = {}
+    for i in range(0, len(liste), 8):
+        if time.time() - BASLANGIC > CALISMA_SURESI - 60:
+            break
+        grup = liste[i:i + 8]
+        q = "(" + " OR ".join(f"domainis:{a}" for a in grup) + ")"
+        url = GDELT + "?" + urllib.parse.urlencode({"query": q, "mode": "artlist", "format": "json", "maxrecords": "250",
+                                                     "timespan": "24h", "sort": "datedesc"})
+        if not izinli(url):
+            log("GDELT robots.txt tarafından engelli")
+            return sonuc
+        kod, metin, _ = getir(url, zaman=40)
+        if kod == 200:
+            try:
+                for m in json.loads(metin).get("articles", []):
+                    a = alan_adi(m.get("url", ""))
+                    for k in alanlar.get(a, []):
+                        try:
+                            t = dt.datetime.strptime(m.get("seendate", ""), "%Y%m%dT%H%M%SZ").replace(tzinfo=dt.timezone.utc)
+                        except Exception:
+                            t = None
+                        sonuc.setdefault(k["id"], []).append({"url": m["url"], "baslik": temiz(m.get("title"), 300), "tarih": t,
+                                                               "giris": "", "gorsel": m.get("socialimage") or None})
+            except Exception as e:
+                log(f"GDELT yanıtı okunamadı: {e}")
+        else:
+            log(f"GDELT yanıtı: {kod}")
+        time.sleep(5.5)
+    for kid in sonuc:
+        sonuc[kid] = sonuc[kid][:KAYNAK_BASINA]
+    return sonuc
 
 
 def cek(yontem):
@@ -659,6 +697,22 @@ def main():
 
     with ThreadPoolExecutor(max_workers=16) as ex:
         sonuclar = list(ex.map(lambda k: kaynak_isle(k, durum), kaynaklar))
+
+    # Son çare: hiçbir yolla okunamayan kaynaklar için GDELT haber veritabanı (asıl haber adresini verir)
+    yolsuz = [(k, d) for k, d, ogeler in sonuclar if not ogeler]
+    if yolsuz:
+        gd = gdelt_topla([k for k, _ in yolsuz])
+        bulunan = 0
+        for k, d in yolsuz:
+            og = gd.get(k["id"], [])
+            if og:
+                bulunan += 1
+                d["son_basari"] = SIMDI.isoformat()
+                d["gdelt"] = True
+                for j, (kk, dd, oo) in enumerate(sonuclar):
+                    if kk["id"] == k["id"]:
+                        sonuclar[j] = (kk, dd, og)
+        log(f"GDELT: {len(yolsuz)} sessiz kaynaktan {bulunan} tanesinde haber bulundu")
 
     yeni = 0
     for k, d, ogeler in sonuclar:
