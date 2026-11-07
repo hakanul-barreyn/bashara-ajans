@@ -100,7 +100,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
 
 
 # ---------------------------------------------------------------- arşiv
-ARSIV_ALANLAR = ("id", "kaynak", "kaynak_ad", "url", "tarih", "baslik_tr", "ozet_tr", "etiket", "gorsel", "arsiv", "telegram")
+ARSIV_ALANLAR = ("id", "kaynak", "kaynak_ad", "url", "tarih", "baslik_tr", "ozet_tr", "etiket", "gorsel", "arsiv", "telegram", "nitelik")
 
 
 def arsive_yaz(kok, haberler):

@@ -12,10 +12,12 @@
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
+  let logolar = {};
   let kaynaklar = {}, haberler = [], guncellendi = null, gor = [], olaylar = [], olayHarita = {};
   let konu = null, olaySec = null, odakId = null;
   let bilinen = null; // önceki yüklemede görülen haber kimlikleri
   let haberIdx = {};
+  let sadeceAnaliz = false;
   let bolge = "Tümü", sehir = null, ara = "", kac = SAYFA, aktifId = null;
   const $ = (id) => document.getElementById(id);
   const renk = (ad) => getComputedStyle(document.documentElement).getPropertyValue(ad).trim();
@@ -32,6 +34,20 @@
     if (d < 60) return Math.round(d) + " dk önce";
     if (d < 1440) return Math.round(d / 60) + " sa önce";
     return Math.round(d / 1440) + " gün önce";
+  }
+  // Yayın simgesi: toplayıcının bulduğu logo, olmazsa DuckDuckGo simge servisi, o da yoksa baş harfler
+  function avatar(k, ek) {
+    const a = el("div", "avatar " + k.tur + (ek ? " " + ek : ""), bas(k.ad));
+    const host = (() => { try { return new URL(k.url).hostname; } catch (e) { return ""; } })();
+    const kaynaklarim = [(logolar[k.id] || {}).url, host && "https://icons.duckduckgo.com/ip3/" + host + ".ico"].filter(Boolean);
+    if (kaynaklarim.length) {
+      const img = document.createElement("img"); img.alt = ""; img.loading = "lazy"; img.referrerPolicy = "no-referrer"; img.decoding = "async";
+      let i = 0; img.src = kaynaklarim[0];
+      img.onerror = () => { i++; if (i < kaynaklarim.length) img.src = kaynaklarim[i]; else img.remove(); };
+      img.onload = () => { if (img.naturalWidth < 8) img.onerror(); else a.classList.add("logolu"); };
+      a.appendChild(img);
+    }
+    return a;
   }
   function bas(ad) {
     const k = ad.replace(/^(The|Al|El|La|Le|Il|L’|Der|Die)[\s-]+/i, "").replace(/[^\p{L}\p{N} ]/gu, " ").trim().split(/\s+/);
@@ -109,6 +125,7 @@
       if (bolge !== "Tümü" && k.bolge !== bolge) return false;
       if (ilgili && !h.ilgili) return false;
       if (ozetli && !h.ozet_tr) return false;
+      if (sadeceAnaliz && h.nitelik !== "analiz") return false;
       if (konu && !(h.etiket || []).includes(konu)) return false;
       if (ara) {
         const m = [h.baslik_tr, h.ozet_tr, h.baslik_orj, k.ad, k.sehir, k.ulke].join(" ").toLocaleLowerCase("tr");
@@ -332,6 +349,40 @@
     yeniden();
   }
 
+  // ---------------------------------------------------- analizler: haberin aktarımından çok yorum ve inceleme
+  // Öncelikli yayınlar (Al-Akhbar) başta; Türkçe özeti yazılmış olanlar özeti yazılmamışlardan önce.
+  function analizCiz() {
+    const kutu = $("analizler"); kutu.innerHTML = "";
+    const liste = haberler.filter((h) => h.nitelik === "analiz" && h.ilgili && !h.atla && kaynaklar[h.kaynak] && dk(h.tarih) < 72 * 60
+      && (bolge === "Tümü" || kaynaklar[h.kaynak].bolge === bolge))
+      .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || (!!b.ozet_tr - !!a.ozet_tr) || (a.tarih < b.tarih ? 1 : -1))
+      .slice(0, 12);
+    kutu.hidden = !liste.length || !!olaySec || sadeceAnaliz;
+    if (kutu.hidden) return;
+    const ust = el("div", "slayt-ust");
+    const bh = el("h2", "bolum", "Analizler"); bh.appendChild(el("span", "bolum-ek", " · olayların ötesine bakan yazılar")); ust.appendChild(bh);
+    const tum = el("button", "kapat-olay", "Tümünü gör →"); tum.type = "button"; tum.onclick = () => { $("fAnaliz").checked = true; sadeceAnaliz = true; kac = SAYFA; ciz(true); };
+    ust.appendChild(tum); kutu.appendChild(ust);
+    const iz = el("div", "analiz-serit");
+    liste.forEach((h) => {
+      const k = kaynaklar[h.kaynak];
+      const a = el("article", "analiz-kart" + (k.oncelik ? " oncelikli" : ""));
+      const u = el("div", "kart-ust"); u.appendChild(avatar(k));
+      const kim = el("div", "kim"); kim.appendChild(el("span", "ad", k.ad)); kim.appendChild(el("span", "yer", k.sehir + " · " + once(h.tarih))); u.appendChild(kim);
+      a.appendChild(u);
+      if (h.baslik_tr) a.appendChild(el("h3", null, h.baslik_tr));
+      else { const b = el("h3", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; a.appendChild(b); }
+      if (h.ozet_tr) a.appendChild(el("p", null, h.ozet_tr));
+      else a.appendChild(el("p", "cevirisiz", "Türkçe özet sırada"));
+      const e = el("div", "eylemler");
+      const git = el("a", "eylem ana", "Yazıyı oku ↗"); git.href = h.url; git.target = "_blank"; git.rel = "noopener"; e.appendChild(git);
+      a.appendChild(e);
+      a.addEventListener("click", (ev) => { if (!ev.target.closest("a")) a.classList.toggle("acik"); });
+      iz.appendChild(a);
+    });
+    kutu.appendChild(iz);
+  }
+
   // ---------------------------------------------------- olay ayrıntısı: kim nasıl yazdı
   function olayAyrinti(o) {
     const b = el("div", "olay-baslik");
@@ -361,7 +412,7 @@
       gruplar[g].forEach((h) => {
         const k = kaynaklar[h.kaynak];
         const r = el("div", "kim-satir");
-        const a = el("div", "avatar " + k.tur, bas(k.ad)); r.appendChild(a);
+        const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
         const ad = el("div", "kim-ad"); if (k.bolge === "İsrail") ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
@@ -405,7 +456,7 @@
     kart.appendChild(gorselCiz(h, k));
     const g = el("div", "govde");
     const ust = el("div", "kart-ust");
-    ust.appendChild(el("div", "avatar " + k.tur, bas(k.ad)));
+    ust.appendChild(avatar(k));
     const kim = el("div", "kim");
     const adEl = el("span", "ad", k.ad);
     if (k.bolge === "İsrail") adEl.insertAdjacentHTML("afterbegin", BAYRAK);
@@ -415,6 +466,7 @@
     kim.appendChild(yer); ust.appendChild(kim);
     const roz = el("div", "rozetler");
     if (dk(h.tarih) < 30) roz.appendChild(el("span", "rozet yeni", "YENİ"));
+    if (h.nitelik === "analiz") roz.appendChild(el("span", "rozet analiz", "Analiz"));
     if (h.telegram) roz.appendChild(el("span", "rozet tg", "Telegram"));
     roz.appendChild(el("span", "rozet " + k.tur, TUR[k.tur] || k.tur));
     ust.appendChild(roz);
@@ -502,7 +554,7 @@
     const akis = $("akis");
     const kaydir = window.scrollY;
     akis.innerHTML = "";
-    gundemCiz(); seritCiz();
+    gundemCiz(); analizCiz(); seritCiz();
     if (secOlay) {
       akis.appendChild(olayAyrinti(secOlay));
     } else if (odakId && !odak) {
@@ -541,11 +593,13 @@
   async function yukle() {
     const t = Date.now();
     try {
-      const [k, h, o] = await Promise.all([
+      const [k, h, o, lg] = await Promise.all([
         fetch("kaynaklar.json?t=" + t).then((r) => r.json()),
         fetch("data/haberler.json?t=" + t).then((r) => r.json()),
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
+        fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
       ]);
+      logolar = lg || {};
       olaylar = o.olaylar || []; olayHarita = {}; olaylar.forEach((x) => (olayHarita[x.id] = x));
       kaynaklar = {}; k.forEach((x) => (kaynaklar[x.id] = x));
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
@@ -576,6 +630,7 @@
   document.addEventListener("click", (e) => { if (!e.target.closest(".paylas")) document.querySelectorAll(".paylas-menu").forEach((m) => (m.hidden = true)); });
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   $("fIlgili").onchange = $("fOzet").onchange = () => { kac = SAYFA; ciz(true); };
+  $("fAnaliz").onchange = (e) => { sadeceAnaliz = e.target.checked; kac = SAYFA; ciz(true); };
   const bul = $("fBulanik");
   bul.checked = oku("zbs-bulanik") === "1";
   document.body.classList.toggle("bulanik", bul.checked);

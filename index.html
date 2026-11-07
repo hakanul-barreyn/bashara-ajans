@@ -12,8 +12,8 @@
 <link rel="alternate" type="application/rss+xml" data-marka-sablon="{ad}" data-marka-oznitelik="title" title="ZBS" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611072330">
-<script src="site/marka.js?v=202611072330"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080015">
+<script src="site/marka.js?v=202611080015"></script>
 </head>
 <body>
 <!-- Arka plandaki harita: şehirler haber geldikçe yanıp söner, karta gelince o kartın şehri parlar -->
@@ -22,7 +22,7 @@
 <header class="ust">
   <div class="ust-ic">
     <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa">
-      <img class="logo" src="site/logo.svg?v=202611072330" alt="" width="32" height="32">
+      <img class="logo" src="site/logo.svg?v=202611080015" alt="" width="32" height="32">
       <span class="marka-ad" data-marka="ad">ZBS</span>
     </a>
     <p class="slogan" data-marka="slogan">Mağrip’ten Körfez’e basının Türkçe takibi</p>
@@ -37,6 +37,7 @@
 
 <main class="duzen">
   <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
+  <section class="analizler" id="analizler" hidden aria-label="Analizler"></section>
   <div class="suzgec">
     <div class="suzgec-ust">
       <div class="ara-kutu">
@@ -49,6 +50,7 @@
     <div class="bolgeler konular" id="fKonu" role="group" aria-label="Konu"></div>
     <div class="secenekler">
       <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
+      <label class="anahtar"><input type="checkbox" id="fAnaliz"><span class="kol" aria-hidden="true"></span>Yalnızca analizler</label>
       <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
       <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
       <button class="sehir-cip" id="fSehir" type="button" hidden></button>
@@ -61,6 +63,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/uygulama.js?v=202611072330"></script>
+<script src="site/uygulama.js?v=202611080015"></script>
 </body>
 </html>

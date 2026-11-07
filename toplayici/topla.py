@@ -38,6 +38,7 @@ KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
 HABERLER = os.path.join(KOK, "data", "haberler.json")
 DURUM = os.path.join(KOK, "data", "durum.json")
+LOGOLAR = os.path.join(KOK, "data", "logolar.json")
 OLAYLAR = os.path.join(KOK, "data", "olaylar.json")
 
 MARKA = marka.oku()
@@ -642,9 +643,23 @@ Kurallar:
 - metin alanı boşsa yalnızca başlıkta yazanı Türkçe bir cümleyle aktar; başlıkta olmayan hiçbir bilgi ekleme.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
-- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."]}]
+- nitelik: metin bir olayı aktarmaktan çok yorumluyor, tartışıyor ya da derinlemesine inceliyorsa (analiz, köşe yazısı, görüş, uzun rapor) "analiz", değilse "haber".
+- Analizlerde ozet 3-4 cümle olsun ve yazının ana savını, dayandığı gerekçeyi ve vardığı sonucu ver ("Yazara göre ...").
+- Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz"}]
 """
 TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
+
+
+ANALIZ_YOLLARI = ("/opinion", "/opinions/", "/analysis", "/analyse", "/analisis", "/analisi", "/column", "/columns/", "/comment/",
+                  "/commentisfree/", "/views/", "/op-ed", "/oped/", "/editorial", "/meinung/", "/kommentar", "/tribune", "/idees/",
+                  "/debats/", "/opinione/", "/editoriali/", "/yazarlar/", "/kose-yazilari/", "/yorum/", "/features/long-read",
+                  "/مقالات", "/رأي", "/آراء", "/تحليل", "/topics-opinions/")
+
+
+def analiz_mi(url, k):
+    """Adres analiz ya da görüş bölümünü gösteriyor mu? Yayına özel yollar kaynaklar.json'da (analiz_yolu)."""
+    u = urllib.parse.unquote(url)
+    return any(y in u for y in k.get("analiz_yolu", [])) or any(y in u.lower() for y in ANALIZ_YOLLARI)
 
 
 def gemini_ozetle(anahtar, model, parti):
@@ -684,6 +699,28 @@ def malzeme_hazirla(h):
             h["gorsel"] = h.get("gorsel") or gorsel_bul(sayfa, h["url"])
         h["gorsel_denendi"] = True
     h["_malzeme"] = m[:1500]
+
+
+def logo_bul(k):
+    """Yayının ana sayfasından simgesini bulur: apple-touch-icon > en büyük icon > /favicon.ico. Bulamazsa None."""
+    if not izinli(k["url"]):
+        return None
+    kod, metin, son = getir(k["url"], zaman=12, en_fazla=600_000)
+    if kod != 200 or not metin:
+        return None
+    adaylar = []
+    for m in re.finditer(r"<link\b[^>]*>", metin[:200_000], re.I):
+        tag = m.group(0)
+        rel = (re.search(r'rel=["\']([^"\']+)', tag, re.I) or [None, ""])[1].lower()
+        href = (re.search(r'href=["\']([^"\']+)', tag, re.I) or [None, ""])[1]
+        if not href or "icon" not in rel or "mask-icon" in rel:
+            continue
+        boy = max([int(x) for x in re.findall(r"(\d+)x\d+", tag)] or [0])
+        puan = boy + (1000 if "apple-touch-icon" in rel else 0) + (50 if href.lower().endswith((".png", ".svg")) else 0)
+        adaylar.append((puan, html.unescape(href)))
+    if adaylar:
+        return urllib.parse.urljoin(son, max(adaylar)[1])
+    return urllib.parse.urljoin(son, "/favicon.ico")
 
 
 def gorsel_tamamla(h):
@@ -739,6 +776,30 @@ def main():
                         sonuclar[j] = (kk, dd, og)
         log(f"GDELT: {len(yolsuz)} sessiz kaynaktan {bulunan} tanesinde haber bulundu")
 
+    # Yola göre ilgili / analiz kuralları sonradan eklendiyse eldeki haberlere de uygula
+    kmap = {k["id"]: k for k in kaynaklar}
+    for h in eski.values():
+        k = kmap.get(h["kaynak"])
+        if not k:
+            continue
+        if not h.get("ilgili") and any(y in h["url"] for y in k.get("ilgili_yolu", [])):
+            h["ilgili"] = True
+        if not h.get("nitelik") and analiz_mi(h["url"], k):
+            h["nitelik"] = "analiz"
+        if k.get("oncelik"):
+            h["oncelik"] = True
+
+    # Yayın logoları: ayda bir yenilenir, her çalıştırmada en çok 30 yayın
+    logolar = oku(LOGOLAR, {})
+    eksik_logo = [k for k in kaynaklar if str(k["id"]) not in logolar
+                  or (SIMDI - (tarih_coz(logolar[str(k["id"])].get("zaman")) or SIMDI)).days > 30][:30]
+    if eksik_logo:
+        with ThreadPoolExecutor(max_workers=10) as ex:
+            for k, u in zip(eksik_logo, ex.map(logo_bul, eksik_logo)):
+                logolar[str(k["id"])] = {"url": u, "zaman": SIMDI.isoformat()}
+        yaz(LOGOLAR, logolar)
+        log(f"Logo: {sum(1 for k in eksik_logo if logolar[str(k['id'])]['url'])}/{len(eksik_logo)} yayının simgesi bulundu")
+
     yeni = 0
     for k, d, ogeler in sonuclar:
         durum[str(k["id"])] = d
@@ -756,7 +817,10 @@ def main():
                 "telegram": bool(o.get("telegram")),
                 "gnews": bool(o.get("gnews")) or None,
                 "gorsel": o.get("gorsel"),
-                "ilgili": ilgili_mi(o["baslik"] + " " + o.get("giris", ""), k["dil"], k["bolge"]),
+                "ilgili": any(y in o["url"] for y in k.get("ilgili_yolu", []))
+                          or ilgili_mi(o["baslik"] + " " + o.get("giris", ""), k["dil"], k["bolge"]),
+                "nitelik": "analiz" if analiz_mi(o["url"], k) else None,
+                "oncelik": bool(k.get("oncelik")) or None,
             }
             yeni += 1
     log(f"{yeni} yeni haber; {sum(1 for _, d, _ in sonuclar if d.get('yontem'))}/{len(kaynaklar)} kaynakta yol bulundu")
@@ -767,8 +831,10 @@ def main():
     model = None
     if anahtar and not (bekle and bekle > SIMDI):
         model = gemini_model(anahtar)
+        # Öncelikli yayınlar (Al-Akhbar gibi) ve analizler sıranın başına; geri kalanı en yeniden eskiye
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
-                       and h.get("deneme", 0) < 3), key=lambda h: h["tarih"], reverse=True)[:OZET_SINIRI]
+                       and h.get("deneme", 0) < 3), key=lambda h: h["tarih"], reverse=True)
+        sira = sorted(sira, key=lambda h: (not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
         if model and sira:
             with ThreadPoolExecutor(max_workers=8) as ex:
                 list(ex.map(malzeme_hazirla, sira))
@@ -796,10 +862,12 @@ def main():
                         h["atla"] = True
                     else:
                         h["baslik_tr"] = temiz(c.get("baslik"), 200)
-                        h["ozet_tr"] = temiz(c.get("ozet"), 700)
+                        h["ozet_tr"] = temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700)
                         et = [e for e in (c.get("etiketler") or []) if e in ekler.ETIKETLER][:3]
                         if et:
                             h["etiket"] = et
+                        if str(c.get("nitelik") or "").strip().lower() == "analiz":
+                            h["nitelik"] = "analiz"
                         yazilan += 1
                 time.sleep(4)  # dakika başı istek sınırına takılmamak için
             durum["_model"] = model

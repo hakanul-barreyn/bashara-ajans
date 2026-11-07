@@ -8,15 +8,34 @@
   "lat": 33.89,
   "lon": 35.5,
   "dil": "ar",
-  "tur": "grup",
-  "profil": "2006’da Joseph Samaha ve arkadaşlarının kurduğu günlük gazete. Sol çizgide, Hizbullah ve “direniş ekseni”ne yakın olarak bilinir.",
+  "tur": "bagimsiz",
+  "profil": "2006’da Joseph Samaha ve İbrahim el-Emin’in kurduğu Beyrut gazetesi; Lübnan’ın en etkili günlüklerinden. Solcu, Arap milliyetçisi ve direniş eksenine yakın yazarları bir arada barındırır, ama bir partinin yayın organı değildir. Lübnan siyasetinin karmaşık dengelerini içeriden izleyen analizleri ve basılı baskıdaki uzun yazılarıyla bilinir.",
   "dog": "B",
   "tg": true,
   "liste": true,
   "notu": "",
   "id": 1,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "oncelik": true,
+  "analiz_yolu": [
+   "/NewspaperArticles/"
+  ],
+  "ilgili_yolu": [
+   "/NewspaperArticles/lebanon/",
+   "/NewspaperArticles/arab/",
+   "/NewspaperArticles/world/",
+   "/NewspaperArticles/syria/",
+   "/NewspaperArticles/palestine/",
+   "/NewspaperArticles/topics-opinions/",
+   "/NewspaperArticles/politics/",
+   "/NewspaperArticles/economy/",
+   "/news/lebanon/",
+   "/news/arab/",
+   "/news/world/",
+   "/news/syria/",
+   "/news/palestine/"
+  ]
  },
  {
   "ad": "Al-Akhbar English",
@@ -27,7 +46,7 @@
   "lat": 33.89,
   "lon": 35.5,
   "dil": "en",
-  "tur": "grup",
+  "tur": "bagimsiz",
   "profil": "Al-Akhbar’ın İngilizce sürümü; Filistin, Lübnan, Suriye ve Arap dünyasından haber ve analiz. Düzenli yayında; içeriği atıf yapılması ve ticari kullanılmaması şartıyla Creative Commons lisansıyla paylaşıyor.",
   "dog": "D",
   "tg": true,
@@ -35,7 +54,8 @@
   "notu": "RSS veya site haritası sayfada görünmüyor; kurulumda denenecek, yoksa Telegram kanalı kullanılacak.",
   "id": 2,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "oncelik": true
  },
  {
   "ad": "Al-Manar",

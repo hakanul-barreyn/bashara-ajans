@@ -9,8 +9,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611072330">
-<script src="site/marka.js?v=202611072330"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611080015">
+<script src="site/marka.js?v=202611080015"></script>
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
@@ -116,6 +116,12 @@
       const a=el("a",null,x.kaynak+(x.tarih?", "+x.tarih.slice(0,7):"")+" ↗");a.href=x.url;a.target="_blank";a.rel="noopener";li.appendChild(a);ul.appendChild(li);});
     kutu.appendChild(ul);return kutu;
   }
+  let LG={};fetch("data/logolar.json?t="+Math.floor(Date.now()/36e5)).then(r=>r.json()).then(d=>{LG=d||{};document.querySelectorAll(".avatar[data-k]").forEach(a=>logoTak(a,K.find(x=>String(x.id)===a.dataset.k)));}).catch(()=>{});
+  function logoTak(a,k){if(!k||a.querySelector("img"))return;let host="";try{host=new URL(k.url).hostname;}catch(e){}
+    const L=[(LG[k.id]||{}).url,host&&"https://icons.duckduckgo.com/ip3/"+host+".ico"].filter(Boolean);if(!L.length)return;
+    const img=document.createElement("img");img.alt="";img.loading="lazy";img.referrerPolicy="no-referrer";let i=0;img.src=L[0];
+    img.onerror=()=>{i++;if(i<L.length)img.src=L[i];else img.remove();};img.onload=()=>{if(img.naturalWidth<8)img.onerror();else a.classList.add("logolu");};a.appendChild(img);}
+  function avatarK(k){const a=el("div","avatar "+k.tur,bas(k.ad));a.dataset.k=k.id;logoTak(a,k);return a;}
   function kanit(k){
     const d=KN[String(k.id)],kutu=el("div","kanit");
     if(!d||!d.olcum.length){kutu.appendChild(el("span","kanit-yok","Henüz ölçüm yok: bu yayının başlıkları bir olay karşılaştırmasına girdikçe burada birikecek."));return kutu;}
@@ -150,7 +156,7 @@
     REG.forEach(r=>{const ks=K.filter(k=>k.bolge===r&&ok(k));if(!ks.length)return;n+=ks.length;
       const g=el("section","grup");g.appendChild(el("h2",null,r+" · "+ks.length));const iz=el("div","izgara");
       ks.forEach(k=>{const c=el("article","kk"),u=el("div","kk-ust");
-        u.appendChild(el("div","avatar "+k.tur,bas(k.ad)));const w=el("div");const ad=el("div","kk-ad");if(k.bolge==="İsrail")ad.insertAdjacentHTML("afterbegin",BAYRAK);
+        u.appendChild(avatarK(k));const w=el("div");const ad=el("div","kk-ad");if(k.bolge==="İsrail")ad.insertAdjacentHTML("afterbegin",BAYRAK);
         const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
         const rz=el("div","rozetler");rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
