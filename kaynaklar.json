@@ -255,7 +255,8 @@
    "QudsNen",
    "QudsN"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "son_dakika": true
  },
  {
   "ad": "Al-Quds",
@@ -4058,5 +4059,73 @@
     "tarih": "2025-05"
    }
   ]
+ },
+ {
+  "id": 184,
+  "ad": "Muhammad al-Sharif",
+  "url": "https://t.me/s/muhamadalsharif",
+  "sehir": "Gazze",
+  "ulke": "Filistin",
+  "bolge": "Filistin",
+  "lat": 31.53,
+  "lon": 34.48,
+  "dil": "ar",
+  "tur": "bagimsiz",
+  "profil": "Gazze Şeridi’nin kuzeyinden yayın yapan foto muhabiri ve gazeteci (kanalın kendi tanımına göre). Sahadan fotoğraf, video ve kısa haberler paylaşır.",
+  "sadece_telegram": "muhamadalsharif",
+  "son_dakika": true,
+  "cizgi": "ad",
+  "hassas": true
+ },
+ {
+  "id": 185,
+  "ad": "Hamas (resmî kanal)",
+  "url": "https://t.me/s/almoqawma87",
+  "sehir": "Gazze",
+  "ulke": "Filistin",
+  "bolge": "Filistin",
+  "lat": 31.5,
+  "lon": 34.47,
+  "dil": "ar",
+  "tur": "grup",
+  "profil": "Kendi tanımına göre İslami Direniş Hareketi Hamas’ın resmî Telegram kanalı. Hareketin açıklamalarını ve bildirilerini yayımlar; buradaki her şey hareketin kendi sesidir.",
+  "sadece_telegram": "almoqawma87",
+  "resmi_grup": "Hamas",
+  "cizgi": "ad",
+  "hassas": true
+ },
+ {
+  "id": 186,
+  "ad": "FHKC Gazze",
+  "url": "https://t.me/s/pflpgaza1",
+  "sehir": "Gazze",
+  "ulke": "Filistin",
+  "bolge": "Filistin",
+  "lat": 31.5,
+  "lon": 34.47,
+  "dil": "ar",
+  "tur": "grup",
+  "profil": "Filistin Halk Kurtuluş Cephesi’nin (FHKC) Gazze teşkilatına ait olduğu belirtilen Telegram kanalı. Örgütün açıklamalarını ve bildirilerini yayımlar.",
+  "sadece_telegram": "pflpgaza1",
+  "resmi_grup": "FHKC",
+  "cizgi": "ad",
+  "hassas": true
+ },
+ {
+  "id": 187,
+  "ad": "İslami Cihad (kanal)",
+  "url": "https://t.me/s/jehad_ps",
+  "sehir": "Gazze",
+  "ulke": "Filistin",
+  "bolge": "Filistin",
+  "lat": 31.5,
+  "lon": 34.47,
+  "dil": "ar",
+  "tur": "grup",
+  "profil": "Filistin İslami Cihad Hareketi’ne ait olduğu belirtilen Telegram kanalı. Hareketin açıklamalarını ve bildirilerini yayımlar.",
+  "sadece_telegram": "jehad_ps",
+  "resmi_grup": "İslami Cihad",
+  "cizgi": "ad",
+  "hassas": true
  }
 ]

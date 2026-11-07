@@ -410,3 +410,8 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 @keyframes z-sessiz{0%,100%{transform:scale(1);stroke-opacity:.55}50%{transform:scale(1.6);stroke-opacity:.15}}
 .ilk-haber.gecikme{color:var(--k-kirmizi)}
 .rozet.resmi{color:var(--k-ink2);background:var(--k-yuzey2);border-color:transparent}
+
+/* resmî hareket kanalları ve sahadan görseller */
+.rozet.aciklama{color:#5b4a14;background:#f3ead0;border-color:transparent}
+.gorsel.hassas:not(.acik) img{filter:blur(22px) saturate(.7)}
+.gorsel.hassas:not(.acik) .ac{display:grid;position:absolute;inset:0;place-items:center;color:#fff;font-size:.84rem;font-weight:600;background:rgba(0,0,0,.3);border:0;cursor:pointer;width:100%;padding:16px;text-align:center}

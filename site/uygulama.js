@@ -164,14 +164,14 @@
   }
 
   function gorselCiz(h, k) {
-    const kutu = el("div", "gorsel");
+    const kutu = el("div", "gorsel" + (k.hassas ? " hassas" : ""));
     if (h.gorsel) {
       const img = document.createElement("img");
       img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.referrerPolicy = "no-referrer"; img.src = h.gorsel;
       img.onerror = () => yerTutucu(kutu, k);
       kutu.appendChild(img);
       kutu.appendChild(el("span", "kredi", "Görsel: " + k.ad));
-      const ac = el("button", "ac", "Görseli göstermek için dokun"); ac.type = "button";
+      const ac = el("button", "ac", k.hassas ? "Sahadan görsel; ağır olabilir. Göstermek için dokun" : "Görseli göstermek için dokun"); ac.type = "button";
       ac.onclick = () => kutu.classList.add("acik");
       kutu.appendChild(ac);
     } else {
@@ -327,7 +327,7 @@
     liste.forEach((o, n) => {
       const kp = kapsama(o);
       const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
-      const gh = o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews);
+      const gh = o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
       const arka = el("div", "slayt-arka");
       if (gh) { const img = document.createElement("img"); img.src = gh.gorsel; img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.onerror = () => img.remove(); arka.appendChild(img);
         arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
@@ -478,7 +478,9 @@
   }
 
   function seritCiz() {
-    const son = haberler.filter((h) => h.ilgili && !h.atla && dk(h.tarih) < 90).slice(0, 14);
+    const sd = (h) => kaynaklar[h.kaynak] && kaynaklar[h.kaynak].son_dakika;
+    const son = [...haberler.filter((h) => sd(h) && !h.atla && dk(h.tarih) < 180).slice(0, 8),
+                 ...haberler.filter((h) => !sd(h) && h.ilgili && !h.atla && dk(h.tarih) < 90)].slice(0, 16);
     const s = $("serit"); s.hidden = !son.length;
     document.documentElement.style.setProperty("--serit", son.length ? "38px" : "0px");
     const ic = $("seritIc"); ic.innerHTML = "";
@@ -511,7 +513,9 @@
     const z = el("time", null, once(h.tarih)); z.dateTime = h.tarih; z.title = new Date(h.tarih).toLocaleString("tr-TR"); yer.appendChild(z);
     kim.appendChild(yer); ust.appendChild(kim);
     const roz = el("div", "rozetler");
-    if (dk(h.tarih) < 30) roz.appendChild(el("span", "rozet yeni", "YENİ"));
+    if (dk(h.tarih) < 30 && !k.son_dakika) roz.appendChild(el("span", "rozet yeni", "YENİ"));
+    if (k.resmi_grup) roz.appendChild(el("span", "rozet aciklama", k.resmi_grup + " açıklaması"));
+    if (k.son_dakika && dk(h.tarih) < 120) roz.appendChild(el("span", "rozet yeni", "SON DAKİKA"));
     if (h.nitelik === "analiz") roz.appendChild(el("span", "rozet analiz", "Analiz"));
     if (h.telegram) roz.appendChild(el("span", "rozet tg", "Telegram"));
     if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));

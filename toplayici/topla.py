@@ -557,6 +557,18 @@ def cek_telegram(kanal):
 
 def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
+    if k.get("sadece_telegram"):
+        # Yalnızca Telegram kanalı olan kaynak: site keşfi yok, doğrudan kanalın açık sayfası okunur
+        tg = cek_telegram(k["sadece_telegram"])
+        d.update({"yontem": None, "telegram": k["sadece_telegram"], "surum": KESIF_SURUMU, "son_oge": len(tg)})
+        d.setdefault("kesif", SIMDI.isoformat())
+        if tg:
+            d["son_basari"] = SIMDI.isoformat()
+            d["hata"] = 0
+        else:
+            d["hata"] = d.get("hata", 0) + 1
+        tg.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
+        return k, d, tg[:KAYNAK_BASINA]
     son_kesif = tarih_coz(d.get("kesif")) or SIMDI - dt.timedelta(days=99)
     gecen = SIMDI - son_kesif
     if d.get("surum") != KESIF_SURUMU and (not d.get("son_basari") or (SIMDI - tarih_coz(d["son_basari"])).days >= 1):
@@ -641,7 +653,7 @@ Kurallar:
 - baslik: Türkçe, en fazla 14 kelime, haberin özünü veren sade bir başlık.
 - ozet: Türkçe, 2-3 cümle. Tamamen kendi cümlelerinle yaz; kaynaktan cümle kopyalama. Doğrudan alıntı gerekiyorsa en fazla bir tane ve 10 kelimeyi geçmesin.
 - Yalnızca verilen metindeki bilgileri kullan, bilgi ekleme, yorum katma.
-- İddiaları sahibine atfet ("... göre", "... açıkladı"). Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
+- İddiaları sahibine atfet ("... göre", "... açıkladı"). "kaynak_turu" alanı varsa metin o hareketin kendi açıklamasıdır: başlık ve özette bunu açıkça belirt ("Hamas açıkladı:", "FHKC'ye göre") ve iddiaları doğrulanmış bilgi gibi yazma. Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
 - metin alanı boşsa yalnızca başlıkta yazanı Türkçe bir cümleyle aktar; başlıkta olmayan hiçbir bilgi ekleme.
 - Metin bir Telegram mesajıysa ve haber değeri yoksa (reklam, selamlama, tek bağlantı) ozet alanına "ATLA" yaz.
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
@@ -677,7 +689,8 @@ def gunluk_istek(durum, ekle=0):
 
 
 def gemini_ozetle(anahtar, model, parti):
-    girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "dil": h["dil"], "baslik": h["baslik_orj"], "metin": h.get("_malzeme", "")}
+    girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "dil": h["dil"], "baslik": h["baslik_orj"], "metin": h.get("_malzeme", ""),
+              **({"kaynak_turu": f"{h['resmi_grup']} hareketinin kendi açıklaması"} if h.get("resmi_grup") else {})}
              for h in parti]
     govde = {
         "contents": [{"role": "user", "parts": [{"text": TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False)}]}],
@@ -835,6 +848,7 @@ def main():
                           or ilgili_mi(o["baslik"] + " " + o.get("giris", ""), k["dil"], k["bolge"]),
                 "nitelik": "analiz" if analiz_mi(o["url"], k) else None,
                 "oncelik": bool(k.get("oncelik")) or None,
+                "resmi_grup": k.get("resmi_grup"),
             }
             yeni += 1
     log(f"{yeni} yeni haber; {sum(1 for _, d, _ in sonuclar if d.get('yontem'))}/{len(kaynaklar)} kaynakta yol bulundu")
