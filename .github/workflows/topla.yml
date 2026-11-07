@@ -50,7 +50,7 @@ jobs:
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           OZET_SINIRI: ${{ vars.OZET_SINIRI }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_KANAL: ${{ vars.TELEGRAM_KANAL }}
+          TELEGRAM_KANAL: ${{ vars.TELEGRAM_KANAL || secrets.TELEGRAM_KANAL }}
         run: python toplayici/topla.py
 
       - name: Veriyi kaydet

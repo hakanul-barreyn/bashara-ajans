@@ -92,7 +92,10 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     kanal = os.environ.get("TELEGRAM_KANAL", "").strip()
     if not token or not kanal:
+        if token or kanal:
+            log("Telegram: " + ("TELEGRAM_KANAL boş geldi" if token else "TELEGRAM_BOT_TOKEN boş geldi") + "; gönderi yapılmadı")
         return 0
+    kanal = kanal.replace("https://", "").replace("http://", "").replace("t.me/", "").strip().strip("/")
     if kanal and not kanal.startswith(("@", "-")) and not kanal.lstrip("-").isdigit():
         kanal = "@" + kanal
     site = site_adresi()
