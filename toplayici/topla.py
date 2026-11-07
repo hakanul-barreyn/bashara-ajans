@@ -726,7 +726,8 @@ def main():
     wb_bekle = tarih_coz(durum.get("_wayback_bekle"))
     if not (wb_bekle and wb_bekle > SIMDI):
         sira = [eski[i] for o in olay_veri.get("olaylar", []) for i in o["haberler"]
-                if i in eski and i not in wb and not eski[i].get("telegram")]
+                if i in eski and not (wb.get(i) or {}).get("url") and (wb.get(i) or {}).get("deneme", 0) < 3
+                and not eski[i].get("telegram")]
         kaydedilen = 0
         for h in sira[:8]:
             if time.time() - BASLANGIC > CALISMA_SURESI + 120:
@@ -736,7 +737,7 @@ def main():
                 durum["_wayback_bekle"] = (SIMDI + dt.timedelta(minutes=30)).isoformat()
                 log("Wayback kotası doldu; yarım saat sonra yeniden denenecek")
                 break
-            wb[h["id"]] = {"zaman": SIMDI.isoformat(), "url": sonuc}
+            wb[h["id"]] = {"zaman": SIMDI.isoformat(), "url": sonuc, "deneme": (wb.get(h["id"]) or {}).get("deneme", 0) + 1}
             if sonuc:
                 h["arsiv"] = sonuc
                 kaydedilen += 1
