@@ -178,3 +178,34 @@ def wayback_kaydet(url, zaman=60):
         return None
     except Exception:
         return None
+
+
+# ---------------------------------------------------------------- kanıt defteri
+def kanit_guncelle(kok, olaylar, haberler):
+    """Her olay karşılaştırmasında her yayının başlığına verilen bakış etiketini yayının defterine işler.
+    Defter, kaynaklar sayfasında 'bu yayın neden bu çizgide' sorusunun ölçülmüş kanıtı olarak gösterilir."""
+    yol = os.path.join(kok, "data", "kanit.json")
+    try:
+        with open(yol, encoding="utf-8") as f:
+            defter = json.load(f)
+    except Exception:
+        defter = {}
+    eklenen = 0
+    for o in olaylar:
+        for hid, bakis in (o.get("bakislar") or {}).items():
+            h = haberler.get(hid)
+            if not h:
+                continue
+            d = defter.setdefault(str(h["kaynak"]), {"olcum": [], "ornek": []})
+            if any(x[0] == hid for x in d["olcum"]):
+                continue  # aynı haber bir kez sayılır
+            d["olcum"].append([hid, h["tarih"][:10], bakis])
+            d["olcum"] = d["olcum"][-400:]
+            d["ornek"].insert(0, {"id": hid, "tarih": h["tarih"], "bakis": bakis, "url": h["url"],
+                                  "baslik_orj": h.get("baslik_orj", "")[:240], "baslik_tr": h.get("baslik_tr", ""),
+                                  "yorum": (o.get("yorumlar") or {}).get(hid, ""), "olay": o.get("baslik", "")})
+            d["ornek"] = d["ornek"][:12]
+            eklenen += 1
+    with open(yol, "w", encoding="utf-8") as f:
+        json.dump(defter, f, ensure_ascii=False, separators=(",", ":"))
+    return eklenen

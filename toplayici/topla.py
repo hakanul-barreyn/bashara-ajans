@@ -789,6 +789,10 @@ def main():
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
             if isinstance(sonuc, list):
                 yaz(OLAYLAR, {"guncellendi": SIMDI.isoformat(), "olaylar": sonuc})
+                try:
+                    log(f"Kanıt defteri: {ekler.kanit_guncelle(KOK, sonuc, eski)} yeni ölçüm")
+                except Exception as e:
+                    log(f"Kanıt defteri hatası: {e}")
                 durum["_olay_son"] = SIMDI.isoformat()
                 durum["_olay_surum"] = 3
                 log(f"{len(sonuc)} olay kümesi çıkarıldı")

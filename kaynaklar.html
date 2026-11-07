@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611071847">
+<link rel="stylesheet" href="site/stil.css?v=202611071855">
 <style>
 /* Kaynaklar: üstte sağlık özeti, sonra bölgelere göre gruplanmış açık renkli kaynak kartları */
 .sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 64px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
@@ -21,6 +21,17 @@
 .cz{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 8px;border-radius:999px;margin-right:8px;color:#0c110e;font-weight:500}
 .cz-ad{background:#1fa463}.cz-ara{background:#9aa7b4}.cz-ik{background:#e05a5a}
 .cz-t{font-family:var(--mono);font-size:.64rem;color:var(--k-soluk)}
+.kanit{border-top:1px solid var(--k-cizgi);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.kanit-ust{font-size:.76rem;color:var(--k-soluk)}.kanit-ust b{color:var(--k-ink)}
+.kanit-yok{font-size:.76rem;color:var(--k-soluk)}
+.kanit-cubuk{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--k-yuzey2);gap:2px}.kanit-cubuk i{display:block;height:100%}
+.kanit-efsane{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.72rem;color:var(--k-ink2)}.kanit-efsane span{display:flex;align-items:center;gap:5px}.kanit-efsane i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.uyusmaz{font-size:.76rem;font-weight:700;color:#7a4b00;background:#fbeed2;padding:4px 8px;border-radius:8px}
+.kanit details{font-size:.82rem}.kanit summary{cursor:pointer;color:var(--k-yesil);font-weight:600}
+.ornek{display:flex;flex-direction:column;gap:3px;padding:8px 0;border-bottom:1px solid var(--k-cizgi)}
+.ornek .bakis-cip{align-self:flex-start;font-family:var(--mono);font-size:.62rem;color:#fff;padding:2px 8px;border-radius:999px}
+.ornek-tarih{font-size:.7rem;color:var(--k-soluk)}.ornek-ozgun{font-style:italic;color:var(--k-ink2)}.ornek-tr{font-weight:600}
+.ornek-yorum{color:var(--k-ink2);border-left:3px solid var(--k-yesil);padding-left:8px}.ornek a{color:var(--k-yesil);font-weight:600;text-decoration:none;font-size:.76rem}
 .giris{margin:-8px 0 0;color:var(--soluk);max-width:72ch}
 .saglik{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .saglik button{text-align:left;border:1px solid var(--cizgi);background:var(--yuzey);color:var(--ink);border-radius:14px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
@@ -64,6 +75,7 @@
       <li><span class="cz cz-ara">Ara / ana akım</span> İsrail’i zaman zaman eleştirse de sistemik bir antiemperyalist çizgi izlemeyen yayınlar; haber ajansları; dengeleri karışık devletlerin yayın organları.</li>
       <li><span class="cz cz-ik">İşbirlikçi kompradorlar ve emperyalistler</span> Haberciliği ağırlıkla ABD ve İsrail hükümetlerinin çerçevesini izleyen yayınlar; İsrail ana akımı ve sağı; İsrail’le normalleşmiş hükümetlerin (BAE, Fas, Mısır, Ürdün, Suudi Arabistan) çizgisindeki yayınlar.</li>
     </ul>
+    <p><b>Kanıt:</b> Her yayın kartının altındaki “Ölçülmüş söylem” bölümü, ZBS’nin olay karşılaştırmalarında o yayının başlıklarını kimin bakış açısından kurduğunu sayar ve örnek başlıkları özgün dilleriyle gösterir. Değerlendirme bir görüştür; ölçüm ise okurun kendisinin kontrol edebileceği kayıttır. Ölçüm değerlendirmeyle uyuşmadığında bunu kartta açıkça yazarız.</p>
     <p>Sınırda kalan yayınlar “tartışmalı” olarak işaretlidir. Bir değerlendirmeye itirazın varsa bize yaz.</p>
   </section>
   <div class="saglik" id="saglik"></div>
@@ -85,7 +97,25 @@
   const $=(i)=>document.getElementById(i);
   const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
   const bas=(ad)=>{const k=ad.replace(/^(The|Al|El|La|Le|Il|L’|Der|Die)[\s-]+/i,"").replace(/[^\p{L}\p{N} ]/gu," ").trim().split(/\s+/);return((k[0]||"")[0]+((k[1]||"")[0]||(k[0]||"")[1]||"")).toUpperCase();};
-  let K=[],D={},N={},bolge="Tümü",ara="",sDurum=null;
+  let K=[],D={},N={},KN={},bolge="Tümü",ara="",sDurum=null;
+  const BK={filistin:"Filistin / Arap bakışı",aktarim:"Aktarım",israil:"İsrail / ABD bakışı"},BR={filistin:"#1fa463",aktarim:"#8d989f",israil:"#3b6fd8"};
+  function kanit(k){
+    const d=KN[String(k.id)],kutu=el("div","kanit");
+    if(!d||!d.olcum.length){kutu.appendChild(el("span","kanit-yok","Henüz ölçüm yok: bu yayının başlıkları bir olay karşılaştırmasına girdikçe burada birikecek."));return kutu;}
+    const n=d.olcum.length,c={filistin:0,aktarim:0,israil:0};d.olcum.forEach(x=>c[x[2]]++);
+    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · ZBS’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
+    const bar=el("div","kanit-cubuk");Object.keys(c).forEach(v=>{if(!c[v])return;const i=el("i");i.style.width=(100*c[v]/n)+"%";i.style.background=BR[v];i.title=BK[v]+": "+c[v];bar.appendChild(i);});kutu.appendChild(bar);
+    const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);
+    if(n>=5){const fi=c.filistin/n,is=c.israil/n;
+      if((k.cizgi==="ik"&&fi>=0.6)||(k.cizgi==="ad"&&is>=0.6))kutu.appendChild(el("span","uyusmaz","Ölçüm bu yayının çizgi değerlendirmesiyle uyuşmuyor; değerlendirme gözden geçirilecek."));}
+    const det=document.createElement("details");det.appendChild(el("summary",null,"Örnek başlıklar ("+d.ornek.length+")"));
+    d.ornek.forEach(o=>{const r=el("div","ornek");const cp=el("span","bakis-cip",BK[o.bakis]);cp.style.background=BR[o.bakis];r.appendChild(cp);
+      r.appendChild(el("span","ornek-tarih",new Date(o.tarih).toLocaleDateString("tr-TR",{day:"numeric",month:"short"})+" · "+o.olay));
+      const oz=el("div","ornek-ozgun",o.baslik_orj);oz.dir="auto";r.appendChild(oz);
+      if(o.baslik_tr)r.appendChild(el("div","ornek-tr",o.baslik_tr));if(o.yorum)r.appendChild(el("div","ornek-yorum",o.yorum));
+      const a=el("a",null,"Habere git ↗");a.href=o.url;a.target="_blank";a.rel="noopener";r.appendChild(a);det.appendChild(r);});
+    kutu.appendChild(det);return kutu;
+  }
   function saglik(k){const d=D[String(k.id)]||{};if(!d.kesif)return"yok";if(!d.son_basari)return"kopuk";const s=(Date.now()-new Date(d.son_basari))/36e5;return s<6?"iyi":s<48?"sessiz":"kopuk";}
   function once(iso){const d=(Date.now()-new Date(iso))/6e4;if(d<60)return Math.max(1,Math.round(d))+" dk önce";if(d<1440)return Math.round(d/60)+" sa önce";return Math.round(d/1440)+" gün önce";}
   function ust(){
@@ -112,12 +142,13 @@
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
         const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);if(d.gdelt&&!yol.length)yol.push("GDELT haber veritabanı");
         iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı")+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
-        c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));iz.appendChild(c);});
+        c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));
+        c.appendChild(kanit(k));iz.appendChild(c);});
       g.appendChild(iz);L.appendChild(g);});
     if(!n)L.appendChild(el("p","bos","Bu süzgeçle eşleşen kaynak yok."));
   }
-  Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]}))])
-  .then(([k,d,h])=>{K=k;D=d;(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
+  Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]})),fetch("data/kanit.json?t="+Date.now()).then(r=>r.json()).catch(()=>({}))])
+  .then(([k,d,h,kn])=>{K=k;D=d;KN=kn||{};(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
     ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});
     Object.entries(CIZ).forEach(([k,l])=>{const b=el("button","cip",l);b.type="button";b.dataset.k="cz-"+k;b.onclick=()=>{bolge="cz-"+k;ciz();};$("bolgeler").appendChild(b);});ciz();})
   .catch(()=>{$("liste").textContent="Kaynak listesi okunamadı.";});
