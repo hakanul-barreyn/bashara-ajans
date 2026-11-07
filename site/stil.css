@@ -26,7 +26,7 @@ a{color:var(--yesil)}
   border-bottom:1px solid var(--cizgi)}
 .marka{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .marka-ad{font-weight:800;font-size:1.35rem;letter-spacing:.06em}
-.logo{width:30px;height:30px;display:block;flex:none}
+.logo{width:34px;height:34px;display:block;flex:none;border:0;border-radius:0;background:none}
 .slogan{margin:0;flex:1 1 200px;color:var(--soluk);font-size:.88rem}
 .canli{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.75rem;color:var(--soluk);padding:5px 10px;border:1px solid var(--cizgi);border-radius:999px;background:var(--yuzey)}
 .nabiz{width:8px;height:8px;border-radius:50%;background:var(--yesil);box-shadow:0 0 0 0 color-mix(in srgb,var(--yesil) 60%,transparent);animation:nabiz 2s infinite}
