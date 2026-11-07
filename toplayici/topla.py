@@ -837,6 +837,8 @@ def main():
             t = o["tarih"] or SIMDI
             if t < sinir or t > SIMDI + dt.timedelta(hours=2):
                 continue
+            if not str(o.get("url") or "").startswith(("https://", "http://")):
+                continue   # yalnızca web bağlantıları: "javascript:" gibi adresler sayfaya girmesin
             hid = kimlik(o["url"])
             if hid in eski:
                 continue
