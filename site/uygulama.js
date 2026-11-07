@@ -4,6 +4,8 @@
   "use strict";
   const BOLGELER = ["Filistin", "Meşrik", "Körfez", "Mısır", "İran", "Yemen", "Mağrip", "Anadolu-Türkiye", "İsrail", "İsrail’de muhalif basın", "ABD", "İngiltere", "İspanya", "İtalya", "Almanya", "Fransa", "Asya ve diğer"];
   const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "karşı taraf" };
+  // Kartlarda yalnızca okura bir şey söyleyen sahiplik bilgisi gösterilir; ayrıntısı Kaynaklar sayfasında
+  const ROZETLI = { resmi: "devlet", grup: "bağlı" };
   const DIL = { ar: "Arapça", en: "İngilizce", fr: "Fransızca", tr: "Türkçe", he: "İbranice", es: "İspanyolca", ca: "Katalanca", it: "İtalyanca", de: "Almanca" };
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
   const SAYFA = 30;
@@ -431,7 +433,7 @@
         const r = el("div", "kim-satir");
         const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
-        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail" && !k.bayraksiz) ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); ad.appendChild(el("span", "rozet " + k.tur, TUR[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
+        const ad = el("div", "kim-ad"); if (k.bolge === "İsrail" && !k.bayraksiz) ad.insertAdjacentHTML("afterbegin", BAYRAK); ad.append(k.ad); if (ROZETLI[k.tur]) ad.appendChild(el("span", "rozet sahip", ROZETLI[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", h.baslik_tr || h.baslik_orj));
         if (h.baslik_tr && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const bv = o.bakislar && o.bakislar[h.id];
@@ -485,7 +487,7 @@
     if (dk(h.tarih) < 30) roz.appendChild(el("span", "rozet yeni", "YENİ"));
     if (h.nitelik === "analiz") roz.appendChild(el("span", "rozet analiz", "Analiz"));
     if (h.telegram) roz.appendChild(el("span", "rozet tg", "Telegram"));
-    roz.appendChild(el("span", "rozet " + k.tur, TUR[k.tur] || k.tur));
+    if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));
     ust.appendChild(roz);
     g.appendChild(ust);
     if (h.baslik_tr) {
