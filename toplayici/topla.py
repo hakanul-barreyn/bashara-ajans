@@ -37,8 +37,10 @@ HABERLER = os.path.join(KOK, "data", "haberler.json")
 DURUM = os.path.join(KOK, "data", "durum.json")
 
 UA = "ZBS-haber-toplayici/1.0 (+https://github.com)"
-SAKLA_GUN = 3
-EN_FAZLA_HABER = 4000
+SAKLA_GUN = 2
+EN_FAZLA_HABER = 6000
+KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
+KESIF_SURUMU = 2
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 45)
 PARTI = 15
 YENIDEN_KESIF_GUN = 7
@@ -248,7 +250,7 @@ def telegram_coz(metin, kanal):
         if not (m and y):
             continue
         metin_ = temiz(y.group(1), 700)
-        if len(metin_) < 25:
+        if len(metin_) < 15:
             continue
         cikti.append({
             "url": "https://t.me/" + m.group(1),
@@ -325,6 +327,22 @@ def kesfet(k):
             if h.lower() not in ("share", "joinchat", "addstickers", "iv", "s"):
                 sonuc["telegram"] = h
                 break
+
+    # 0) Kaynak listesinde elle verilmiş besleme adresleri
+    for a in k.get("besleme") or []:
+        r = dene_besleme(a) or dene_harita(a)
+        if r:
+            sonuc["yontem"] = r
+            break
+
+    # Telegram adayları (sayfada bağlantı bulunamadıysa)
+    if not sonuc["telegram"]:
+        for h in k.get("telegram_aday") or []:
+            if cek_telegram(h):
+                sonuc["telegram"] = h
+                break
+    if sonuc["yontem"]:
+        return sonuc
 
     # 1) Alt bölüm verilmişse önce o sayfanın kendi beslemesi
     adaylar = []
@@ -410,7 +428,9 @@ def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
     son_kesif = tarih_coz(d.get("kesif")) or SIMDI - dt.timedelta(days=99)
     gecen = SIMDI - son_kesif
-    if d.get("yontem"):
+    if d.get("surum") != KESIF_SURUMU:
+        gerek = True
+    elif d.get("yontem"):
         gerek = d.get("hata", 0) >= 3 or gecen.days >= YENIDEN_KESIF_GUN
     else:
         gerek = gecen >= dt.timedelta(hours=24)  # yol bulunamadıysa günde bir kez yeniden dene
@@ -419,6 +439,7 @@ def kaynak_isle(k, durum):
         d["yontem"] = s["yontem"]
         d["telegram"] = s["telegram"] or d.get("telegram")
         d["kesif"] = SIMDI.isoformat()
+        d["surum"] = KESIF_SURUMU
         d["hata"] = 0
     ogeler = cek(d.get("yontem")) if d.get("yontem") else None
     if ogeler is None:
@@ -433,7 +454,8 @@ def kaynak_isle(k, durum):
         if tg:
             d["son_basari"] = SIMDI.isoformat()
     d["son_oge"] = len(ogeler)
-    return k, d, ogeler
+    ogeler.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
+    return k, d, ogeler[:KAYNAK_BASINA]
 
 
 # ---------------------------------------------------------------- Gemini
@@ -607,7 +629,7 @@ def main():
     tut = tut[:EN_FAZLA_HABER]
     for h in tut:
         h.pop("_malzeme", None)
-        if h.get("ozet_tr") or h.get("atla"):
+        if h.get("ozet_tr") or h.get("atla") or not h.get("ilgili"):
             h["giris"] = ""  # özeti yazılanların ham metnini saklamıyoruz
         else:
             h["giris"] = h.get("giris", "")[:300]

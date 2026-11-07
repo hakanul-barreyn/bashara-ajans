@@ -87,7 +87,12 @@
   "liste": true,
   "notu": "",
   "id": 5,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "almayadeen",
+   "AlMayadeenNews"
+  ]
  },
  {
   "ad": "Al Mayadeen English",
@@ -105,7 +110,12 @@
   "liste": true,
   "notu": "",
   "id": 6,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "AlMayadeenEnglish",
+   "almayadeenenglish"
+  ]
  },
  {
   "ad": "The Cradle",
@@ -123,7 +133,15 @@
   "liste": true,
   "notu": "",
   "id": 7,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://thecradle.co/rss",
+   "https://thecradle.co/feed"
+  ],
+  "telegram_aday": [
+   "thecradlemedia",
+   "TheCradleMedia"
+  ]
  },
  {
   "ad": "The Cradle Türkiye",
@@ -159,7 +177,11 @@
   "liste": false,
   "notu": "",
   "id": 9,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.lorientlejour.com/rss"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Daraj",
@@ -195,7 +217,14 @@
   "liste": true,
   "notu": "",
   "id": 11,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://qudsnen.co/feed/"
+  ],
+  "telegram_aday": [
+   "QudsNen",
+   "QudsN"
+  ]
  },
  {
   "ad": "Al-Quds",
@@ -231,7 +260,12 @@
   "liste": false,
   "notu": "",
   "id": 13,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "WAFAgency",
+   "wafanews"
+  ]
  },
  {
   "ad": "Arab48",
@@ -267,7 +301,13 @@
   "liste": false,
   "notu": "",
   "id": 15,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.972mag.com/feed/"
+  ],
+  "telegram_aday": [
+   "mag972"
+  ]
  },
  {
   "ad": "Middle East Monitor",
@@ -321,7 +361,11 @@
   "liste": false,
   "notu": "",
   "id": 18,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://electronicintifada.net/rss.xml"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Haaretz",
@@ -555,7 +599,11 @@
   "liste": false,
   "notu": "",
   "id": 31,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "raialyoum"
+  ]
  },
  {
   "ad": "Middle East Eye",
@@ -573,7 +621,11 @@
   "liste": true,
   "notu": "",
   "id": 32,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "middleeasteye"
+  ]
  },
  {
   "ad": "Al Arabiya",
@@ -591,7 +643,13 @@
   "liste": false,
   "notu": "",
   "id": 33,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://english.alarabiya.net/feed/rss2/en.xml"
+  ],
+  "telegram_aday": [
+   "AlArabiya_Eng"
+  ]
  },
  {
   "ad": "Arab News",
@@ -609,7 +667,11 @@
   "liste": false,
   "notu": "",
   "id": 34,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.arabnews.com/rss.xml"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "The National",
@@ -735,7 +797,11 @@
   "liste": true,
   "notu": "",
   "id": 41,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "almanassa"
+  ]
  },
  {
   "ad": "Rassd",
@@ -771,7 +837,14 @@
   "liste": false,
   "notu": "",
   "id": 43,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://english.enabbaladi.net/feed/"
+  ],
+  "telegram_aday": [
+   "EnabBaladiEnglish",
+   "enabbaladi"
+  ]
  },
  {
   "ad": "SANA",
@@ -897,7 +970,12 @@
   "liste": false,
   "notu": "",
   "id": 50,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "TasnimNewsEN",
+   "Tasnimnews"
+  ]
  },
  {
   "ad": "Press TV",
@@ -915,7 +993,14 @@
   "liste": false,
   "notu": "",
   "id": 51,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.presstv.ir/rss.xml",
+   "https://www.presstv.ir/RSS"
+  ],
+  "telegram_aday": [
+   "presstv"
+  ]
  },
  {
   "ad": "Al-Masirah",
@@ -933,7 +1018,12 @@
   "liste": false,
   "notu": "",
   "id": 52,
-  "telegram": null
+  "telegram": null,
+  "besleme": [],
+  "telegram_aday": [
+   "almasirahbreaking",
+   "almasirah"
+  ]
  },
  {
   "ad": "TSA (Tout sur l’Algérie)",
@@ -1023,7 +1113,11 @@
   "liste": false,
   "notu": "",
   "id": 57,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.aps.dz/fr/?format=feed&type=rss"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "El Watan",
@@ -1041,7 +1135,11 @@
   "liste": false,
   "notu": "",
   "id": 58,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://elwatan-dz.com/feed"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Le Matin d’Algérie",
@@ -1113,7 +1211,11 @@
   "liste": true,
   "notu": "",
   "id": 62,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.businessnews.com.tn/rss.xml"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Nawaat",
@@ -1167,7 +1269,12 @@
   "liste": true,
   "notu": "",
   "id": 65,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://libyaobserver.ly/rss.xml",
+   "https://libyaobserver.ly/feed"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Anadolu Ajansı (Dünya)",
@@ -1383,7 +1490,12 @@
   "liste": false,
   "notu": "",
   "id": 77,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://bianet.org/rss",
+   "https://bianet.org/biamag.rss"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "The New York Times",
@@ -1419,7 +1531,12 @@
   "liste": false,
   "notu": "",
   "id": 79,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://feeds.washingtonpost.com/rss/world/middle-east",
+   "https://feeds.washingtonpost.com/rss/world"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Axios",
@@ -1545,7 +1662,11 @@
   "liste": true,
   "notu": "",
   "id": 86,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://maritime-executive.com/articles.rss"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "MuslimMatters",
@@ -1563,7 +1684,11 @@
   "liste": true,
   "notu": "Haritada ABD’ye yaklaşık olarak konuldu.",
   "id": 87,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://muslimmatters.org/feed/"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Reuters",
@@ -1617,7 +1742,12 @@
   "liste": false,
   "notu": "",
   "id": 90,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml",
+   "https://feeds.bbci.co.uk/news/world/rss.xml"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "The Muslim News",
@@ -1635,7 +1765,11 @@
   "liste": true,
   "notu": "",
   "id": 91,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://muslimnews.co.uk/feed/"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "elDiario.es",
@@ -1671,7 +1805,11 @@
   "liste": false,
   "notu": "",
   "id": 93,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://www.publico.es/rss/"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "El Salto",
@@ -1707,7 +1845,11 @@
   "liste": false,
   "notu": "",
   "id": 95,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://ctxt.es/es/rss"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Naiz / Gara",
@@ -1797,7 +1939,11 @@
   "liste": false,
   "notu": "",
   "id": 100,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/internacional/portada"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "El Mundo",
@@ -2031,7 +2177,11 @@
   "liste": false,
   "notu": "",
   "id": 113,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://rss.sueddeutsche.de/rss/Politik"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Deutsche Welle",
@@ -2139,7 +2289,11 @@
   "liste": false,
   "notu": "",
   "id": 119,
-  "telegram": null
+  "telegram": null,
+  "besleme": [
+   "https://orientxxi.info/?page=backend"
+  ],
+  "telegram_aday": []
  },
  {
   "ad": "Le Monde diplomatique",

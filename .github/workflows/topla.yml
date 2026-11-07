@@ -1,12 +1,20 @@
 name: Haberleri topla
 
+# Veri (data/) ana dalda değil, tek bir commit olarak tutulan "veri" dalında durur.
+# Böylece her 15 dakikada bir yapılan güncelleme deponun geçmişini şişirmez.
+# Site, kod ile güncel veri birleştirilerek GitHub Pages'e doğrudan yayımlanır.
+
 on:
   schedule:
     - cron: "*/15 * * * *"   # 15 dakikada bir (GitHub yoğunken birkaç dakika gecikebilir)
   workflow_dispatch: {}       # Actions sekmesinden elle çalıştırmak için
+  push:
+    branches: [main]          # kod değişince siteyi hemen yenile
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: topla
@@ -15,9 +23,22 @@ concurrency:
 jobs:
   topla:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 14
+    environment:
+      name: github-pages
+      url: ${{ steps.yayin.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Önceki veriyi al
+        run: |
+          mkdir -p data
+          if git fetch --depth 1 origin veri 2>/dev/null; then
+            git checkout FETCH_HEAD -- data && git reset -q
+          else
+            echo '{"guncellendi":null,"haberler":[]}' > data/haberler.json
+            echo '{}' > data/durum.json
+          fi
 
       - uses: actions/setup-python@v5
         with:
@@ -30,18 +51,24 @@ jobs:
           OZET_SINIRI: ${{ vars.OZET_SINIRI }}
         run: python toplayici/topla.py
 
-      - name: Değişiklikleri kaydet
+      - name: Veriyi kaydet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "zbs-toplayici"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/
-          if git diff --cached --quiet; then
-            echo "Yeni haber yok"
-            exit 0
-          fi
-          git commit -m "Haberler: $(date -u +'%Y-%m-%d %H:%M') UTC"
-          for i in 1 2 3; do
-            git pull --rebase -X ours origin "${GITHUB_REF_NAME}" && git push && exit 0
-            sleep 5
-          done
-          exit 1
+          V="$RUNNER_TEMP/veri"
+          rm -rf "$V" && mkdir -p "$V" && cp -r data "$V/"
+          cd "$V"
+          git init -q -b veri
+          git add -A
+          git -c user.name="zbs-toplayici" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Veri: $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" veri
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: yayin
+        uses: actions/deploy-pages@v4

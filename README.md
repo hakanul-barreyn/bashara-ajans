@@ -11,14 +11,14 @@ Mağrip’ten Körfez’e, Meşrik’ten Anadolu’ya ve Avrupa ile ABD’ye uza
 | Konu filtresi | Hangi haberlerin özetleneceğini belirleyen kelime listesi (9 dil) | `toplayici/konular.py` |
 | Zamanlayıcı | Toplayıcıyı 15 dakikada bir çalıştırıp sonucu depoya kaydeder | `.github/workflows/topla.yml` |
 | Site | Harita, haber akışı, süzgeçler, arşiv tuşları ve kaynak profilleri | `index.html`, `kaynaklar.html`, `site/` |
-| Veri | Son üç günün haberleri ve her kaynağın izleme durumu | `data/haberler.json`, `data/durum.json` |
+| Veri | Son iki günün haberleri ve her kaynağın izleme durumu. Deponun geçmişini şişirmesin diye ana dalda değil, tek commit olarak tutulan `veri` dalında | `veri` dalı: `data/haberler.json`, `data/durum.json` |
 
 Toplayıcı yalnızca Python’un standart kütüphanesini kullanır, `robots.txt` kurallarına uyar ve özet yazılan haberlerin ham metnini saklamaz. Sitede yalnızca Türkçe başlık, kendi cümlelerimizle yazılmış özet ve orijinal habere bağlantı yer alır.
 
 ## Kurulum
 
 1. **Anahtar:** Settings → Secrets and variables → Actions → New repository secret. Ad: `GEMINI_API_KEY`, değer: Google AI Studio’dan aldığın anahtar.
-2. **Site:** Settings → Pages → Source: “Deploy from a branch”, Branch: `main`, klasör: `/ (root)` → Save. Birkaç dakika sonra site `https://KULLANICIADI.github.io/DEPOADI/` adresinde açılır.
+2. **Site:** Settings → Pages → Source: **GitHub Actions**. Site her toplamadan sonra kendiliğinden yeniden yayımlanır ve `https://KULLANICIADI.github.io/DEPOADI/` adresinde açılır.
 3. **İlk çalıştırma:** Actions sekmesi → “Haberleri topla” → Run workflow. Sonrasında kendiliğinden 15 dakikada bir çalışır.
 
 ## Ayarlar (isteğe bağlı)
@@ -30,7 +30,7 @@ Settings → Secrets and variables → Actions → **Variables** sekmesinden:
 
 ## Kaynak eklemek
 
-`kaynaklar.json` dosyasına aynı biçimde bir kayıt ekle (`id` benzersiz olmalı). Toplayıcı bir sonraki çalıştırmada izleme yolunu kendisi arar. Telegram kanalını elle belirtmek için `"telegram": "kanaladi"` yaz.
+`kaynaklar.json` dosyasına aynı biçimde bir kayıt ekle (`id` benzersiz olmalı). Toplayıcı bir sonraki çalıştırmada izleme yolunu kendisi arar. Bilinen bir RSS adresini `"besleme": ["https://..."]`, Telegram kanalını `"telegram": "kanaladi"` ile elle verebilirsin; emin olmadığın kanal adlarını `"telegram_aday": ["ad1", "ad2"]` olarak yazarsan toplayıcı çalışanı kendisi seçer.
 
 ## Sorun giderme
 
