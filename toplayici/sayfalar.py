@@ -12,6 +12,7 @@ import json
 import os
 import re
 
+import almanak
 import marka
 
 SAKLA_GUN = 7
@@ -56,7 +57,44 @@ def _dogrulama_blogu(dg, dil):
             f'<b>{_e(tr if dil == "tr" else en)}</b> {_e(dg.get("aciklama", ""))}{kanit}</p>')
 
 
-def sayfa(h, k, M, site, surum, dg=None):
+BAKIS = {"filistin": ("Filistin bakışı", "Palestinian lens", "#2b8a5e"), "aktarim": ("aktarım", "relaying", "#8d969e"),
+         "israil": ("İsrail / ABD bakışı", "Israeli / US lens", "#4a72c4")}
+
+
+def _kim_nasil(olay, h, kmap, sayfa_var, dil):
+    """Haberin ait olduğu olayı öteki yayınlar nasıl anlattı: kamp kamp, bakış ve kısa betimleme."""
+    if not olay or len(olay.get("haberler", [])) < 2:
+        return ""
+    sira = {k: i for i, k in enumerate(almanak.KAMP_SIRA)}
+    satir = []
+    for x in sorted(olay["haberler"], key=lambda x: (sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or "")):
+        k = kmap.get(x.get("k"))
+        if not k:
+            continue
+        b = BAKIS.get(x.get("b"))
+        nokta = f'<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{b[2] if b else "#c9cfcb"};margin-right:6px"></span>'
+        hedef = f'{x["id"]}.html' if x["id"] in sayfa_var else (x.get("u") or "")
+        if not str(hedef).endswith(".html") and not str(hedef).startswith(("http://", "https://")):
+            hedef = ""
+        ad = _e(k["ad"])
+        ad = f'<a href="{_e(hedef)}" style="color:inherit">{ad}</a>' if hedef else ad
+        bu = (' <small style="font-family:var(--mono);font-size:.66rem;background:var(--yuzey);border-radius:999px;padding:1px 7px">'
+              + ("bu haber" if dil == "tr" else "this story") + "</small>") if x["id"] == h["id"] else ""
+        meta = _e(almanak.kamp(k)) + (" · " + _e(b[0] if dil == "tr" else b[1]) if b else "")
+        satir.append(f'<li style="list-style:none;padding:10px 0;border-top:1px solid var(--k-cizgi)">{nokta}<b>{ad}</b>{bu}'
+                     f'<br><small style="color:var(--k-soluk)">{meta}</small>'
+                     + (f'<br><span style="color:var(--k-ink2)">{_e(x.get("y"))}</span>' if x.get("y") else "") + "</li>")
+    if len(satir) < 2:
+        return ""
+    bas = "Kim nasıl yazdı" if dil == "tr" else "Who told it how"
+    return (f'<section class="hs-kart" id="kim-{dil}" style="margin-top:16px;scroll-margin-top:80px"><h2 style="margin:0;font-size:1.15rem">{bas} · '
+            f'{len({x.get("k") for x in olay["haberler"]})} {"yayın" if dil == "tr" else "outlets"}</h2>'
+            f'<p style="margin:0;font-weight:700">{_e(olay.get("baslik"))}</p>'
+            + (f'<p style="margin:0;color:var(--k-ink2)">{_e(olay.get("not"))}</p>' if olay.get("not") else "")
+            + f'<ul style="margin:0;padding:0">{"".join(satir)}</ul></section>')
+
+
+def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=()):
     bas_tr = h.get("baslik_tr") or h.get("baslik_orj") or ""
     oz_tr = h.get("ozet_tr") or ""
     bas_en, oz_en = h.get("baslik_en") or bas_tr, h.get("ozet_en") or oz_tr
@@ -78,9 +116,9 @@ def sayfa(h, k, M, site, surum, dg=None):
         if h.get("baslik_orj") and h.get("baslik_orj") != bas:
             p.append(f'<p class="hs-orj" dir="auto" lang="{_e(h.get("dil", ""))}"><small>{_e(ozgun)}</small> {_e(h["baslik_orj"])}</p>')
         p.append('<p class="hs-eylem">'
-                 f'<a class="eylem ana" href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(git)} ↗</a>'
-                 f'<a class="eylem" href="../#o-{_e(h["id"])}">{_e(kim)}</a>'
-                 f'<a class="eylem" href="../">{_e(tum)}</a></p>')
+                 + f'<a class="eylem ana" href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(git)} ↗</a>'
+                 + (f'<a class="eylem" href="#kim-{dil}">{_e(kim)} ↓</a>' if olay and len(olay.get("haberler", [])) >= 2 else "")
+                 + f'<a class="eylem" href="../">{_e(tum)}</a></p>')
         p.append("</div>")
         return "".join(p)
 
@@ -138,6 +176,7 @@ def sayfa(h, k, M, site, surum, dg=None):
 </header>
 <main class="hs">
 <article class="hs-kart">{govde}</article>
+<div data-dil="tr">{_kim_nasil(olay, h, kmap or {}, sayfa_var, "tr")}</div><div data-dil="en">{_kim_nasil(olay, h, kmap or {}, sayfa_var, "en")}</div>
 <p class="hs-not"><span data-dil="tr">Bu özet, yayının kendi haberinden yapay zekâyla yazıldı; haberin aslı yayının sitesinde.</span><span data-dil="en">This summary was written with AI from the outlet's own report; the original is on the outlet's site.</span></p>
 </main>
 </body>
@@ -159,6 +198,17 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     os.makedirs(d, exist_ok=True)
     sinir = (simdi - dt.timedelta(days=SAKLA_GUN)).isoformat()
     surum = simdi.strftime("%Y%m%d")
+    # Haber -> olay (son SAKLA_GUN+1 günün olay arşivinden; yeni günün kaydı eskisinin üstüne yazar)
+    olay_of = {}
+    for n in range(SAKLA_GUN + 1, -1, -1):
+        g = (simdi - dt.timedelta(days=n)).date().isoformat()
+        try:
+            for o in json.load(open(os.path.join(kok, "data", "olay-arsiv", g + ".json"), encoding="utf-8")):
+                for x in o.get("haberler", []):
+                    olay_of[x["id"]] = o
+        except Exception:
+            pass
+    sayfa_var = {h["id"] for h in haberler}
     tut, yeni = set(), 0
     for h in haberler:
         k = kmap.get(h.get("kaynak"))
@@ -168,7 +218,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             continue
         ad = f"{h['id']}.html"
         tut.add(ad)
-        metin = sayfa(h, k, M, site, surum, etiketler.get(h["id"]))
+        metin = sayfa(h, k, M, site, surum, etiketler.get(h["id"]), olay_of.get(h["id"]), kmap, sayfa_var)
         yol = os.path.join(d, ad)
         try:
             if open(yol, encoding="utf-8").read() == metin:
