@@ -24,13 +24,15 @@
 
 
   // Bir bayrak: zincirden sarkan dikey bayrak (yeşil-beyaz-siyah şerit, üstte kırmızı üçgen)
+  // Asılma noktası dış grubun (0,0) noktası: sallanma ve savrulma hep ipteki noktanın çevresinde döner
   function bayrak(x, y, aci, s) {
-    var w = 34 * s, h = 52 * s;
-    return '<g class="kt-bayrak" style="transform-origin:' + x + 'px ' + y + 'px;animation-delay:' + (-Math.random() * 3).toFixed(2) + 's" transform="rotate(' + aci.toFixed(1) + ' ' + x + ' ' + y + ')">' +
-      '<rect x="' + (x - w / 2) + '" y="' + y + '" width="' + (w / 3) + '" height="' + h + '" fill="' + YESIL + '"/>' +
-      '<rect x="' + (x - w / 2 + w / 3) + '" y="' + y + '" width="' + (w / 3) + '" height="' + h + '" fill="' + BEYAZ + '"/>' +
-      '<rect x="' + (x - w / 2 + 2 * w / 3) + '" y="' + y + '" width="' + (w / 3) + '" height="' + h + '" fill="' + SIYAH + '"/>' +
-      '<path d="M' + (x - w / 2) + ' ' + y + 'H' + (x + w / 2) + 'L' + x + ' ' + (y + h * 0.42) + 'Z" fill="' + KIRMIZI + '"/></g>';
+    var w = 34 * s, h = 52 * s, x0 = -w / 2;
+    return '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (aci * 0.3).toFixed(1) + ')">' +
+      '<g class="kt-bayrak" style="animation-delay:' + (-Math.random() * 3).toFixed(2) + 's">' +
+      '<rect x="' + x0 + '" y="0" width="' + (w / 3) + '" height="' + h + '" fill="' + YESIL + '"/>' +
+      '<rect x="' + (x0 + w / 3) + '" y="0" width="' + (w / 3) + '" height="' + h + '" fill="' + BEYAZ + '"/>' +
+      '<rect x="' + (x0 + 2 * w / 3) + '" y="0" width="' + (w / 3) + '" height="' + h + '" fill="' + SIYAH + '"/>' +
+      '<path d="M' + x0 + ' 0H' + (w / 2) + 'L0 ' + (h * 0.42) + 'Z" fill="' + KIRMIZI + '"/></g></g>';
   }
   // Bir zincir: iki uç arasında sarkan ip (ikinci dereceden eğri) ve üzerindeki bayraklar
   function zincir(W, y1, y2, sark, adet, s) {
@@ -65,7 +67,10 @@
       'background:rgba(12,14,12,.58);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:kt-gir .5s ease both;overflow:hidden}' +
       '#kutlama svg.kt-zincir{position:absolute;left:0;width:100%;height:auto;pointer-events:none}' +
       '#kutlama .kt-z1{top:-6px}#kutlama .kt-z2{top:-6px}' +
-      '.kt-bayrak{animation:kt-salla 2.8s ease-in-out infinite alternate}' +
+      '.kt-bayrak{transform-box:view-box;transform-origin:0 0;animation:kt-salla 2.8s ease-in-out infinite alternate;pointer-events:auto}' +
+      '.kt-bayrak.kt-carp{animation:kt-carp 1.5s cubic-bezier(.25,.6,.35,1)}' +
+      '@keyframes kt-carp{0%{transform:rotate(0)}15%{transform:rotate(calc(var(--yon)*24deg*var(--guc)))}35%{transform:rotate(calc(var(--yon)*-15deg*var(--guc)))}' +
+      '55%{transform:rotate(calc(var(--yon)*9deg*var(--guc)))}75%{transform:rotate(calc(var(--yon)*-4deg*var(--guc)))}100%{transform:rotate(0)}}' +
       '#kutlama .kt-pano{position:relative;z-index:2;width:min(560px,100%);background:' + BEYAZ + ';color:' + SIYAH + ';border-radius:6px;overflow:hidden;' +
       'box-shadow:0 30px 80px rgba(0,0,0,.45);animation:kt-pano .7s cubic-bezier(.2,.9,.3,1.2) .15s both;text-align:center}' +
       '#kutlama .kt-pano svg{display:block;width:100%;height:auto}' +
@@ -119,6 +124,24 @@
       kok.appendChild(c);
     }
     document.body.appendChild(kok);
+
+    // İmleç bayrakların üzerinden geçince bayrak (ve iki yanındakiler daha az) imlecin gittiği yöne savrulur
+    var sonX = null, hiz = 1;
+    kok.addEventListener("pointermove", function (e) { if (sonX != null) hiz = e.clientX - sonX; sonX = e.clientX; });
+    kok.querySelectorAll("svg.kt-zincir").forEach(function (z) {
+      var bayraklar = Array.prototype.slice.call(z.querySelectorAll(".kt-bayrak"));
+      bayraklar.forEach(function (b, i) {
+        b.addEventListener("pointerenter", function () {
+          var yon = hiz < 0 ? -1 : 1;
+          [[i, 1], [i - 1, .45], [i + 1, .45]].forEach(function (c) {
+            var f = bayraklar[c[0]]; if (!f) return;
+            f.style.setProperty("--yon", yon); f.style.setProperty("--guc", c[1] * Math.min(1.6, .7 + Math.abs(hiz) / 25));
+            f.classList.remove("kt-carp"); void f.getBoundingClientRect(); f.classList.add("kt-carp");
+          });
+        });
+        b.addEventListener("animationend", function (e) { if (e.animationName === "kt-carp") b.classList.remove("kt-carp"); });
+      });
+    });
 
     // Yalnızca okurun kendi hareketi kapatır: tekerlek, tıklama, dokunup kaydırma, tuş. İmleç gezdirmek ve sayfanın
     // kendiliğinden kayması (tarayıcının kaydırma konumunu geri yüklemesi gibi) kapatmaz.

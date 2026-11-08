@@ -29,7 +29,7 @@
     kok.querySelectorAll("[data-dil]").forEach(function (x) { x.hidden = x.dataset.dil !== DIL; });
   }
 
-  // Gerçek harita: Leaflet + OpenStreetMap verisi (CARTO Voyager altlığı, etiketler Latin harfli). Görününce yüklenir.
+  // Gerçek harita: Leaflet + OpenStreetMap'in kendi harita karoları (anahtar gerektirmez, atıf yeterli). Görününce yüklenir.
   var leafletSoz = null;
   function leaflet() {
     if (leafletSoz) return leafletSoz;
@@ -47,9 +47,9 @@
       var d = x.target, la = +d.dataset.lat, lo = +d.dataset.lon;
       leaflet().then(function (L) {
         var h = L.map(d, { scrollWheelZoom: false, dragging: !L.Browser.mobile, tap: false, zoomControl: true, attributionControl: true }).setView([la, lo], 8);
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-          subdomains: "abcd", maxZoom: 18,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
         }).addTo(h);
         L.circleMarker([la, lo], { radius: 22, color: "#c9302c", weight: 1, fillColor: "#c9302c", fillOpacity: .15 }).addTo(h);
         var m = L.circleMarker([la, lo], { radius: 7, color: "#fff", weight: 2, fillColor: "#c9302c", fillOpacity: 1 }).addTo(h);
