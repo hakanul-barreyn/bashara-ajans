@@ -6,7 +6,12 @@ name: Geriye dönük tarama
 on:
   schedule:
     - cron: "23 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      sadece_ozet:
+        description: "Taramayı atla, yalnızca Almanak özetini yeniden yaz"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -34,6 +39,7 @@ jobs:
           python-version: "3.12"
 
       - name: Tara
+        if: ${{ !inputs.sadece_ozet }}
         env:
           TARAMA_SURE: "2500"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
