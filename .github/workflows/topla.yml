@@ -47,7 +47,7 @@ jobs:
 
       - name: Görsel kart aracı
         run: |
-          command -v rsvg-convert >/dev/null || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null)) || true
+          (command -v rsvg-convert >/dev/null && fc-list | grep -qi 'Inter Display') || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null)) || true
           pip install -q pillow || true
 
       - name: Haberleri çek ve özetle

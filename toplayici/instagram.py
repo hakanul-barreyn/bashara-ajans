@@ -31,6 +31,8 @@ import urllib.parse
 import urllib.request
 
 import almanak
+import ekler
+import ig_kart
 import marka
 
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 4)
@@ -72,129 +74,7 @@ def site_adresi():
     return f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else ""
 
 
-# ------------------------------------------------------------------ kart çizimi
-def _logo(kok):
-    try:
-        s = open(os.path.join(kok, "site", "logo.svg"), encoding="utf-8").read()
-        ic = s[s.index(">", s.index("<svg")) + 1:s.rindex("</svg>")]
-        for a in ("sol", "sag", "kure"):
-            ic = ic.replace(f'id="{a}"', f'id="i-{a}"').replace(f"url(#{a})", f"url(#i-{a})")
-        return ic
-    except Exception:
-        return ""
-
-
-def _cerceve(kok, ic, sayfa, toplam, alan):
-    M = marka.oku(kok)
-    p = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{G}" height="{Y}" viewBox="0 0 {G} {Y}">',
-         f'<rect width="{G}" height="{Y}" fill="{ZEMIN}"/>',
-         f'<rect width="{G // 2}" height="14" fill="{YESIL}"/><rect x="{G // 2}" width="{G // 2}" height="14" fill="{KIRMIZI}"/>',
-         ic,
-         f'<line x1="70" y1="{Y - 112}" x2="{G - 70}" y2="{Y - 112}" stroke="{CIZGI}" stroke-width="2"/>',
-         f'<g transform="translate(70 {Y - 92}) scale(.82)">{_logo(kok)}</g>',
-         f'<text x="140" y="{Y - 50}" font-family="{F}" font-size="30" font-weight="bold" fill="{MUREKKEP}">{_e(M["ad"])}</text>',
-         f'<text x="{140 + 24 * len(M["ad"]) + 20}" y="{Y - 50}" font-family="{F}" font-size="24" fill="{SOLUK}">{_e(alan)}</text>']
-    if toplam > 1:
-        p.append(f'<text x="{G - 70}" y="{Y - 50}" text-anchor="end" font-family="{F}" font-size="26" fill="{SOLUK}">{sayfa} / {toplam}</text>')
-    p.append("</svg>")
-    return "\n".join(p)
-
-
-def _metin(x, y, satirlar, boy, renk=MUREKKEP, kalin=False, aralik=1.28):
-    k = ' font-weight="bold"' if kalin else ""
-    p = [f'<text x="{x}" y="{y + i * boy * aralik:.0f}" font-family="{F}" font-size="{boy}"{k} fill="{renk}">{_e(s)}</text>'
-         for i, s in enumerate(satirlar)]
-    return "".join(p), y + len(satirlar) * boy * aralik
-
-
-def _etiket(y, metin, renk):
-    return f'<text x="70" y="{y}" font-family="{F}" font-size="26" font-weight="bold" fill="{renk}" letter-spacing="3">{_e(metin)}</text>'
-
-
-def _denge_cubugu(y, sayi):
-    toplam = sum(sayi.values()) or 1
-    p, x = [], 70.0
-    for v in ("filistin", "aktarim", "israil"):
-        w = 940 * sayi.get(v, 0) / toplam
-        if w > 0:
-            p.append(f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="26" fill="{BAKIS_RENK[v]}"/>')
-            x += w
-    p.insert(0, f'<rect x="70" y="{y}" width="940" height="26" rx="13" fill="{CIZGI}"/>')
-    # köşeleri yuvarlatmak için üstüne zemin renginde maske yerine kırpma
-    p = [f'<clipPath id="cub"><rect x="70" y="{y}" width="940" height="26" rx="13"/></clipPath>',
-         f'<g clip-path="url(#cub)">'] + p + ["</g>"]
-    lx, ly = 70, y + 66
-    for v in ("filistin", "aktarim", "israil"):
-        if sayi.get(v):
-            t = f"{BAKIS_AD[v]} {sayi[v]}"
-            p.append(f'<circle cx="{lx + 11}" cy="{ly - 9}" r="11" fill="{BAKIS_RENK[v]}"/>')
-            p.append(f'<text x="{lx + 32}" y="{ly}" font-family="{F}" font-size="26" fill="{MUREKKEP}">{_e(t)}</text>')
-            lx += 32 + int(len(t) * 15.5) + 34
-    return "".join(p), ly + 20
-
-
-def kapak_svg(kok, o, tur, ozet, sayfa, toplam, alan):
-    tarih = dt.datetime.fromisoformat(o.get("son") or o.get("ilk")).astimezone(dt.timezone(dt.timedelta(hours=3)))
-    AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
-    p = []
-    if tur == "sessiz":
-        p.append(_etiket(110, "İSRAİL VE BATI BASINI YAZMADI", KIRMIZI))
-    else:
-        p.append(_etiket(110, "KİM NASIL YAZDI", YESIL))
-    p.append(f'<text x="{G - 70}" y="110" text-anchor="end" font-family="{F}" font-size="26" fill="{SOLUK}">{tarih.day} {AY[tarih.month - 1]} {tarih.year}</text>')
-    s, y = _metin(70, 200, _sar(o["baslik"], 25, 5), 64, kalin=True, aralik=1.2)
-    p.append(s)
-    y += 30
-    if tur == "sessiz":
-        p.append(f'<text x="70" y="{y + 110:.0f}" font-family="{F}" font-size="150" font-weight="bold" fill="{YESIL}">{ozet["bolge"]}</text>')
-        p.append(f'<text x="{70 + 95 * len(str(ozet["bolge"])) + 30}" y="{y + 60:.0f}" font-family="{F}" font-size="30" fill="{MUREKKEP}">bölge yayını yazdı</text>')
-        p.append(f'<text x="{70 + 95 * len(str(ozet["bolge"])) + 30}" y="{y + 104:.0f}" font-family="{F}" font-size="30" font-weight="bold" fill="{KIRMIZI}">İsrail ve Batı basınından: 0</text>')
-        y += 170
-        s, y = _metin(70, y + 20, _sar(" · ".join(ozet["adlar"]), 44, 5), 32, MUREKKEP, aralik=1.4)
-        p.append(s)
-    else:
-        s, y = _metin(70, y + 10, _sar(o.get("not"), 46, 9), 34, MUREKKEP, aralik=1.38)
-        p.append(s)
-        y += 30
-        p.append(_etiket(int(y + 10), "BAKIŞ DENGESİ", SOLUK))
-        s, y = _denge_cubugu(int(y + 36), ozet["bakis"])
-        p.append(s)
-    p.append(f'<text x="70" y="{Y - 150}" font-family="{F}" font-size="28" fill="{SOLUK}">{ozet["yayin"]} yayın · {ozet["haber"]} haber   ·   kaydır →</text>')
-    return _cerceve(kok, "".join(p), sayfa, toplam, alan)
-
-
-def grup_svg(kok, bloklar, sayfa, toplam, alan):
-    """bloklar: [("başlık", girdi) ya da ("girdi", girdi)] sırayla, yukarıdan aşağı akar."""
-    p, y = [], 96
-    for tur, g in bloklar:
-        if tur == "baslik":
-            y += 14
-            p.append(f'<text x="70" y="{y}" font-family="{F}" font-size="26" font-weight="bold" fill="{SOLUK}" letter-spacing="3">{_e(g.upper())}</text>')
-            p.append(f'<line x1="70" y1="{y + 18}" x2="{G - 70}" y2="{y + 18}" stroke="{CIZGI}" stroke-width="2"/>')
-            y += 74
-            continue
-        p.append(f'<circle cx="84" cy="{y - 12}" r="14" fill="{BAKIS_RENK.get(g["bakis"], CIZGI)}"/>')
-        p.append(f'<text x="112" y="{y}" font-family="{F}" font-size="36" font-weight="bold" fill="{MUREKKEP}">{_e(g["ad"])}</text>')
-        p.append(f'<text x="112" y="{y + 38}" font-family="{F}" font-size="24" fill="{SOLUK}">{_e(g["yer"])} · {_e(BAKIS_AD.get(g["bakis"], ""))}</text>')
-        s_, y = _metin(112, y + 86, g["_satir"], 32, MUREKKEP, aralik=1.34)
-        p.append(s_)
-        y += 44
-    return _cerceve(kok, "".join(p), sayfa, toplam, alan)
-
-
-def son_svg(kok, sayfa, toplam, alan):
-    p = [_etiket(110, "TAMAMI SİTEDE", YESIL)]
-    s, y = _metin(70, 260, ["Her yayının özgün haberi,", "Türkçe özeti ve bakış", "dengesi sitede."], 60, kalin=True, aralik=1.2)
-    p.append(s)
-    p.append(f'<text x="70" y="{y + 70:.0f}" font-family="{F}" font-size="40" font-weight="bold" fill="{YESIL}">{_e(alan)}</text>')
-    p.append(f'<text x="70" y="{y + 130:.0f}" font-family="{F}" font-size="30" fill="{MUREKKEP}">Bağlantı profilde.</text>')
-    s, _ = _metin(70, Y - 330, _sar("Başlangıç noktamız Filistin bakışı. Kartlardaki açıklamaları yapay zekâ, kaynakların "
-                                    "kendi haberlerine dayanarak yazdı; hangi yayının ne dediğini sitede özgün metinden doğrulayabilirsin.", 56, 5),
-                  26, SOLUK, aralik=1.4)
-    p.append(s)
-    return _cerceve(kok, "".join(p), sayfa, toplam, alan)
-
-
+# ------------------------------------------------------------------ görüntü dosyası
 def _jpeg(svg, yol):
     """SVG -> PNG (rsvg-convert) -> JPEG (Pillow ya da ImageMagick). Döndürür: başarılı mı"""
     if not shutil.which("rsvg-convert"):
@@ -246,11 +126,13 @@ def _olay_ozeti(o, haberler, kaynaklar):
         y = (o.get("yorumlar") or {}).get(i)
         if k["id"] not in yayinlar and y:
             yayinlar[k["id"]] = {"ad": k["ad"], "yer": f'{k.get("sehir", "")}', "bakis": v, "yorum": y,
-                                 "kamp": almanak.kamp(k), "cizgi": k.get("cizgi")}
+                                 "kamp": almanak.kamp(k), "cizgi": k.get("cizgi"), "hid": i,
+                                 "baslik": h.get("baslik_tr") or ""}
     return yayinlar, sayi, dislanan
 
 
 def adaylar(kay, olaylar, haberler, kaynaklar, simdi):
+    """Instagram'a uygun olaylar. Türler: sessiz (İsrail/Batı yazmadı), karsilastirma (iki taraf da yazdı), rakam (yalnızca bölge)."""
     cikti = []
     gonderilmis = [set(g) for _, g in kay.get("olay", [])]
     for o in olaylar:
@@ -260,19 +142,21 @@ def adaylar(kay, olaylar, haberler, kaynaklar, simdi):
         yayinlar, sayi, dislanan = _olay_ozeti(o, haberler, kaynaklar)
         if dislanan >= 0.4 * len(ids) or len(yayinlar) < 4:
             continue
-        kamplar = {y["kamp"] for y in yayinlar.values()}
         bolge = [y for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI and y["cizgi"] != "ik"]
         dis = [y for y in yayinlar.values() if y["kamp"] in almanak.DIS]
         ilk = dt.datetime.fromisoformat(o.get("ilk") or o.get("son"))
         yas = (simdi - ilk).total_seconds() / 3600
+        if yas > 36:
+            continue
         tum_dis = any(almanak.kamp(kaynaklar.get(haberler[i]["kaynak"])) in almanak.DIS for i in ids if i in haberler)
-        if not tum_dis and len(bolge) >= 4 and 6 <= yas <= 36:
+        if not tum_dis and len(bolge) >= 4 and yas >= 6:
             # Sessizlik kartında yalnızca bölgenin kendi basını: işbirlikçi çizgideki yayınlar (Iran International gibi) karışmasın
             yalniz = {i: y for i, y in yayinlar.items() if y["cizgi"] != "ik"}
-            cikti.append(("sessiz", 2 + len(bolge) / 10, o, (yalniz, sayi)))
-        elif dis and bolge and sum(1 for n in sayi.values() if n) >= 2 and yas <= 30 and len(kamplar) >= 3:
-            # İsrail/ABD bakışıyla yazılmış haber varsa karşılaştırma daha öğretici: öne al
-            cikti.append(("karsilastirma", 1 + (1 if sayi["israil"] else 0) + len(yayinlar) / 10, o, (yayinlar, sayi)))
+            cikti.append(("sessiz", 3 + len(bolge) / 10, o, (yalniz, sayi)))
+        elif dis and bolge and yas <= 30:
+            cikti.append(("karsilastirma", 2 + (1 if sayi["israil"] else 0) + len(yayinlar) / 10, o, (yayinlar, sayi)))
+        elif len(bolge) >= 4 and yas <= 30:
+            cikti.append(("rakam", 1 + len(bolge) / 10, o, (yayinlar, sayi)))
     cikti.sort(key=lambda x: -x[1])
     return cikti
 
@@ -281,42 +165,137 @@ def _klasor(kok, kimlik):
     return os.path.join(kok, "data", "instagram", kimlik)
 
 
-def olay_kartlari(kok, tur, o, yayinlar, sayi, alan):
-    """Kapak + kamp kamp yayınlar (kartlara sığdığı kadar akar) + kapanış; en çok 10 kart. Döndürür: SVG listesi"""
+# ------------------------------------------------------------------ gönderi planı (Gemini)
+PLAN_TALIMAT = """Bir Instagram haber gönderisi planlıyorsun. Aşağıdaki VERİ tek bir olayı ve onu yazan yayınların haberlerini içeriyor
+(Türkçe başlık, kısa Türkçe özet, yayının kampı ve bakışı).
+
+Kurallar:
+- Yalnızca VERİ'deki bilgileri kullan. Sayı, isim, yer, fail uydurma; VERİ'de olmayan hiçbir şeyi yazma.
+- Dil yalın, abartısız, Türkçe. Başlangıç noktamız Filistin bakışı: sivillerin ölümünü ya da yıkımı edilgen dille gizleme;
+  VERİ'de fail açıkça geçiyorsa söyle. Silahlı grupları övme ya da yüceltme; şiddete çağırma.
+- "kanca": okuru durduracak en fazla 55 karakterlik tek cümle ya da soru (örnek biçim: "Felaketin adı: sel mi, abluka mı?").
+- "ton": ölüm, yaralanma, yıkım, açlık, salgın ya da yerinden edilme haberiyse "yas"; siyasi, diplomatik, askeri açıklama ya da
+  medya çerçevesi haberiyse "medya".
+- "duello": aynı olayı belirgin biçimde farklı çerçeveleyen iki haber kimliği. "a" kampı Filistin / Arap dünyası / Türkiye /
+  İran ve Yemen olan bir haber; "b" kampı İsrail ya da Batı olan bir haber. Belirgin bir çerçeve farkı yoksa null.
+- "rakam": VERİ'de açıkça yazan en çarpıcı tek sayı (ölü, yaralı, yerinden edilmiş, yıkılan ev, su basan çadır, aç kalan çocuk …).
+  {"deger": "70.000+", "birim": "çadır su altında", "kaynak": "sayıyı veren yayının adı"}. "deger" yalnızca rakam, nokta ve
+  gerekirse + işaretinden oluşur; "birim" en çok 4 kelime. Böyle bir sayı yoksa null.
+- "govde": rakam kartı için bağlamı veren 1-2 cümle, en çok 170 karakter.
+- "etiketler": 3-5 Türkçe hashtag, # işareti olmadan ve boşluksuz (Gazze, Filistin, BatıŞeria, Lübnan …).
+
+Yalnızca şu JSON'u döndür:
+{"kanca": "...", "ton": "yas|medya", "duello": {"a": "haberId", "b": "haberId"} | null,
+ "rakam": {"deger": "...", "birim": "...", "kaynak": "..."} | null, "govde": "...", "etiketler": ["..."]}
+"""
+
+_SAYI = re.compile(r"(\d{1,3}(?:[.,]\d{3})+|\d+)(?:[.,](\d+))?\s*(bin|milyon)?", re.I)
+
+
+def _sayilar(metin):
+    """Metindeki sayıların değerleri: "70 bin", "70.000", "70,000", "1,5 milyon" …"""
+    deger = set()
+    for m in _SAYI.finditer(metin or ""):
+        tam = int(re.sub(r"[.,]", "", m.group(1)))
+        kesir = m.group(2)
+        carp = {"bin": 1000, "milyon": 1000000}.get((m.group(3) or "").lower(), 1)
+        if kesir and carp > 1 and len(kesir) <= 2:
+            deger.add(int(round((tam + int(kesir) / 10 ** len(kesir)) * carp)))
+        deger.add(tam * carp)
+    return deger
+
+
+def _plan_dogrula(p, o, yayinlar, haberler, girdi_metni):
+    if not isinstance(p, dict):
+        return None
+    temiz = lambda x, n: ekler.guvenli(str(x or "")).strip()[:n]
+    plan = {"kanca": temiz(p.get("kanca"), 70), "ton": "yas" if p.get("ton") == "yas" else "medya",
+            "govde": temiz(p.get("govde"), 220), "duello": None, "rakam": None, "etiketler": []}
+    hid = {y["hid"]: y for y in yayinlar.values()}
+    d = p.get("duello")
+    if isinstance(d, dict) and d.get("a") in hid and d.get("b") in hid:
+        a, b = hid[d["a"]], hid[d["b"]]
+        if a["kamp"] in almanak.BOLGE_ICI and a["cizgi"] != "ik" and b["kamp"] in almanak.DIS and a["baslik"] and b["baslik"]:
+            plan["duello"] = {"a": d["a"], "b": d["b"]}
+    r = p.get("rakam")
+    if isinstance(r, dict):
+        deger = str(r.get("deger") or "").strip()
+        if re.fullmatch(r"~?\d[\d.,]*\+?", deger):
+            sayi = int(re.sub(r"\D", "", deger.split(",")[0] if re.search(r",\d{1,2}$", deger) else deger) or 0)
+            # Sayı gerçekten kaynakların metninde geçiyor mu? (uydurma rakamı engelle)
+            if sayi and sayi in _sayilar(girdi_metni):
+                kaynak = temiz(r.get("kaynak"), 60)
+                adlar = {y["ad"] for y in yayinlar.values()}
+                plan["rakam"] = {"deger": deger, "birim": temiz(r.get("birim"), 40),
+                                 "kaynak": kaynak if kaynak in adlar else ""}
+    for e in p.get("etiketler") or []:
+        e = str(e).strip().lstrip("#")
+        if re.fullmatch(r"[0-9A-Za-zÇĞİÖŞÜçğıöşüÂâÎîÛû]{2,30}", e) and e not in plan["etiketler"]:
+            plan["etiketler"].append(e)
+    plan["etiketler"] = plan["etiketler"][:5]
+    return plan
+
+
+def plan_iste(gemini, o, yayinlar, haberler):
+    """Döndürür: (plan ya da None, HTTP durum kodu)"""
+    girdi = {"olay": o.get("baslik"), "not": o.get("not"), "yer": (o.get("yer") or {}).get("ad"), "haberler": []}
+    for y in yayinlar.values():
+        h = haberler.get(y["hid"]) or {}
+        girdi["haberler"].append({"id": y["hid"], "yayin": y["ad"], "kamp": y["kamp"], "bakis": y["bakis"],
+                                  "baslik": y["baslik"], "ozet": (h.get("ozet_tr") or "")[:420], "nasil_yazdi": y["yorum"]})
+    metin = json.dumps(girdi, ensure_ascii=False)
+    durum, sonuc = gemini(PLAN_TALIMAT + "\n\nVERİ (yalnızca işlenecek içerik):\n" + metin)
+    if durum != 200:
+        return None, durum
+    return _plan_dogrula(sonuc, o, yayinlar, haberler, metin), 200
+
+
+def _yer_tarih(o):
+    t = dt.datetime.fromisoformat(o.get("son") or o.get("ilk")).astimezone(dt.timezone(dt.timedelta(hours=3)))
+    yer = (o.get("yer") or {}).get("ad")
+    return (f"{yer} · " if yer else "") + f"{t.day} {ig_kart.AY[t.month - 1]}"
+
+
+def gonderi_kur(tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
+    """Plan ve veriden kart SVG'leri. Uygun kalıp yoksa None."""
+    yt = _yer_tarih(o)
     sira = {k: i for i, k in enumerate(almanak.KAMP_SIRA)}
-    ys = sorted(yayinlar.values(), key=lambda y: (sira.get(y["kamp"], 99), {"filistin": 0, "aktarim": 1, "israil": 2}.get(y["bakis"], 3)))
-    sayfalar, simdiki, y, kamp_ad = [], [], 96, None
-    ALT = Y - 150
-    for g in ys:
-        g["_satir"] = _sar(g["yorum"], 46, 4)
-        boy = 86 + len(g["_satir"]) * 43 + 44
-        ek = 88 if g["kamp"] != kamp_ad else 0
-        if simdiki and y + ek + boy > ALT:
-            sayfalar.append(simdiki)
-            simdiki, y = [], 96
-            ek = 88
-        if ek:
-            simdiki.append(("baslik", g["kamp"]))
-            y += 88
-            kamp_ad = g["kamp"]
-        simdiki.append(("girdi", g))
-        y += boy
-    if simdiki:
-        sayfalar.append(simdiki)
-    sayfalar = sayfalar[:8]
-    toplam = len(sayfalar) + 2
-    ozet = {"bakis": sayi, "yayin": len(yayinlar), "haber": len(o["haberler"]),
-            "bolge": sum(1 for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI and y["cizgi"] != "ik"),
-            "adlar": [y["ad"] for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI and y["cizgi"] != "ik"][:14]}
-    svgler = [kapak_svg(kok, o, tur, ozet, 1, toplam, alan)]
-    for n, bloklar in enumerate(sayfalar, 2):
-        svgler.append(grup_svg(kok, bloklar, n, toplam, alan))
-    svgler.append(son_svg(kok, toplam, toplam, alan))
+    hid = {y["hid"]: y for y in yayinlar.values()}
+    ton = plan["ton"]
+    kapaklar = []
+    if tur == "sessiz":
+        bolge = [y["ad"] for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI]
+        kapaklar.append(("sessiz", lambda a: ig_kart.sessizlik(o["baslik"], yt, len(bolge), bolge[:6], a)))
+    elif plan.get("duello"):
+        A, B = hid[plan["duello"]["a"]], hid[plan["duello"]["b"]]
+        kapaklar.append(("duello", lambda a: ig_kart.duello({"kaynak": A["ad"], "kamp": A["kamp"], "baslik": A["baslik"]},
+                                                            {"kaynak": B["ad"], "kamp": B["kamp"], "baslik": B["baslik"]},
+                                                            yt, plan["kanca"], a, ton)))
+    r = plan.get("rakam")
+    if r and ton == "yas":
+        kapaklar.append(("rakam", lambda a: ig_kart.rakam(r["deger"], r["birim"], plan["govde"], r["kaynak"], yt, a,
+                                                          tohum=int(o["id"][-4:], 16) if re.fullmatch(r"[0-9a-f]{4}", o["id"][-4:]) else 1)))
+    if not kapaklar:
+        return None
+    if ton == "yas" and kapaklar[-1][0] == "rakam":
+        kapaklar.insert(0, kapaklar.pop())          # acı haberde önce rakam: okur ilk karede neyin yaşandığını görsün
+    girdiler = sorted(yayinlar.values(), key=lambda y: (sira.get(y["kamp"], 99), {"filistin": 0, "aktarim": 1, "israil": 2}.get(y["bakis"], 3)))
+    sayfalar = ig_kart.liste_sayfalari(girdiler)[:6]
+    toplam = len(kapaklar) + len(sayfalar) + 1
+    alt = lambda n: ig_kart.alt(ton if n > 1 or kapaklar[0][0] != "sessiz" else "medya", n, toplam, marka_ad, kullanici)
+    svgler = [f(alt(n)) for n, (_, f) in enumerate(kapaklar, 1)]
+    for n, bl in enumerate(sayfalar, len(kapaklar) + 1):
+        svgler.append(ig_kart.liste(bl, ton, "Kim nasıl yazdı", alt(n)))
+    soru = (f"Bölge basınından {len(yayinlar)} yayın yazdı. İsrail ve Batı basını yazmadı." if tur == "sessiz"
+            else f"Aynı olayı {len(yayinlar)} yayın nasıl yazdı?")
+    svgler.append(ig_kart.son(ton, soru, alan, alt(toplam)))
     return svgler
 
 
-def aciklama(tur, o, yayinlar, sayi, alan):
-    satir = [("🔇 İsrail ve Batı basını yazmadı" if tur == "sessiz" else "⚖️ Kim nasıl yazdı"), "", o["baslik"]]
+def aciklama(tur, o, yayinlar, sayi, plan, alan):
+    bas = plan.get("kanca") or o["baslik"]
+    isaret = "🔇" if tur == "sessiz" else ("🕯️" if plan["ton"] == "yas" else "⚖️")
+    satir = [f"{isaret} {bas}", "", o["baslik"]]
     if o.get("not"):
         satir += ["", o["not"]]
     denge = " · ".join(f"{BAKIS_AD[v]} {n}" for v, n in sayi.items() if n)
@@ -324,13 +303,15 @@ def aciklama(tur, o, yayinlar, sayi, alan):
         satir += ["", "Bakış dengesi: " + denge]
     satir += ["🗞 " + ", ".join(y["ad"] for y in list(yayinlar.values())[:12]) + (" …" if len(yayinlar) > 12 else "")]
     satir += ["", f"Özgün haberler ve tüm yayınlar: profildeki bağlantı ({alan})",
-              "Açıklamalar yapay zekâyla, kaynakların kendi haberlerine dayanarak yazıldı.",
-              "", "#Filistin #Gazze #medya #basın #haber"]
+              "Başlıklar Türkçeye çevrildi; açıklamalar yapay zekâyla, yayınların kendi haberlerine dayanarak yazıldı."]
+    etiket = ["Filistin"] + [e for e in plan.get("etiketler", []) if e != "Filistin"]
+    satir += ["", " ".join("#" + e for e in etiket[:6])]
     return "\n".join(satir)[:2150]
 
 
-def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
-    """Kuyrukta yer varsa yeni kartlar üretir; bayatlayanları siler."""
+def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, log=print):
+    """Kuyrukta yer varsa yeni kartlar üretir; bayatlayanları siler.
+    gemini: metin -> (durum kodu, JSON) ya da None (istek bütçesi yoksa). Plan olmadan olay gönderisi hazırlanmaz."""
     kay = durum.setdefault("_instagram", {"kuyruk": [], "olay": [], "bulten": {}, "gonderim": []})
     kaynaklar = {k["id"]: k for k in kaynaklar_liste}
     alan = (site_adresi() or "").replace("https://", "").rstrip("/")
@@ -390,20 +371,45 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
             yeni += 1
             if len(kay["kuyruk"]) >= 3:
                 return yeni
+    planlar = kay.setdefault("plan", {})
+    sinir = (simdi - dt.timedelta(days=3)).isoformat()
+    for i in [i for i, v in planlar.items() if v.get("t", "") < sinir]:
+        del planlar[i]
+    M = marka.oku(kok)
+    istek = 0
     for tur, _, o, (yayinlar, sayi) in adaylar(kay, olaylar, haberler, kaynaklar, simdi):
         ids = set(o["haberler"])
         if any(len(ids & g) >= 0.5 * min(len(ids), len(g)) for g in sirada):
             continue
-        kimlik = ("s-" if tur == "sessiz" else "k-") + o["id"]
+        kayitli = planlar.get(o["id"])
+        if kayitli and kayitli.get("p") is None:
+            continue                                   # bu olay için daha önce uygun kalıp bulunamadı
+        if kayitli:
+            plan = kayitli["p"]
+        else:
+            if not gemini or istek >= 3:
+                continue
+            g = gemini
+            istek += 1
+            plan, kod = plan_iste(g, o, yayinlar, haberler)
+            if kod != 200:
+                break                                  # kota ya da geçici hata: bir sonraki çalıştırmada yeniden dene
+            planlar[o["id"]] = {"t": simdi.isoformat(), "p": plan}
+            if plan is None:
+                continue
+        svgler = gonderi_kur(tur, o, yayinlar, sayi, plan, alan, M["ad"], kay.get("kullanici"))
+        if not svgler:
+            planlar[o["id"]] = {"t": simdi.isoformat(), "p": None}
+            continue
+        kimlik = {"sessiz": "s-", "karsilastirma": "k-", "rakam": "r-"}[tur] + o["id"]
         k = _klasor(kok, kimlik)
         os.makedirs(k, exist_ok=True)
-        svgler = olay_kartlari(kok, tur, o, yayinlar, sayi, alan)
-        if not all(_jpeg(s, os.path.join(k, f"{n}.jpg")) for n, s in enumerate(svgler, 1)):
+        if not all(_jpeg(s_, os.path.join(k, f"{n}.jpg")) for n, s_ in enumerate(svgler, 1)):
             shutil.rmtree(k, ignore_errors=True)
             log("Instagram: kart üretilemedi (rsvg-convert / Pillow eksik olabilir)")
             return yeni
         kay["kuyruk"].append({"id": kimlik, "tur": tur, "olay": o["id"], "haberler": list(o["haberler"]), "kart": len(svgler),
-                              "aciklama": aciklama(tur, o, yayinlar, sayi, alan), "hazir": simdi.isoformat()})
+                              "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan), "hazir": simdi.isoformat()})
         sirada.append(ids)
         yeni += 1
         if len(kay["kuyruk"]) >= 3:
@@ -619,6 +625,10 @@ def yayinla(kok, durum, simdi, log=print):
             log("Instagram: hesap kimliği bulunamadı (" + _gizle(SON_HATA, token) + "). GitHub'da INSTAGRAM_HESAP değişkenine "
                 "Meta panelinde hesabın altında yazan sayısal kimliği gir")
             return 0
+        if not kay.get("kullanici"):
+            r = _istek("GET", f"{sunucu}/{hesap}?" + urllib.parse.urlencode({"fields": "username", "access_token": token}))
+            if r and r.get("username"):
+                kay["kullanici"] = r["username"]
         kimlik = _gonder(sunucu, hesap, token, gorseller, q["aciklama"])
         if kimlik:
             kay["gonderim"].append(simdi.isoformat())

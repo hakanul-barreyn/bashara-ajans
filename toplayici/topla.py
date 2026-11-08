@@ -1063,7 +1063,16 @@ def main():
     # Instagram: önce bir önceki çalıştırmada hazırlanıp sitede yayımlanmış kartları gönder, sonra yenilerini hazırla
     try:
         instagram.yayinla(KOK, durum, SIMDI, log=log)
-        instagram.hazirla(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
+        bekle = tarih_coz(durum.get("_gemini_bekle"))
+        ig_model = model or (gemini_model(anahtar) if anahtar else None)
+
+        def ig_gemini(metin):
+            if not anahtar or not ig_model or (bekle and bekle > SIMDI) or gunluk_istek(durum) >= GEMINI_GUNLUK - 20:
+                return 0, None
+            gunluk_istek(durum, 1)
+            return ekler.gemini_cagir(anahtar, ig_model, metin, zaman=90)
+        instagram.hazirla(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI,
+                          gemini=ig_gemini, log=log)
     except Exception as e:
         log(f"Instagram hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
