@@ -12,6 +12,8 @@ Her çalıştırma ZAMAN saniye çalışır, kaldığı yerden devam eder. Durum
   tarama/ilerleme.json         özet (yüzde, toplam, tahmini bitiş)
 """
 import datetime as dt
+import gzip
+import shutil
 import json
 import os
 import re
@@ -30,6 +32,7 @@ KLASOR = os.path.join(KOK, "tarama")
 BAS = dt.datetime(2023, 10, 7, tzinfo=dt.timezone.utc)
 BIT = dt.datetime(2026, 11, 6, tzinfo=dt.timezone.utc)
 ZAMAN = int(os.environ.get("TARAMA_SURE") or 45 * 60)
+TARAMA_SURUM = 2              # veri biçimi değişince artır: eski veri silinir, tarama baştan başlar
 KAYNAK_SURE = 5 * 60          # bir çalıştırmada kaynak başına en çok; böylece her çalıştırmada çok sayıda kaynak ilerler
 BASLANGIC = time.time()
 _kilit = threading.Lock()
@@ -86,30 +89,56 @@ def slug_baslik(url):
         son = re.sub(r"\.(html?|php|aspx?)$", "", parca[-2])
     metin = re.sub(r"[-_+]+", " ", son)
     metin = re.sub(r"\b\d{5,}\b", "", metin).strip()
-    return metin[:200] if len(re.findall(r"\w", metin)) >= 8 else ""
+    return metin[:200] if sum(ch.isalpha() for ch in metin) >= 6 else ""
+
+
+# Bölgeyle ilgili başlık ya da adres (Filistin yayınları dışındaki kaynaklarda yalnızca bunlar tutulur). 9 dil, küçük harf.
+ILGI = re.compile(
+    r"gaza|gazze|غزة|עזה|palestin|filist|فلسطين|פלסטינ|israel|isra[iı]l|إسرائيل|اسرائيل|ישראל|zionis|siyon|صهيون|hamas|حماس|חמאס|"
+    r"hezbollah|hizbullah|hizbollah|حزب الله|חיזבאללה|lebanon|liban|lübnan|libano|líbano|لبنان|לבנון|west bank|cisjordan|batı şeria|"
+    r"الضفة|westjordanland|cisgiordania|jerusalem|kudüs|القدس|ירושלים|gerusalemme|jérusalem|jerusalén|al-?aqsa|aksa|الأقصى|"
+    r"yemen|اليمن|houthi|husi|الحوثي|ansarallah|iran|إيران|איראן|syria|suriye|syrie|siria|سوريا|سورية|netanyahu|نتنياهو|נתניהו|"
+    r"\bidf\b|tsahal|occupation|işgal|احتلال|genocid|soykırım|إبادة|ceasefire|ateşkes|cessez|hudna|هدنة|rafah|refah|رفح|khan ?y[ou]nis|"
+    r"han yunus|خان يونس|jenin|cenin|جنين|nablus|نابلس|tulkarm|طولكرم|unrwa|أونروا|sinwar|السنوار|nasrallah|نصر الله|"
+    r"middle east|orta doğu|ortadoğu|moyen-orient|oriente medio|medio oriente|nahost|الشرق الأوسط|flotilla|أسطول الصمود", re.I)
+_ILGISIZ_DEGIL = {"Filistin"}   # bu kamptaki yayınların her haberi tutulur
+
+
+def ilgili_mi(r):
+    return bool(ILGI.search((r.get("b") or "") + " " + urllib.parse.unquote(r.get("u") or "")))
+
+
+_KAMP = {}
+_BILINEN = {}   # dosya -> bilinen adresler (çalıştırma boyunca bellekte)
 
 
 def yaz(kid, kayitlar):
-    """Kayıtları yıl dosyalarına ekler (aynı adres bir kez)."""
+    """Kayıtları sıkıştırılmış yıl dosyalarına ekler (aynı adres bir kez). Filistin yayınları dışında yalnızca bölgeyle ilgililer."""
+    hepsi = _KAMP.get(kid) in _ILGISIZ_DEGIL
     yil = {}
     for r in kayitlar:
+        if not hepsi and r.get("m") != "telegram" and not ilgili_mi(r):
+            continue
         if r["t"] and BAS.isoformat() <= r["t"] < BIT.isoformat():
             yil.setdefault(r["t"][:4], []).append(r)
     n = 0
     for y, rs in yil.items():
         d = os.path.join(KLASOR, "veri", str(kid))
         os.makedirs(d, exist_ok=True)
-        yol = os.path.join(d, f"{y}.jsonl")
+        yol = os.path.join(d, f"{y}.jsonl.gz")
         with _kilit:
-            var = set()
-            if os.path.exists(yol):
-                with open(yol, encoding="utf-8") as f:
-                    for satir in f:
-                        try:
-                            var.add(json.loads(satir)["u"])
-                        except Exception:
-                            pass
-            with open(yol, "a", encoding="utf-8") as f:
+            var = _BILINEN.get(yol)
+            if var is None:
+                var = set()
+                if os.path.exists(yol):
+                    with gzip.open(yol, "rt", encoding="utf-8") as f:
+                        for satir in f:
+                            try:
+                                var.add(json.loads(satir)["u"])
+                            except Exception:
+                                pass
+                _BILINEN[yol] = var
+            with gzip.open(yol, "at", encoding="utf-8") as f:
                 for r in rs:
                     if r["u"] not in var:
                         var.add(r["u"])
@@ -338,6 +367,13 @@ def main():
     except Exception:
         durum = {"kaynak": {}, "baslangic": simdi.isoformat()}
     kaynaklar = json.load(open(os.path.join(KOK, "kaynaklar.json"), encoding="utf-8"))
+    if durum.get("surum") != TARAMA_SURUM:
+        shutil.rmtree(os.path.join(KLASOR, "veri"), ignore_errors=True)
+        durum = {"kaynak": {}, "baslangic": simdi.isoformat(), "surum": TARAMA_SURUM}
+        log("Tarama: veri biçimi değişti, baştan başlanıyor")
+    import almanak
+    for k in kaynaklar:
+        _KAMP[k["id"]] = almanak.kamp(k)
     for k in kaynaklar:
         durum["kaynak"].setdefault(str(k["id"]), {})
     # Bitmemiş kaynaklar, en az ilerlemiş olan önce; her kaynak kendi alan adında sırayla, kaynaklar paralel
