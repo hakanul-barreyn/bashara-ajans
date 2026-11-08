@@ -28,7 +28,7 @@ OLAYLAR = [
     ("2024-05-06", None, "Refah saldırısı başladı", "gazze"),
     ("2024-06-14", "2024-07-14", "Avrupa Futbol Şampiyonası", "dunya"),
     ("2024-07-26", "2024-08-11", "Paris Olimpiyatları", "dunya"),
-    ("2024-09-17", "2024-10-01", "Lübnan: çağrı cihazı saldırıları, Nasrallah, İran füzeleri", "bolge"),
+    ("2024-09-17", "2024-11-27", "Lübnan’a saldırılar: çağrı cihazları, Nasrallah, kara harekâtı", "gazze"),
     ("2024-11-05", None, "ABD seçimi", "dunya"),
     ("2024-11-21", None, "UCM tutuklama kararları", "gazze"),
     ("2024-12-08", None, "Suriye'de rejimin çöküşü", "bolge"),
@@ -53,13 +53,14 @@ def grup(k):
 
 
 def _bos():
-    return {"n": 0, "b": 0, "g": 0, "i": 0, "gz": 0, "t": {a: 0 for a, _, _ in TERIMLER}, "f": {f: 0 for f in FAILLIK}}
+    return {"n": 0, "b": 0, "g": 0, "s": 0, "i": 0, "gz": 0, "t": {a: 0 for a, _, _ in TERIMLER}, "f": {f: 0 for f in FAILLIK}}
 
 
 def _ekle(r, n, tt):
     r["n"] += n
     r["b"] += tt.get("_b", 0)
     r["g"] += tt.get("_g", 0)
+    r["s"] += tt.get("_s", 0)
     r["i"] += tt.get("_i", 0)
     r["gz"] += tt.get("_gz", 0)
     for a in r["t"]:
@@ -76,6 +77,7 @@ def _oran(r):
                              "israilli": round(100 * r["f"]["pfail"] / israilli, 1) if israilli >= 20 else None,
                              "israilli_n": israilli},"n": r["n"], "baglamli": r["b"], "gazze": r["g"], "gazeteci_haber": r["gz"],
             "gazze_pay": round(100 * r["g"] / r["n"], 1) if r["n"] else None,
+            "savas_pay": round(100 * r["s"] / r["n"], 1) if r["n"] else None, "savas": r["s"],
             "iran_pay": round(100 * r["i"] / r["n"], 1) if r["n"] else None,
             "binde": {a: round(1000 * r["t"][a] / r["b"], 1) if r["b"] else None for a in r["t"]},
             "olum_haberi": olum, "faillik": {f: r["f"][f] for f in FAILLIK},
@@ -94,7 +96,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             oz = json.load(f)
     except (OSError, ValueError, EOFError):
         return None
-    if oz.get("surum", 1) < 4:
+    if oz.get("surum", 1) < 6:
         return None   # bağlamlı sayılar ve faillik yok; özetin yeni sürümü bekleniyor
     dis = dis_veri.guncelle(kok, log) or {"gun": {}}
     K = {str(k["id"]): k for k in kaynaklar}
@@ -129,6 +131,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             s[g] = o
         seri.append(s)
     haftalar = [{"hafta": h, "olu": olu_hafta.get(h), **{g: {"n": hafta[h][g]["n"], "gazze": hafta[h][g]["g"],
+                                                              "savas_pay": round(100 * hafta[h][g]["s"] / hafta[h][g]["n"], 1)
+                                                              if hafta[h][g]["n"] >= 40 else None,
                                                               "gazze_pay": round(100 * hafta[h][g]["g"] / hafta[h][g]["n"], 1)
                                                               if hafta[h][g]["n"] >= 40 else None} for g, _ in GRUPLAR}}
                 for h in sorted(hafta)]
@@ -137,9 +141,9 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         c = f"{m[:4]}-Ç{(int(m[5:]) - 1) // 3 + 1}"
         r = ceyrek.setdefault(c, {g: _bos() for g, _ in GRUPLAR})
         for g, _ in GRUPLAR:
-            for x in ("n", "g"):
+            for x in ("n", "g", "s"):
                 r[g][x] += ay[m][g][x]
-    ceyrekler = [{"ceyrek": c, **{g: round(100 * r[g]["g"] / r[g]["n"], 1) if r[g]["n"] else None for g, _ in GRUPLAR}}
+    ceyrekler = [{"ceyrek": c, **{g: round(100 * r[g]["s"] / r[g]["n"], 1) if r[g]["n"] else None for g, _ in GRUPLAR}}
                  for c, r in sorted(ceyrek.items())]
     yayinlar = []
     for kid, r in yay.items():

@@ -27,7 +27,7 @@ BASLANGIC = dt.date(2023, 10, 7)
 # \b şart: İtalyanca "ragazze" (kızlar) içinde "gazze" geçiyor
 GAZZE = re.compile(r"\bgazze|\bgaza|غزة|غزه|עזה", re.I)
 BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|siyon|zionis|sionis|sionist|cisjord|west bank|batı şeria|"
-                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|\bidf\b|فلسطين|إسرائيل|اسرائيل|"
+                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|\bidf\b|lübnan|lebanon|liban|líbano|libano|hizbullah|hezbollah|hizbollah|hisbollah|nasrallah|لبنان|حزب الله|فلسطين|إسرائيل|اسرائيل|"
                     r"الاحتلال|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
 # Faillik: ölüm haberinde fail yazılmış mı? (başlık düzeyinde, kalıplarla)
 OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
@@ -86,7 +86,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 5
+OZET_SURUM = 6
 BULTEN_SURUM = 1
 
 
@@ -113,6 +113,8 @@ LIDER = [(a, _derle(k)) for a, _, _, k in OT.LIDERLER]
 LIDER_ON = _derle("|".join(k for *_, k in OT.LIDERLER))
 LKEL = [(a, _derle(k)) for a, _, k in OT.LIDER_KELIME]
 FILISTIN = _derle(r"filist|palest|palästin|فلسطين|الفلسطيني|الضفة|west bank|batı şeria|cisjord|cisgiord|westjordan|ramallah|رام الله")
+# Lübnan ve Hizbullah: aynı savaşın parçası; Gazze'den ayrı okunmaz
+LUBNAN = _derle(r"lübnan|lebanon|liban|líbano|libano|hizbullah|hezbollah|hizbollah|hisbollah|nasrallah|beyrut|beirut|لبنان|حزب الله|بيروت|الضاحية")
 
 
 def olay_bul(kb):
@@ -244,8 +246,13 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             bg = gz or bool(BAGLAM.search(b) or BAGLAM.search(kb))
             if gz:
                 tt["_g"] = tt.get("_g", 0) + 1
-            if IRAN.search(b) or IRAN.search(kb):
+            iran = bool(IRAN.search(b) or IRAN.search(kb))
+            if iran:
                 tt["_i"] = tt.get("_i", 0) + 1
+            # Savaş başlığı (_s): Gazze, Batı Şeria, Kudüs, Lübnan ve İsrail bağlamındaki bütün başlıklar; yalnızca
+            # İran'la ilgili olanlar hariç. Dikkat ölçüsü budur: Lübnan'a yapılan saldırılar Gazze'den ayrı sayılmaz.
+            if bg and not (iran and not (gz or FILISTIN.search(kb) or LUBNAN.search(kb))):
+                tt["_s"] = tt.get("_s", 0) + 1
             ozgun = r.get("s") != 1
             if bg:
                 tt["_b"] = tt.get("_b", 0) + 1
@@ -259,8 +266,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                 ot = olay_bul(kb)
                 if ot:
                     yerler = [ad for ad, c in YER if c.search(kb)]
-                    if not (gz or yerler or FILISTIN.search(kb)):
-                        ot = []        # Lübnan, İran ya da İsrail'deki olaylar bu katalogda değil
+                    if not (gz or yerler or FILISTIN.search(kb) or LUBNAN.search(kb)):
+                        ot = []        # İran'ın İsrail'e saldırıları gibi olaylar bu katalogda değil
                 if ot:
                     oy, oo = olay_yer.setdefault(g, {}), olay_ornek.setdefault(g, {})
                     for a in ot:

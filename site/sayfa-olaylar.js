@@ -41,7 +41,7 @@
       hastane_ref: h && h.referans ? yerAd(h.referans) + " (" + gunAd(h.referans.gun) + ")" : "ilk büyük olay",
       hastane_metin: hastaneMetin(h, hs),
       egri_metin: egriMetin(e),
-      olum_metin: og.length ? "Gazze Sağlık Bakanlığı’nın bir günde 300 ya da daha fazla yeni ölüm bildirdiği " + og.length + " gün var. Bu günlerin " + artmayan.length + " tanesinde Batı ana akım basınında Gazze’nin payı, önceki iki haftaya göre artmadı. Tablo her gün için Gazze payını (o gün ve sonraki iki gün) ve önceki iki haftayı, liderlerin adının geçtiği başlıkların kaç kat arttığını gösteriyor." : ""
+      olum_metin: og.length ? "Gazze Sağlık Bakanlığı’nın bir günde 300 ya da daha fazla yeni ölüm bildirdiği " + og.length + " gün var. Bu günlerin " + artmayan.length + " tanesinde Batı ana akım basınında Filistin savaşının payı, önceki iki haftaya göre artmadı. Tablo her gün için savaş payını (o gün ve sonraki iki gün) ve önceki iki haftayı, liderlerin adının geçtiği başlıkların kaç kat arttığını gösteriyor." : ""
     };
     document.querySelectorAll("[data-v]").forEach(function (x) { var d = deger[x.dataset.v]; x.textContent = d == null ? "–" : d; if (x.dataset.v === "taslak" && !d) x.hidden = true; });
     var k = $("kartlar");
@@ -49,7 +49,7 @@
     kart(sayi(v.olaylar.length, 0), v.turler.filter(function (t) { return t.olay_sayisi; }).length + " türde, başlıklardan bulunan olay");
     if (son) kart(gunAd(son.gun), "Batı ana akım basınının bir hastane saldırısına El-Ehli’nin en az yarısı kadar yer ayırdığı son olay (" + yerAd(son) + ")");
     if (ilk && sonC) kart("%" + sayi(ilk.bati_ana * 100, 0) + " → %" + sayi(sonC.bati_ana * 100, 0), "Batı ana akım basınının olaylara, bölge basınına göre ayırdığı yer (" + ilk.donem + " → " + sonC.donem + ")");
-    if (og.length) kart(artmayan.length + " / " + og.length, "300’den fazla ölümün bildirildiği günlerde Batı ana akım basınında Gazze payının artmadığı gün");
+    if (og.length) kart(artmayan.length + " / " + og.length, "300’den fazla ölümün bildirildiği günlerde Batı ana akım basınında savaş payının artmadığı gün");
     [hastaneGrafik, turTablo, kucukler, egriGrafik, olumTablo, katalog, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("alisma", er); } });
   }
 
@@ -156,7 +156,7 @@
   // ---- 4) kitlesel ölüm günleri
   function olumTablo(v) {
     var t = el("table"), lg = ["Türkiye", "ABD", "Avrupa", "Arap ülkeleri", "BM"];
-    t.innerHTML = "<thead><tr><th>Gün</th><th>Bildirilen ölüm</th><th>Batı ana akım · Gazze payı</th><th>Türkiye basını · Gazze payı</th>" + lg.map(function (g) { return "<th>" + LG[g] + " liderleri</th>"; }).join("") + "</tr></thead>";
+    t.innerHTML = "<thead><tr><th>Gün</th><th>Bildirilen ölüm</th><th>Batı ana akım · savaş payı</th><th>Türkiye basını · savaş payı</th>" + lg.map(function (g) { return "<th>" + LG[g] + " liderleri</th>"; }).join("") + "</tr></thead>";
     var bd = el("tbody");
     v.olum_gunleri.slice().sort(function (a, b) { return b.olu - a.olu; }).forEach(function (x, j) {
       var r = el("tr"); if (j >= 12) { r.hidden = true; r.className = "rp-gizli"; }
@@ -171,7 +171,7 @@
       m.addEventListener("click", function () { bd.querySelectorAll(".rp-gizli").forEach(function (r) { r.hidden = false; }); m.remove(); });
       $("g-olumler").appendChild(m);
     }
-    $("g-olumler").appendChild(el("p", "rp-not", "Gazze payı: önceki iki hafta → o gün ve sonraki iki gün. Liderler: adlarının geçtiği başlıkların önceki dört haftanın ortalamasına göre kaç kat olduğu. Kırmızı: artış yok. Bakanlığın bir günde açıkladığı sayı geç kayıtları da içerebilir."));
+    $("g-olumler").appendChild(el("p", "rp-not", "savaş payı: önceki iki hafta → o gün ve sonraki iki gün. Liderler: adlarının geçtiği başlıkların önceki dört haftanın ortalamasına göre kaç kat olduğu. Kırmızı: artış yok. Bakanlığın bir günde açıkladığı sayı geç kayıtları da içerebilir."));
   }
 
   // ---- 5) katalog

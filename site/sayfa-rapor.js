@@ -23,7 +23,7 @@
   // bir olayın önce / sırasında ortalama Gazze payı ve haftalık ölüm
   function olayEtki(v, o) {
     var bit = o.bit || o.bas, H = v.haftalik;
-    var ort = function (b, e, g) { var x = H.filter(function (h) { return h.hafta >= b && h.hafta <= e && h[g].gazze_pay != null; }); return x.length ? x.reduce(function (t, h) { return t + h[g].gazze_pay; }, 0) / x.length : null; };
+    var ort = function (b, e, g) { var x = H.filter(function (h) { return h.hafta >= b && h.hafta <= e && h[g].savas_pay != null; }); return x.length ? x.reduce(function (t, h) { return t + h[g].savas_pay; }, 0) / x.length : null; };
     var olu = function (b, e) { var x = H.filter(function (h) { return h.hafta >= b && h.hafta <= e; }); return x.length ? x.reduce(function (t, h) { return t + (h.olu || 0); }, 0) / x.length : null; };
     var ob = ekle(o.bas, -35), oe = ekle(o.bas, -7), sb = ekle(o.bas, -6), se = bit;
     return { bati_once: ort(ob, oe, "bati_ana"), bati_sirasinda: ort(sb, se, "bati_ana"), bolge_once: ort(ob, oe, "bolge"), bolge_sirasinda: ort(sb, se, "bolge"),
@@ -75,10 +75,10 @@
     var k = $("g-dikkat"); efsane(["bolge", "bati_ana", "bati_muhalif"], k, [["#d5d8d5", "haftalık ölüm (sağ eksen)"]]);
     var H = v.haftalik, W = 760, Hh = 300, P = { l: 40, r: 46, t: 28, b: 26 }, n = H.length;
     var x = function (i) { return P.l + (W - P.l - P.r) * i / (n - 1); };
-    var enP = 60, enO = Math.max.apply(0, H.map(function (h) { return h.olu || 0; })) || 1;
+    var enP = 100, enO = Math.max.apply(0, H.map(function (h) { return h.olu || 0; })) || 1;
     var y = function (p) { return P.t + (Hh - P.t - P.b) * (1 - Math.min(p, enP) / enP); };
     var yo = function (o) { return Hh - P.b - (Hh - P.t - P.b) * o / enO; };
-    var s = sv("svg", { viewBox: "0 0 " + W + " " + Hh, "class": "rp-svg", role: "img", "aria-label": "Hafta hafta Gazze payı ve ölümler" });
+    var s = sv("svg", { viewBox: "0 0 " + W + " " + Hh, "class": "rp-svg", role: "img", "aria-label": "Hafta hafta savaş payı ve ölümler" });
     var idx = function (g) { for (var i = 0; i < n; i++) if (H[i].hafta >= g) return i; return n - 1; };
     var bw = (W - P.l - P.r) / n;
     H.forEach(function (h, i) { if (!h.olu) return; s.appendChild(baslik(sv("rect", { x: x(i) - bw * 0.4, y: yo(h.olu), width: bw * 0.8, height: Hh - P.b - yo(h.olu), "class": "rp-olu" }), gunAd(h.hafta) + " haftası: " + sayi(h.olu, 0) + " ölüm")); });
@@ -88,19 +88,19 @@
         (j + 1) + " · " + o.ad + " · " + gunAd(o.bas) + (o.bit ? " – " + gunAd(o.bit) : "")));
       var t = sv("text", { x: x(a), y: 11 + (j % 2) * 11, "text-anchor": "middle", "class": "rp-olay-no" }); t.textContent = j + 1; s.appendChild(t);
     });
-    [0, 20, 40, 60].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = "%" + p; s.appendChild(t); });
+    [0, 25, 50, 75, 100].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = "%" + p; s.appendChild(t); });
     [0.5, 1].forEach(function (f) { var t = sv("text", { x: W - P.r + 6, y: yo(enO * f) + 4, "class": "rp-eksen" }); t.textContent = sayi(enO * f, 0); s.appendChild(t); });
     H.forEach(function (h, i) { if (h.hafta.slice(5, 7) === "01" && +h.hafta.slice(8) <= 7) { var t = sv("text", { x: x(i), y: Hh - 8, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = h.hafta.slice(0, 4); s.appendChild(t); } });
     ["bati_muhalif", "bolge", "bati_ana"].forEach(function (g) {
       var d = "", yeni = true;
-      H.forEach(function (h, i) { var p = h[g].gazze_pay; if (p == null) { yeni = true; return; } d += (yeni ? "M" : "L") + x(i).toFixed(1) + "," + y(p).toFixed(1); yeni = false; });
+      H.forEach(function (h, i) { var p = h[g].savas_pay; if (p == null) { yeni = true; return; } d += (yeni ? "M" : "L") + x(i).toFixed(1) + "," + y(p).toFixed(1); yeni = false; });
       s.appendChild(sv("path", { d: d, fill: "none", stroke: R[g], "stroke-width": g === "bati_muhalif" ? 1.2 : 2.2, "stroke-opacity": g === "bati_muhalif" ? 0.55 : 1, "stroke-linejoin": "round" }));
     });
     k.appendChild(s);
   }
   function olayTablo(v) {
     var k = $("g-olaylar"); var t = el("table");
-    t.innerHTML = "<thead><tr><th>#</th><th>Olay</th><th>Tarih</th><th>Batı ana akım · Gazze payı</th><th>Bölge basını · Gazze payı</th><th>Ölüm / hafta</th></tr></thead>";
+    t.innerHTML = "<thead><tr><th>#</th><th>Olay</th><th>Tarih</th><th>Batı ana akım · savaş payı<br><small>önce → sırasında</small></th><th>Bölge basını · savaş payı<br><small>önce → sırasında</small></th><th>Gazze’de ölüm / hafta<br><small>önce → sırasında</small></th></tr></thead>";
     var bd = el("tbody");
     v.olaylar.forEach(function (o, j) {
       var e = olayEtki(v, o), r = el("tr");
@@ -110,12 +110,12 @@
       bd.appendChild(r);
     });
     t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); k.appendChild(kt);
-    k.appendChild(el("p", "rp-not", "Önce: olaydan önceki dört hafta; sırasında: olay boyunca. Kırmızı: Gazze payı dörtte birden fazla düştü."));
+    k.appendChild(el("p", "rp-not", "Nasıl okunur: her satırda, olaydan önceki dört haftada ve olay sürerken, o grubun başlıklarının yüzde kaçının Filistin savaşıyla (Gazze, Batı Şeria, Kudüs, Lübnan) ilgili olduğu. Kırmızı: savaş payı dörtte birden fazla düştü, yani o olay sırasında savaş gündemden çıktı. Sağdaki sütun aynı dönemlerde Gazze’de haftada bildirilen ölümler: ölümler sürerken pay düşüyorsa, ilgi başka yere kaymıştır."));
   }
   // takvim: yıl yıl haftalık kareler
   function takvim(v) {
     var k = $("g-takvim"), H = v.haftalik;
-    var renk = function (p, g) { if (p == null) return "#ebe9e3"; var a = Math.min(1, p / 50); return (g === "bolge" ? "rgba(31,122,82," : "rgba(138,109,59,") + (0.08 + 0.92 * a).toFixed(2) + ")"; };
+    var renk = function (p, g) { if (p == null) return "#ebe9e3"; var a = Math.min(1, p / 80); return (g === "bolge" ? "rgba(31,122,82," : "rgba(138,109,59,") + (0.08 + 0.92 * a).toFixed(2) + ")"; };
     var yillar = {}; H.forEach(function (h) { var yl = h.hafta.slice(0, 4); (yillar[yl] = yillar[yl] || []).push(h); });
     Object.keys(yillar).sort().forEach(function (yil) {
       var blok = el("div", "rp-takvim-yil"); blok.appendChild(el("b", null, yil));
@@ -124,12 +124,12 @@
         var kareler = el("div", "rp-kareler");
         var bos = Math.floor((new Date(yillar[yil][0].hafta + "T12:00:00Z") - new Date(yil + "-01-01T12:00:00Z")) / (7 * 864e5));
         for (var i = 0; i < bos; i++) kareler.appendChild(el("i", "rp-bos"));
-        yillar[yil].forEach(function (h) { var c = el("i"); c.style.background = renk(h[g].gazze_pay, g); c.title = gunAd(h.hafta) + " haftası · " + AD[g] + ": Gazze payı " + yuzde(h[g].gazze_pay) + " · " + sayi(h.olu, 0) + " ölüm"; kareler.appendChild(c); });
+        yillar[yil].forEach(function (h) { var c = el("i"); c.style.background = renk(h[g].savas_pay, g); c.title = gunAd(h.hafta) + " haftası · " + AD[g] + ": savaş payı " + yuzde(h[g].savas_pay) + " · " + sayi(h.olu, 0) + " ölüm"; kareler.appendChild(c); });
         sat.appendChild(kareler); blok.appendChild(sat);
       });
       k.appendChild(blok);
     });
-    var ay = el("div", "rp-takvim-olcek"); ay.append(el("span", null, "az"), el("i"), el("span", null, "Gazze payı %50 ve üstü")); k.appendChild(ay);
+    var ay = el("div", "rp-takvim-olcek"); ay.append(el("span", null, "az"), el("i"), el("span", null, "savaş payı %80 ve üstü")); k.appendChild(ay);
   }
 
   // ---- 2) adlandırma: karşıt çiftler
@@ -249,7 +249,7 @@
     var sr = { k: "baglamli", y: -1 };
     var d = el("details"); d.appendChild(el("summary", null, "Bütün yayınların tablosu (" + v.yayinlar.length + ")"));
     var kt = el("div", "tablo-kutu"); var t = el("table", "rp-yt"); kt.appendChild(t); d.appendChild(kt); k.appendChild(d);
-    var val = function (o, a) { return a === "ad" ? o.ad : a === "grup" ? AD[o.grup] : a === "baglamli" ? o.baglamli : a === "gazze" ? o.gazze_pay : a === "fail" ? (o.olum_haberi >= 30 ? o.fail_yazilan.filistinli : null) : o.binde[a]; };
+    var val = function (o, a) { return a === "ad" ? o.ad : a === "grup" ? AD[o.grup] : a === "baglamli" ? o.baglamli : a === "gazze" ? o.savas_pay : a === "fail" ? (o.olum_haberi >= 30 ? o.fail_yazilan.filistinli : null) : o.binde[a]; };
     function ciz() {
       t.innerHTML = ""; var h = el("tr");
       S.forEach(function (c) { var th = el("th", null, c[1] + (sr.k === c[0] ? (sr.y > 0 ? " ▲" : " ▼") : "")); th.onclick = function () { sr = { k: c[0], y: sr.k === c[0] ? -sr.y : -1 }; ciz(); }; h.appendChild(th); });
@@ -274,7 +274,7 @@
       "Ölümler ve öldürülen gazeteciler: Tech for Palestine’in kamu malı veri setleri (data.techforpalestine.org); kaynakları Gazze Sağlık Bakanlığı ve Gazze Hükümet Medya Ofisi. Toplam " + sayi(v.dis.olu, 0) + " ölüm, " + sayi(v.dis.gazeteci, 0) + " gazeteci. Olay tarihleri kamuya açık kayıtlardan.",
       "Gruplar: Bölge basını (" + G.bolge.olculen_yayin + " yayın; ör. " + ad("bolge") + "); İsrail basını (" + G.israil.olculen_yayin + " yayın; ör. " + ad("israil") + "); Batı ana akım basını (" + G.bati_ana.olculen_yayin + " yayın; ör. " + ad("bati_ana") + "); Batı’da muhalif basın (" + G.bati_muhalif.olculen_yayin + " yayın; ör. " + ad("bati_muhalif") + ").",
       "İnternet Arşivi’ndeki tarih sayfanın arşive alındığı andır; bu yüzden arşiv kayıtlarından yalnızca adresinde tarih yazanlar sayıldı; " + sayi(v.tarihsiz, 0) + " kayıt dışarıda kaldı. İsrail basınının büyük bölümü ölçülemedi (The Jerusalem Post ve Ynet’in kayıtları tarihlenemedi, The Times of Israel ile i24NEWS’in site haritalarına ulaşılamadı); bu grup büyük ölçüde Israel Hayom’u yansıtıyor.",
-      "Site haritalarında binlerce eski yazının aynı güne “güncellendi” diye işaretlendiği günler ayıklandı. Bölge dışı yayınlar için yalnızca bölgeyle ilgili başlıklar toplandı; “Gazze payı” bu başlıklar içindeki paydır.",
+      "Site haritalarında binlerce eski yazının aynı güne “güncellendi” diye işaretlendiği günler ayıklandı. Bölge dışı yayınlar için yalnızca bölgeyle ilgili başlıklar toplandı; “Savaş payı” bu başlıklar içinde Gazze, Batı Şeria, Kudüs, Lübnan ya da İsrail geçenlerin payıdır (yalnızca İran’la ilgili olanlar hariç). Lübnan’a yapılan saldırılar aynı savaşın parçası olarak sayıldı.",
       "Sessizlik (bölge basınının yazıp İsrail ve Batı basınının hiç yazmadığı olaylar) olay olay karşılaştırma ister: bu dönem için ikinci aşamada, canlı dönem için Almanak’taki sessizlik endeksinde.",
       v.tarama_bitti ? "Tarama tamamlandı." : "Tarama sürüyor; sayılar her gün güncelleniyor ve küçük ölçüde değişebilir."
     ].forEach(function (x) { u.appendChild(el("li", null, x)); });
