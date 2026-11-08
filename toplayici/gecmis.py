@@ -21,11 +21,13 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import almanak  # noqa: E402
+import olay_turleri as OT  # noqa: E402
 
 BASLANGIC = dt.date(2023, 10, 7)
-GAZZE = re.compile(r"gazze|gaza|غزة|غزه|עזה|gazastreifen|striscia", re.I)
+# \b şart: İtalyanca "ragazze" (kızlar) içinde "gazze" geçiyor
+GAZZE = re.compile(r"\bgazze|\bgaza|غزة|غزه|עזה", re.I)
 BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|siyon|zionis|sionis|sionist|cisjord|west bank|batı şeria|"
-                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|idf|فلسطين|إسرائيل|اسرائيل|"
+                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|\bidf\b|فلسطين|إسرائيل|اسرائيل|"
                     r"الاحتلال|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
 # Faillik: ölüm haberinde fail yazılmış mı? (başlık düzeyinde, kalıplarla)
 OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
@@ -84,7 +86,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 4
+OZET_SURUM = 5
 BULTEN_SURUM = 1
 
 
@@ -96,6 +98,42 @@ def katla(s):
 
 TERIM = [(a, re.compile(k, re.I), re.compile(katla(k), re.I)) for a, _, _, k in almanak.TERIMLER]
 ANAHTARLAR = [a for a, _, _ in TERIM]
+
+
+def _derle(k):
+    """Kalıp sadeleştirilmiş (katla) başlıkta aranır: küçük harf, harf işaretsiz. Büyük/küçük harf seçeneği gerekmez, hızlıdır."""
+    return re.compile(katla(k))
+
+
+# Olay türleri (hastane, çadır, yardım bekleyenlere ateş, ...), yerler ve liderler: olay_turleri.py
+OLAY = [(t[0], [_derle(k) for k in t[2]], _derle(t[3]) if len(t) > 3 else None) for t in OT.TURLER]
+OLAY_ON = _derle("|".join(t[2][0] for t in OT.TURLER))     # hızlı ön eleme: türlerin ilk kalıpları
+YER = [(ad, _derle(k)) for ad, k in OT.YERLER]
+LIDER = [(a, _derle(k)) for a, _, _, k in OT.LIDERLER]
+LIDER_ON = _derle("|".join(k for *_, k in OT.LIDERLER))
+LKEL = [(a, _derle(k)) for a, _, k in OT.LIDER_KELIME]
+FILISTIN = _derle(r"filist|palest|palästin|فلسطين|الفلسطيني|الضفة|west bank|batı şeria|cisjord|cisgiord|westjordan|ramallah|رام الله")
+
+
+def olay_bul(kb):
+    """Sadeleştirilmiş başlığın girdiği olay türleri (kesişim türleri dahil)."""
+    if not OLAY_ON.search(kb):
+        return []
+    bul = [a for a, gr, har in OLAY if all(c.search(kb) for c in gr) and not (har and har.search(kb))]
+    if bul:
+        s = set(bul)
+        for x, y in OT.BASTIR:
+            if x in s and y in s:
+                s.discard(y)
+                bul.remove(y)
+        bul += [a for a, _, p in OT.TUREV if all(x in s for x in p)]
+    return bul
+
+
+def lider_bul(kb):
+    if not LIDER_ON.search(kb):
+        return []
+    return [a for a, c in LIDER if c.search(kb)]
 
 
 def _yan(k):
@@ -136,6 +174,9 @@ def ozetle(tarama_kok, kaynaklar, log=print):
     gun = {}      # "2024-01-05": {"k": {kamp: n}, "ic": n, "dis": n, "gi": n, "gd": n, "t": {terim: [ic, dis]}}
     yayin = {}    # "2024-01-05": {kid: n | [n, {terim: c}]}
     ornek = {}    # "2024-01": {terim: {"ic": [[kid, başlık, url, gün]], "dis": [...]}}
+    olay_ornek = {}   # "2024-01-05": {tür: [[kid, başlık, url, yan], ...]}
+    olay_yer = {}     # "2024-01-05": {tür: {yer: n}}
+    lider_ornek = {}  # "2024-01": {lider: [[kid, başlık, url, gün], ...]}
     tarih_yontem, toplu_gun = {}, {}
     toplam = 0
     kok = os.path.join(tarama_kok, "veri")
@@ -205,6 +246,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                 tt["_g"] = tt.get("_g", 0) + 1
             if IRAN.search(b) or IRAN.search(kb):
                 tt["_i"] = tt.get("_i", 0) + 1
+            ozgun = r.get("s") != 1
             if bg:
                 tt["_b"] = tt.get("_b", 0) + 1
                 for a in bulunan:
@@ -214,6 +256,33 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                     tt["f:" + f] = tt.get("f:" + f, 0) + 1
                     if GAZETECI.search(b) or GAZETECI.search(kb):
                         tt["_gz"] = tt.get("_gz", 0) + 1   # gazeteci ölümü haberi
+                ot = olay_bul(kb)
+                if ot:
+                    yerler = [ad for ad, c in YER if c.search(kb)]
+                    if not (gz or yerler or FILISTIN.search(kb)):
+                        ot = []        # Lübnan, İran ya da İsrail'deki olaylar bu katalogda değil
+                if ot:
+                    oy, oo = olay_yer.setdefault(g, {}), olay_ornek.setdefault(g, {})
+                    for a in ot:
+                        tt["o:" + a] = tt.get("o:" + a, 0) + 1
+                        for yr in yerler:
+                            oy.setdefault(a, {})[yr] = oy.setdefault(a, {}).get(yr, 0) + 1
+                        lst = oo.setdefault(a, [])
+                        yk = yan or "x"
+                        if (ozgun and len(lst) < 6 and sum(1 for x in lst if x[3] == yk) < 2
+                                and all(x[0] != int(kid) for x in lst)):
+                            lst.append([int(kid), b[:170], r.get("u"), yk])
+                ls = lider_bul(kb)
+                if ls:
+                    ks = [a for a, c in LKEL if c.search(kb)]
+                    lo = lider_ornek.setdefault(g[:7], {})
+                    for a in ls:
+                        tt["l:" + a] = tt.get("l:" + a, 0) + 1    # bağlamdaki başlıklar
+                        for kl in ks:
+                            tt[f"lk:{a}:{kl}"] = tt.get(f"lk:{a}:{kl}", 0) + 1
+                        lst = lo.setdefault(a, [])
+                        if ozgun and len(lst) < 4 and all(x[0] != int(kid) for x in lst):
+                            lst.append([int(kid), b[:170], r.get("u"), g])
             y[kid] = [n + 1, tt] if tt else n + 1
             if not yan:
                 continue
@@ -234,7 +303,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
     veri = {"surum": OZET_SURUM, "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat(), "baslik": toplam,
             "tarama_bitti": ilerleme.get("kalan_gorev") == 0, "ilerleme": ilerleme, "tarih_yontem": tarih_yontem,
             "tarihsiz": sum(v["tarihsiz"] for v in tarih_yontem.values()), "toplu_gun": toplu_gun,
-            "gun": gun, "yayin": yayin, "ornek": ornek}
+            "gun": gun, "yayin": yayin, "ornek": ornek,
+            "olay_ornek": olay_ornek, "olay_yer": olay_yer, "lider_ornek": lider_ornek}
     yol = os.path.join(tarama_kok, "gecmis.json.gz")
     with gzip.open(yol, "wt", encoding="utf-8") as f:
         json.dump(veri, f, ensure_ascii=False, separators=(",", ":"))

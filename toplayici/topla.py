@@ -40,6 +40,7 @@ import karne  # noqa: E402
 import gecmis  # noqa: E402
 import rapor  # noqa: E402
 import isimler  # noqa: E402
+import alisma  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
 import diller  # noqa: E402
@@ -1115,6 +1116,10 @@ def main():
         rapor.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Rapor (7 Ekim) hatası: {e}")
+    try:
+        alisma.hesapla(KOK, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Alışma ve liderler hatası: {e}")
     # Sitenin Telegram kanalına gündem, öncelikli analizler ve bültenler
     try:
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)

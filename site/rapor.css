@@ -106,3 +106,22 @@
 .rp-kimin-cubuk i{display:block;height:100%;border-radius:5px}
 .rp-kimin-cubuk em{position:absolute;right:6px;font-style:normal;font-family:var(--mono);font-size:.74rem;font-weight:700}
 @media (max-width:640px){.rp-yigin-satir,.rp-kimin{grid-template-columns:1fr}.rp-cift-satir{grid-template-columns:minmax(0,1fr) 74px minmax(0,1fr)}.rp-takvim-satir{grid-template-columns:1fr}}
+/* alışma ve liderler raporları */
+.rp-yuz{stroke-opacity:.35;stroke-dasharray:3 3}
+.rp-nok{cursor:help}.rp-nok:hover{fill-opacity:.9}
+.rp-suzgec{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.rp-cip{font:inherit;font-size:.78rem;font-weight:700;padding:6px 11px;border-radius:999px;border:1px solid var(--cizgi);background:#fff;color:var(--ink);cursor:pointer}
+.rp-cip:hover{border-color:var(--ink)}.rp-cip.secili{background:#0c0e0d;border-color:#0c0e0d;color:#fff}
+.rp-katalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:12px}
+.rp-olay-kart{border:1px solid var(--cizgi);border-radius:12px;padding:12px 14px;background:#fff;min-width:0}
+.rp-olay-bas{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.rp-olay-bas b{font-family:var(--serif);font-size:1.02rem}
+.rp-olay-bas span{font-size:.74rem;color:var(--soluk)}
+.rp-olay-olcu{margin:4px 0 4px!important;font-family:var(--mono)!important;font-size:.72rem!important;color:var(--ink2)!important;line-height:1.5!important}
+.rp-daha{grid-column:1/-1;font:inherit;font-weight:700;font-size:.86rem;padding:10px;border-radius:10px;border:1px solid var(--ink);background:#fff;cursor:pointer}
+.rp-daha:hover{background:#0c0e0d;color:#fff}
+.rp-sec{font:inherit;font-size:.95rem;padding:6px 10px;border-radius:8px;border:1px solid var(--cizgi);background:#fff;max-width:100%}
+.rp-tablo td.artis{color:#1f7a52;font-weight:700}
+.rp-hedef-satir{display:grid;grid-template-columns:200px minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
+@media (max-width:640px){.rp-hedef-satir{grid-template-columns:1fr;gap:4px}}
+.rp-tablo td:first-child{white-space:nowrap}.tablo-kutu{overflow-x:auto;max-width:100%}#g-olumler .rp-daha{width:100%;margin-top:10px}
