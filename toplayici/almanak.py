@@ -96,6 +96,7 @@ def olay_arsivle(kok, olaylar, haberler):
         gun = ilk[:10]
         kayit = {"id": o["id"], "baslik": o.get("baslik", ""), "not": o.get("not", ""), "ilk": ilk, "yer": o.get("yer"),
                  "ortak": o.get("ortak"), "fark": o.get("fark"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
+                 "olgular": o.get("olgular") or [],
                  "son": max(x["t"] for x in hs if x["t"]), "haberler": hs}
         # Önceki gün dosyasında da aynı olay olabilir (gece yarısını aşan olaylar)
         onceki = (dt.date.fromisoformat(gun) - dt.timedelta(days=1)).isoformat()

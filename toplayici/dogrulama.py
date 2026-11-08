@@ -184,10 +184,10 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
                         for i in oneri["ids"]:
                             if i in haberler and veri["etiketler"].get(i, {}).get("tur") != "yanlis":
                                 h = haberler[i]
-                                veri["etiketler"][i] = {"tur": "celiskili", "aciklama": oneri["aciklama"], "kanit": [],
+                                veri["etiketler"][i] = {"tur": oneri.get("tur", "celiskili"), "aciklama": oneri["aciklama"], "kanit": [],
                                                         "kaynak": h.get("kaynak"), "baslik": h.get("baslik_tr") or h.get("baslik_orj"),
                                                         "tarih": simdi.isoformat(), "kim": "yonetici"}
-                        oneri["durum"], sonuc = "onaylandi", "⚠️ Çelişkili iddia etiketi eklendi."
+                        oneri["durum"], sonuc = "onaylandi", ETIKET.get(oneri.get("tur", "celiskili")) + " etiketi eklendi."
                         degisti = True
                     else:
                         oneri["durum"], sonuc = "reddedildi", "Öneri reddedildi; etiket eklenmedi."
@@ -209,17 +209,17 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
                                                 "link_preview_options": {"is_disabled": True}})
         # 2) Yeni çelişki önerileri
         gonderilen = 0
-        for o in olaylar:
-            c = o.get("celiski")
+        for o, c, tur in [(o, o.get("celiski"), "celiskili") for o in olaylar] + [(o, o.get("dogrulanmamis"), "dogrulanmamis") for o in olaylar]:
             if not c or gonderilen >= ONERI_SINIRI:
                 continue
-            sid = hashlib.sha1(",".join(sorted(c["ids"])).encode()).hexdigest()[:10]
+            sid = hashlib.sha1((tur + ",".join(sorted(c["ids"]))).encode()).hexdigest()[:10]
             if sid in kay["oneriler"]:
                 continue
             satirlar = [_haber_satiri(haberler[i], kaynaklar) for i in c["ids"] if i in haberler]
-            metin = ("⚠️ <b>Çelişki önerisi</b>\n\n<b>" + _e(o.get("baslik")) + "</b>\n\n" + _e(c["aciklama"]) + "\n\n"
+            baslik_ = "⚠️ <b>Çelişki önerisi</b>" if tur == "celiskili" else "🔍 <b>Doğrulanmamış iddia önerisi</b>"
+            metin = (baslik_ + "\n\n<b>" + _e(o.get("baslik")) + "</b>\n\n" + _e(c["aciklama"]) + "\n\n"
                      + "\n".join(satirlar) + (f'\n\n<a href="{site}#o-{o["haberler"][0]}">Kim nasıl yazdı →</a>' if site else "")
-                     + "\n\nOnaylarsan bu haberlere ⚠️ Çelişkili iddia etiketi konur.")
+                     + "\n\nOnaylarsan bu haberlere " + ETIKET[tur] + " etiketi konur.")
             r = _api(token, "sendMessage", {"chat_id": yonetici, "text": metin[:4000], "parse_mode": "HTML",
                                             "link_preview_options": {"is_disabled": True},
                                             "reply_markup": {"inline_keyboard": [[
@@ -228,7 +228,7 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
             if r is None:
                 log(f"Doğrulama: öneri gönderilemedi ({SON_HATA}); bota özel mesajla /start yazılmış olmalı")
                 break
-            kay["oneriler"][sid] = {"ids": c["ids"], "aciklama": c["aciklama"], "durum": "bekliyor", "t": simdi.isoformat()}
+            kay["oneriler"][sid] = {"ids": c["ids"], "aciklama": c["aciklama"], "tur": tur, "durum": "bekliyor", "t": simdi.isoformat()}
             gonderilen += 1
         if gonderilen:
             log(f"Doğrulama: {gonderilen} çelişki önerisi yöneticiye gönderildi")

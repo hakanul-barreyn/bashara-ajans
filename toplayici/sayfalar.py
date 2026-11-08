@@ -103,12 +103,12 @@ def _fark(olay, kmap, dil):
                     if ad(x) not in g[x["an"][alan]]:
                         g[x["an"][alan]].append(ad(x))
             return g
-        rk = grupla("rakam")
+        rk = {d: v for d, v in grupla("rakam").items() if re.search(r"[^\W\d_]", d)}   # birimsiz çıplak sayı gösterilmez
         if len(rk) == 1:
             satir.append(("Rakam", f"Hepsi aynı rakamı verdi: {next(iter(rk))}."))
         elif rk:
             satir.append(("Rakam", " · ".join(f"{d}: {', '.join(v[:3])}{f' +{len(v) - 3}' if len(v) > 3 else ''}" for d, v in rk.items())))
-        kl = grupla("kelime")
+        kl = dict(sorted(grupla("kelime").items(), key=lambda x: -len(x[1]))[:4])
         if len(kl) > 1:
             satir.append(("Kelime", " · ".join(f"“{d}”: {', '.join(v[:3])}{f' +{len(v) - 3}' if len(v) > 3 else ''}" for d, v in kl.items())))
         if not satir:
@@ -125,7 +125,18 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     t = T[dil]
     sira = {k: i for i, k in enumerate(almanak.KAMP_SIRA)}
     satir = []
-    for x in sorted(olay["haberler"], key=lambda x: (sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or "")):
+    # Yayın başına tek satır: yayının ilk (ya da bu sayfanın) haberi; öteki haberlerinin sayısı yanında
+    gorulen, ek = {}, {}
+    sirali = sorted(olay["haberler"], key=lambda x: (x["id"] != h["id"], sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
+    secilen = []
+    for x in sirali:
+        if x.get("k") in gorulen:
+            ek[x["k"]] = ek.get(x["k"], 0) + 1
+            continue
+        gorulen[x.get("k")] = True
+        secilen.append(x)
+    secilen.sort(key=lambda x: (sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
+    for x in secilen:
         k = kmap.get(x.get("k"))
         if not k:
             continue
@@ -135,6 +146,8 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
             hedef = ""
         ad = f'<a href="{_e(hedef)}">{_e(k["ad"])}</a>' if hedef else f"<b>{_e(k['ad'])}</b>"
         bu = f' <span class="hs-cip">{t["bu"]}</span>' if x["id"] == h["id"] else ""
+        if ek.get(x.get("k")):
+            bu += f' <small>+{ek[x["k"]]} {"haber daha" if dil == "tr" else "more"}</small>'
         cip = ""
         a = x.get("an") or {}
         if a.get("dayanak"):
@@ -157,10 +170,178 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         return ""
     return (f'<section class="hs-bolum" id="kim-{dil}"><h2>{t["kim"]} · {len({x.get("k") for x in olay["haberler"]})}</h2>'
             + (f'<p>{_e(olay.get("not_en") if dil == "en" and olay.get("not_en") else olay.get("not"))}</p>' if olay.get("not") else "")
-            + f'<ul class="hs-kim">{"".join(satir)}</ul></section>')
+            + f'<ul class="hs-kim">{"".join(satir[:10])}</ul>'
+            + (f'<details class="hs-kim-daha"><summary>{"Tümünü göster" if dil == "tr" else "Show all"} ({len(satir)})</summary>'
+               f'<ul class="hs-kim">{"".join(satir[10:])}</ul></details>' if len(satir) > 10 else "")
+            + "</section>")
 
 
-def _giris(h, k, olay, kmap, dil, foto, dg):
+def _adlar(liste, n=5):
+    return ", ".join(liste[:n]) + (f" +{len(liste) - n}" if len(liste) > n else "")
+
+
+def _olgular(olay, kmap, dil):
+    """Kim neyi yazdı, kim neyi atladı: her temel olgu için veren ve vermeyen yayınlar."""
+    ol = (olay or {}).get("olgular") or []
+    hs = (olay or {}).get("haberler") or []
+    if not ol or len(hs) < 2:
+        return ""
+    yayin_of = {x["id"]: kmap[x["k"]]["ad"] for x in hs if kmap.get(x.get("k"))}
+    tum = list(dict.fromkeys(yayin_of.values()))
+    satir = []
+    for x in ol:
+        veren = list(dict.fromkeys(yayin_of[i] for i in x["ids"] if i in yayin_of))
+        vermeyen = [a for a in tum if a not in veren]
+        if not veren:
+            continue
+        hepsi = not vermeyen
+        satir.append(f'<li><b>{_e(x["olgu"])}</b><span class="hs-olgu-v">✓ {_e("Hepsi" if hepsi and dil == "tr" else "All" if hepsi else _adlar(veren))}</span>'
+                     + (f'<span class="hs-olgu-y">✗ {_e(_adlar(vermeyen))}</span>' if vermeyen else "") + "</li>")
+    if not satir:
+        return ""
+    bas = "Kim neyi yazdı, kim neyi atladı" if dil == "tr" else "Who reported what, who left it out"
+    return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-olgu">{"".join(satir)}</ul></section>'
+
+
+def _zaman(olay, kmap, dil):
+    """Kim ne zaman yazdı: her yayının ilk haberi, olayın ilk haberinden bu yana geçen süreye göre bir çizgide."""
+    hs = [x for x in (olay or {}).get("haberler") or [] if x.get("t") and kmap.get(x.get("k"))]
+    ilk = {}
+    for x in sorted(hs, key=lambda x: x["t"]):
+        ilk.setdefault(x["k"], x["t"])
+    if len(ilk) < 3:
+        return ""
+    t0 = dt.datetime.fromisoformat(min(ilk.values()))
+    t1 = dt.datetime.fromisoformat(max(ilk.values()))
+    aralik = max(1.0, (t1 - t0).total_seconds())
+    renk = lambda k: ("#2b8a5e" if almanak.kamp(k) in almanak.BOLGE_ICI else "#4a72c4" if almanak.kamp(k) in almanak.DIS else "#9aa39e")
+    satir = []
+    for kid, t in sorted(ilk.items(), key=lambda x: x[1]):
+        k = kmap[kid]
+        sa = (dt.datetime.fromisoformat(t) - t0).total_seconds()
+        yuzde = 100 * sa / aralik
+        etiket = ("ilk" if dil == "tr" else "first") if sa < 60 else (f"+{sa / 3600:.1f} sa" if dil == "tr" else f"+{sa / 3600:.1f} h").replace(".", "," if dil == "tr" else ".")
+        satir.append(f'<li><span class="hs-z-ad">{_e(k["ad"])}</span><span class="hs-z-iz"><i style="left:{yuzde:.1f}%;background:{renk(k)}"></i></span>'
+                     f'<span class="hs-z-sa">{_e(etiket)}</span></li>')
+    bas = "Kim ne zaman yazdı" if dil == "tr" else "Who reported when"
+    acik = ("Yeşil: bölge basını · mavi: İsrail ve Batı basını" if dil == "tr" else "Green: regional press · blue: Israeli and Western press")
+    return f'<section class="hs-bolum"><h2>{bas}</h2><p><small>{acik}</small></p><ul class="hs-zaman">{"".join(satir)}</ul></section>'
+
+
+_ONEMSIZ = set("ve ile için bir bu da de olarak sonra yeni üzerine karşı daha göre gibi olan oldu etti açıkladı dedi".split())
+
+
+def _kelimeler(b):
+    return {w for w in re.findall(r"\w{5,}", (b or "").lower()) if w not in _ONEMSIZ}
+
+
+def _onceki(olay, tum, sayfa_hedef, dil):
+    """Önceki gelişmeler: aynı yerde ya da aynı konuda daha önceki olaylar (olay arşivinden)."""
+    if not olay:
+        return ""
+    yer = ((olay.get("yer") or {}).get("ad") or "").lower() if isinstance(olay.get("yer"), dict) else ""
+    kw = _kelimeler(olay.get("baslik"))
+    ilk = olay.get("ilk") or ""
+    aday = []
+    for o in tum.values():
+        if o.get("id") == olay.get("id") or (o.get("ilk") or "") >= ilk:
+            continue
+        oy = ((o.get("yer") or {}).get("ad") or "").lower() if isinstance(o.get("yer"), dict) else ""
+        ortak = len(kw & _kelimeler(o.get("baslik")))
+        if ortak >= 2 or (yer and oy == yer and ortak >= 1):
+            aday.append((ortak, o))
+    aday = sorted(aday, key=lambda x: x[1].get("ilk") or "", reverse=True)[:6]
+    if not aday:
+        return ""
+    satir = []
+    for _, o in aday:
+        hedef = sayfa_hedef.get(o["id"])
+        b = _e(o.get("baslik_en") if dil == "en" and o.get("baslik_en") else o.get("baslik"))
+        satir.append(f'<li><time>{_e(_tarih(o.get("ilk"), dil))}</time>' + (f'<a href="{_e(hedef)}">{b}</a>' if hedef else f"<span>{b}</span>") + "</li>")
+    bas = "Önceki gelişmeler" if dil == "tr" else "Earlier developments"
+    return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-onceki">{"".join(satir)}</ul></section>'
+
+
+def harita_yaz(kok, olay):
+    """Olayın yeri için küçük karanlık harita (data/h/harita/<olay>.svg); adres ya da boş."""
+    yer = olay.get("yer") if isinstance(olay.get("yer"), dict) else None
+    if not yer or yer.get("lat") is None:
+        return ""
+    ad = f"harita/{olay['id']}.svg"
+    yol = os.path.join(kok, "data", "h", ad)
+    if not os.path.isfile(yol):
+        try:
+            import ig_harita
+            ic = ig_harita.harita(kok, float(yer["lat"]), float(yer["lon"]), yer.get("ad", ""), "medya", (0, 0, 600, 340), yaricap=5.0, kimlik="m")
+        except Exception:
+            ic = ""
+        if not ic:
+            return ""
+        os.makedirs(os.path.dirname(yol), exist_ok=True)
+        with open(yol, "w", encoding="utf-8") as f:
+            f.write('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">'
+                    '<defs><filter id="hafif" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/>'
+                    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
+                    f'<rect width="600" height="340" fill="#0a0d0c"/>{ic}</svg>')
+    return ad
+
+
+def paylasim_gorseli(kok, olay, kmap):
+    """Olay için 1200x630 paylaşım görseli (data/h/og/<olay>.png): başlık, yayın sayısı, bakış dağılımı. Adres ya da boş."""
+    import shutil
+    import subprocess
+    ad = f"og/{olay['id']}.png"
+    yol = os.path.join(kok, "data", "h", ad)
+    if os.path.isfile(yol):
+        return ad
+    if not shutil.which("rsvg-convert"):
+        return ""
+    try:
+        import ig_kart
+    except Exception:
+        return ""
+    hs = olay.get("haberler") or []
+    n = len({x.get("k") for x in hs})
+    sayi = {}
+    for x in hs:
+        if x.get("b") in BAKIS:
+            sayi[x["b"]] = sayi.get(x["b"], 0) + 1
+    boy, sat = ig_kart.sigdir(olay.get("baslik") or "", [68, 60, 54, 48], 900, 1060, 3)
+    F = ig_kart.F
+    cub, x0, top = "", 70.0, sum(sayi.values()) or 1
+    for v in ("filistin", "aktarim", "israil"):
+        w = 1060 * sayi.get(v, 0) / top
+        if w:
+            cub += f'<rect x="{x0:.1f}" y="520" width="{w:.1f}" height="14" fill="{BAKIS[v][2]}"/>'
+            x0 += w
+    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">'
+           f'<defs><radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) scale(700)">'
+           f'<stop stop-color="#19e68c" stop-opacity=".25"/><stop offset="1" stop-color="#19e68c" stop-opacity="0"/></radialGradient>'
+           f'<radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1200 630) scale(700)">'
+           f'<stop stop-color="#ff3b55" stop-opacity=".25"/><stop offset="1" stop-color="#ff3b55" stop-opacity="0"/></radialGradient></defs>'
+           f'<rect width="1200" height="630" fill="#0b0d0c"/><rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#r)"/>'
+           f'<text x="70" y="100" font-family="{F}" font-weight="900" font-size="26" letter-spacing="3" fill="#ffc247">KİM NASIL YAZDI · {n} YAYIN</text>'
+           + "".join(f'<text x="70" y="{190 + i * boy * 1.12:.0f}" font-family="{F}" font-weight="900" font-size="{boy}" fill="#f6f3ec">{_e(t)}</text>'
+                     for i, t in enumerate(sat))
+           + (f'<clipPath id="c"><rect x="70" y="520" width="1060" height="14" rx="7"/></clipPath><g clip-path="url(#c)">{cub}</g>' if cub else "")
+           + f'<text x="70" y="580" font-family="{F}" font-weight="900" font-size="30" fill="#f6f3ec">ZBS</text>'
+           f'<text x="140" y="580" font-family="{F}" font-weight="500" font-size="24" fill="#8d9792">Haberin haberi</text></svg>')
+    os.makedirs(os.path.dirname(yol), exist_ok=True)
+    gecici = yol[:-4] + ".svg"
+    try:
+        open(gecici, "w", encoding="utf-8").write(svg)
+        subprocess.run(["rsvg-convert", "-w", "1200", "-h", "630", gecici, "-o", yol], check=True, timeout=60)
+        return ad
+    except Exception:
+        return ""
+    finally:
+        try:
+            os.remove(gecici)
+        except OSError:
+            pass
+
+
+def _giris(h, k, olay, kmap, dil, foto, dg, harita=""):
     """Siyah giriş bölümü: başlık, sayılar, bakış dağılımı, paylaşılan haberin alıntısı ve karşı alıntı, düğmeler."""
     t = T[dil]
     bas = (h.get("baslik_en") if dil == "en" else None) or h.get("baslik_tr") or h.get("baslik_orj") or ""
@@ -220,6 +401,7 @@ def _giris(h, k, olay, kmap, dil, foto, dg):
             + (f'<a class="hs-d" href="#kim-{dil}">{t["kim"]} ↓</a>' if len(hs) >= 2 else "")
             + "</div>"
             + (f'<div class="hs-seridi">{seridi}</div>' if len(hs) >= 2 else "")
+            + (f'<figure class="hs-harita"><img src="{_e(harita)}" alt="" width="600" height="340" loading="lazy"></figure>' if harita else "")
             + (f'<p class="hs-kunye">{_e(foto[1])}</p>' if foto else "")
             + "</div>")
 
@@ -241,7 +423,8 @@ def _diger(digerler, dil, haric):
     return f'<section><h2 style="margin:6px 4px 10px;font-size:1.15rem">{t["diger"]}</h2><div class="hs-diger">{"".join(kart)}</div></section>'
 
 
-def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), foto=None, digerler=()):
+def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), foto=None, digerler=(), tum=None, sayfa_hedef=None,
+          harita="", og=""):
     kmap = kmap or {}
     bas_tr = h.get("baslik_tr") or h.get("baslik_orj") or ""
     yayin = k.get("ad", "")
@@ -249,10 +432,11 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     hs = (olay or {}).get("haberler", [])
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
     aciklama = _kisa((f"{n} yayın bu olayı nasıl anlattı? " if n else "") + (h.get("ozet_tr") or h.get("baslik_orj") or ""), 200)
-    resim = f"{site}site/paylas.png"
+    resim = f"{site}h/{og}" if og else f"{site}site/paylas.png"
     v = f"?v={surum}"
     foto_ic = f'<div class="hs-foto" style="background-image:url(\'../data/foto/{_e(foto[0])}.jpg\')"></div>' if foto else ""
-    govde = "".join(f'<div data-dil="{d}" style="display:contents">{_fark(olay or {}, kmap, d)}{_kim_nasil(olay, h, kmap, sayfa_var, d)}'
+    govde = "".join(f'<div data-dil="{d}" style="display:contents">{_olgular(olay, kmap, d)}{_fark(olay or {}, kmap, d)}'
+                    f'{_kim_nasil(olay, h, kmap, sayfa_var, d)}{_zaman(olay, kmap, d)}{_onceki(olay, tum or {}, sayfa_hedef or {}, d)}'
                     f'{_diger(digerler, d, (olay or {}).get("id"))}<p class="hs-not">{T[d]["not"]}</p></div>' for d in ("tr", "en"))
     return f"""<!doctype html>
 <html lang="tr">
@@ -295,7 +479,7 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     <nav class="menu"><a href="../">Akış</a><a href="../arsiv.html">Arşiv</a><a href="../almanak.html">Almanak</a><a href="../kaynaklar.html">Kaynaklar</a></nav>
   </div>
 </header>
-<section class="hs-giris">{foto_ic}{_giris(h, k, olay, kmap, "tr", foto, dg)}{_giris(h, k, olay, kmap, "en", foto, dg)}</section>
+<section class="hs-giris">{foto_ic}{_giris(h, k, olay, kmap, "tr", foto, dg, harita)}{_giris(h, k, olay, kmap, "en", foto, dg, harita)}</section>
 <main class="hs-govde">{govde}</main>
 </body>
 </html>
@@ -358,6 +542,12 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             digerler.append((o, hedef))
         if len(digerler) >= 12:
             break
+    sayfa_hedef = {}
+    for o in tum.values():
+        h0 = next((f'{x["id"]}.html' for x in o.get("haberler", []) if x["id"] in sayfa_var), None)
+        if h0:
+            sayfa_hedef[o["id"]] = h0
+    harita_of, og_of = {}, {}
     tut, yeni = set(), 0
     for h in haberler:
         k = kmap.get(h.get("kaynak"))
@@ -370,7 +560,13 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         olay = olay_of.get(h["id"])
         yer = (olay or {}).get("yer") if isinstance((olay or {}).get("yer"), dict) else None
         foto = _foto_sec(kok, yer.get("ad"), int(h["id"][-4:], 16) if re.fullmatch(r"[0-9a-f]{4}", h["id"][-4:]) else 0) if yer else None
-        metin = sayfa(h, k, M, site, surum, etiketler.get(h["id"]), olay, kmap, sayfa_var, foto, digerler)
+        hr = og = ""
+        if olay and len(olay.get("haberler", [])) >= 2:
+            if olay["id"] not in harita_of:
+                harita_of[olay["id"]] = harita_yaz(kok, olay)
+                og_of[olay["id"]] = paylasim_gorseli(kok, olay, kmap)
+            hr, og = harita_of[olay["id"]], og_of[olay["id"]]
+        metin = sayfa(h, k, M, site, surum, etiketler.get(h["id"]), olay, kmap, sayfa_var, foto, digerler, tum, sayfa_hedef, hr, og)
         yol = os.path.join(d, ad)
         try:
             if open(yol, encoding="utf-8").read() == metin:
@@ -382,9 +578,14 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         yeni += 1
     # Akıştan düşen haberlerin sayfaları SAKLA_GUN boyunca kalır, sonra silinir
     silinen, eski = 0, (simdi - dt.timedelta(days=SAKLA_GUN)).timestamp()
+    for alt in ("harita", "og"):
+        da = os.path.join(d, alt)
+        for ad in (os.listdir(da) if os.path.isdir(da) else []):
+            if os.path.getmtime(os.path.join(da, ad)) < eski:
+                os.remove(os.path.join(da, ad))
     for ad in os.listdir(d):
         yol = os.path.join(d, ad)
-        if ad.endswith(".html") and ad not in tut and os.path.getmtime(yol) < eski:
+        if ad.endswith(".html") and ad not in tut and os.path.isfile(yol) and os.path.getmtime(yol) < eski:
             os.remove(yol)
             silinen += 1
     log(f"Haber sayfaları: {len(tut)} sayfa ({yeni} yeni ya da güncel, {silinen} eski silindi)")

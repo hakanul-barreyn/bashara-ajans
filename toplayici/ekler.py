@@ -83,12 +83,18 @@ Kurallar:
   Kararsız kalırsan "aktarim" yaz.
 - anlatim: gruptaki HER haber için o yayının olayı NASIL verdiğini, başlığa ve kısa özete dayanarak, şu alanlarla çıkar:
   "dayanak": habere kimin açıklaması ya da verisi temel olmuş (en fazla 4 kelime: "İsrail ordusu", "Gazze Sağlık Bakanlığı",
-  "BM", "muhabirin gözlemi", "Hamas açıklaması", "belirsiz"…);
+  "BM", "muhabirin gözlemi", "Hamas açıklaması", "belirsiz"…). AYNI TARAFI HER HABERDE AYNI ADLA YAZ: örneğin "Suudi savunması",
+  "koalisyon sözcüsü", "Suudi yönetimi" hepsi "Suudi koalisyonu"; "IDF", "ordu sözcüsü", "İsrail askeri kaynakları" hepsi "İsrail ordusu";
   "fail": eylemi yapanı yayının nasıl verdiği: "acik" (fail adıyla yazılmış), "edilgen" (ölüm/yıkım var ama fail gizlenmiş:
   "öldü", "hayatını kaybetti", "patlama oldu"), "yok" (bir faille ilgili olay değil);
   "baglam": işgal, abluka, süregiden saldırılar ya da öncesi gibi bir bağlam verilmiş mi (true/false);
-  "rakam": haberde geçen en önemli sayı ve birimi (örn. "12 ölü"), yoksa null;
+  "rakam": haberde geçen en önemli sayı ve NEYİN sayısı olduğu (örn. "12 ölü", "3 füze"); birimsiz çıplak sayı yazma; yoksa null;
   "kelime": yayının olayı adlandırmak için seçtiği kilit kelime, özgün dilinde ve en fazla 3 kelime ("katliam", "operasyon", "çatışma"…).
+- olgular: olayın en önemli 3-5 olgusu (kısa, tek cümle, en çok 90 karakter; ör. "Beni Huşayş'ta 33 ölü, çoğu kadın ve çocuk",
+  "Füze havada imha edildi") ve her olguyu başlığında ya da özetinde VEREN haberlerin kimlikleri: [{"olgu": "...", "ids": ["..."]}].
+  Sivil kayıplar, failin kimliği ve bağlam gibi bazı yayınların atladığı olguları özellikle yaz. Olgu uydurma; yalnızca verilenlerden.
+- dogrulanmamis: haberlerden biri bir iddianın bağımsız olarak DOĞRULANAMADIĞINI açıkça söylüyorsa (ör. "Reuters rakamları
+  doğrulayamadı") {"aciklama": "hangi iddia, kim doğrulayamadı", "ids": [o iddiayı aktaran haberler]}; yoksa null.
 - ortak: kaynaklar büyük ölçüde AYNI dayanağa ve aynı bilgiye dayanıyorsa bunu bir cümleyle söyle (örn. "Hepsi İsrail ordusunun
   açıklamasını aktarıyor."); değilse null.
 - fark: yayınlar arasında dayanak, fail, bağlam, rakam ya da kelime bakımından anlamlı bir fark varsa true, yoksa false.
@@ -97,7 +103,7 @@ Kurallar:
   kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
 """
 
 
@@ -147,8 +153,20 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
                               "baglam": a.get("baglam") if isinstance(a.get("baglam"), bool) else None,
                               "rakam": guvenli(a.get("rakam"))[:40] or None,
                               "kelime": guvenli(a.get("kelime"))[:40] or None}
+        olgular = []
+        for x in (g.get("olgular") or [])[:6]:
+            if isinstance(x, dict) and x.get("olgu"):
+                oi = [i for i in map(str, x.get("ids") or []) if i in ids]
+                if oi:
+                    olgular.append({"olgu": guvenli(x["olgu"])[:120], "ids": oi})
+        dv = g.get("dogrulanmamis")
+        dogrulanmamis = None
+        if isinstance(dv, dict) and dv.get("aciklama"):
+            di = [i for i in map(str, dv.get("ids") or []) if i in ids]
+            if di:
+                dogrulanmamis = {"aciklama": guvenli(dv["aciklama"])[:300], "ids": di}
         olaylar.append({
-            "yer": yer, "celiski": celiski, "anlatim": anl,
+            "yer": yer, "celiski": celiski, "anlatim": anl, "olgular": olgular, "dogrulanmamis": dogrulanmamis,
             "ortak": guvenli(g.get("ortak"))[:240] or None if g.get("ortak") else None,
             "fark": g.get("fark") if isinstance(g.get("fark"), bool) else None,
             "id": oid, "baslik": guvenli(g.get("baslik"))[:160], "not": guvenli(g.get("not"))[:700],
