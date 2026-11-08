@@ -1144,7 +1144,8 @@
   "id": 45,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "ig_gizle": true
  },
  {
   "ad": "Shafaq News",
@@ -3044,7 +3045,8 @@
   "notu": "",
   "id": 135,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "ig_gizle": true
  },
  {
   "ad": "Hawar Haber Ajansı (ANHA)",
@@ -3063,7 +3065,8 @@
   "notu": "Türkiye’de erişim engeli olabilir.",
   "id": 136,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "ig_gizle": true
  },
  {
   "ad": "Kurdistan24",
@@ -3086,7 +3089,8 @@
    "kurdistan24english",
    "Kurdistan24"
   ],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "ig_gizle": true
  },
  {
   "ad": "Irak Haber Ajansı (INA)",
@@ -3429,7 +3433,8 @@
     "url": "https://en.wikipedia.org/wiki/Iran_International",
     "tarih": "2018-10-31"
    }
-  ]
+  ],
+  "ig_gizle": true
  },
  {
   "ad": "MAP",
@@ -3677,7 +3682,8 @@
   "notu": "Bazı haberlerine erişim engeli getirilebiliyor.",
   "id": 166,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "ig_gizle": true
  },
  {
   "ad": "Daily Sabah",

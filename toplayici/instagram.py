@@ -34,6 +34,8 @@ import almanak
 import marka
 
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 4)
+# Yeni kart tasarımı bitene kadar gönderim durduruldu (kartlar yine hazırlanır). Açmak için False yap.
+DURAKLAT = True
 IG_ARA = 150                      # dakika
 SURUM = "v23.0"
 G, Y = 1080, 1350                 # 4:5 dikey; akışta en çok yer kaplayan oran
@@ -223,7 +225,8 @@ def _jpeg(svg, yol):
 
 # ------------------------------------------------------------------ içerik seçimi
 def _uygun_kaynak(k):
-    return bool(k) and not k.get("resmi_grup") and not k.get("hassas")
+    # ig_gizle: sitede kalan ama Türkçe Instagram kitlesinde yanlış anlaşılabilecek yayınlar (Kürt bölgesi yayınları, Iran International…)
+    return bool(k) and not k.get("resmi_grup") and not k.get("hassas") and not k.get("ig_gizle")
 
 
 def _olay_ozeti(o, haberler, kaynaklar):
@@ -581,7 +584,7 @@ def yayinla(kok, durum, simdi, log=print):
     kay = durum.setdefault("_instagram", {"kuyruk": [], "olay": [], "bulten": {}, "gonderim": []})
     sinir = (simdi - dt.timedelta(days=7)).isoformat()
     kay["olay"] = [x for x in kay.get("olay", []) if x[0] >= sinir]
-    if not token:
+    if not token or DURAKLAT:
         return 0
     if not kay.get("basladi"):
         kay["basladi"] = simdi.isoformat()
