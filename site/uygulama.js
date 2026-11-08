@@ -729,6 +729,7 @@
     // Kartın en altında kendi haber sayfamıza giden geniş düğme (kim nasıl yazdı, karşılaştırma, grafikler)
     const sb = el("a", "kart-sayfa"); sb.href = "h/" + encodeURIComponent(h.id) + ".html";
     if (o && o.kaynak_sayisi > 1) {
+      sb.classList.add("olayli");
       sb.appendChild(el("b", null, "Kim nasıl yazdı"));
       sb.appendChild(el("span", null, o.kaynak_sayisi + " yayının karşılaştırması · ZBS analizi"));
     } else {
