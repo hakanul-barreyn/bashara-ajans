@@ -718,11 +718,6 @@
       g.appendChild(et);
     }
     const o = h.olay && olayHarita[h.olay];
-    if (o && !olaySec) {
-      const b = el("button", "olay-bag", "Bu olayı " + o.kaynak_sayisi + " kaynak yazdı · nasıl anlattıklarını gör →"); b.type = "button";
-      b.onclick = () => olayAc(o.id);
-      g.appendChild(b);
-    }
     const ey = el("div", "eylemler");
     ey.appendChild(eylem(h.telegram ? "Telegram’da aç ↗" : h.gnews ? "Kaynağa git (Google Haberler üzerinden) ↗" : "Kaynağa git ↗", h.url, "ana"));
     if (!h.gnews) {
@@ -731,6 +726,17 @@
     }
     ey.appendChild(paylasDugme(h));
     g.appendChild(ey);
+    // Kartın en altında kendi haber sayfamıza giden geniş düğme (kim nasıl yazdı, karşılaştırma, grafikler)
+    const sb = el("a", "kart-sayfa"); sb.href = "h/" + encodeURIComponent(h.id) + ".html";
+    if (o && o.kaynak_sayisi > 1) {
+      sb.appendChild(el("b", null, "Kim nasıl yazdı"));
+      sb.appendChild(el("span", null, o.kaynak_sayisi + " yayının karşılaştırması · ZBS analizi"));
+    } else {
+      sb.appendChild(el("b", null, "ZBS sayfasında oku"));
+      sb.appendChild(el("span", null, "Özet, bağlam ve kaynak bilgisi"));
+    }
+    sb.appendChild(el("i", null, "→"));
+    g.appendChild(sb);
     kart.appendChild(g);
     // Kartın gövdesine dokunmak haberi kaynağında açar (analiz kartlarıyla aynı); metin seçerken açılmaz
     kart.addEventListener("click", (e) => {
