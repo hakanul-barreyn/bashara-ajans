@@ -82,6 +82,23 @@
   gorulen[location.pathname.split("/").pop()] = true;
   var isaret = document.createElement("div"); isaret.className = "mk-yukleniyor"; akis.after(isaret);
 
+  // Bir haber bitip sıradaki başlamadan önce: "Haberin sonu" çizgisi ve okuma önerileri (sayfanın 'Okumaya devam' kartlarından)
+  var sonOneri = Array.prototype.slice.call(document.querySelectorAll(".mk-alt .mk-daha"));
+  function oneriBlok(dahalar, haric) {
+    var d = dahalar.filter(function (x) { return x.dataset.dil === DIL; })[0] || dahalar[0];
+    if (!d) return null;
+    var hedef = (haric || "").split("/").pop();
+    var kartlar = Array.prototype.slice.call(d.querySelectorAll(".mk-kart")).filter(function (a) { return (a.getAttribute("href") || "").split("/").pop() !== hedef; }).slice(0, 4);
+    if (!kartlar.length) return null;
+    var b = document.createElement("section"); b.className = "mk-ara";
+    var son = document.createElement("p"); son.className = "mk-ara-son"; son.textContent = DIL === "en" ? "End of story" : "Haberin sonu";
+    var h = document.createElement("h2"); h.textContent = DIL === "en" ? "Recommended reading" : "Okuma önerileri";
+    var k = document.createElement("div"); k.className = "mk-kartlar";
+    kartlar.forEach(function (a) { k.appendChild(document.importNode(a, true)); });
+    b.append(son, h, k);
+    return b;
+  }
+
   function sonrakiYukle() {
     var sonraki = son && son.dataset.sonraki;
     if (yukleniyor || !sonraki || gorulen[sonraki] || yuklenen >= 5) { isaret.textContent = ""; return; }
@@ -96,6 +113,8 @@
       kap.appendChild(et);
       m.dataset.adres = new URL(sonraki, location.href).href;
       kap.appendChild(document.importNode(m, true));
+      var ob = oneriBlok(sonOneri, sonraki); if (ob) akis.appendChild(ob);
+      sonOneri = Array.prototype.slice.call(dok.querySelectorAll(".mk-alt .mk-daha"));
       akis.appendChild(kap);
       son = kap.querySelector(".mk-makale");
       dilUygula(kap); paylasBagla(kap); haritalar(kap); izle(son);

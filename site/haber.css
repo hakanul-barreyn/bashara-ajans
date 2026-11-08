@@ -143,3 +143,11 @@
 .hs-gr-bas{font-size:1.45rem;font-weight:800}
 .hs-gr-alt{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.86rem;color:var(--mk-soluk)}
 .hs-grafikler>.hs-bolum:first-of-type{margin-top:4px}
+
+/* haberler arası: haberin sonu ve okuma önerileri */
+.mk-ara{max-width:1180px;margin:46px auto 0;padding:0 0 10px}
+.mk-ara-son{display:flex;align-items:center;gap:14px;margin:0 0 26px;font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mk-soluk)}
+.mk-ara-son::before,.mk-ara-son::after{content:"";flex:1;height:0;border-top:3px double var(--mk-yazi)}
+.mk-ara h2{margin:0 0 14px;padding-bottom:8px;border-bottom:3px solid var(--mk-yazi);font-size:.8rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.mk-sirada{margin-top:44px}
+.mk-govde{--icerik:1180px}

@@ -535,13 +535,14 @@ h1,.duzen h2:not(.bolum),.duzen h3,.sayfa h2,.sayfa h3,.olay-baslik h2,.olay-bas
 .slayt-kim b{color:#fff;font-weight:700}
 .slayt-sessiz{font-size:.78rem;font-weight:700;color:#fff;background:#c9302c;padding:3px 10px;border-radius:999px}
 
-/* Kefiye dokusu: yalnızca geniş ekranda, ortası boş, kenarlara doğru koyulaşır */
+/* Kefiye dokusu: yalnızca geniş ekranda, yalnızca içerik sütununun dışındaki kenar boşluklarında; yazıların arkası boş,
+   ekranın kenarına doğru koyulaşır */
+:root{--icerik:1240px}
 @media (min-width:821px) and (hover:hover){
-  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url(kefiye.png) 0 0/264px 264px repeat;opacity:.2;
-    -webkit-mask-image:radial-gradient(ellipse 62% 75% at 50% 45%,transparent 50%,rgba(0,0,0,.55) 78%,#000 100%);
-    mask-image:radial-gradient(ellipse 62% 75% at 50% 45%,transparent 50%,rgba(0,0,0,.55) 78%,#000 100%)}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url(kefiye.png) 0 0/264px 264px repeat;opacity:.22;
+    --m:linear-gradient(90deg,#000 0,rgba(0,0,0,.45) calc(50% - var(--icerik)/2 - 70px),transparent calc(50% - var(--icerik)/2 + 6px),transparent calc(50% + var(--icerik)/2 - 6px),rgba(0,0,0,.45) calc(50% + var(--icerik)/2 + 70px),#000 100%);
+    -webkit-mask-image:var(--m);mask-image:var(--m)}
 }
-
 /* Gündem slaytı: kenardan kenara, büyük; başlık ve noktalar içerik sütununda */
 body{overflow-x:clip}
 .gundem{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin-top:0}
