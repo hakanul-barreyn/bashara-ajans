@@ -169,7 +169,6 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     if len(satir) < 2:
         return ""
     return (f'<section class="hs-bolum" id="kim-{dil}"><h2>{t["kim"]} · {len({x.get("k") for x in olay["haberler"]})}</h2>'
-            + (f'<p>{_e(olay.get("not_en") if dil == "en" and olay.get("not_en") else olay.get("not"))}</p>' if olay.get("not") else "")
             + f'<ul class="hs-kim">{"".join(satir[:10])}</ul>'
             + (f'<details class="hs-kim-daha"><summary>{"Tümünü göster" if dil == "tr" else "Show all"} ({len(satir)})</summary>'
                f'<ul class="hs-kim">{"".join(satir[10:])}</ul></details>' if len(satir) > 10 else "")
@@ -341,36 +340,23 @@ def paylasim_gorseli(kok, olay, kmap):
             pass
 
 
-def _giris(h, k, olay, kmap, dil, foto, dg, harita=""):
-    """Siyah giriş bölümü: başlık, sayılar, bakış dağılımı, paylaşılan haberin alıntısı ve karşı alıntı, düğmeler."""
+def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef, ilgili, site):
+    """Bir dilde makale gövdesi: üst bilgi, başlık, özet, künye, paylaş, kapak, metin, bölümler, etiketler."""
     t = T[dil]
-    bas = (h.get("baslik_en") if dil == "en" else None) or h.get("baslik_tr") or h.get("baslik_orj") or ""
+    hs = (olay or {}).get("haberler", []) if len((olay or {}).get("haberler", [])) >= 2 else []
+    bas = ((olay or {}).get("baslik_en" if dil == "en" else "baslik") or (olay or {}).get("baslik")) if hs else None
+    bas = bas or (h.get("baslik_en") if dil == "en" else None) or h.get("baslik_tr") or h.get("baslik_orj") or ""
     oz = (h.get("ozet_en") if dil == "en" else None) or h.get("ozet_tr") or ""
-    hs = (olay or {}).get("haberler", [])
-    yayin_say = len({x.get("k") for x in hs}) if len(hs) >= 2 else 1
-    sayi = {}
-    for x in hs:
-        if x.get("b") in BAKIS:
-            sayi[x["b"]] = sayi.get(x["b"], 0) + 1
-    hap = [f'<span class="hs-hap">{_e(t["analiz"] if h.get("nitelik") == "analiz" else t["haber"])}</span>',
-           f'<span class="hs-hap">{yayin_say} {t["yayin"]}</span>' if yayin_say > 1 else f'<span class="hs-hap">{t["tek"]}</span>']
-    hap += [f'<span class="hs-hap"><i style="background:{BAKIS[v][2]}"></i>{_e(BAKIS[v][0] if dil == "tr" else BAKIS[v][1])} {n}</span>'
-            for v, n in sayi.items()]
-    # Alıntılar: paylaşılan haber + (varsa) farklı bakıştan bir karşı haber
-    alinti = [(h["id"], k, bas, h.get("url"), True)]
-    benim_b = next((x.get("b") for x in hs if x["id"] == h["id"]), None)
-    karsi = next((x for x in hs if x["id"] != h["id"] and x.get("b") and x.get("b") != benim_b and kmap.get(x.get("k"))), None)
-    if karsi:
-        alinti.append((karsi["id"], kmap[karsi["k"]], karsi.get("bt") or karsi.get("bo"), karsi.get("u"), False))
-    al = "".join(f'<div class="hs-al{" secili" if sec else ""}"><small>{_e(kk.get("ad"))} · {_e(almanak.kamp(kk))}</small>'
-                 f'<p>“{_e(_kisa(b_, 160))}”</p>'
-                 + (f'<a href="{_e(u)}" target="_blank" rel="noopener">{t["oku"]}</a>' if str(u or "").startswith(("http://", "https://")) else "")
-                 + "</div>" for i, kk, b_, u, sec in alinti)
-    seridi = "".join(f"<span>{_e(kmap[k_]['ad'])}</span>" for k_ in dict.fromkeys(x.get("k") for x in hs) if kmap.get(k_))
-    baslik = ((olay or {}).get("baslik_en" if dil == "en" else "baslik") or (olay or {}).get("baslik")) if len(hs) >= 2 else bas
-    # Gecikme: İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi
+    yer = (olay or {}).get("yer", {}).get("ad") if isinstance((olay or {}).get("yer"), dict) else None
+    n = len({x.get("k") for x in hs})
+    kategori = (t["analiz"] if h.get("nitelik") == "analiz" else t["haber"]) + (f" · {yer}" if yer else "")
+    # Künye satırı
+    kunye = (f'<span>{_e("ZBS masası" if dil == "tr" else "ZBS desk")}</span>'
+             + (f'<span>{n} {t["yayin"]}</span>' if n else f'<span>{_e(k.get("ad"))}</span>')
+             + f'<time datetime="{_e(h.get("tarih"))}">{_e(_tarih(h.get("tarih"), dil))}</time>')
+    # Gecikme ve ilk yazan
     gec = ""
-    if len(hs) >= 2:
+    if hs:
         ic = [x["t"] for x in hs if x.get("t") and almanak.kamp(kmap.get(x.get("k"))) in almanak.BOLGE_ICI]
         ds = [x["t"] for x in hs if x.get("t") and almanak.kamp(kmap.get(x.get("k"))) in almanak.DIS]
         if ic and not ds:
@@ -385,42 +371,98 @@ def _giris(h, k, olay, kmap, dil, foto, dg, harita=""):
         ilk = min((x for x in hs if x.get("t") and kmap.get(x.get("k"))), key=lambda x: x["t"], default=None)
         if ilk:
             gec += (" İlk yazan: " if dil == "tr" else " First to report: ") + kmap[ilk["k"]]["ad"] + "."
-    return (f'<div data-dil="{dil}" class="hs-ic">'
-            f'<div class="hs-meta"><time datetime="{_e(h.get("tarih"))}">{_e(_tarih(h.get("tarih"), dil))}</time>'
-            + (f' · {_e((olay or {}).get("yer", {}).get("ad"))}' if isinstance((olay or {}).get("yer"), dict) and olay["yer"].get("ad") else "")
-            + "</div>"
-            f'<div class="hs-meta">{"".join(hap)}</div>'
-            + (f'<p class="hs-meta" style="color:#ff9aa8">⏱ {_e(gec.strip())}</p>' if gec else "")
+    # Bakış dağılımı
+    sayi = {}
+    for x in hs:
+        if x.get("b") in BAKIS:
+            sayi[x["b"]] = sayi.get(x["b"], 0) + 1
+    top = sum(sayi.values()) or 1
+    denge = ""
+    if sayi:
+        denge = ('<div class="mk-denge"><div class="mk-denge-cubuk">'
+                 + "".join(f'<i style="width:{100 * sayi.get(v, 0) / top:.1f}%;background:{BAKIS[v][2]}"></i>' for v in ("filistin", "aktarim", "israil") if sayi.get(v))
+                 + '</div><div class="mk-denge-acik">'
+                 + "".join(f'<span><i style="background:{BAKIS[v][2]}"></i>{_e(BAKIS[v][0] if dil == "tr" else BAKIS[v][1])} {sayi[v]}</span>' for v in ("filistin", "aktarim", "israil") if sayi.get(v))
+                 + "</div></div>")
+    # Kapak: onaylı fotoğraf, yoksa harita
+    if foto:
+        kapak = (f'<figure class="mk-kapak"><img src="../data/foto/{_e(foto[0])}.jpg" alt="" loading="eager">'
+                 f'<figcaption>{_e(yer or "")}{" · " if yer else ""}{_e(foto[1])}</figcaption></figure>')
+    elif harita:
+        kapak = (f'<figure class="mk-kapak mk-harita"><img src="{_e(harita)}" alt="" width="600" height="340">'
+                 f'<figcaption>{_e(("Olayın yeri: " if dil == "tr" else "Location: ") + (yer or ""))}</figcaption></figure>')
+    else:
+        kapak = ""
+    # Karşı manşetler (alıntı kutusu)
+    benim_b = next((x.get("b") for x in hs if x["id"] == h["id"]), None)
+    karsi = next((x for x in hs if x["id"] != h["id"] and x.get("b") and x.get("b") != benim_b and kmap.get(x.get("k"))), None)
+    alinti = ""
+    if karsi:
+        b1 = (h.get("baslik_en") if dil == "en" else None) or h.get("baslik_tr") or h.get("baslik_orj")
+        alinti = ('<aside class="mk-iki">'
+                  f'<blockquote><cite>{_e(k.get("ad"))} · {_e(almanak.kamp(k))}</cite><p>“{_e(_kisa(b1, 170))}”</p></blockquote>'
+                  f'<blockquote><cite>{_e(kmap[karsi["k"]]["ad"])} · {_e(almanak.kamp(kmap[karsi["k"]]))}</cite>'
+                  f'<p>“{_e(_kisa(karsi.get("bt") or karsi.get("bo"), 170))}”</p></blockquote></aside>')
+    # Metin: paylaşılan haberin özeti, çerçeve notu
+    not_ = ((olay or {}).get("not_en") if dil == "en" and (olay or {}).get("not_en") else (olay or {}).get("not")) if hs else ""
+    govde = ""
+    if oz:
+        govde += f'<p class="mk-ilk">{_e(oz)}</p>'
+    govde += (f'<p class="mk-kaynak">{_e("Bu haberin kaynağı" if dil == "tr" else "Source of this story")}: '
+              f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>')
+    # Ayrıca okuyun (metnin içinde): en yakın ilgili olay
+    ayrica = ""
+    if ilgili:
+        o2, hedef2 = ilgili[0]
+        ayrica = (f'<a class="mk-ayrica" href="{_e(hedef2)}"><small>{_e("Ayrıca okuyun" if dil == "tr" else "Also read")}</small>'
+                  f'<b>{_e(o2.get("baslik_en") if dil == "en" and o2.get("baslik_en") else o2.get("baslik"))}</b></a>')
+    paylas = (f'<div class="mk-paylas"><button type="button" data-paylas>{t["paylas"]}</button>'
+              f'<a data-ag="whatsapp" href="#" rel="noopener">WhatsApp</a><a data-ag="telegram" href="#" rel="noopener">Telegram</a>'
+              f'<a data-ag="x" href="#" rel="noopener">X</a></div>')
+    etiket = "".join(f'<span>{_e(e)}</span>' for e in dict.fromkeys(
+        ([yer] if yer else []) + [almanak.kamp(kmap[x["k"]]) for x in hs if kmap.get(x.get("k"))][:12]))
+    return (f'<div data-dil="{dil}" class="mk-dil">'
+            f'<p class="mk-ust">{_e(kategori)}</p>'
+            f'<h1 class="mk-baslik">{_e(bas)}</h1>'
+            + (f'<p class="mk-ozet">{_e(_kisa(not_, 300))}</p>' if not_ else "")
+            + f'<div class="mk-kunye">{kunye}</div>'
+            + (f'<p class="mk-gec">⏱ {_e(gec.strip())}</p>' if gec else "")
             + _dogrulama_blogu(dg, dil)
-            + f'<h1>{_e(baslik or bas)}</h1>'
-            + (f'<p class="hs-ozet-ust">{_e(oz)}</p>' if oz else "")
-            + f'<div class="hs-alinti">{al}</div>'
-            + '<div class="hs-dugmeler">'
-            + f'<a class="hs-d ana" href="{_e(h["url"])}" target="_blank" rel="noopener">{t["git"]} ↗</a>'
-            + f'<button class="hs-d" type="button" data-paylas>{t["paylas"]}</button>'
-            + (f'<a class="hs-d" href="#kim-{dil}">{t["kim"]} ↓</a>' if len(hs) >= 2 else "")
-            + "</div>"
-            + (f'<div class="hs-seridi">{seridi}</div>' if len(hs) >= 2 else "")
-            + (f'<figure class="hs-harita"><img src="{_e(harita)}" alt="" width="600" height="340" loading="lazy"></figure>' if harita else "")
-            + (f'<p class="hs-kunye">{_e(foto[1])}</p>' if foto else "")
+            + paylas + kapak + denge
+            + f'<div class="mk-metin">{govde}{alinti}{ayrica}</div>'
+            + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
+            + _zaman(olay, kmap, dil) + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
+            + (f'<div class="mk-etiket">{etiket}</div>' if etiket else "")
+            + f'<p class="mk-not">{T[dil]["not"]}</p>'
             + "</div>")
 
 
-def _diger(digerler, dil, haric):
-    t = T[dil]
+def _yan(digerler, dil, haric):
+    """Yan sütun: en çok yayının yazdığı son olaylar."""
+    liste = sorted([(o, h_) for o, h_ in digerler if o.get("id") != haric], key=lambda x: -len({y.get("k") for y in x[0].get("haberler", [])}))[:6]
+    if not liste:
+        return ""
+    satir = "".join(f'<li><a href="{_e(h_)}"><span class="mk-no">{i}</span><b>{_e(o.get("baslik_en") if dil == "en" and o.get("baslik_en") else o.get("baslik"))}</b>'
+                    f'<small>{len({y.get("k") for y in o.get("haberler", [])})} {"yayın" if dil == "tr" else "outlets"}</small></a></li>'
+                    for i, (o, h_) in enumerate(liste, 1))
+    return f'<div data-dil="{dil}"><h2 class="mk-yan-bas">{"En çok yazılanlar" if dil == "tr" else "Most covered"}</h2><ol class="mk-yan">{satir}</ol></div>'
+
+
+def _alt(digerler, dil, haric):
     kart = []
     for o, hedef in digerler:
         if o.get("id") == haric:
             continue
         n = len({x.get("k") for x in o.get("haberler", [])})
         yer = o["yer"].get("ad") if isinstance(o.get("yer"), dict) else ""
-        kart.append(f'<a class="hs-dk" href="{_e(hedef)}"><b>{_e(o.get("baslik"))}</b>'
-                    f'<small>{n} {"yayın" if dil == "tr" else "outlets"}{" · " + _e(yer) if yer else ""} · {_e(_tarih(o.get("son") or o.get("ilk"), dil))}</small></a>')
-        if len(kart) >= 8:
+        kart.append(f'<a class="mk-kart" href="{_e(hedef)}"><small>{_e(yer or ("Haber" if dil == "tr" else "News"))}</small>'
+                    f'<b>{_e(o.get("baslik_en") if dil == "en" and o.get("baslik_en") else o.get("baslik"))}</b>'
+                    f'<span>{n} {"yayın" if dil == "tr" else "outlets"} · {_e(_tarih(o.get("son") or o.get("ilk"), dil))}</span></a>')
+        if len(kart) >= 6:
             break
     if not kart:
         return ""
-    return f'<section><h2 style="margin:6px 4px 10px;font-size:1.15rem">{t["diger"]}</h2><div class="hs-diger">{"".join(kart)}</div></section>'
+    return f'<section data-dil="{dil}" class="mk-daha"><h2>{"Okumaya devam" if dil == "tr" else "Keep reading"}</h2><div class="mk-kartlar">{"".join(kart)}</div></section>'
 
 
 def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), foto=None, digerler=(), tum=None, sayfa_hedef=None,
@@ -431,13 +473,26 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     adres = f"{site}h/{h['id']}.html"
     hs = (olay or {}).get("haberler", [])
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
+    baslik_ol = (olay or {}).get("baslik") if n else None
     aciklama = _kisa((f"{n} yayın bu olayı nasıl anlattı? " if n else "") + (h.get("ozet_tr") or h.get("baslik_orj") or ""), 200)
     resim = f"{site}h/{og}" if og else f"{site}site/paylas.png"
     v = f"?v={surum}"
-    foto_ic = f'<div class="hs-foto" style="background-image:url(\'../data/foto/{_e(foto[0])}.jpg\')"></div>' if foto else ""
-    govde = "".join(f'<div data-dil="{d}" style="display:contents">{_olgular(olay, kmap, d)}{_fark(olay or {}, kmap, d)}'
-                    f'{_kim_nasil(olay, h, kmap, sayfa_var, d)}{_zaman(olay, kmap, d)}{_onceki(olay, tum or {}, sayfa_hedef or {}, d)}'
-                    f'{_diger(digerler, d, (olay or {}).get("id"))}<p class="hs-not">{T[d]["not"]}</p></div>' for d in ("tr", "en"))
+    haric = (olay or {}).get("id")
+    # Sıradaki haber: "okumaya devam" listesinde bu olaydan sonraki ilk olay (sonsuz akış için)
+    sira = [h_ for o, h_ in digerler if o.get("id") != haric]
+    sonraki = sira[0] if sira else ""
+    # İlgili olay (metin içi "Ayrıca okuyun"): önceki gelişmelerden en yenisi
+    ilgili = []
+    if olay:
+        kw = _kelimeler(olay.get("baslik"))
+        for o in sorted((tum or {}).values(), key=lambda o: o.get("ilk") or "", reverse=True):
+            if o.get("id") != haric and len(kw & _kelimeler(o.get("baslik"))) >= 2 and (sayfa_hedef or {}).get(o["id"]):
+                ilgili.append((o, sayfa_hedef[o["id"]]))
+                break
+    makale = "".join(_makale(h, k, olay, kmap, d, foto, dg, harita, sayfa_var, tum, sayfa_hedef, ilgili, site) for d in ("tr", "en"))
+    yan = "".join(_yan(digerler, d, haric) for d in ("tr", "en"))
+    alt = "".join(_alt(digerler, d, haric) for d in ("tr", "en"))
+    baslik_sekme = _kisa(baslik_ol or bas_tr, 90)
     return f"""<!doctype html>
 <html lang="tr">
 <head>
@@ -446,12 +501,12 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0c0e0d">
-<title>{_e(_kisa(bas_tr, 90))} · {_e(yayin)} | {_e(M["ad"])}</title>
+<title>{_e(baslik_sekme)} | {_e(M["ad"])}</title>
 <meta name="description" content="{_e(aciklama)}">
 <link rel="canonical" href="{_e(adres)}">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="{_e(M["ad"])}">
-<meta property="og:title" content="{_e(_kisa(bas_tr, 110))} · {_e(yayin)}">
+<meta property="og:title" content="{_e(_kisa(baslik_ol or bas_tr, 110))}{"" if n else " · " + _e(yayin)}">
 <meta property="og:description" content="{_e(aciklama)}">
 <meta property="og:url" content="{_e(adres)}">
 <meta property="og:image" content="{_e(resim)}">
@@ -460,27 +515,30 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <meta property="og:locale" content="tr_TR">
 <meta property="article:published_time" content="{_e(h.get("tarih"))}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{_e(_kisa(bas_tr, 110))} · {_e(yayin)}">
+<meta name="twitter:title" content="{_e(_kisa(baslik_ol or bas_tr, 110))}">
 <meta name="twitter:description" content="{_e(aciklama)}">
 <meta name="twitter:image" content="{_e(resim)}">
 <link rel="icon" href="../site/logo.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../site/stil.css{v}">
 <link rel="stylesheet" href="../site/haber.css{v}">
 <script src="../site/dil.js{v}"></script>
 <script src="../site/marka.js{v}"></script>
 <script src="../site/sayfa-haber.js{v}" defer></script>
 </head>
-<body>
-<header class="hs-su">
-  <div class="ust-ic">
-    <a class="marka" href="../"><img class="logo" src="../site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">{_e(M["ad"])}</span></a>
-    <p class="slogan" data-marka="slogan">{_e(M.get("slogan", ""))}</p>
-    <nav class="menu"><a href="../">Akış</a><a href="../arsiv.html">Arşiv</a><a href="../almanak.html">Almanak</a><a href="../kaynaklar.html">Kaynaklar</a></nav>
+<body class="mk-govde">
+<header class="mk-bas">
+  <div class="mk-bas-ic">
+    <a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="30" height="30"><b data-marka="ad">{_e(M["ad"])}</b><span data-marka="slogan">{_e(M.get("slogan", ""))}</span></a>
+    <nav class="mk-menu"><a href="../">Akış</a><a href="../arsiv.html">Arşiv</a><a href="../almanak.html">Almanak</a><a href="../kaynaklar.html">Kaynaklar</a><a href="../hakkimizda.html">Hakkımızda</a></nav>
   </div>
 </header>
-<section class="hs-giris">{foto_ic}{_giris(h, k, olay, kmap, "tr", foto, dg, harita)}{_giris(h, k, olay, kmap, "en", foto, dg, harita)}</section>
-<main class="hs-govde">{govde}</main>
+<div class="mk-sayfa">
+  <article class="mk-makale" data-sonraki="{_e(sonraki)}" data-baslik="{_e(baslik_sekme)} | {_e(M["ad"])}">{makale}</article>
+  <aside class="mk-yan-sutun">{yan}</aside>
+</div>
+<div class="mk-akis" id="akis"></div>
+<div class="mk-alt">{alt}</div>
 </body>
 </html>
 """
