@@ -539,6 +539,17 @@ def paylasim_gorseli(kok, olay, kmap):
             pass
 
 
+def _grafikler(bolumler, dil):
+    """Grafik bölümleri tek bir açılır kutuda, kapalı başlar: sayfa kısa kalır, isteyen açar."""
+    bolumler = [b for b in bolumler if b]
+    if not bolumler:
+        return ""
+    bas = f"Grafikler · {len(bolumler)}" if dil == "tr" else f"Charts · {len(bolumler)}"
+    alt = "Dil, kaynak, fail, rakam ve zaman karşılaştırmaları" if dil == "tr" else "Words, sources, perpetrators, figures and timing compared"
+    return (f'<details class="hs-grafikler"><summary><span class="hs-gr-bas">{bas}</span><span class="hs-gr-alt">{alt}</span></summary>'
+            + "".join(bolumler) + "</details>")
+
+
 def _konum(olay):
     y = (olay or {}).get("yer")
     try:
@@ -645,8 +656,8 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
             + paylas + kapak + denge
             + f'<div class="mk-metin">{govde}{alinti}{ayrica}</div>'
             + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
-            + _dil_terazisi(olay, kmap, dil) + _soz(olay, kmap, dil) + _fail_grafik(olay, kmap, dil) + _rakam_grafik(olay, kmap, dil)
-            + _zaman(olay, kmap, dil) + _yayilis(olay, kmap, dil) + _seyir(olay, tum or {}, dil)
+            + _grafikler([_dil_terazisi(olay, kmap, dil), _soz(olay, kmap, dil), _fail_grafik(olay, kmap, dil), _rakam_grafik(olay, kmap, dil),
+                          _zaman(olay, kmap, dil), _yayilis(olay, kmap, dil), _seyir(olay, tum or {}, dil)], dil)
             + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
             + (f'<div class="mk-etiket">{etiket}</div>' if etiket else "")
             + f'<p class="mk-not">{T[dil]["not"]}</p>'

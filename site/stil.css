@@ -515,3 +515,6 @@ h1,.duzen h2:not(.bolum),.duzen h3,.sayfa h2,.sayfa h3,.olay-baslik h2,.olay-bas
 .slayt-ust .bolum{border-top:0;padding-top:0}
 .slayt-ust{border-top:2px solid var(--ink);padding-top:10px}
 @media (max-width:820px){.ust .menu{gap:12px}.ust .menu a{padding:6px 0}}
+.slayt-kim{margin:4px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.92rem;color:#d9ddda}
+.slayt-kim b{color:#fff;font-weight:700}
+.slayt-sessiz{font-size:.78rem;font-weight:700;color:#fff;background:#c9302c;padding:3px 10px;border-radius:999px}

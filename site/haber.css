@@ -134,3 +134,12 @@
 .gr-yig-acik i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
 .gr-svg{width:100%;height:auto;display:block}
 @media (max-width:560px){.gr-tz{grid-template-columns:minmax(0,1fr)}}
+/* grafikler kutusu: kapalı başlar */
+.hs-grafikler{margin:34px 0 0;border-top:2px solid var(--mk-yazi)}
+.hs-grafikler>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:14px 0;font-family:var(--serif)}
+.hs-grafikler>summary::-webkit-details-marker{display:none}
+.hs-grafikler>summary::after{content:"+";margin-left:auto;font:700 1.5rem/1 system-ui,sans-serif}
+.hs-grafikler[open]>summary::after{content:"−"}
+.hs-gr-bas{font-size:1.45rem;font-weight:800}
+.hs-gr-alt{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.86rem;color:var(--mk-soluk)}
+.hs-grafikler>.hs-bolum:first-of-type{margin-top:4px}

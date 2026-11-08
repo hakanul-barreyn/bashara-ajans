@@ -379,8 +379,16 @@
       ic.appendChild(el("span", "slayt-sayi", (n + 1) + " / " + liste.length + " · " + kp.toplam + " kaynak · son " + once(o.son)));
       ic.appendChild(el("h3", null, OB(o)));
       if (ON(o)) ic.appendChild(el("p", null, ON(o).length > 220 ? ON(o).slice(0, 217) + "…" : ON(o)));
-      ic.appendChild(bakisMatrisi(o, true) || cubuk(kp.cizgi, CIZGI_RENK, kp.toplam));
-      const kn = korNokta(kp); if (kn) ic.appendChild(el("span", "kor-nokta", kn));
+      // Sade özet: kaç bölge yayını, kaç İsrail/Batı yayını yazdı (ayrıntılar haber sayfasında)
+      const kk = kp.kamp || {}, en = window.DIL === "en";
+      const bolgeN = ["Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"].reduce((t, x) => t + (kk[x] || 0), 0);
+      const disN = ["İsrail", "Batı"].reduce((t, x) => t + (kk[x] || 0), 0);
+      const sat = el("p", "slayt-kim");
+      sat.appendChild(el("b", null, (en ? "Regional press " : "Bölge basını ") + bolgeN));
+      sat.appendChild(document.createTextNode(" · "));
+      sat.appendChild(el("b", null, (en ? "Israeli & Western press " : "İsrail ve Batı basını ") + disN));
+      if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Israeli and Western outlets did not report it" : "İsrail ve Batı basını yazmadı"));
+      ic.appendChild(sat);
       const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
       ic.appendChild(b);
       sl.appendChild(ic);
