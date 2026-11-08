@@ -24,7 +24,11 @@ import almanak  # noqa: E402
 
 BASLANGIC = dt.date(2023, 10, 7)
 GAZZE = re.compile(r"gazze|gaza|غزة|غزه|עזה|gazastreifen|striscia", re.I)
-OZET_SURUM = 1
+BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|siyon|zionis|sionis|sionist|cisjord|west bank|batı şeria|"
+                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|idf|فلسطين|إسرائيل|اسرائيل|"
+                    r"الاحتلال|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
+IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
+OZET_SURUM = 2
 BULTEN_SURUM = 1
 
 
@@ -134,6 +138,18 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             n, tt = (eski, {}) if isinstance(eski, int) else (eski[0], eski[1])
             for a in bulunan:
                 tt[a] = tt.get(a, 0) + 1
+            # Rapor için: Gazze geçen başlık (_g) ve Filistin / İsrail / Gazze bağlamındaki başlık (_b); bağlamdaki
+            # başlıklarda geçen kelimeler "b:<kelime>" (ör. Ruanda soykırımı haberleri 'soykırım' sayısını şişirmesin)
+            gz = bool(GAZZE.search(b) or GAZZE.search(kb))
+            bg = gz or bool(BAGLAM.search(b) or BAGLAM.search(kb))
+            if gz:
+                tt["_g"] = tt.get("_g", 0) + 1
+            if IRAN.search(b) or IRAN.search(kb):
+                tt["_i"] = tt.get("_i", 0) + 1
+            if bg:
+                tt["_b"] = tt.get("_b", 0) + 1
+                for a in bulunan:
+                    tt["b:" + a] = tt.get("b:" + a, 0) + 1
             y[kid] = [n + 1, tt] if tt else n + 1
             if not yan:
                 continue
@@ -168,8 +184,11 @@ def _indir(kok, log):
     yol = os.path.join(kok, "data", "bulten", "gecmis-ozet.json.gz")
     zyol = os.path.join(kok, "data", "bulten", "gecmis-indirme.json")
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    son = almanak._oku(zyol, {}).get("zaman")
-    taze = os.path.exists(yol) and son and dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(son) < dt.timedelta(hours=6)
+    ind = almanak._oku(zyol, {})
+    son = ind.get("zaman")
+    # Elimizdeki özet eski sürümdeyse (yeni ölçüler yoksa) 6 saati beklemeden yeniden indir
+    taze = (os.path.exists(yol) and son and ind.get("surum") == OZET_SURUM
+            and dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(son) < dt.timedelta(hours=6))
     if depo and not taze:
         try:
             istek = urllib.request.Request(f"https://raw.githubusercontent.com/{depo}/tarama/gecmis.json.gz",
@@ -179,7 +198,11 @@ def _indir(kok, log):
             os.makedirs(os.path.dirname(yol), exist_ok=True)
             with open(yol, "wb") as f:
                 f.write(icerik)
-            almanak._yaz(zyol, {"zaman": dt.datetime.now(dt.timezone.utc).isoformat()})
+            try:
+                gelen = json.loads(gzip.decompress(icerik)).get("surum")
+            except Exception:
+                gelen = None
+            almanak._yaz(zyol, {"zaman": dt.datetime.now(dt.timezone.utc).isoformat(), "surum": gelen})
         except Exception as e:
             log(f"Geçmiş özeti indirilemedi: {e}")
     try:

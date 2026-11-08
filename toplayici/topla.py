@@ -38,6 +38,7 @@ import instagram  # noqa: E402
 import sayfalar  # noqa: E402
 import karne  # noqa: E402
 import gecmis  # noqa: E402
+import rapor  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
 import diller  # noqa: E402
@@ -1105,6 +1106,10 @@ def main():
             durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
     except Exception as e:
         log(f"Almanak (geçmiş) hatası: {e}")
+    try:
+        rapor.hesapla(KOK, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Rapor (7 Ekim) hatası: {e}")
     # Sitenin Telegram kanalına gündem, öncelikli analizler ve bültenler
     try:
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)

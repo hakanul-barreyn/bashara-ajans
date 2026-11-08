@@ -1,0 +1,66 @@
+/* 7 Ekim raporu: uzun okuma düzeni, serif metin, sade grafikler */
+.rapor-govde{background:#fbfaf7}
+.rp{max-width:880px;margin:0 auto;padding:34px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.rp-bas{border-bottom:1px solid var(--cizgi);padding-bottom:20px}
+.rp-ust{margin:0 0 12px;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#c9302c}
+.rp h1{margin:0;font-family:var(--serif);font-weight:800;font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em;text-wrap:balance}
+.rp-dek{margin:16px 0 0;font-family:var(--serif);font-size:clamp(1.12rem,2vw,1.32rem);line-height:1.5;color:#3d4541}
+.rp-kunye{display:flex;flex-wrap:wrap;gap:6px 16px;margin:16px 0 0;font-size:.84rem;color:var(--soluk)}
+.rp-kunye span:first-child{font-weight:800;color:var(--ink)}
+.rp-kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px;margin:26px 0 0}
+.rp-kart{background:#0c0e0d;color:#d9ddda;border-radius:12px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
+.rp-kart b{font-family:var(--serif);font-size:2.4rem;line-height:1;color:#fff}
+.rp-kart b::after{content:"×";font-size:1.4rem;margin-left:2px;color:#7ee2a8}
+.rp-kart span{font-size:.82rem;line-height:1.4}
+.rp-metin{margin:40px 0 0;padding-top:14px;border-top:2px solid var(--ink)}
+.rp-metin h2{margin:0 0 12px;font-family:var(--serif);font-size:1.6rem;font-weight:800;letter-spacing:-.01em}
+.rp-metin p{font-family:var(--serif);font-size:1.12rem;line-height:1.7;color:#1d2421;margin:0 0 14px;max-width:68ch}
+.rp-metin p b{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.95em}
+.rp-sekil{margin:18px 0 0}
+.rp-sekil figcaption{margin-top:8px;font-size:.78rem;color:var(--soluk);line-height:1.45}
+.rp-efsane{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 10px;font-size:.8rem;color:var(--ink2)}
+.rp-efsane span{display:flex;align-items:center;gap:6px}
+.rp-efsane i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.rp-terim{display:flex;flex-direction:column;gap:10px}
+.rp-terim-satir{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center}
+.rp-terim-ad{font-family:var(--serif);font-weight:700;font-size:1rem}
+.rp-terim-ad.yesil{color:#1f7a52}.rp-terim-ad.mavi{color:#2f5bb7}
+.rp-terim-cubuklar{display:flex;flex-direction:column;gap:2px}
+.rp-cubuk{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px;align-items:center}
+.rp-cubuk i{display:block;height:8px;border-radius:4px}
+.rp-cubuk span{font-family:var(--mono);font-size:.72rem;color:var(--ink2);text-align:right}
+.rp-svg{display:block;width:100%;height:auto}
+.rp-izgara{stroke:#000;stroke-opacity:.08}
+.rp-eksen{font-family:var(--mono);font-size:11px;fill:#6f7772}
+.rp-eksen-ad{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:700;fill:#3d4541}
+.rp-nokta-ad{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:11px;font-weight:700;fill:#1d2421;paint-order:stroke;stroke:#fbfaf7;stroke-width:3px}
+.rp-kucukler{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px 20px}
+.rp-kucukler .rp-efsane{grid-column:1/-1}
+.rp-kucuk{margin:0}
+.rp-kucuk figcaption{font-family:var(--serif);font-weight:700;font-size:.98rem;margin-bottom:4px}
+.rp-zirve{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:14px;margin-top:8px}
+.rp-zirve-kart{border:1px solid var(--cizgi);border-radius:12px;padding:14px 16px;background:#fff}
+.rp-zirve-bas{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px}
+.rp-zirve-bas b{font-family:var(--serif);font-size:1.1rem}
+.rp-zirve-bas span{font-size:.76rem;color:var(--soluk)}
+.rp-ornek{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px solid var(--cizgi);text-decoration:none;color:var(--ink)}
+.rp-ornek-b{font-family:var(--serif);font-size:.98rem;line-height:1.35}
+.rp-ornek small{font-size:.72rem;color:var(--soluk)}
+.rp-ornek:hover .rp-ornek-b{text-decoration:underline}
+.rp-tablo details{margin-top:14px}
+.rp-tablo summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:8px 0}
+.rp-tablo table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:620px}
+.rp-tablo th{text-align:left;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--soluk);padding:7px 8px;border-bottom:2px solid var(--ink);white-space:nowrap;cursor:pointer}
+.rp-tablo td{padding:6px 8px;border-bottom:1px solid var(--cizgi)}
+.rp-tablo td.sayi{font-family:var(--mono);font-size:.78rem;text-align:right}
+.rp-yontem ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:.92rem;line-height:1.55;color:#3d4541;max-width:72ch}
+.rp-geri{margin:34px 0 0}
+.rp-geri a{font-weight:700;color:var(--ink)}
+/* Almanak sayfasındaki rapor kartı */
+.rapor-afis{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;align-items:center;background:#0c0e0d;color:#d9ddda;border-radius:16px;padding:20px 22px;text-decoration:none}
+.rapor-afis small{grid-column:1;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7ee2a8}
+.rapor-afis b{grid-column:1;font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.8rem);line-height:1.15;color:#fff}
+.rapor-afis span{grid-column:1;font-size:.9rem}
+.rapor-afis i{grid-column:2;grid-row:1/4;font-style:normal;font-size:1.8rem;color:#7ee2a8}
+.rapor-afis:hover{background:#1f7a52}.rapor-afis:hover i{color:#fff}
+@media (max-width:640px){.rp-terim-satir{grid-template-columns:1fr;gap:4px}}
