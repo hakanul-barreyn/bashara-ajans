@@ -51,7 +51,7 @@ UA = (re.sub(r"[^A-Za-z0-9]+", "-", MARKA["kisa_ad"]).strip("-") or "haber") + "
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
-KESIF_SURUMU = 5
+KESIF_SURUMU = 6
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 100)
 PARTI = 20  # bir istekte kaç haber; istek sayısı ücretsiz kotanın asıl sınırı olduğu için partiler büyük
 GEMINI_GUNLUK = int(os.environ.get("GEMINI_GUNLUK") or 900)  # Pasifik saatiyle gece yarısı sıfırlanan günlük kotanın altında kal
@@ -359,7 +359,8 @@ def kesfet(k):
     alt_bolum = p.path.strip("/") != ""
     sonuc = {"yontem": None, "telegram": k.get("telegram")}
 
-    kod, ana, _ = getir(sayfa) if izinli(sayfa) else (0, "", sayfa)
+    kod, ana, _ = getir(sayfa) if izinli(sayfa) else (-1, "", sayfa)
+    sonuc["kod"] = kod   # teşhis: 200 açık, 403/429 engel, 0 bağlantı kurulamadı, -1 robots.txt izin vermiyor
 
     # Telegram kanalı: sayfadaki t.me bağlantısı
     if not sonuc["telegram"] and ana:
@@ -435,11 +436,17 @@ def kesfet(k):
     # 4) WordPress API'si
     wp = kok + "/wp-json/wp/v2/posts?per_page=20&_fields=link,date,date_gmt,title,excerpt"
     if izinli(wp):
-        kod, metin, _ = getir(wp)
-        if kod == 200 and wp_coz(metin):
+        kod2, metin, _ = getir(wp)
+        if kod2 == 200 and wp_coz(metin):
             sonuc["yontem"] = {"tip": "wp", "url": wp}
             return sonuc
 
+    # 5) Son çare: Google Haberler'in bu alan adı için RSS araması. Site sunucumuzu engelliyorsa (çoğu Cloudflare'in bulut
+    #    sunucularına karşı koyduğu engel) ya da hiç besleme yayınlamıyorsa başlık ve bağlantı yine gelir; özet başlıktan yazılır.
+    gn = gnews_adresi(k)
+    kod3, metin, _ = getir(gn, zaman=20)
+    if kod3 == 200 and gnews_coz(metin):
+        sonuc["yontem"] = {"tip": "gnews", "url": gn}
     return sonuc
 
 
@@ -588,6 +595,7 @@ def kaynak_isle(k, durum):
         s = kesfet(k)
         d["yontem"] = s["yontem"]
         d["telegram"] = s["telegram"] or d.get("telegram")
+        d["ana_kod"] = s.get("kod")
         d["kesif"] = SIMDI.isoformat()
         d["surum"] = KESIF_SURUMU
         d["hata"] = 0

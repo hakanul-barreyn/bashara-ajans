@@ -76,7 +76,9 @@
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
         const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);if(d.gdelt&&!yol.length)yol.push("GDELT haber veritabanı");
-        iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı")+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
+        const NEDEN={403:"site sunucumuzu engelliyor",429:"site istek sınırı koydu",0:"siteye bağlanılamadı",[-1]:"robots.txt izin vermiyor",404:"adres bulunamadı",503:"site geçici olarak kapalı"};
+        const neden=(sd==="kopuk"&&!yol.length&&d.ana_kod!=null&&d.ana_kod!==200)?" ("+(NEDEN[d.ana_kod]||"HTTP "+d.ana_kod)+")":"";
+        iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı"+neden)+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
         c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));
         {const b=belgeler(k);if(b)c.appendChild(b);}{const dk=dogKayit(k);if(dk)c.appendChild(dk);}c.appendChild(kanit(k));iz.appendChild(c);});
       g.appendChild(iz);L.appendChild(g);});
