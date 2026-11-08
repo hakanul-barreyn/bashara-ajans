@@ -102,7 +102,7 @@ def olay_metni(o, haberler, kaynaklar, site):
     if denge:
         satir += ["", f"⚖️ {denge}"]
     satir += [f"🗞 {_e(', '.join(adlar))}{' …' if len(ks) > len(adlar) else ''}",
-              "", f'<a href="{site}#o-{ilk}">Kim nasıl yazdı →</a>']
+              "", f'<a href="{site}h/{ilk}.html#kim-tr">Kim nasıl yazdı →</a>']
     return "\n".join(satir)
 
 

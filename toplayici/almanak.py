@@ -88,13 +88,14 @@ def olay_arsivle(kok, olaylar, haberler):
                 continue
             hs.append({"id": i, "k": h.get("kaynak"), "b": (o.get("bakislar") or {}).get(i), "e": h.get("etiket") or [], "ky": h.get("kayip"),
                        "t": h.get("tarih"), "bt": h.get("baslik_tr") or "", "bo": (h.get("baslik_orj") or "")[:160],
-                       "u": h.get("url"), "y": (o.get("yorumlar") or {}).get(i, ""), "an": (o.get("anlatim") or {}).get(i)})
+                       "u": h.get("url"), "y": (o.get("yorumlar") or {}).get(i, ""), "ye": (o.get("yorumlar_en") or {}).get(i, ""),
+                       "an": (o.get("anlatim") or {}).get(i)})
         if len(hs) < 2:
             continue
         ilk = min(x["t"] for x in hs if x["t"])
         gun = ilk[:10]
         kayit = {"id": o["id"], "baslik": o.get("baslik", ""), "not": o.get("not", ""), "ilk": ilk, "yer": o.get("yer"),
-                 "ortak": o.get("ortak"), "fark": o.get("fark"),
+                 "ortak": o.get("ortak"), "fark": o.get("fark"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
                  "son": max(x["t"] for x in hs if x["t"]), "haberler": hs}
         # Önceki gün dosyasında da aynı olay olabilir (gece yarısını aşan olaylar)
         onceki = (dt.date.fromisoformat(gun) - dt.timedelta(days=1)).isoformat()

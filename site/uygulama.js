@@ -224,8 +224,16 @@
   let icGezinti = false;
   function olayAc(id) {
     const o = olayHarita[id];
-    if (o && o.haberler && o.haberler[0]) { icGezinti = true; location.hash = "#o-" + o.haberler[0]; }
-    else { olaySec = id; ciz(true); }
+    if (!o || !o.haberler || !o.haberler[0]) { olaySec = id; ciz(true); return; }
+    const icGit = () => { icGezinti = true; location.hash = "#o-" + o.haberler[0]; };
+    // Olayın haber sayfası (siyah girişli, paylaşılabilir) hazırsa oraya git; henüz üretilmediyse sitedeki görünümü aç
+    const adaylar = o.haberler.slice(0, 4);
+    (async () => {
+      for (const i of adaylar) {
+        try { const r = await fetch("h/" + i + ".html", { method: "HEAD" }); if (r.ok) { location.href = "h/" + i + ".html#kim-" + (DL || "tr"); return; } } catch (e) {}
+      }
+      icGit();
+    })();
   }
   function akisaDon() {
     if (icGezinti && history.length > 1) { icGezinti = false; history.back(); return; }

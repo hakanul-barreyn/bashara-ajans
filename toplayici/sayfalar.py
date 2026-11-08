@@ -151,12 +151,12 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         satir.append(f'<li><div class="hs-su"><i style="background:{b[2] if b else "#c9cfcb"}"></i>{ad}{bu}</div>'
                      f'<small>{meta}</small>'
                      + (f'<span>{_e(x.get("bt") or x.get("bo"))}</span>' if (x.get("bt") or x.get("bo")) else "")
-                     + (f'<span style="color:var(--k-ink2)">{_e(x.get("y"))}</span>' if x.get("y") else "")
+                     + (f'<span style="color:var(--k-ink2)">{_e(x.get("ye") if dil == "en" and x.get("ye") else x.get("y"))}</span>' if x.get("y") else "")
                      + (f'<div class="hs-su">{cip}</div>' if cip else "") + "</li>")
     if len(satir) < 2:
         return ""
     return (f'<section class="hs-bolum" id="kim-{dil}"><h2>{t["kim"]} · {len({x.get("k") for x in olay["haberler"]})}</h2>'
-            + (f'<p>{_e(olay.get("not"))}</p>' if olay.get("not") else "")
+            + (f'<p>{_e(olay.get("not_en") if dil == "en" and olay.get("not_en") else olay.get("not"))}</p>' if olay.get("not") else "")
             + f'<ul class="hs-kim">{"".join(satir)}</ul></section>')
 
 
@@ -186,12 +186,30 @@ def _giris(h, k, olay, kmap, dil, foto, dg):
                  + (f'<a href="{_e(u)}" target="_blank" rel="noopener">{t["oku"]}</a>' if str(u or "").startswith(("http://", "https://")) else "")
                  + "</div>" for i, kk, b_, u, sec in alinti)
     seridi = "".join(f"<span>{_e(kmap[k_]['ad'])}</span>" for k_ in dict.fromkeys(x.get("k") for x in hs) if kmap.get(k_))
-    baslik = (olay or {}).get("baslik") if len(hs) >= 2 and dil == "tr" else bas
+    baslik = ((olay or {}).get("baslik_en" if dil == "en" else "baslik") or (olay or {}).get("baslik")) if len(hs) >= 2 else bas
+    # Gecikme: İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi
+    gec = ""
+    if len(hs) >= 2:
+        ic = [x["t"] for x in hs if x.get("t") and almanak.kamp(kmap.get(x.get("k"))) in almanak.BOLGE_ICI]
+        ds = [x["t"] for x in hs if x.get("t") and almanak.kamp(kmap.get(x.get("k"))) in almanak.DIS]
+        if ic and not ds:
+            gec = "İsrail ve Batı basını bu olayı yazmadı." if dil == "tr" else "Israeli and Western outlets did not report this."
+        elif ic and ds:
+            sa = (dt.datetime.fromisoformat(min(ds)) - dt.datetime.fromisoformat(min(ic))).total_seconds() / 3600
+            if abs(sa) < .25:
+                gec = "İki taraf da aynı saatlerde yazdı." if dil == "tr" else "Both sides reported it at the same time."
+            elif sa > 0:
+                gec = (f"İsrail ve Batı basını {sa:.1f} saat sonra yazdı.".replace(".", ",", 1) if dil == "tr"
+                       else f"Israeli and Western outlets reported it {sa:.1f} hours later.")
+        ilk = min((x for x in hs if x.get("t") and kmap.get(x.get("k"))), key=lambda x: x["t"], default=None)
+        if ilk:
+            gec += (" İlk yazan: " if dil == "tr" else " First to report: ") + kmap[ilk["k"]]["ad"] + "."
     return (f'<div data-dil="{dil}" class="hs-ic">'
             f'<div class="hs-meta"><time datetime="{_e(h.get("tarih"))}">{_e(_tarih(h.get("tarih"), dil))}</time>'
             + (f' · {_e((olay or {}).get("yer", {}).get("ad"))}' if isinstance((olay or {}).get("yer"), dict) and olay["yer"].get("ad") else "")
             + "</div>"
             f'<div class="hs-meta">{"".join(hap)}</div>'
+            + (f'<p class="hs-meta" style="color:#ff9aa8">⏱ {_e(gec.strip())}</p>' if gec else "")
             + _dogrulama_blogu(dg, dil)
             + f'<h1>{_e(baslik or bas)}</h1>'
             + (f'<p class="hs-ozet-ust">{_e(oz)}</p>' if oz else "")
