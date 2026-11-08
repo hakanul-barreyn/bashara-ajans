@@ -596,7 +596,7 @@
     if (k.resmi_grup) roz.appendChild(el("span", "rozet aciklama", k.resmi_grup + " açıklaması"));
     if (k.son_dakika && dk(h.tarih) < 120) roz.appendChild(el("span", "rozet yeni", "SON DAKİKA"));
     if (h.nitelik === "analiz") roz.appendChild(el("span", "rozet analiz", "Analiz"));
-    if (h.telegram) roz.appendChild(el("span", "rozet tg", "Telegram"));
+    if (h.telegram) roz.appendChild(el("span", "rozet tg", /instagram\.com/.test(h.url) ? "Instagram" : "Telegram"));
     if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));
     ust.appendChild(roz);
     g.appendChild(ust);
