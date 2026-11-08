@@ -141,10 +141,12 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         if not k:
             continue
         b = BAKIS.get(x.get("b"))
-        hedef = f'{x["id"]}.html' if x["id"] in sayfa_var else (x.get("u") or "")
-        if not (hedef.endswith(".html") or hedef.startswith(("http://", "https://"))):
+        # Yayın adı ve başlık doğrudan yayının kendi haberine gider (yeni sekmede)
+        hedef = x.get("u") or ""
+        if not hedef.startswith(("http://", "https://")):
             hedef = ""
-        ad = f'<a href="{_e(hedef)}">{_e(k["ad"])}</a>' if hedef else f"<b>{_e(k['ad'])}</b>"
+        dis = f' href="{_e(hedef)}" target="_blank" rel="noopener"'
+        ad = f'<a{dis}>{_e(k["ad"])} <span aria-hidden="true">↗</span></a>' if hedef else f"<b>{_e(k['ad'])}</b>"
         bu = f' <span class="hs-cip">{t["bu"]}</span>' if x["id"] == h["id"] else ""
         if ek.get(x.get("k")):
             bu += f' <small>+{ek[x["k"]]} {"haber daha" if dil == "tr" else "more"}</small>'
@@ -163,7 +165,8 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         meta = _e(almanak.kamp(k)) + (" · " + _e(b[0] if dil == "tr" else b[1]) if b else "")
         satir.append(f'<li><div class="hs-su"><i style="background:{b[2] if b else "#c9cfcb"}"></i>{ad}{bu}</div>'
                      f'<small>{meta}</small>'
-                     + (f'<span>{_e(x.get("bt") or x.get("bo"))}</span>' if (x.get("bt") or x.get("bo")) else "")
+                     + ((f'<a class="hs-kim-bas"{dis}>{_e(x.get("bt") or x.get("bo"))}</a>' if hedef else f'<span>{_e(x.get("bt") or x.get("bo"))}</span>')
+                        if (x.get("bt") or x.get("bo")) else "")
                      + (f'<span style="color:var(--k-ink2)">{_e(x.get("ye") if dil == "en" and x.get("ye") else x.get("y"))}</span>' if x.get("y") else "")
                      + (f'<div class="hs-su">{cip}</div>' if cip else "") + "</li>")
     if len(satir) < 2:

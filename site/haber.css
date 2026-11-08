@@ -64,6 +64,8 @@
 .hs-kim .hs-su i{width:10px;height:10px;border-radius:50%;display:inline-block}
 .hs-kim .hs-su a{color:inherit;font-weight:800}
 .hs-kim small{color:var(--mk-soluk)}
+.hs-kim .hs-kim-bas{color:inherit;text-decoration:none}
+.hs-kim .hs-kim-bas:hover{text-decoration:underline}
 .hs-kim-daha summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--mk-yazi2)}
 .hs-cip{font-size:.72rem;padding:1px 8px;border-radius:999px;background:#fff;border:1px solid var(--mk-cizgi);color:var(--mk-yazi2)}
 .hs-cip.iyi{background:#e5f4ec;border-color:#bfe2cf;color:#1d5a3e}
