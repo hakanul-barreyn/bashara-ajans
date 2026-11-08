@@ -37,6 +37,7 @@ import telegram_kanal  # noqa: E402
 import instagram  # noqa: E402
 import sayfalar  # noqa: E402
 import dogrulama  # noqa: E402
+import tg_hesap  # noqa: E402
 import diller  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -560,7 +561,12 @@ def cek(yontem):
     return None
 
 
+TG_HESAP = {}   # Telegram API'siyle (hesapla) önceden okunan kanallar: web önizlemesi kapalı olanlar için
+
+
 def cek_telegram(kanal, sinir=700):
+    if kanal in TG_HESAP and TG_HESAP[kanal]:
+        return [dict(o, giris=o["giris"][:sinir]) for o in TG_HESAP[kanal]]
     url = f"https://t.me/s/{kanal}"
     if not izinli(url):
         return []
@@ -802,6 +808,11 @@ def main():
     eski = {h["id"]: h for h in oku(HABERLER, {}).get("haberler", [])}
     sinir = SIMDI - dt.timedelta(days=SAKLA_GUN)
 
+    # Yalnızca Telegram'dan beslenen kaynaklar hesapla da okunur (web önizlemesi kapalı kanallar için; bilgiler yoksa atlanır)
+    if tg_hesap.hazir():
+        kanallar = [k["sadece_telegram"] for k in kaynaklar if k.get("sadece_telegram")]
+        TG_HESAP.update(tg_hesap.topla(kanallar, log=log))
+        log(f"Telegram hesabı: {sum(1 for v in TG_HESAP.values() if v)}/{len(kanallar)} kanal okundu")
     with ThreadPoolExecutor(max_workers=16) as ex:
         sonuclar = list(ex.map(lambda k: kaynak_isle(k, durum), kaynaklar))
 

@@ -57,7 +57,7 @@ jobs:
       - name: Görsel kart aracı
         run: |
           (command -v rsvg-convert >/dev/null && fc-list | grep -qi 'Inter Display') || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null)) || true
-          pip install -q pillow || true
+          pip install -q pillow telethon || true
 
       - name: Haberleri çek ve özetle
         env:
@@ -67,6 +67,9 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_KANAL: ${{ vars.TELEGRAM_KANAL || secrets.TELEGRAM_KANAL }}
           TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_OTURUM: ${{ secrets.TELEGRAM_OTURUM }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           INSTAGRAM_HESAP: ${{ vars.INSTAGRAM_HESAP }}
           IG_GUNLUK: ${{ vars.IG_GUNLUK }}
