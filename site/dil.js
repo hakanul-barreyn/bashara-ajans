@@ -22,7 +22,7 @@
   // ---------------------------------------------------------------- İngilizce sözlük
   var EN = {
     // menü ve genel
-    "Akış": "Feed", "Arşiv": "Archive", "Almanak": "Almanac", "Kaynaklar": "Sources", "Hakkımızda": "About",
+    "Akış": "Feed", "Arşiv": "Archive", "Almanak": "Almanac", "Raporlar": "Reports", "Rapor": "Report", "Raporlar · Özel rapor": "Reports · Special report", "ZBS veri masası": "ZBS data desk", "İsimler": "Names", "Kaynaklar": "Sources", "Hakkımızda": "About",
     "Canlı": "Live", "Yükleniyor": "Loading", "Yükleniyor…": "Loading…", "Son dakika": "Breaking", "SON DAKİKA": "BREAKING", "YENİ": "NEW",
     "Veri okunamadı": "Could not load data", "Gündem": "Top stories", "Analizler": "Analysis", "Analiz": "Analysis",
     " · birden fazla kaynağın yazdığı olaylar": " · events covered by several outlets", " · olayların ötesine bakan yazılar": " · writing that looks beyond the events",

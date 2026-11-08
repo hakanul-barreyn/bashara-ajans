@@ -16,79 +16,97 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611082330">
-<link rel="stylesheet" href="site/rapor.css?v=202611090300">
-<script src="site/dil.js?v=202611081749"></script>
+<link rel="stylesheet" href="site/rapor.css?v=202611090500">
+<script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
 <body class="rapor-govde">
 <header class="ust">
   <div class="ust-ic">
     <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
-    <p class="slogan">Almanak · Özel rapor</p>
-    <nav class="menu"><a href="./">Akış</a><a href="almanak.html">Almanak</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+    <p class="slogan">Raporlar · Özel rapor</p>
+    <nav class="menu"><a href="./">Akış</a><a href="almanak.html">Raporlar</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
   </div>
 </header>
 
 <main class="rp">
-  <p class="dil-uyari" data-dil="en">This report is in Turkish only for now.</p><span data-dil="tr" hidden></span>
   <header class="rp-bas">
-    <p class="rp-ust">Almanak · Özel rapor · <span data-v="donem"></span></p>
-    <h1>Alışma: aynı olay tekrarlandıkça</h1>
-    <p class="rp-dek">17 Ekim 2023 gecesi El-Ehli Baptist Hastanesi vurulduğunda dünyanın pek çok şehrinde insanlar sokağa çıktı. Sonra hastaneler defalarca vuruldu; çadırlar yakıldı, yardım bekleyenlerin üzerine ateş açıldı. Her türden olayı başlıklardan tek tek bulduk ve her birinde basının ne kadar tepki verdiğini ölçtük. Soru şu: hangi olay ne zaman tetiklemeyi bıraktı?</p>
+    <p data-dil="tr" class="rp-ust">Raporlar · Özel rapor · <span data-v="donem"></span></p>
+    <p data-dil="en" class="rp-ust">Reports · Special report · <span data-v="donem"></span></p>
+    <h1 data-dil="tr">Alışma: aynı olay tekrarlandıkça</h1>
+    <h1 data-dil="en">Habituation: when the same thing keeps happening</h1>
+    <p data-dil="tr" class="rp-dek">17 Ekim 2023 gecesi El-Ehli Baptist Hastanesi vurulduğunda dünyanın pek çok şehrinde insanlar sokağa çıktı. Sonra hastaneler defalarca vuruldu; çadırlar yakıldı, yardım bekleyenlerin üzerine ateş açıldı. Her türden olayı başlıklardan tek tek bulduk ve her birinde basının ne kadar tepki verdiğini ölçtük. Soru şu: hangi olay ne zaman tetiklemeyi bıraktı?</p>
+    <p data-dil="en" class="rp-dek">On the night of 17 October 2023, when the Al-Ahli Baptist Hospital was hit, people took to the streets in cities around the world. Then hospitals were hit again and again; tents were burned; people waiting for aid were shot. We found each kind of event in the headlines, one by one, and measured how strongly the press responded to each. The question: which kind of event stopped triggering a response, and when?</p>
     <p class="rp-kunye"><span>ZBS veri masası</span><span data-v="guncel"></span><span data-v="taslak"></span></p>
   </header>
 
   <section class="rp-kartlar" aria-label="Öne çıkan sayılar" id="kartlar"></section>
 
   <nav class="rp-icindekiler" aria-label="Bölümler">
-    <a href="#hastane">1 · Hastaneler</a><a href="#turler">2 · Tür tür</a><a href="#egri">3 · Alışma eğrisi</a><a href="#olumler">4 · Kitlesel ölüm günleri</a><a href="#katalog">5 · Olay kataloğu</a><a href="#yontem">Yöntem</a>
+    <span data-dil="tr"><a href="#hastane">1 · Hastaneler</a><a href="#turler">2 · Tür tür</a><a href="#egri">3 · Alışma eğrisi</a><a href="#olumler">4 · Kitlesel ölüm günleri</a><a href="#katalog">5 · Olay kataloğu</a><a href="#yontem">Yöntem</a></span>
+    <span data-dil="en"><a href="#hastane">1 · Hospitals</a><a href="#turler">2 · Type by type</a><a href="#egri">3 · Habituation curve</a><a href="#olumler">4 · Mass-death days</a><a href="#katalog">5 · Event catalogue</a><a href="#yontem">Method</a></span>
   </nav>
 
   <article class="rp-metin" id="hastane">
-    <p class="rp-soru">Soru 1 · Tepki</p>
-    <h2>El-Ehli’den sonra hastaneler</h2>
+    <p data-dil="tr" class="rp-soru">Soru 1 · Tepki</p>
+    <p data-dil="en" class="rp-soru">Question 1 · Response</p>
+    <h2 data-dil="tr">El-Ehli’den sonra hastaneler</h2>
+    <h2 data-dil="en">Hospitals after Al-Ahli</h2>
     <p data-v="hastane_metin"></p>
-    <figure class="rp-sekil"><div id="g-hastane"></div><figcaption>Her nokta bir hastane saldırısı. Dikey eksen tepki endeksi: <span data-v="hastane_ref"></span> = 100. Noktanın büyüklüğü olayın bölge basınındaki ağırlığını, yani büyüklüğünü gösteriyor. Üzerine gelince olay ve örnek başlık çıkar.</figcaption></figure>
-    <p class="rp-not">Tepki endeksi: olayın penceresinde (bir gün önce, iki gün sonra) o grubun bin başlığından kaçının bu türden olduğu, ilk büyük olaya göre. El-Ehli patlamasının sorumluluğu tartışmalıdır: Filistin tarafı İsrail’in saldırısını, İsrail yanlış ateşlenen bir roketi gösterdi.</p>
+    <figure class="rp-sekil"><div id="g-hastane"></div><figcaption data-dil="tr">Her nokta bir hastane saldırısı. Dikey eksen tepki endeksi: <span data-v="hastane_ref"></span> = 100. Noktanın büyüklüğü olayın bölge basınındaki ağırlığını, yani büyüklüğünü gösteriyor. Üzerine gelince olay ve örnek başlık çıkar.</figcaption><figcaption data-dil="en">Each dot is an attack on a hospital. Vertical axis: response index, <span data-v="hastane_ref"></span> = 100. Dot size shows the event’s weight in the regional press, that is, its size. Hover for the event and a sample headline.</figcaption></figure>
+    <p data-dil="tr" class="rp-not">Tepki endeksi: olayın penceresinde (bir gün önce, iki gün sonra) o grubun bin başlığından kaçının bu türden olduğu, ilk büyük olaya göre. El-Ehli patlamasının sorumluluğu tartışmalıdır: Filistin tarafı İsrail’in saldırısını, İsrail yanlış ateşlenen bir roketi gösterdi.</p>
+    <p data-dil="en" class="rp-not">Response index: how many of every thousand headlines in a group were about this type of event in the event’s window (one day before, two days after), relative to the first major event. Responsibility for the Al-Ahli explosion is disputed: the Palestinian side blamed an Israeli strike, Israel a misfired rocket.</p>
   </article>
 
   <article class="rp-metin" id="turler">
-    <p class="rp-soru">Soru 2 · Tür tür</p>
-    <h2>Hangi olay ne zaman tetiklemeyi bıraktı?</h2>
-    <p>Her tür için ilk büyük olayı 100 saydık. Bir grubun “son tepkisi”, o grubun tepkisinin ilk olayın yarısını geçtiği son olay. Ondan sonra aynı türden olaylar sürdü; bazıları ilkinden de büyüktü. Ama tepki bir daha o düzeye çıkmadı. Tablonun altındaki küçük grafikler aynı soruyu olayın büyüklüğünden bağımsız bir ölçüyle soruyor: grubun bu türden olaylara bölge basınına göre ne kadar yer ayırdığı.</p>
+    <p data-dil="tr" class="rp-soru">Soru 2 · Tür tür</p>
+    <p data-dil="en" class="rp-soru">Question 2 · Type by type</p>
+    <h2 data-dil="tr">Hangi olay ne zaman tetiklemeyi bıraktı?</h2>
+    <h2 data-dil="en">Which kind of event stopped triggering a response, and when?</h2>
+    <p data-dil="tr">Her tür için ilk büyük olayı 100 saydık. Bir grubun “son tepkisi”, o grubun tepkisinin ilk olayın yarısını geçtiği son olay. Ondan sonra aynı türden olaylar sürdü; bazıları ilkinden de büyüktü. Ama tepki bir daha o düzeye çıkmadı. Tablonun altındaki küçük grafikler aynı soruyu olayın büyüklüğünden bağımsız bir ölçüyle soruyor: grubun bu türden olaylara bölge basınına göre ne kadar yer ayırdığı.</p>
+    <p data-dil="en">For each type we set the first major event at 100. A group’s “last response” is the last event to which its response exceeded half of the first. Events of the same type continued after that, some larger than the first, but the response never returned to that level. The small charts below the table ask the same question with a measure independent of event size: how much space the group gave such events compared with the regional press.</p>
     <div id="g-turler" class="rp-tablo"></div>
     <div id="g-kucukler" class="rp-kucukler"></div>
   </article>
 
   <article class="rp-metin" id="egri">
-    <p class="rp-soru">Soru 3 · Alışma</p>
-    <h2>Alışma eğrisi</h2>
+    <p data-dil="tr" class="rp-soru">Soru 3 · Alışma</p>
+    <p data-dil="en" class="rp-soru">Question 3 · Habituation</p>
+    <h2 data-dil="tr">Alışma eğrisi</h2>
+    <h2 data-dil="en">The habituation curve</h2>
     <p data-v="egri_metin"></p>
-    <figure class="rp-sekil"><div id="g-egri"></div><figcaption>İzleme oranı: bütün türlerden olayların pencerelerinde grubun bu türlere ayırdığı pay, bölge basınının aynı pencerelerde ayırdığı paya bölünerek. %100: bölge basını kadar. Gri çubuklar: o çeyrekte bulunan olay sayısı.</figcaption></figure>
+    <figure class="rp-sekil"><div id="g-egri"></div><figcaption data-dil="tr">İzleme oranı: bütün türlerden olayların pencerelerinde grubun bu türlere ayırdığı pay, bölge basınının aynı pencerelerde ayırdığı paya bölünerek. %100: bölge basını kadar. Gri çubuklar: o çeyrekte bulunan olay sayısı.</figcaption><figcaption data-dil="en">Follow rate: the share a group gave to all event types within the events’ windows, divided by the regional press’s share in the same windows. 100%: as much as the regional press. Grey bars: number of events found in that quarter.</figcaption></figure>
   </article>
 
   <article class="rp-metin" id="olumler">
-    <p class="rp-soru">Soru 4 · Büyüklük ve sessizlik</p>
-    <h2>Tek günde yüzlerce ölüm: kim baktı?</h2>
+    <p data-dil="tr" class="rp-soru">Soru 4 · Büyüklük ve sessizlik</p>
+    <p data-dil="en" class="rp-soru">Question 4 · Scale and silence</p>
+    <h2 data-dil="tr">Tek günde yüzlerce ölüm: kim baktı?</h2>
+    <h2 data-dil="en">Hundreds killed in a single day: who looked?</h2>
     <p data-v="olum_metin"></p>
     <div id="g-olumler" class="rp-tablo"></div>
   </article>
 
   <article class="rp-metin" id="katalog">
-    <p class="rp-soru">Olay kataloğu</p>
-    <h2>Başlıklardan bulunan olaylar</h2>
-    <p>Her olay, o türün bölge basınındaki payının önceki dört haftanın ortancasının iki buçuk katını aştığı günlerdir. Yer, başlıklarda en sık geçen yer adıdır. Ölü sayısı o gün ve ertesi gün Gazze Sağlık Bakanlığı’nın bildirdiği yeni ölümlerdir; yalnızca o olayın değil, bütün Gazze’nin.</p>
+    <p data-dil="tr" class="rp-soru">Olay kataloğu</p>
+    <p data-dil="en" class="rp-soru">Event catalogue</p>
+    <h2 data-dil="tr">Başlıklardan bulunan olaylar</h2>
+    <h2 data-dil="en">Events found in the headlines</h2>
+    <p data-dil="tr">Her olay, o türün bölge basınındaki payının önceki dört haftanın ortancasının iki buçuk katını aştığı günlerdir. Yer, başlıklarda en sık geçen yer adıdır. Ölü sayısı o gün ve ertesi gün Gazze Sağlık Bakanlığı’nın bildirdiği yeni ölümlerdir; yalnızca o olayın değil, bütün Gazze’nin.</p>
+    <p data-dil="en">An event is a day on which the type’s share of regional press headlines exceeded two and a half times the median of the previous four weeks. The place is the place name most often mentioned in the headlines. The death figure is the new deaths reported by the Gaza Ministry of Health that day and the next, for all of Gaza, not only that event.</p>
     <div class="rp-suzgec" id="suzgec" role="group" aria-label="Olay türü"></div>
     <div id="g-katalog" class="rp-katalog"></div>
   </article>
 
   <article class="rp-metin rp-yontem" id="yontem">
-    <h2>Yöntem ve sınırlar</h2>
+    <h2 data-dil="tr">Yöntem ve sınırlar</h2>
+    <h2 data-dil="en">Method and limits</h2>
     <ul id="g-yontem"></ul>
   </article>
-  <p class="rp-geri"><a href="almanak.html">← Almanak’a dön</a> · <a href="liderler.html">Liderler ne dedi? →</a></p>
+  <p data-dil="tr" class="rp-geri"><a href="almanak.html">← Raporlara dön</a> · <a href="liderler.html">Liderler ne dedi? →</a></p>
+  <p data-dil="en" class="rp-geri"><a href="almanak.html">← Back to Reports</a> · <a href="liderler.html">What did leaders say? →</a></p>
 </main>
-<script src="site/rapor-ortak.js?v=202611090300"></script>
-<script src="site/sayfa-olaylar.js?v=202611090230"></script>
+<script src="site/rapor-ortak.js?v=202611090500"></script>
+<script src="site/sayfa-olaylar.js?v=202611090500"></script>
 </body>
 </html>

@@ -183,3 +183,4 @@ body.baski .rp-metin{break-before:auto}
 .rp-buyut-kapat{position:absolute;top:8px;right:10px;font:inherit;font-size:1.6rem;line-height:1;width:38px;height:38px;border-radius:50%;border:0;background:#f1efe9;cursor:pointer}
 .rp-buyut-kapat:hover{background:#0c0e0d;color:#fff}
 .rp-alinti{font-size:.92rem!important;line-height:1.5!important;color:#3d4541!important;margin:6px 0 0!important;padding-left:10px;border-left:3px solid #1f7a52}
+.rp-icindekiler>span{display:contents}

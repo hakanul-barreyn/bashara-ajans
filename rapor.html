@@ -16,101 +16,136 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611082330">
-<link rel="stylesheet" href="site/rapor.css?v=202611090300">
-<script src="site/dil.js?v=202611081749"></script>
+<link rel="stylesheet" href="site/rapor.css?v=202611090500">
+<script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
 <body class="rapor-govde">
 <header class="ust">
   <div class="ust-ic">
     <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
-    <p class="slogan">Almanak · Özel rapor</p>
-    <nav class="menu"><a href="./">Akış</a><a href="almanak.html">Almanak</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+    <p class="slogan">Raporlar · Özel rapor</p>
+    <nav class="menu"><a href="./">Akış</a><a href="almanak.html">Raporlar</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
   </div>
 </header>
 
 <main class="rp">
-  <p class="dil-uyari" data-dil="en">This report is in Turkish only for now.</p><span data-dil="tr" hidden></span>
   <header class="rp-bas">
-    <p class="rp-ust">Almanak · Özel rapor · <span data-v="donem"></span></p>
-    <h1>7 Ekim’den bu yana: kim gördü, kim adını koydu, kim faili yazdı</h1>
-    <p class="rp-dek">Üç yılda <b data-v="baslik"></b> haber başlığını dört soruyla okuduk. Gazze’ye ne zaman bakıldı? Aynı şiddete hangi adlar verildi? Bir Filistinlinin ölümünde fail yazıldı mı? Öldürülen gazeteciler haber oldu mu?</p>
+    <p data-dil="tr" class="rp-ust">Raporlar · Özel rapor · <span data-v="donem"></span></p>
+    <p data-dil="en" class="rp-ust">Reports · Special report · <span data-v="donem"></span></p>
+    <h1 data-dil="tr">7 Ekim’den bu yana: kim gördü, kim adını koydu, kim faili yazdı</h1>
+    <h1 data-dil="en">Since 7 October: who saw it, who named it, who wrote the killer’s name</h1>
+    <p data-dil="tr" class="rp-dek">Üç yılda <b data-v="baslik"></b> haber başlığını dört soruyla okuduk. Gazze’ye ne zaman bakıldı? Aynı şiddete hangi adlar verildi? Bir Filistinlinin ölümünde fail yazıldı mı? Öldürülen gazeteciler haber oldu mu?</p>
+    <p data-dil="en" class="rp-dek">We read <b data-v="baslik"></b> headlines from three years with four questions. When did the press look at Gaza? What names did it give the same violence? When a Palestinian was killed, was the killer named? Did the killing of journalists make the news?</p>
     <p class="rp-kunye"><span>ZBS veri masası</span><span data-v="guncel"></span><span data-v="taslak"></span></p>
   </header>
 
   <section class="rp-kartlar" aria-label="Öne çıkan sayılar">
-    <div class="rp-kart"><b data-v="k.fail_f"></b><span>Batı ana akım basınında Filistinlilerin öldüğü başlıklarda failin yazıldığı pay. İsraillilerin öldüğü başlıklarda: <em data-v="k.fail_i"></em></span></div>
-    <div class="rp-kart"><b data-v="k.rehine"></b><span>Batı ana akım basını “rehine” kelimesini “esir / tutuklu”dan bu kadar kat sık kullandı</span></div>
-    <div class="rp-kart"><b data-v="k.iran"></b><span>İsrail–İran savaşı haftalarında Batı ana akım basınında Filistin savaşının payı (bir ay önce <em data-v="k.iran_once"></em>), ölümler artarken</span></div>
-    <div class="rp-kart"><b data-v="k.gzt"></b><span>gazeteci öldürüldü (dış veri). Batı ana akım basınında öldürülen gazeteci başına <em data-v="k.gzt_bati"></em> başlık</span></div>
+    <div data-dil="tr" class="rp-kart"><b data-v="k.fail_f"></b><span>Batı ana akım basınında Filistinlilerin öldüğü başlıklarda failin yazıldığı pay. İsraillilerin öldüğü başlıklarda: <em data-v="k.fail_i"></em></span></div>
+    <div data-dil="en" class="rp-kart"><b data-v="k.fail_f"></b><span>Share of Western mainstream headlines on Palestinian deaths that name the killer. In headlines on Israeli deaths: <em data-v="k.fail_i"></em></span></div>
+    <div data-dil="tr" class="rp-kart"><b data-v="k.rehine"></b><span>Batı ana akım basını “rehine” kelimesini “esir / tutuklu”dan bu kadar kat sık kullandı</span></div>
+    <div data-dil="en" class="rp-kart"><b data-v="k.rehine"></b><span>times more often Western mainstream press used “hostage” than “prisoner / detainee”</span></div>
+    <div data-dil="tr" class="rp-kart"><b data-v="k.iran"></b><span>İsrail–İran savaşı haftalarında Batı ana akım basınında Filistin savaşının payı (bir ay önce <em data-v="k.iran_once"></em>), ölümler artarken</span></div>
+    <div data-dil="en" class="rp-kart"><b data-v="k.iran"></b><span>share of the Palestine war in Western mainstream headlines during the Israel–Iran war weeks (a month earlier: <em data-v="k.iran_once"></em>), while deaths rose</span></div>
+    <div data-dil="tr" class="rp-kart"><b data-v="k.gzt"></b><span>gazeteci öldürüldü (dış veri). Batı ana akım basınında öldürülen gazeteci başına <em data-v="k.gzt_bati"></em> başlık</span></div>
+    <div data-dil="en" class="rp-kart"><b data-v="k.gzt"></b><span>journalists killed (external data). Western mainstream headlines per journalist killed: <em data-v="k.gzt_bati"></em></span></div>
   </section>
 
   <nav class="rp-icindekiler" aria-label="Bölümler">
-    <a href="#dikkat">1 · Dikkat</a><a href="#adlandirma">2 · Adlandırma</a><a href="#faillik">3 · Faillik</a><a href="#soykirim">4 · “Soykırım”</a><a href="#gazeteciler">5 · Gazeteciler</a><a href="#yayinlar">6 · Yayın yayın</a><a href="#yontem">Yöntem</a>
+    <span data-dil="tr"><a href="#dikkat">1 · Dikkat</a><a href="#adlandirma">2 · Adlandırma</a><a href="#faillik">3 · Faillik</a><a href="#soykirim">4 · “Soykırım”</a><a href="#gazeteciler">5 · Gazeteciler</a><a href="#yayinlar">6 · Yayın yayın</a><a href="#yontem">Yöntem</a></span>
+    <span data-dil="en"><a href="#dikkat">1 · Attention</a><a href="#adlandirma">2 · Naming</a><a href="#faillik">3 · Agency</a><a href="#soykirim">4 · “Genocide”</a><a href="#gazeteciler">5 · Journalists</a><a href="#yayinlar">6 · Outlet by outlet</a><a href="#yontem">Method</a></span>
   </nav>
 
   <article class="rp-metin" id="dikkat">
-    <p class="rp-soru">Soru 1 · Görünürlük ve dikkat</p>
-    <h2>Gazze’ye ne zaman bakıldı, ne zaman bakılmadı?</h2>
-    <p>Gündem kuramına göre basın neyin önemli olduğunu, neyi konuştuğuyla belirler; sorun-dikkat döngüsü de ilginin önce patlayıp sonra söndüğünü söyler. Aşağıdaki çizgiler her grubun başlıkları içinde Filistin savaşıyla ilgili olanların hafta hafta payını gösteriyor: Gazze, Batı Şeria, Kudüs, Lübnan ve İsrail. Lübnan’a ve Hizbullah’a yapılan saldırılar aynı savaşın parçası olarak sayıldı. Gri çubuklar o hafta Gazze’de bildirilen ölümler.</p>
-    <p>İlgi genel olarak ölümleri izledi. Ama bu bağ, başka bir gündem geldiğinde koptu. En açık örnek İsrail–İran savaşı. Savaştan önceki dört haftada Batı ana akım basınının başlıklarının <b data-v="e.iran.bati_once"></b> kadarı Filistin savaşıyla ilgiliydi; İran savaşı sürerken bu pay <b data-v="e.iran.bati_sirasinda"></b> oldu. Aynı haftalarda Gazze’de haftalık ölümler azalmadı: önce <b data-v="e.iran.olu_once"></b>, savaş sırasında <b data-v="e.iran.olu_sirasinda"></b>. Lübnan’a saldırılar ise savaşın içinden sayıldığında ilgiyi düşürmüyor: o haftalarda Batı ana akım basınında savaş payı önce <b data-v="e.lubnan.bati_once"></b>, sırasında <b data-v="e.lubnan.bati_sirasinda"></b>.</p>
-    <figure class="rp-sekil"><div id="g-dikkat"></div><figcaption>Hafta hafta savaş payı (çizgiler) ve Gazze’de bildirilen haftalık ölümler (gri çubuklar, Gazze Sağlık Bakanlığı verisi). Renkli şeritler önemli olayları gösteriyor; üzerine gelince adı çıkar.</figcaption></figure>
-    <h3 class="rp-ara">Olaylar ve ilgi</h3>
-    <p>Bu tablo şunu soruyor: bir olay olduğunda Filistin savaşı gündemde kaldı mı? Her satırda iki sayı var: olaydan önceki dört haftada ve olay sürerken, o grubun başlıklarının yüzde kaçının savaşla ilgili olduğu. Kırmızı rakamlar, savaşın o olay sırasında gündemden belirgin biçimde düştüğü yerler: Suriye’de rejimin çöküşü ve İsrail–İran savaşı haftaları. Son sütun aynı dönemlerde Gazze’de haftada bildirilen ölümler; ölümler sürerken pay düşüyorsa, dikkat başka yere kaymıştır.</p>
+    <p data-dil="tr" class="rp-soru">Soru 1 · Görünürlük ve dikkat</p>
+    <p data-dil="en" class="rp-soru">Question 1 · Visibility and attention</p>
+    <h2 data-dil="tr">Gazze’ye ne zaman bakıldı, ne zaman bakılmadı?</h2>
+    <h2 data-dil="en">When did the press look at Gaza, and when did it look away?</h2>
+    <p data-dil="tr">Gündem kuramına göre basın neyin önemli olduğunu, neyi konuştuğuyla belirler; sorun-dikkat döngüsü de ilginin önce patlayıp sonra söndüğünü söyler. Aşağıdaki çizgiler her grubun başlıkları içinde Filistin savaşıyla ilgili olanların hafta hafta payını gösteriyor: Gazze, Batı Şeria, Kudüs, Lübnan ve İsrail. Lübnan’a ve Hizbullah’a yapılan saldırılar aynı savaşın parçası olarak sayıldı. Gri çubuklar o hafta Gazze’de bildirilen ölümler.</p>
+    <p data-dil="en">Agenda-setting theory says the press decides what matters by what it talks about; the issue-attention cycle says interest flares and then fades. The lines below show, week by week, the share of each group’s headlines about the Palestine war: Gaza, the West Bank, Jerusalem, Lebanon and Israel. Attacks on Lebanon and Hezbollah are counted as part of the same war. Grey bars are the deaths reported in Gaza that week.</p>
+    <p data-dil="tr">İlgi genel olarak ölümleri izledi. Ama bu bağ, başka bir gündem geldiğinde koptu. En açık örnek İsrail–İran savaşı. Savaştan önceki dört haftada Batı ana akım basınının başlıklarının <b data-v="e.iran.bati_once"></b> kadarı Filistin savaşıyla ilgiliydi; İran savaşı sürerken bu pay <b data-v="e.iran.bati_sirasinda"></b> oldu. Aynı haftalarda Gazze’de haftalık ölümler azalmadı: önce <b data-v="e.iran.olu_once"></b>, savaş sırasında <b data-v="e.iran.olu_sirasinda"></b>. Lübnan’a saldırılar ise savaşın içinden sayıldığında ilgiyi düşürmüyor: o haftalarda Batı ana akım basınında savaş payı önce <b data-v="e.lubnan.bati_once"></b>, sırasında <b data-v="e.lubnan.bati_sirasinda"></b>.</p>
+    <p data-dil="en">Attention broadly followed the deaths. But the link broke when another story arrived. The clearest case is the Israel–Iran war. In the four weeks before it, <b data-v="e.iran.bati_once"></b> of Western mainstream headlines were about the Palestine war; while the Iran war lasted, the share was <b data-v="e.iran.bati_sirasinda"></b>. Weekly deaths in Gaza did not fall in those weeks: <b data-v="e.iran.olu_once"></b> before, <b data-v="e.iran.olu_sirasinda"></b> during. Attacks on Lebanon, counted within the war, did not lower attention: the war’s share in Western mainstream press was <b data-v="e.lubnan.bati_once"></b> before and <b data-v="e.lubnan.bati_sirasinda"></b> during.</p>
+    <figure class="rp-sekil"><div id="g-dikkat"></div><figcaption data-dil="tr">Hafta hafta savaş payı (çizgiler) ve Gazze’de bildirilen haftalık ölümler (gri çubuklar, Gazze Sağlık Bakanlığı verisi). Renkli şeritler önemli olayları gösteriyor; üzerine gelince adı çıkar.</figcaption><figcaption data-dil="en">Weekly share of the war (lines) and weekly deaths reported in Gaza (grey bars, Gaza Ministry of Health). Coloured bands mark major events; hover for the name.</figcaption></figure>
+    <h3 data-dil="tr" class="rp-ara">Olaylar ve ilgi</h3>
+    <h3 data-dil="en" class="rp-ara">Events and attention</h3>
+    <p data-dil="tr">Bu tablo şunu soruyor: bir olay olduğunda Filistin savaşı gündemde kaldı mı? Her satırda iki sayı var: olaydan önceki dört haftada ve olay sürerken, o grubun başlıklarının yüzde kaçının savaşla ilgili olduğu. Kırmızı rakamlar, savaşın o olay sırasında gündemden belirgin biçimde düştüğü yerler: Suriye’de rejimin çöküşü ve İsrail–İran savaşı haftaları. Son sütun aynı dönemlerde Gazze’de haftada bildirilen ölümler; ölümler sürerken pay düşüyorsa, dikkat başka yere kaymıştır.</p>
+    <p data-dil="en">This table asks: when something else happened, did the Palestine war stay on the agenda? Each row has two numbers: the share of the group’s headlines about the war in the four weeks before the event, and while it lasted. Red marks where the war clearly dropped off the agenda: the fall of the Syrian government and the Israel–Iran war. The last column is the weekly deaths reported in Gaza in the same periods; if the share falls while the deaths go on, attention has moved elsewhere.</p>
     <div id="g-olaylar" class="rp-tablo"></div>
-    <h3 class="rp-ara">Takvim</h3>
-    <p>Her kare bir hafta. Koyu kareler Filistin savaşının başlıklarda en çok yer bulduğu haftalar.</p>
+    <h3 data-dil="tr" class="rp-ara">Takvim</h3>
+    <h3 data-dil="en" class="rp-ara">Calendar</h3>
+    <p data-dil="tr">Her kare bir hafta. Koyu kareler Filistin savaşının başlıklarda en çok yer bulduğu haftalar.</p>
+    <p data-dil="en">Each square is a week. Darker squares are the weeks when the Palestine war took the largest share of headlines.</p>
     <div id="g-takvim" class="rp-takvim"></div>
   </article>
 
   <article class="rp-metin" id="adlandirma">
-    <p class="rp-soru">Soru 2 · Adlandırma</p>
-    <h2>Aynı şeye hangi adlar verildi?</h2>
-    <p>Çerçeveleme kuramına göre bir olaya verilen ad, onun ne olduğunu, kimin sorumlu olduğunu ve ne yapılması gerektiğini de söyler. Burada aynı şeyin iki adını yan yana koyduk. Sayım yalnızca Filistin, İsrail ya da Gazze geçen başlıklarda yapıldı; sayılar bin başlıkta kaç kez geçtiğini gösteriyor.</p>
-    <p>Tutulan insanlar: Batı ana akım basını <b>“rehine”</b> kelimesini (binde <b data-v="g.bati_ana.rehine"></b>) <b>“esir / tutuklu”</b>dan (binde <b data-v="g.bati_ana.esir"></b>) <b data-v="k.rehine"></b> kat sık kullandı; İsrail basınında bu fark daha da büyük. Bölge basınında tersine, “esir” öne çıkıyor. Oysa İsrail hapishanelerindeki Filistinlilerin binlercesi hiçbir suçlama olmadan, “idari gözaltı” ile tutuluyor. Silahlı gruplar: Batı ana akım basınında “terör” (binde <b data-v="g.bati_ana.teror"></b>) “direniş”ten (binde <b data-v="g.bati_ana.direnis"></b>) sık; İsrail basınında “direniş” neredeyse hiç yok. Ölüm: bölge basınında ölüm bir <b>şehadet</b> olarak anlatılıyor (binde <b data-v="g.bolge.sehit"></b>); İsrail basınında ise öldürülenler için <b>“etkisiz hale getirildi”</b> diliyle (binde <b data-v="g.israil.etkisiz"></b>).</p>
-    <figure class="rp-sekil"><div id="g-ciftler"></div><figcaption>Karşıt çiftler: soldaki çubuk ilk adı, sağdaki ikinci adı gösteriyor. Uzunluklar her çiftte kendi içinde ölçeklenmiştir.</figcaption></figure>
-    <details class="rp-ac"><summary>Bütün kelimeler (<span data-v="terim_sayisi"></span>)</summary><div id="g-terimler"></div></details>
+    <p data-dil="tr" class="rp-soru">Soru 2 · Adlandırma</p>
+    <p data-dil="en" class="rp-soru">Question 2 · Naming</p>
+    <h2 data-dil="tr">Aynı şeye hangi adlar verildi?</h2>
+    <h2 data-dil="en">What names were given to the same thing?</h2>
+    <p data-dil="tr">Çerçeveleme kuramına göre bir olaya verilen ad, onun ne olduğunu, kimin sorumlu olduğunu ve ne yapılması gerektiğini de söyler. Burada aynı şeyin iki adını yan yana koyduk. Sayım yalnızca Filistin, İsrail ya da Gazze geçen başlıklarda yapıldı; sayılar bin başlıkta kaç kez geçtiğini gösteriyor.</p>
+    <p data-dil="en">Framing theory says the name given to an event also says what it is, who is responsible and what should be done. Here we set two names for the same thing side by side. Counts cover only headlines that mention Palestine, Israel or Gaza; numbers are uses per thousand headlines.</p>
+    <p data-dil="tr">Tutulan insanlar: Batı ana akım basını <b>“rehine”</b> kelimesini (binde <b data-v="g.bati_ana.rehine"></b>) <b>“esir / tutuklu”</b>dan (binde <b data-v="g.bati_ana.esir"></b>) <b data-v="k.rehine"></b> kat sık kullandı; İsrail basınında bu fark daha da büyük. Bölge basınında tersine, “esir” öne çıkıyor. Oysa İsrail hapishanelerindeki Filistinlilerin binlercesi hiçbir suçlama olmadan, “idari gözaltı” ile tutuluyor. Silahlı gruplar: Batı ana akım basınında “terör” (binde <b data-v="g.bati_ana.teror"></b>) “direniş”ten (binde <b data-v="g.bati_ana.direnis"></b>) sık; İsrail basınında “direniş” neredeyse hiç yok. Ölüm: bölge basınında ölüm bir <b>şehadet</b> olarak anlatılıyor (binde <b data-v="g.bolge.sehit"></b>); İsrail basınında ise öldürülenler için <b>“etkisiz hale getirildi”</b> diliyle (binde <b data-v="g.israil.etkisiz"></b>).</p>
+    <p data-dil="en">People held captive: Western mainstream press used <b>“hostage”</b> (<b data-v="g.bati_ana.rehine"></b> per thousand) <b data-v="k.rehine"></b> times more often than <b>“prisoner / detainee”</b> (<b data-v="g.bati_ana.esir"></b> per thousand); in Israeli press the gap is larger still. In the regional press it is the reverse: “prisoner” leads. Yet thousands of Palestinians in Israeli prisons are held without charge under “administrative detention”. Armed groups: in Western mainstream press “terror” (<b data-v="g.bati_ana.teror"></b> per thousand) is more common than “resistance” (<b data-v="g.bati_ana.direnis"></b> per thousand); in Israeli press “resistance” barely appears. Death: the regional press describes death as <b>martyrdom</b> (<b data-v="g.bolge.sehit"></b> per thousand); Israeli press speaks of those killed as <b>“neutralised”</b> (<b data-v="g.israil.etkisiz"></b> per thousand).</p>
+    <figure class="rp-sekil"><div id="g-ciftler"></div><figcaption data-dil="tr">Karşıt çiftler: soldaki çubuk ilk adı, sağdaki ikinci adı gösteriyor. Uzunluklar her çiftte kendi içinde ölçeklenmiştir.</figcaption><figcaption data-dil="en">Opposing pairs: the left bar is the first name, the right bar the second. Lengths are scaled within each pair.</figcaption></figure>
+    <details class="rp-ac"><summary><span data-dil="tr">Bütün kelimeler</span><span data-dil="en">All terms</span> (<span data-v="terim_sayisi"></span>)</summary><div id="g-terimler"></div></details>
   </article>
 
   <article class="rp-metin" id="faillik">
-    <p class="rp-soru">Soru 3 · Faillik</p>
-    <h2>Ölümün faili yazıldı mı?</h2>
-    <p>Eleştirel söylem çözümlemesi, edilgen yapının ve adlaştırmanın faili cümleden çıkardığını gösterir. “İsrail 20 kişiyi öldürdü” bir faili adlandırır. “İsrail’in saldırısında 20 kişi öldürüldü” faili edilgen bir cümlede tutar. “20 kişi öldürüldü” faili siler. “20 kişi öldü” ya da “ölü sayısı 20’ye çıktı” ise öldürmeyi bile söylemez. Ölüm bildiren bütün başlıkları bu dört kalıba ayırdık.</p>
-    <p>Batı ana akım basınında Filistinlilerin öldüğünü bildiren başlıkların <b data-v="g.bati_ana.fp.oldu"></b>’i ölümü öldürme fiili olmadan veriyor (“öldü”, “ölü sayısı”); <b data-v="g.bati_ana.fp.failsiz"></b>’inde “öldürüldü” deniyor ama kimin öldürdüğü yok. Fail ancak başlıkların <b data-v="k.fail_f"></b>’inde yazıyor. İsraillilerin öldüğü başlıklarda ise fail, yani Hamas, Hizbullah ya da bir silahlı Filistinli, başlıkların <b data-v="k.fail_i"></b>’inde adlandırılıyor.</p>
-    <p>Bölge basınında ölümlerin yaklaşık yarısı şehadet diliyle anlatılıyor (<b data-v="g.bolge.fp.sehadet"></b>): bu da başlıkta faili yazmaz, ama ölümü bir haksızlığın ve direnişin parçası olarak çerçeveler. Faili en açık yazan grup, küçük bir örneklemle, İsrail basını (<b data-v="g.israil.fp.aktif"></b> etken cümle): ordunun “öldürdüğü”, “etkisiz hale getirdiği” kişiler.</p>
-    <figure class="rp-sekil"><div id="g-faillik"></div><figcaption>Filistinlilerin öldüğünü bildiren başlıkların anlatım kalıplarına göre dağılımı.</figcaption></figure>
-    <figure class="rp-sekil"><div id="g-kimin"></div><figcaption>Ölüm başlıklarında failin yazıldığı pay: Filistinlilerin ölümü (İsrail fail olarak) ve İsraillilerin ölümü (Hamas, Hizbullah ya da silahlı bir Filistinli fail olarak).</figcaption></figure>
+    <p data-dil="tr" class="rp-soru">Soru 3 · Faillik</p>
+    <p data-dil="en" class="rp-soru">Question 3 · Agency</p>
+    <h2 data-dil="tr">Ölümün faili yazıldı mı?</h2>
+    <h2 data-dil="en">Was the killer named?</h2>
+    <p data-dil="tr">Eleştirel söylem çözümlemesi, edilgen yapının ve adlaştırmanın faili cümleden çıkardığını gösterir. “İsrail 20 kişiyi öldürdü” bir faili adlandırır. “İsrail’in saldırısında 20 kişi öldürüldü” faili edilgen bir cümlede tutar. “20 kişi öldürüldü” faili siler. “20 kişi öldü” ya da “ölü sayısı 20’ye çıktı” ise öldürmeyi bile söylemez. Ölüm bildiren bütün başlıkları bu dört kalıba ayırdık.</p>
+    <p data-dil="en">Critical discourse analysis shows how the passive voice and nominalisation remove the agent from a sentence. “Israel killed 20 people” names an agent. “20 people were killed in an Israeli strike” keeps the agent in a passive sentence. “20 people were killed” erases it. “20 people died” or “death toll rises to 20” does not even say there was a killing. We sorted every headline reporting deaths into these four patterns.</p>
+    <p data-dil="tr">Batı ana akım basınında Filistinlilerin öldüğünü bildiren başlıkların <b data-v="g.bati_ana.fp.oldu"></b>’i ölümü öldürme fiili olmadan veriyor (“öldü”, “ölü sayısı”); <b data-v="g.bati_ana.fp.failsiz"></b>’inde “öldürüldü” deniyor ama kimin öldürdüğü yok. Fail ancak başlıkların <b data-v="k.fail_f"></b>’inde yazıyor. İsraillilerin öldüğü başlıklarda ise fail, yani Hamas, Hizbullah ya da bir silahlı Filistinli, başlıkların <b data-v="k.fail_i"></b>’inde adlandırılıyor.</p>
+    <p data-dil="en">In Western mainstream press, <b data-v="g.bati_ana.fp.oldu"></b> of headlines reporting Palestinian deaths give the death without a verb of killing (“died”, “death toll”); <b data-v="g.bati_ana.fp.failsiz"></b> say “were killed” without saying by whom. The killer is named in only <b data-v="k.fail_f"></b>. In headlines on Israeli deaths, the killer (Hamas, Hezbollah or an armed Palestinian) is named in <b data-v="k.fail_i"></b>.</p>
+    <p data-dil="tr">Bölge basınında ölümlerin yaklaşık yarısı şehadet diliyle anlatılıyor (<b data-v="g.bolge.fp.sehadet"></b>): bu da başlıkta faili yazmaz, ama ölümü bir haksızlığın ve direnişin parçası olarak çerçeveler. Faili en açık yazan grup, küçük bir örneklemle, İsrail basını (<b data-v="g.israil.fp.aktif"></b> etken cümle): ordunun “öldürdüğü”, “etkisiz hale getirdiği” kişiler.</p>
+    <p data-dil="en">In the regional press about half of the deaths are told in the language of martyrdom (<b data-v="g.bolge.fp.sehadet"></b>): this does not name the killer either, but frames the death as part of an injustice and of resistance. The group that names the agent most plainly, on a small sample, is the Israeli press (<b data-v="g.israil.fp.aktif"></b> active sentences): people the army “killed” or “neutralised”.</p>
+    <figure class="rp-sekil"><div id="g-faillik"></div><figcaption data-dil="tr">Filistinlilerin öldüğünü bildiren başlıkların anlatım kalıplarına göre dağılımı.</figcaption><figcaption data-dil="en">Headlines reporting Palestinian deaths, by narrative pattern.</figcaption></figure>
+    <figure class="rp-sekil"><div id="g-kimin"></div><figcaption data-dil="tr">Ölüm başlıklarında failin yazıldığı pay: Filistinlilerin ölümü (İsrail fail olarak) ve İsraillilerin ölümü (Hamas, Hizbullah ya da silahlı bir Filistinli fail olarak).</figcaption><figcaption data-dil="en">Share of death headlines that name the killer: Palestinian deaths (Israel as the agent) and Israeli deaths (Hamas, Hezbollah or an armed Palestinian as the agent).</figcaption></figure>
   </article>
 
   <article class="rp-metin" id="soykirim">
-    <p class="rp-soru">Soru 4 · Kaynak ve aktarım</p>
-    <h2>“Soykırım” kimin sözü?</h2>
-    <p>Kelimeyi en sık Batı’daki muhalif basın kullandı (binde <b data-v="g.bati_muhalif.soykirim"></b>), bölge basınından (binde <b data-v="g.bolge.soykirim"></b>) bile sık. Batı ana akım basınında kelime binde <b data-v="g.bati_ana.soykirim"></b> geçiyor; ama en sık geçtiği aylarda örnek başlıkların çoğunda bir nitelendirme olarak değil, bir davanın, raporun ya da suçlamanın aktarımı olarak, tırnak içinde ya da “suçlamalar” diye geçiyor. Hall’un deyişiyle olayı tanımlama hakkı başkasında kalıyor: kelime ana akım basına başkalarının ağzından girdi.</p>
+    <p data-dil="tr" class="rp-soru">Soru 4 · Kaynak ve aktarım</p>
+    <p data-dil="en" class="rp-soru">Question 4 · Source and attribution</p>
+    <h2 data-dil="tr">“Soykırım” kimin sözü?</h2>
+    <h2 data-dil="en">Whose word is “genocide”?</h2>
+    <p data-dil="tr">Kelimeyi en sık Batı’daki muhalif basın kullandı (binde <b data-v="g.bati_muhalif.soykirim"></b>), bölge basınından (binde <b data-v="g.bolge.soykirim"></b>) bile sık. Batı ana akım basınında kelime binde <b data-v="g.bati_ana.soykirim"></b> geçiyor; ama en sık geçtiği aylarda örnek başlıkların çoğunda bir nitelendirme olarak değil, bir davanın, raporun ya da suçlamanın aktarımı olarak, tırnak içinde ya da “suçlamalar” diye geçiyor. Hall’un deyişiyle olayı tanımlama hakkı başkasında kalıyor: kelime ana akım basına başkalarının ağzından girdi.</p>
+    <p data-dil="en">The word was used most by the dissenting press in the West (<b data-v="g.bati_muhalif.soykirim"></b> per thousand), more often even than the regional press (<b data-v="g.bolge.soykirim"></b> per thousand). In Western mainstream press it appears <b data-v="g.bati_ana.soykirim"></b> per thousand; but in the months it appears most, most sample headlines use it not as a description but as a report of a case, a report or an accusation, in quotation marks or as “accusations”. In Hall’s terms, the right to define the event stays with others: the word entered the mainstream press through other people’s mouths.</p>
     <div id="g-zirve" class="rp-zirve"></div>
   </article>
 
   <article class="rp-metin" id="gazeteciler">
-    <p class="rp-soru">Soru 5 · Görünürlük</p>
-    <h2>Öldürülen gazeteciler haber oldu mu?</h2>
-    <p>Gazze Hükümet Medya Ofisi’nin listelerine göre 7 Ekim’den bu yana <b data-v="k.gzt"></b> gazeteci öldürüldü. Gri çubuklar ay ay öldürülen gazetecileri, çizgiler her grubun gazeteci ölümlerini bildiren başlıklarını gösteriyor. Bölge basını öldürülen her gazeteci için ortalama <b data-v="k.gzt_bolge"></b> başlık attı; Batı ana akım basını <b data-v="k.gzt_bati"></b>.</p>
-    <figure class="rp-sekil"><div id="g-gazeteci"></div><figcaption>Gri: ay ay öldürülen gazeteciler (Gazze Hükümet Medya Ofisi; Tech for Palestine). Çizgiler: gazeteci ölümü bildiren başlıklar.</figcaption></figure>
+    <p data-dil="tr" class="rp-soru">Soru 5 · Görünürlük</p>
+    <p data-dil="en" class="rp-soru">Question 5 · Visibility</p>
+    <h2 data-dil="tr">Öldürülen gazeteciler haber oldu mu?</h2>
+    <h2 data-dil="en">Did the killing of journalists make the news?</h2>
+    <p data-dil="tr">Gazze Hükümet Medya Ofisi’nin listelerine göre 7 Ekim’den bu yana <b data-v="k.gzt"></b> gazeteci öldürüldü. Gri çubuklar ay ay öldürülen gazetecileri, çizgiler her grubun gazeteci ölümlerini bildiren başlıklarını gösteriyor. Bölge basını öldürülen her gazeteci için ortalama <b data-v="k.gzt_bolge"></b> başlık attı; Batı ana akım basını <b data-v="k.gzt_bati"></b>.</p>
+    <p data-dil="en">According to the Gaza Government Media Office, <b data-v="k.gzt"></b> journalists have been killed since 7 October. Grey bars show journalists killed each month; lines show each group’s headlines reporting journalists’ deaths. The regional press ran on average <b data-v="k.gzt_bolge"></b> headlines per journalist killed; Western mainstream press <b data-v="k.gzt_bati"></b>.</p>
+    <figure class="rp-sekil"><div id="g-gazeteci"></div><figcaption data-dil="tr">Gri: ay ay öldürülen gazeteciler (Gazze Hükümet Medya Ofisi; Tech for Palestine). Çizgiler: gazeteci ölümü bildiren başlıklar.</figcaption><figcaption data-dil="en">Grey: journalists killed each month (Gaza Government Media Office; Tech for Palestine). Lines: headlines reporting journalists’ deaths.</figcaption></figure>
   </article>
 
   <article class="rp-metin" id="yayinlar">
-    <p class="rp-soru">Yayın yayın</p>
-    <h2>Hangi yayın faili yazıyor, hangisi işgal diyor?</h2>
-    <p>Her nokta bir yayın. Sağa gittikçe “işgal” kelimesini daha sık kullanıyor; yukarı çıktıkça Filistinlilerin ölümünde faili (İsrail’i) daha sık yazıyor. Noktanın büyüklüğü ölçülen başlık sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
-    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption>Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı ve en az 30 ölüm başlığı olan yayınlar.</figcaption></figure>
+    <p data-dil="tr" class="rp-soru">Yayın yayın</p>
+    <p data-dil="en" class="rp-soru">Outlet by outlet</p>
+    <h2 data-dil="tr">Hangi yayın faili yazıyor, hangisi işgal diyor?</h2>
+    <h2 data-dil="en">Which outlet names the killer, which says occupation?</h2>
+    <p data-dil="tr">Her nokta bir yayın. Sağa gittikçe “işgal” kelimesini daha sık kullanıyor; yukarı çıktıkça Filistinlilerin ölümünde faili (İsrail’i) daha sık yazıyor. Noktanın büyüklüğü ölçülen başlık sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
+    <p data-dil="en">Each dot is an outlet. Further right, it uses “occupation” more often; higher up, it names the killer (Israel) more often when Palestinians die. Dot size shows the number of headlines measured; hover for the outlet’s name.</p>
+    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption data-dil="tr">Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı ve en az 30 ölüm başlığı olan yayınlar.</figcaption><figcaption data-dil="en">Only outlets with at least 150 headlines on Palestine, Israel or Gaza and at least 30 headlines on deaths.</figcaption></figure>
     <div id="g-yayinlar" class="rp-tablo"></div>
   </article>
 
   <article class="rp-metin rp-yontem" id="yontem">
-    <h2>Yöntem ve sınırlar</h2>
+    <h2 data-dil="tr">Yöntem ve sınırlar</h2>
+    <h2 data-dil="en">Method and limits</h2>
     <ul id="g-yontem"></ul>
   </article>
-  <p class="rp-geri"><a href="almanak.html">← Almanak’a dön</a></p>
+  <p data-dil="tr" class="rp-geri"><a href="almanak.html">← Raporlara dön</a></p>
+  <p data-dil="en" class="rp-geri"><a href="almanak.html">← Back to Reports</a> · <a href="olaylar.html">Habituation →</a> · <a href="liderler.html">What did leaders say? →</a></p>
 </main>
-<script src="site/rapor-ortak.js?v=202611090300"></script>
-<script src="site/sayfa-rapor.js?v=202611090200"></script>
+<script src="site/rapor-ortak.js?v=202611090500"></script>
+<script src="site/sayfa-rapor.js?v=202611090500"></script>
 </body>
 </html>
