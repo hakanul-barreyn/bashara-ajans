@@ -506,8 +506,10 @@
         const dy = {}; anIds.forEach((i) => { const d = an[i].dayanak; if (d) (dy[d] = dy[d] || []).push(ad(i)); });
         const dk = Object.keys(dy); if (dk.length) satir.push(["Dayanak", dk.length === 1 ? "Hepsi: " + dk[0] + "." : dk.map((d) => d + " (" + dy[d].length + ")").join(" · ")]);
         const bg = say((i) => an[i].baglam === true); if (bg && bg < anIds.length) satir.push(["Bağlam", anIds.length + " yayından " + bg + " tanesi işgal, abluka ya da öncesi gibi bir bağlam verdi."]);
-        const rk = anIds.filter((i) => an[i].rakam); if (rk.length) { const fr = new Set(rk.map((i) => an[i].rakam)); satir.push(["Rakam", fr.size > 1 ? rk.map((i) => an[i].rakam + " (" + ad(i) + ")").join(" · ") : "Hepsi aynı rakamı verdi: " + an[rk[0]].rakam + "."]); }
-        const kl = new Set(anIds.map((i) => an[i].kelime).filter(Boolean)); if (kl.size > 1) satir.push(["Kelime", anIds.filter((i) => an[i].kelime).map((i) => "“" + an[i].kelime + "” (" + ad(i) + ")").join(" · ")]);
+        const grupla = (alan) => { const g = {}; anIds.forEach((i) => { const v = an[i][alan]; if (!v) return; g[v] = g[v] || []; if (!g[v].includes(ad(i))) g[v].push(ad(i)); }); return g; };
+        const yaz2 = (g, t) => Object.entries(g).map(([d, v]) => (t ? "“" + d + "”" : d) + ": " + v.slice(0, 3).join(", ") + (v.length > 3 ? " +" + (v.length - 3) : "")).join(" · ");
+        const rk = grupla("rakam"), rkS = Object.keys(rk).length; if (rkS) satir.push(["Rakam", rkS === 1 ? "Hepsi aynı rakamı verdi: " + Object.keys(rk)[0] + "." : yaz2(rk, false)]);
+        const kl = grupla("kelime"); if (Object.keys(kl).length > 1) satir.push(["Kelime", yaz2(kl, true)]);
         if (o.ortak) kutu.appendChild(el("p", "anlatim-ozet", o.ortak));
         const dl = el("dl", "anlatim-liste");
         satir.forEach(([b2, t]) => { dl.appendChild(el("dt", null, b2)); dl.appendChild(el("dd", null, t)); });

@@ -1,0 +1,52 @@
+/* Haber sayfası (h/<id>.html): siyah giriş bölümü, altında karşılaştırma ve öteki haberler */
+.hs-giris{position:relative;background:#0c0e0d;color:#f3f1ec;overflow:hidden;isolation:isolate}
+.hs-giris::before{content:"";position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(620px 420px at 0% 0%,rgba(25,230,140,.20),transparent 70%),
+  radial-gradient(700px 480px at 100% 100%,rgba(255,59,85,.18),transparent 70%)}
+.hs-foto{position:absolute;inset:0;z-index:-3;background-size:cover;background-position:center;opacity:.34;filter:saturate(.6)}
+.hs-foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,14,13,.55),rgba(12,14,13,.92) 70%,#0c0e0d)}
+.hs-ic{max-width:980px;margin:0 auto;padding:30px max(16px,env(safe-area-inset-right,0px)) 34px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px}
+.hs-yol{font-size:.8rem;color:#9aa39e;display:flex;gap:6px;flex-wrap:wrap}
+.hs-yol a{color:#c8cec9;text-decoration:none}
+.hs-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.8rem;color:#b9c0bb}
+.hs-hap{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e9ece9;font-weight:600}
+.hs-hap i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.hs-giris h1{margin:0;font-size:clamp(1.7rem,4.6vw,3rem);line-height:1.12;letter-spacing:-.02em;font-weight:800;text-wrap:balance;max-width:24ch}
+.hs-ozet-ust{margin:0;font-size:1.05rem;line-height:1.6;color:#cfd5d1;max-width:68ch}
+.hs-alinti{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px}
+.hs-al{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.hs-al b{font-size:.82rem;color:#f3f1ec}
+.hs-al small{font-family:var(--mono);font-size:.68rem;color:#9aa39e;text-transform:uppercase;letter-spacing:.06em}
+.hs-al p{margin:0;font-size:.95rem;line-height:1.45;color:#e2e6e3}
+.hs-al.secili{border-color:rgba(25,230,140,.55);box-shadow:0 0 0 1px rgba(25,230,140,.25) inset}
+.hs-al a{color:#7fe6b6;font-size:.82rem;font-weight:700;text-decoration:none;margin-top:auto}
+.hs-dugmeler{display:flex;flex-wrap:wrap;gap:8px}
+.hs-d{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;font-weight:700;font-size:.9rem;text-decoration:none;border:1px solid rgba(255,255,255,.18);color:#f3f1ec;background:transparent;cursor:pointer;font-family:inherit}
+.hs-d.ana{background:#f3f1ec;color:#0c0e0d;border-color:#f3f1ec}
+.hs-seridi{display:flex;flex-wrap:wrap;gap:6px}
+.hs-seridi span{font-size:.74rem;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:#cfd5d1}
+.hs-kunye{font-size:.72rem;color:#7d8681}
+.hs-govde{max-width:980px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-right,0px)) 64px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px}
+.hs-bolum{background:var(--kart);color:var(--k-ink);box-shadow:var(--golge);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:80px;min-width:0}
+.hs-bolum h2{margin:0;font-size:1.15rem;letter-spacing:-.01em}
+.hs-bolum p{margin:0;color:var(--k-ink2);line-height:1.55}
+.hs-fark{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 14px;margin:0}
+.hs-fark dt{font-weight:800}
+.hs-fark dd{margin:0;color:var(--k-ink2)}
+.hs-kim{list-style:none;margin:0;padding:0}
+.hs-kim li{padding:12px 0;border-top:1px solid var(--k-cizgi);display:flex;flex-direction:column;gap:3px}
+.hs-kim li:first-child{border-top:0}
+.hs-kim .hs-su{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.hs-kim .hs-su i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.hs-kim .hs-su a{color:inherit;font-weight:800}
+.hs-kim small{color:var(--k-soluk)}
+.hs-cip{font-size:.72rem;padding:1px 8px;border-radius:999px;background:var(--yuzey);border:1px solid var(--k-cizgi);color:var(--k-ink2)}
+.hs-cip.iyi{background:#e5f4ec;border-color:#bfe2cf;color:#1d5a3e}
+.hs-cip.kotu{background:#fbeaea;border-color:#efc4c4;color:#7a2424}
+.hs-diger{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:12px}
+.hs-dk{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:14px;background:var(--kart);box-shadow:var(--golge);text-decoration:none;color:var(--k-ink);min-width:0}
+.hs-dk b{font-size:1rem;line-height:1.3;text-wrap:balance}
+.hs-dk small{color:var(--k-soluk);font-size:.78rem}
+.hs-not{font-size:.8rem;color:var(--soluk);margin:0 4px}
+@media (max-width:560px){.hs-fark{grid-template-columns:minmax(0,1fr)}.hs-fark dd{margin-bottom:6px}}
+[data-dil][hidden]{display:none!important}
