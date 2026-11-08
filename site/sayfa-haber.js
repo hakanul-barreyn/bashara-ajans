@@ -12,3 +12,16 @@
     });
   });
 })();
+
+// Haber sayfasına dışarıdan (paylaşılan bağlantı, arama motoru) gelindiyse geçmişe önce sitenin ana sayfası yazılır:
+// tarayıcının geri tuşu siteden çıkmaz, ana sayfaya döner.
+(function () {
+  try {
+    var ic = document.referrer && new URL(document.referrer).origin === location.origin;
+    if (ic || !history.pushState) return;
+    var ana = new URL("../", location.href).href, burasi = location.href;
+    history.replaceState({ zbsAna: true }, "", ana);
+    history.pushState({ zbsHaber: true }, "", burasi);
+    window.addEventListener("popstate", function (e) { if (e.state && e.state.zbsAna) location.replace(ana); });
+  } catch (e) { /* eski tarayıcı: dokunma */ }
+})();

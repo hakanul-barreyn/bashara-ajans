@@ -220,7 +220,24 @@
     return kutu;
   }
 
-  function olayAc(id) { olaySec = id; ciz(true); }
+  // Olay sayfası ve paylaşılan haber görünümü adres çubuğuna (#o-…, #h-…) yazılır: tarayıcının geri tuşu akışa döner
+  let icGezinti = false;
+  function olayAc(id) {
+    const o = olayHarita[id];
+    if (o && o.haberler && o.haberler[0]) { icGezinti = true; location.hash = "#o-" + o.haberler[0]; }
+    else { olaySec = id; ciz(true); }
+  }
+  function akisaDon() {
+    if (icGezinti && history.length > 1) { icGezinti = false; history.back(); return; }
+    history.replaceState(null, "", location.pathname + location.search);
+    olaySec = null; odakId = null; kac = SAYFA; ciz(true);
+  }
+  // Paylaşılan bir bağlantıyla dışarıdan gelindiyse (#h-…, #o-…) geçmişe önce ana sayfa yazılır: geri tuşu siteden çıkmaz, akışa döner
+  if (/^#[ho]-/.test(location.hash) && !(document.referrer && new URL(document.referrer).origin === location.origin)) {
+    const h0 = location.hash;
+    history.replaceState(null, "", location.pathname + location.search);
+    history.pushState(null, "", location.pathname + location.search + h0);
+  }
 
   // ---------------------------------------------------- kapsama analizi (Ground News benzeri)
   const KAMP = { "Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası", "Mağrip": "Arap dünyası",
@@ -471,7 +488,7 @@
     const kp = kapsama(o);
     const ust = el("div", "olay-ust");
     ust.appendChild(el("span", "olay-sayi", kp.toplam + " kaynak · " + o.haberler.length + " haber"));
-    const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = () => { olaySec = null; ciz(true); };
+    const kap = el("button", "kapat-olay", "Akışa dön ✕"); kap.type = "button"; kap.onclick = akisaDon;
     ust.appendChild(kap); b.appendChild(ust);
     b.appendChild(el("h2", null, OB(o)));
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
@@ -729,7 +746,7 @@
     document.body.classList.toggle("odak-modu", odakModu);
     if (odakModu) {
       const geri = el("button", "kapat-olay odak-geri", "← Tüm haberler"); geri.type = "button";
-      geri.onclick = () => { history.replaceState(null, "", location.pathname + location.search); odakId = null; kac = SAYFA; ciz(true); };
+      geri.onclick = akisaDon;
       akis.appendChild(geri);
     }
     if (secOlay) {
