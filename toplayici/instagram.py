@@ -41,7 +41,7 @@ import marka
 # Deneysel dönem: günde tek gönderi, yalnızca Türkiye saatiyle akşam (izlenmenin en yüksek olduğu saatler).
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 1)
 IG_SAAT = (19, 22)                # Türkiye saati; gönderi bu aralıkta çıkar
-KART_SURUM = 2                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
+KART_SURUM = 3                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
 # Actions'tan elle "şimdi gönder": saat aralığı ve iki gönderi arası bekleme bir kerelik atlanır; IG_OGE verilirse o öge gönderilir
 IG_SIMDI = os.environ.get("IG_SIMDI", "").lower() == "true"
 IG_OGE = os.environ.get("IG_OGE", "").strip()
@@ -159,7 +159,10 @@ def adaylar(kay, olaylar, haberler, kaynaklar, simdi):
         if yas > 36:
             continue
         tum_dis = any(almanak.kamp(kaynaklar.get(haberler[i]["kaynak"])) in almanak.DIS for i in ids if i in haberler)
-        if not tum_dis and len(bolge) >= 4 and yas >= 6:
+        # Notta bir İsrail/Batı yayınının adı geçiyorsa o yayın olayı yazmış olabilir: "0 haber" iddiası riskli, sessizlik kartı yok
+        dis_adlar = [k["ad"] for k in kaynaklar.values() if almanak.kamp(k) in almanak.DIS]
+        notta_dis = any(ad and ad.lower() in (o.get("not") or "").lower() for ad in dis_adlar)
+        if not tum_dis and not notta_dis and len(bolge) >= 4 and yas >= 6 and sayi["filistin"] >= 2:
             # Sessizlik kartında yalnızca bölgenin kendi basını: işbirlikçi çizgideki yayınlar (Iran International gibi) karışmasın
             yalniz = {i: y for i, y in yayinlar.items() if y["cizgi"] != "ik"}
             cikti.append(("sessiz", 3 + len(bolge) / 10, o, (yalniz, sayi)))
@@ -226,7 +229,10 @@ def _plan_dogrula(p, o, yayinlar, haberler, girdi_metni):
     d = p.get("duello")
     if isinstance(d, dict) and d.get("a") in hid and d.get("b") in hid:
         a, b = hid[d["a"]], hid[d["b"]]
-        if a["kamp"] in almanak.BOLGE_ICI and a["cizgi"] != "ik" and b["kamp"] in almanak.DIS and a["baslik"] and b["baslik"]:
+        # Gerçek bir karşıtlık olmalı: iki haberin bakışı farklı ve başlıklar birbirinin kopyası değil
+        ayni = len(set(a["baslik"].lower().split()) ^ set(b["baslik"].lower().split())) < 4
+        if (a["kamp"] in almanak.BOLGE_ICI and a["cizgi"] != "ik" and b["kamp"] in almanak.DIS and a["baslik"] and b["baslik"]
+                and a["bakis"] != b["bakis"] and not ayni):
             plan["duello"] = {"a": d["a"], "b": d["b"]}
     r = p.get("rakam")
     if isinstance(r, dict):
@@ -649,6 +655,12 @@ def yayinla(kok, durum, simdi, log=print):
     if token.startswith("IG"):
         _jeton_yenile(kay, token, simdi, log)
     _hatirlat(kay, simdi, log)
+    if not kay.get("kullanici"):
+        h_ = _hesap(kay, sunucu, token)
+        if h_:
+            r = _istek("GET", f"{sunucu}/{h_}?" + urllib.parse.urlencode({"fields": "username", "access_token": token}))
+            if r and r.get("username"):
+                kay["kullanici"] = r["username"]
     tr_saat = (simdi + dt.timedelta(hours=3)).hour
     if not IG_SIMDI and not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
         return 0
