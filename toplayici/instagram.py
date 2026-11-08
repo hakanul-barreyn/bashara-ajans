@@ -32,13 +32,17 @@ import urllib.request
 
 import almanak
 import ekler
+import ig_foto
+import ig_harita
 import ig_kart
+import ig_video
 import marka
 
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 4)
 # Yeni kart tasarımı bitene kadar gönderim durduruldu (kartlar yine hazırlanır). Açmak için False yap.
 DURAKLAT = True
 IG_ARA = 150                      # dakika
+IG_REELS_HER = int(os.environ.get("IG_REELS_HER") or 2)   # her kaçıncı gönderi Reels videosu olarak gitsin (0: hiç)
 SURUM = "v23.0"
 G, Y = 1080, 1350                 # 4:5 dikey; akışta en çok yer kaplayan oran
 F = "DejaVu Sans, Noto Sans, Arial, sans-serif"
@@ -256,25 +260,34 @@ def _yer_tarih(o):
     return (f"{yer} · " if yer else "") + f"{t.day} {ig_kart.AY[t.month - 1]}"
 
 
-def gonderi_kur(tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
-    """Plan ve veriden kart SVG'leri. Uygun kalıp yoksa None."""
+def gonderi_kur(kok, tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
+    """Plan ve veriden kart SVG'leri: (svg listesi, fotoğraf künyesi). Uygun kalıp yoksa None."""
     yt = _yer_tarih(o)
+    # Kapak arka planı: onaylı açık lisanslı yer fotoğrafı; yoksa olayın yerini gösteren karanlık harita
+    yer = o.get("yer") or {}
+    tohum = int(o["id"][-4:], 16) if re.fullmatch(r"[0-9a-f]{4}", o["id"][-4:]) else 1
+    foto = ig_foto.sec(kok, yer.get("ad"), tohum)
+    kunye = foto[1] if foto else ""
+    arka = lambda kutu: (ig_kart.foto_katmani(foto[0], plan["ton"]) if foto
+                         else ig_harita.harita(kok, yer["lat"], yer["lon"], yer.get("ad", ""), plan["ton"], kutu,
+                                               kimlik="h" + str(kutu[1])) if yer.get("lat") is not None and kutu else "")
     sira = {k: i for i, k in enumerate(almanak.KAMP_SIRA)}
     hid = {y["hid"]: y for y in yayinlar.values()}
     ton = plan["ton"]
     kapaklar = []
     if tur == "sessiz":
         bolge = [y["ad"] for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI]
-        kapaklar.append(("sessiz", lambda a: ig_kart.sessizlik(o["baslik"], yt, len(bolge), bolge[:6], a)))
+        kapaklar.append(("sessiz", lambda a: ig_kart.sessizlik(o["baslik"], yt, len(bolge), bolge[:6], a,
+                                                               arka((600, 130, 480, 420)), kunye)))
     elif plan.get("duello"):
         A, B = hid[plan["duello"]["a"]], hid[plan["duello"]["b"]]
         kapaklar.append(("duello", lambda a: ig_kart.duello({"kaynak": A["ad"], "kamp": A["kamp"], "baslik": A["baslik"]},
                                                             {"kaynak": B["ad"], "kamp": B["kamp"], "baslik": B["baslik"]},
-                                                            yt, plan["kanca"], a, ton)))
+                                                            yt, plan["kanca"], a, ton, arka(None) if foto else "", kunye if foto else "")))
     r = plan.get("rakam")
     if r and ton == "yas":
-        kapaklar.append(("rakam", lambda a: ig_kart.rakam(r["deger"], r["birim"], plan["govde"], r["kaynak"], yt, a,
-                                                          tohum=int(o["id"][-4:], 16) if re.fullmatch(r"[0-9a-f]{4}", o["id"][-4:]) else 1)))
+        kapaklar.append(("rakam", lambda a: ig_kart.rakam(r["deger"], r["birim"], plan["govde"], r["kaynak"], yt, a, tohum=tohum,
+                                                          arka=arka((560, 40, 520, 300)), kunye_=kunye)))
     if not kapaklar:
         return None
     if ton == "yas" and kapaklar[-1][0] == "rakam":
@@ -289,10 +302,10 @@ def gonderi_kur(tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
     soru = (f"Bölge basınından {len(yayinlar)} yayın yazdı. İsrail ve Batı basını yazmadı." if tur == "sessiz"
             else f"Aynı olayı {len(yayinlar)} yayın nasıl yazdı?")
     svgler.append(ig_kart.son(ton, soru, alan, alt(toplam)))
-    return svgler
+    return svgler, kunye
 
 
-def aciklama(tur, o, yayinlar, sayi, plan, alan):
+def aciklama(tur, o, yayinlar, sayi, plan, alan, kunye=""):
     bas = plan.get("kanca") or o["baslik"]
     isaret = "🔇" if tur == "sessiz" else ("🕯️" if plan["ton"] == "yas" else "⚖️")
     satir = [f"{isaret} {bas}", "", o["baslik"]]
@@ -304,6 +317,8 @@ def aciklama(tur, o, yayinlar, sayi, plan, alan):
     satir += ["🗞 " + ", ".join(y["ad"] for y in list(yayinlar.values())[:12]) + (" …" if len(yayinlar) > 12 else "")]
     satir += ["", f"Özgün haberler ve tüm yayınlar: profildeki bağlantı ({alan})",
               "Başlıklar Türkçeye çevrildi; açıklamalar yapay zekâyla, yayınların kendi haberlerine dayanarak yazıldı."]
+    if kunye:
+        satir += [kunye.replace("Fotoğraf:", "Kapak fotoğrafı:")]
     etiket = ["Filistin"] + [e for e in plan.get("etiketler", []) if e != "Filistin"]
     satir += ["", " ".join("#" + e for e in etiket[:6])]
     return "\n".join(satir)[:2150]
@@ -330,6 +345,10 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
         for ad in os.listdir(kok_klasor):
             if ad not in canli:
                 shutil.rmtree(os.path.join(kok_klasor, ad), ignore_errors=True)
+    try:
+        ig_foto.kutuphane_doldur(kok, simdi, en_cok_yer=2, log=log)
+    except Exception as e:
+        log(f"Fotoğraf kütüphanesi hatası: {type(e).__name__}")
     if len(kay["kuyruk"]) >= 3 or not shutil.which("rsvg-convert"):
         return 0
     yeni = 0
@@ -397,7 +416,8 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
             planlar[o["id"]] = {"t": simdi.isoformat(), "p": plan}
             if plan is None:
                 continue
-        svgler = gonderi_kur(tur, o, yayinlar, sayi, plan, alan, M["ad"], kay.get("kullanici"))
+        kurulan = gonderi_kur(kok, tur, o, yayinlar, sayi, plan, alan, M["ad"], kay.get("kullanici"))
+        svgler, kunye = kurulan if kurulan else (None, "")
         if not svgler:
             planlar[o["id"]] = {"t": simdi.isoformat(), "p": None}
             continue
@@ -408,8 +428,12 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
             shutil.rmtree(k, ignore_errors=True)
             log("Instagram: kart üretilemedi (rsvg-convert / Pillow eksik olabilir)")
             return yeni
+        # Her IG_REELS_HER gönderiden biri Reels videosu olarak da hazırlanır (Instagram'ın en çok gösterdiği biçim)
+        kay["sayac"] = kay.get("sayac", 0) + 1
+        reel = bool(IG_REELS_HER) and kay["sayac"] % IG_REELS_HER == 0 and ig_video.uret(
+            [os.path.join(k, f"{n}.jpg") for n in range(1, len(svgler) + 1)], os.path.join(k, "video.mp4"), log=log)
         kay["kuyruk"].append({"id": kimlik, "tur": tur, "olay": o["id"], "haberler": list(o["haberler"]), "kart": len(svgler),
-                              "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan), "hazir": simdi.isoformat()})
+                              "reel": reel, "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan, kunye), "hazir": simdi.isoformat()})
         sirada.append(ids)
         yeni += 1
         if len(kay["kuyruk"]) >= 3:
@@ -509,6 +533,18 @@ def _herkese_acik(adres):
             return r.status == 200
     except Exception:
         return False
+
+
+def _gonder_reel(sunucu, hesap, token, video, metin):
+    """Reels videosu (akışta da görünür). Döndürür: gönderi kimliği ya da None"""
+    veri = {"media_type": "REELS", "video_url": video, "caption": metin, "share_to_feed": "true", "access_token": token}
+    kap = _istek("POST", f"{sunucu}/{hesap}/media", {**veri, "is_ai_generated": "true"})
+    if not kap and "is_ai_generated" in SON_HATA:
+        kap = _istek("POST", f"{sunucu}/{hesap}/media", veri)
+    if not kap or not kap.get("id") or not _bekle_hazir(sunucu, kap["id"], token, sure=300):
+        return None
+    r = _istek("POST", f"{sunucu}/{hesap}/media_publish", {"creation_id": kap["id"], "access_token": token})
+    return (r or {}).get("id")
 
 
 def _gonder(sunucu, hesap, token, gorseller, metin):
@@ -629,7 +665,14 @@ def yayinla(kok, durum, simdi, log=print):
             r = _istek("GET", f"{sunucu}/{hesap}?" + urllib.parse.urlencode({"fields": "username", "access_token": token}))
             if r and r.get("username"):
                 kay["kullanici"] = r["username"]
-        kimlik = _gonder(sunucu, hesap, token, gorseller, q["aciklama"])
+        kimlik = None
+        if q.get("reel"):
+            video = f"{site}data/instagram/{q['id']}/video.mp4"
+            kimlik = _gonder_reel(sunucu, hesap, token, video, q["aciklama"]) if _herkese_acik(video) else None
+            if not kimlik:
+                log("Instagram: Reels gönderilemedi (" + _gizle(SON_HATA, token) + "); kaydırmalı gönderiyle deneniyor")
+        if not kimlik:
+            kimlik = _gonder(sunucu, hesap, token, gorseller, q["aciklama"])
         if kimlik:
             kay["gonderim"].append(simdi.isoformat())
             if q["tur"] == "bulten":
@@ -638,7 +681,7 @@ def yayinla(kok, durum, simdi, log=print):
                 kay["olay"].append([simdi.isoformat(), q["haberler"]])
             kay["kuyruk"].remove(q)
             shutil.rmtree(_klasor(kok, q["id"]), ignore_errors=True)
-            log(f"Instagram: gönderi yayımlandı ({q['tur']}, {q['kart']} kart)")
+            log(f"Instagram: gönderi yayımlandı ({q['tur']}, {q['kart']} kart{', Reels' if q.get('reel') else ''})")
             return 1
         q["deneme"] = q.get("deneme", 0) + 1
         hata = _gizle(SON_HATA, token)

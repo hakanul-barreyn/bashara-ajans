@@ -79,7 +79,7 @@ def sigdir(metin, boylar, agirlik, genislik, en_cok):
 
 def buyuk(s):
     """Türkçe büyük harf: i → İ, ı → I (Python'un upper()'ı 'iki'yi 'IKI' yapar)."""
-    return str(s or "").replace("i", "İ").replacebuyuk("ı", "I")
+    return str(s or "").replace("i", "İ").replace("ı", "I").upper()
 
 
 def _e(s):
@@ -153,16 +153,33 @@ def alt(ton, n, toplam, marka, kullanici):
 
 
 def svg(ic):
-    return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">{ic}</svg>'
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" '
+            f'viewBox="0 0 {W} {H}">{ic}</svg>')
+
+
+def foto_katmani(uri, ton):
+    """Açık lisanslı yer fotoğrafı: kartın arkasında, karartılmış; yas tonunda neredeyse siyah-beyaz."""
+    filtre = '<filter id="gri"><feColorMatrix type="saturate" values="0.12"/></filter>' if ton == "yas" else ""
+    return (f'<defs>{filtre}<linearGradient id="fo" x1="0" y1="0" x2="0" y2="1">'
+            f'<stop offset="0" stop-color="#07090a" stop-opacity=".45"/><stop offset=".5" stop-color="#07090a" stop-opacity=".72"/>'
+            f'<stop offset="1" stop-color="#07090a" stop-opacity=".96"/></linearGradient></defs>'
+            f'<image xlink:href="{uri}" href="{uri}" x="0" y="0" width="{W}" height="{H}" preserveAspectRatio="xMidYMid slice" '
+            f'opacity="{.5 if ton == "yas" else .6}"{" filter=" + chr(34) + "url(#gri)" + chr(34) if ton == "yas" else ""}/>'
+            f'<rect width="{W}" height="{H}" fill="url(#fo)"/>')
+
+
+def kunye(metin):
+    return (f'<text x="70" y="1236" font-family="{F}" font-weight="500" font-size="19" fill="#6f777e">{_e(metin[:110])}</text>'
+            if metin else "")
 
 
 # ------------------------------------------------------------------ kart türleri
-def duello(a, b, yer_tarih, kanca, alt_, ton="medya"):
+def duello(a, b, yer_tarih, kanca, alt_, ton="medya", arka="", kunye_=""):
     """a: {kaynak, kamp, baslik} Filistin/bölge; b: İsrail/Batı. Yazı boyları iki manşet ve kanca sığacak biçimde birlikte seçilir."""
     if ton == "yas":   # acı haberde düello da yas tonunda: parlama yok, soluk renkler
-        p = [zemin("yas", tohum=2), ust_yas("Aynı olay · iki manşet · " + yer_tarih)]
+        p = [zemin("yas", tohum=2), arka, ust_yas("Aynı olay · iki manşet · " + yer_tarih)]
     else:
-        p = [zemin("medya"), etiket(70, 90, "AYNI OLAY · İKİ MANŞET", ALTIN),
+        p = [zemin("medya"), arka, etiket(70, 90, "AYNI OLAY · İKİ MANŞET", ALTIN),
              f'<text x="{W - 70}" y="127" text-anchor="end" font-family="{F}" font-weight="700" font-size="26" fill="{SOLUK}">{_e(buyuk(yer_tarih))}</text>']
     YS, KR, AL = (("#3f9f78", KAN, "#d8cfc4") if ton == "yas" else (YESIL, KIRMIZI, ALTIN))
     parla = "" if ton == "yas" else ' filter="url(#hafif)"'
@@ -189,14 +206,15 @@ def duello(a, b, yer_tarih, kanca, alt_, ton="medya"):
                      f'<text x="540" y="{vs + 17:.0f}" text-anchor="middle" font-family="{F}" font-weight="900" font-size="46" fill="{AL}">VS</text>')
             y = vs + 75
     if ks:
-        s_, _ = yazi(70, 1215 - (len(ks) - 1) * kb * 1.15, ks, kb, AL, 900, 1.15, parla.strip())
+        s_, _ = yazi(70, 1215 - (len(ks) - 1) * kb * 1.15 - (22 if kunye_ else 0), ks, kb, AL, 900, 1.15, parla.strip())
         p.append(s_)
+    p.append(kunye(kunye_))
     p.append(alt_)
     return svg("".join(p))
 
 
-def sessizlik(baslik, yer_tarih, bolge_sayi, adlar, alt_):
-    p = [zemin("medya"), etiket(70, 90, "İSRAİL VE BATI BASINI", KIRMIZI),
+def sessizlik(baslik, yer_tarih, bolge_sayi, adlar, alt_, arka="", kunye_=""):
+    p = [zemin("medya"), arka, etiket(70, 90, "İSRAİL VE BATI BASINI", KIRMIZI),
          f'<text x="{W - 70}" y="127" text-anchor="end" font-family="{F}" font-weight="700" font-size="26" fill="{SOLUK}">{_e(buyuk(yer_tarih))}</text>',
          f'<text x="540" y="640" text-anchor="middle" font-family="{F}" font-weight="900" font-size="560" fill="{KIRMIZI}" filter="url(#parla)">0</text>',
          f'<text x="540" y="730" text-anchor="middle" font-family="{F}" font-weight="800" font-size="56" fill="{BEYAZ}">haber</text>']
@@ -208,12 +226,13 @@ def sessizlik(baslik, yer_tarih, bolge_sayi, adlar, alt_):
     x = 70 + olc(str(bolge_sayi), 120, 900) + 24
     s, _ = yazi(x, y - 46, ["bölge yayını yazdı:"] + sar(", ".join(adlar), 30, 700, W - 70 - x, 2), 30, BEYAZ, 700, 1.4)
     p.append(s)
+    p.append(kunye(kunye_))
     p.append(alt_)
     return svg("".join(p))
 
 
-def rakam(deger, birim, govde, kaynak, yer_tarih, alt_, tohum=1):
-    p = [zemin("yas", tohum=tohum), ust_yas(yer_tarih)]
+def rakam(deger, birim, govde, kaynak, yer_tarih, alt_, tohum=1, arka="", kunye_=""):
+    p = [zemin("yas", tohum=tohum), arka, ust_yas(yer_tarih)]
     boy, _ = sigdir(deger, [230, 200, 170, 140, 120], 900, W - 140, 1)
     p.append(f'<text x="70" y="520" font-family="{F}" font-weight="900" font-size="{boy}" fill="url(#kan)">{_e(deger)}</text>')
     b2, sat = sigdir(birim, [78, 66, 56], 800, W - 140, 2)
@@ -224,8 +243,9 @@ def rakam(deger, birim, govde, kaynak, yer_tarih, alt_, tohum=1):
     s, _ = yazi(70, y + 80, sar(govde, 38, 400, W - 140, 6), 38, SIS_SOLUK, 400, 1.45)
     p.append(s)
     if kaynak:
-        s, _ = yazi(70, 1150, sar("Kaynak: " + kaynak, 26, 500, W - 140, 2), 26, "#6f777e", 500, 1.35)
+        s, _ = yazi(70, 1150 - (30 if kunye_ else 0), sar("Kaynak: " + kaynak, 26, 500, W - 140, 2), 26, "#8a9198", 500, 1.35)
         p.append(s)
+    p.append(kunye(kunye_))
     p.append(alt_)
     return svg("".join(p))
 
