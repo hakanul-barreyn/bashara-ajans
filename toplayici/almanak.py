@@ -41,6 +41,19 @@ TERIMLER = [
     ("operasyon", "operasyon", "israil", r"operasyon|operation|opération|operación|operazione|מבצע"),
     ("misilleme", "misilleme", "israil", r"misilleme|retaliat|représaille|riposte|represalia|rappresaglia|vergeltung|תגמול"),
     ("kalkan", "insan kalkanı", "israil", r"insan kalkan|human shield|bouclier humain|escudo humano|scudo umano|schutzschild|دروع بشرية|מגן אנושי"),
+    # karşıt çiftler (Kasım 2026): saldırı ↔ savaş, direniş ↔ militan, esir ↔ rehine, kurbanın adı, yumuşatıcı adlar
+    ("saldiri", "saldırı / bombardıman", "filistin", r"saldır|bombard|bombal|air ?strike|\bstrikes?\b|bombing|frappe|ataque|bombardeo|attacc|luftangriff|angriff|غارة|غارات|قصف|תקיפ|הפצצ"),
+    ("savas", "savaş", "israil", r"savaş|\bwar\b|guerre|guerra|\bkrieg|حرب|מלחמ"),
+    ("direnis", "direniş", "filistin", r"direniş|resistance|résistance|resistencia|resistenza|widerstand|مقاوم"),
+    ("militan", "militan", "israil", r"militan|milicien|miliciano|milizian|kämpfer|مسلح"),
+    ("esir", "esir / tutuklu", "filistin", r"\besir|tutuklu|prisoner|detainee|prisonnier|détenu|preso|detenid|prigionier|detenut|gefangene|häftling|أسير|أسرى|معتقل|אסיר|עציר"),
+    ("rehine", "rehine", "israil", r"rehine|hostage|otage|rehén|ostagg|geisel|رهينة|رهائن|חטוף|חטופ|בן ערובה|בני ערובה"),
+    ("cocuk", "çocuk", "filistin", r"çocuk|\bchild|children|\bkids?\b|enfant|niño|niña|menores|bambin|\bkinder|أطفال|طفل|ילד"),
+    ("sivil", "sivil", "filistin", r"sivil|civilian|\bcivils?\b|civile|zivil|مدني|אזרח"),
+    ("aclik", "açlık / kıtlık", "filistin", r"açlık|kıtlık|famine|starv|\bhunger|hambruna|hambre|carestia|\bfame\b|تجويع|مجاعة|רעב"),
+    ("yerlesimci", "yerleşimci / sömürgeci", "filistin", r"yerleşimci|settler|\bcolons?\b|colono|coloni\b|siedler|مستوطن|מתנחל"),
+    ("insani", "“insani kriz”", "israil", r"insani kriz|humanitarian crisis|crise humanitaire|crisis humanitaria|crisi umanitaria|humanitäre krise|أزمة إنسانية|משבר הומניטרי"),
+    ("etkisiz", "etkisiz hale getirme", "israil", r"etkisiz hale|eliminat|neutraliz|neutralis|abatid|eliminier|neutralisier|تحييد|חוסל|חיסל|חוסלו"),
 ]
 TERIM_RE = [(a, l, y, re.compile(k, re.I)) for a, l, y, k in TERIMLER]
 

@@ -171,7 +171,7 @@
           const bb=el("span","b",e.baslik);bb.dir="auto";r.appendChild(bb);if(e.cerceve)r.appendChild(el("span","c",e.cerceve));c.appendChild(r);});iki.appendChild(c);});
       d.appendChild(iki);n.appendChild(d);});
     if(!TRM)k.appendChild(n);
-    if(TRM&&s.yayin_dil&&s.yayin_dil.length)k.appendChild(yayinDil(s.yayin_dil));
+    if(TRM){const r=el("a","rapor-afis");r.href="rapor.html";r.append(el("small",null,"Özel rapor"),el("b",null,"Bu dönemi dört soruyla okuyun"),el("span",null,"Gazze’ye ne zaman bakıldı, aynı şiddete hangi adlar verildi, ölümün faili yazıldı mı, öldürülen gazeteciler haber oldu mu?"),el("i",null,"→"));k.appendChild(r);}
     // yayınlar
     if(s.yayin_yakin.length){const y=el("article","kart2");y.appendChild(el("h2",null,"Yayınlar"));y.appendChild(el("p",null,"En az dört başlığı ölçülen yayınlar arasında Filistin bakışına en yakın ve en uzak olanlar."));
       y.appendChild(eksen("En yakın",s.yayin_yakin));y.appendChild(eksen("En uzak",s.yayin_uzak));k.appendChild(y);}

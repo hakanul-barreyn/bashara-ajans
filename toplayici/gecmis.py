@@ -27,8 +27,64 @@ GAZZE = re.compile(r"gazze|gaza|غزة|غزه|עזה|gazastreifen|striscia", re.
 BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|siyon|zionis|sionis|sionist|cisjord|west bank|batı şeria|"
                     r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|idf|فلسطين|إسرائيل|اسرائيل|"
                     r"الاحتلال|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
+# Faillik: ölüm haberinde fail yazılmış mı? (başlık düzeyinde, kalıplarla)
+OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
+EDILGEN_TR = re.compile(r"öldürül|katledil", re.I)
+OLUM = re.compile(r"öldü|hayatını kaybet|can verdi|\böl[üu]\b|ölü sayısı|\bdie[sd]?\b|\bdead\b|death toll|deaths|\bmeur|\bmorts?\b|muer[et]|muertos|\bmort[ie]\b|muoion|\bstirbt|sterben|starben|\btote\b|todesopfer|استشهاد|شهيد|شهداء|مقتل|وفاة|ضحايا|נהרג|מתו|הרוגים", re.I)
+FAIL_ISRAIL = re.compile(r"israel|israël|israil|isra[eé]l|\bidf\b|tsahal|siyonist|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל", re.I)
+FAIL_HAMAS = re.compile(r"hamas|حماس|חמאס|qassam|kassam|القسام|islamic jihad|cihad|hezbollah|hizbullah|حزب الله|houthi|husi|"
+                        r"palestinian (?:gunm[ae]n|attacker|assailant|militant)|\bgunm[ae]n\b|attacker|assailant|saldırgan|terrorist|מחבל|مسلح", re.I)
+FAIL_SONRA = re.compile(r"(?:\b(?:in|by|from|after|amid|during|par|lors|dans|por|en|tras|durante|da|dal|nel|von|durch|bei|nach)\b|"
+                        r"بقصف|بغارة|بغارات|برصاص|جراء|في قصف|في غارة|في غارات|إثر)\W+(?:\w+\W+){0,3}?"
+                        r"(?:israel|israël|isra[eé]l|israil|idf|tsahal|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל)", re.I)
+ISRAIL_KURBAN = re.compile(r"(?:israeli|israélien|israelí|israeliano|israelisch|israilli|إسرائيلي|اسرائيلي)(?:ne|s|es|a|i|e|en)?\W+(?:\w+\W+)?"
+                           r"(?:soldier|soldat|soldad|soldat|asker|جندي|جنود|hostage|otage|rehén|ostagg|geisel|rehine|civilian|civil|"
+                           r"\bm[ae]n\b|wom[ae]n|settler|reservist|officer|teen|girl|boy|kadın|erkek|مستوطن)|\bisraelis\b|\bisraéliens\b|"
+                           r"\bisraelíes\b|\bisraeliani\b|\bisraelis\b|israilliler", re.I)
+SEHADET = re.compile(r"şehit|şehadet|martyr|martyre|mártir|martire|märtyrer|استشهاد|شهيد|شهداء|ارتقاء|ارتقى", re.I)
+GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|صحف|صحاف|مراسل|עיתונא|כתב", re.I)
+
+
+def faillik(b, kb):
+    """Başlıktaki ölüm anlatımının türü: aktif (İsrail öldürdü), failli (İsrail'in saldırısında öldürüldü),
+    failsiz (öldürüldü, kim olduğu yok), oldu (öldü / ölü sayısı), pfail (fail olarak Hamas, Hizbullah ya da bir silahlı Filistinli yazılmış), ikurban (ölen İsrailli). Ölüm yoksa None."""
+    m = OLDURME.search(b) or OLDURME.search(kb)
+    i = FAIL_ISRAIL.search(b) or FAIL_ISRAIL.search(kb)
+    h = FAIL_HAMAS.search(b) or FAIL_HAMAS.search(kb)
+    if m:
+        metin = b if OLDURME.search(b) else kb
+        m = OLDURME.search(metin)
+        i = FAIL_ISRAIL.search(metin)
+        h = FAIL_HAMAS.search(metin)
+        edilgen = bool(EDILGEN_TR.search(metin))
+        k = ISRAIL_KURBAN.search(metin[:m.start()])
+        if k and (i is None or i.start() >= k.start()):
+            # fiilden önceki "İsrailli asker", "Israelis" kurbanı anlatır: ölen İsraillidir
+            i2 = FAIL_ISRAIL.search(metin[k.end():m.start()])
+            if not i2:
+                return "pfail" if h and h.start() < m.start() else "ikurban"
+        once_i = i is not None and i.start() < m.start()
+        once_h = h is not None and h.start() < m.start()
+        if once_i and not edilgen and not (once_h and h.start() < i.start()):
+            return "aktif"
+        if once_h and not edilgen and not once_i:
+            return "pfail"
+        if once_i:
+            return "failli"                          # İsrail'in saldırısında ... öldürüldü
+        # fiilden sonra gelen İsrail ancak bir fail ipucuyla failtir ("in an Israeli strike", "by Israel");
+        # "kills 20 Israelis" gibi kurbanı anlatan kullanımlar fail sayılmaz
+        if FAIL_SONRA.search(metin[m.end():]):
+            return "failli"
+        return "failsiz"
+    if SEHADET.search(b) or SEHADET.search(kb):
+        return "sehadet"                             # şehit / istişhad: ölüm bir şehadet olarak anlatılıyor
+    if OLUM.search(b) or OLUM.search(kb):
+        return "oldu"
+    return None
+
+
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 2
+OZET_SURUM = 4
 BULTEN_SURUM = 1
 
 
@@ -67,8 +123,11 @@ def _cdx_tarihle(kayitlar):
         m = URL_TARIH.search(u)
         if m:
             y, a, g = (m.group(1), m.group(2), m.group(3)) if m.group(1) else (m.group(4), m.group(5), m.group(6))
-            sonuc[u] = f"{y}-{a}-{g or '15'}"
-            tarihli += 1
+            try:
+                sonuc[u] = dt.date(int(y), int(a), int(g or 15)).isoformat()   # 30 Şubat gibi geçersiz tarihler elenir
+                tarihli += 1
+            except ValueError:
+                pass
     return {u: sonuc.get(u) for u in ilk}, ("adres" if tarihli >= 0.5 * len(ilk) else "kismi" if tarihli else "yok")
 
 
@@ -150,6 +209,11 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                 tt["_b"] = tt.get("_b", 0) + 1
                 for a in bulunan:
                     tt["b:" + a] = tt.get("b:" + a, 0) + 1
+                f = faillik(b, kb)
+                if f:
+                    tt["f:" + f] = tt.get("f:" + f, 0) + 1
+                    if GAZETECI.search(b) or GAZETECI.search(kb):
+                        tt["_gz"] = tt.get("_gz", 0) + 1   # gazeteci ölümü haberi
             y[kid] = [n + 1, tt] if tt else n + 1
             if not yan:
                 continue

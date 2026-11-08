@@ -7,16 +7,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0c0e0d">
 <title>7 Ekim'den bu yana basın | ZBS</title>
-<meta name="description" content="Üç yılda bir milyondan fazla başlık: bölge basını, İsrail basını ve Batı basını aynı savaşı hangi kelimelerle anlattı, Gazze'yi ne zaman unuttu.">
-<meta property="og:title" content="7 Ekim'den bu yana basın: kim işgal dedi, kim çatışma dedi">
-<meta property="og:description" content="Bir milyondan fazla başlığın sayımıyla üç yılın dil raporu.">
+<meta name="description" content="Bir milyondan fazla başlığın sayımı: kim işgal dedi, kim çatışma dedi; kimin ölümünde fail yazıldı; Gazze'ye ne zaman bakıldı, ne zaman bakılmadı.">
+<meta property="og:title" content="7 Ekim'den bu yana basın: görünürlük, adlandırma, faillik">
+<meta property="og:description" content="Bir milyondan fazla başlığın sayımıyla üç yılın basın raporu.">
 <meta property="og:image" content="https://hakanul-barreyn.github.io/bashara-ajans/site/paylas.png">
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611082230">
-<link rel="stylesheet" href="site/rapor.css?v=202611082230">
+<link rel="stylesheet" href="site/stil.css?v=202611082330">
+<link rel="stylesheet" href="site/rapor.css?v=202611082330">
 <script src="site/dil.js?v=202611081749"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -33,59 +33,83 @@
   <p class="dil-uyari" data-dil="en">This report is in Turkish only for now.</p><span data-dil="tr" hidden></span>
   <header class="rp-bas">
     <p class="rp-ust">Almanak · Özel rapor · <span data-v="donem"></span></p>
-    <h1>7 Ekim’den bu yana: aynı savaş, üç ayrı dil</h1>
-    <p class="rp-dek">Üç yılda <b data-v="baslik"></b> haber başlığını saydık. Bölge basını işgal ve şehit dedi; Batı ana akım basını çatışma dedi; İsrail basını terör dedi. Gazze ise zamanla herkesin başlıklarından düştü: ilk aylarda Gazze’ye bölge basınından daha çok yer veren Batı ana akım basını, 2026’da ondan daha az yer veriyor.</p>
+    <h1>7 Ekim’den bu yana: kim gördü, kim adını koydu, kim faili yazdı</h1>
+    <p class="rp-dek">Üç yılda <b data-v="baslik"></b> haber başlığını dört soruyla okuduk. Gazze’ye ne zaman bakıldı? Aynı şiddete hangi adlar verildi? Bir Filistinlinin ölümünde fail yazıldı mı? Öldürülen gazeteciler haber oldu mu?</p>
     <p class="rp-kunye"><span>ZBS veri masası</span><span data-v="guncel"></span><span data-v="taslak"></span></p>
   </header>
 
   <section class="rp-kartlar" aria-label="Öne çıkan sayılar">
-    <div class="rp-kart"><b data-v="k.isgal"></b><span>kat: bölge basınında “işgal”, Batı ana akım basınına göre bu kadar sık</span></div>
-    <div class="rp-kart"><b data-v="k.sehit"></b><span>kat: bölge basınında “şehit”, Batı ana akım basınına göre</span></div>
-    <div class="rp-kart"><b data-v="k.catisma"></b><span>kat: Batı ana akım basınında “çatışma”, bölge basınına göre</span></div>
-    <div class="rp-kart"><b data-v="k.teror"></b><span>kat: İsrail basınında “terör”, bölge basınına göre</span></div>
+    <div class="rp-kart"><b data-v="k.fail_f"></b><span>Batı ana akım basınında Filistinlilerin öldüğü başlıklarda failin yazıldığı pay. İsraillilerin öldüğü başlıklarda: <em data-v="k.fail_i"></em></span></div>
+    <div class="rp-kart"><b data-v="k.rehine"></b><span>Batı ana akım basını “rehine” kelimesini “esir / tutuklu”dan bu kadar kat sık kullandı</span></div>
+    <div class="rp-kart"><b data-v="k.iran"></b><span>İsrail–İran savaşı haftalarında Batı ana akım basınında Gazze payı (bir ay önce <em data-v="k.iran_once"></em>), ölümler artarken</span></div>
+    <div class="rp-kart"><b data-v="k.gzt"></b><span>gazeteci öldürüldü (dış veri). Batı ana akım basınında öldürülen gazeteci başına <em data-v="k.gzt_bati"></em> başlık</span></div>
   </section>
 
-  <article class="rp-metin">
-    <h2>Kelimeler: kim neyi nasıl adlandırdı</h2>
-    <p>Sayım yalnızca Filistin, İsrail ya da Gazze geçen başlıklarda yapıldı; böylece Ruanda’dan ya da Myanmar’dan bir soykırım haberi, Gazze üzerine kullanılan dile karışmadı. Aşağıdaki her sayı, o gruptaki bu bağlamdaki <b>bin başlıkta</b> kelimenin kaç kez geçtiğini gösteriyor.</p>
-    <p>Bölge basını olayı <b>işgal</b> ve <b>şehitlik</b> üzerinden anlattı: bin başlığın <b data-v="g.bolge.isgal"></b>’inde “işgal”, <b data-v="g.bolge.sehit"></b>’inde “şehit” geçiyor. Batı ana akım basınında bu iki kelime neredeyse hiç yok: “işgal” binde <b data-v="g.bati_ana.isgal"></b>, “şehit” binde <b data-v="g.bati_ana.sehit"></b>. Onların yerine <b>“çatışma”</b> (binde <b data-v="g.bati_ana.catisma"></b>) ve <b>“operasyon”</b> (binde <b data-v="g.bati_ana.operasyon"></b>) öne çıkıyor. İsrail basınında (geriye dönük tarihi doğrulanabilen başlıkların neredeyse tamamı Israel Hayom’dan geldiği için bu grup büyük ölçüde onu yansıtıyor) en sık kelime <b>“terör”</b> (binde <b data-v="g.israil.teror"></b>), ardından “operasyon” (binde <b data-v="g.israil.operasyon"></b>); “işgal” orada binde <b data-v="g.israil.isgal"></b>.</p>
-    <p>Batı’da muhalif basın, yani L’Humanité, Novara Media, The Intercept, il manifesto ya da Mediapart gibi yayınlar, başka bir yerde duruyor: <b>“soykırım”</b> kelimesini en sık bu grup kullandı (binde <b data-v="g.bati_muhalif.soykirim"></b>), bölge basınından (binde <b data-v="g.bolge.soykirim"></b>) bile daha sık. “Apartheid” ve “etnik temizlik” de en çok bu grubun başlıklarında.</p>
-    <figure class="rp-sekil"><div id="g-terimler"></div><figcaption>Filistin, İsrail ya da Gazze geçen bin başlıkta kelimenin geçme sayısı. Her satırın çubukları kendi içinde ölçeklenmiştir; sayılar gerçek değerdir.</figcaption></figure>
+  <nav class="rp-icindekiler" aria-label="Bölümler">
+    <a href="#dikkat">1 · Dikkat</a><a href="#adlandirma">2 · Adlandırma</a><a href="#faillik">3 · Faillik</a><a href="#soykirim">4 · “Soykırım”</a><a href="#gazeteciler">5 · Gazeteciler</a><a href="#yayinlar">6 · Yayın yayın</a><a href="#yontem">Yöntem</a>
+  </nav>
+
+  <article class="rp-metin" id="dikkat">
+    <p class="rp-soru">Soru 1 · Görünürlük ve dikkat</p>
+    <h2>Gazze’ye ne zaman bakıldı, ne zaman bakılmadı?</h2>
+    <p>Gündem kuramına göre basın neyin önemli olduğunu, neyi konuştuğuyla belirler; sorun-dikkat döngüsü de ilginin önce patlayıp sonra söndüğünü söyler. Aşağıdaki çizgiler, bölgeyle ilgili başlıklar içinde Gazze geçenlerin hafta hafta payını; gri çubuklar o hafta Gazze’de bildirilen ölümleri gösteriyor.</p>
+    <p>İlgi genel olarak ölümleri izledi: ölümlerin arttığı aylarda Gazze payı da arttı. Ama bu bağ, başka bir gündem geldiğinde koptu. En açık örnek İsrail–İran savaşı: savaş haftalarında Gazze’de haftalık ölümler <b data-v="e.iran.olu_once"></b>’den <b data-v="e.iran.olu_sirasinda"></b>’e çıkarken Batı ana akım basınında Gazze payı <b data-v="e.iran.bati_once"></b>’ten <b data-v="e.iran.bati_sirasinda"></b>’ye düştü. Lübnan’daki çağrı cihazı saldırıları ve Nasrallah’ın öldürülmesi haftalarında da Gazze payı <b data-v="e.lubnan.bati_once"></b>’ten <b data-v="e.lubnan.bati_sirasinda"></b>’a indi.</p>
+    <figure class="rp-sekil"><div id="g-dikkat"></div><figcaption>Hafta hafta Gazze payı (çizgiler) ve Gazze’de bildirilen haftalık ölümler (gri çubuklar, Gazze Sağlık Bakanlığı verisi). Renkli şeritler önemli olayları gösteriyor; üzerine gelince adı çıkar.</figcaption></figure>
+    <h3 class="rp-ara">Olaylar ve ilgi</h3>
+    <p>Her olay için, olaydan önceki dört hafta ile olay süresince Gazze payı. Spor olayları için bu pay az değişiyor, çünkü yalnızca bölgeyle ilgili başlıkları topladık; ama Gazze başlıklarının sayısı düşüyor.</p>
+    <div id="g-olaylar" class="rp-tablo"></div>
+    <h3 class="rp-ara">Takvim</h3>
+    <p>Her kare bir hafta. Koyu kareler Gazze’nin başlıklarda en çok yer bulduğu haftalar.</p>
+    <div id="g-takvim" class="rp-takvim"></div>
   </article>
 
-  <article class="rp-metin">
+  <article class="rp-metin" id="adlandirma">
+    <p class="rp-soru">Soru 2 · Adlandırma</p>
+    <h2>Aynı şeye hangi adlar verildi?</h2>
+    <p>Çerçeveleme kuramına göre bir olaya verilen ad, onun ne olduğunu, kimin sorumlu olduğunu ve ne yapılması gerektiğini de söyler. Burada aynı şeyin iki adını yan yana koyduk. Sayım yalnızca Filistin, İsrail ya da Gazze geçen başlıklarda yapıldı; sayılar bin başlıkta kaç kez geçtiğini gösteriyor.</p>
+    <p>Tutulan insanlar: Batı ana akım basını <b>“rehine”</b> kelimesini (binde <b data-v="g.bati_ana.rehine"></b>) <b>“esir / tutuklu”</b>dan (binde <b data-v="g.bati_ana.esir"></b>) <b data-v="k.rehine"></b> kat sık kullandı; İsrail basınında bu fark daha da büyük. Bölge basınında tersine, “esir” öne çıkıyor. Oysa İsrail hapishanelerindeki Filistinlilerin binlercesi hiçbir suçlama olmadan, “idari gözaltı” ile tutuluyor. Silahlı gruplar: Batı ana akım basınında “terör” (binde <b data-v="g.bati_ana.teror"></b>) “direniş”ten (binde <b data-v="g.bati_ana.direnis"></b>) sık; İsrail basınında “direniş” neredeyse hiç yok. Ölüm: bölge basınında ölüm bir <b>şehadet</b> olarak anlatılıyor (binde <b data-v="g.bolge.sehit"></b>); İsrail basınında ise öldürülenler için <b>“etkisiz hale getirildi”</b> diliyle (binde <b data-v="g.israil.etkisiz"></b>).</p>
+    <figure class="rp-sekil"><div id="g-ciftler"></div><figcaption>Karşıt çiftler: soldaki çubuk ilk adı, sağdaki ikinci adı gösteriyor. Uzunluklar her çiftte kendi içinde ölçeklenmiştir.</figcaption></figure>
+    <details class="rp-ac"><summary>Bütün kelimeler (<span data-v="terim_sayisi"></span>)</summary><div id="g-terimler"></div></details>
+  </article>
+
+  <article class="rp-metin" id="faillik">
+    <p class="rp-soru">Soru 3 · Faillik</p>
+    <h2>Ölümün faili yazıldı mı?</h2>
+    <p>Eleştirel söylem çözümlemesi, edilgen yapının ve adlaştırmanın faili cümleden çıkardığını gösterir. “İsrail 20 kişiyi öldürdü” bir faili adlandırır. “İsrail’in saldırısında 20 kişi öldürüldü” faili edilgen bir cümlede tutar. “20 kişi öldürüldü” faili siler. “20 kişi öldü” ya da “ölü sayısı 20’ye çıktı” ise öldürmeyi bile söylemez. Ölüm bildiren bütün başlıkları bu dört kalıba ayırdık.</p>
+    <p>Batı ana akım basınında Filistinlilerin öldüğünü bildiren başlıkların <b data-v="g.bati_ana.fp.oldu"></b>’i ölümü öldürme fiili olmadan veriyor (“öldü”, “ölü sayısı”); <b data-v="g.bati_ana.fp.failsiz"></b>’inde “öldürüldü” deniyor ama kimin öldürdüğü yok. Fail ancak başlıkların <b data-v="k.fail_f"></b>’inde yazıyor. İsraillilerin öldüğü başlıklarda ise fail, yani Hamas, Hizbullah ya da bir silahlı Filistinli, başlıkların <b data-v="k.fail_i"></b>’inde adlandırılıyor.</p>
+    <p>Bölge basınında ölümlerin yaklaşık yarısı şehadet diliyle anlatılıyor (<b data-v="g.bolge.fp.sehadet"></b>): bu da başlıkta faili yazmaz, ama ölümü bir haksızlığın ve direnişin parçası olarak çerçeveler. Faili en açık yazan grup, küçük bir örneklemle, İsrail basını (<b data-v="g.israil.fp.aktif"></b> etken cümle): ordunun “öldürdüğü”, “etkisiz hale getirdiği” kişiler.</p>
+    <figure class="rp-sekil"><div id="g-faillik"></div><figcaption>Filistinlilerin öldüğünü bildiren başlıkların anlatım kalıplarına göre dağılımı.</figcaption></figure>
+    <figure class="rp-sekil"><div id="g-kimin"></div><figcaption>Ölüm başlıklarında failin yazıldığı pay: Filistinlilerin ölümü (İsrail fail olarak) ve İsraillilerin ölümü (Hamas, Hizbullah ya da silahlı bir Filistinli fail olarak).</figcaption></figure>
+  </article>
+
+  <article class="rp-metin" id="soykirim">
+    <p class="rp-soru">Soru 4 · Kaynak ve aktarım</p>
     <h2>“Soykırım” kimin sözü?</h2>
-    <p>Batı ana akım basınında kelime bin başlıkta <b data-v="g.bati_ana.soykirim"></b> kez geçiyor; bu, ilk bakışta az değil. Ama kelimenin en sık geçtiği aylara bakınca, örnek başlıkların çoğunda “soykırım”ın bir nitelendirme olarak değil, bir davanın, bir raporun ya da bir suçlamanın aktarımı olarak, tırnak içinde ya da “suçlamalar” diye geçtiği görülüyor. Kelime, ana akım basına başkalarının ağzından girdi.</p>
+    <p>Kelimeyi en sık Batı’daki muhalif basın kullandı (binde <b data-v="g.bati_muhalif.soykirim"></b>), bölge basınından (binde <b data-v="g.bolge.soykirim"></b>) bile sık. Batı ana akım basınında kelime binde <b data-v="g.bati_ana.soykirim"></b> geçiyor; ama en sık geçtiği aylarda örnek başlıkların çoğunda bir nitelendirme olarak değil, bir davanın, raporun ya da suçlamanın aktarımı olarak, tırnak içinde ya da “suçlamalar” diye geçiyor. Hall’un deyişiyle olayı tanımlama hakkı başkasında kalıyor: kelime ana akım basına başkalarının ağzından girdi.</p>
     <div id="g-zirve" class="rp-zirve"></div>
   </article>
 
-  <article class="rp-metin">
-    <h2>Gazze’ye ilgi: kim ne zaman unuttu</h2>
-    <p>Savaşın ilk çeyreğinde Batı ana akım basını bölgeyle ilgili başlıklarının <b data-v="c.ilk.bati_ana"></b>’ini Gazze’ye ayırdı; bu oran bölge basınınkinden (<b data-v="c.ilk.bolge"></b>) yüksekti. Bölge basını Lübnan’dan Yemen’e, Suriye’den İran’a çok daha geniş bir coğrafyayı izlediği için bu beklenen bir durum. Asıl değişen, ilginin hızı: son çeyrekte Batı ana akım basınında Gazze payı <b data-v="c.son.bati_ana"></b>’e düştü ve bölge basınının (<b data-v="c.son.bolge"></b>) altına indi. İsrail basını ise Gazze’yi baştan beri az andı (<b data-v="c.ilk.israil"></b> → <b data-v="c.son.israil"></b>).</p>
-    <p>En sert düşüş 2026 baharında: Mart 2026’da Batı ana akım basınının bölge başlıklarının <b data-v="m.2026-03.bati_ana.iran"></b>’inde İran geçiyordu, Gazze ise yalnızca <b data-v="m.2026-03.bati_ana.gazze"></b>’inde.</p>
-    <figure class="rp-sekil"><div id="g-gazze"></div><figcaption>Bölgeyle ilgili başlıklar içinde Gazze geçenlerin payı, ay ay. İsrail basınının aylık örneklemi küçük olduğu için kesik çizgiyle gösterildi.</figcaption></figure>
-    <div id="g-ceyrek" class="rp-tablo"></div>
+  <article class="rp-metin" id="gazeteciler">
+    <p class="rp-soru">Soru 5 · Görünürlük</p>
+    <h2>Öldürülen gazeteciler haber oldu mu?</h2>
+    <p>Gazze Hükümet Medya Ofisi’nin listelerine göre 7 Ekim’den bu yana <b data-v="k.gzt"></b> gazeteci öldürüldü. Gri çubuklar ay ay öldürülen gazetecileri, çizgiler her grubun gazeteci ölümlerini bildiren başlıklarını gösteriyor. Bölge basını öldürülen her gazeteci için ortalama <b data-v="k.gzt_bolge"></b> başlık attı; Batı ana akım basını <b data-v="k.gzt_bati"></b>.</p>
+    <figure class="rp-sekil"><div id="g-gazeteci"></div><figcaption>Gri: ay ay öldürülen gazeteciler (Gazze Hükümet Medya Ofisi; Tech for Palestine). Çizgiler: gazeteci ölümü bildiren başlıklar.</figcaption></figure>
   </article>
 
-  <article class="rp-metin">
-    <h2>Üç yılda kelimeler nasıl değişti</h2>
-    <p>Aynı kelimelerin ay ay seyri. Bölge basınında “işgal” üç yıl boyunca her ay binde <b data-v="min.bolge.isgal"></b>’in üstünde kaldı. Batı ana akım basınında “çatışma” ise üç yılın her ayında bölge basınından daha sık geçti. Değişen, Batı’da “soykırım” kelimesinin dalgaları: dava ve rapor aylarında yükseliyor, sonra geri çekiliyor.</p>
-    <div id="g-seyir" class="rp-kucukler"></div>
-  </article>
-
-  <article class="rp-metin">
-    <h2>Yayın yayın</h2>
-    <p>Her nokta bir yayın. Sağa gittikçe “işgal” kelimesini, yukarı çıktıkça “çatışma” kelimesini daha sık kullanıyor. Bölge basını sağ altta, Batı ana akım basını sol üstte toplanıyor. Noktanın büyüklüğü ölçülen başlık sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
-    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption>Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı olan yayınlar. Eksenler karekök ölçeğinde.</figcaption></figure>
+  <article class="rp-metin" id="yayinlar">
+    <p class="rp-soru">Yayın yayın</p>
+    <h2>Hangi yayın faili yazıyor, hangisi işgal diyor?</h2>
+    <p>Her nokta bir yayın. Sağa gittikçe “işgal” kelimesini daha sık kullanıyor; yukarı çıktıkça Filistinlilerin ölümünde faili (İsrail’i) daha sık yazıyor. Noktanın büyüklüğü ölçülen başlık sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
+    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption>Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı ve en az 30 ölüm başlığı olan yayınlar.</figcaption></figure>
     <div id="g-yayinlar" class="rp-tablo"></div>
   </article>
 
-  <article class="rp-metin rp-yontem">
+  <article class="rp-metin rp-yontem" id="yontem">
     <h2>Yöntem ve sınırlar</h2>
     <ul id="g-yontem"></ul>
   </article>
   <p class="rp-geri"><a href="almanak.html">← Almanak’a dön</a></p>
 </main>
-<script src="site/sayfa-rapor.js?v=202611082230"></script>
+<script src="site/sayfa-rapor.js?v=202611082330"></script>
 </body>
 </html>
