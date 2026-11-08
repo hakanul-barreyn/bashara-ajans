@@ -1,5 +1,5 @@
 // Kutlama süsü: açılış, Ramazan Bayramı, Kurban Bayramı. Ana sayfaya girince bayrak zincirleri ve kefiye desenli bir pano çıkar;
-// ilk tekerlek, kaydırma, dokunma ya da tuş hareketiyle uçup kaybolur. Her ziyaretçiye her kutlamada bir kez gösterilir.
+// okur tekerleği çevirene, tıklayana ya da tuşa basana kadar açık kalır (ilk 3 saniye hiçbir hareketle kapanmaz). Her ziyaretçiye her kutlamada bir kez gösterilir.
 // Açıp kapatmak: site/kutlama.json  {"tur": "acilis|ramazan|kurban", "bitis": "YYYY-MM-DD"}  (tur boşsa kapalı).
 // Önizleme: ?kutlama=acilis|ramazan|kurban (her seferinde gösterir).
 (function () {
@@ -120,17 +120,18 @@
     }
     document.body.appendChild(kok);
 
-    var gitti = false, olaylar = ["wheel", "touchmove", "keydown", "scroll"];
+    // Yalnızca okurun kendi hareketi kapatır: tekerlek, tıklama, dokunup kaydırma, tuş. İmleç gezdirmek ve sayfanın
+    // kendiliğinden kayması (tarayıcının kaydırma konumunu geri yüklemesi gibi) kapatmaz.
+    var gitti = false, olaylar = ["wheel", "pointerdown", "touchmove", "keydown"];
     function git() {
       if (gitti) return; gitti = true;
       olaylar.forEach(function (o) { removeEventListener(o, git, true); });
       kok.classList.add("kt-git");
       setTimeout(function () { kok.remove(); st.remove(); }, 750);
     }
-    // İlk hareket süsü kaldırır; açılır açılmaz gelen olayları yok saymak için kısa bir bekleme
-    setTimeout(function () { olaylar.forEach(function (o) { addEventListener(o, git, { capture: true, passive: true }); }); }, 400);
+    // Açıldıktan sonraki ilk 3 saniyede gelen hareketler yok sayılır: süs görülmeden kapanmasın
+    setTimeout(function () { olaylar.forEach(function (o) { addEventListener(o, git, { capture: true, passive: true }); }); }, 3000);
     kok.querySelector(".kt-kapat").addEventListener("click", git);
-    kok.addEventListener("click", function (e) { if (e.target === kok) git(); });
   }
   var q = null;
   try { q = new URLSearchParams(location.search).get("kutlama"); } catch (e) {}
