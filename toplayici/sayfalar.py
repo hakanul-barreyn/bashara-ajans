@@ -180,26 +180,47 @@ def _adlar(liste, n=5):
 
 
 def _olgular(olay, kmap, dil):
-    """Kim neyi yazdı, kim neyi atladı: her temel olgu için veren ve vermeyen yayınlar."""
-    ol = (olay or {}).get("olgular") or []
+    """İsrail ve Batı basını olayı nasıl gölgeledi: yapay zekânın gölgeleme maddeleri ve bölge basınının verip İsrail/Batı
+    yayınlarının vermediği olgular. Bölge yayınlarının kendi aralarındaki farklar burada gösterilmez."""
     hs = (olay or {}).get("haberler") or []
-    if not ol or len(hs) < 2:
+    if len(hs) < 2:
         return ""
+    dis = lambda x: almanak.kamp(kmap.get(x.get("k"))) in almanak.DIS
     yayin_of = {x["id"]: kmap[x["k"]]["ad"] for x in hs if kmap.get(x.get("k"))}
-    tum = list(dict.fromkeys(yayin_of.values()))
-    satir = []
-    for x in ol:
-        veren = list(dict.fromkeys(yayin_of[i] for i in x["ids"] if i in yayin_of))
-        vermeyen = [a for a in tum if a not in veren]
-        if not veren:
-            continue
-        hepsi = not vermeyen
-        satir.append(f'<li><b>{_e(x["olgu"])}</b><span class="hs-olgu-v">✓ {_e("Hepsi" if hepsi and dil == "tr" else "All" if hepsi else _adlar(veren))}</span>'
-                     + (f'<span class="hs-olgu-y">✗ {_e(_adlar(vermeyen))}</span>' if vermeyen else "") + "</li>")
-    if not satir:
-        return ""
-    bas = "Kim neyi yazdı, kim neyi atladı" if dil == "tr" else "Who reported what, who left it out"
-    return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-olgu">{"".join(satir)}</ul></section>'
+    dis_ad = list(dict.fromkeys(yayin_of[x["id"]] for x in hs if dis(x) and x["id"] in yayin_of))
+    bolge_ad = list(dict.fromkeys(yayin_of[x["id"]] for x in hs if not dis(x) and x["id"] in yayin_of))
+    bas = "İsrail ve Batı basını neyi gölgeledi" if dil == "tr" else "What Israeli and Western outlets obscured"
+    if not dis_ad:
+        if len(bolge_ad) < 3:
+            return ""
+        metin = (f"Bu olayı bölge basınından {len(bolge_ad)} yayın yazdı; İsrail ve Batı basınında hiç haber yok." if dil == "tr"
+                 else f"{len(bolge_ad)} regional outlets reported this; there is no coverage in Israeli or Western outlets.")
+        return f'<section class="hs-bolum"><h2>{bas}</h2><p class="hs-sessiz">{_e(metin)}</p></section>'
+    madde = []
+    TUR = {"atlanan olgu": "Atlanan olgu", "edilgen dil": "Edilgen dil", "tek taraflı kaynak": "Tek taraflı kaynak", "bağlamsız": "Bağlamsız",
+           "örtmeceli kelime": "Örtmeceli kelime", "önemsizleştirme": "Önemsizleştirme"}
+    for g in (olay.get("golgeleme") or []):
+        adlar = list(dict.fromkeys(yayin_of[i] for i in g["ids"] if i in yayin_of))
+        if adlar:
+            madde.append(f'<li><span class="hs-g-tur">{_e(TUR.get(g.get("tur"), g.get("tur") or ""))}</span>'
+                         f'<b>{_e(", ".join(adlar))}</b> {_e(g["aciklama"])}</li>')
+    # Bölge basınının verdiği ama İsrail/Batı yayınlarından en az birinin vermediği olgular
+    for x in (olay.get("olgular") or []):
+        veren = set(x["ids"])
+        bolge_veren = list(dict.fromkeys(yayin_of[i] for i in veren if i in yayin_of and not dis(next(y for y in hs if y["id"] == i))))
+        dis_vermeyen = [a for a in dis_ad if a not in {yayin_of[i] for i in veren if i in yayin_of}]
+        if bolge_veren and dis_vermeyen:
+            if dil == "tr":
+                t = f"Bölge basınından {len(bolge_veren)} yayın verdi; {', '.join(dis_vermeyen)} vermedi."
+            else:
+                t = f"{len(bolge_veren)} regional outlets reported it; {', '.join(dis_vermeyen)} did not."
+            madde.append(f'<li><span class="hs-g-tur">{"Verilmeyen olgu" if dil == "tr" else "Left out"}</span>'
+                         f'<b>{_e(x["olgu"])}</b> {_e(t)}</li>')
+    if not madde:
+        metin = (f"İsrail ve Batı basınından {', '.join(dis_ad)} olayı bölge basınıyla aynı temel olgularla verdi; belirgin bir gölgeleme yok."
+                 if dil == "tr" else f"{', '.join(dis_ad)} reported the same core facts as the regional press; no clear obscuring.")
+        return f'<section class="hs-bolum"><h2>{bas}</h2><p>{_e(metin)}</p></section>'
+    return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-golge">{"".join(madde[:6])}</ul></section>'
 
 
 def _zaman(olay, kmap, dil):

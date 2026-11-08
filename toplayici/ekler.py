@@ -93,6 +93,11 @@ Kurallar:
 - olgular: olayın en önemli 3-5 olgusu (kısa, tek cümle, en çok 90 karakter; ör. "Beni Huşayş'ta 33 ölü, çoğu kadın ve çocuk",
   "Füze havada imha edildi") ve her olguyu başlığında ya da özetinde VEREN haberlerin kimlikleri: [{"olgu": "...", "ids": ["..."]}].
   Sivil kayıplar, failin kimliği ve bağlam gibi bazı yayınların atladığı olguları özellikle yaz. Olgu uydurma; yalnızca verilenlerden.
+- golgeleme: İsrail ve Batı yayınları (The Times of Israel, Jerusalem Post, Haaretz dışı İsrail basını, NYT, BBC, CNN, Reuters,
+  AP, DW, Le Monde… gibi) bu olayı bölge ve Filistin basınına göre nasıl GÖLGELEDİ? Yalnızca VERİDEN görülebilenleri yaz, en çok 4
+  madde: [{"tur": "atlanan olgu|edilgen dil|tek taraflı kaynak|bağlamsız|örtmeceli kelime|önemsizleştirme",
+  "aciklama": "kısa, somut, tek cümle (ör. 'Sivil ölümleri başlıkta vermedi, yalnızca füzenin düşürüldüğünü yazdı.')",
+  "ids": ["o İsrail/Batı haberlerinin kimlikleri"]}]. Grupta İsrail/Batı haberi yoksa ya da belirgin bir gölgeleme yoksa [].
 - dogrulanmamis: haberlerden biri bir iddianın bağımsız olarak DOĞRULANAMADIĞINI açıkça söylüyorsa (ör. "Reuters rakamları
   doğrulayamadı") {"aciklama": "hangi iddia, kim doğrulayamadı", "ids": [o iddiayı aktaran haberler]}; yoksa null.
 - ortak: kaynaklar büyük ölçüde AYNI dayanağa ve aynı bilgiye dayanıyorsa bunu bir cümleyle söyle (örn. "Hepsi İsrail ordusunun
@@ -103,7 +108,7 @@ Kurallar:
   kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
 """
 
 
@@ -159,6 +164,12 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
                 oi = [i for i in map(str, x.get("ids") or []) if i in ids]
                 if oi:
                     olgular.append({"olgu": guvenli(x["olgu"])[:120], "ids": oi})
+        golgeleme = []
+        for x in (g.get("golgeleme") or [])[:5]:
+            if isinstance(x, dict) and x.get("aciklama"):
+                gi = [i for i in map(str, x.get("ids") or []) if i in ids]
+                if gi:
+                    golgeleme.append({"tur": guvenli(x.get("tur"))[:30], "aciklama": guvenli(x["aciklama"])[:240], "ids": gi})
         dv = g.get("dogrulanmamis")
         dogrulanmamis = None
         if isinstance(dv, dict) and dv.get("aciklama"):
@@ -166,7 +177,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
             if di:
                 dogrulanmamis = {"aciklama": guvenli(dv["aciklama"])[:300], "ids": di}
         olaylar.append({
-            "yer": yer, "celiski": celiski, "anlatim": anl, "olgular": olgular, "dogrulanmamis": dogrulanmamis,
+            "yer": yer, "celiski": celiski, "anlatim": anl, "olgular": olgular, "golgeleme": golgeleme, "dogrulanmamis": dogrulanmamis,
             "ortak": guvenli(g.get("ortak"))[:240] or None if g.get("ortak") else None,
             "fark": g.get("fark") if isinstance(g.get("fark"), bool) else None,
             "id": oid, "baslik": guvenli(g.get("baslik"))[:160], "not": guvenli(g.get("not"))[:700],

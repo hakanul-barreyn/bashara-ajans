@@ -107,3 +107,8 @@
 @media (max-width:980px){.mk-sayfa{grid-template-columns:minmax(0,1fr);gap:30px}.mk-yan-sutun>div{position:static}.mk-makale{max-width:none}}
 @media (max-width:560px){.mk-logo span{display:none}.mk-menu{gap:14px;font-size:.8rem;flex-wrap:nowrap;overflow-x:auto;max-width:calc(100vw - 120px);scrollbar-width:none}.mk-metin{font-size:1.08rem}
   .hs-fark{grid-template-columns:minmax(0,1fr)}.hs-fark dd{margin-bottom:6px}.hs-zaman li{grid-template-columns:minmax(0,6.5rem) minmax(0,1fr) 3.8rem}}
+.hs-golge{list-style:none;margin:0;padding:0}
+.hs-golge li{padding:12px 0 12px 14px;border-bottom:1px solid var(--mk-cizgi);border-left:3px solid var(--mk-vurgu);margin-bottom:8px;line-height:1.55;font-size:.98rem}
+.hs-golge b{font-family:var(--serif)}
+.hs-g-tur{display:block;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mk-vurgu);margin-bottom:3px}
+.hs-sessiz{font-family:var(--serif);font-size:1.2rem!important;color:var(--mk-vurgu)!important;font-weight:700}
