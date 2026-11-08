@@ -51,7 +51,7 @@ UA = (re.sub(r"[^A-Za-z0-9]+", "-", MARKA["kisa_ad"]).strip("-") or "haber") + "
 SAKLA_GUN = 2
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
-KESIF_SURUMU = 6
+KESIF_SURUMU = 7
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 100)
 PARTI = 20  # bir istekte kaç haber; istek sayısı ücretsiz kotanın asıl sınırı olduğu için partiler büyük
 GEMINI_GUNLUK = int(os.environ.get("GEMINI_GUNLUK") or 900)  # Pasifik saatiyle gece yarısı sıfırlanan günlük kotanın altında kal
@@ -441,12 +441,7 @@ def kesfet(k):
             sonuc["yontem"] = {"tip": "wp", "url": wp}
             return sonuc
 
-    # 5) Son çare: Google Haberler'in bu alan adı için RSS araması. Site sunucumuzu engelliyorsa (çoğu Cloudflare'in bulut
-    #    sunucularına karşı koyduğu engel) ya da hiç besleme yayınlamıyorsa başlık ve bağlantı yine gelir; özet başlıktan yazılır.
-    gn = gnews_adresi(k)
-    kod3, metin, _ = getir(gn, zaman=20)
-    if kod3 == 200 and gnews_coz(metin):
-        sonuc["yontem"] = {"tip": "gnews", "url": gn}
+    # Google Haberler araması kullanılmıyor: news.google.com'un robots.txt'si bu tür otomatik okumaya izin vermiyor.
     return sonuc
 
 
