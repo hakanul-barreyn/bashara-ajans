@@ -29,6 +29,37 @@
     kok.querySelectorAll("[data-dil]").forEach(function (x) { x.hidden = x.dataset.dil !== DIL; });
   }
 
+  // Gerçek harita: Leaflet + OpenStreetMap verisi (CARTO Voyager altlığı, etiketler Latin harfli). Görününce yüklenir.
+  var leafletSoz = null;
+  function leaflet() {
+    if (leafletSoz) return leafletSoz;
+    leafletSoz = new Promise(function (tamam, hata) {
+      var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(l);
+      var b = document.createElement("script"); b.src = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js";
+      b.onload = function () { tamam(window.L); }; b.onerror = hata; document.head.appendChild(b);
+    });
+    return leafletSoz;
+  }
+  var haritaGozcu = "IntersectionObserver" in window ? new IntersectionObserver(function (g) {
+    g.forEach(function (x) {
+      if (!x.isIntersecting) return;
+      haritaGozcu.unobserve(x.target);
+      var d = x.target, la = +d.dataset.lat, lo = +d.dataset.lon;
+      leaflet().then(function (L) {
+        var h = L.map(d, { scrollWheelZoom: false, dragging: !L.Browser.mobile, tap: false, zoomControl: true, attributionControl: true }).setView([la, lo], 8);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+          subdomains: "abcd", maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+        }).addTo(h);
+        L.circleMarker([la, lo], { radius: 22, color: "#c9302c", weight: 1, fillColor: "#c9302c", fillOpacity: .15 }).addTo(h);
+        var m = L.circleMarker([la, lo], { radius: 7, color: "#fff", weight: 2, fillColor: "#c9302c", fillOpacity: 1 }).addTo(h);
+        if (d.dataset.ad) m.bindTooltip(d.dataset.ad, { permanent: true, direction: "right", offset: [10, 0], className: "mk-osm-etiket" });
+      }).catch(function () { d.querySelectorAll("noscript").forEach(function (n) { d.innerHTML = n.textContent; }); });
+    });
+  }, { rootMargin: "200px 0px" }) : null;
+  function haritalar(kok) { if (haritaGozcu) kok.querySelectorAll(".mk-osm").forEach(function (d) { haritaGozcu.observe(d); }); }
+  haritalar(document);
+
   var ilk = document.querySelector(".mk-makale");
   if (ilk) { ilk.dataset.adres = location.href.split("#")[0]; }
   paylasBagla(document);
@@ -67,7 +98,7 @@
       kap.appendChild(document.importNode(m, true));
       akis.appendChild(kap);
       son = kap.querySelector(".mk-makale");
-      dilUygula(kap); paylasBagla(kap); izle(son);
+      dilUygula(kap); paylasBagla(kap); haritalar(kap); izle(son);
       yuklenen++;
     }).catch(function () {}).finally(function () { yukleniyor = false; isaret.textContent = ""; });
   }

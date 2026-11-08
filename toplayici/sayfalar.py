@@ -17,7 +17,7 @@ import marka
 
 SAKLA_GUN = 7
 AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
-CSP = ("default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+CSP = ("default-src 'self'; script-src 'self' https://gc.zgo.at https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
        "font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://zbshaber.goatcounter.com; "
        "object-src 'none'; base-uri 'self'; form-action 'none'")
 
@@ -539,6 +539,15 @@ def paylasim_gorseli(kok, olay, kmap):
             pass
 
 
+def _konum(olay):
+    y = (olay or {}).get("yer")
+    try:
+        la, lo = float(y["lat"]), float(y["lon"])
+        return (la, lo) if (la or lo) and -90 <= la <= 90 and -180 <= lo <= 180 else None
+    except Exception:
+        return None
+
+
 def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef, ilgili, site):
     """Bir dilde makale gövdesi: üst bilgi, başlık, özet, künye, paylaş, kapak, metin, bölümler, etiketler."""
     t = T[dil]
@@ -587,9 +596,15 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
     if foto:
         kapak = (f'<figure class="mk-kapak"><img src="../data/foto/{_e(foto[0])}.jpg" alt="" loading="eager">'
                  f'<figcaption>{_e(yer or "")}{" · " if yer else ""}{_e(foto[1])}</figcaption></figure>')
-    elif harita:
-        kapak = (f'<figure class="mk-kapak mk-harita"><img src="{_e(harita)}" alt="" width="600" height="340">'
-                 f'<figcaption>{_e(("Olayın yeri: " if dil == "tr" else "Location: ") + (yer or ""))}</figcaption></figure>')
+    elif harita or _konum(olay):
+        # Gerçek harita (OpenStreetMap verisi, CARTO altlığı): sayfa-haber.js görününce yükler; betik yoksa eski küçük harita
+        ky = _konum(olay)
+        alt_y = (f'<noscript><img src="{_e(harita)}" alt="" width="600" height="340"></noscript>' if harita else "")
+        ic = (f'<div class="mk-osm" data-lat="{ky[0]:.4f}" data-lon="{ky[1]:.4f}" data-ad="{_e(yer or "")}" role="img" '
+              f'aria-label="{_e(("Harita: " if dil == "tr" else "Map: ") + (yer or ""))}">{alt_y}</div>') if ky else f'<img src="{_e(harita)}" alt="" width="600" height="340">'
+        kapak = (f'<figure class="mk-kapak mk-harita">{ic}'
+                 f'<figcaption>{_e(("Olayın yeri: " if dil == "tr" else "Location: ") + (yer or ""))}'
+                 f'{" · © OpenStreetMap katkıcıları, © CARTO" if ky else ""}</figcaption></figure>')
     else:
         kapak = ""
     # Karşı manşetler (alıntı kutusu)

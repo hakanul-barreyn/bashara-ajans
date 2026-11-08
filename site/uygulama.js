@@ -230,7 +230,7 @@
     const adaylar = o.haberler.slice(0, 4);
     (async () => {
       for (const i of adaylar) {
-        try { const r = await fetch("h/" + i + ".html", { method: "HEAD" }); if (r.ok) { location.href = "h/" + i + ".html#kim-" + (DL || "tr"); return; } } catch (e) {}
+        try { const r = await fetch("h/" + i + ".html", { method: "HEAD" }); if (r.ok) { location.href = "h/" + i + ".html"; return; } } catch (e) {}
       }
       icGit();
     })();

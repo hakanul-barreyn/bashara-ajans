@@ -26,6 +26,11 @@
 .mk-kapak{margin:22px 0 0}
 .mk-kapak img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:#0c0e0d}
 .mk-harita img{object-fit:contain}
+.mk-osm{width:100%;aspect-ratio:2/1;max-height:420px;border-radius:4px;background:#e8e6df;overflow:hidden;z-index:0}
+.mk-osm .leaflet-container{font:inherit}
+.mk-osm-etiket{background:#111;color:#fff;border:0;border-radius:3px;font-weight:700;font-size:.8rem;padding:3px 8px;box-shadow:none}
+.mk-osm-etiket:before{display:none}
+@media (max-width:640px){.mk-osm{aspect-ratio:4/3}}
 .mk-kapak figcaption{margin-top:8px;font-size:.78rem;color:var(--mk-soluk)}
 .mk-denge{margin:18px 0 0}
 .mk-denge-cubuk{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--mk-cizgi)}
