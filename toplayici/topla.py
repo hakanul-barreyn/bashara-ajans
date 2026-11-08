@@ -541,10 +541,17 @@ def gdelt_topla(kaynaklar):
     return sonuc
 
 
+_cek_kod = {}   # teşhis: yöntem adresi -> son HTTP kodu ("robots": robots.txt izin vermiyor)
+
+
 def cek(yontem):
-    if not yontem or not izinli(yontem["url"]):
+    if not yontem:
+        return None
+    if not izinli(yontem["url"]):
+        _cek_kod[yontem["url"]] = "robots"
         return None
     kod, metin, _ = getir(yontem["url"])
+    _cek_kod[yontem["url"]] = kod
     if kod != 200:
         return None
     if yontem["tip"] == "harita":
@@ -600,6 +607,8 @@ def kaynak_isle(k, durum):
         d["surum"] = KESIF_SURUMU
         d["hata"] = 0
     ogeler = cek(d.get("yontem")) if d.get("yontem") else None
+    if d.get("yontem"):
+        d["cek_kod"] = _cek_kod.get(d["yontem"]["url"])
     if ogeler is None:
         d["hata"] = d.get("hata", 0) + 1
         ogeler = []
