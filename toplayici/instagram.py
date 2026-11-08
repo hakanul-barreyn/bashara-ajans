@@ -471,9 +471,10 @@ def _hesap(kay, sunucu, token):
                     bulunan = (str(iba["id"]), iba.get("username"))
                     break
         if not bulunan:
-            r = q("me", "id,username")          # birleşik girişte /me doğrudan Instagram hesabı olabilir
-            if r and r.get("id") and r.get("username"):
-                bulunan = (str(r["id"]), r["username"])
+            # Birleşik giriş jetonu bazen Instagram sunucusunda da geçer: orada /me doğrudan Instagram hesabıdır
+            r = _istek("GET", f"https://graph.instagram.com/{SURUM}/me?" + urllib.parse.urlencode({"fields": "user_id,username", "access_token": token}))
+            if r and (r.get("user_id") or r.get("id")):
+                bulunan = (str(r.get("user_id") or r["id"]), r.get("username"))
     if bulunan:
         kay["hesap"], kay["kullanici"] = bulunan[0], bulunan[1]
         return bulunan[0]
