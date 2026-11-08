@@ -20,35 +20,17 @@ API = "https://commons.wikimedia.org/w/api.php"
 UA = "ZBS-haber-toplayici/1.0 (otomatik haber ozeti; https://github.com/hakanul-barreyn/bashara-ajans)"
 
 # Sitedeki yer adları (Türkçe) -> Commons'ta aranacak terimler
-YERLER = {
-    "Gazze": ["Gaza City skyline", "Gaza City street", "Gaza port"],
-    "Han Yunus": ["Khan Yunis"],
-    "Refah": ["Rafah Gaza"],
-    "Cebaliye": ["Jabalia camp"],
-    "Deyr el-Belah": ["Deir al-Balah"],
-    "Nuseyrat": ["Nuseirat camp"],
-    "Batı Şeria": ["West Bank landscape", "West Bank olive"],
-    "Cenin": ["Jenin"],
-    "Nablus": ["Nablus old city", "Nablus"],
-    "Ramallah": ["Ramallah"],
-    "Tulkerim": ["Tulkarm"],
-    "El Halil": ["Hebron old city"],
-    "Kudüs": ["Jerusalem Old City", "Al-Aqsa Mosque"],
-    "Beyrut": ["Beirut skyline", "Beirut Dahieh"],
-    "Güney Lübnan": ["South Lebanon village", "Nabatieh"],
-    "Şam": ["Damascus old city"],
-    "Halep": ["Aleppo citadel"],
-    "Sana": ["Sanaa old city"],
-    "Hudeyde": ["Hodeidah"],
-    "Tahran": ["Tehran skyline"],
-    "Bağdat": ["Baghdad Tigris"],
-    "Kahire": ["Cairo skyline"],
-    "Amman": ["Amman citadel"],
-    "Doha": ["Doha skyline"],
-    "Riyad": ["Riyadh skyline"],
-    "İstanbul": ["Istanbul skyline"],
-    "Ankara": ["Ankara skyline"],
+YERLER = {   # Türkçe ad -> Commons'taki İngilizce ad
+    "Gazze": "Gaza City", "Han Yunus": "Khan Yunis", "Refah": "Rafah", "Cebaliye": "Jabalia", "Deyr el-Belah": "Deir al-Balah",
+    "Nuseyrat": "Nuseirat", "Batı Şeria": "West Bank", "Cenin": "Jenin", "Nablus": "Nablus", "Ramallah": "Ramallah",
+    "Tulkerim": "Tulkarm", "El Halil": "Hebron", "Kudüs": "Jerusalem", "Beyrut": "Beirut", "Güney Lübnan": "South Lebanon",
+    "Şam": "Damascus", "Halep": "Aleppo", "Sana": "Sanaa", "Hudeyde": "Hodeidah", "Tahran": "Tehran", "Bağdat": "Baghdad",
+    "Kahire": "Cairo", "Amman": "Amman", "Doha": "Doha", "Riyad": "Riyadh", "İstanbul": "Istanbul", "Ankara": "Ankara",
 }
+# Her yer için aranacak ifadeler: Al Jazeera English'in serbest lisanslı (CC BY-SA) Flickr arşivi en değerli kaynak
+TERIMLER = ["{} Al Jazeera English", "{} destruction", "{} skyline", "{} street"]
+
+
 ESANLAM = {"gazze seridi": "Gazze", "gaza": "Gazze", "han yunus": "Han Yunus", "hanyunus": "Han Yunus", "rafah": "Refah",
            "cabaliya": "Cebaliye", "cebalya": "Cebaliye", "bati seria": "Batı Şeria", "jenin": "Cenin", "kudus": "Kudüs",
            "dogu kudus": "Kudüs", "beirut": "Beyrut", "lubnan": "Güney Lübnan", "guney lubnan": "Güney Lübnan", "sam": "Şam",
@@ -57,7 +39,8 @@ ESANLAM = {"gazze seridi": "Gazze", "gaza": "Gazze", "han yunus": "Han Yunus", "
 SERBEST = re.compile(r"^(public domain|pd|cc0|cc by(-sa)? [0-9.]+( [a-z]+)?)$", re.I)
 YASAK = re.compile(r"\b(dead|death|died|body|bodies|corpse|killed|kill|blood|injur|wound|martyr|funeral|massacre|victim|"
                    r"child|children|kid|baby|boy|girl|portrait|people|crowd|soldier|militant|weapon|rifle|gun|"
-                   r"map|flag|logo|coat of arms|diagram|chart|poster|stamp|banknote|coin)", re.I)
+                   r"map|flag|logo|coat of arms|diagram|chart|poster|stamp|banknote|coin|archive|interior|mayor|minister|president|"
+                   r"official|meeting|conference|ceremony|selfie)", re.I)
 
 
 def _sade(s):
@@ -109,15 +92,22 @@ def _ara(terim):
         return list((json.loads(y.read()).get("query") or {}).get("pages", {}).values())
 
 
-def kutuphane_doldur(kok, simdi, en_cok_yer=3, yer_basina=6, log=print):
+def kutuphane_doldur(kok, simdi, en_cok_yer=3, yer_basina=8, log=print):
     """Henüz aranmamış yerler için Commons'ta arar, uygun adayları indirir."""
     kat = katalog(kok)
     os.makedirs(_klasor(kok), exist_ok=True)
-    aranacak = [y for y in YERLER if y not in kat["arandi"]][:en_cok_yer]
+    # Reddedilen fotoğrafların dosyalarını sil (katalogda kalırlar ki bir daha indirilmesinler)
+    _, red = _onay(kok)
+    for i in red:
+        try:
+            os.remove(os.path.join(_klasor(kok), f"{i}.jpg"))
+        except OSError:
+            pass
+    aranacak = [y for y in YERLER if f"v2:{y}" not in kat["arandi"]][:en_cok_yer]
     for yer in aranacak:
         bulunan = 0
         try:
-            for terim in YERLER[yer]:
+            for terim in (t.format(YERLER[yer]) for t in TERIMLER):
                 for p in _ara(terim):
                     if bulunan >= yer_basina:
                         break
@@ -127,7 +117,8 @@ def kutuphane_doldur(kok, simdi, en_cok_yer=3, yer_basina=6, log=print):
                     metin = " ".join([p.get("title", ""), _temiz((em.get("ImageDescription") or {}).get("value")),
                                       _temiz((em.get("Categories") or {}).get("value"))])
                     kimlik = str(p.get("pageid"))
-                    if (kimlik in kat["fotolar"] or ii.get("mime") != "image/jpeg" or (ii.get("width") or 0) < 1600
+                    yatay = (ii.get("width") or 0) >= 1.25 * (ii.get("height") or 1)   # dikey ve kare taramalar kapak için uygun değil
+                    if (kimlik in kat["fotolar"] or ii.get("mime") != "image/jpeg" or (ii.get("width") or 0) < 1600 or not yatay
                             or not SERBEST.match(lis) or YASAK.search(metin) or not ii.get("thumburl")):
                         continue
                     yol = os.path.join(_klasor(kok), f"{kimlik}.jpg")
@@ -141,7 +132,7 @@ def kutuphane_doldur(kok, simdi, en_cok_yer=3, yer_basina=6, log=print):
                         "lisans": lis, "lisans_url": (em.get("LicenseUrl") or {}).get("value", ""),
                         "kaynak": ii.get("descriptionurl", ""), "genislik": ii.get("thumbwidth"), "yukseklik": ii.get("thumbheight")}
                     bulunan += 1
-            kat["arandi"][yer] = simdi.isoformat()
+            kat["arandi"][f"v2:{yer}"] = simdi.isoformat()
         except Exception as e:
             log(f"Fotoğraf kütüphanesi: {yer} aranamadı ({type(e).__name__})")
             break
