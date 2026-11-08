@@ -1,0 +1,52 @@
+name: Geriye dönük tarama
+
+# 7 Ekim 2023'ten toplayıcının başladığı güne kadar her yayının haber listesi (başlık, tarih, bağlantı).
+# Saatte bir 45 dakika çalışır, kaldığı yerden devam eder. Veri ve durum "tarama" dalında durur; ana siteyi etkilemez.
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tarama
+  cancel-in-progress: false
+
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Önceki tarama durumunu al
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 --branch tarama "$ADRES" tarama 2>/dev/null || (mkdir -p tarama && git -C tarama init -q -b tarama)
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tara
+        env:
+          TARAMA_SURE: "2700"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
+        run: python toplayici/tarama.py
+
+      - name: Kaydet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd tarama
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add -A
+          KIM=(-c user.name="zbs-tarama" -c user.email="41898282+github-actions[bot]@users.noreply.github.com")
+          if git rev-parse -q --verify HEAD >/dev/null; then git "${KIM[@]}" commit -q --amend -m "Tarama: $(date -u +'%Y-%m-%d %H:%M') UTC"; else git "${KIM[@]}" commit -q -m "Tarama"; fi
+          git push -q -f "$ADRES" HEAD:tarama
