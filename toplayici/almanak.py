@@ -94,7 +94,7 @@ def olay_arsivle(kok, olaylar, haberler):
             continue
         ilk = min(x["t"] for x in hs if x["t"])
         gun = ilk[:10]
-        kayit = {"id": o["id"], "baslik": o.get("baslik", ""), "not": o.get("not", ""), "ilk": ilk, "yer": o.get("yer"),
+        kayit = {"id": o["id"], "baslik": o.get("baslik", ""), "not": o.get("not", ""), "ilk": ilk, "yer": o.get("yer"), "yerler": o.get("yerler") or [],
                  "ortak": o.get("ortak"), "fark": o.get("fark"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
                  "olgular": o.get("olgular") or [], "golgeleme": o.get("golgeleme") or [],
                  "son": max(x["t"] for x in hs if x["t"]), "haberler": hs}
@@ -107,7 +107,7 @@ def olay_arsivle(kok, olaylar, haberler):
             yeni_ids = {x["id"] for x in hs}
             for j, e in enumerate(gunluk[g]):
                 eski_ids = {x["id"] for x in e["haberler"]}
-                if e["id"] == o["id"] or len(eski_ids & yeni_ids) >= 0.5 * min(len(eski_ids), len(yeni_ids)):
+                if e["id"] == o["id"] or ayni_olay(e["baslik"], eski_ids, kayit["baslik"], yeni_ids):
                     yer = (g, j)
                     break
             if yer:
@@ -127,8 +127,43 @@ def olay_arsivle(kok, olaylar, haberler):
         n += 1
     for g, liste in gunluk.items():
         if liste:
-            _yaz(os.path.join(klasor, g + ".json"), sorted(liste, key=lambda x: x["ilk"]))
+            _yaz(os.path.join(klasor, g + ".json"), sorted(birlestir(liste), key=lambda x: x["ilk"]))
     return n
+
+
+def _kokler(baslik):
+    """Başlığın kelime kökleri (ilk 5 harf; kesme işaretinden sonrası atılır): 'Eisenkot'un' ve 'Eisenkot'u' aynı."""
+    s = re.sub(r"[’'][^\s]*", "", (baslik or "").replace("İ", "i").replace("I", "ı").lower())
+    return {w[:5] for w in re.findall(r"\w{4,}", s)}
+
+
+def ayni_olay(b1, ids1, b2, ids2):
+    """İki küme aynı olay mı? Haberlerin yarısı ortaksa; ya da en az iki haber ortak ve başlıklar benziyorsa."""
+    ortak = len(ids1 & ids2)
+    if ortak >= 0.5 * min(len(ids1), len(ids2)):
+        return True
+    k1, k2 = _kokler(b1), _kokler(b2)
+    benzer = len(k1 & k2) / len(k1 | k2) if k1 and k2 else 0
+    return ortak >= 2 and benzer >= 0.3 or ortak >= 1 and benzer >= 0.5
+
+
+def birlestir(liste):
+    """Aynı gün dosyasında iki ayrı kayıt olarak kalmış aynı olayları tek kayıtta topla (büyük olanın metni kalır)."""
+    liste = sorted(liste, key=lambda e: -len(e["haberler"]))
+    sonuc = []
+    for e in liste:
+        ids = {x["id"] for x in e["haberler"]}
+        hedef = next((s for s in sonuc if ayni_olay(s["baslik"], {x["id"] for x in s["haberler"]}, e["baslik"], ids)), None)
+        if not hedef:
+            sonuc.append(e)
+            continue
+        birlesik = {x["id"]: x for x in e["haberler"]}
+        birlesik.update({x["id"]: x for x in hedef["haberler"]})
+        hedef["haberler"] = sorted(birlesik.values(), key=lambda x: x.get("t") or "")
+        hedef["ilk"] = min(hedef["ilk"], e["ilk"])
+        hedef["son"] = max(hedef.get("son") or "", e.get("son") or "")
+        hedef.setdefault("eski_idler", []).append(e["id"])
+    return sonuc
 
 
 # ------------------------------------------------------------------ dönemler

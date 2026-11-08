@@ -151,3 +151,23 @@
 .mk-ara h2{margin:0 0 14px;padding-bottom:8px;border-bottom:3px solid var(--mk-yazi);font-size:.8rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
 .mk-sirada{margin-top:44px}
 .mk-govde{--icerik:1180px}
+/* bölge haritası (kendi altlığımız) */
+.mk-osm{position:relative;touch-action:pan-y}
+.bh-svg{display:block;width:100%;height:100%;cursor:grab;user-select:none}
+.bh-svg:active{cursor:grabbing}
+.bh-deniz{fill:#d6e4ec}
+.bh-kara{fill:#f3efe6;stroke:none}
+.bh-sinir{fill:none;stroke:#a99f8f;stroke-dasharray:none;stroke-linejoin:round}
+.bh-ulke{fill:#8a8275;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:700;letter-spacing:.14em}
+.bh-filistin{fill:#1f7a52;font-weight:800;letter-spacing:.2em}
+.bh-sehir{fill:#4a514d;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:600}
+.bh-sehir-n{fill:#6f7772}
+.bh-hale{fill:#c9302c;fill-opacity:.14;stroke:#c9302c;stroke-opacity:.5}
+.bh-yer{fill:#c9302c;stroke:#fff}
+.bh-yer2{fill:#e0702b}
+.bh-yer-ad{fill:#161a18;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;paint-order:stroke;stroke:#fff;stroke-linejoin:round}
+.bh-yer-ad2{fill:#7a3b12}
+.bh-dugmeler{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.bh-dugmeler button{width:32px;height:32px;border:0;border-bottom:1px solid #ddd;background:#fff;color:#161a18;font:700 18px/1 system-ui;cursor:pointer}
+.bh-dugmeler button:last-child{border-bottom:0}
+.bh-atif{position:absolute;right:8px;bottom:6px;font-size:.64rem;color:#6f7772;background:rgba(255,255,255,.75);padding:1px 6px;border-radius:3px}

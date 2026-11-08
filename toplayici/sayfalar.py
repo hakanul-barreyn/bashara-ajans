@@ -608,14 +608,16 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
         kapak = (f'<figure class="mk-kapak"><img src="../data/foto/{_e(foto[0])}.jpg" alt="" loading="eager">'
                  f'<figcaption>{_e(yer or "")}{" · " if yer else ""}{_e(foto[1])}</figcaption></figure>')
     elif harita or _konum(olay):
-        # Gerçek harita (OpenStreetMap): sayfa-haber.js görününce yükler; betik yoksa eski küçük harita
+        # Harita: sayfa-haber.js görününce kendi bölge altlığımızla (site/bolge-harita.json) çizer; betik yoksa eski küçük harita
         ky = _konum(olay)
         alt_y = (f'<noscript><img src="{_e(harita)}" alt="" width="600" height="340"></noscript>' if harita else "")
-        ic = (f'<div class="mk-osm" data-lat="{ky[0]:.4f}" data-lon="{ky[1]:.4f}" data-ad="{_e(yer or "")}" role="img" '
+        ekyer = json.dumps([{"ad": y["ad"], "lat": y["lat"], "lon": y["lon"]} for y in (olay or {}).get("yerler") or []
+                            if isinstance(y, dict) and y.get("ad")][:3], ensure_ascii=False)
+        ic = (f'<div class="mk-osm" data-lat="{ky[0]:.4f}" data-lon="{ky[1]:.4f}" data-ad="{_e(yer or "")}" data-yerler="{_e(ekyer)}" role="img" '
               f'aria-label="{_e(("Harita: " if dil == "tr" else "Map: ") + (yer or ""))}">{alt_y}</div>') if ky else f'<img src="{_e(harita)}" alt="" width="600" height="340">'
         kapak = (f'<figure class="mk-kapak mk-harita">{ic}'
                  f'<figcaption>{_e(("Olayın yeri: " if dil == "tr" else "Location: ") + (yer or ""))}'
-                 f'{" · © OpenStreetMap katkıcıları" if ky else ""}</figcaption></figure>')
+                 f'</figcaption></figure>')
     else:
         kapak = ""
     # Karşı manşetler (alıntı kutusu)

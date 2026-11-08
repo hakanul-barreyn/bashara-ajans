@@ -107,8 +107,9 @@ Kurallar:
   olduğu, olayın olup olmadığı gibi) bunu 1-2 cümleyle, kimin ne dediğini yazarak belirt ve çelişen iddiaları taşıyan haberlerin
   kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
-- yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
+- yer: olayın KONUSU olan ya da yaşandığı yer; açıklamanın yapıldığı başkent değil (Ankara'da Sincar üzerine varılan bir mutabakatta yer Sincar'dır). Yalnızca diplomatik bir görüşmenin kendisi haberse görüşmenin yapıldığı şehir. {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık merkez yeter. Belirsizse null.
+- yerler: olay birden çok yeri ilgilendiriyorsa (iki ülke arası anlaşma, birden çok kentte saldırı) "yer" dışındaki en çok 3 yer, aynı biçimde; yoksa [].
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}, "yerler": []}]
 """
 
 
@@ -143,6 +144,13 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
                 yer = {"ad": guvenli(y.get("ad"))[:60], "lat": round(float(y["lat"]), 2), "lon": round(float(y["lon"]), 2)}
         except (TypeError, ValueError):
             yer = None
+        yerler = []
+        for y in (g.get("yerler") or [])[:3] if isinstance(g.get("yerler"), list) else []:
+            try:
+                if isinstance(y, dict) and -90 <= float(y.get("lat")) <= 90 and -180 <= float(y.get("lon")) <= 180 and y.get("ad"):
+                    yerler.append({"ad": guvenli(y.get("ad"))[:60], "lat": round(float(y["lat"]), 2), "lon": round(float(y["lon"]), 2)})
+            except (TypeError, ValueError):
+                pass
         cel = g.get("celiski")
         celiski = None
         if isinstance(cel, dict) and cel.get("aciklama"):
@@ -177,7 +185,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
             if di:
                 dogrulanmamis = {"aciklama": guvenli(dv["aciklama"])[:300], "ids": di}
         olaylar.append({
-            "yer": yer, "celiski": celiski, "anlatim": anl, "olgular": olgular, "golgeleme": golgeleme, "dogrulanmamis": dogrulanmamis,
+            "yer": yer, "yerler": yerler, "celiski": celiski, "anlatim": anl, "olgular": olgular, "golgeleme": golgeleme, "dogrulanmamis": dogrulanmamis,
             "ortak": guvenli(g.get("ortak"))[:240] or None if g.get("ortak") else None,
             "fark": g.get("fark") if isinstance(g.get("fark"), bool) else None,
             "id": oid, "baslik": guvenli(g.get("baslik"))[:160], "not": guvenli(g.get("not"))[:700],
