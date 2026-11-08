@@ -439,3 +439,12 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 @media (max-width:520px){.dil-sec button{padding:4px 6px;font-size:.68rem}}
 [data-dil][hidden]{display:none!important}
 .sayfa>div[data-dil]{display:flex;flex-direction:column;gap:20px}
+
+/* Telefonda zemin sabit bir görsel: adres çubuğu açılıp kapanınca yeniden ölçeklenmez, noktalar yanıp sönmez, kaydırırken parlamaz */
+@media (max-width:820px),(hover:none){
+  .zemin{inset:0 0 auto 0;height:100vh;height:100lvh;transform:translateZ(0)}
+  .z-nabiz{display:none}
+  .z-sehir .z-nokta{transition:none}
+  .z-sehir.taze .z-nokta{fill-opacity:.45}
+  .z-sessiz *{animation:none!important}
+}

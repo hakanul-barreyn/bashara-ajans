@@ -74,6 +74,7 @@
   // haber gelen şehirler nokta olur, son bir saatte haber gelenler nabız gibi atar, üzerine gelinen kartın şehri parlar.
   const ZB = { bat: -24, dogu: 76, kuzey: 62, guney: 2, olcek: 10 };
   const zx = (lon) => (lon - ZB.bat) * ZB.olcek, zy = (lat) => (ZB.kuzey - lat) * ZB.olcek;
+  const SABIT_ZEMIN = matchMedia("(max-width:820px),(hover:none)").matches;
   const zemin = $("zemin"), SVGNS = "http://www.w3.org/2000/svg";
   const zEl = (t, at) => { const e = document.createElementNS(SVGNS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
   let zNoktalar = null;
@@ -129,7 +130,8 @@
       g.appendChild(zEl("circle", { class: "z-sessiz-ic", cx: zx(y.lon), cy: zy(y.lat), r: 4 }));
       zNoktalar.appendChild(g);
     });
-    const aktif = aktifId && haberIdx[aktifId];
+    // Telefonda zemin sabit: kaydırırken kartın şehri parlamaz, yalnızca seçilen şehir vurgulanır
+    const aktif = !SABIT_ZEMIN && aktifId && haberIdx[aktifId];
     const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
     sirali.slice().reverse().forEach(([ad, s]) => {
       if (s.lon < ZB.bat || s.lon > ZB.dogu || s.lat < ZB.guney || s.lat > ZB.kuzey) return;
@@ -629,7 +631,7 @@
     document.querySelectorAll(".haber.aktif").forEach((x) => x.classList.remove("aktif"));
     const kart = document.querySelector('.haber[data-id="' + id + '"]'); if (kart) kart.classList.add("aktif");
     const h = haberler.find((x) => x.id === id); const k = h && kaynaklar[h.kaynak];
-    if (k) haritaCiz(suz());
+    if (k && !SABIT_ZEMIN) haritaCiz(suz());
   }
 
   let sonGozcu = null;
