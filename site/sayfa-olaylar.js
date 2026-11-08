@@ -176,6 +176,7 @@
 
   // ---- 5) katalog
   var secili = "hepsi", gosterilen = 30;
+  document.addEventListener("rp-baski", function () { if (V) { gosterilen = 1e9; liste(); } });
   function katalog(v) {
     var z = $("suzgec");
     var turler = v.turler.filter(function (t) { return t.olay_sayisi; }).sort(function (a, b) { return b.olay_sayisi - a.olay_sayisi; });
