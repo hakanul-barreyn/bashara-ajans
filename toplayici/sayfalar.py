@@ -282,6 +282,181 @@ def _onceki(olay, tum, sayfa_hedef, dil):
     return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-onceki">{"".join(satir)}</ul></section>'
 
 
+# ------------------------------------------------------------------ haber sayfası grafikleri
+def _iki_kamp(olay, kmap):
+    hs = [x for x in (olay or {}).get("haberler") or [] if kmap.get(x.get("k"))]
+    b = [x for x in hs if almanak.kamp(kmap[x["k"]]) in almanak.BOLGE_ICI]
+    d = [x for x in hs if almanak.kamp(kmap[x["k"]]) in almanak.DIS]
+    return b, d
+
+
+def _grup_ad(dil):
+    return ("Bölge basını", "İsrail ve Batı basını") if dil == "tr" else ("Regional press", "Israeli & Western press")
+
+
+RENK_B, RENK_D = "#1f7a52", "#3e63b8"
+
+
+def _dil_terazisi(olay, kmap, dil):
+    b, d = _iki_kamp(olay, kmap)
+    say = lambda hs: {}
+    def kelime(hs):
+        c = {}
+        for x in hs:
+            w = ((x.get("an") or {}).get("kelime") or "").strip()
+            if w:
+                c[w] = c.get(w, 0) + 1
+        return sorted(c.items(), key=lambda x: -x[1])[:5]
+    kb, kd = kelime(b), kelime(d)
+    if not kb or not kd:
+        return ""
+    en = max([n for _, n in kb + kd])
+    sutun = lambda ad, lst, renk, sag: (f'<div class="gr-tz-sutun{" sag" if sag else ""}"><h3>{_e(ad)}</h3>'
+        + "".join(f'<div class="gr-tz-satir"><span dir="auto">“{_e(w)}”</span><i style="width:{100 * n / en:.0f}%;background:{renk}"></i><b>{n}</b></div>' for w, n in lst) + "</div>")
+    ga, gd = _grup_ad(dil)
+    bas = "Dil terazisi: aynı olay, farklı kelimeler" if dil == "tr" else "Word scale: same event, different words"
+    return f'<section class="hs-bolum"><h2>{bas}</h2><div class="gr-tz">{sutun(ga, kb, RENK_B, False)}{sutun(gd, kd, RENK_D, True)}</div></section>'
+
+
+def _yigin(sayi, renkler, toplam):
+    return "".join(f'<i style="width:{100 * n / toplam:.1f}%;background:{renkler[j % len(renkler)]}" title="{_e(a)} {n}"></i>'
+                   for j, (a, n) in enumerate(sayi))
+
+
+def _soz(olay, kmap, dil):
+    """Kime söz verildi: iki kampın dayandığı kaynakların payı."""
+    b, d = _iki_kamp(olay, kmap)
+    def pay(hs):
+        c = {}
+        for x in hs:
+            v = ((x.get("an") or {}).get("dayanak") or "").strip()
+            if v:
+                c[v] = c.get(v, 0) + 1
+        lst = sorted(c.items(), key=lambda x: -x[1])
+        if len(lst) > 4:
+            lst = lst[:4] + [("Diğer" if dil == "tr" else "Other", sum(n for _, n in lst[4:]))]
+        return lst
+    pb, pd = pay(b), pay(d)
+    if not pb or not pd:
+        return ""
+    renk = ["#c9302c", "#e3a23b", "#5f8f7a", "#7a6fb0", "#9aa39e"]
+    ga, gd = _grup_ad(dil)
+    def satir(ad, lst):
+        top = sum(n for _, n in lst)
+        return (f'<div class="gr-yig"><span class="gr-yig-ad">{_e(ad)}</span><div class="gr-yig-cubuk">{_yigin(lst, renk, top)}</div>'
+                f'<div class="gr-yig-acik">' + "".join(f'<span><i style="background:{renk[j % 5]}"></i>{_e(a)} %{round(100 * n / top)}</span>'
+                                                      for j, (a, n) in enumerate(lst)) + "</div></div>")
+    bas = "Kime söz verildi" if dil == "tr" else "Whose account was carried"
+    return f'<section class="hs-bolum"><h2>{bas}</h2>{satir(ga, pb)}{satir(gd, pd)}</section>'
+
+
+def _fail_grafik(olay, kmap, dil):
+    b, d = _iki_kamp(olay, kmap)
+    def c(hs):
+        a = sum(1 for x in hs if (x.get("an") or {}).get("fail") == "acik")
+        e = sum(1 for x in hs if (x.get("an") or {}).get("fail") == "edilgen")
+        return a, e
+    (ab, eb), (ad_, ed) = c(b), c(d)
+    if not (eb or ed) or not ((ab + eb) and (ad_ + ed)):
+        return ""
+    ga, gd = _grup_ad(dil)
+    acik, edil = ("Faili açıkça yazdı", "Edilgen dil") if dil == "tr" else ("Named the perpetrator", "Passive voice")
+    def satir(ad, a, e):
+        t = a + e
+        return (f'<div class="gr-yig"><span class="gr-yig-ad">{_e(ad)}</span><div class="gr-yig-cubuk">'
+                f'<i style="width:{100 * a / t:.1f}%;background:#1f7a52"></i><i style="width:{100 * e / t:.1f}%;background:#c9302c"></i></div>'
+                f'<div class="gr-yig-acik"><span><i style="background:#1f7a52"></i>{acik} %{round(100 * a / t)}</span>'
+                f'<span><i style="background:#c9302c"></i>{edil} %{round(100 * e / t)}</span></div></div>')
+    bas = "Faili yazan, gizleyen" if dil == "tr" else "Who named the perpetrator"
+    return f'<section class="hs-bolum"><h2>{bas}</h2>{satir(ga, ab, eb)}{satir(gd, ad_, ed)}</section>'
+
+
+_SAYI = re.compile(r"(\d[\d.,]*)\s*(\w+)")
+
+
+def _rakam_grafik(olay, kmap, dil):
+    """Yayınların verdiği rakamlar bir sayı doğrusunda (en çok rastlanan birim için)."""
+    hs = [x for x in (olay or {}).get("haberler") or [] if kmap.get(x.get("k")) and (x.get("an") or {}).get("rakam")]
+    birim = {}
+    for x in hs:
+        m = _SAYI.search(x["an"]["rakam"])
+        if m:
+            try:
+                v = float(m.group(1).replace(".", "").replace(",", "."))
+            except ValueError:
+                continue
+            birim.setdefault(m.group(2).lower(), {})
+            birim[m.group(2).lower()].setdefault(x["k"], v)
+    if not birim:
+        return ""
+    ad, deg = max(birim.items(), key=lambda x: len(x[1]))
+    if len(deg) < 2 or len(set(deg.values())) < 2:
+        return ""
+    en = max(deg.values()) or 1
+    nokta = "".join(f'<li><span class="hs-z-ad">{_e(kmap[k]["ad"])}</span><span class="hs-z-iz"><i style="left:{100 * v / en:.1f}%;'
+                    f'background:{RENK_B if almanak.kamp(kmap[k]) in almanak.BOLGE_ICI else RENK_D if almanak.kamp(kmap[k]) in almanak.DIS else "#9aa39e"}"></i></span>'
+                    f'<span class="hs-z-sa">{int(v) if v == int(v) else v} {_e(ad)}</span></li>'
+                    for k, v in sorted(deg.items(), key=lambda x: -x[1]))
+    bas = "Verilen rakamlar" if dil == "tr" else "Figures reported"
+    return f'<section class="hs-bolum"><h2>{bas}</h2><ul class="hs-zaman">{nokta}</ul></section>'
+
+
+def _yayilis(olay, kmap, dil):
+    """İlk 24 saatte saat saat haber sayısı, iki kamp üst üste."""
+    b, d = _iki_kamp(olay, kmap)
+    tum_t = [x["t"] for x in b + d if x.get("t")]
+    if len(tum_t) < 5:
+        return ""
+    t0 = dt.datetime.fromisoformat(min(tum_t))
+    kova = lambda hs: [sum(1 for x in hs if x.get("t") and int((dt.datetime.fromisoformat(x["t"]) - t0).total_seconds() // 3600) == s) for s in range(24)]
+    kb, kd = kova(b), kova(d)
+    son = max([i for i in range(24) if kb[i] or kd[i]] or [0]) + 1
+    son = max(son, 6)
+    en = max(kb[:son] + kd[:son]) or 1
+    W, Hh = 600, 120
+    w = W / son
+    cub = "".join(f'<rect x="{i * w + 1:.1f}" y="{Hh - Hh * kb[i] / en:.1f}" width="{w / 2 - 1:.1f}" height="{Hh * kb[i] / en:.1f}" fill="{RENK_B}"/>'
+                  f'<rect x="{i * w + w / 2:.1f}" y="{Hh - Hh * kd[i] / en:.1f}" width="{w / 2 - 1:.1f}" height="{Hh * kd[i] / en:.1f}" fill="{RENK_D}"/>'
+                  for i in range(son))
+    etk = "".join(f'<text x="{i * w + w / 2:.1f}" y="{Hh + 14}" text-anchor="middle" font-size="10" fill="#6f7772">{i}</text>' for i in range(0, son, max(1, son // 8)))
+    ga, gd = _grup_ad(dil)
+    bas = "Haberin yayılışı (ilk saatler)" if dil == "tr" else "How the story spread (first hours)"
+    alt = "saat" if dil == "tr" else "hours"
+    return (f'<section class="hs-bolum"><h2>{bas}</h2><svg class="gr-svg" viewBox="0 0 {W} {Hh + 20}" role="img">{cub}{etk}</svg>'
+            f'<div class="gr-yig-acik"><span><i style="background:{RENK_B}"></i>{ga}</span><span><i style="background:{RENK_D}"></i>{gd}</span>'
+            f'<span>{"x ekseni: ilk haberden bu yana " + alt if dil == "tr" else "x axis: " + alt + " since the first report"}</span></div></section>')
+
+
+def _seyir(olay, tum, dil):
+    """Konunun seyri: son 30 günde aynı konudaki olay sayısı (gün gün)."""
+    if not olay:
+        return ""
+    kw = _kelimeler(olay.get("baslik"))
+    yer = ((olay.get("yer") or {}).get("ad") or "").lower() if isinstance(olay.get("yer"), dict) else ""
+    gun = {}
+    for o in tum.values():
+        oy = ((o.get("yer") or {}).get("ad") or "").lower() if isinstance(o.get("yer"), dict) else ""
+        ortak = len(kw & _kelimeler(o.get("baslik")))
+        if o.get("ilk") and (ortak >= 2 or (yer and oy == yer and ortak >= 1)):
+            g = o["ilk"][:10]
+            gun[g] = gun.get(g, 0) + len(o.get("haberler", []))
+    if len(gun) < 3:
+        return ""
+    son = dt.date.fromisoformat(max(gun))
+    gunler = [(son - dt.timedelta(days=i)).isoformat() for i in range(29, -1, -1)]
+    deg = [gun.get(g, 0) for g in gunler]
+    en = max(deg) or 1
+    W, Hh = 600, 80
+    nok = " ".join(f"{i * W / 29:.1f},{Hh - Hh * v / en:.1f}" for i, v in enumerate(deg))
+    bas = "Konunun seyri (30 gün)" if dil == "tr" else "Story over 30 days"
+    acik = "Aynı konudaki haber sayısı, gün gün" if dil == "tr" else "Reports on the same topic, per day"
+    return (f'<section class="hs-bolum"><h2>{bas}</h2><p><small>{acik}</small></p><svg class="gr-svg" viewBox="0 0 {W} {Hh + 16}" role="img">'
+            f'<polyline points="0,{Hh} {nok} {W},{Hh}" fill="rgba(201,48,44,.12)" stroke="none"/>'
+            f'<polyline points="{nok}" fill="none" stroke="#c9302c" stroke-width="2"/>'
+            f'<text x="0" y="{Hh + 14}" font-size="10" fill="#6f7772">{gunler[0][5:]}</text>'
+            f'<text x="{W}" y="{Hh + 14}" font-size="10" fill="#6f7772" text-anchor="end">{gunler[-1][5:]}</text></svg></section>')
+
+
 def harita_yaz(kok, olay):
     """Olayın yeri için küçük karanlık harita (data/h/harita/<olay>.svg); adres ya da boş."""
     yer = olay.get("yer") if isinstance(olay.get("yer"), dict) else None
@@ -452,7 +627,9 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
             + paylas + kapak + denge
             + f'<div class="mk-metin">{govde}{alinti}{ayrica}</div>'
             + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
-            + _zaman(olay, kmap, dil) + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
+            + _dil_terazisi(olay, kmap, dil) + _soz(olay, kmap, dil) + _fail_grafik(olay, kmap, dil) + _rakam_grafik(olay, kmap, dil)
+            + _zaman(olay, kmap, dil) + _yayilis(olay, kmap, dil) + _seyir(olay, tum or {}, dil)
+            + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
             + (f'<div class="mk-etiket">{etiket}</div>' if etiket else "")
             + f'<p class="mk-not">{T[dil]["not"]}</p>'
             + "</div>")
@@ -601,7 +778,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     surum = simdi.strftime("%Y%m%d")
     # Haber -> olay (son SAKLA_GUN+1 günün olay arşivinden; yeni günün kaydı eskisinin üstüne yazar)
     olay_of, tum = {}, {}
-    for n in range(SAKLA_GUN + 1, -1, -1):
+    for n in range(30, -1, -1):
         g = (simdi - dt.timedelta(days=n)).date().isoformat()
         try:
             for o in json.load(open(os.path.join(kok, "data", "olay-arsiv", g + ".json"), encoding="utf-8")):

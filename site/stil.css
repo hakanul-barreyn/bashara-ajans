@@ -477,3 +477,19 @@ body.odak-modu #gundem,body.odak-modu #analizler,body.odak-modu .suzgec{display:
 .anlatim-cipler span.iyi{background:#e5f4ec;border-color:#bfe2cf;color:#1d5a3e}
 .anlatim-cipler span.kotu{background:#fbeaea;border-color:#efc4c4;color:#7a2424}
 @media (max-width:560px){.anlatim-liste{grid-template-columns:minmax(0,1fr)}.anlatim-liste dd{margin-bottom:6px}}
+
+/* yayın karnesi ve sessizlik endeksi */
+.karne-bolum{margin:18px 0 26px;padding:18px 20px;background:var(--kart);color:var(--k-ink);border-radius:16px;box-shadow:var(--golge);min-width:0}
+.karne-bolum h2{margin:0 0 6px}
+.karne-arac{margin:10px 0}
+.karne-arac select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--k-cizgi);background:var(--yuzey);color:var(--k-ink)}
+.karne-sar{overflow-x:auto}
+.karne{width:100%;border-collapse:collapse;font-size:.86rem;min-width:640px}
+.karne th{text-align:left;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--k-soluk);padding:8px 8px;border-bottom:2px solid var(--k-ink);cursor:pointer;white-space:nowrap}
+.karne td{padding:8px;border-bottom:1px solid var(--k-cizgi);white-space:nowrap}
+.karne td:first-child{font-weight:700}
+.karne-cubuk{display:inline-block;width:70px;height:8px;border-radius:4px;background:var(--k-cizgi);margin-right:8px;vertical-align:middle;overflow:hidden}
+.karne-cubuk i{display:block;height:100%}
+.ses-svg{width:100%;height:auto;max-height:240px;color:var(--k-ink)}
+.ses-not{margin:8px 0 0;font-size:.9rem;color:var(--k-ink2)}
+.sayfa > .karne-bolum{grid-column:1/-1}

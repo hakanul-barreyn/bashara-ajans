@@ -36,6 +36,7 @@ import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
 import instagram  # noqa: E402
 import sayfalar  # noqa: E402
+import karne  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
 import diller  # noqa: E402
@@ -1079,6 +1080,7 @@ def main():
         ekler.rss_yaz(KOK, tut, SIMDI)
         log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")
         sayfalar.yaz(KOK, tut, kaynaklar, SIMDI, log=log)
+        karne.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:  # arşiv hatası toplamayı durdurmasın
         log(f"Arşiv/RSS hatası: {e}")
     # Almanak: biten hafta / ay / yıl için kesin bülten, sürenler için günlük taslak

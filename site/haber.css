@@ -112,3 +112,18 @@
 .hs-golge b{font-family:var(--serif)}
 .hs-g-tur{display:block;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mk-vurgu);margin-bottom:3px}
 .hs-sessiz{font-family:var(--serif);font-size:1.2rem!important;color:var(--mk-vurgu)!important;font-weight:700}
+/* grafikler */
+.gr-tz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.gr-tz h3{margin:0 0 8px;font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mk-soluk)}
+.gr-tz-satir{display:grid;grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) 1.6rem;gap:8px;align-items:center;font-size:.9rem;margin-bottom:6px}
+.gr-tz-satir span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif);font-weight:700}
+.gr-tz-satir i{display:block;height:10px;border-radius:2px}
+.gr-tz-satir b{font-family:var(--mono);font-size:.76rem;color:var(--mk-soluk);text-align:right}
+.gr-yig{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.gr-yig-ad{font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mk-soluk)}
+.gr-yig-cubuk{display:flex;height:14px;border-radius:3px;overflow:hidden;background:var(--mk-cizgi)}
+.gr-yig-cubuk i{display:block;height:100%}
+.gr-yig-acik{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--mk-yazi2)}
+.gr-yig-acik i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+.gr-svg{width:100%;height:auto;display:block}
+@media (max-width:560px){.gr-tz{grid-template-columns:minmax(0,1fr)}}
