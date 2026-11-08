@@ -673,10 +673,19 @@
     const kaydir = window.scrollY;
     akis.innerHTML = "";
     gundemCiz(); analizCiz(); seritCiz();
+    // Paylaşılan bağlantı (#h-…): sayfa doğrudan o haberle açılır; gündem, analizler ve süzgeç gizlenir
+    const odakModu = !!odakId && !secOlay;
+    document.body.classList.toggle("odak-modu", odakModu);
+    if (odakModu) {
+      const geri = el("button", "kapat-olay odak-geri", "← Tüm haberler"); geri.type = "button";
+      geri.onclick = () => { history.replaceState(null, "", location.pathname + location.search); odakId = null; kac = SAYFA; ciz(true); };
+      akis.appendChild(geri);
+    }
     if (secOlay) {
       akis.appendChild(olayAyrinti(secOlay));
     } else if (odakId && !odak) {
-      const n = el("p", "bos"); n.append("Paylaşılan haber artık akışta değil (akış son iki günü gösteriyor). ");
+      if (arsivAraniyor !== odakId) arsivdeBul(odakId);
+      const n = el("p", "bos", arsivBulunamadi === odakId ? "Paylaşılan haber bulunamadı. " : "Paylaşılan haber arşivde aranıyor… ");
       const a = el("a", null, "Arşivde ara"); a.href = "arsiv.html"; n.appendChild(a); akis.appendChild(n);
     }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
@@ -692,7 +701,7 @@
       const n = el("p", "nota"); n.append("Hepsi bu kadar. Yayınların kim olduğunu ");
       const a = el("a", null, "Kaynaklar"); a.href = "kaynaklar.html"; n.appendChild(a); n.append(" sayfasında bulabilirsin."); akis.appendChild(n);
     }
-    if (basaDon) { if (window.scrollY > 0) window.scrollTo({ top: 0 }); } else window.scrollTo({ top: kaydir });
+    if (basaDon || odakModu) { if (window.scrollY > 0) window.scrollTo({ top: 0 }); } else window.scrollTo({ top: kaydir });
     const s = $("sayilar"); s.innerHTML = ""; s.hidden = !!secOlay;
     s.appendChild(el("b", null, gor.length.toLocaleString(YR))); s.append(" haber · ");
     s.appendChild(el("b", null, gor.filter((h) => OZ(h)).length.toLocaleString(YR))); s.append(" Türkçe · ");
@@ -722,7 +731,7 @@
       kaynaklar = {}; k.forEach((x) => (kaynaklar[x.id] = x));
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
       guncellendi = h.guncellendi;
-      haberIdx = {}; haberler.forEach((x) => (haberIdx[x.id] = x));
+      haberIdx = { ...arsivBulunan }; haberler.forEach((x) => (haberIdx[x.id] = x));
       hashOku();
       ciz(ilk); ilk = false;
       bilinen = new Set(haberler.map((x) => x.id));
@@ -743,6 +752,26 @@
     $("fKonu").appendChild(c);
   });
   $("fKonuSil").onclick = () => { konu = null; ciz(true); };
+  let arsivAraniyor = null, arsivBulunamadi = null;
+  const arsivBulunan = {};
+  async function arsivdeBul(id) {
+    arsivAraniyor = id;
+    try {
+      const dizin = await (await fetch("data/arsiv/dizin.json?t=" + Date.now())).json();
+      for (const g of dizin.slice(0, 21)) {
+        const gun = await (await fetch("data/arsiv/" + g.gun + ".json")).json();
+        const h = (Array.isArray(gun) ? gun : gun.haberler || []).find((x) => x.id === id);
+        if (h && kaynaklar[h.kaynak]) {
+          if (h.ilgili === undefined) h.ilgili = true;
+          haberIdx[h.id] = h; arsivBulunan[h.id] = h;
+          if (odakId === id) ciz(true);
+          return;
+        }
+      }
+    } catch (e) { /* arşiv okunamadı */ }
+    arsivBulunamadi = id;
+    if (odakId === id) ciz(true);
+  }
   function hashOku() {
     const m = /^#h-([0-9a-f]+)$/.exec(location.hash); odakId = m ? m[1] : null;
     // #o-<haber kimliği>: o haberin bulunduğu olayın "kim nasıl yazdı" sayfası (Telegram bağlantıları)

@@ -448,3 +448,8 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .z-sehir.taze .z-nokta{fill-opacity:.45}
   .z-sessiz *{animation:none!important}
 }
+
+/* paylaşılan haber bağlantısıyla açılış: yalnızca o haber */
+body.odak-modu #gundem,body.odak-modu #analizler,body.odak-modu .suzgec{display:none!important}
+.odak-geri{margin:14px 0 12px}
+.haber.odak{padding-top:44px}
