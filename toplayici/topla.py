@@ -39,6 +39,7 @@ import sayfalar  # noqa: E402
 import karne  # noqa: E402
 import gecmis  # noqa: E402
 import rapor  # noqa: E402
+import isimler  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
 import diller  # noqa: E402
@@ -1106,6 +1107,10 @@ def main():
             durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
     except Exception as e:
         log(f"Almanak (geçmiş) hatası: {e}")
+    try:
+        isimler.guncelle(KOK, log=log)
+    except Exception as e:
+        log(f"İsimler hatası: {e}")
     try:
         rapor.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:

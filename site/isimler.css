@@ -1,0 +1,25 @@
+/* İsimleri vardı: sakin, okunur, ağır olmayan bir anma sayfası */
+.isim-govde{background:#f6f4ef}
+.isim{max-width:1100px;margin:0 auto;padding:40px max(16px,env(safe-area-inset-right,0px)) 90px max(16px,env(safe-area-inset-left,0px))}
+.isim-bas{max-width:760px}
+.isim-ust{margin:0 0 10px;font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#6f7772}
+.isim h1{margin:0;font-family:var(--serif);font-weight:800;font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;letter-spacing:-.02em}
+.isim-dek{margin:16px 0 0;font-family:var(--serif);font-size:clamp(1.15rem,2.2vw,1.4rem);line-height:1.5;color:#2b302d}
+.isim-not{margin:14px 0 0;font-size:.84rem;line-height:1.55;color:#6f7772;max-width:68ch}
+.isim-ara{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:22px 0 0}
+.isim-ara input{flex:1 1 300px;font:inherit;font-size:.95rem;padding:11px 14px;border-radius:10px;border:1px solid #d9d6ce;background:#fff;color:#161a18}
+.isim-ara span{font-size:.82rem;color:#6f7772}
+.isim-yaslar{display:flex;flex-wrap:wrap;gap:4px;margin:18px 0 0}
+.isim-yaslar a{min-width:34px;text-align:center;font-family:var(--mono);font-size:.74rem;padding:5px 6px;border-radius:6px;background:#fff;border:1px solid #e1ded6;color:#2b302d;text-decoration:none}
+.isim-yaslar a.cocuk{background:#161a18;color:#f3f1ec;border-color:#161a18}
+.isim-yaslar a:hover{border-color:#161a18}
+.yas-bolum{margin:46px 0 0;content-visibility:auto;contain-intrinsic-size:auto 900px}
+.yas-bas{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;border-top:2px solid #161a18;padding-top:10px;margin-bottom:14px;position:sticky;top:var(--ust,60px);background:#f6f4ef;z-index:2}
+.yas-bas h2{margin:0;font-family:var(--serif);font-size:1.7rem;font-weight:800}
+.yas-bas span{font-size:.84rem;color:#6f7772}
+.isim-izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:2px 18px}
+.kisi{padding:6px 0;border-bottom:1px solid #e6e3dc;min-width:0}
+.kisi b{display:block;font-family:"Noto Naskh Arabic","Amiri",serif;font-weight:600;font-size:1.02rem;line-height:1.4;color:#161a18}
+.kisi span{display:block;font-size:.76rem;color:#5d6460;line-height:1.35;overflow-wrap:anywhere}
+.kisi.vurgu{background:#fff4c7}
+.yas-bos{font-size:.85rem;color:#6f7772}

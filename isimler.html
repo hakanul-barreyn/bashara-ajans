@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://zbshaber.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'; manifest-src 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e0d">
+<title>İsimleri vardı | ZBS</title>
+<meta name="description" content="Gazze'de hayatını kaybeden ve kimliği belirlenen insanların isimleri, sıfır yaşından başlayarak.">
+<meta property="og:title" content="İsimleri vardı: Gazze'de hayatını kaybedenler">
+<meta property="og:description" content="Kimliği belirlenen her insanın adı, yaşına göre, bebeklerden başlayarak.">
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611082330">
+<link rel="stylesheet" href="site/isimler.css?v=202611082300">
+<script src="site/dil.js?v=202611081749"></script>
+<script src="site/marka.js?v=202611081749"></script>
+</head>
+<body class="isim-govde">
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
+    <p class="slogan">İsimleri vardı</p>
+    <nav class="menu"><a href="./">Akış</a><a href="almanak.html">Almanak</a><a href="rapor.html">Rapor</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+<main class="isim">
+  <header class="isim-bas">
+    <p class="isim-ust">Gazze · 7 Ekim 2023’ten bu yana</p>
+    <h1>İsimleri vardı</h1>
+    <p class="isim-dek">Kimliği belirlenen <b id="toplam">…</b> insan. <b id="cocuk">…</b> tanesi on sekiz yaşından küçüktü. Sayıların arkasındaki adlar, bebeklerden başlayarak, yaşlarına göre.</p>
+    <p class="isim-not">Liste, Gazze Sağlık Bakanlığı’nın kimliği belirlenmiş ölü listelerinden derlenen ve Tech for Palestine’in kamu malı olarak yayımladığı veriden geliyor. Enkaz altında kalan ve kimliği belirlenemeyenler bu listede yok; gerçek sayı daha yüksek. Yaşlar listede bildirildiği gibidir. <span id="guncel"></span></p>
+    <div class="isim-ara"><input id="ara" type="search" placeholder="Bir isim ara (Arapça ya da Latin harfleriyle)" aria-label="İsim ara"><span id="araSonuc"></span></div>
+    <nav class="isim-yaslar" id="yaslar" aria-label="Yaşlar"></nav>
+  </header>
+  <div id="liste"></div>
+</main>
+<script src="site/sayfa-isimler.js?v=202611082300"></script>
+</body>
+</html>
