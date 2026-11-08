@@ -89,6 +89,9 @@ jobs:
           if [ "$YENI" = 1 ]; then git "${KIM[@]}" commit -q -m "Veri"; else git "${KIM[@]}" commit -q --amend -m "Veri: $(date -u +'%Y-%m-%d %H:%M') UTC"; fi
           git push -q -f "$ADRES" veri
 
+      - name: Haber sayfaları
+        run: rm -rf h && (cp -r data/h h || true)
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

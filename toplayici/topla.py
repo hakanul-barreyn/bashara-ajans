@@ -35,6 +35,7 @@ import marka  # noqa: E402
 import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
 import instagram  # noqa: E402
+import sayfalar  # noqa: E402
 import diller  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1043,6 +1044,7 @@ def main():
         gun = ekler.arsive_yaz(KOK, tut)
         ekler.rss_yaz(KOK, tut, SIMDI)
         log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")
+        sayfalar.yaz(KOK, tut, kaynaklar, SIMDI, log=log)
     except Exception as e:  # arşiv hatası toplamayı durdurmasın
         log(f"Arşiv/RSS hatası: {e}")
     # Almanak: biten hafta / ay / yıl için kesin bülten, sürenler için günlük taslak

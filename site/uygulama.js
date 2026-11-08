@@ -195,7 +195,8 @@
     return kutu;
   }
 
-  function kalici(id) { return location.origin + location.pathname + "#h-" + id; }
+  // Her haberin kendi sayfası (h/<id>.html): paylaşıldığında önizlemede başlık, özet ve yayın adı görünür
+  function kalici(id) { return location.origin + location.pathname.replace(/[^/]*$/, "") + "h/" + id + ".html"; }
   function paylasDugme(h) {
     const kutu = el("span", "paylas");
     const b = el("button", "eylem", "Paylaş"); b.type = "button"; b.setAttribute("aria-expanded", "false");

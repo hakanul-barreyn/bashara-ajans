@@ -1,6 +1,6 @@
 // ZBS hizmet çalışanı: sayfa iskeletini önbellekte tutar, haber verisini her zaman ağdan ister.
 // Ağ yoksa son görülen veriyi gösterir.
-const SURUM = "zbs-202611080355";
+const SURUM = "zbs-202611080659";
 const ISKELET = ["./", "index.html", "kaynaklar.html", "arsiv.html", "hakkimizda.html", "almanak.html", "site/dil.js", "manifest.webmanifest", "site/logo.svg", "site/simge-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -12,6 +12,7 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== "GET" || u.origin !== location.origin) return;
+  if (/\/h\/[0-9a-f]+\.html$/.test(u.pathname)) return;   // haber sayfaları önbelleğe alınmaz
   // Veri ve sayfalar: önce ağ, olmazsa önbellek
   e.respondWith(
     fetch(e.request).then((r) => {

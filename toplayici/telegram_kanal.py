@@ -108,7 +108,7 @@ def olay_metni(o, haberler, kaynaklar, site):
 
 def analiz_metni(h, k, site):
     satir = [f"📝 <b>Analiz · {_e(k.get('ad'))}</b>", "", f"<b>{_e(h['baslik_tr'])}</b>", "", _e(h.get("ozet_tr")),
-             "", f'<a href="{_e(h["url"])}">Yazıyı oku ↗</a> · <a href="{site}#h-{h["id"]}">{_e(marka.oku()["ad"])}’de</a>']
+             "", f'<a href="{_e(h["url"])}">Yazıyı oku ↗</a> · <a href="{site}h/{h["id"]}.html">{_e(marka.oku()["ad"])}’de</a>']
     return "\n".join(satir)
 
 
