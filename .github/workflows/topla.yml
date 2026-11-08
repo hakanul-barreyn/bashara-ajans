@@ -7,7 +7,16 @@ name: Haberleri topla
 on:
   schedule:
     - cron: "*/15 * * * *"   # 15 dakikada bir (GitHub yoğunken birkaç dakika gecikebilir)
-  workflow_dispatch: {}       # Actions sekmesinden elle çalıştırmak için
+  workflow_dispatch:          # Actions sekmesinden elle çalıştırmak için
+    inputs:
+      ig_simdi:
+        description: "Instagram: kuyruktaki gönderiyi saat aralığını beklemeden şimdi gönder"
+        type: boolean
+        default: false
+      ig_oge:
+        description: "Instagram: yalnızca bu kuyruk ögesini gönder (boş: sıradaki)"
+        type: string
+        default: ""
   push:
     branches: [main]          # kod değişince siteyi hemen yenile
 
@@ -60,6 +69,8 @@ jobs:
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           INSTAGRAM_HESAP: ${{ vars.INSTAGRAM_HESAP }}
           IG_GUNLUK: ${{ vars.IG_GUNLUK }}
+          IG_SIMDI: ${{ inputs.ig_simdi }}
+          IG_OGE: ${{ inputs.ig_oge }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python toplayici/topla.py
 

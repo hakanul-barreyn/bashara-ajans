@@ -41,6 +41,10 @@ import marka
 # Deneysel dönem: günde tek gönderi, yalnızca Türkiye saatiyle akşam (izlenmenin en yüksek olduğu saatler).
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 1)
 IG_SAAT = (19, 22)                # Türkiye saati; gönderi bu aralıkta çıkar
+KART_SURUM = 2                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
+# Actions'tan elle "şimdi gönder": saat aralığı ve iki gönderi arası bekleme bir kerelik atlanır; IG_OGE verilirse o öge gönderilir
+IG_SIMDI = os.environ.get("IG_SIMDI", "").lower() == "true"
+IG_OGE = os.environ.get("IG_OGE", "").strip()
 # Gönderimi tamamen durdurmak için True yap (kartlar yine hazırlanır).
 DURAKLAT = False
 IG_ARA = 150                      # dakika
@@ -337,7 +341,7 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
     tut = []
     for q in kay["kuyruk"]:
         bayat = q["tur"] != "bulten" and (simdi - dt.datetime.fromisoformat(q["hazir"])).total_seconds() > 24 * 3600
-        if bayat or q.get("deneme", 0) >= 3:
+        if bayat or q.get("deneme", 0) >= 3 or (q["tur"] != "bulten" and q.get("surum", 1) < KART_SURUM):
             shutil.rmtree(_klasor(kok, q["id"]), ignore_errors=True)
         else:
             tut.append(q)
@@ -436,7 +440,7 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
         reel = bool(IG_REELS_HER) and kay["sayac"] % IG_REELS_HER == 0 and ig_video.uret(
             [os.path.join(k, f"{n}.jpg") for n in range(1, len(svgler) + 1)], os.path.join(k, "video.mp4"), log=log)
         kay["kuyruk"].append({"id": kimlik, "tur": tur, "olay": o["id"], "haberler": list(o["haberler"]), "kart": len(svgler),
-                              "reel": reel, "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan, kunye), "hazir": simdi.isoformat()})
+                              "surum": KART_SURUM, "reel": reel, "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan, kunye), "hazir": simdi.isoformat()})
         sirada.append(ids)
         yeni += 1
         if len(kay["kuyruk"]) >= 3:
@@ -646,17 +650,21 @@ def yayinla(kok, durum, simdi, log=print):
         _jeton_yenile(kay, token, simdi, log)
     _hatirlat(kay, simdi, log)
     tr_saat = (simdi + dt.timedelta(hours=3)).hour
-    if not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
+    if not IG_SIMDI and not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
         return 0
     gun = [t for t in kay.get("gonderim", []) if (simdi - dt.datetime.fromisoformat(t)).total_seconds() < 20 * 3600]
     kay["gonderim"] = gun
-    if len(gun) >= IG_GUNLUK or (gun and (simdi - dt.datetime.fromisoformat(max(gun))).total_seconds() < IG_ARA * 60):
+    if not IG_SIMDI and len(gun) >= IG_GUNLUK or not IG_SIMDI and (gun and (simdi - dt.datetime.fromisoformat(max(gun))).total_seconds() < IG_ARA * 60):
         return 0
     site = site_adresi()
     if not site:
         return 0
     # Sitede yayımlanmış (bir önceki çalıştırmada hazırlanmış) ilk öge
     for q in kay["kuyruk"]:
+        if IG_OGE and q["id"] != IG_OGE:
+            continue
+        if q["tur"] != "bulten" and q.get("surum", 1) < KART_SURUM:
+            continue
         if (simdi - dt.datetime.fromisoformat(q["hazir"])).total_seconds() < 8 * 60:
             continue
         gorseller = [f"{site}data/instagram/{q['id']}/{n}.jpg" for n in range(1, q["kart"] + 1)]
