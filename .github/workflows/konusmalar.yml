@@ -1,0 +1,42 @@
+name: Resmî konuşmalar
+
+# Cumhurbaşkanlığı sitesindeki konuşmalar: Filistin vurgusunun sayımı. Günde bir; veri "konusma" dalında.
+on:
+  schedule:
+    - cron: "41 3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: konusma
+  cancel-in-progress: false
+
+jobs:
+  topla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - name: Önceki veri
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 --branch konusma "$ADRES" konusma 2>/dev/null || (mkdir -p konusma && git -C konusma init -q -b konusma)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Konuşmalar
+        run: python toplayici/konusmalar.py konusma 2400
+      - name: Kaydet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd konusma
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add -A
+          KIM=(-c user.name="zbs-konusma" -c user.email="41898282+github-actions[bot]@users.noreply.github.com")
+          if git rev-parse -q --verify HEAD >/dev/null; then git "${KIM[@]}" commit -q --amend -m "Konuşmalar: $(date -u +'%Y-%m-%d %H:%M') UTC"; else git "${KIM[@]}" commit -q -m "Konuşmalar"; fi
+          git push -q -f "$ADRES" HEAD:konusma
