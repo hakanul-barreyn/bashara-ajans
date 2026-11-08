@@ -1,4 +1,4 @@
-// Sayfa kodu: haber akışı tek sütunda; bölge haritası Gündem'in altında ayrı bir bölüm.
+// Sayfa kodu: haber akışı tek sütunda; bölge haritası akışın içinde (6. haberden sonra) ayrı bir bölüm.
 // Bir kartın üzerine gelince arkadaki haritada o haberin şehri parlar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
@@ -78,6 +78,7 @@
   const zx = (lon) => (lon - ZB.bat) * ZB.olcek, zy = (lat) => (ZB.kuzey - lat) * ZB.olcek;
   const SABIT_ZEMIN = matchMedia("(max-width:820px),(hover:none)").matches;
   const zemin = $("zemin"), SVGNS = "http://www.w3.org/2000/svg";
+  const HARITA_BOLUM = $("haritaBolum"), HARITA_SIRA = 6;   // harita bölümü akışta 6. haberden sonra durur
   const zEl = (t, at) => { const e = document.createElementNS(SVGNS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
   let zNoktalar = null;
   if (zemin) {
@@ -815,7 +816,9 @@
       if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
       if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
       akis.appendChild(k);
+      if (i === HARITA_SIRA - 1 && HARITA_BOLUM && !secOlay) akis.appendChild(HARITA_BOLUM);
     });
+    if (HARITA_BOLUM) { if (secOlay) HARITA_BOLUM.remove(); else if (!HARITA_BOLUM.isConnected || HARITA_BOLUM.parentNode !== akis) akis.appendChild(HARITA_BOLUM); }
     if (gor.length > kac) akis.appendChild(el("p", "nota nota-son", "Yükleniyor…"));
     else if (gor.length) {
       const n = el("p", "nota"); n.append("Hepsi bu kadar. Yayınların kim olduğunu ");
