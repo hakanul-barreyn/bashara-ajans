@@ -1,0 +1,343 @@
+"""Geriye dönük taramadan Almanak: 7 Ekim 2023'ten toplayıcının başladığı güne kadar haftalık, aylık ve yıllık bültenler.
+
+İki adım:
+1) ozetle()  — tarama iş akışında çalışır. "tarama" dalındaki milyonlarca başlığı (veri/<kaynak>/<yıl>.jsonl.gz) gün gün
+   sayar ve küçük bir özet yazar: tarama/gecmis.json.gz. Yapay zekâ kullanılmaz.
+2) bultenler() — toplayıcıda çalışır. Özeti indirir, canlı arşivin başladığı günden önceki dönemler için
+   data/bulten/<tür>/<anahtar>.json bültenleri yazar (kaynak: "tarama").
+
+Bu bültenlerde yalnızca başlıklardan ölçülebilenler var: kim ne kadar yazdı, Gazze ne kadar yer buldu, hangi kelimeler
+kullanıldı (dil sayacı, almanak.TERIMLER ile aynı kalıplar), yayın yayın dil. Olay kümeleri ve bakış ölçümü yok;
+bunlar ikinci aşamada (önemli dönemlerin yapay zekâyla işlenmesi) eklenecek.
+"""
+import datetime as dt
+import gzip
+import json
+import os
+import re
+import sys
+import unicodedata
+import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import almanak  # noqa: E402
+
+BASLANGIC = dt.date(2023, 10, 7)
+GAZZE = re.compile(r"gazze|gaza|غزة|غزه|עזה|gazastreifen|striscia", re.I)
+OZET_SURUM = 1
+BULTEN_SURUM = 1
+
+
+def katla(s):
+    """Adresten türetilen başlıklarda (s=1) harf işaretleri yok: 'soykirim'. Karşılaştırma için her şeyi sadeleştir."""
+    s = s.lower().replace("ı", "i").replace("İ", "i")
+    return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+
+
+TERIM = [(a, re.compile(k, re.I), re.compile(katla(k), re.I)) for a, _, _, k in almanak.TERIMLER]
+ANAHTARLAR = [a for a, _, _ in TERIM]
+
+
+def _yan(k):
+    c = almanak.kamp(k)
+    return "dis" if c in almanak.DIS else "ic" if c in almanak.BOLGE_ICI and k.get("cizgi") != "ik" else None
+
+
+# ------------------------------------------------------------------ 1) tarama verisinden özet
+# Wayback (cdx) kayıtlarında tarih, sayfanın arşive alındığı andır; yayın tarihi değil. Eski bir yazı 2024'te yeniden
+# arşivlenince 2024'e sayılmasın diye cdx kayıtlarından yalnızca adresinde tarih olanlar (/2024/01/15/, 20240115) alınır,
+# tarih adresten okunur. Adresinde tarih olmayan cdx kayıtları tarihlenemez ve Almanak'a girmez (sayısı özete yazılır).
+# (Haber numarasından tarih tahmini denendi: arşivin boş ayları yüzünden aylık sayıları bozduğu için bırakıldı.)
+URL_TARIH = re.compile(r"/(20[12]\d)[/-](0[1-9]|1[0-2])(?:[/-](0[1-9]|[12]\d|3[01]))?(?=[/-]|$)|[/_-](20[12]\d)(0[1-9]|1[0-2])([0-3]\d)(?=[/_-]|$)")
+
+
+def _cdx_tarihle(kayitlar):
+    """kayitlar: [{'u','t',...}] (aynı kaynak, cdx). Döndürür: {url: 'YYYY-MM-DD' | None}, yöntem adı."""
+    ilk = {}
+    for r in kayitlar:
+        if r["u"] not in ilk or r["t"] < ilk[r["u"]]:
+            ilk[r["u"]] = r["t"]
+    sonuc = {}
+    tarihli = 0
+    for u in ilk:
+        m = URL_TARIH.search(u)
+        if m:
+            y, a, g = (m.group(1), m.group(2), m.group(3)) if m.group(1) else (m.group(4), m.group(5), m.group(6))
+            sonuc[u] = f"{y}-{a}-{g or '15'}"
+            tarihli += 1
+    return {u: sonuc.get(u) for u in ilk}, ("adres" if tarihli >= 0.5 * len(ilk) else "kismi" if tarihli else "yok")
+
+
+def ozetle(tarama_kok, kaynaklar, log=print):
+    K = {str(k["id"]): k for k in kaynaklar}
+    gun = {}      # "2024-01-05": {"k": {kamp: n}, "ic": n, "dis": n, "gi": n, "gd": n, "t": {terim: [ic, dis]}}
+    yayin = {}    # "2024-01-05": {kid: n | [n, {terim: c}]}
+    ornek = {}    # "2024-01": {terim: {"ic": [[kid, başlık, url, gün]], "dis": [...]}}
+    tarih_yontem, toplu_gun = {}, {}
+    toplam = 0
+    kok = os.path.join(tarama_kok, "veri")
+    for kid in sorted(os.listdir(kok)) if os.path.isdir(kok) else []:
+        k = K.get(kid)
+        if not k:
+            continue
+        kmp, yan = almanak.kamp(k), _yan(k)
+        kayitlar = []
+        for ad in sorted(os.listdir(os.path.join(kok, kid))):
+            if not ad.endswith(".jsonl.gz"):
+                continue
+            try:
+                with gzip.open(os.path.join(kok, kid, ad), "rt", encoding="utf-8") as f:
+                    for satir in f:
+                        try:
+                            r = json.loads(satir)
+                        except ValueError:
+                            continue
+                        if r.get("u") and r.get("t") and r.get("b"):
+                            kayitlar.append(r)
+            except (OSError, EOFError) as e:
+                log(f"Geçmiş özeti: {kid}/{ad} okunamadı: {e}")
+        cdx = [r for r in kayitlar if r.get("m") == "cdx"]
+        cdx_tarih, yontem = _cdx_tarihle(cdx) if cdx else ({}, "")
+        if cdx:
+            tarihsiz = sum(1 for v in cdx_tarih.values() if not v)
+            tarih_yontem[kid] = {"yontem": yontem, "adres": len(cdx_tarih), "tarihsiz": tarihsiz}
+        gorulen, tarihli = set(), []
+        for r in sorted(kayitlar, key=lambda r: r["t"]):
+            if r["u"] in gorulen:
+                continue
+            gorulen.add(r["u"])
+            g = cdx_tarih.get(r["u"]) if r.get("m") == "cdx" else r["t"][:10]
+            if g and g >= BASLANGIC.isoformat():
+                tarihli.append((g, r))
+        # Site haritasındaki "son değişiklik" tarihi bazen binlerce eski yazıda aynı güne toplu yazılır (ör. bir sitenin
+        # arşivini yenilemesi). Bir kaynağın bir günü, o kaynağın olağan günlük sayısının 6 katını (en az 200) aşıyorsa
+        # o gün toplu güncelleme sayılır ve dışarıda bırakılır.
+        gunluk_say = {}
+        for g, _ in tarihli:
+            gunluk_say[g] = gunluk_say.get(g, 0) + 1
+        if gunluk_say:
+            orta = sorted(gunluk_say.values())[len(gunluk_say) // 2]
+            sinir = max(200, 6 * orta)
+            toplu = {g for g, n in gunluk_say.items() if n > sinir}
+            if toplu:
+                toplu_gun[kid] = sorted(toplu)
+                tarihli = [(g, r) for g, r in tarihli if g not in toplu]
+        for g, r in tarihli:
+            b = r["b"]
+            toplam += 1
+            d = gun.setdefault(g, {"k": {}, "ic": 0, "dis": 0, "gi": 0, "gd": 0, "t": {}})
+            d["k"][kmp] = d["k"].get(kmp, 0) + 1
+            kb = katla(b)
+            bulunan = [a for a, r1, r2 in TERIM if r1.search(b) or r2.search(kb)]
+            y = yayin.setdefault(g, {})
+            eski = y.get(kid, 0)
+            n, tt = (eski, {}) if isinstance(eski, int) else (eski[0], eski[1])
+            for a in bulunan:
+                tt[a] = tt.get(a, 0) + 1
+            y[kid] = [n + 1, tt] if tt else n + 1
+            if not yan:
+                continue
+            d[yan] += 1
+            if GAZZE.search(b) or GAZZE.search(kb):
+                d["gi" if yan == "ic" else "gd"] += 1
+            for a in bulunan:
+                c = d["t"].setdefault(a, [0, 0])
+                c[0 if yan == "ic" else 1] += 1
+                o = ornek.setdefault(g[:7], {}).setdefault(a, {"ic": [], "dis": []})[yan]
+                if len(o) < 4 and r.get("s") != 1:   # örnek olarak özgün başlıkları tercih et
+                    o.append([int(kid), b[:180], r.get("u"), g])
+    ilerleme = {}
+    try:
+        ilerleme = json.load(open(os.path.join(tarama_kok, "ilerleme.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        pass
+    veri = {"surum": OZET_SURUM, "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat(), "baslik": toplam,
+            "tarama_bitti": ilerleme.get("kalan_gorev") == 0, "ilerleme": ilerleme, "tarih_yontem": tarih_yontem,
+            "tarihsiz": sum(v["tarihsiz"] for v in tarih_yontem.values()), "toplu_gun": toplu_gun,
+            "gun": gun, "yayin": yayin, "ornek": ornek}
+    yol = os.path.join(tarama_kok, "gecmis.json.gz")
+    with gzip.open(yol, "wt", encoding="utf-8") as f:
+        json.dump(veri, f, ensure_ascii=False, separators=(",", ":"))
+    log(f"Geçmiş özeti: {toplam} başlık, {len(gun)} gün; {os.path.getsize(yol) // 1024} KB")
+    return veri
+
+
+# ------------------------------------------------------------------ 2) özetten bültenler
+def _indir(kok, log):
+    """Özeti tarama dalından indirir (herkese açık depo); 6 saatte bir yeniler."""
+    yol = os.path.join(kok, "data", "bulten", "gecmis-ozet.json.gz")
+    zyol = os.path.join(kok, "data", "bulten", "gecmis-indirme.json")
+    depo = os.environ.get("GITHUB_REPOSITORY", "")
+    son = almanak._oku(zyol, {}).get("zaman")
+    taze = os.path.exists(yol) and son and dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(son) < dt.timedelta(hours=6)
+    if depo and not taze:
+        try:
+            istek = urllib.request.Request(f"https://raw.githubusercontent.com/{depo}/tarama/gecmis.json.gz",
+                                           headers={"User-Agent": "zbs-toplayici"})
+            with urllib.request.urlopen(istek, timeout=60) as r:
+                icerik = r.read()
+            os.makedirs(os.path.dirname(yol), exist_ok=True)
+            with open(yol, "wb") as f:
+                f.write(icerik)
+            almanak._yaz(zyol, {"zaman": dt.datetime.now(dt.timezone.utc).isoformat()})
+        except Exception as e:
+            log(f"Geçmiş özeti indirilemedi: {e}")
+    try:
+        with gzip.open(yol, "rt", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError, EOFError):
+        return None
+
+
+def _gunler(bas, bit):
+    g = bas
+    while g < bit:
+        yield g.isoformat()
+        g += dt.timedelta(days=1)
+
+
+def istatistik(oz, bas, bit, kaynaklar):
+    K = {k["id"]: k for k in kaynaklar}
+    hacim, say, terim, gunluk = {}, {"ic": 0, "dis": 0}, {a: [0, 0] for a in ANAHTARLAR}, []
+    yay = {}
+    for g in _gunler(max(bas, BASLANGIC), bit):
+        d = oz["gun"].get(g)
+        gunluk.append({"gun": g, "ic": d["ic"] if d else 0, "dis": d["dis"] if d else 0, "ic_gazze": d["gi"] if d else 0,
+                       "dis_gazze": d["gd"] if d else 0, "ic_uzaklik": None, "dis_uzaklik": None, "ic_n": 0, "dis_n": 0})
+        if not d:
+            continue
+        for c, n in d["k"].items():
+            hacim[c] = hacim.get(c, 0) + n
+        say["ic"] += d["ic"]
+        say["dis"] += d["dis"]
+        for a, (i, s) in d["t"].items():
+            terim[a][0] += i
+            terim[a][1] += s
+        for kid, v in (oz["yayin"].get(g) or {}).items():
+            n, tt = (v, {}) if isinstance(v, int) else (v[0], v[1])
+            r = yay.setdefault(int(kid), {"n": 0, "t": {}})
+            r["n"] += n
+            for a, c in tt.items():
+                r["t"][a] = r["t"].get(a, 0) + c
+    toplam = sum(hacim.values())
+    if not toplam:
+        return None
+    ornekler = {a: {"ic": [], "dis": []} for a in ANAHTARLAR}
+    ay = dt.date(bas.year, bas.month, 1)
+    while ay < bit:
+        for a, d in (oz["ornek"].get(ay.isoformat()[:7]) or {}).items():
+            for yan in ("ic", "dis"):
+                for kid, b, u, g in d.get(yan, []):
+                    if bas.isoformat() <= g < bit.isoformat() and len(ornekler[a][yan]) < 3 and K.get(kid):
+                        ornekler[a][yan].append({"yayin": K[kid]["ad"], "baslik": b, "url": u, "gun": g})
+        ay = dt.date(ay.year + (ay.month == 12), ay.month % 12 + 1, 1)
+    dil = {"baslik_ic": say["ic"], "baslik_dis": say["dis"], "terimler": []}
+    for a, l, y, _ in almanak.TERIMLER:
+        i, s = terim[a]
+        dil["terimler"].append({"anahtar": a, "ad": l, "yan": y, "ic": i, "dis": s,
+                                "ic_binde": round(1000 * i / say["ic"], 1) if say["ic"] else None,
+                                "dis_binde": round(1000 * s / say["dis"], 1) if say["dis"] else None,
+                                "ornek_ic": ornekler[a]["ic"], "ornek_dis": ornekler[a]["dis"]})
+    # Yayın yayın dil: en az 30 başlığı olan yayınlarda öne çıkan kelimelerin bin başlıktaki sıklığı
+    yayin_dil = []
+    for kid, r in yay.items():
+        k = K.get(kid)
+        if not k or r["n"] < 30:
+            continue
+        yayin_dil.append({"ad": k["ad"], "kamp": almanak.kamp(k), "n": r["n"],
+                          **{a: round(1000 * r["t"].get(a, 0) / r["n"], 1) for a in ANAHTARLAR}})
+    yayin_dil.sort(key=lambda x: (almanak.KAMP_SIRA.index(x["kamp"]) if x["kamp"] in almanak.KAMP_SIRA else 99, -x["n"]))
+    gazze_ic = sum(x["ic_gazze"] for x in gunluk)
+    gazze_dis = sum(x["dis_gazze"] for x in gunluk)
+    return {
+        "kaynak": "tarama", "haber_sayisi": toplam, "olay_sayisi": 0,
+        "gun_sayisi": sum(1 for x in gunluk if x["ic"] or x["dis"]),
+        "hacim": [{"ad": c, "n": hacim[c]} for c in almanak.KAMP_SIRA if hacim.get(c)],
+        "gazze": {"ic": gazze_ic, "dis": gazze_dis,
+                  "ic_pay": round(100 * gazze_ic / say["ic"], 1) if say["ic"] else None,
+                  "dis_pay": round(100 * gazze_dis / say["dis"], 1) if say["dis"] else None},
+        "dil": dil, "gunluk": gunluk, "yayin_dil": yayin_dil,
+        # canlı bültenlerle aynı biçim: bu dönemde ölçülmeyenler boş
+        "kodlar": {}, "gecikme": None, "olum": None, "yerler": [], "yayin_tum": [], "konular": [], "kamp_bakis": [],
+        "cizgi_bakis": [], "yayin_yakin": [], "yayin_uzak": [], "konu_bakis": [], "gormeyen_israil_bati": [],
+        "gormeyen_bolge": [], "buyuk_olaylar": [],
+    }
+
+
+def _donemler(son_gun):
+    """7 Ekim 2023'ten son_gun'e (hariç) kadar tamamen biten haftalar, aylar ve yıllar."""
+    for tur in ("yillik", "aylik", "haftalik"):
+        anahtar = almanak.anahtar_bul(tur, BASLANGIC)
+        while True:
+            bas, bit, ad = almanak.donem(tur, anahtar)
+            if bit > son_gun:
+                break
+            yield tur, anahtar, bas, bit, ad
+            anahtar = almanak.anahtar_bul(tur, bit)
+
+
+def bultenler(kok, kaynaklar, simdi, en_cok=60, log=print):
+    oz = _indir(kok, log)
+    if not oz:
+        return 0
+    arsiv = os.path.join(kok, "data", "arsiv")
+    gunler = sorted(a[:10] for a in os.listdir(arsiv) if a.endswith(".json") and a[:4].isdigit()) if os.path.isdir(arsiv) else []
+    canli_bas = dt.date.fromisoformat(gunler[0]) if gunler else simdi.date()
+    klasor = os.path.join(kok, "data", "bulten")
+    yazilan = 0
+    for tur, anahtar, bas, bit, ad in _donemler(canli_bas):
+        if yazilan >= en_cok:
+            break
+        yol = os.path.join(klasor, tur, anahtar + ".json")
+        var = almanak._oku(yol, None)
+        if var and var.get("istatistik", {}).get("kaynak") != "tarama":
+            continue   # canlı bülten varsa ona dokunma
+        if var and var.get("ozet_guncellendi") == oz["guncellendi"] and var.get("surum") == BULTEN_SURUM:
+            continue
+        ist = istatistik(oz, bas, bit, kaynaklar)
+        if not ist:
+            continue
+        o_anahtar = almanak.anahtar_bul(tur, bas - dt.timedelta(days=1))
+        ob, obit, oad = almanak.donem(tur, o_anahtar)
+        if obit > BASLANGIC:
+            onc = istatistik(oz, ob, obit, kaynaklar)
+            if onc:
+                ist["onceki"] = {"ad": oad, "anahtar": o_anahtar, "haber_sayisi": onc["haber_sayisi"], "kamp_bakis": {},
+                                 "gormeyen": 0, "gecikme_medyan": None,
+                                 "dil": {t["anahtar"]: {"ic": t["ic_binde"], "dis": t["dis_binde"]} for t in onc["dil"]["terimler"]}}
+        b = {"tur": tur, "anahtar": anahtar, "ad": ad, "bas": bas.isoformat(), "bit": bit.isoformat(),
+             "taslak": not oz.get("tarama_bitti"), "uretildi": simdi.isoformat(), "istatistik": ist,
+             "anlati": (var or {}).get("anlati") if (var or {}).get("ozet_guncellendi") == oz["guncellendi"] else None,
+             "surum": BULTEN_SURUM, "ozet_guncellendi": oz["guncellendi"], "kaynak": "tarama"}
+        almanak._yaz(yol, b)
+        yazilan += 1
+    if yazilan:
+        dizin_yaz(klasor)
+        log(f"Almanak (geçmiş): {yazilan} bülten yazıldı; tarama {'bitti' if oz.get('tarama_bitti') else 'sürüyor'}")
+    return yazilan
+
+
+def dizin_yaz(klasor):
+    dizin = []
+    for tur in ("haftalik", "aylik", "yillik"):
+        d = os.path.join(klasor, tur)
+        if not os.path.isdir(d):
+            continue
+        for ad in os.listdir(d):
+            if ad.endswith(".json"):
+                b = almanak._oku(os.path.join(d, ad), None)
+                if b:
+                    dizin.append({"tur": tur, "anahtar": b["anahtar"], "ad": b["ad"], "bas": b["bas"], "taslak": b["taslak"],
+                                  "baslik": (b.get("anlati") or {}).get("baslik", ""), "haber": b["istatistik"]["haber_sayisi"],
+                                  "olay": b["istatistik"]["olay_sayisi"], "uretildi": b["uretildi"],
+                                  "kaynak": b.get("kaynak", "canli")})
+    dizin.sort(key=lambda x: (x["bas"], x["tur"]), reverse=True)
+    almanak._yaz(os.path.join(klasor, "dizin.json"), dizin)
+
+
+if __name__ == "__main__":
+    # tarama iş akışından: python toplayici/gecmis.py ozetle
+    kok = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    ks = json.load(open(os.path.join(kok, "kaynaklar.json"), encoding="utf-8"))
+    ks = ks["kaynaklar"] if isinstance(ks, dict) else ks
+    ozetle(os.path.join(kok, "tarama"), ks)

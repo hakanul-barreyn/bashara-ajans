@@ -576,7 +576,8 @@ def bultenleri_guncelle(kok, kaynaklar, anahtar_api, model, simdi, sure_var=lamb
                 if b:
                     dizin.append({"tur": tur, "anahtar": b["anahtar"], "ad": b["ad"], "bas": b["bas"], "taslak": b["taslak"],
                                   "baslik": (b.get("anlati") or {}).get("baslik", ""), "haber": b["istatistik"]["haber_sayisi"],
-                                  "olay": b["istatistik"]["olay_sayisi"], "uretildi": b["uretildi"]})
+                                  "olay": b["istatistik"]["olay_sayisi"], "uretildi": b["uretildi"],
+                                  "kaynak": b.get("kaynak", "canli")})
     dizin.sort(key=lambda x: (x["bas"], x["tur"]), reverse=True)
     if dizin or os.path.isdir(klasor):
         _yaz(os.path.join(klasor, "dizin.json"), dizin)

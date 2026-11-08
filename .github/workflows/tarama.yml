@@ -35,10 +35,13 @@ jobs:
 
       - name: Tara
         env:
-          TARAMA_SURE: "2700"
+          TARAMA_SURE: "2500"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
         run: python toplayici/tarama.py
+
+      - name: Almanak için özet
+        run: python toplayici/gecmis.py
 
       - name: Kaydet
         env:

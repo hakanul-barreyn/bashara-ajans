@@ -94,14 +94,15 @@
     const k=$("icerik");k.innerHTML="";const s=b.istatistik,a=b.anlati||{},on=s.onceki||null;KOD=s.kodlar||{};
     // başlık
     const ust=el("article","kart2");const bu=el("div","bas-ust");bu.append(TUR[b.tur]+" · "+b.ad);if(b.taslak)bu.appendChild(el("span","taslak","taslak · "+new Date(b.uretildi).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+" itibarıyla"));
-    bu.append(" · "+sayi(s.haber_sayisi,0)+" haber · "+s.olay_sayisi+" olay");ust.appendChild(bu);
+    const TRM=s.kaynak==="tarama";bu.append(TRM?" · "+sayi(s.haber_sayisi,0)+" başlık · geriye dönük tarama":" · "+sayi(s.haber_sayisi,0)+" haber · "+s.olay_sayisi+" olay");ust.appendChild(bu);
     ust.appendChild(el("h2","bulten-baslik",a.baslik||b.ad));
     (a.ozet||[]).forEach(p=>ust.appendChild(kodluMetin("p",p)));
-    if(!b.anlati)ust.appendChild(el("p","bekliyor","Yorum metni henüz yazılmadı; yapay zekâ kotası açılınca eklenecek. Aşağıdaki sayılar hazır."));
+    if(TRM)ust.appendChild(el("p","tarama-not","Bu dönem toplayıcı çalışmaya başlamadan önceye ait. Sayılar, yayınların kendi arşivlerinden ve İnternet Arşivi’nden geriye dönük toplanan özgün başlıklardan çıkarıldı: kim ne kadar yazdı, Gazze ne kadar yer buldu, hangi kelimeler kullanıldı. Olay karşılaştırması ve Filistin bakışından uzaklık ölçümü bu dönem için henüz yok; ikinci aşamada eklenecek."+(b.taslak?" Tarama sürdüğü için sayılar artmaya devam ediyor.":"")));
+    if(!b.anlati)ust.appendChild(el("p","bekliyor",TRM?"Yorum metni tarama bitince yazılacak. Aşağıdaki sayılar hazır.":"Yorum metni henüz yazılmadı; yapay zekâ kotası açılınca eklenecek. Aşağıdaki sayılar hazır."));
     if(Object.keys(KOD).length)ust.appendChild(el("p","bekliyor","Metindeki numaralı düğmeler kanıttır: dokununca o olayı yazan yayınları ve özgün başlıkları görürsün."));
     const ind=el("div","indirler");const kok="data/bulten/"+b.tur+"/";const ix=b.indir||{};
     [["Metin (.md)",kok+b.anahtar+".md"],ix.zip&&["Veri (CSV, .zip)",ix.zip],ix.png&&["Paylaşım görseli (.png)",ix.png]].filter(Boolean).forEach(([l,h])=>{const x=el("a","indir",l+" ↓");x.href=h;x.setAttribute("download","");ind.appendChild(x);});
-    ust.appendChild(ind);
+    if(!TRM)ust.appendChild(ind);
     if(ix.png){const f=el("a","kart-onizle");f.href=ix.png;f.target="_blank";f.rel="noopener";const im=document.createElement("img");im.src=ix.png+"?t="+Date.parse(b.uretildi);im.alt="Bültenin paylaşım görseli";im.loading="lazy";f.appendChild(im);ust.appendChild(f);}
     k.appendChild(ust);
     // uzaklık ve eğilim
@@ -110,7 +111,8 @@
     const ek=eksen("Bölgeye göre",s.kamp_bakis);if(on)[...ek.querySelectorAll(".e-satir")].forEach((r,i)=>{const x=s.kamp_bakis.filter(z=>z.uzaklik!=null)[i];const d=x&&degisim(x.uzaklik,on.kamp_bakis[x.ad]);if(d)r.querySelector(".e-deger").appendChild(d);});
     u.appendChild(ek);if(s.cizgi_bakis.length)u.appendChild(eksen("Yayın çizgisine göre",s.cizgi_bakis));
     if(s.gunluk&&s.gunluk.length>1){u.appendChild(el("div","alt-baslik","Gün gün"));u.appendChild(egilim(s.gunluk));}
-    k.appendChild(u);
+    if(!TRM)k.appendChild(u);
+    if(TRM)k.appendChild(taramaKartlari(s));
     // görülmeyenler ve sessizlik haritası
     const g=el("article","kart2");const gb=el("h2",null,"İsrail ve Batı basınının görmedikleri");if(on){const d=degisim(s.gormeyen_israil_bati.length,on.gormeyen);if(d){d.title=on.ad+": "+on.gormeyen;gb.appendChild(d);}}g.appendChild(gb);
     if(a.gorulmeyenler)g.appendChild(kodluMetin("p",a.gorulmeyenler));
@@ -119,7 +121,7 @@
     const liste=(arr)=>{const ul=el("ul","olay-liste");arr.forEach(o=>{const li=el("li");li.appendChild(el("span","t",o.tarih));li.appendChild(el("b",null,o.baslik));li.appendChild(kamplar(o));if(o.kod)li.appendChild(kodDugme(o.kod));ul.appendChild(li);});return ul;};
     const ul=liste(s.gormeyen_israil_bati);if(!s.gormeyen_israil_bati.length)ul.appendChild(el("li",null,"Bu dönemde böyle bir olay yok."));g.appendChild(ul);
     if(s.gormeyen_bolge.length){g.appendChild(el("div","alt-baslik","Tersi: yalnızca İsrail ve Batı basınının yazdıkları"));g.appendChild(liste(s.gormeyen_bolge));}
-    k.appendChild(g);
+    if(!TRM)k.appendChild(g);
     // gecikme
     const gc=s.gecikme;if(gc&&gc.olay){const c=el("article","kart2");c.appendChild(el("h2",null,"Kim önce yazdı, kim geç kaldı"));
       c.appendChild(el("p",null,"İki tarafın da yazdığı "+gc.olay+" olayda, İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi."));
@@ -168,7 +170,8 @@
         o.ornekler[y].forEach(e=>{const r=el("div","orn");const yy=el("span","y",e.yayin);if(e.bakis){const cp=el("span","bakis-cip",BK[e.bakis]);cp.style.background=BR[e.bakis];yy.appendChild(cp);}r.appendChild(yy);
           const bb=el("span","b",e.baslik);bb.dir="auto";r.appendChild(bb);if(e.cerceve)r.appendChild(el("span","c",e.cerceve));c.appendChild(r);});iki.appendChild(c);});
       d.appendChild(iki);n.appendChild(d);});
-    k.appendChild(n);
+    if(!TRM)k.appendChild(n);
+    if(TRM&&s.yayin_dil&&s.yayin_dil.length)k.appendChild(yayinDil(s.yayin_dil));
     // yayınlar
     if(s.yayin_yakin.length){const y=el("article","kart2");y.appendChild(el("h2",null,"Yayınlar"));y.appendChild(el("p",null,"En az dört başlığı ölçülen yayınlar arasında Filistin bakışına en yakın ve en uzak olanlar."));
       y.appendChild(eksen("En yakın",s.yayin_yakin));y.appendChild(eksen("En uzak",s.yayin_uzak));k.appendChild(y);}
@@ -177,6 +180,34 @@
       const ul3=el("ul","csv-liste");[["kamp_bakis","Bölgeye göre uzaklık"],["cizgi_bakis","Çizgiye göre uzaklık"],["yayinlar","Yayın yayın uzaklık"],["konular","Konu payları"],["gorulmeyen_olaylar","Görülmeyen olaylar"],["gecikme","Gecikme"],["dil_sayaci","Dil sayacı"],["olu_basina_haber","Ölü başına haber"],["gunluk","Günlük seri"],["kanitlar","Kanıtlar: olay olay bütün başlıklar ve bağlantılar"]].forEach(([d,l])=>{const li=el("li");const x=el("a",null,l+" ↓");x.href=ix.csv+"/"+d+".csv";x.setAttribute("download","");li.appendChild(x);ul3.appendChild(li);});
       v.appendChild(ul3);k.appendChild(v);}
     if(a.veri_notu)k.appendChild(el("p","bekliyor",a.veri_notu));
+  }
+  // ---- geriye dönük tarama bültenleri: hacim ve Gazze payı
+  function taramaKartlari(s){
+    const f=document.createDocumentFragment();
+    const c=el("article","kart2");c.appendChild(el("h2",null,"Kim ne kadar yazdı"));
+    c.appendChild(el("p",null,"Bu dönemde geriye dönük toplanan başlıkların gruplara dağılımı. Sayılar yayınların arşivlerinin ne kadarına ulaşılabildiğine de bağlıdır; mutlak sayıdan çok oranlara bakın."));
+    const en=Math.max(1,...s.hacim.map(x=>x.n));const ul=el("div","hacim-liste");
+    s.hacim.forEach(x=>{const r=el("div","hacim-satir");r.appendChild(el("span","h-ad",x.ad));const bar=el("span","h-cubuk");const i=el("i");i.style.width=(100*x.n/en)+"%";i.style.background=KR[x.ad]||"#6b746f";bar.appendChild(i);r.appendChild(bar);r.appendChild(el("span","h-sayi",sayi(x.n,0)));ul.appendChild(r);});
+    c.appendChild(ul);f.appendChild(c);
+    const gz=s.gazze;if(gz&&(gz.ic_pay!=null||gz.dis_pay!=null)){const g=el("article","kart2");g.appendChild(el("h2",null,"Gazze başlıkların ne kadarında"));
+      g.appendChild(el("p",null,"Başlığında Gazze geçen haberlerin payı (9 dilde)."));
+      const r=el("div","rakamlar");[[gz.ic_pay==null?"–":"%"+sayi(gz.ic_pay,1),"bölge basını · "+sayi(gz.ic,0)+" başlık"],[gz.dis_pay==null?"–":"%"+sayi(gz.dis_pay,1),"İsrail ve Batı basını · "+sayi(gz.dis,0)+" başlık"]].forEach(([v,l])=>{const d=el("div","rakam");d.appendChild(el("b",null,v));d.appendChild(el("span",null,l));r.appendChild(d);});
+      g.appendChild(r);f.appendChild(g);}
+    return f;
+  }
+  // ---- yayın yayın dil: öne çıkan kelimelerin bin başlıktaki sıklığı
+  function yayinDil(liste){
+    const c=el("article","kart2");c.appendChild(el("h2",null,"Yayın yayın dil"));
+    c.appendChild(el("p",null,"En az 30 başlığı olan yayınlarda kelimenin bin başlıkta kaç kez geçtiği. Sütun başlığına tıklayarak sırala."));
+    const S=[["ad","Yayın"],["kamp","Grup"],["n","Başlık"],["soykirim","soykırım"],["katliam","katliam"],["isgal","işgal"],["sehit","şehit"],["teror","terör"],["catisma","çatışma"],["operasyon","operasyon"]];
+    let sr={k:"n",y:-1};const kt=el("div","tablo-kutu");const tb=el("table","yayin-dil");kt.appendChild(tb);
+    function ciz(){tb.innerHTML="";const h=el("tr");S.forEach(([a,l])=>{const th=el("th",null,l+(sr.k===a?(sr.y>0?" ▲":" ▼"):""));th.onclick=()=>{sr={k:a,y:sr.k===a?-sr.y:-1};ciz();};h.appendChild(th);});const th=el("thead");th.appendChild(h);tb.appendChild(th);
+      const bd=el("tbody");liste.slice().sort((x,y)=>{const a=x[sr.k],b=y[sr.k];return(typeof a==="string"?a.localeCompare(b,"tr"):a-b)*sr.y;}).forEach(x=>{const r=el("tr");
+        S.forEach(([a])=>{const td=el("td",typeof x[a]==="number"?"sayi":null,typeof x[a]==="number"?sayi(x[a],a==="n"?0:1):x[a]);if(["soykirim","katliam","isgal","sehit"].includes(a)&&x[a]>0)td.style.color="#1f7a52";if(["teror","catisma","operasyon"].includes(a)&&x[a]>0)td.style.color="#3e63b8";r.appendChild(td);});bd.appendChild(r);});tb.appendChild(bd);}
+    ciz();c.appendChild(kt);
+    // uzun liste: ilk 25 yayın görünür, kalanı düğmeyle açılır
+    if(liste.length>25){kt.classList.add("kisa");const b=el("button","daha-goster","Bütün yayınları göster ("+liste.length+")");b.type="button";b.onclick=()=>{kt.classList.remove("kisa");b.remove();};c.appendChild(b);}
+    return c;
   }
   document.addEventListener("keydown",e=>{if(e.key==="Escape")$("kanitPanel").hidden=true;});
   document.addEventListener("click",e=>{const p=$("kanitPanel");if(!p.hidden&&!p.contains(e.target)&&!e.target.closest(".kod,.sh-yer"))p.hidden=true;});
@@ -187,7 +218,7 @@
     const sk=$("sekmeler");sk.innerHTML="";Object.entries(TUR).forEach(([t,l])=>{const b=el("button",null,l);b.type="button";b.setAttribute("aria-pressed",t===tur);b.onclick=()=>{tur=t;const ilk=dizin.find(x=>x.tur===t);if(ilk)ac(ilk);else listele();};sk.appendChild(b);});
     const d=$("donemler");d.innerHTML="";const l=dizin.filter(x=>x.tur===tur);
     if(!l.length)d.appendChild(el("p","bos2","Bu türde henüz bülten yok."));
-    l.forEach(x=>{const b=el("button");b.type="button";b.setAttribute("aria-pressed",secili===x);b.appendChild(el("span",null,x.ad));b.appendChild(el("small",null,(x.taslak?"taslak · ":"")+x.haber+" haber"));b.onclick=()=>ac(x);d.appendChild(b);});
+    let yil=null;l.forEach(x=>{if(tur!=="yillik"&&x.bas.slice(0,4)!==yil){yil=x.bas.slice(0,4);d.appendChild(el("div","donem-yil",yil));}const b=el("button");b.type="button";b.setAttribute("aria-pressed",secili===x);b.appendChild(el("span",null,x.ad));b.appendChild(el("small",null,(x.taslak?"taslak · ":"")+x.haber.toLocaleString("tr-TR")+(x.kaynak==="tarama"?" başlık · tarama":" haber")));b.onclick=()=>ac(x);d.appendChild(b);});
   }
   fetch("data/bulten/dizin.json?t="+Date.now()).then(r=>r.json()).then(d=>{dizin=d;
     if(!d.length){listele();$("icerik").innerHTML='<p class="bos2">İlk bülten toplayıcının bir sonraki çalışmasında yazılacak.</p>';return;}
