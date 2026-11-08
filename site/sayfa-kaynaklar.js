@@ -78,10 +78,22 @@
         const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);if(d.gdelt&&!yol.length)yol.push("GDELT haber veritabanı");
         iz2.append(DURUM[sd]+" · "+(yol.length?yol.join(" + "):"yol bulunamadı")+(d.son_basari?" · son okuma "+once(d.son_basari):"")+" · son 2 günde "+(N[k.id]||0)+" haber");
         c.appendChild(iz2);if(k.notu)c.appendChild(el("div","not",k.notu));
-        {const b=belgeler(k);if(b)c.appendChild(b);}c.appendChild(kanit(k));iz.appendChild(c);});
+        {const b=belgeler(k);if(b)c.appendChild(b);}{const dk=dogKayit(k);if(dk)c.appendChild(dk);}c.appendChild(kanit(k));iz.appendChild(c);});
       g.appendChild(iz);L.appendChild(g);});
     if(!n)L.appendChild(el("p","bos","Bu süzgeçle eşleşen kaynak yok."));
   }
+  // Elle onaylı doğrulama kaydı: bu yayının aktardığı ve sonradan yanlış çıkan ya da çelişkili bulunan iddialar
+  let DG={};
+  function dogKayit(k){
+    const e=Object.values(DG).filter(x=>x.kaynak===k.id&&(x.tur==="yanlis"||x.tur==="celiskili"));if(!e.length)return null;
+    const y=e.filter(x=>x.tur==="yanlis").length,c=e.length-y;
+    const d=document.createElement("details");d.className="dog-kayit";
+    d.appendChild(el("summary",null,(y?"❌ "+y+" iddia yanlış çıktı":"")+(y&&c?" · ":"")+(c?"⚠️ "+c+" çelişkili iddia":"")));
+    e.sort((a,b)=>(a.tarih<b.tarih?1:-1)).slice(0,8).forEach(x=>{const p=el("p");p.appendChild(el("b",null,x.tur==="yanlis"?"Yanlış çıktı: ":"Çelişkili: "));p.append((x.baslik||"")+" — "+(x.aciklama||""));
+      (x.kanit||[]).forEach(u=>{if(!/^https?:\/\//.test(u))return;const a=el("a",null," Kanıt ↗");a.href=u;a.target="_blank";a.rel="noopener nofollow";p.appendChild(a);});d.appendChild(p);});
+    return d;
+  }
+  fetch("data/dogrulama.json?t="+Date.now()).then(r=>r.json()).then(d=>{DG=(d&&d.etiketler)||{};if(K.length)ciz();}).catch(()=>{});
   Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]})),fetch("data/kanit.json?t="+Date.now()).then(r=>r.json()).catch(()=>({}))])
   .then(([k,d,h,kn])=>{K=k;D=d;KN=kn||{};(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
     ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});

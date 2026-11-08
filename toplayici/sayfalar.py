@@ -41,7 +41,22 @@ def _tarih(iso, dil="tr"):
         return ""
 
 
-def sayfa(h, k, M, site, surum):
+DOG = {"yanlis": ("❌ Yanlış çıktı", "❌ Proven false", "#fbeaea", "#5d1a1a"),
+       "celiskili": ("⚠️ Çelişkili iddia", "⚠️ Disputed claim", "#fdf3e1", "#5a3d06"),
+       "dogrulanmamis": ("🔍 Doğrulanmamış", "🔍 Unverified", "#eef1f4", "#2e3a45")}
+
+
+def _dogrulama_blogu(dg, dil):
+    if not dg or dg.get("tur") not in DOG:
+        return ""
+    tr, en, zemin, renk = DOG[dg["tur"]]
+    kanit = "".join(f' <a href="{_e(u)}" target="_blank" rel="noopener nofollow" style="color:inherit;font-weight:700">'
+                    f'{"Kanıt" if dil == "tr" else "Evidence"} ↗</a>' for u in dg.get("kanit", []) if str(u).startswith(("http://", "https://")))
+    return (f'<p style="margin:0;padding:10px 12px;border-radius:10px;background:{zemin};color:{renk};font-size:.9rem">'
+            f'<b>{_e(tr if dil == "tr" else en)}</b> {_e(dg.get("aciklama", ""))}{kanit}</p>')
+
+
+def sayfa(h, k, M, site, surum, dg=None):
     bas_tr = h.get("baslik_tr") or h.get("baslik_orj") or ""
     oz_tr = h.get("ozet_tr") or ""
     bas_en, oz_en = h.get("baslik_en") or bas_tr, h.get("ozet_en") or oz_tr
@@ -56,6 +71,7 @@ def sayfa(h, k, M, site, surum):
         p = [f'<div data-dil="{dil}">',
              f'<p class="hs-ust"><span class="hs-tur">{_e(etiket if dil == "tr" else ("Analysis" if etiket == "Analiz" else "News"))}</span>'
              f'<b>{_e(yayin)}</b> · {_e(k.get("sehir", ""))} · <time datetime="{_e(h.get("tarih"))}">{_e(_tarih(h.get("tarih"), dil))}</time></p>',
+             _dogrulama_blogu(dg, dil),
              f'<h1>{_e(bas)}</h1>']
         if oz:
             p.append(f'<p class="hs-ozet">{_e(oz)}</p>')
@@ -135,6 +151,10 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     depo = os.environ.get("GITHUB_REPOSITORY", "")
     site = f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else "./"
     kmap = {k["id"]: k for k in kaynaklar}
+    try:
+        etiketler = json.load(open(os.path.join(kok, "data", "dogrulama.json"), encoding="utf-8")).get("etiketler", {})
+    except Exception:
+        etiketler = {}
     d = os.path.join(kok, "data", "h")
     os.makedirs(d, exist_ok=True)
     sinir = (simdi - dt.timedelta(days=SAKLA_GUN)).isoformat()
@@ -148,7 +168,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             continue
         ad = f"{h['id']}.html"
         tut.add(ad)
-        metin = sayfa(h, k, M, site, surum)
+        metin = sayfa(h, k, M, site, surum, etiketler.get(h["id"]))
         yol = os.path.join(d, ad)
         try:
             if open(yol, encoding="utf-8").read() == metin:

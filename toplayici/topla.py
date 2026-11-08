@@ -36,6 +36,7 @@ import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
 import instagram  # noqa: E402
 import sayfalar  # noqa: E402
+import dogrulama  # noqa: E402
 import diller  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -943,7 +944,7 @@ def main():
         # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
         son_olay = tarih_coz(durum.get("_olay_son"))
         bekle = tarih_coz(durum.get("_gemini_bekle"))
-        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 4) \
+        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 5) \
                 and time.time() - BASLANGIC < CALISMA_SURESI:
             gunluk_istek(durum, 1)
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
@@ -959,7 +960,7 @@ def main():
                 except Exception as e:
                     log(f"Kanıt defteri hatası: {e}")
                 durum["_olay_son"] = SIMDI.isoformat()
-                durum["_olay_surum"] = 4
+                durum["_olay_surum"] = 5
                 log(f"{len(sonuc)} olay kümesi çıkarıldı")
             elif sonuc == 429:
                 durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
@@ -1062,6 +1063,11 @@ def main():
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Telegram hatası: {e}")
+    # Doğrulama: yöneticinin Telegram komutları ve onayları; olaylardaki çelişkiler öneri olarak yöneticiye gider (otomatik etiket yok)
+    try:
+        dogrulama.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Doğrulama hatası: {e}")
     # Instagram: önce bir önceki çalıştırmada hazırlanıp sitede yayımlanmış kartları gönder, sonra yenilerini hazırla
     try:
         instagram.yayinla(KOK, durum, SIMDI, log=log)

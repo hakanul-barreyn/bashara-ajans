@@ -59,7 +59,7 @@
     "Kaynağa git (Google Haberler üzerinden) ↗": "Go to source (via Google News) ↗",
     "Wayback’e kaydet": "Save to Wayback", "Arşivlendi ✓": "Archived ✓", "Paylaş": "Share", "Bağlantıyı kopyala": "Copy link", "Kopyalandı": "Copied",
     "Bağlantı": "Link", "Görseli göstermek için dokun": "Tap to show image", "Sahadan görsel; ağır olabilir. Göstermek için dokun": "Image from the field; may be distressing. Tap to show",
-    "Yazıyı oku ↗": "Read the article ↗", "Türkçe özet sırada": "English summary pending", "Paylaşılan haber": "Shared story", "← Tüm haberler": "← All stories", "Paylaşılan haber arşivde aranıyor…": "Looking for the shared story in the archive…", "Paylaşılan haber bulunamadı.": "The shared story could not be found.",
+    "Yazıyı oku ↗": "Read the article ↗", "Türkçe özet sırada": "English summary pending", "Paylaşılan haber": "Shared story", "❌ Yanlış çıktı": "❌ Proven false", "⚠️ Çelişkili iddia": "⚠️ Disputed claim", "🔍 Doğrulanmamış": "🔍 Unverified", "Kanıt ↗": "Evidence ↗", "← Tüm haberler": "← All stories", "Paylaşılan haber arşivde aranıyor…": "Looking for the shared story in the archive…", "Paylaşılan haber bulunamadı.": "The shared story could not be found.",
     "Açıklamanın tam çevirisi": "Full translation of the statement",
     // olay sayfası
     "Akışa dön ✕": "Back to feed ✕", "Denge: kim, kimin gözünden anlattı": "Balance: who told it from whose perspective",

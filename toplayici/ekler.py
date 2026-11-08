@@ -81,8 +81,12 @@ Kurallar:
   "aktarim" = bir tarafın (ABD, İsrail, İran, Hamas…) açıklamasını tırnak ya da "…dedi/duyurdu" kalıbıyla, kendi yargısını katmadan aktarıyor. Bir ABD ya da İsrail duyurusunu yansız haberleştirmek "aktarim"dır, "israil" değildir.
   "israil" = İsrail ya da ABD çerçevesini yayının kendi sesiyle benimsiyor: onların ifadelerini tırnaksız kullanıyor ("terörist", "terör altyapısı", "operasyon", "İran'ın vekilleri"), eylemi olumluyor ya da Filistinli/Arap kayıpları geri plana itiyor.
   Kararsız kalırsan "aktarim" yaz.
+- celiski: kaynaklar AYNI OLGU hakkında birbiriyle ÇELİŞEN somut iddialarda bulunuyorsa (ölü sayısı, failin kim olduğu, hedefin ne
+  olduğu, olayın olup olmadığı gibi) bunu 1-2 cümleyle, kimin ne dediğini yazarak belirt ve çelişen iddiaları taşıyan haberlerin
+  kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
+  Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
 """
 
 
@@ -116,8 +120,14 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
                 yer = {"ad": guvenli(y.get("ad"))[:60], "lat": round(float(y["lat"]), 2), "lon": round(float(y["lon"]), 2)}
         except (TypeError, ValueError):
             yer = None
+        cel = g.get("celiski")
+        celiski = None
+        if isinstance(cel, dict) and cel.get("aciklama"):
+            cids = [i for i in map(str, cel.get("ids") or []) if i in ids]
+            if len(cids) >= 2:
+                celiski = {"aciklama": guvenli(cel["aciklama"])[:500], "ids": cids}
         olaylar.append({
-            "yer": yer,
+            "yer": yer, "celiski": celiski,
             "id": oid, "baslik": guvenli(g.get("baslik"))[:160], "not": guvenli(g.get("not"))[:700],
             "haberler": ids, "kaynak_sayisi": len(kaynaklar), "son": var[ids[0]]["tarih"],
             "ilk": var[ids[-1]]["tarih"],

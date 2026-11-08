@@ -453,3 +453,13 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 body.odak-modu #gundem,body.odak-modu #analizler,body.odak-modu .suzgec{display:none!important}
 .odak-geri{margin:14px 0 12px}
 .haber.odak{padding-top:44px}
+
+/* doğrulama etiketleri (elle onaylı) */
+.dogrulama{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:4px 0 8px;padding:9px 12px;border-radius:10px;font-size:.86rem;line-height:1.45;background:#fbeaea;color:#5d1a1a;border:1px solid #efc4c4}
+.dogrulama b{font-weight:800}
+.dogrulama a{color:inherit;font-weight:700}
+.dogrulama.celiskili{background:#fdf3e1;color:#5a3d06;border-color:#f0d9a8}
+.dogrulama.dogrulanmamis{background:#eef1f4;color:#2e3a45;border-color:#d3dbe2}
+.dog-kayit{margin-top:8px;font-size:.84rem;color:var(--k-ink2)}
+.dog-kayit summary{cursor:pointer;font-weight:700;color:#8a2a2a}
+.dog-kayit p{margin:6px 0 0}

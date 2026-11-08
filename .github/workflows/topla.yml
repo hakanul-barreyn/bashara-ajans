@@ -66,6 +66,7 @@ jobs:
           OZET_SINIRI: ${{ vars.OZET_SINIRI }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_KANAL: ${{ vars.TELEGRAM_KANAL || secrets.TELEGRAM_KANAL }}
+          TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           INSTAGRAM_HESAP: ${{ vars.INSTAGRAM_HESAP }}
           IG_GUNLUK: ${{ vars.IG_GUNLUK }}

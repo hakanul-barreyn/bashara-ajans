@@ -29,6 +29,8 @@
   let konu = null, olaySec = null, odakId = null;
   let bilinen = null; // önceki yüklemede görülen haber kimlikleri
   let haberIdx = {};
+  let dogrulama = {};   // elle onaylı doğrulama etiketleri: {haberId: {tur, aciklama, kanit[]}}
+  const DOG_AD = { yanlis: "❌ Yanlış çıktı", celiskili: "⚠️ Çelişkili iddia", dogrulanmamis: "🔍 Doğrulanmamış" };
   let sadeceAnaliz = false;
   let bolge = "Tümü", sehir = null, ara = "", kac = SAYFA, aktifId = null;
   const $ = (id) => document.getElementById(id);
@@ -568,6 +570,18 @@
     if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));
     ust.appendChild(roz);
     g.appendChild(ust);
+    const dg = dogrulama[h.id];
+    if (dg && DOG_AD[dg.tur]) {
+      const d = el("div", "dogrulama " + dg.tur);
+      d.appendChild(el("b", null, DOG_AD[dg.tur]));
+      if (dg.aciklama) d.appendChild(el("span", null, dg.aciklama));
+      (dg.kanit || []).forEach((u, i) => {
+        if (!/^https?:\/\//.test(u)) return;
+        const a = el("a", null, (i ? "Kanıt " + (i + 1) : "Kanıt") + " ↗"); a.href = u; a.target = "_blank"; a.rel = "noopener nofollow";
+        a.addEventListener("click", (e) => e.stopPropagation()); d.appendChild(a);
+      });
+      g.appendChild(d);
+    }
     if (BT(h)) {
       g.appendChild(el("h2", null, BT(h)));
       if (OZ(h)) g.appendChild(el("p", null, OZ(h)));
@@ -721,13 +735,15 @@
   async function yukle() {
     const t = Date.now();
     try {
-      const [k, h, o, lg] = await Promise.all([
+      const [k, h, o, lg, dg] = await Promise.all([
         fetch("kaynaklar.json?t=" + t).then((r) => r.json()),
         fetch("data/haberler.json?t=" + t).then((r) => r.json()),
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
         fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
+        fetch("data/dogrulama.json?t=" + t).then((r) => r.json()).catch(() => ({})),
       ]);
       logolar = lg || {};
+      dogrulama = (dg && dg.etiketler) || {};
       olaylar = o.olaylar || []; olayHarita = {}; olaylar.forEach((x) => (olayHarita[x.id] = x));
       kaynaklar = {}; k.forEach((x) => (kaynaklar[x.id] = x));
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
