@@ -20,13 +20,11 @@
 <link rel="alternate" type="application/rss+xml" data-marka-sablon="{ad}" data-marka-oznitelik="title" title="ZBS" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611081850">
+<link rel="stylesheet" href="site/stil.css?v=202611081900">
 <script src="site/dil.js?v=202611081749"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
 <body>
-<!-- Arka plandaki harita: şehirler haber geldikçe yanıp söner, karta gelince o kartın şehri parlar -->
-<div class="zemin" aria-hidden="true"><svg id="zemin" preserveAspectRatio="xMidYMid slice"></svg></div>
 
 <header class="ust">
   <div class="ust-ic">
@@ -46,6 +44,14 @@
 
 <main class="duzen">
   <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
+  <!-- Haber gelen şehirler: şehirler haber geldikçe yanıp söner; bir şehre dokununca akış o şehre süzülür -->
+  <section class="harita-bolum" id="haritaBolum" aria-label="Haber gelen şehirler">
+    <div class="slayt-ust"><h2 class="bolum">Şu an haber gelen şehirler<span class="bolum-ek"> · şehre dokunun, haberler süzülsün</span></h2></div>
+    <div class="harita-kutu">
+      <svg id="zemin" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Haber gelen şehirlerin haritası"></svg>
+      <div class="harita-lejant"><span><i class="lj-nokta"></i>Haber gelen şehir (büyüklük: haber sayısı)</span><span><i class="lj-nabiz"></i>Son bir saatte haber geldi</span><span><i class="lj-sessiz"></i>Bölge basını yazdı, İsrail ve Batı basını yazmadı</span></div>
+    </div>
+  </section>
   <section class="analizler" id="analizler" hidden aria-label="Analizler"></section>
   <div class="suzgec">
     <div class="suzgec-ust">
@@ -73,6 +79,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="site/kutlama.js?v=202611081820"></script>
-<script src="site/uygulama.js?v=202611081850"></script>
+<script src="site/uygulama.js?v=202611081900"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// Sayfa kodu: haber akışı tek sütunda; bölge haritası sayfanın arkasında sabit bir zemin.
+// Sayfa kodu: haber akışı tek sütunda; bölge haritası Gündem'in altında ayrı bir bölüm.
 // Bir kartın üzerine gelince arkadaki haritada o haberin şehri parlar. Veri 5 dakikada bir yenilenir.
 (function () {
   "use strict";
@@ -81,7 +81,13 @@
   const zEl = (t, at) => { const e = document.createElementNS(SVGNS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
   let zNoktalar = null;
   if (zemin) {
-    zemin.setAttribute("viewBox", "0 0 " + (ZB.dogu - ZB.bat) * ZB.olcek + " " + (ZB.kuzey - ZB.guney) * ZB.olcek);
+    // Bölüm haritası: Mağrip'ten Pakistan'a, Yemen'den Anadolu'ya
+    zemin.setAttribute("viewBox", zx(-12) + " " + zy(45) + " " + (zx(70) - zx(-12)) + " " + (zy(10) - zy(45)));
+    zemin.addEventListener("click", (e) => {
+      const g = e.target.closest(".z-sehir"); if (!g) return;
+      sehir = sehir === g.dataset.ad ? null : g.dataset.ad; kac = SAYFA; ciz(true);
+      const sz = document.querySelector(".suzgec"); if (sz && sehir) sz.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
     const kara = zEl("g", { class: "z-kara" }); zNoktalar = zEl("g", { class: "z-noktalar" });
     zemin.append(kara, zNoktalar);
     fetch(DUNYA).then((r) => r.json()).then((topo) => {
@@ -135,15 +141,30 @@
     // Telefonda zemin sabit: kaydırırken kartın şehri parlamaz, yalnızca seçilen şehir vurgulanır
     const aktif = !SABIT_ZEMIN && aktifId && haberIdx[aktifId];
     const aktifSehir = aktif && kaynaklar[aktif.kaynak] ? kaynaklar[aktif.kaynak].sehir : null;
+    const etiketler = [];
     sirali.slice().reverse().forEach(([ad, s]) => {
       if (s.lon < ZB.bat || s.lon > ZB.dogu || s.lat < ZB.guney || s.lat > ZB.kuzey) return;
       const x = zx(s.lon), y = zy(s.lat), r = 3 + Math.sqrt(s.n) * 1.3;
-      const vurgu = ad === sehir || ad === aktifSehir;
-      const g = zEl("g", { class: "z-sehir" + (vurgu ? " vurgu" : "") + (s.taze ? " taze" : "") });
+      const vurgu = ad === sehir || ad === aktifSehir, buyuk = sirali.findIndex(([a]) => a === ad) < 12;
+      const g = zEl("g", { class: "z-sehir" + (vurgu ? " vurgu" : "") + (s.taze ? " taze" : "") + (buyuk ? " buyuk" : ""), "data-ad": ad });
+      const ti = zEl("title", {}); ti.textContent = ad + " · " + s.n + (window.DIL === "en" ? " stories" : " haber"); g.appendChild(ti);
       if (s.taze) g.appendChild(zEl("circle", { class: "z-nabiz", cx: x, cy: y, r: r }));
       g.appendChild(zEl("circle", { class: "z-nokta", cx: x, cy: y, r: r }));
-      if (vurgu) { const t = zEl("text", { x: x + r + 6, y: y + 4 }); t.textContent = ad; g.appendChild(t); }
+      g.appendChild(zEl("circle", { class: "z-alan", cx: x, cy: y, r: Math.max(r, 7) }));
+      if (vurgu || buyuk) etiketler.push({ ad, x, y, r, vurgu, n: s.n, g });
       zNoktalar.appendChild(g);
+    });
+    // Şehir adları çakışmasın: önce seçili, sonra en çok haber gelen; çakışan ad yazılmaz (noktanın üstüne gelince görünür)
+    const kutular = [];
+    etiketler.sort((a, b) => (b.vurgu - a.vurgu) || (b.n - a.n)).forEach((e) => {
+      const w = e.ad.length * (e.vurgu ? 8.5 : 7) + 4, h = e.vurgu ? 17 : 14;
+      for (const [dx, yon] of [[e.r + 5, "start"], [-(e.r + 5), "end"]]) {
+        const x0 = yon === "start" ? e.x + dx : e.x + dx - w, k = { x0, x1: x0 + w, y0: e.y - h / 2 - 2, y1: e.y + h / 2 };
+        if (kutular.some((b) => k.x0 < b.x1 && k.x1 > b.x0 && k.y0 < b.y1 && k.y1 > b.y0)) continue;
+        kutular.push(k);
+        const t = zEl("text", { x: e.x + dx, y: e.y + 4, "text-anchor": yon }); t.textContent = e.ad; e.g.appendChild(t);
+        break;
+      }
     });
   }
 

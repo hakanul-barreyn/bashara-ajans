@@ -27,9 +27,25 @@ a{color:var(--yesil)}
 button{font:inherit}
 
 /* arka plan haritası */
-.zemin{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-  -webkit-mask-image:radial-gradient(ellipse 85% 75% at 50% 40%,#000 35%,transparent 100%);mask-image:radial-gradient(ellipse 85% 75% at 50% 40%,#000 35%,transparent 100%)}
-.zemin svg{width:100%;height:100%;display:block}
+.zemin{display:none}
+/* Haber gelen şehirler bölümü */
+.harita-bolum{margin:0 0 30px}
+.harita-kutu{position:relative;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;overflow:hidden}
+#zemin{display:block;width:100%;height:auto;aspect-ratio:82/35;max-height:460px}
+.harita-lejant{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 16px 12px;border-top:1px solid var(--cizgi);font-size:.78rem;color:var(--ink2)}
+.harita-lejant span{display:flex;align-items:center;gap:7px}
+.harita-lejant i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.lj-nokta{background:var(--z-nokta);opacity:.6}
+.lj-nabiz{border:2px solid var(--z-nokta)}
+.lj-sessiz{border:2px solid var(--z-vurgu)}
+.z-sehir{cursor:pointer}
+.z-alan{fill:transparent}
+.harita-bolum .z-nokta{fill-opacity:.5}
+.z-sehir:hover .z-nokta{fill-opacity:.85}
+.z-sehir.buyuk text{font-size:12px;font-weight:600;fill:var(--ink2)}
+.z-sehir.vurgu text{font-size:15px;font-weight:700;fill:var(--z-vurgu)}
+body.odak-modu .harita-bolum{display:none}
+@media (max-width:640px){#zemin{aspect-ratio:82/48}.harita-lejant{font-size:.72rem}}
 .z-kara path{fill:var(--z-kara);stroke:var(--z-sinir);stroke-width:.8;stroke-linejoin:round}
 .z-nokta{fill:var(--z-nokta);fill-opacity:.3;transition:fill .3s,fill-opacity .3s}
 .z-sehir.taze .z-nokta{fill-opacity:.55}
@@ -518,3 +534,10 @@ h1,.duzen h2:not(.bolum),.duzen h3,.sayfa h2,.sayfa h3,.olay-baslik h2,.olay-bas
 .slayt-kim{margin:4px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.92rem;color:#d9ddda}
 .slayt-kim b{color:#fff;font-weight:700}
 .slayt-sessiz{font-size:.78rem;font-weight:700;color:#fff;background:#c9302c;padding:3px 10px;border-radius:999px}
+
+/* Kefiye dokusu: yalnızca geniş ekranda, ortası boş, kenarlara doğru koyulaşır */
+@media (min-width:821px) and (hover:hover){
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url(kefiye.png) 0 0/264px 264px repeat;opacity:.2;
+    -webkit-mask-image:radial-gradient(ellipse 62% 75% at 50% 45%,transparent 50%,rgba(0,0,0,.55) 78%,#000 100%);
+    mask-image:radial-gradient(ellipse 62% 75% at 50% 45%,transparent 50%,rgba(0,0,0,.55) 78%,#000 100%)}
+}
