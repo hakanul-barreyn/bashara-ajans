@@ -447,23 +447,37 @@ def _gizle(s, token):
 
 
 def _hesap(kay, sunucu, token):
+    """Instagram hesabının sayısal kimliği. Önce INSTAGRAM_HESAP değişkeni; yoksa jeton türüne göre sırayla denenir."""
     h = os.environ.get("INSTAGRAM_HESAP", "").strip() or kay.get("hesap")
     if h:
         return h
+    q = lambda yol, alan: _istek("GET", f"{sunucu}/{yol}?" + urllib.parse.urlencode({"fields": alan, "access_token": token}))
+    bulunan = None
     if "instagram" in sunucu:
-        r = _istek("GET", f"{sunucu}/me?" + urllib.parse.urlencode({"fields": "user_id,username", "access_token": token}))
-        h = r and str(r.get("user_id") or r.get("id") or "")
-        if r and r.get("username"):
-            kay["kullanici"] = r["username"]
+        r = q("me", "user_id,username")
+        if r and (r.get("user_id") or r.get("id")):
+            bulunan = (str(r.get("user_id") or r["id"]), r.get("username"))
     else:
-        r = _istek("GET", f"{sunucu}/me?" + urllib.parse.urlencode({"fields": "instagram_business_account{id,username}", "access_token": token}))
+        # EAA (Facebook / birleşik giriş) jetonu: sayfa jetonu, kullanıcı jetonu ya da sistem kullanıcısı olabilir
+        r = q("me", "instagram_business_account{id,username}")
         iba = (r or {}).get("instagram_business_account") or {}
-        h = str(iba.get("id") or "")
-        if iba.get("username"):
-            kay["kullanici"] = iba["username"]
-    if h:
-        kay["hesap"] = h
-    return h
+        if iba.get("id"):
+            bulunan = (str(iba["id"]), iba.get("username"))
+        if not bulunan:
+            r = q("me/accounts", "instagram_business_account{id,username}")
+            for sayfa in (r or {}).get("data", []):
+                iba = sayfa.get("instagram_business_account") or {}
+                if iba.get("id"):
+                    bulunan = (str(iba["id"]), iba.get("username"))
+                    break
+        if not bulunan:
+            r = q("me", "id,username")          # birleşik girişte /me doğrudan Instagram hesabı olabilir
+            if r and r.get("id") and r.get("username"):
+                bulunan = (str(r["id"]), r["username"])
+    if bulunan:
+        kay["hesap"], kay["kullanici"] = bulunan[0], bulunan[1]
+        return bulunan[0]
+    return None
 
 
 def _bekle_hazir(sunucu, kap, token, sure=90):
@@ -598,7 +612,8 @@ def yayinla(kok, durum, simdi, log=print):
             continue
         hesap = _hesap(kay, sunucu, token)
         if not hesap:
-            log("Instagram: hesap kimliği bulunamadı (" + _gizle(SON_HATA, token) + "); jeton ya da izinler eksik olabilir")
+            log("Instagram: hesap kimliği bulunamadı (" + _gizle(SON_HATA, token) + "). GitHub'da INSTAGRAM_HESAP değişkenine "
+                "Meta panelinde hesabın altında yazan sayısal kimliği gir")
             return 0
         kimlik = _gonder(sunucu, hesap, token, gorseller, q["aciklama"])
         if kimlik:
