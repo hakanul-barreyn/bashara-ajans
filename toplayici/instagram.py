@@ -32,6 +32,7 @@ import urllib.request
 
 import almanak
 import ekler
+import dogrulama
 import ig_foto
 import ig_harita
 import ig_kart
@@ -41,9 +42,12 @@ import marka
 # Deneysel dönem: günde tek gönderi, yalnızca Türkiye saatiyle akşam (izlenmenin en yüksek olduğu saatler).
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 1)
 IG_SAAT = (19, 22)                # Türkiye saati; gönderi bu aralıkta çıkar
-KART_SURUM = 3                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
+KART_SURUM = 4                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
 # Actions'tan elle "şimdi gönder": saat aralığı ve iki gönderi arası bekleme bir kerelik atlanır; IG_OGE verilirse o öge gönderilir
 IG_SIMDI = os.environ.get("IG_SIMDI", "").lower() == "true"
+# Deneysel dönem: her gönderi önce yöneticiye Telegram'dan gider (Yayımla / Atla); onaylanmayan hiçbir şey Instagram'a gitmez.
+# Onaylanan gönderi saat aralığını beklemeden bir sonraki çalıştırmada çıkar (günlük sınır geçerli).
+ONAY_MODU = True
 IG_OGE = os.environ.get("IG_OGE", "").strip()
 # Gönderimi tamamen durdurmak için True yap (kartlar yine hazırlanır).
 DURAKLAT = False
@@ -292,7 +296,9 @@ def gonderi_kur(kok, tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
         bolge = [y["ad"] for y in yayinlar.values() if y["kamp"] in almanak.BOLGE_ICI]
         kapaklar.append(("sessiz", lambda a: ig_kart.sessizlik(o["baslik"], yt, len(bolge), bolge[:6], a,
                                                                arka((600, 130, 480, 420)), kunye)))
-    elif plan.get("duello"):
+    elif plan.get("duello") and plan["duello"]["a"] in hid and plan["duello"]["b"] in hid and (
+            hid[plan["duello"]["a"]]["bakis"] != hid[plan["duello"]["b"]]["bakis"]
+            and len(set(hid[plan["duello"]["a"]]["baslik"].lower().split()) ^ set(hid[plan["duello"]["b"]]["baslik"].lower().split())) >= 4):
         A, B = hid[plan["duello"]["a"]], hid[plan["duello"]["b"]]
         kapaklar.append(("duello", lambda a: ig_kart.duello({"kaynak": A["ad"], "kamp": A["kamp"], "baslik": A["baslik"]},
                                                             {"kaynak": B["ad"], "kamp": B["kamp"], "baslik": B["baslik"]},
@@ -347,7 +353,7 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
     tut = []
     for q in kay["kuyruk"]:
         bayat = q["tur"] != "bulten" and (simdi - dt.datetime.fromisoformat(q["hazir"])).total_seconds() > 24 * 3600
-        if bayat or q.get("deneme", 0) >= 3 or (q["tur"] != "bulten" and q.get("surum", 1) < KART_SURUM):
+        if bayat or q.get("onay") == "reddedildi" or q.get("deneme", 0) >= 3 or (q["tur"] != "bulten" and q.get("surum", 1) < KART_SURUM):
             shutil.rmtree(_klasor(kok, q["id"]), ignore_errors=True)
         else:
             tut.append(q)
@@ -446,14 +452,46 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
         reel = bool(IG_REELS_HER) and kay["sayac"] % IG_REELS_HER == 0 and ig_video.uret(
             [os.path.join(k, f"{n}.jpg") for n in range(1, len(svgler) + 1)], os.path.join(k, "video.mp4"), log=log)
         kay["kuyruk"].append({"id": kimlik, "tur": tur, "olay": o["id"], "haberler": list(o["haberler"]), "kart": len(svgler),
-                              "surum": KART_SURUM, "reel": reel, "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan, kunye), "hazir": simdi.isoformat()})
+                              "surum": KART_SURUM, "onay": "bekliyor" if ONAY_MODU else "otomatik", "reel": reel, "aciklama": aciklama(tur, o, yayinlar, sayi, plan, alan, kunye), "hazir": simdi.isoformat()})
         sirada.append(ids)
         yeni += 1
         if len(kay["kuyruk"]) >= 3:
             break
     if yeni:
         log(f"Instagram: {yeni} gönderi hazırlandı (kuyrukta {len(kay['kuyruk'])})")
+    onaya_gonder(kok, kay, log)
     return yeni
+
+
+def onaya_gonder(kok, kay, log=print):
+    """Onay bekleyen ve henüz yöneticiye gösterilmemiş gönderileri Telegram'dan yöneticiye gönderir."""
+    if not ONAY_MODU:
+        return
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    m = re.search(r"\d{6,12}:[A-Za-z0-9_-]{30,}", token)
+    token = m.group(0) if m else ""
+    yonetici = re.sub(r"\D", "", os.environ.get("TELEGRAM_YONETICI", ""))
+    bekleyen = [q for q in kay["kuyruk"] if q.get("onay") == "bekliyor" and not q.get("bildirildi")]
+    if not bekleyen:
+        return
+    if not token or not yonetici:
+        log("Instagram: onay bekleyen gönderi var ama TELEGRAM_YONETICI tanımlı değil; onay olmadan hiçbir şey gönderilmez")
+        return
+    for q in bekleyen[:2]:
+        yollar = [os.path.join(_klasor(kok, q["id"]), f"{n}.jpg") for n in range(1, q["kart"] + 1)]
+        if not all(os.path.isfile(y) for y in yollar):
+            continue
+        metin = ("📸 Instagram gönderisi onay bekliyor" + (" (Reels videosu da hazır)" if q.get("reel") else "") + "\n\n"
+                 + q["aciklama"][:3000] + "\n\nYayımla dersen bir sonraki çalıştırmada (15 dk içinde) gider. 24 saat içinde karar "
+                 "verilmezse gönderi düşer.")
+        if dogrulama.yonetici_album(token, yonetici, yollar, metin,
+                                    [{"text": "✅ Yayımla", "callback_data": f"i:yay:{q['id']}"},
+                                     {"text": "Atla", "callback_data": f"i:atla:{q['id']}"}]):
+            q["bildirildi"] = True
+            log("Instagram: gönderi önizlemesi onaya gönderildi")
+        else:
+            log("Instagram: önizleme yöneticiye gönderilemedi (bota özel mesajla /start yazılmış olmalı)")
+            break
 
 
 def _jpeg_kare(svg, yol):
@@ -662,11 +700,13 @@ def yayinla(kok, durum, simdi, log=print):
             if r and r.get("username"):
                 kay["kullanici"] = r["username"]
     tr_saat = (simdi + dt.timedelta(hours=3)).hour
-    if not IG_SIMDI and not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
+    onayli_var = any(q.get("onay") == "onaylandi" for q in kay["kuyruk"])
+    if not IG_SIMDI and not onayli_var and not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
         return 0
     gun = [t for t in kay.get("gonderim", []) if (simdi - dt.datetime.fromisoformat(t)).total_seconds() < 20 * 3600]
     kay["gonderim"] = gun
-    if not IG_SIMDI and len(gun) >= IG_GUNLUK or not IG_SIMDI and (gun and (simdi - dt.datetime.fromisoformat(max(gun))).total_seconds() < IG_ARA * 60):
+    serbest = IG_SIMDI or onayli_var          # elle onaylanan gönderi günlük sınırı ve bekleme süresini beklemez
+    if not serbest and len(gun) >= IG_GUNLUK or not serbest and (gun and (simdi - dt.datetime.fromisoformat(max(gun))).total_seconds() < IG_ARA * 60):
         return 0
     site = site_adresi()
     if not site:
@@ -674,6 +714,8 @@ def yayinla(kok, durum, simdi, log=print):
     # Sitede yayımlanmış (bir önceki çalıştırmada hazırlanmış) ilk öge
     for q in kay["kuyruk"]:
         if IG_OGE and q["id"] != IG_OGE:
+            continue
+        if ONAY_MODU and q.get("onay") != "onaylandi" and not IG_OGE:
             continue
         if q["tur"] != "bulten" and q.get("surum", 1) < KART_SURUM:
             continue

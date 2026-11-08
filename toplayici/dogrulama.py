@@ -45,6 +45,32 @@ def _api(token, yontem, veri=None, zaman=25):
         return None
 
 
+def yonetici_album(token, yonetici, yollar, aciklama, dugmeler):
+    """Kartları albüm olarak (sendMediaGroup, en çok 10) ve ardından düğmeli bir mesaj olarak yöneticiye gönderir.
+    Döndürür: başarılı mı"""
+    global SON_HATA
+    sinir = "----zbs" + os.urandom(8).hex()
+    medya, parca = [], []
+    for n, y in enumerate(yollar[:10]):
+        medya.append({"type": "photo", "media": f"attach://k{n}"})
+        parca.append(f'--{sinir}\r\nContent-Disposition: form-data; name="k{n}"; filename="k{n}.jpg"\r\nContent-Type: image/jpeg\r\n\r\n'.encode()
+                     + open(y, "rb").read() + b"\r\n")
+    for ad, deger in (("chat_id", yonetici), ("media", json.dumps(medya))):
+        parca.insert(0, f'--{sinir}\r\nContent-Disposition: form-data; name="{ad}"\r\n\r\n{deger}\r\n'.encode())
+    parca.append(f"--{sinir}--\r\n".encode())
+    istek = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMediaGroup", data=b"".join(parca),
+                                   headers={"Content-Type": f"multipart/form-data; boundary={sinir}"})
+    try:
+        with urllib.request.urlopen(istek, timeout=60) as r:
+            if not json.loads(r.read()).get("ok"):
+                return False
+    except Exception as e:
+        SON_HATA = type(e).__name__
+        return False
+    return _api(token, "sendMessage", {"chat_id": yonetici, "text": aciklama[:4000], "link_preview_options": {"is_disabled": True},
+                                       "reply_markup": {"inline_keyboard": [dugmeler]}}) is not None
+
+
 def _e(s):
     return html.escape(str(s or ""), quote=False)
 
@@ -135,6 +161,22 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
                 if str(c.get("from", {}).get("id")) != yonetici:
                     continue
                 parca = (c.get("data") or "").split(":")
+                if parca[0] == "i" and len(parca) == 3:
+                    # Instagram gönderi onayı: i:yay:<öge> / i:atla:<öge>
+                    q = next((x for x in durum.get("_instagram", {}).get("kuyruk", []) if x["id"] == parca[2]), None)
+                    if q and q.get("onay") == "bekliyor":
+                        q["onay"] = "onaylandi" if parca[1] == "yay" else "reddedildi"
+                        sonuc = ("✅ Onaylandı: bir sonraki çalıştırmada (15 dk içinde) Instagram'a gönderilecek."
+                                 if parca[1] == "yay" else "Atlandı; bu gönderi yayımlanmayacak.")
+                    else:
+                        sonuc = "Bu gönderi artık kuyrukta değil."
+                    _api(token, "answerCallbackQuery", {"callback_query_id": c["id"], "text": sonuc[:180]})
+                    msg = c.get("message") or {}
+                    if msg.get("message_id"):
+                        _api(token, "editMessageReplyMarkup", {"chat_id": msg["chat"]["id"], "message_id": msg["message_id"],
+                                                               "reply_markup": {"inline_keyboard": []}})
+                        _api(token, "sendMessage", {"chat_id": yonetici, "text": sonuc, "reply_to_message_id": msg["message_id"]})
+                    continue
                 oneri = kay["oneriler"].get(parca[2]) if len(parca) == 3 else None
                 sonuc = "Bu öneri artık geçerli değil."
                 if oneri and oneri.get("durum") == "bekliyor":
