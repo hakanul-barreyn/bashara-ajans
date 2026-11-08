@@ -57,6 +57,20 @@
   var elle = false;
   gorunum.addEventListener("click", function () { if (document.body.classList.contains("baski")) { elle = false; baskiKapa(); } else { elle = true; baskiAc(); window.scrollTo(0, 0); } });
   yazdir.addEventListener("click", function () { window.print(); });
+  // küçük grafikler: tıklayınca büyüt
+  var perde = null;
+  function kapat() { if (perde) { perde.remove(); perde = null; document.body.style.overflow = ""; } }
+  document.addEventListener("click", function (e) {
+    var f = e.target.closest && e.target.closest(".rp-kucuk");
+    if (!f || perde || document.body.classList.contains("baski")) return;
+    perde = el("div", "rp-buyut"); perde.setAttribute("role", "dialog"); perde.setAttribute("aria-modal", "true");
+    var kutu = el("div", "rp-buyut-kutu"), x = el("button", "rp-buyut-kapat", "×"); x.type = "button"; x.setAttribute("aria-label", "Kapat");
+    var kopya = f.cloneNode(true); kopya.classList.remove("rp-kucuk"); kopya.classList.add("rp-buyuk");
+    kutu.append(x, kopya); perde.appendChild(kutu); document.body.appendChild(perde); document.body.style.overflow = "hidden";
+    perde.addEventListener("click", function (ev) { if (ev.target === perde || ev.target === x) kapat(); });
+    x.focus();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") kapat(); });
   window.addEventListener("beforeprint", function () { if (!document.body.classList.contains("baski")) baskiAc(); });
   window.addEventListener("afterprint", function () { if (!elle) baskiKapa(); });
 })();
