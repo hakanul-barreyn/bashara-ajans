@@ -81,12 +81,23 @@ Kurallar:
   "aktarim" = bir tarafın (ABD, İsrail, İran, Hamas…) açıklamasını tırnak ya da "…dedi/duyurdu" kalıbıyla, kendi yargısını katmadan aktarıyor. Bir ABD ya da İsrail duyurusunu yansız haberleştirmek "aktarim"dır, "israil" değildir.
   "israil" = İsrail ya da ABD çerçevesini yayının kendi sesiyle benimsiyor: onların ifadelerini tırnaksız kullanıyor ("terörist", "terör altyapısı", "operasyon", "İran'ın vekilleri"), eylemi olumluyor ya da Filistinli/Arap kayıpları geri plana itiyor.
   Kararsız kalırsan "aktarim" yaz.
+- anlatim: gruptaki HER haber için o yayının olayı NASIL verdiğini, başlığa ve kısa özete dayanarak, şu alanlarla çıkar:
+  "dayanak": habere kimin açıklaması ya da verisi temel olmuş (en fazla 4 kelime: "İsrail ordusu", "Gazze Sağlık Bakanlığı",
+  "BM", "muhabirin gözlemi", "Hamas açıklaması", "belirsiz"…);
+  "fail": eylemi yapanı yayının nasıl verdiği: "acik" (fail adıyla yazılmış), "edilgen" (ölüm/yıkım var ama fail gizlenmiş:
+  "öldü", "hayatını kaybetti", "patlama oldu"), "yok" (bir faille ilgili olay değil);
+  "baglam": işgal, abluka, süregiden saldırılar ya da öncesi gibi bir bağlam verilmiş mi (true/false);
+  "rakam": haberde geçen en önemli sayı ve birimi (örn. "12 ölü"), yoksa null;
+  "kelime": yayının olayı adlandırmak için seçtiği kilit kelime, özgün dilinde ve en fazla 3 kelime ("katliam", "operasyon", "çatışma"…).
+- ortak: kaynaklar büyük ölçüde AYNI dayanağa ve aynı bilgiye dayanıyorsa bunu bir cümleyle söyle (örn. "Hepsi İsrail ordusunun
+  açıklamasını aktarıyor."); değilse null.
+- fark: yayınlar arasında dayanak, fail, bağlam, rakam ya da kelime bakımından anlamlı bir fark varsa true, yoksa false.
 - celiski: kaynaklar AYNI OLGU hakkında birbiriyle ÇELİŞEN somut iddialarda bulunuyorsa (ölü sayısı, failin kim olduğu, hedefin ne
   olduğu, olayın olup olmadığı gibi) bunu 1-2 cümleyle, kimin ne dediğini yazarak belirt ve çelişen iddiaları taşıyan haberlerin
   kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın yaşandığı yer (açıklama ya da toplantıysa yapıldığı şehir). {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık şehir merkezi yeter. Belirsizse null.
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}}]
 """
 
 
@@ -97,7 +108,8 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
     son = son[:260]
     if len(son) < 4:
         return None
-    girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "baslik": h["baslik_tr"], "ozgun": h["baslik_orj"][:160]} for h in son]
+    girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "baslik": h["baslik_tr"], "ozgun": h["baslik_orj"][:160],
+              "ozet": (h.get("ozet_tr") or "")[:240]} for h in son]
     kod, sonuc = gemini_cagir(anahtar, model, OLAY_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=180)
     if kod != 200 or not isinstance(sonuc, list):
         return kod
@@ -126,8 +138,19 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
             cids = [i for i in map(str, cel.get("ids") or []) if i in ids]
             if len(cids) >= 2:
                 celiski = {"aciklama": guvenli(cel["aciklama"])[:500], "ids": cids}
+        anl = {}
+        if isinstance(g.get("anlatim"), dict):
+            for i, a in g["anlatim"].items():
+                if i in ids and isinstance(a, dict):
+                    anl[i] = {"dayanak": guvenli(a.get("dayanak"))[:50],
+                              "fail": a.get("fail") if a.get("fail") in ("acik", "edilgen", "yok") else None,
+                              "baglam": a.get("baglam") if isinstance(a.get("baglam"), bool) else None,
+                              "rakam": guvenli(a.get("rakam"))[:40] or None,
+                              "kelime": guvenli(a.get("kelime"))[:40] or None}
         olaylar.append({
-            "yer": yer, "celiski": celiski,
+            "yer": yer, "celiski": celiski, "anlatim": anl,
+            "ortak": guvenli(g.get("ortak"))[:240] or None if g.get("ortak") else None,
+            "fark": g.get("fark") if isinstance(g.get("fark"), bool) else None,
             "id": oid, "baslik": guvenli(g.get("baslik"))[:160], "not": guvenli(g.get("not"))[:700],
             "haberler": ids, "kaynak_sayisi": len(kaynaklar), "son": var[ids[0]]["tarih"],
             "ilk": var[ids[-1]]["tarih"],

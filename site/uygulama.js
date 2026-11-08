@@ -490,20 +490,39 @@
     }
     if (ilkH && kaynaklar[ilkH.kaynak]) b.appendChild(el("p", "ilk-haber", "İlk yazan: " + kaynaklar[ilkH.kaynak].ad + " · " + new Date(ilkH.tarih).toLocaleString(YR, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
     const mat = bakisMatrisi(o, false); if (mat) b.appendChild(mat);
-    const denge = cubuk(kp.cizgi, CIZGI_RENK, kp.toplam, "Kaynakların çizgisi");
-    denge.classList.add("denge"); b.appendChild(denge);
-    const iki = el("div", "dagilimlar");
-    iki.appendChild(cubuk(kp.kamp, KAMP_RENK, kp.toplam, "Kaynakların bölgesi"));
-    iki.appendChild(cubuk(kp.tur, TUR_RENK, kp.toplam, "Kaynakların sahipliği"));
-    b.appendChild(iki);
-    const kn = korNokta(kp); if (kn) b.appendChild(el("span", "kor-nokta", kn));
+    // Anlatım farkları: yayınların genel çizgisi değil, bu haberde ne yaptıkları (dayanak, fail, bağlam, rakam, kelime)
+    const an = o.anlatim || {};
+    const anIds = o.haberler.filter((i) => an[i] && haberIdx[i] && kaynaklar[haberIdx[i].kaynak]);
+    if (anIds.length >= 2) {
+      const kutu = el("div", "anlatim");
+      kutu.appendChild(el("h3", null, "Anlatım farkları"));
+      if (o.fark === false) kutu.appendChild(el("p", "anlatim-ozet", "Fark yok. " + (o.ortak || "Yayınlar olayı aynı dayanakla ve benzer dille veriyor.")));
+      else {
+        const say = (f) => anIds.filter(f).length, ad = (i) => kaynaklar[haberIdx[i].kaynak].ad;
+        const satir = [];
+        const acik = say((i) => an[i].fail === "acik"), edil = say((i) => an[i].fail === "edilgen");
+        if (acik && edil) satir.push(["Fail", acik + " yayın faili açıkça yazdı; " + edil + " yayın edilgen dil kullandı (" + anIds.filter((i) => an[i].fail === "edilgen").map(ad).join(", ") + ")."]);
+        else if (edil) satir.push(["Fail", "Bütün yayınlar edilgen dil kullandı: faili yazan yok."]);
+        const dy = {}; anIds.forEach((i) => { const d = an[i].dayanak; if (d) (dy[d] = dy[d] || []).push(ad(i)); });
+        const dk = Object.keys(dy); if (dk.length) satir.push(["Dayanak", dk.length === 1 ? "Hepsi: " + dk[0] + "." : dk.map((d) => d + " (" + dy[d].length + ")").join(" · ")]);
+        const bg = say((i) => an[i].baglam === true); if (bg && bg < anIds.length) satir.push(["Bağlam", anIds.length + " yayından " + bg + " tanesi işgal, abluka ya da öncesi gibi bir bağlam verdi."]);
+        const rk = anIds.filter((i) => an[i].rakam); if (rk.length) { const fr = new Set(rk.map((i) => an[i].rakam)); satir.push(["Rakam", fr.size > 1 ? rk.map((i) => an[i].rakam + " (" + ad(i) + ")").join(" · ") : "Hepsi aynı rakamı verdi: " + an[rk[0]].rakam + "."]); }
+        const kl = new Set(anIds.map((i) => an[i].kelime).filter(Boolean)); if (kl.size > 1) satir.push(["Kelime", anIds.filter((i) => an[i].kelime).map((i) => "“" + an[i].kelime + "” (" + ad(i) + ")").join(" · ")]);
+        if (o.ortak) kutu.appendChild(el("p", "anlatim-ozet", o.ortak));
+        const dl = el("dl", "anlatim-liste");
+        satir.forEach(([b2, t]) => { dl.appendChild(el("dt", null, b2)); dl.appendChild(el("dd", null, t)); });
+        if (satir.length) kutu.appendChild(dl);
+        else kutu.appendChild(el("p", "anlatim-ozet", "Dayanak, fail, bağlam ve rakam bakımından belirgin bir fark yok."));
+      }
+      b.appendChild(kutu);
+    }
     if (ON(o)) { const n = el("p", "cerceve"); n.appendChild(el("b", null, "Kaynaklar nasıl anlattı: ")); n.append(ON(o)); b.appendChild(n); }
     // kaynak kaynak liste, bölge grubuna göre
     const gruplar = {};
-    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[cizgiAd(k)] = gruplar[cizgiAd(k)] || []).push(h); });
-    Object.keys(CIZGI_RENK).filter((g) => gruplar[g]).forEach((g) => {
+    o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (!k) return; (gruplar[kampAd(k)] = gruplar[kampAd(k)] || []).push(h); });
+    Object.keys(KAMP_RENK).concat(Object.keys(gruplar).filter((g) => !KAMP_RENK[g])).filter((g) => gruplar[g]).forEach((g) => {
       const sec = el("section", "kim-grup");
-      const hb = el("h3"); const nk = el("i"); nk.style.background = CIZGI_RENK[g]; hb.appendChild(nk); hb.append(g); sec.appendChild(hb);
+      const hb = el("h3"); const nk = el("i"); nk.style.background = KAMP_RENK[g] || "#8d969e"; hb.appendChild(nk); hb.append(g); sec.appendChild(hb);
       gruplar[g].forEach((h) => {
         const k = kaynaklar[h.kaynak];
         const r = el("div", "kim-satir");
@@ -515,14 +534,23 @@
         const bv = o.bakislar && o.bakislar[h.id];
         if (bv) { const c = el("span", "bakis-cip", BAKIS[bv]); c.style.background = BAKIS_RENK[bv]; ad.appendChild(c); }
         const y = OY(o, h.id); if (y) ic.appendChild(el("div", "kim-yorum", y));
+        const a2 = an[h.id];
+        if (a2) {
+          const cp = el("div", "anlatim-cipler");
+          if (a2.dayanak) cp.appendChild(el("span", null, "Dayanak: " + a2.dayanak));
+          if (a2.fail === "acik") cp.appendChild(el("span", "iyi", "Fail açık"));
+          if (a2.fail === "edilgen") cp.appendChild(el("span", "kotu", "Edilgen dil"));
+          if (a2.baglam === true) cp.appendChild(el("span", "iyi", "Bağlam var"));
+          if (a2.rakam) cp.appendChild(el("span", null, a2.rakam));
+          if (a2.kelime) { const kw = el("span", null, "“" + a2.kelime + "”"); kw.dir = "auto"; cp.appendChild(kw); }
+          ic.appendChild(cp);
+        }
         const l = el("a", "kim-bag", (h.gnews ? "Kaynağa git (Google Haberler üzerinden)" : "Kaynağa git") + " ↗"); l.href = h.url; l.target = "_blank"; l.rel = "noopener"; ic.appendChild(l);
         r.appendChild(ic); sec.appendChild(r);
       });
       b.appendChild(sec);
     });
-    const yontem = el("p", "olay-uyari"); yontem.append("Denge çubuğu " + MARKA_AD + "’nin her yayına verdiği editoryal çizgi değerlendirmesine dayanır; ölçütleri ");
-    const ya = el("a", null, "Hakkımızda"); ya.href = "hakkimizda.html#cizgi"; yontem.appendChild(ya); yontem.append(" sayfasında."); b.appendChild(yontem);
-    b.appendChild(el("p", "olay-uyari", "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git."));
+    b.appendChild(el("p", "olay-uyari", "Çerçeve notu, anlatım farkları ve kaynak betimlemeleri başlıklar ve özetler karşılaştırılarak yapay zekâyla çıkarılır; haberlerin tamamı için kaynaklara git. Yayınların genel çizgisi Kaynaklar sayfasında."));
     return b;
   }
 

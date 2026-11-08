@@ -464,3 +464,16 @@ body.odak-modu #gundem,body.odak-modu #analizler,body.odak-modu .suzgec{display:
 .dog-kayit summary{cursor:pointer;font-weight:700;color:#8a2a2a}
 .dog-kayit p{margin:6px 0 0}
 .akis .haber{cursor:pointer}
+
+/* anlatım farkları */
+.anlatim{margin:14px 0 6px;padding:14px 16px;border-radius:14px;background:var(--yuzey);border:1px solid var(--k-cizgi)}
+.anlatim h3{margin:0 0 6px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--k-soluk)}
+.anlatim-ozet{margin:0 0 6px;font-size:.95rem;color:var(--k-ink)}
+.anlatim-liste{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 14px;margin:6px 0 0;font-size:.9rem}
+.anlatim-liste dt{font-weight:800;color:var(--k-ink)}
+.anlatim-liste dd{margin:0;color:var(--k-ink2)}
+.anlatim-cipler{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.anlatim-cipler span{font-size:.74rem;padding:2px 8px;border-radius:999px;background:var(--yuzey);border:1px solid var(--k-cizgi);color:var(--k-ink2)}
+.anlatim-cipler span.iyi{background:#e5f4ec;border-color:#bfe2cf;color:#1d5a3e}
+.anlatim-cipler span.kotu{background:#fbeaea;border-color:#efc4c4;color:#7a2424}
+@media (max-width:560px){.anlatim-liste{grid-template-columns:minmax(0,1fr)}.anlatim-liste dd{margin-bottom:6px}}

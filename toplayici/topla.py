@@ -967,7 +967,7 @@ def main():
         # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
         son_olay = tarih_coz(durum.get("_olay_son"))
         bekle = tarih_coz(durum.get("_gemini_bekle"))
-        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 5) \
+        if model and not (bekle and bekle > SIMDI) and (not son_olay or SIMDI - son_olay >= dt.timedelta(minutes=55) or durum.get("_olay_surum") != 6) \
                 and time.time() - BASLANGIC < CALISMA_SURESI:
             gunluk_istek(durum, 1)
             sonuc = ekler.olaylari_kumele(anahtar, model, list(eski.values()), SIMDI)
@@ -983,7 +983,7 @@ def main():
                 except Exception as e:
                     log(f"Kanıt defteri hatası: {e}")
                 durum["_olay_son"] = SIMDI.isoformat()
-                durum["_olay_surum"] = 5
+                durum["_olay_surum"] = 6
                 log(f"{len(sonuc)} olay kümesi çıkarıldı")
             elif sonuc == 429:
                 durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
