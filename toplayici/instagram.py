@@ -38,9 +38,11 @@ import ig_kart
 import ig_video
 import marka
 
-IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 4)
-# Yeni kart tasarımı bitene kadar gönderim durduruldu (kartlar yine hazırlanır). Açmak için False yap.
-DURAKLAT = True
+# Deneysel dönem: günde tek gönderi, yalnızca Türkiye saatiyle akşam (izlenmenin en yüksek olduğu saatler).
+IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 1)
+IG_SAAT = (19, 22)                # Türkiye saati; gönderi bu aralıkta çıkar
+# Gönderimi tamamen durdurmak için True yap (kartlar yine hazırlanır).
+DURAKLAT = False
 IG_ARA = 150                      # dakika
 IG_REELS_HER = int(os.environ.get("IG_REELS_HER") or 2)   # her kaçıncı gönderi Reels videosu olarak gitsin (0: hiç)
 SURUM = "v23.0"
@@ -176,7 +178,8 @@ PLAN_TALIMAT = """Bir Instagram haber gönderisi planlıyorsun. Aşağıdaki VER
 Kurallar:
 - Yalnızca VERİ'deki bilgileri kullan. Sayı, isim, yer, fail uydurma; VERİ'de olmayan hiçbir şeyi yazma.
 - Dil yalın, abartısız, Türkçe. Başlangıç noktamız Filistin bakışı: sivillerin ölümünü ya da yıkımı edilgen dille gizleme;
-  VERİ'de fail açıkça geçiyorsa söyle. Silahlı grupları övme ya da yüceltme; şiddete çağırma.
+  VERİ'de fail açıkça geçiyorsa söyle. Silahlı grupları ya da eylemlerini övme, yüceltme, adını slogan gibi kullanma; şiddete çağırma.
+  Kanca ve gövdede "şehit", "kahraman", "zafer", "intikam" gibi yüceltici kelimeler kullanma; ölenler için "öldürüldü", "hayatını kaybetti" de.
 - "kanca": okuru durduracak en fazla 55 karakterlik tek cümle ya da soru (örnek biçim: "Felaketin adı: sel mi, abluka mı?").
 - "ton": ölüm, yaralanma, yıkım, açlık, salgın ya da yerinden edilme haberiyse "yas"; siyasi, diplomatik, askeri açıklama ya da
   medya çerçevesi haberiyse "medya".
@@ -642,7 +645,10 @@ def yayinla(kok, durum, simdi, log=print):
     if token.startswith("IG"):
         _jeton_yenile(kay, token, simdi, log)
     _hatirlat(kay, simdi, log)
-    gun = [t for t in kay.get("gonderim", []) if (simdi - dt.datetime.fromisoformat(t)).total_seconds() < 24 * 3600]
+    tr_saat = (simdi + dt.timedelta(hours=3)).hour
+    if not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
+        return 0
+    gun = [t for t in kay.get("gonderim", []) if (simdi - dt.datetime.fromisoformat(t)).total_seconds() < 20 * 3600]
     kay["gonderim"] = gun
     if len(gun) >= IG_GUNLUK or (gun and (simdi - dt.datetime.fromisoformat(max(gun))).total_seconds() < IG_ARA * 60):
         return 0
