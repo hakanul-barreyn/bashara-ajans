@@ -775,7 +775,15 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     d = os.path.join(kok, "data", "h")
     os.makedirs(d, exist_ok=True)
     sinir = (simdi - dt.timedelta(days=SAKLA_GUN)).isoformat()
-    surum = simdi.strftime("%Y%m%d")
+    # Sürüm, dosyaların içeriğinden: CSS/JS değişince tarayıcı eskisini önbellekten kullanmaz
+    import hashlib
+    hs = hashlib.md5()
+    for f in ("stil.css", "haber.css", "dil.js", "marka.js", "sayfa-haber.js"):
+        try:
+            hs.update(open(os.path.join(kok, "site", f), "rb").read())
+        except OSError:
+            pass
+    surum = hs.hexdigest()[:10]
     # Haber -> olay (son SAKLA_GUN+1 günün olay arşivinden; yeni günün kaydı eskisinin üstüne yazar)
     olay_of, tum = {}, {}
     for n in range(30, -1, -1):
