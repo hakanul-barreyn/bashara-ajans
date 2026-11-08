@@ -22,7 +22,9 @@ UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 KOK = "https://www.tccb.gov.tr"
 LISTE = KOK + "/receptayyiperdogan/konusmalar/"
 BASLANGIC = "2023-01-01"     # savaştan önceki dokuz ay karşılaştırma için
-BEKLE = 1.5
+BEKLE = 8          # site art arda isteklerde yanıt vermeyi kesiyor; yavaş git
+WAYBACK = "https://web.archive.org"
+ILK_ID = 142000    # Ocak 2023'ün konuşma numaraları bu civarda başlıyor
 
 # (anahtar, kalıp) — küçük harfli metinde
 KELIMELER = [
@@ -41,6 +43,44 @@ def al(u):
     istek = urllib.request.Request(u, headers={"User-Agent": UA, "Accept-Language": "tr"})
     with urllib.request.urlopen(istek, timeout=30) as r:
         return r.read().decode("utf-8", "replace")
+
+
+class Yavas:
+    """Doğrudan istekler: zaman aşımında bekleyip bir kez daha dener; art arda başarısızlıkta durur."""
+    def __init__(self, log):
+        self.hata, self.log = 0, log
+
+    def al(self, u):
+        if self.hata >= 4:
+            raise RuntimeError("site yanıt vermiyor")
+        for deneme in range(2):
+            try:
+                h = al(u)
+                self.hata = 0
+                return h
+            except Exception as e:
+                if deneme == 0:
+                    time.sleep(90)
+                else:
+                    self.hata += 1
+                    raise e
+
+
+def wayback_liste(log):
+    """İnternet Arşivi'nde kayıtlı konuşma adresleri: {adres: zaman damgası} (2023 ve sonrası)."""
+    sonuc = {}
+    for kalip in ("tccb.gov.tr/konusmalar/353/*", "tccb.gov.tr/receptayyiperdogan/konusmalar/353/*"):
+        try:
+            v = json.loads(al(f"{WAYBACK}/cdx/search/cdx?url={kalip}&output=json&fl=original,timestamp&filter=statuscode:200&collapse=urlkey&limit=20000"))
+        except Exception as e:
+            log(f"Wayback listesi alınamadı ({kalip}): {e}")
+            continue
+        for u, ts in v[1:]:
+            m = re.search(r"/konusmalar/353/(\d+)/([^/?#]+)", u)
+            if m and int(m.group(1)) >= ILK_ID:
+                sonuc[f"{KOK}/konusmalar/353/{m.group(1)}/{m.group(2)}"] = ts
+    log(f"Wayback: {len(sonuc)} konuşma adresi")
+    return sonuc
 
 
 def kucult(s):
@@ -79,60 +119,74 @@ def calistir(klasor, sure=2400, log=print):
     except (OSError, ValueError):
         veri = {"konusmalar": []}
     bilinen = {k["url"] for k in veri["konusmalar"]}
+    bilinen_id = {re.search(r"/353/(\d+)/", k["url"]).group(1) for k in veri["konusmalar"]}
     bitis = time.time() + sure
-    yeni, sayfa, eski_seri, ust = 0, 1, 0, None
-    while time.time() < bitis:
-        u = LISTE if sayfa == 1 else f"{LISTE}?&page={sayfa}"
-        try:
-            h = al(u)
-        except Exception as e:
-            log(f"Liste {sayfa} alınamadı: {e}")
-            break
-        if sayfa == 1:
-            log("Sayfalama bağlantıları: " + " ".join(sorted(set(re.findall(r'href="([^"]*page=[^"]*)"', h)))[:6]))
-        linkler = []
-        for x in re.findall(r'href="(/(?:receptayyiperdogan/)?konusmalar/\d+/\d+/[^"#?]+)"', h):
-            if x not in linkler:
-                linkler.append(x)
-        if not linkler or linkler == ust:
-            log(f"Sayfa {sayfa}: bağlantı yok ya da önceki sayfayla aynı; bitti")
-            break
-        ust = linkler
-        en_eski = None
-        for x in linkler:
-            adres = KOK + x
-            if adres in bilinen:
-                continue
-            if time.time() > bitis:
-                break
-            time.sleep(BEKLE)
-            try:
-                k = metin_cikar(al(adres))
-            except Exception as e:
-                log(f"{adres} alınamadı: {e}")
-                continue
-            if not k:
-                log(f"{adres}: metin bulunamadı")
-                continue
-            en_eski = min(en_eski or k["tarih"], k["tarih"])
-            if k["tarih"] < BASLANGIC:
-                continue
+    yeni = 0
+
+    def ekle(adres, h):
+        nonlocal yeni
+        k = metin_cikar(h)
+        if not k:
+            log(f"{adres}: metin bulunamadı")
+            return None
+        if k["tarih"] >= BASLANGIC:
             kayit = say(k)
             kayit["url"] = adres
             veri["konusmalar"].append(kayit)
-            bilinen.add(adres)
             yeni += 1
+        bilinen.add(adres)
+        bilinen_id.add(re.search(r"/353/(\d+)/", adres).group(1))
+        return k["tarih"]
+
+    # 1) doğrudan: güncel liste sayfaları (yavaş)
+    y = Yavas(log)
+    sayfa, ust, tumu_bilinen = 1, None, 0
+    while time.time() < bitis and y.hata < 4:
+        u = LISTE if sayfa == 1 else f"{LISTE}?&page={sayfa}"
+        try:
+            h = y.al(u)
+        except Exception as e:
+            log(f"Liste {sayfa} alınamadı: {e}")
+            break
+        linkler = []
+        for x in re.findall(r'href="(/(?:receptayyiperdogan/)?konusmalar/353/\d+/[^"#?]+)"', h):
+            adres = KOK + re.sub(r"^/receptayyiperdogan", "", x)
+            if adres not in linkler:
+                linkler.append(adres)
+        if not linkler or linkler == ust:
+            break
+        ust = linkler
+        en_eski = None
+        for adres in linkler:
+            if re.search(r"/353/(\d+)/", adres).group(1) in bilinen_id or time.time() > bitis:
+                continue
+            time.sleep(BEKLE)
+            try:
+                t = ekle(adres, y.al(adres))
+                en_eski = min(en_eski or t, t) if t else en_eski
+            except Exception as e:
+                log(f"{adres} alınamadı: {e}")
+                if y.hata >= 4:
+                    break
         log(f"Sayfa {sayfa}: {len(linkler)} bağlantı, en eski {en_eski}, toplam yeni {yeni}")
-        # bilinenlere ulaştıysak (ilk tarama bittiyse) ve sayfa tümüyle bilinenlerden oluşuyorsa dur
-        if all(KOK + x in bilinen for x in linkler) and veri.get("tamam"):
-            eski_seri += 1
-            if eski_seri >= 2:
-                break
-        if en_eski and en_eski < BASLANGIC:
-            veri["tamam"] = True
+        tumu_bilinen = tumu_bilinen + 1 if en_eski is None else 0
+        if tumu_bilinen >= 3 or (en_eski and en_eski < BASLANGIC):
             break
         sayfa += 1
         time.sleep(BEKLE)
+    # 2) İnternet Arşivi: doğrudan alınamayanlar ve eski konuşmalar
+    if time.time() < bitis - 60:
+        for adres, ts in sorted(wayback_liste(log).items(), key=lambda x: -int(re.search(r"/353/(\d+)/", x[0]).group(1))):
+            if time.time() > bitis:
+                break
+            if re.search(r"/353/(\d+)/", adres).group(1) in bilinen_id:
+                continue
+            time.sleep(1)
+            try:
+                ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}"))
+            except Exception as e:
+                log(f"Wayback {adres}: {e}")
+        log(f"Wayback sonrası toplam yeni {yeni}")
     veri["konusmalar"].sort(key=lambda k: k["tarih"])
     veri["guncellendi"] = dt.datetime.now(dt.timezone.utc).isoformat()
     veri["kaynak"] = "T.C. Cumhurbaşkanlığı, tccb.gov.tr (Konuşmalar)"
