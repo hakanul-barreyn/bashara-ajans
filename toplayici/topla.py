@@ -34,6 +34,7 @@ import ekler  # noqa: E402
 import marka  # noqa: E402
 import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
+import instagram  # noqa: E402
 import diller  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1059,6 +1060,12 @@ def main():
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Telegram hatası: {e}")
+    # Instagram: önce bir önceki çalıştırmada hazırlanıp sitede yayımlanmış kartları gönder, sonra yenilerini hazırla
+    try:
+        instagram.yayinla(KOK, durum, SIMDI, log=log)
+        instagram.hazirla(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Instagram hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
     yaz(DURUM, durum)
     log(f"{len(tut)} haber kaydedildi; süre {int(time.time() - BASLANGIC)} sn")

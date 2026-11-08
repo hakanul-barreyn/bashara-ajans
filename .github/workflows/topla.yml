@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  issues: write             # Instagram jetonu dolmadan hatırlatma kaydı açmak için
   pages: write
   id-token: write
 
@@ -45,7 +46,9 @@ jobs:
           python-version: "3.12"
 
       - name: Görsel kart aracı
-        run: command -v rsvg-convert >/dev/null || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null)) || true
+        run: |
+          command -v rsvg-convert >/dev/null || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin >/dev/null)) || true
+          pip install -q pillow || true
 
       - name: Haberleri çek ve özetle
         env:
@@ -54,6 +57,10 @@ jobs:
           OZET_SINIRI: ${{ vars.OZET_SINIRI }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_KANAL: ${{ vars.TELEGRAM_KANAL || secrets.TELEGRAM_KANAL }}
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          INSTAGRAM_HESAP: ${{ vars.INSTAGRAM_HESAP }}
+          IG_GUNLUK: ${{ vars.IG_GUNLUK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python toplayici/topla.py
 
       - name: Veriyi kaydet
