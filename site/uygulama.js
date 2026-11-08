@@ -632,7 +632,13 @@
     ey.appendChild(paylasDugme(h));
     g.appendChild(ey);
     kart.appendChild(g);
-    kart.addEventListener("click", (e) => { if (!e.target.closest("a,button")) aktifEt(h.id, true); });
+    // Kartın gövdesine dokunmak haberi kaynağında açar (analiz kartlarıyla aynı); metin seçerken açılmaz
+    kart.addEventListener("click", (e) => {
+      if (e.target.closest("a,button,details,summary,input,label")) return;
+      if (String(window.getSelection && window.getSelection()).trim()) return;
+      aktifEt(h.id, true);
+      if (/^https?:\/\//.test(h.url)) window.open(h.url, "_blank", "noopener");
+    });
     let ust_ = null;
     kart.addEventListener("mouseenter", () => { clearTimeout(ust_); ust_ = setTimeout(() => aktifEt(h.id), 350); });
     kart.addEventListener("mouseleave", () => clearTimeout(ust_));
