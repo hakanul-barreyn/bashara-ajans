@@ -264,6 +264,38 @@ def istatistik(oz, bas, bit, kaynaklar):
     }
 
 
+ANLATI_TARAMA = """Sen bir haber ajansının almanak editörüsün. Aşağıda {ad} dönemine ait ÖLÇÜLMÜŞ veriler var. Bu dönemin
+verisi geriye dönük taramadan geliyor: yayınların özgün başlıkları sayıldı; olay karşılaştırması ve bakış ölçümü YOK.
+Bu verilere bakarak Türkçe kısa bir bülten yaz. Kurallar:
+- Yalnızca verilen veriyi kullan. Veride olmayan olay, sayı ya da alıntı uydurma; sayıları veriden aynen al.
+  Dönemde ne olduğunu kendi bilginden anlatma; yalnızca örnek başlıklarda geçen olaylardan, başlık olarak söz et.
+- "bolge_ici" ve "ic" Filistin, Arap, İran-Yemen ve Türkiye basını; "dis" İsrail ve Batı basınıdır.
+- "dil.terimler": kelimenin bin başlıkta kaç kez geçtiği (ic_binde, dis_binde). İki tarafın kelime seçimini karşılaştır.
+- "gazze": başlığında Gazze geçen haberlerin payı. "hacim": grupların başlık sayısı (arşive erişime de bağlıdır, mutlak
+  sayıya değil orana bak). "yayin_dil": yayın yayın kelime sıklığı; dikkat çekenleri adıyla an. "onceki": önceki dönem.
+- Örneklem küçükse (başlık sayısı < 300) bunu belirt ve kesin hüküm kurma. Sakin, kanıta dayalı bir dil kullan.
+Yalnızca şu JSON'u döndür:
+{"baslik": "en çok 12 kelime", "ozet": ["1-2 paragraf"], "veri_notu": "verinin sınırları üzerine bir cümle"}
+
+VERİ:
+"""
+
+
+def anlati_yaz(anahtar_api, model, ad, ist):
+    import ekler
+    hafif = {k: ist[k] for k in ("haber_sayisi", "gun_sayisi", "hacim", "gazze", "onceki") if k in ist}
+    hafif["dil"] = {**ist["dil"], "terimler": [{k: v for k, v in t.items() if k != "ornek_ic" and k != "ornek_dis"}
+                                               | {"ornek_ic": [o["baslik"] for o in t["ornek_ic"]], "ornek_dis": [o["baslik"] for o in t["ornek_dis"]]}
+                                               for t in ist["dil"]["terimler"]]}
+    hafif["yayin_dil"] = ist.get("yayin_dil", [])[:40]
+    kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI_TARAMA.replace("{ad}", ad) + json.dumps(hafif, ensure_ascii=False)[:60000], zaman=100)
+    if kod != 200 or not isinstance(cevap, dict):
+        return kod, None
+    temiz = lambda x, n: ekler.guvenli(x)[:n]
+    return 200, {"baslik": temiz(cevap.get("baslik"), 140), "ozet": [temiz(p, 1500) for p in (cevap.get("ozet") or []) if p][:3],
+                 "veri_notu": temiz(cevap.get("veri_notu"), 400)}
+
+
 def _donemler(son_gun):
     """7 Ekim 2023'ten son_gun'e (hariç) kadar tamamen biten haftalar, aylar ve yıllar."""
     for tur in ("yillik", "aylik", "haftalik"):
@@ -276,10 +308,12 @@ def _donemler(son_gun):
             anahtar = almanak.anahtar_bul(tur, bit)
 
 
-def bultenler(kok, kaynaklar, simdi, en_cok=60, log=print):
+def bultenler(kok, kaynaklar, simdi, en_cok=300, anahtar_api="", model="", yorum=1, log=print):
+    """Bültenleri yazar. Tarama bittiyse, yorum metni olmayan bültenlerden en çok `yorum` tanesine yapay zekâ yorumu ekler
+    (önce yıllar, sonra aylar, sonra haftalar). Döndürür: (yazılan, yorum isteği sayısı, 429 alındı mı)."""
     oz = _indir(kok, log)
     if not oz:
-        return 0
+        return 0, 0, False
     arsiv = os.path.join(kok, "data", "arsiv")
     gunler = sorted(a[:10] for a in os.listdir(arsiv) if a.endswith(".json") and a[:4].isdigit()) if os.path.isdir(arsiv) else []
     canli_bas = dt.date.fromisoformat(gunler[0]) if gunler else simdi.date()
@@ -311,10 +345,30 @@ def bultenler(kok, kaynaklar, simdi, en_cok=60, log=print):
              "surum": BULTEN_SURUM, "ozet_guncellendi": oz["guncellendi"], "kaynak": "tarama"}
         almanak._yaz(yol, b)
         yazilan += 1
+    # Yorum metni: yalnızca tarama bitince (sayılar artık değişmeyecek)
+    istek, kota = 0, False
+    if oz.get("tarama_bitti") and anahtar_api and model:
+        for tur, anahtar, bas, bit, ad in _donemler(canli_bas):
+            if istek >= yorum:
+                break
+            yol = os.path.join(klasor, tur, anahtar + ".json")
+            b = almanak._oku(yol, None)
+            if not b or b.get("kaynak") != "tarama" or b.get("anlati") or b.get("deneme", 0) >= 4:
+                continue
+            kod, a = anlati_yaz(anahtar_api, model, ad, b["istatistik"])
+            istek += 1
+            if kod == 429:
+                kota = True
+                break
+            b["anlati"] = a
+            b["deneme"] = 0 if a else b.get("deneme", 0) + 1
+            almanak._yaz(yol, b)
+            yazilan += 1
+            log(f"Almanak (geçmiş): {ad} yorumu {'yazıldı' if a else 'yazılamadı'}")
     if yazilan:
         dizin_yaz(klasor)
-        log(f"Almanak (geçmiş): {yazilan} bülten yazıldı; tarama {'bitti' if oz.get('tarama_bitti') else 'sürüyor'}")
-    return yazilan
+        log(f"Almanak (geçmiş): {yazilan} bülten güncellendi; tarama {'bitti' if oz.get('tarama_bitti') else 'sürüyor'}")
+    return yazilan, istek, kota
 
 
 def dizin_yaz(klasor):

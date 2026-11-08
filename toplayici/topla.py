@@ -1096,7 +1096,13 @@ def main():
         log(f"Almanak hatası: {e}")
     # Almanak (geçmiş): geriye dönük taramanın özetinden 7 Ekim 2023'ten bu yana haftalık, aylık, yıllık bültenler
     try:
-        gecmis.bultenler(KOK, kaynaklar, SIMDI, log=log)
+        bekle = tarih_coz(durum.get("_gemini_bekle"))
+        izin = anahtar and not (bekle and bekle > SIMDI) and gunluk_istek(durum) < GEMINI_GUNLUK - 100
+        _, istek, kota = gecmis.bultenler(KOK, kaynaklar, SIMDI, anahtar_api=anahtar if izin else "", model=model, log=log)
+        if istek:
+            gunluk_istek(durum, istek)
+        if kota:
+            durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
     except Exception as e:
         log(f"Almanak (geçmiş) hatası: {e}")
     # Sitenin Telegram kanalına gündem, öncelikli analizler ve bültenler
