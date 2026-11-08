@@ -4,9 +4,9 @@
 window.MARKA = {
   "ad": "ZBS",
   "kisa_ad": "ZBS",
-  "slogan": "Mağrip’ten Körfez’e basının Türkçe takibi",
+  "slogan": "Haberin haberi",
   "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
-  "slogan_en": "The press from the Maghreb to the Gulf, followed in one place",
+  "slogan_en": "The news about the news",
   "aciklama_en": "Following the press of the Maghreb, the Gulf, the Mashriq and Anatolia, with summaries and a balance of who told the story how.",
   "goatcounter": "zbshaber"
 };
