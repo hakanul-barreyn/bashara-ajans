@@ -15,20 +15,22 @@
 
   var zaman = Math.floor(Date.now() / 6e5);
   Promise.all([fetch("data/bulten/liderler.json?t=" + zaman).then(function (r) { return r.json(); }),
-    fetch("data/bulten/alisma.json?t=" + zaman).then(function (r) { return r.json(); }).catch(function () { return null; })]).then(function (x) { ciz(x[0], x[1]); })
+    fetch("data/bulten/alisma.json?t=" + zaman).then(function (r) { return r.json(); }).catch(function () { return null; }),
+    fetch("data/konusma/erdogan.json?t=" + zaman).then(function (r) { return r.json(); }).catch(function () { return null; })]).then(function (x) { KON = x[2]; ciz(x[0], x[1]); })
     .catch(function () { var m = document.querySelector(".rp-dek"); if (m) m.after(el("p", "bekliyor", "Rapor verisi henüz hazır değil; toplayıcının bir sonraki çalışmasında yazılacak.")); });
 
-  var L = {};
+  var L = {}, KON = null;
   function ciz(v, a) {
     v.liderler.forEach(function (x) { L[x.anahtar] = x; });
     var e = L.erdogan, tr = v.tr_olaylar;
-    var em = erdoganOzet(v);
+    var em = konusmaOzet();
     var og = a ? a.olum_gunleri : [];
     var deger = {
       donem: ayAd(v.aylar[0]) + " – " + ayAd(v.aylar[v.aylar.length - 1]),
       guncel: "Güncellendi: " + new Date(v.guncellendi).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }),
       taslak: a && !a.tarama_bitti ? "Tarama sürüyor; sayılar kesinleşmedi" : "",
-      erdogan_metin: em ? em.metin : "",
+      erdogan_metin: em ? em.metin : "Konuşmalar Cumhurbaşkanlığı sitesinden toplanıyor; ilk sonuçlar birkaç saat içinde burada olacak.",
+      erdogan_alt: "Üstte: her ay yapılan konuşmalar (gri) ve bunların içinde Gazze ya da Filistin’den söz edenlerin yüzdesi (yeşil). Altta: on bin kelimede kaç kez “Gazze” ya da “Filistin” (yeşil) ve “soykırım” (kırmızı) dendiği. Kaynak: tccb.gov.tr.",
       olum_metin: og.length ? "Gazze Sağlık Bakanlığı’nın bir günde 300 ya da daha fazla yeni ölüm bildirdiği " + og.length + " gün için, her lider grubunun adının o gün ve sonraki iki gün kaç kat daha sık geçtiğini hesapladık. 1,5 kattan az artış, o liderlerin haber olacak bir şey söylemediğine işaret ediyor." : ""
     };
     document.querySelectorAll("[data-v]").forEach(function (x) { var d = deger[x.dataset.v]; x.textContent = d == null ? "–" : d; if (x.dataset.v === "taslak" && !d) x.hidden = true; });
@@ -36,26 +38,87 @@
     var kart = function (b, s) { var d = el("div", "rp-kart"); d.append(el("b", null, b), el("span", null, s)); k.appendChild(d); };
     kart(sayi(v.liderler.length, 0), "lider, bakan ve BM yetkilisinin adı Filistin bağlamındaki başlıklarda izlendi");
     if (e) kart(yuzde(e.kelime.soykirim, e.toplam), "Erdoğan’ın adının geçtiği Filistin başlıklarında “soykırım” da geçiyor");
-    if (em && em.once != null) kart(sayi(em.once, 0) + " → " + sayi(em.sonra, 0), "Türkiye basınında haftada ortalama Erdoğan–Filistin başlığı: seçimden önceki 8 hafta → sonraki 8 hafta");
+    if (em) kart(em.kartB, em.kartS);
     var ol = olumOzet(og);
     var abd = ol.filter(function (x) { return x.grup === "ABD"; })[0];
     if (abd) kart(abd.sessiz + " / " + abd.n, "kitlesel ölüm gününde ABD liderlerinin adı 1,5 kat bile artmadı");
     [gruplar, erdoganGrafik, hedef, kelimeler, tetik, function () { olumTablo(ol); }, ornekler, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("liderler", er); } });
   }
 
-  function erdoganOzet(v) {
-    var e = L.erdogan; if (!e || !e.haftalik_tr) return null;
-    var H = v.haftalar, s = e.haftalik_tr, secim = "2024-03-31";
-    var i = H.findIndex(function (h) { return h >= "2024-03-25"; }); if (i < 8) return null;
-    var ort = function (dizi, a, b) { var x = dizi.slice(a, b); return x.reduce(function (t, y) { return t + y; }, 0) / x.length; };
-    var once = ort(s.toplam, i - 8, i + 1), sonra = ort(s.toplam, i + 1, i + 9);
-    var soyOnce = ort(s.soykirim, i - 8, i + 1);
-    var donus = null; for (var j = i + 1; j < H.length; j++) if (s.soykirim[j] >= soyOnce && soyOnce > 0) { donus = H[j]; break; }
-    var top = 0, ti = 0; s.toplam.forEach(function (x, j) { if (x > top) { top = x; ti = j; } });
-    var metin = "Türkiye basınında Erdoğan’ın adının Filistin bağlamında geçtiği başlıklar 31 Mart 2024 yerel seçiminden önceki sekiz haftada haftada ortalama " + sayi(once, 0) + ", sonraki sekiz haftada " + sayi(sonra, 0) + ". “Soykırım” geçen Erdoğan başlıkları seçimden önce haftada " + sayi(soyOnce, 1) + (donus ? "; seçimden sonra bu düzeye ilk kez " + gunAd(donus) + " haftasında yeniden çıktı." : "; seçimden sonra bu düzeye bir daha çıkmadı.") + " En yoğun hafta " + gunAd(H[ti]) + " haftası (" + top + " başlık). Başlıkta Netanyahu’nun adı İsrail’den ayrı yazıldığında suçlama çoğunlukla bir kişiye, “Siyonist” dendiğinde bir ideolojiye yöneliyor; aşağıdaki çubuklar bu dağılımı gösteriyor.";
-    return { once: once, sonra: sonra, metin: metin };
+  // ---- Erdoğan'ın resmî konuşmaları (tccb.gov.tr)
+  var IMLER = [{ gun: "2023-10-07", ad: "7 Ekim" }, { gun: "2024-03-31", ad: "Türkiye’de yerel seçim" }, { gun: "2024-11-05", ad: "ABD seçimi" },
+    { gun: "2025-01-20", ad: "Trump göreve başladı" }, { gun: "2025-10-10", ad: "Gazze’de ateşkes" }];
+  function kv(k, a) { return (k.sayi && k.sayi[a]) || 0; }
+  function aylik() {
+    var A = {}; KON.konusmalar.forEach(function (k) {
+      var m = k.tarih.slice(0, 7), x = A[m] = A[m] || { ay: m, n: 0, nf: 0, kelime: 0, gf: 0, soy: 0, isr: 0 };
+      x.n++; x.kelime += k.kelime; var gf = kv(k, "gazze") + kv(k, "filistin"); x.gf += gf; if (gf) x.nf++; x.soy += kv(k, "soykirim"); x.isr += kv(k, "israil");
+    });
+    return Object.keys(A).sort().map(function (m) { return A[m]; });
   }
-
+  function donem(b, e) {
+    var xs = KON.konusmalar.filter(function (k) { return k.tarih >= b && k.tarih < e; });
+    var t = function (a) { return xs.reduce(function (s, k) { return s + (typeof a === "function" ? a(k) : kv(k, a)); }, 0); };
+    var kel = t(function (k) { return k.kelime; }) || 1, nf = xs.filter(function (k) { return kv(k, "gazze") + kv(k, "filistin"); }).length;
+    var on = function (x) { return 1e4 * x / kel; };
+    return { n: xs.length, nf: nf, pay: xs.length ? 100 * nf / xs.length : null, gf: on(t("gazze") + t("filistin")), soy: on(t("soykirim")), net: on(t("netanyahu")), abd: on(t("abd") + t("trump") + t("biden")), gun: Math.max(1, (Date.parse(e) - Date.parse(b)) / 864e5) };
+  }
+  function ekleGun(g, n) { var d = new Date(g + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  function konusmaOzet() {
+    if (!KON || !KON.konusmalar || KON.konusmalar.length < 20) return null;
+    var yo = donem(ekleGun("2024-03-31", -90), "2024-03-31"), ys = donem("2024-03-31", ekleGun("2024-03-31", 90));
+    var ao = donem(ekleGun("2024-11-05", -90), "2024-11-05"), as = donem("2024-11-05", "2025-01-20"), tr = donem("2025-01-20", ekleGun("2025-01-20", 90));
+    var A = aylik().filter(function (x) { return x.ay >= "2023-10"; }), tepe = A.reduce(function (a, x) { return x.kelime > 2000 && 1e4 * x.gf / x.kelime > 1e4 * a.gf / Math.max(1, a.kelime) ? x : a; }, A[0]);
+    var on = function (x) { return sayi(x, 1); };
+    var metin = "Toplanan " + KON.konusmalar.length + " konuşmaya göre: Türkiye’deki yerel seçimden önceki üç ayda Erdoğan konuşmalarının yüzde " + sayi(yo.pay, 0) + " kadarında Gazze ya da Filistin’den söz etti, on bin kelimede " + on(yo.gf) + " kez; seçimden sonraki üç ayda yüzde " + sayi(ys.pay, 0) + ", on bin kelimede " + on(ys.gf) + ". " +
+      "ABD seçiminden önceki üç ayda on bin kelimede " + on(ao.gf) + " kez Gazze ya da Filistin dedi; ABD seçimi ile Trump’ın göreve başlaması arasında " + on(as.gf) + ", Trump’ın ilk üç ayında " + on(tr.gf) + ". “Soykırım” kelimesi aynı üç dönemde on bin kelimede " + on(ao.soy) + ", " + on(as.soy) + " ve " + on(tr.soy) + " kez geçti. " +
+      "Filistin’e en çok yer verdiği ay " + ayAd(tepe.ay) + " (on bin kelimede " + on(1e4 * tepe.gf / tepe.kelime) + ").";
+    return { metin: metin, kartB: on(ao.gf) + " → " + on(tr.gf), kartS: "Erdoğan’ın konuşmalarında on bin kelimede “Gazze / Filistin”: ABD seçiminden önceki üç ay → Trump’ın ilk üç ayı" };
+  }
+  function erdoganGrafik(v) {
+    var k = $("g-erdogan");
+    if (!KON || !KON.konusmalar || KON.konusmalar.length < 20) { k.appendChild(el("p", "bekliyor", "Konuşmalar toplanıyor.")); return; }
+    var A = aylik(), et = A.map(function (x) { return x.ay; });
+    efsane(k, [["#d5d8d5", "konuşma sayısı"], [RENK.gazze, "Gazze / Filistin geçen konuşmaların yüzdesi"]]);
+    cizgi(k, et, [{ v: A.map(function (x) { return Math.round(100 * x.nf / x.n); }), renk: RENK.gazze, ad: "Gazze / Filistin geçen konuşma %", kalin: 2.4 }], A.map(function (x) { return x.n; }), IMLER, "Konuşmalarda Filistin payı", 230);
+    efsane(k, [[RENK.gazze, "on bin kelimede Gazze / Filistin"], [RENK.soykirim, "on bin kelimede soykırım"], [RENK.netanyahu, "on bin kelimede Netanyahu"]]);
+    var on = function (f) { return A.map(function (x) { return x.kelime ? Math.round(1e5 * f(x) / x.kelime) / 10 : 0; }); };
+    var net = {}; KON.konusmalar.forEach(function (c) { var m = c.tarih.slice(0, 7); net[m] = (net[m] || 0) + kv(c, "netanyahu"); });
+    cizgi(k, et, [{ v: on(function (x) { return x.gf; }), renk: RENK.gazze, ad: "Gazze / Filistin", kalin: 2.4 }, { v: on(function (x) { return x.soy; }), renk: RENK.soykirim, ad: "soykırım" }, { v: on(function (x) { return net[x.ay] || 0; }), renk: RENK.netanyahu, ad: "Netanyahu" }], null, IMLER, "On bin kelimede", 230);
+    // dönem tablosu
+    var D = [["7 Ekim’den önce (Ocak–Eylül 2023)", "2023-01-01", "2023-10-07"], ["7 Ekim – Türkiye yerel seçimi", "2023-10-07", "2024-03-31"], ["Yerel seçim – ABD seçimi", "2024-03-31", "2024-11-05"],
+      ["ABD seçimi – Trump’ın göreve başlaması", "2024-11-05", "2025-01-20"], ["Trump’ın göreve başlaması – ateşkes", "2025-01-20", "2025-10-10"], ["Ateşkesten bu yana", "2025-10-10", "2099-01-01"]];
+    var t = el("table"); t.innerHTML = "<thead><tr><th>Dönem</th><th>Konuşma</th><th>Gazze / Filistin geçen</th><th>On bin kelimede Gazze / Filistin</th><th>soykırım</th><th>Netanyahu</th><th>ABD / Trump / Biden</th></tr></thead>";
+    var bd = el("tbody");
+    D.forEach(function (d) { var x = donem(d[1], d[2]); if (!x.n) return; var r = el("tr"); r.append(el("td", null, d[0]), el("td", "sayi", x.n), el("td", "sayi", "%" + sayi(x.pay, 0)), el("td", "sayi", sayi(x.gf, 1)), el("td", "sayi", sayi(x.soy, 1)), el("td", "sayi", sayi(x.net, 1)), el("td", "sayi", sayi(x.abd, 1))); bd.appendChild(r); });
+    t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); $("g-donemler").appendChild(kt);
+    konusmaListe();
+  }
+  function hedef() {
+    var k = $("g-hedef"); if (!KON || !KON.konusmalar || KON.konusmalar.length < 20) return;
+    var H = [["israil", "İsrail", "#6f7772"], ["israil_yonetimi", "İsrail / Netanyahu yönetimi, hükümeti", "#c39a35"], ["netanyahu", "Netanyahu", RENK.netanyahu], ["siyonist", "Siyonist", RENK.siyonist]];
+    efsane(k, H.map(function (h) { return [h[2], h[1]]; }));
+    var C = {}; KON.konusmalar.forEach(function (c) { if (c.tarih < "2023-10-01") return; var q = c.tarih.slice(0, 4) + " Ç" + (Math.floor((+c.tarih.slice(5, 7) - 1) / 3) + 1); var x = C[q] = C[q] || { israil: 0, israil_yonetimi: 0, netanyahu: 0, siyonist: 0 }; H.forEach(function (h) { x[h[0]] += kv(c, h[0]); }); x.israil -= kv(c, "israil_yonetimi"); });
+    Object.keys(C).sort().forEach(function (q) {
+      var x = C[q], top = H.reduce(function (s, h) { return s + Math.max(0, x[h[0]]); }, 0); if (!top) return;
+      var r = el("div", "rp-yigin-satir"); r.appendChild(el("span", "rp-yigin-ad", q + " · " + top + " kez"));
+      var y = el("div", "rp-yigin");
+      H.forEach(function (h) { var n = Math.max(0, x[h[0]]); if (!n) return; var i = el("i", null, n / top >= 0.08 ? "%" + sayi(100 * n / top, 0) : ""); i.style.width = (100 * n / top) + "%"; i.style.background = h[2]; i.title = h[1] + ": " + n; y.appendChild(i); });
+      r.appendChild(y); k.appendChild(r);
+    });
+  }
+  function konusmaListe() {
+    var k = $("g-konusmalar");
+    KON.konusmalar.filter(function (c) { return c.kelime >= 400 && c.tarih >= "2023-10-07"; }).map(function (c) { return { c: c, o: 1e4 * (kv(c, "gazze") + kv(c, "filistin")) / c.kelime }; })
+      .sort(function (a, b) { return b.o - a.o; }).slice(0, 8).forEach(function (x) {
+        var c = x.c, d = el("div", "rp-zirve-kart"), b = el("div", "rp-zirve-bas");
+        var a = el("a", null, c.baslik); a.href = c.url; a.target = "_blank"; a.rel = "noopener";
+        var bb = el("b"); bb.appendChild(a); b.append(bb, el("span", null, gunAd(c.tarih) + " · " + sayi(c.kelime, 0) + " kelime")); d.appendChild(b);
+        d.appendChild(el("p", "rp-olay-olcu", "On bin kelimede Gazze / Filistin: " + sayi(x.o, 0) + " · soykırım: " + kv(c, "soykirim") + " · Netanyahu: " + kv(c, "netanyahu") + " · Siyonist: " + kv(c, "siyonist")));
+        (c.cumle || []).slice(0, 3).forEach(function (s) { d.appendChild(el("p", "rp-alinti", "“" + s + "”")); });
+        k.appendChild(d);
+      });
+  }
   function cizgi(kap, etiketler, seriler, cubuk, isaretler, etiket, H0) {
     var W = 760, H = H0 || 240, P = { l: 36, r: 12, t: 12, b: 24 }, n = etiketler.length;
     var x = function (i) { return P.l + (W - P.l - P.r) * (i + 0.5) / n; };
@@ -96,19 +159,6 @@
     efsane(k, [[RENK.toplam, "Erdoğan · Filistin başlığı"], [RENK.soykirim, "+ soykırım"], [RENK.netanyahu, "+ Netanyahu"], [RENK.siyonist, "+ Siyonist"]]);
     cizgi(k, v.haftalar, [{ v: s.toplam, renk: RENK.toplam, ad: "Erdoğan", cubuk: true }, { v: s.soykirim, renk: RENK.soykirim, ad: "soykırım" }, { v: s.netanyahu, renk: RENK.netanyahu, ad: "Netanyahu" }, { v: s.siyonist, renk: RENK.siyonist, ad: "Siyonist" }],
       null, v.tr_olaylar, "Erdoğan haftalık", 280);
-  }
-  function hedef(v) {
-    var k = $("g-hedef");
-    efsane(k, [[RENK.netanyahu, "Netanyahu"], [RENK.israil, "İsrail"], [RENK.siyonist, "Siyonist"]]);
-    v.liderler.filter(function (x) { return x.grup !== "İsrail" && x.toplam >= 150; }).slice(0, 14).forEach(function (x) {
-      var r = el("div", "rp-hedef-satir"); r.appendChild(el("span", "rp-yigin-ad", x.ad.replace(/ \(.*\)/, "") + " · " + x.toplam));
-      var c = el("div", "rp-terim-cubuklar");
-      ["netanyahu", "israil", "siyonist"].forEach(function (a) {
-        var p = 100 * (x.kelime[a] || 0) / x.toplam, d = el("div", "rp-cubuk"), i = el("i"); i.style.width = Math.max(0.5, p) + "%"; i.style.background = RENK[a];
-        var w = el("div"); w.appendChild(i); d.append(w, el("span", null, "%" + sayi(p, 0))); c.appendChild(d);
-      });
-      r.appendChild(c); k.appendChild(r);
-    });
   }
   function kelimeler(v) {
     var kk = [["soykirim", "soykırım"], ["katliam", "katliam"], ["ateskes", "ateşkes"], ["hamas", "Hamas"], ["netanyahu", "Netanyahu"], ["siyonist", "Siyonist"]];

@@ -144,3 +144,28 @@ def calistir(klasor, sure=2400, log=print):
 
 if __name__ == "__main__":
     calistir(sys.argv[1] if len(sys.argv) > 1 else "konusma", int(sys.argv[2]) if len(sys.argv) > 2 else 2400)
+
+
+def indir(kok, log=print):
+    """Toplayıcıdan: konuşma özetini konusma dalından data/konusma/erdogan.json'a indirir (6 saatte bir)."""
+    yol = os.path.join(kok, "data", "konusma", "erdogan.json")
+    depo = os.environ.get("GITHUB_REPOSITORY", "")
+    zyol = os.path.join(kok, "data", "konusma", "indirme.json")
+    try:
+        son = json.load(open(zyol))["zaman"]
+    except (OSError, ValueError, KeyError):
+        son = 0
+    if not depo or (os.path.exists(yol) and time.time() - son < 6 * 3600):
+        return
+    try:
+        istek = urllib.request.Request(f"https://raw.githubusercontent.com/{depo}/konusma/erdogan.json", headers={"User-Agent": "zbs-toplayici"})
+        with urllib.request.urlopen(istek, timeout=60) as r:
+            icerik = r.read()
+        json.loads(icerik)
+        os.makedirs(os.path.dirname(yol), exist_ok=True)
+        with open(yol, "wb") as f:
+            f.write(icerik)
+        with open(zyol, "w") as f:
+            json.dump({"zaman": time.time()}, f)
+    except Exception as e:
+        log(f"Konuşmalar indirilemedi: {e}")

@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611082330">
-<link rel="stylesheet" href="site/rapor.css?v=202611090300">
+<link rel="stylesheet" href="site/rapor.css?v=202611090330">
 <script src="site/dil.js?v=202611081749"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -53,12 +53,16 @@
 
   <article class="rp-metin" id="erdogan">
     <p class="rp-soru">Soru 2 · Türkiye</p>
-    <h2>Erdoğan: seçim, ticaret, soykırım</h2>
+    <h2>Erdoğan’ın resmî konuşmalarında Filistin</h2>
+    <p>Cumhurbaşkanlığı sitesinde yayımlanan bütün konuşmaları tek tek okuyup saydık: her ay kaç konuşma yaptı, bunların kaçında Gazze ya da Filistin’den söz etti, on bin kelimede kaç kez “Gazze”, “Filistin” ve “soykırım” dedi. Dikey çizgiler Türkiye’deki yerel seçimi, ABD seçimini, Trump’ın göreve başlamasını ve ateşkesleri gösteriyor.</p>
     <p data-v="erdogan_metin"></p>
-    <figure class="rp-sekil"><div id="g-erdogan"></div><figcaption>Türkiye basınında Erdoğan’ın adının Filistin bağlamında geçtiği haftalık başlıklar (gri) ve bunların içinde “soykırım”, “Netanyahu”, “Siyonist” geçenler. Dikey çizgiler: 31 Mart 2024 yerel seçimi ve 2 Mayıs 2024’te İsrail’le ticaretin durdurulması.</figcaption></figure>
+    <figure class="rp-sekil"><div id="g-erdogan"></div><figcaption data-v="erdogan_alt"></figcaption></figure>
+    <div id="g-donemler" class="rp-tablo"></div>
     <h3 class="rp-ara">Suçlama kime?</h3>
-    <p>Başlıkta liderin adıyla birlikte “Netanyahu”, “İsrail” ya da “Siyonist” geçen başlıkların dağılımı. Suçlamanın Netanyahu hükümetine mi, İsrail devletine mi, Siyonizme mi yöneldiğine dair kaba bir ölçü.</p>
+    <p>Konuşmalarda İsrail’e yöneltilen sözlerin hedefi: devletin adı (“İsrail”), kişi (“Netanyahu”), yönetim (“İsrail yönetimi / hükümeti”, “Netanyahu hükümeti”) ya da ideoloji (“Siyonist”). Çeyrek çeyrek, bu adların konuşmalarda kaç kez geçtiği.</p>
     <div id="g-hedef"></div>
+    <h3 class="rp-ara">Filistin’e en çok yer verdiği konuşmalar</h3>
+    <div id="g-konusmalar" class="rp-zirve"></div>
   </article>
 
   <article class="rp-metin" id="kelimeler">
@@ -96,6 +100,6 @@
   <p class="rp-geri"><a href="almanak.html">← Almanak’a dön</a> · <a href="olaylar.html">Alışma: olaylar tekrarlandıkça →</a></p>
 </main>
 <script src="site/rapor-ortak.js?v=202611090300"></script>
-<script src="site/sayfa-liderler.js?v=202611090100"></script>
+<script src="site/sayfa-liderler.js?v=202611090330"></script>
 </body>
 </html>
