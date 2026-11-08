@@ -138,7 +138,20 @@ def calistir(klasor, sure=2400, log=print):
         bilinen_id.add(re.search(r"/353/(\d+)/", adres).group(1))
         return k["tarih"]
 
-    # 1) doğrudan: güncel liste sayfaları (yavaş)
+    # 1) İnternet Arşivi: hızlı; kayıtlı bütün konuşmalar (sitenin kendisi art arda isteklerde yanıt vermeyi kesiyor)
+    if True:
+        for adres, ts in sorted(wayback_liste(log).items(), key=lambda x: -int(re.search(r"/353/(\d+)/", x[0]).group(1))):
+            if time.time() > bitis - sure * 0.25:   # sürenin son çeyreği sitenin kendisine
+                break
+            if re.search(r"/353/(\d+)/", adres).group(1) in bilinen_id:
+                continue
+            time.sleep(1)
+            try:
+                ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}"))
+            except Exception as e:
+                log(f"Wayback {adres}: {e}")
+        log(f"Wayback sonrası toplam yeni {yeni}")
+    # 2) doğrudan: güncel liste sayfaları (yavaş); arşivde henüz olmayan yeni konuşmalar
     y = Yavas(log)
     sayfa, ust, tumu_bilinen = 1, None, 0
     while time.time() < bitis and y.hata < 4:
@@ -174,19 +187,6 @@ def calistir(klasor, sure=2400, log=print):
             break
         sayfa += 1
         time.sleep(BEKLE)
-    # 2) İnternet Arşivi: doğrudan alınamayanlar ve eski konuşmalar
-    if time.time() < bitis - 60:
-        for adres, ts in sorted(wayback_liste(log).items(), key=lambda x: -int(re.search(r"/353/(\d+)/", x[0]).group(1))):
-            if time.time() > bitis:
-                break
-            if re.search(r"/353/(\d+)/", adres).group(1) in bilinen_id:
-                continue
-            time.sleep(1)
-            try:
-                ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}"))
-            except Exception as e:
-                log(f"Wayback {adres}: {e}")
-        log(f"Wayback sonrası toplam yeni {yeni}")
     veri["konusmalar"].sort(key=lambda k: k["tarih"])
     veri["guncellendi"] = dt.datetime.now(dt.timezone.utc).isoformat()
     veri["kaynak"] = "T.C. Cumhurbaşkanlığı, tccb.gov.tr (Konuşmalar)"
