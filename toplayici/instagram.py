@@ -759,3 +759,33 @@ def yayinla(kok, durum, simdi, log=print):
         log(f"Instagram: gönderilemedi: {hata}" + (f" → {neden}" if neden else ""))
         return 0
     return 0
+
+
+# ------------------------------------------------------------------ başka hesapların herkese açık gönderileri
+def baska_hesap(kullanici, adet=25, log=print):
+    """Başka bir herkese açık İşletme/İçerik Üreticisi Instagram hesabının son gönderileri (Instagram'ın 'business discovery'
+    özelliği; kendi hesabımızın jetonuyla, ücretsiz). Döndürür: toplayıcının öge listesi (başlık = açıklamanın başı)."""
+    token = os.environ.get("INSTAGRAM_TOKEN", "").strip()
+    m = re.search(r"(IG|EAA)[A-Za-z0-9_-]{40,}", token)
+    hesap = os.environ.get("INSTAGRAM_HESAP", "").strip()
+    if not m or not hesap or not re.fullmatch(r"[A-Za-z0-9_.]{1,30}", kullanici or ""):
+        return []
+    token = m.group(0)
+    sunucu = f"https://graph.instagram.com/{SURUM}" if token.startswith("IG") else f"https://graph.facebook.com/{SURUM}"
+    alan = f"business_discovery.username({kullanici}){{media.limit({adet}){{caption,permalink,timestamp,media_type}}}}"
+    r = _istek("GET", f"{sunucu}/{hesap}?" + urllib.parse.urlencode({"fields": alan, "access_token": token}))
+    if not r:
+        log(f"Instagram @{kullanici}: okunamadı ({_gizle(SON_HATA, token)})")
+        return []
+    cikti = []
+    for g in ((r.get("business_discovery") or {}).get("media") or {}).get("data", []):
+        metin = re.sub(r"\s+", " ", g.get("caption") or "").strip()
+        if len(metin) < 15 or not str(g.get("permalink", "")).startswith("https://"):
+            continue
+        try:
+            tarih = dt.datetime.strptime(g["timestamp"], "%Y-%m-%dT%H:%M:%S%z")
+        except Exception:
+            tarih = None
+        cikti.append({"url": g["permalink"], "baslik": metin[:140] + ("…" if len(metin) > 140 else ""), "tarih": tarih,
+                      "giris": metin[:1500], "telegram": True, "gorsel": None})
+    return cikti

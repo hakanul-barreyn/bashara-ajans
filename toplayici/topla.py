@@ -576,6 +576,16 @@ def cek_telegram(kanal, sinir=700):
 
 def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
+    if k.get("sadece_instagram"):
+        # Yalnızca Instagram hesabı olan kaynak (saha muhabirleri): kendi Instagram hesabımızın jetonuyla, ücretsiz
+        og = instagram.baska_hesap(k["sadece_instagram"], log=log)
+        d.update({"yontem": None, "surum": KESIF_SURUMU, "son_oge": len(og)})
+        d.setdefault("kesif", SIMDI.isoformat())
+        if og:
+            d["son_basari"], d["hata"] = SIMDI.isoformat(), 0
+        else:
+            d["hata"] = d.get("hata", 0) + 1
+        return k, d, og[:KAYNAK_BASINA]
     if k.get("sadece_telegram"):
         # Yalnızca Telegram kanalı olan kaynak: site keşfi yok, doğrudan kanalın açık sayfası okunur
         tg = cek_telegram(k["sadece_telegram"], 4000 if k.get("resmi_grup") else 700)
