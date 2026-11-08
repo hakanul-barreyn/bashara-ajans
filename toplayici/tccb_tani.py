@@ -1,28 +1,25 @@
-"""Tek seferlik tanı: tccb.gov.tr konuşmalar sayfalarının yapısı (robots.txt'e uyar)."""
-import re, urllib.request, urllib.robotparser
+"""Tek seferlik tanı: tccb.gov.tr konuşmalarına doğrudan ve Wayback üzerinden erişim."""
+import re, socket, time, urllib.request, json
+socket.setdefaulttimeout(25)
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 def al(u):
-    with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=40) as r:
-        return r.read().decode("utf-8", "replace")
-rp = urllib.robotparser.RobotFileParser("https://www.tccb.gov.tr/robots.txt")
-try:
-    print(al("https://www.tccb.gov.tr/robots.txt")[:1500]); rp.read()
-except Exception as e: print("robots hata", e)
-for u in ["https://www.tccb.gov.tr/konusmalar/", "https://www.tccb.gov.tr/konusmalar/?&page=2"]:
-    print("====", u, rp.can_fetch(UA, u))
+    t = time.time()
     try:
-        h = al(u); print(len(h))
-        ls = sorted(set(re.findall(r'href="([^"]*konusmalar[^"]*)"', h)))
-        print("\n".join(ls[:40]))
-        for m in re.finditer(r"\d{1,2}\.\d{1,2}\.\d{4}|\d{1,2} \w+ \d{4}", h): print("TARIH", h[max(0,m.start()-200):m.end()+50].replace("\n"," ")); break
-        print("SAYFALAMA", sorted(set(re.findall(r'href="([^"]*page=[^"]*)"', h)))[:10])
-    except Exception as e: print("hata", e)
+        with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=25) as r:
+            h = r.read().decode("utf-8", "replace"); print("OK", u, r.status, len(h), round(time.time() - t, 1), "s"); return h
+    except Exception as e:
+        print("HATA", u, repr(e)[:200], round(time.time() - t, 1), "s"); return ""
+print(al("https://www.tccb.gov.tr/robots.txt")[:800])
 h = al("https://www.tccb.gov.tr/konusmalar/")
-ls = [x for x in re.findall(r'href="(/konusmalar/\d+/\d+/[^"]+)"', h)]
-print("ORNEK", ls[:3])
-if ls:
-    u = "https://www.tccb.gov.tr" + ls[0]; print(rp.can_fetch(UA, u))
-    d = al(u); print(len(d))
-    i = d.find("<h1"); print(d[i:i+3000])
-    for k in ("class=\"detay", "id=\"divContentArea", "class=\"text", "<article"):
-        j = d.find(k); print(k, j, d[j:j+500] if j > 0 else "")
+print(sorted(set(re.findall(r'href="([^"]*konusmalar[^"]*)"', h)))[:20])
+c = al("https://web.archive.org/cdx/search/cdx?url=tccb.gov.tr/konusmalar/353/*&output=json&fl=original,timestamp&filter=statuscode:200&collapse=urlkey&limit=5000")
+try:
+    v = json.loads(c); print("CDX", len(v)); print(v[1:15]); print(v[-10:])
+    ids = sorted({int(m.group(1)) for x in v[1:] for m in [re.search(r"/353/(\d+)/", x[0])] if m}); print("ID aralık", ids[:3], ids[-3:], len(ids))
+    u, ts = v[len(v) // 2]
+    d = al(f"https://web.archive.org/web/{ts}id_/{u}")
+    i = d.find("<h1"); print(re.sub(r"\s+", " ", d[i:i+2500]))
+    for k in ("detay", "divContentArea", "konusma", "<article", "tarih", "date"):
+        j = d.find(k); print("--", k, j, re.sub(r"\s+", " ", d[j:j+400]) if j > 0 else "")
+except Exception as e:
+    print("cdx çözülemedi", e, c[:300])
