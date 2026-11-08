@@ -426,13 +426,28 @@
   }
 
   // ---------------------------------------------------- analizler: haberin aktarımından çok yorum ve inceleme
-  // Öncelikli yayınlar (Al-Akhbar) başta; Türkçe özeti yazılmış olanlar özeti yazılmamışlardan önce.
+  // Sabit yerler: 1. Yakın Doğu Haber, 2. Haaretz, 3. Al-Akhbar (Arapça ya da İngilizce), her birinin en yeni analizi
+  // (son 72 saatte yoksa son 14 günün en yenisi; hiç analiz yoksa bölgeyle ilgili en yeni yazısı). Kalan yerlerde her yayından en çok bir analiz.
+  const ANALIZ_SABIT = [[71], [19], [1, 2]];
   function analizCiz() {
     const kutu = $("analizler"); kutu.innerHTML = "";
-    const liste = haberler.filter((h) => h.nitelik === "analiz" && h.ilgili && !h.atla && kaynaklar[h.kaynak] && dk(h.tarih) < 72 * 60
-      && (bolge === "Tümü" || (kaynaklar[h.kaynak].kamp || kaynaklar[h.kaynak].bolge) === bolge))
-      .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || (!!OZ(b) - !!OZ(a)) || (a.tarih < b.tarih ? 1 : -1))
-      .slice(0, 12);
+    const uygun = (h, gun) => h.nitelik === "analiz" && h.ilgili && !h.atla && kaynaklar[h.kaynak] && dk(h.tarih) < gun * 24 * 60
+      && (bolge === "Tümü" || (kaynaklar[h.kaynak].kamp || kaynaklar[h.kaynak].bolge) === bolge);
+    const sira = (a, b) => (!!OZ(b) - !!OZ(a)) || (a.tarih < b.tarih ? 1 : -1);
+    const sabitId = new Set(ANALIZ_SABIT.flat());
+    const liste = [];
+    ANALIZ_SABIT.forEach((idler) => {
+      const aday = haberler.filter((h) => idler.includes(+h.kaynak));
+      // Yayının analiz olarak işaretlenmiş yazısı yoksa bölgeyle ilgili en yeni yazısı: yer hep o yayına ayrılı kalır
+      const ilgiliSon = (x) => x.ilgili && !x.atla && kaynaklar[x.kaynak] && dk(x.tarih) < 3 * 24 * 60;
+      const h = aday.filter((x) => uygun(x, 3)).sort(sira)[0] || aday.filter((x) => uygun(x, 14)).sort((a, b) => (a.tarih < b.tarih ? 1 : -1))[0]
+        || aday.filter(ilgiliSon).sort(sira)[0];
+      if (h) liste.push(h);
+    });
+    const gorulen = new Set();
+    haberler.filter((h) => uygun(h, 3) && !sabitId.has(+h.kaynak))
+      .sort((a, b) => (!!kaynaklar[b.kaynak].oncelik - !!kaynaklar[a.kaynak].oncelik) || sira(a, b))
+      .forEach((h) => { if (liste.length < 12 && !gorulen.has(h.kaynak)) { gorulen.add(h.kaynak); liste.push(h); } });
     kutu.hidden = !liste.length || !!olaySec || sadeceAnaliz;
     if (kutu.hidden) return;
     const ust = el("div", "slayt-ust");
