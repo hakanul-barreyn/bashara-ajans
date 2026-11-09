@@ -89,6 +89,9 @@ def _hafta(g):
     return (d - dt.timedelta(days=d.weekday())).isoformat()
 
 
+RAPOR_SURUM = 6
+
+
 def hesapla(kok, kaynaklar, simdi, log=print):
     yol = os.path.join(kok, "data", "bulten", "gecmis-ozet.json.gz")
     try:
@@ -99,6 +102,14 @@ def hesapla(kok, kaynaklar, simdi, log=print):
     if oz.get("surum", 1) < 6:
         return None   # bağlamlı sayılar ve faillik yok; özetin yeni sürümü bekleniyor
     dis = dis_veri.guncelle(kok, log) or {"gun": {}}
+    # özet ve dış veri değişmediyse yeniden hesaplama (her 15 dakikada iki dakika kazandırır)
+    try:
+        eski = json.load(open(os.path.join(kok, "data", "bulten", "rapor-7-ekim.json"), encoding="utf-8"))
+        if (eski.get("surum") == RAPOR_SURUM and eski.get("ozet_guncellendi") == oz.get("guncellendi")
+                and (eski.get("dis") or {}).get("indirildi") == dis.get("indirildi")):
+            return eski
+    except (OSError, ValueError):
+        pass
     K = {str(k["id"]): k for k in kaynaklar}
     gk = {kid: grup(k) for kid, k in K.items()}
     ay, hafta, toplam, yay = {}, {}, {g: _bos() for g, _ in GRUPLAR}, {}
@@ -163,7 +174,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         gruplar.append({"anahtar": g, "ad": a, "olculen_yayin": sum(1 for kid, r in yay.items() if gk.get(kid) == g and r["n"]), **o})
     toplam_olu = sum(olu_ay.values())
     veri = {
-        "guncellendi": simdi.isoformat(), "ozet_guncellendi": oz["guncellendi"], "tarama_bitti": oz.get("tarama_bitti"),
+        "surum": RAPOR_SURUM, "guncellendi": simdi.isoformat(), "ozet_guncellendi": oz["guncellendi"], "tarama_bitti": oz.get("tarama_bitti"),
         "bas": aylar[0] if aylar else None, "son": aylar[-1] if aylar else None,
         "baslik": sum(t["n"] for t in toplam.values()), "tarihsiz": oz.get("tarihsiz"),
         "dis": {"kaynak": dis.get("kaynak"), "olu": toplam_olu, "gazeteci": sum(gzt_ay.values()), "indirildi": dis.get("indirildi")},

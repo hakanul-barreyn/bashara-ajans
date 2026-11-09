@@ -25,6 +25,7 @@ permissions:
   issues: write             # Instagram jetonu dolmadan hatırlatma kaydı açmak için
   pages: write
   id-token: write
+  actions: write            # bitince bir sonraki çalıştırmayı başlatmak için
 
 concurrency:
   group: topla
@@ -33,11 +34,13 @@ concurrency:
 jobs:
   topla:
     runs-on: ubuntu-latest
-    timeout-minutes: 16
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.yayin.outputs.page_url }}
     steps:
+      - name: Başlangıç
+        run: echo "BASLA=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
 
       - name: Önceki veriyi al
@@ -104,3 +107,15 @@ jobs:
 
       - id: yayin
         uses: actions/deploy-pages@v4
+
+      # GitHub'ın zamanlayıcısı yoğunken 15 dakikalık çalışmaları saatte bire düşürüyor.
+      # Bu yüzden her çalıştırma bitince, başlangıçtan 15 dakika dolunca bir sonrakini kendisi başlatır.
+      # (Aynı anda en fazla bir çalıştırma ve bir bekleyen olur; zamanlayıcı yedek olarak kalır.)
+      - name: Sonraki çalıştırma
+        if: always() && github.event_name != 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bekle=$(( 900 - ($(date +%s) - BASLA) ))
+          if [ "$bekle" -gt 0 ]; then sleep "$bekle"; fi
+          gh workflow run topla.yml --ref main -R "$GITHUB_REPOSITORY" || true
