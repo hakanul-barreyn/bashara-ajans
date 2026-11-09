@@ -3,7 +3,7 @@ name: Resmî konuşmalar
 # Cumhurbaşkanlığı sitesindeki konuşmalar: Filistin vurgusunun sayımı. Günde bir; veri "konusma" dalında.
 on:
   schedule:
-    - cron: "41 3 * * *"
+    - cron: "41 */3 * * *"
   workflow_dispatch: {}
 
 permissions:

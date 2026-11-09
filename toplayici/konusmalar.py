@@ -143,6 +143,7 @@ def calistir(klasor, sure=2400, log=print):
         bilinen_id.add(re.search(r"/353/(\d+)/", adres).group(1))
         return k["tarih"]
 
+    arsiv_hata = 0
     # 1) İnternet Arşivi: hızlı; kayıtlı bütün konuşmalar (sitenin kendisi art arda isteklerde yanıt vermeyi kesiyor)
     if True:
         for adres, ts in sorted(wayback_liste(log).items(), key=lambda x: -int(re.search(r"/353/(\d+)/", x[0]).group(1))):
@@ -150,11 +151,17 @@ def calistir(klasor, sure=2400, log=print):
                 break
             if re.search(r"/353/(\d+)/", adres).group(1) in bilinen_id:
                 continue
-            time.sleep(1)
+            time.sleep(4)
             try:
                 ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}", sure=60))
+                arsiv_hata = 0
             except Exception as e:
                 log(f"Wayback {adres}: {e}")
+                arsiv_hata += 1
+                if arsiv_hata >= 6:
+                    log("İnternet Arşivi yanıt vermiyor; sonraki çalıştırmada devam")
+                    break
+                time.sleep(60)
         log(f"Wayback sonrası toplam yeni {yeni}")
     # 2) doğrudan: güncel liste sayfaları (yavaş); arşivde henüz olmayan yeni konuşmalar
     y = Yavas(log)
