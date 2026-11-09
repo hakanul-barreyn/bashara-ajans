@@ -39,9 +39,9 @@ DERLI = [(a, re.compile(k)) for a, k in KELIMELER]
 FILISTIN = re.compile(r"gazze|filistin|israil|netanyahu|siyonis|kudüs|aksa")
 
 
-def al(u):
+def al(u, sure=30):
     istek = urllib.request.Request(u, headers={"User-Agent": UA, "Accept-Language": "tr"})
-    with urllib.request.urlopen(istek, timeout=30) as r:
+    with urllib.request.urlopen(istek, timeout=sure) as r:
         return r.read().decode("utf-8", "replace")
 
 
@@ -70,15 +70,20 @@ def wayback_liste(log):
     """İnternet Arşivi'nde kayıtlı konuşma adresleri: {adres: zaman damgası} (2023 ve sonrası)."""
     sonuc = {}
     for kalip in ("tccb.gov.tr/konusmalar/353/*", "tccb.gov.tr/receptayyiperdogan/konusmalar/353/*"):
-        try:
-            v = json.loads(al(f"{WAYBACK}/cdx/search/cdx?url={kalip}&output=json&fl=original,timestamp&filter=statuscode:200&collapse=urlkey&limit=20000"))
-        except Exception as e:
-            log(f"Wayback listesi alınamadı ({kalip}): {e}")
-            continue
-        for u, ts in v[1:]:
-            m = re.search(r"/konusmalar/353/(\d+)/([^/?#]+)", u)
-            if m and int(m.group(1)) >= ILK_ID:
-                sonuc[f"{KOK}/konusmalar/353/{m.group(1)}/{m.group(2)}"] = ts
+        for yil in range(2023, dt.date.today().year + 1):
+            v = None
+            for deneme in range(3):
+                try:
+                    v = json.loads(al(f"{WAYBACK}/cdx/search/cdx?url={kalip}&from={yil}&to={yil}&output=json&fl=original,timestamp"
+                                      f"&filter=statuscode:200&collapse=urlkey&limit=20000", sure=180))
+                    break
+                except Exception as e:
+                    log(f"Wayback listesi ({kalip}, {yil}) deneme {deneme + 1}: {e}")
+                    time.sleep(20)
+            for u, ts in (v or [])[1:]:
+                m = re.search(r"/konusmalar/353/(\d+)/([^/?#]+)", u)
+                if m and int(m.group(1)) >= ILK_ID:
+                    sonuc[f"{KOK}/konusmalar/353/{m.group(1)}/{m.group(2)}"] = ts
     log(f"Wayback: {len(sonuc)} konuşma adresi")
     return sonuc
 
@@ -147,7 +152,7 @@ def calistir(klasor, sure=2400, log=print):
                 continue
             time.sleep(1)
             try:
-                ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}"))
+                ekle(adres, al(f"{WAYBACK}/web/{ts}id_/{adres.replace(KOK, 'https://www.tccb.gov.tr')}", sure=60))
             except Exception as e:
                 log(f"Wayback {adres}: {e}")
         log(f"Wayback sonrası toplam yeni {yeni}")
