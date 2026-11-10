@@ -89,7 +89,7 @@ def _hafta(g):
     return (d - dt.timedelta(days=d.weekday())).isoformat()
 
 
-RAPOR_SURUM = 6
+RAPOR_SURUM = 7
 
 
 def hesapla(kok, kaynaklar, simdi, log=print):

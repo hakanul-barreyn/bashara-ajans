@@ -184,3 +184,7 @@ body.baski .rp-metin{break-before:auto}
 .rp-buyut-kapat:hover{background:#0c0e0d;color:#fff}
 .rp-alinti{font-size:.92rem!important;line-height:1.5!important;color:#3d4541!important;margin:6px 0 0!important;padding-left:10px;border-left:3px solid #1f7a52}
 .rp-icindekiler>span{display:contents}
+.rp-manset{font-family:var(--serif);font-weight:800;font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.2;text-wrap:balance;margin:14px 0 10px;padding:16px 18px;background:#0c0e0d;color:#fff;border-radius:12px}
+.rp-manset:empty{display:none}
+.rp-manset b{color:#7fd6a5}
+body.baski .rp-manset{background:#fff;color:#0c0e0d;border:2px solid #0c0e0d}

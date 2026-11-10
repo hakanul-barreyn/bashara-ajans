@@ -43,6 +43,10 @@ ISRAIL_KURBAN = re.compile(r"(?:israeli|israélien|israelí|israeliano|israelisc
                            r"(?:soldier|soldat|soldad|soldat|asker|جندي|جنود|hostage|otage|rehén|ostagg|geisel|rehine|civilian|civil|"
                            r"\bm[ae]n\b|wom[ae]n|settler|reservist|officer|teen|girl|boy|kadın|erkek|مستوطن)|\bisraelis\b|\bisraéliens\b|"
                            r"\bisraelíes\b|\bisraeliani\b|\bisraelis\b|israilliler", re.I)
+FILISTIN_NESNE = re.compile(r"palestin|filistinli|فلسطيني|فلسطينيين|فلسطينيا|gazan|\bchild|children|\bteen|\bboys?\b|\bgirls?\b|"
+                            r"çocu|genç|journalist|gazeteci|paramedic|\bman\b|\bwoman\b|طفل|أطفال|شاب|شابا|صحفي", re.I)
+ISRAIL_ASKER_OLUM = re.compile(r"(?:\bidf\b|soldiers?|reservists?|troops|soldat|soldad|asker[a-z]*)[ ,:'-]+(?:[a-z0-9]+[ ,:'-]+){0,3}(?:killed|dead|die[sd]?|slain|fall|fell|oldu|olduruldu|hayatini|tues?|muert|uccis|getotet)|"
+                           r"مقتل جندي|مقتل جنود|مقتل ضابط|هلاك|مصرع جندي|مصرع جنود|נהרג|נפלו", re.I)
 SEHADET = re.compile(r"şehit|şehadet|martyr|martyre|mártir|martire|märtyrer|استشهاد|شهيد|شهداء|ارتقاء|ارتقى", re.I)
 GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|صحف|صحاف|مراسل|עיתונא|כתב", re.I)
 
@@ -50,6 +54,8 @@ GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|per
 def faillik(b, kb):
     """Başlıktaki ölüm anlatımının türü: aktif (İsrail öldürdü), failli (İsrail'in saldırısında öldürüldü),
     failsiz (öldürüldü, kim olduğu yok), oldu (öldü / ölü sayısı), pfail (fail olarak Hamas, Hizbullah ya da bir silahlı Filistinli yazılmış), ikurban (ölen İsrailli). Ölüm yoksa None."""
+    if ISRAIL_ASKER_OLUM.search(kb) and not FILISTIN_NESNE.search(kb):
+        return "pfail" if (FAIL_HAMAS.search(b) or FAIL_HAMAS.search(kb)) else "ikurban"   # ölen İsrail askeri
     m = OLDURME.search(b) or OLDURME.search(kb)
     i = FAIL_ISRAIL.search(b) or FAIL_ISRAIL.search(kb)
     h = FAIL_HAMAS.search(b) or FAIL_HAMAS.search(kb)
@@ -60,6 +66,9 @@ def faillik(b, kb):
         h = FAIL_HAMAS.search(metin)
         edilgen = bool(EDILGEN_TR.search(metin))
         k = ISRAIL_KURBAN.search(metin[:m.start()])
+        if k and FILISTIN_NESNE.search(metin[m.end():m.end() + 60]):
+            # "İsrail askerleri 3 Filistinliyi öldürdü": fiilden önceki İsrailli kurban değil, faildir
+            return "aktif"
         if k and (i is None or i.start() >= k.start()):
             # fiilden önceki "İsrailli asker", "Israelis" kurbanı anlatır: ölen İsraillidir
             i2 = FAIL_ISRAIL.search(metin[k.end():m.start()])
@@ -86,7 +95,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 6
+OZET_SURUM = 7
 BULTEN_SURUM = 1
 
 
@@ -112,6 +121,11 @@ YER = [(ad, _derle(k)) for ad, k in OT.YERLER]
 LIDER = [(a, _derle(k)) for a, _, _, k in OT.LIDERLER]
 LIDER_ON = _derle("|".join(k for *_, k in OT.LIDERLER))
 LKEL = [(a, _derle(k)) for a, _, k in OT.LIDER_KELIME]
+REHINE_AD = [(a, _derle(k)) for a, _, k in OT.REHINELER]
+REHINE_ON = _derle("|".join(k for _, _, k in OT.REHINELER))
+REHINE = _derle(r"rehine|hostage|otage|rehén|ostagg|geisel|رهينة|رهائن|محتجز|חטוף|חטופ|בן ערובה|בני ערובה")
+# İsrailli asker: Gazze bağlamında "asker" neredeyse hep İsrail askeridir
+YARALI = _derle(r"wound|injur|yaralan|yaralı|blessé|herid|ferit|verletzt|جرحى|إصابة|مصاب|פצוע")
 FILISTIN = _derle(r"filist|palest|palästin|فلسطين|الفلسطيني|الضفة|west bank|batı şeria|cisjord|cisgiord|westjordan|ramallah|رام الله")
 # Lübnan ve Hizbullah: aynı savaşın parçası; Gazze'den ayrı okunmaz
 LUBNAN = _derle(r"lübnan|lebanon|liban|líbano|libano|hizbullah|hezbollah|hizbollah|hisbollah|nasrallah|beyrut|beirut|لبنان|حزب الله|بيروت|الضاحية")
@@ -279,6 +293,19 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                         if (ozgun and len(lst) < 6 and sum(1 for x in lst if x[3] == yk) < 2
                                 and all(x[0] != int(kid) for x in lst)):
                             lst.append([int(kid), b[:170], r.get("u"), yk])
+                # kimin ölümü haber oldu: İsrailli ölüm / Filistinli ölüm başlığı, rehine başlığı, rehine adları
+                # faillik sırayı gözetir: "İsrail askerleri 3 Filistinliyi öldürdü" İsrailli ölüm değildir
+                asker = bool(ISRAIL_ASKER_OLUM.search(kb))
+                if f in ("ikurban", "pfail") or asker:
+                    tt["k:io"] = tt.get("k:io", 0) + 1
+                elif f and (gz or FILISTIN.search(kb)):
+                    tt["k:fo"] = tt.get("k:fo", 0) + 1
+                if REHINE.search(kb):
+                    tt["k:r"] = tt.get("k:r", 0) + 1
+                if REHINE_ON.search(kb):
+                    for a, c in REHINE_AD:
+                        if c.search(kb):
+                            tt["r:" + a] = tt.get("r:" + a, 0) + 1
                 ls = lider_bul(kb)
                 if ls:
                     ks = [a for a, c in LKEL if c.search(kb)]

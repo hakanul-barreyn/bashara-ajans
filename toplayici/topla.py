@@ -41,6 +41,7 @@ import gecmis  # noqa: E402
 import rapor  # noqa: E402
 import isimler  # noqa: E402
 import alisma  # noqa: E402
+import kimin  # noqa: E402
 import konusmalar  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
@@ -1117,6 +1118,10 @@ def main():
         rapor.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Rapor (7 Ekim) hatası: {e}")
+    try:
+        kimin.hesapla(KOK, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Kimin ölümü raporu hatası: {e}")
     try:
         konusmalar.indir(KOK, log=log)
     except Exception as e:
