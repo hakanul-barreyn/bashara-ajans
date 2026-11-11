@@ -144,10 +144,11 @@
    "ulke": "Kolombiya",
    "aktor": "Petro hükümeti",
    "yon": "filistin",
-   "tr": "İsrail’le diplomatik ilişkileri kesti; ardından İsrail’e kömür ihracatını yasakladı.",
-   "en": "Severed diplomatic relations with Israel; later banned coal exports to Israel.",
-   "kaynak": "https://www.reuters.com/world/americas/colombias-petro-says-will-break-diplomatic-relations-with-israel-2024-05-01/",
-   "dogrulandi": false
+   "tr": "İsrail’le diplomatik ilişkileri kesti; Haziran 2024’te İsrail’e kömür ihracatını durdurdu (Kolombiya İsrail’in en büyük kömür tedarikçisiydi).",
+   "en": "Severed diplomatic relations with Israel; in June 2024 halted coal exports to Israel (Colombia was Israel’s largest coal supplier).",
+   "kaynak": "https://www.scmp.com/news/world/americas/article/3265932/israels-top-coal-supplier-colombia-suspend-exports-over-gaza-war",
+   "dogrulandi": true,
+   "kaynak_baslik": "SCMP: Israel’s top coal supplier Colombia to suspend exports over Gaza war"
   },
   {
    "tarih": "2024-05-28",
@@ -347,6 +348,61 @@
    "kaynak": "https://www.fdd.org/analysis/strategic-asset-israeli-natural-gas-exports-to-arab-neighbors-jumped-over-13-percent-in-2024/",
    "dogrulandi": true,
    "kaynak_baslik": "FDD: Israeli natural gas exports to Arab neighbors jumped over 13 percent in 2024"
+  },
+  {
+   "tarih": "2024-05-28",
+   "ulke": "Meksika",
+   "aktor": "López Obrador hükümeti",
+   "yon": "filistin",
+   "tr": "Güney Afrika’nın Uluslararası Adalet Divanı’ndaki soykırım davasına müdahil olmak için başvurdu.",
+   "en": "Filed to intervene in South Africa’s genocide case at the International Court of Justice.",
+   "kaynak": "https://www.icj-cij.org/index.php/node/204114",
+   "kaynak_baslik": "Uluslararası Adalet Divanı: Mexico files a declaration of intervention",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-05-29",
+   "ulke": "Brezilya",
+   "aktor": "Lula hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail’deki büyükelçisini geri çağırdı; Lula İsrail’in Gazze’deki saldırılarını soykırım olarak nitelemişti.",
+   "en": "Recalled its ambassador to Israel; Lula had described Israel’s assault on Gaza as genocide.",
+   "kaynak": "https://www.aljazeera.com/news/2024/5/29/brazil-president-withdraws-his-countrys-ambassador-to-israel",
+   "kaynak_baslik": "Al Jazeera: Brazil withdraws ambassador to Israel after Gaza war criticism",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-07-12",
+   "ulke": "Arjantin",
+   "aktor": "Milei hükümeti",
+   "yon": "israil",
+   "tr": "Hamas’ı terör örgütü ilan etti; İsrail’e açık destek olarak sunuldu (Latin Amerika’da bir ilk).",
+   "en": "Designated Hamas a terrorist organisation, presented as open support for Israel (a first in Latin America).",
+   "kaynak": "https://www.arabnews.pk/node/2548841",
+   "kaynak_baslik": "Arab News: Argentina designates Hamas a terrorist group in show of support for Israel",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-09-13",
+   "ulke": "Şili",
+   "aktor": "Boric hükümeti",
+   "yon": "filistin",
+   "tr": "Güney Afrika’nın Uluslararası Adalet Divanı’ndaki soykırım davasına müdahil oldu.",
+   "en": "Intervened in South Africa’s genocide case at the International Court of Justice.",
+   "kaynak": "https://www.jurist.org/news/2024/09/chile-files-intervention-in-south-africa-genocide-case-against-israel/",
+   "kaynak_baslik": "JURIST: Chile files intervention in South Africa genocide case against Israel",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-08-27",
+   "ulke": "Brezilya",
+   "aktor": "Lula hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail’in yeni büyükelçi atamasını onaylamadı; daha önce Uluslararası Holokost Anma İttifakı’ndan çekildi.",
+   "en": "Declined to approve Israel’s new ambassador; earlier withdrew from the International Holocaust Remembrance Alliance.",
+   "kaynak": "https://brasildefato.com.br/2025/08/27/brazil-rejects-appointment-of-new-israeli-ambassador/",
+   "kaynak_baslik": "Brasil de Fato: Brazil rejects appointment of new Israeli ambassador",
+   "dogrulandi": true
   }
  ]
 }

@@ -47,7 +47,7 @@
     var kart = function (b, s) { var d = el("div", "rp-kart"); d.append(el("b", null, b), el("span", null, s)); k.appendChild(d); };
     kart(sayi(v.liderler.length, 0), tt("lider, bakan ve BM yetkilisinin adı Filistin bağlamındaki başlıklarda izlendi", "leaders, ministers and UN officials tracked in headlines about Palestine"));
     if (e) kart(yuzde(e.kelime.soykirim, e.toplam), tt("Erdoğan’ın adının geçtiği Filistin başlıklarında “soykırım” da geçiyor", "of Palestine headlines naming Erdoğan also contain “genocide”"));
-    if (em) kart(em.kartB, em.kartS);
+    if (em && em.kartB) kart(em.kartB, em.kartS);
     var ol = olumOzet(og);
     var abd = ol.filter(function (x) { return x.grup === "ABD"; })[0];
     if (abd) kart(abd.sessiz + " / " + abd.n, tt("kitlesel ölüm gününde ABD liderlerinin adı 1,5 kat bile artmadı", "mass-death days on which US leaders’ names did not rise even 1.5 times"));
@@ -79,6 +79,9 @@
     var ao = donem(ekleGun("2024-11-05", -90), "2024-11-05"), as = donem("2024-11-05", "2025-01-20"), tr = donem("2025-01-20", ekleGun("2025-01-20", 90));
     var A = aylik().filter(function (x) { return x.ay >= "2023-10"; }), tepe = A.reduce(function (a, x) { return x.kelime > 2000 && 1e4 * x.gf / x.kelime > 1e4 * a.gf / Math.max(1, a.kelime) ? x : a; }, A[0]);
     var on = function (x) { return sayi(x, 1); };
+    var enaz = Math.min(yo.n, ys.n, ao.n, as.n, tr.n);
+    if (enaz < 8) return { kartB: null, metin: tt("Karşılaştırma için henüz yeterli konuşma toplanmadı: her dönem için en az 8 konuşma gerekiyor. Şu an yerel seçim öncesi " + yo.n + ", sonrası " + ys.n + "; ABD seçimi öncesi " + ao.n + ", seçimle Trump’ın göreve başlaması arası " + as.n + ", Trump’ın ilk üç ayı " + tr.n + " konuşma. Toplayıcı Cumhurbaşkanlığı arşivinde geriye doğru ilerliyor; sayılar yeterli olunca karşılaştırma burada çıkacak.",
+      "Not enough speeches collected yet for a comparison: each period needs at least 8. Currently: before the local elections " + yo.n + ", after " + ys.n + "; before the US election " + ao.n + ", between the election and Trump’s inauguration " + as.n + ", Trump’s first three months " + tr.n + ". The collector is working back through the Presidency’s archive.") };
     var metin = "Toplanan " + KON.konusmalar.length + " konuşmaya göre: Türkiye’deki yerel seçimden önceki üç ayda Erdoğan konuşmalarının yüzde " + sayi(yo.pay, 0) + " kadarında Gazze ya da Filistin’den söz etti, on bin kelimede " + on(yo.gf) + " kez; seçimden sonraki üç ayda yüzde " + sayi(ys.pay, 0) + ", on bin kelimede " + on(ys.gf) + ". " +
       "ABD seçiminden önceki üç ayda on bin kelimede " + on(ao.gf) + " kez Gazze ya da Filistin dedi; ABD seçimi ile Trump’ın göreve başlaması arasında " + on(as.gf) + ", Trump’ın ilk üç ayında " + on(tr.gf) + ". “Soykırım” kelimesi aynı üç dönemde on bin kelimede " + on(ao.soy) + ", " + on(as.soy) + " ve " + on(tr.soy) + " kez geçti. " +
       "Filistin’e en çok yer verdiği ay " + ayAd(tepe.ay) + " (on bin kelimede " + on(1e4 * tepe.gf / tepe.kelime) + ").";

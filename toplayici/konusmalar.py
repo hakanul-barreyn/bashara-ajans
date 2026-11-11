@@ -194,10 +194,17 @@ def calistir(klasor, sure=2400, log=print):
                 if y.hata >= 4:
                     break
         log(f"Sayfa {sayfa}: {len(linkler)} bağlantı, en eski {en_eski}, toplam yeni {yeni}")
-        tumu_bilinen = tumu_bilinen + 1 if en_eski is None else 0
-        if tumu_bilinen >= 3 or (en_eski and en_eski < BASLANGIC):
+        if en_eski and en_eski < BASLANGIC:
+            veri["tamam"] = True
             break
+        tumu_bilinen = tumu_bilinen + 1 if en_eski is None else 0
+        # İlk sayfalarda yeni konuşma yoksa, geçen sefer kalınan derin sayfadan devam et (geriye doğru ilerleme)
+        if sayfa <= 2 and tumu_bilinen >= 2 and veri.get("derin", 0) > sayfa + 1 and not veri.get("tamam"):
+            sayfa = veri["derin"]
+            tumu_bilinen = 0
+            continue
         sayfa += 1
+        veri["derin"] = max(veri.get("derin", 0), sayfa)
         time.sleep(BEKLE)
     veri["konusmalar"].sort(key=lambda k: k["tarih"])
     veri["guncellendi"] = dt.datetime.now(dt.timezone.utc).isoformat()
