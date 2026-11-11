@@ -663,11 +663,16 @@ GEMINI = "https://generativelanguage.googleapis.com/v1beta"
 
 
 def gemini_model(anahtar):
-    if os.environ.get("GEMINI_MODEL"):
-        return os.environ["GEMINI_MODEL"]
+    m = gemini_modeller(anahtar)
+    return m[0] if m else None
+
+
+def gemini_modeller(anahtar):
+    """Kullanılabilir flash modelleri, tercih sırasıyla (ilki asıl, gerisi 503'te yedek)."""
+    elle = [os.environ["GEMINI_MODEL"]] if os.environ.get("GEMINI_MODEL") else []
     kod, metin, _ = getir(GEMINI + "/models?pageSize=200", basliklar={"x-goog-api-key": anahtar})
     if kod != 200:
-        return None
+        return elle
     adlar = []
     for m in json.loads(metin).get("models", []):
         ad = m.get("name", "").split("/")[-1]
@@ -683,7 +688,7 @@ def gemini_model(anahtar):
         return ("lite" in ad, float(surum.group(1)) if surum else 0)
 
     adlar.sort(key=puan, reverse=True)
-    return adlar[0] if adlar else None
+    return elle + [a for a in adlar if a not in elle]
 
 
 TALIMAT = """Sen bir Türkçe haber ajansının editörüsün. Aşağıdaki JSON listesindeki her haber için Türkçe bir başlık ve özet yaz.
@@ -908,7 +913,13 @@ def main():
     bekle = tarih_coz(durum.get("_gemini_bekle"))
     model = None
     if anahtar and not (bekle and bekle > SIMDI):
-        model = gemini_model(anahtar)
+        modeller = gemini_modeller(anahtar)
+        model = modeller[0] if modeller else None
+        # Türkçe yayınların başlığı zaten Türkçe: özet beklerken akışta özgün başlık Türkçe başlık olarak görünsün
+        for h in eski.values():
+            if h.get("dil") == "tr" and not h.get("baslik_tr") and h.get("baslik_orj"):
+                h["baslik_tr"] = ekler.guvenli(temiz(h["baslik_orj"], 200))
+                h["baslik_kaba"] = True
         # Öncelikli yayınlar (Al-Akhbar gibi) ve analizler sıranın başına; geri kalanı en yeniden eskiye
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
                        and h.get("deneme", 0) < 3),
@@ -932,10 +943,20 @@ def main():
                     break
                 gunluk_istek(durum, 1)
                 kod, sonuc = gemini_ozetle(anahtar, model, parti)
-                if kod in (500, 503, 0):   # sunucu geçici olarak meşgul: kısa bekleyip bir kez daha dene
-                    time.sleep(12)
+                if kod in (500, 503, 0):   # sunucu meşgul: bir kez aynı modelle, sonra yedek modellerle dene
+                    time.sleep(8)
                     gunluk_istek(durum, 1)
                     kod, sonuc = gemini_ozetle(anahtar, model, parti)
+                    for yedek in [m for m in modeller if m != model][:3]:
+                        if kod not in (500, 503, 0, 429):
+                            break
+                        gunluk_istek(durum, 1)
+                        kod, sonuc = gemini_ozetle(anahtar, yedek, parti)
+                        if kod == 200:
+                            log(f"{model} meşgul; {yedek} ile devam")
+                            model = yedek
+                    if kod == 429:
+                        kod = 503      # yedek modelin kotası: genel kota beklemesi başlatma
                 if kod == 429:
                     durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
                     log("Gemini kotası doldu; bir saat sonra yeniden denenecek")
@@ -954,6 +975,7 @@ def main():
                         h["atla"] = True
                     else:
                         h["baslik_tr"] = ekler.guvenli(temiz(c.get("baslik"), 200))
+                        h.pop("baslik_kaba", None)
                         h["ozet_tr"] = ekler.guvenli(temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700))
                         et = [e for e in (c.get("etiketler") or []) if e in ekler.ETIKETLER][:3]
                         if et:
@@ -980,6 +1002,17 @@ def main():
             log(f"{yazilan} özet yazıldı ({model}); bugün {gunluk_istek(durum)} Gemini isteği")
         elif not model:
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
+
+        # Özeti yazılamayan ilgili haberlere en azından başlık çevirisi (tek istekte 60 başlık; ucuz ve hızlı)
+        if model and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI):
+            try:
+                n, kota = diller.baslik_cevir(anahtar, [model] + [m for m in modeller if m != model][:2], eski,
+                                              butce_var=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 60,
+                                              sayac=lambda: gunluk_istek(durum, 1), log=log)
+                if kota:
+                    durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+            except Exception as e:
+                log(f"Başlık çevirisi hatası: {e}")
 
         # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
         son_olay = tarih_coz(durum.get("_olay_son"))
@@ -1072,8 +1105,12 @@ def main():
 
     # Kaydet: eski haberleri at, ham metinleri temizle
     tut = [h for h in eski.values() if (tarih_coz(h["tarih"]) or SIMDI) >= sinir]
+    # Sınır dolunca önce konu dışı haberler düşer: ilgili ve özeti yazılmış haberler atılıp bir sonraki
+    # çalıştırmada "yeni" diye yeniden gelmesin (özet ve çeviri emeği kaybolmasın)
     tut.sort(key=lambda h: h["tarih"], reverse=True)
+    tut.sort(key=lambda h: not (h.get("ilgili") or h.get("ozet_tr")))
     tut = tut[:EN_FAZLA_HABER]
+    tut.sort(key=lambda h: h["tarih"], reverse=True)
     for h in tut:
         h.pop("_malzeme", None)
         if h.get("ozet_tr") or h.get("atla") or not h.get("ilgili"):

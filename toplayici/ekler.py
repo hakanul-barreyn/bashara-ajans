@@ -117,6 +117,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
     son = [h for h in haberler if h.get("baslik_tr")
            and (simdi - dt.datetime.fromisoformat(h["tarih"])).total_seconds() < 86400]
     son.sort(key=lambda h: h["tarih"], reverse=True)
+    son.sort(key=lambda h: not h.get("ozet_tr"))   # önce özeti yazılmışlar; yer kalırsa yalnızca başlığı çevrilmişler
     son = son[:260]
     if len(son) < 4:
         return None
