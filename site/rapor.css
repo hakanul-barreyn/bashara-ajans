@@ -232,3 +232,12 @@ body.baski .isim-cubuk{background:#fff;color:#1d2421;border:1px solid #1d2421}
 .sn-cip.sn-sustu{background:#5a5f5c}.sn-cip.sn-fail{background:#b8433d}.sn-cip.sn-tarti{background:#8a6d3b}
 .sn-kart p{margin:0;font-size:.95rem;max-width:72ch}
 .sn-kalan{margin-top:14px}.sn-kalan summary{cursor:pointer;font-weight:700;font-size:.88rem}
+/* söz ve eylem defteri */
+.ey-liste{list-style:none;margin:12px 0 0;padding:0;border-left:2px solid var(--cizgi)}
+.ey-liste li{position:relative;padding:0 0 16px 20px;display:flex;flex-direction:column;gap:2px}
+.ey-liste li::before{content:"";position:absolute;left:-7px;top:.35em;width:12px;height:12px;border-radius:50%}
+.ey-liste li.ey-filistin::before{background:#1f7a52}.ey-liste li.ey-israil::before{background:#2f5bb7}
+.ey-liste time{font:600 .72rem var(--mono);color:var(--soluk)}
+.ey-liste b{font-size:.92rem}
+.ey-liste p{margin:0;font-size:.95rem;max-width:70ch}
+.ey-liste a{font-size:.78rem;color:var(--yesil);font-weight:700;text-decoration:none}

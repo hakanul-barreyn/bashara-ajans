@@ -1,0 +1,295 @@
+{
+ "aciklama": "Söz ve eylem defteri: devletlerin ve silahlı grupların 7 Ekim 2023'ten bu yana Filistin lehine ya da İsrail lehine somut eylemleri. Her kayıt tarihli ve kaynaklı. yon: 'filistin' (İsrail'e karşı ya da Filistin lehine), 'israil' (İsrail'in savaşını ya da ekonomisini destekleyen). dogrulandi=false olan kayıtlar kaynak bağlantısı doğrulanana kadar sitede gösterilmez.",
+ "kayitlar": [
+  {
+   "tarih": "2023-10-08",
+   "ulke": "Lübnan",
+   "aktor": "Hizbullah",
+   "yon": "filistin",
+   "tr": "Gazze’ye destek için İsrail mevzilerine saldırılar başladı; cephe Kasım 2024 ateşkesine kadar sürdü.",
+   "en": "Began attacks on Israeli positions in support of Gaza; the front lasted until the November 2024 ceasefire.",
+   "kaynak": "https://www.aljazeera.com/news/2024/11/27/israel-hezbollah-ceasefire-what-we-know",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2023-10-18",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "BM Güvenlik Konseyi’nde insani ara çağrısı yapan Brezilya tasarısını veto etti.",
+   "en": "Vetoed Brazil’s UN Security Council draft calling for humanitarian pauses.",
+   "kaynak": "https://www.pbs.org/newshour/world/u-s-vetoes-un-resolution-condemning-all-violence-against-civilians-in-israel-hamas-war",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2023-10-31",
+   "ulke": "Bolivya",
+   "aktor": "Bolivya hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail’le diplomatik ilişkilerini kesti.",
+   "en": "Severed diplomatic relations with Israel.",
+   "kaynak": "https://www.reuters.com/world/americas/bolivia-cuts-diplomatic-ties-with-israel-2023-10-31/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2023-11-19",
+   "ulke": "Yemen",
+   "aktor": "Ensarullah (Husiler)",
+   "yon": "filistin",
+   "tr": "Kızıldeniz’de İsrail bağlantılı Galaxy Leader gemisine el koydu; İsrail’e giden ya da İsrail bağlantılı gemilere yönelik deniz ablukası başladı.",
+   "en": "Seized the Israel-linked Galaxy Leader in the Red Sea, beginning a naval blockade of ships bound for or linked to Israel.",
+   "kaynak": "https://english.ahram.org.eg/News/512512.aspx",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2023-12-03",
+   "ulke": "İngiltere",
+   "aktor": "Sunak, sonra Starmer hükümeti",
+   "yon": "israil",
+   "tr": "Kıbrıs’taki RAF Akrotiri üssünden Gazze üzerinde casus uçuşları başladı; Mart 2025’e kadar en az 518 uçuş. Hükümet amacın yalnızca rehineleri bulmak olduğunu söylüyor.",
+   "en": "Began surveillance flights over Gaza from RAF Akrotiri in Cyprus; at least 518 flights by March 2025. The government says they are solely to locate hostages.",
+   "kaynak": "https://www.declassifieduk.org/britain-sent-over-500-spy-flights-to-gaza/",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2023-12-08",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "İnsani ateşkes çağrısı yapan BAE tasarısını veto etti.",
+   "en": "Vetoed the UAE draft calling for a humanitarian ceasefire.",
+   "kaynak": "https://www.aljazeera.com/news/2023/12/8/antonio-guterres-urges-un-security-council-to-push-for-gaza-ceasefire",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2023-12-20",
+   "ulke": "Malezya",
+   "aktor": "Enver İbrahim hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail bayraklı gemilerin ve İsrailli ZIM şirketinin limanlarına yanaşmasını yasakladı.",
+   "en": "Banned Israeli-flagged ships and the Israeli shipping firm ZIM from its ports.",
+   "kaynak": "https://www.reuters.com/world/asia-pacific/malaysia-bans-israeli-shipping-company-ships-docking-its-ports-2023-12-20/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2023-12-29",
+   "ulke": "Güney Afrika",
+   "aktor": "Güney Afrika hükümeti",
+   "yon": "filistin",
+   "tr": "Uluslararası Adalet Divanı’nda İsrail aleyhine soykırım davası açtı.",
+   "en": "Filed a genocide case against Israel at the International Court of Justice.",
+   "kaynak": "https://www.icj-cij.org/case/192",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-02-20",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "Derhal insani ateşkes çağrısı yapan Cezayir tasarısını veto etti.",
+   "en": "Vetoed Algeria’s draft calling for an immediate humanitarian ceasefire.",
+   "kaynak": "https://www.aljazeera.com/amp/news/2024/2/20/us-vetoes-another-un-security-council-resolution-urging-gaza-war-ceasefire",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-04-13",
+   "ulke": "Ürdün",
+   "aktor": "Ürdün hükümeti",
+   "yon": "israil",
+   "tr": "İran’ın İsrail’e gönderdiği insansız hava araçlarının bir kısmını kendi hava sahasında düşürdü.",
+   "en": "Shot down some of the drones Iran launched at Israel over its own airspace.",
+   "kaynak": "https://www.reuters.com/world/middle-east/jordan-says-it-intercepted-flying-objects-that-entered-its-airspace-2024-04-14/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2024-04-14",
+   "ulke": "İran",
+   "aktor": "Ali Hamaney / İran Devrim Muhafızları",
+   "yon": "filistin",
+   "tr": "“Sadık Vaat” operasyonu: Şam’daki konsolosluğuna saldırının ardından İsrail’e 300’den fazla insansız hava aracı ve füze gönderdi.",
+   "en": "“True Promise”: after the strike on its Damascus consulate, launched more than 300 drones and missiles at Israel.",
+   "kaynak": "https://www.aljazeera.com/news/2024/4/13/israeli-army-says-iran-has-launched-drones-at-israel",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-04-24",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "İsrail için yaklaşık 26 milyar dolarlık (14 milyar doları askerî) ek bütçeyi yasalaştırdı.",
+   "en": "Signed a supplemental package with about $26 billion for Israel ($14 billion military).",
+   "kaynak": "https://www.reuters.com/world/us/biden-signs-95-billion-ukraine-israel-taiwan-aid-bill-2024-04-24/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2024-05-02",
+   "ulke": "Türkiye",
+   "aktor": "Erdoğan hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail’le bütün ticareti durdurdu (o güne kadar ticaret sürüyordu).",
+   "en": "Halted all trade with Israel (trade had continued until then).",
+   "kaynak": "https://www.aljazeera.com/amp/news/2024/5/2/turkey-says-it-halts-trade-with-israel-over-gaza-aid-access",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-05-01",
+   "ulke": "Kolombiya",
+   "aktor": "Petro hükümeti",
+   "yon": "filistin",
+   "tr": "İsrail’le diplomatik ilişkileri kesti; ardından İsrail’e kömür ihracatını yasakladı.",
+   "en": "Severed diplomatic relations with Israel; later banned coal exports to Israel.",
+   "kaynak": "https://www.reuters.com/world/americas/colombias-petro-says-will-break-diplomatic-relations-with-israel-2024-05-01/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2024-05-28",
+   "ulke": "İspanya, İrlanda, Norveç",
+   "aktor": "Sánchez, Harris, Støre hükümetleri",
+   "yon": "filistin",
+   "tr": "Filistin Devleti’ni tanıdı.",
+   "en": "Recognised the State of Palestine.",
+   "kaynak": "https://www.pbs.org/newshour/world/spain-ireland-and-norway-formally-recognize-a-palestinian-state",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-09-02",
+   "ulke": "İngiltere",
+   "aktor": "Starmer hükümeti",
+   "yon": "israil",
+   "tr": "İsrail’e 350 silah ihracat lisansından 30’unu askıya aldı ama F-35 parçalarını istisna tuttu.",
+   "en": "Suspended 30 of 350 arms export licences to Israel but exempted F-35 parts.",
+   "kaynak": "https://caat.org.uk/publications/the-uk-governments-partial-suspension-of-arms-export-licences-to-israel-and-the-f-35-exemption/",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-10-01",
+   "ulke": "İran",
+   "aktor": "Ali Hamaney / İran Devrim Muhafızları",
+   "yon": "filistin",
+   "tr": "“Sadık Vaat II”: İsrail’e yaklaşık 180 balistik füze gönderdi.",
+   "en": "“True Promise II”: fired about 180 ballistic missiles at Israel.",
+   "kaynak": "https://www.iranwatch.org/our-publications/articles-reports/irans-second-missile-attack-israel",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-10-13",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "İsrail’e THAAD füze savunma sistemi ve onu kullanacak ABD askerlerini gönderdi.",
+   "en": "Sent a THAAD missile defence battery and US troops to operate it to Israel.",
+   "kaynak": "https://www.reuters.com/world/us-sending-thaad-anti-missile-system-israel-2024-10-13/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2024-11-20",
+   "ulke": "ABD",
+   "aktor": "Biden yönetimi",
+   "yon": "israil",
+   "tr": "Seçilmiş 10 üyenin koşulsuz ateşkes tasarısını veto etti.",
+   "en": "Vetoed the elected ten members’ draft for an unconditional ceasefire.",
+   "kaynak": "https://aa.com.tr/en/americas/us-once-again-vetoes-un-security-council-cease-fire-resolution-on-gaza/3399296",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-12-18",
+   "ulke": "BAE",
+   "aktor": "BAE hükümeti",
+   "yon": "israil",
+   "tr": "Husilerin Kızıldeniz ablukasını aşmak için BAE’den Suudi Arabistan ve Ürdün üzerinden İsrail’e kara yolu taşımacılığı haberleri; Ürdün böyle bir koridoru yalanladı.",
+   "en": "Reports of trucking from the UAE through Saudi Arabia and Jordan to Israel to bypass the Houthi blockade; Jordan denied such a corridor.",
+   "kaynak": "https://www.jns.org/uae-israel-land-corridor-operating-despite-war/",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-06-04",
+   "ulke": "ABD",
+   "aktor": "Trump yönetimi",
+   "yon": "israil",
+   "tr": "Gazze’de kalıcı ateşkes ve yardımın önünün açılmasını isteyen tasarıyı veto etti.",
+   "en": "Vetoed a draft demanding a permanent ceasefire in Gaza and unhindered aid.",
+   "kaynak": "https://www.aljazeera.com/news/2025/6/4/us-vetoes-unsc-ceasefire-resolution-as-death-starvation-consume-gaza",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-06-13",
+   "ulke": "İran",
+   "aktor": "Ali Hamaney / İran Devrim Muhafızları",
+   "yon": "filistin",
+   "tr": "İsrail’in saldırısıyla başlayan on iki gün savaşında İsrail’i yüzlerce balistik füze ve insansız hava aracıyla vurdu.",
+   "en": "In the twelve-day war that began with Israel’s attack, struck Israel with hundreds of ballistic missiles and drones.",
+   "kaynak": "https://www.reuters.com/world/middle-east/",
+   "dogrulandi": false
+  },
+  {
+   "tarih": "2025-06-22",
+   "ulke": "ABD",
+   "aktor": "Trump yönetimi",
+   "yon": "israil",
+   "tr": "İsrail’in İran savaşına katılarak Fordo, Natanz ve İsfahan nükleer tesislerini bombaladı.",
+   "en": "Joined Israel’s war on Iran, bombing the Fordow, Natanz and Isfahan nuclear sites.",
+   "kaynak": "https://www.aljazeera.com/amp/news/liveblog/2025/6/22/live-us-joins-israels-attacks-on-iran-bombs-three-nuclear-sites",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-08-07",
+   "ulke": "Mısır",
+   "aktor": "Sisi hükümeti",
+   "yon": "israil",
+   "tr": "İsrail’in Leviathan sahasından 35 milyar dolarlık doğalgaz alım anlaşması imzalandı; İsrail tarihinin en büyük ihracat anlaşması.",
+   "en": "A $35 billion deal to import gas from Israel’s Leviathan field was signed, the largest export deal in Israel’s history.",
+   "kaynak": "https://worldoil.com/news/2025/8/8/israel-egypt-reach-35-billion-deal-for-natural-gas-supply/",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-08-29",
+   "ulke": "Türkiye",
+   "aktor": "Erdoğan hükümeti",
+   "yon": "filistin",
+   "tr": "Limanlarını İsrail gemilerine, hava sahasını İsrail’in resmî uçaklarına kapattı (Dışişleri Bakanı Fidan).",
+   "en": "Closed its ports to Israeli ships and its airspace to Israeli official flights (Foreign Minister Fidan).",
+   "kaynak": "https://www.al-monitor.com/originals/2025/08/turkey-bars-israeli-ships-flights-its-territory",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-10-01",
+   "ulke": "Azerbaycan, Kazakistan",
+   "aktor": "Aliyev ve Tokayev hükümetleri",
+   "yon": "israil",
+   "tr": "Kasım 2023 – Ekim 2025 arasında İsrail’in ham petrolünün %70’ini sağladılar (Oil Change International). Azerbaycan petrolü Türkiye’deki Ceyhan limanından yükleniyor.",
+   "en": "Supplied 70% of Israel’s crude oil between November 2023 and October 2025 (Oil Change International). Azerbaijani crude is loaded at Ceyhan in Turkey.",
+   "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-10-01",
+   "ulke": "ABD",
+   "aktor": "Biden ve Trump yönetimleri",
+   "yon": "israil",
+   "tr": "Aynı dönemde İsrail’e askerî uçaklarda kullanılan JP-8 jet yakıtı taşıyan 9 sevkiyat (360 bin ton) (Oil Change International).",
+   "en": "Over the same period, 9 shipments (360,000 tonnes) of JP-8 jet fuel used by military aircraft went to Israel (Oil Change International).",
+   "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-10-01",
+   "ulke": "Rusya",
+   "aktor": "Putin yönetimi",
+   "yon": "israil",
+   "tr": "Aynı dönemde İsrail’e giden rafine petrol ürünlerinin %45’i Rusya’dan (Oil Change International).",
+   "en": "Over the same period, 45% of refined oil products shipped to Israel came from Russia (Oil Change International).",
+   "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2026-01-21",
+   "ulke": "Türkiye, Azerbaycan",
+   "aktor": "Ceyhan üzerinden petrol akışı",
+   "yon": "israil",
+   "tr": "Türkiye’nin ticaret yasağına rağmen 2025’te İsrail’in ham petrol ithalatının %46,4’ü Ceyhan’dan yüklenen Azerbaycan petrolüydü; son üç yılın en yüksek düzeyi (Kpler verisi, Reuters).",
+   "en": "Despite Turkey’s trade ban, 46.4% of Israel’s crude imports in 2025 were Azerbaijani oil loaded at Ceyhan, a three-year high (Kpler data, Reuters).",
+   "kaynak": "https://www.bairdmaritime.com/shipping/tankers/turkey-trade-ban-fails-to-halt-azerbaijani-oil-flows-to-israel-as-imports-hit-three-year-high",
+   "dogrulandi": true
+  }
+ ]
+}
