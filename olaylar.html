@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611111940">
-<link rel="stylesheet" href="site/rapor.css?v=202611112200">
+<link rel="stylesheet" href="site/rapor.css?v=202611112330">
 <script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -43,8 +43,8 @@
   <section class="rp-kartlar" aria-label="Öne çıkan sayılar" id="kartlar"></section>
 
   <nav class="rp-icindekiler" aria-label="Bölümler">
-    <span data-dil="tr"><a href="#gercek">1 · Gerçekte ne oldu</a><a href="#toplum">2 · Toplum ne yaptı</a><a href="#hastane">3 · Hastaneler</a><a href="#turler">4 · Tür tür</a><a href="#egri">5 · Alışma eğrisi</a><a href="#olumler">6 · Kitlesel ölüm günleri</a><a href="#katalog">7 · Olay kataloğu</a><a href="#yontem">Yöntem</a></span>
-    <span data-dil="en"><a href="#gercek">1 · What really happened</a><a href="#toplum">2 · What readers did</a><a href="#hastane">3 · Hospitals</a><a href="#turler">4 · Type by type</a><a href="#egri">5 · Habituation curve</a><a href="#olumler">6 · Mass-death days</a><a href="#katalog">7 · Event catalogue</a><a href="#yontem">Method</a></span>
+    <span data-dil="tr"><a href="#gercek">1 · Gerçekte ne oldu</a><a href="#toplum">2 · Toplum ne yaptı</a><a href="#hastane">3 · Hastaneler</a><a href="#turler">4 · Tür tür</a><a href="#egri">5 · Alışma eğrisi</a><a href="#olumler">6 · Kitlesel ölüm günleri</a><a href="#katalog">7 · Olay kataloğu</a><a href="#sonuc">Sonuç</a><a href="#yontem">Yöntem</a></span>
+    <span data-dil="en"><a href="#gercek">1 · What really happened</a><a href="#toplum">2 · What readers did</a><a href="#hastane">3 · Hospitals</a><a href="#turler">4 · Type by type</a><a href="#egri">5 · Habituation curve</a><a href="#olumler">6 · Mass-death days</a><a href="#katalog">7 · Event catalogue</a><a href="#sonuc">Conclusion</a><a href="#yontem">Method</a></span>
   </nav>
 
   <article class="rp-metin" id="gercek">
@@ -121,6 +121,15 @@
     <div id="g-katalog" class="rp-katalog"></div>
   </article>
 
+  <article class="rp-metin" id="sonuc">
+    <p data-dil="tr" class="rp-soru">Sonuç</p>
+    <p data-dil="en" class="rp-soru">Conclusion</p>
+    <h2 data-dil="tr">Kim ne yaptı?</h2>
+    <h2 data-dil="en">Who did what?</h2>
+    <p data-dil="tr">Ölçtüğümüz üç davranış, yayın yayın: olaylar karşısında susmak, Filistinlilerin ölümünde faili saklamak ve bir İsraillinin ölümünü bir Filistinlinin ölümünden ağır tartmak. Her hüküm, aynı dilde yayın yapan tanık basınla karşılaştırılarak verildi.</p>
+    <p data-dil="en">Three behaviours we measured, outlet by outlet: staying silent in the face of events, hiding the killer when Palestinians die, and weighing an Israeli death more heavily than a Palestinian one. Each verdict is given in comparison with witness press publishing in the same language.</p>
+    <div id="g-sonuc"></div>
+  </article>
   <article class="rp-metin rp-yontem" id="yontem">
     <h2 data-dil="tr">Yöntem ve sınırlar</h2>
     <h2 data-dil="en">Method and limits</h2>
@@ -131,6 +140,7 @@
 </main>
 <script src="site/rapor-ortak.js?v=202611111700"></script>
 <script src="site/sayfa-olaylar.js?v=202611111700"></script>
+<script src="site/sonuc.js?v=202611112330"></script>
 <script src="site/sayfa-gercek.js?v=202611112200"></script>
 </body>
 </html>

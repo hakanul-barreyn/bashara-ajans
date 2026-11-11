@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 4
+ALISMA_SURUM = 5
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -250,6 +250,88 @@ def _toplum(tp, S, D):
     return {"kaynak": tp.get("kaynak"), "son": tp.get("son"), "olaylar": olaylar, "aylar": aylar, "genel": genel, "savas_payi": pay}
 
 
+# Sonuç: yayın yayın, ölçülmüş üç davranış. Eşikler bilerek yüksek: hüküm yalnızca örneklem yeterliyse verilir.
+HUKUM = {"sustu": (0.8, 20), "fail": (0.6, 30), "tarti": (3.0, 30)}   # (eşik, en az ölçüm)
+ISRAIL_OLU = 1152 + 822          # kimin.py ile aynı: 7 Ekim saldırısı ve sonrasında ölen İsrailliler (Ynet)
+
+
+def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam):
+    """Her yayın için üç ölçü: olaylarda susma oranı, Filistinli ölüm başlıklarında faili saklama oranı, İsrailli ölüme
+    Filistinli ölüme göre ölü başına kaç kat başlık ayırdığı. Hüküm yalnızca İsrail, Batı ana akım ve bölgede işbirlikçi
+    çizgideki yayınlara verilir ve AYNI DİLDEKİ tanık basınla (bölge ve Batı'daki muhalif yayınlar) karşılaştırılır:
+    ölçüm bir dilde zayıfsa (fail kalıpları o dilde iyi çalışmıyorsa, arşiv seyrekse) tanık basın da aynı sonucu verir
+    ve hüküm çıkmaz."""
+    ix = {g: i for i, g in enumerate(D)}
+    sonuc = {}
+    for kid, k in K.items():
+        g = gk.get(kid) or ("ik" if k.get("cizgi") == "ik" else None)
+        if not g:
+            continue
+        sonuc[kid] = {"id": kid, "ad": k.get("ad"), "grup": g, "ulke": k.get("ulke"), "dil": k.get("dil"), "cizgi": k.get("cizgi"),
+                      "olay": 0, "sessiz": 0, "fo": 0, "gizli": 0, "io": 0, "fo_olu": 0, "baslik": 0}
+    yn = S["yn"]
+    for o in olaylar:
+        b, e = ix.get(o["bas"]), ix.get(o["son"])
+        if b is None or e is None:
+            continue
+        w = _pencere(b, e, len(D))
+        yo = S["yo"][o["tur"]]
+        for kid, r in sonuc.items():
+            if sum((yn.get(kid) or {}).get(i, 0) for i in w) < AKTIF_EN_AZ:
+                continue
+            r["olay"] += 1
+            if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
+                r["sessiz"] += 1
+    for gun, yayinlar in oz["yayin"].items():
+        if len(gun) != 10 or gun < "2023-10-07":
+            continue
+        for kid, v in yayinlar.items():
+            r = sonuc.get(kid)
+            if not r:
+                continue
+            n, tt = (v, {}) if isinstance(v, int) else (v[0], v[1])
+            r["baslik"] += n
+            r["fo"] += sum(tt.get("f:" + f, 0) for f in ("aktif", "failli", "failsiz", "oldu", "sehadet"))
+            r["gizli"] += tt.get("f:failsiz", 0) + tt.get("f:oldu", 0)
+            if gun <= "2025-10-09":
+                r["io"] += tt.get("k:io", 0)
+                r["fo_olu"] += tt.get("k:fo", 0)
+
+    def olcu(r):
+        kat = None
+        if r["io"] + r["fo_olu"] >= HUKUM["tarti"][1] and r["fo_olu"] and olu_toplam:
+            kat = (r["io"] / ISRAIL_OLU) / (r["fo_olu"] / olu_toplam)
+        return {"sessiz_oran": r["sessiz"] / r["olay"] if r["olay"] >= HUKUM["sustu"][1] else None,
+                "gizli_oran": r["gizli"] / r["fo"] if r["fo"] >= HUKUM["fail"][1] else None, "kat": kat}
+    # tanık basın: aynı dildeki bölge ve Batı'daki muhalif yayınların toplamı
+    taban = {}
+    for r in sonuc.values():
+        if r["grup"] not in ("bolge", "turkiye", "bati_muhalif"):
+            continue
+        t = taban.setdefault(r["dil"], {k: 0 for k in ("olay", "sessiz", "fo", "gizli", "io", "fo_olu")})
+        for k in t:
+            t[k] += r[k]
+    taban = {d: olcu(t) for d, t in taban.items()}
+    cikti = []
+    for r in sonuc.values():
+        if r["grup"] not in ("israil", "bati_ana", "ik") or r["baslik"] < 200:
+            continue
+        m, tb = olcu(r), taban.get(r["dil"]) or {}
+        hukum = []
+        if m["sessiz_oran"] is not None and tb.get("sessiz_oran") is not None and m["sessiz_oran"] >= HUKUM["sustu"][0] and m["sessiz_oran"] >= tb["sessiz_oran"] + 0.15:
+            hukum.append("sustu")
+        if m["gizli_oran"] is not None and tb.get("gizli_oran") is not None and m["gizli_oran"] >= HUKUM["fail"][0] and m["gizli_oran"] >= tb["gizli_oran"] + 0.15:
+            hukum.append("fail")
+        if m["kat"] is not None and m["kat"] >= HUKUM["tarti"][0] and tb.get("kat") is not None and m["kat"] >= 2 * tb["kat"]:
+            hukum.append("tarti")
+        yuv = lambda x, d=3: None if x is None else round(x, d)  # noqa: E731
+        r.update({"sessiz_oran": yuv(m["sessiz_oran"]), "gizli_oran": yuv(m["gizli_oran"]), "kat": yuv(m["kat"], 1),
+                  "taban": {k: yuv(v, 3 if k != "kat" else 1) for k, v in tb.items()}, "hukum": hukum})
+        cikti.append(r)
+    cikti.sort(key=lambda r: (-len(r["hukum"]), -r["baslik"]))
+    return cikti
+
+
 def _pencere(i, j, N):
     return range(max(0, i - PENCERE_ONCE), min(N, j + PENCERE_SONRA + 1))
 
@@ -419,6 +501,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             "esik": {"kat": ESIK_KAT, "pencere": [PENCERE_ONCE, PENCERE_SONRA], "taban_gun": TABAN_GUN},
             "turler": turler, "olaylar": tum_olaylar, "egri": egri, "olum_gunleri": olum_gunleri,
             "gercek": _gercek(S, D, dis, hafta_ix, haftalar),
+            "hukum": _yayin_hukum(oz, K, gk, S, D, tum_olaylar, sum(x for g, x in zip(D, olu) if g <= "2025-10-09")),
+            "hukum_esik": HUKUM,
             "toplum": _toplum(tp, S, D), "toplum_indirildi": tp.get("indirildi"),
             "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ,
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}
