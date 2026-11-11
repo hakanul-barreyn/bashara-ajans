@@ -188,3 +188,15 @@ body.baski .rp-metin{break-before:auto}
 .rp-manset:empty{display:none}
 .rp-manset b{color:#7fd6a5}
 body.baski .rp-manset{background:#fff;color:#0c0e0d;border:2px solid #0c0e0d}
+/* isimlerden çubuk */
+.isim-cubuklar{display:grid;gap:10px;margin:12px 0}
+.isim-satir{display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;align-items:center}
+.isim-bas{display:flex;flex-direction:column;font-size:.82rem;line-height:1.3}
+.isim-bas span{color:var(--soluk);font-family:var(--mono);font-size:.74rem}
+.isim-cubuk{display:block;height:58px;overflow:hidden;background:#1d2421;border-radius:4px;padding:3px 4px;line-height:1.05;font-size:6.5px;color:#cfd8d3;text-decoration:none;word-break:break-word;transition:outline-color .15s;outline:2px solid transparent}
+.isim-cubuk.cocuk{background:#1f5a40;color:#e4f2ea}
+.isim-cubuk span{display:inline}
+.isim-cubuk span::after{content:" · ";opacity:.5}
+.isim-cubuk:hover{outline-color:#c9302c}
+@media (max-width:640px){.isim-satir{grid-template-columns:1fr;gap:4px}}
+body.baski .isim-cubuk{background:#fff;color:#1d2421;border:1px solid #1d2421}

@@ -155,12 +155,12 @@
   function efsane(kap, xs) { var e = el("div", "rp-efsane"); xs.forEach(function (x) { var s = el("span"); var i = el("i"); i.style.background = x[0]; s.append(i, x[1]); e.appendChild(s); }); kap.appendChild(e); }
 
   function gruplar(v) {
-    var k = $("g-gruplar"); efsane(k, [["#1f7a52", tt("adı geçen başlık", "headlines naming them")], ["#d5d8d5", tt("o ay bildirilen ölüm", "deaths reported that month")]]);
+    var k = $("g-gruplar"); efsane(k, [["#1f7a52", tt("adı geçen başlık", "headlines naming them")]]);
     v.lider_gruplari.filter(function (g) { return g !== "İsrail"; }).forEach(function (g) {
       var s = v.grup_aylik[g]; if (!s || !s.some(Boolean)) return;
       var adlar = v.liderler.filter(function (x) { return x.grup === g; }).slice(0, 4).map(function (x) { return lAd(x.ad).replace(/ \(.*\)/, ""); });
       var f = el("figure", "rp-kucuk"); f.appendChild(el("figcaption", null, gAd(g)));
-      cizgi(f, v.aylar, [{ v: s, renk: "#1f7a52", ad: "başlık", kalin: 2 }], v.olu_ay, null, g, 200);
+      cizgi(f, v.aylar, [{ v: s, renk: "#1f7a52", ad: tt("başlık", "headlines"), kalin: 2 }], null, null, g, 200);
       f.appendChild(el("p", "rp-not", adlar.join(", ")));
       k.appendChild(f);
     });

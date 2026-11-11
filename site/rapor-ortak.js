@@ -16,7 +16,6 @@
     [T("Binde", "Per thousand"), T("Bin başlıkta kaç kez geçtiği.", "Uses per thousand headlines.")],
     [T("Tepki endeksi", "Response index"), T("Bir olayın penceresinde (bir gün önce, iki gün sonra) grubun o türden başlık payı; türün ilk büyük olayı 100.", "A group’s share of headlines of that type in an event’s window (one day before, two after); the type’s first major event = 100.")],
     [T("İzleme oranı", "Follow rate"), T("Bir grubun olaylara ayırdığı payın bölge basınının ayırdığı paya oranı. %100 = bölge basını kadar.", "The share a group gives events divided by the regional press’s share. 100% = as much as the regional press.")],
-    [T("Gri çubuklar", "Grey bars"), T("Gazze Sağlık Bakanlığı’nın bildirdiği ölümler.", "Deaths reported by the Gaza Ministry of Health.")],
     [T("Kırmızı rakam", "Red figures"), T("Belirgin düşüş ya da artış olmaması.", "A clear drop, or no increase.")],
     [T("Kesikli çizgi", "Dashed line"), T("Önemli bir tarih (seçim, karar) ya da 100 / %100 düzeyi.", "A key date (election, ruling) or the 100 / 100% level.")]
   ];

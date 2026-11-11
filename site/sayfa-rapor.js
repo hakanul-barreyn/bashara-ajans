@@ -64,7 +64,7 @@
     };
     GR.forEach(function (g) {
       v.terimler.forEach(function (t) { deger["g." + g + "." + t.anahtar] = sayi(b(g, t.anahtar)); });
-      ["aktif", "failli", "failsiz", "oldu", "sehadet"].forEach(function (f) { deger["g." + g + ".fp." + f] = yuzde(G[g].faillik_pay[f]); });
+      ["aktif", "failli", "failsiz", "oldu", "sehadet"].forEach(function (f) { deger["g." + g + ".fp." + f] = yuzde(G[g].faillik_pay[f]); }); deger["g." + g + ".fp.gizli"] = yuzde((G[g].faillik_pay.failsiz || 0) + (G[g].faillik_pay.oldu || 0));
     });
     document.querySelectorAll("[data-v]").forEach(function (x) { var d = deger[x.dataset.v]; x.textContent = d == null ? "–" : d; if (x.dataset.v === "taslak" && !d) x.hidden = true; });
     [dikkat, olayTablo, takvim, ciftler, terimGrafik, faillik, kiminOlumu, zirve, gazeteci, dagilim, yayinTablo, yontem].forEach(function (f) {
@@ -81,7 +81,7 @@
 
   // ---- 1) dikkat: haftalık Gazze payı + ölüm çubukları + olay şeritleri
   function dikkat(v) {
-    var k = $("g-dikkat"); efsane(["bolge", "bati_ana", "bati_muhalif"], k, [["#d5d8d5", T("haftalık ölüm (sağ eksen)", "weekly deaths (right axis)")]]);
+    var k = $("g-dikkat"); efsane(["bolge", "bati_ana", "bati_muhalif"], k);
     var H = v.haftalik, W = 760, Hh = 300, P = { l: 40, r: 46, t: 28, b: 26 }, n = H.length;
     var x = function (i) { return P.l + (W - P.l - P.r) * i / (n - 1); };
     var enP = 100, enO = Math.max.apply(0, H.map(function (h) { return h.olu || 0; })) || 1;
@@ -90,7 +90,6 @@
     var s = sv("svg", { viewBox: "0 0 " + W + " " + Hh, "class": "rp-svg", role: "img", "aria-label": T("Hafta hafta savaş payı ve ölümler", "Weekly war share and deaths") });
     var idx = function (g) { for (var i = 0; i < n; i++) if (H[i].hafta >= g) return i; return n - 1; };
     var bw = (W - P.l - P.r) / n;
-    H.forEach(function (h, i) { if (!h.olu) return; s.appendChild(baslik(sv("rect", { x: x(i) - bw * 0.4, y: yo(h.olu), width: bw * 0.8, height: Hh - P.b - yo(h.olu), "class": "rp-olu" }), T(gunAd(h.hafta) + " haftası: " + sayi(h.olu, 0) + " ölüm", "Week of " + gunAd(h.hafta) + ": " + sayi(h.olu, 0) + " deaths"))); });
     v.olaylar.forEach(function (o, j) {
       var a = idx(ekle(o.bas, -6)), c = idx(o.bit || o.bas);
       s.appendChild(baslik(sv("rect", { x: x(a) - bw / 2, y: P.t, width: Math.max(bw, x(c) - x(a) + bw), height: Hh - P.t - P.b, "class": "rp-olay rp-olay-" + o.tur }),
@@ -98,7 +97,6 @@
       var t = sv("text", { x: x(a), y: 11 + (j % 2) * 11, "text-anchor": "middle", "class": "rp-olay-no" }); t.textContent = j + 1; s.appendChild(t);
     });
     [0, 25, 50, 75, 100].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = yz(p, 0); s.appendChild(t); });
-    [0.5, 1].forEach(function (f) { var t = sv("text", { x: W - P.r + 6, y: yo(enO * f) + 4, "class": "rp-eksen" }); t.textContent = sayi(enO * f, 0); s.appendChild(t); });
     H.forEach(function (h, i) { if (h.hafta.slice(5, 7) === "01" && +h.hafta.slice(8) <= 7) { var t = sv("text", { x: x(i), y: Hh - 8, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = h.hafta.slice(0, 4); s.appendChild(t); } });
     ["bati_muhalif", "bolge", "bati_ana"].forEach(function (g) {
       var d = "", yeni = true;
@@ -174,7 +172,7 @@
   }
 
   // ---- 3) faillik
-  var FK = [["aktif", T("İsrail öldürdü", "Israel killed"), "#262a28"], ["failli", T("İsrail’in saldırısında öldürüldü", "killed in an Israeli strike"), "#7d8380"], ["failsiz", T("öldürüldü (fail yok)", "were killed (no agent)"), "#d9a21b"], ["oldu", T("öldü / ölü sayısı", "died / death toll"), "#e0702b"], ["sehadet", T("şehit oldu", "martyred"), "#1f7a52"]];
+  var FK = [["aktif", T("Fail yazılı: “İsrail öldürdü”", "Killer named: “Israel killed”"), "#262a28"], ["failli", T("Fail yazılı: “İsrail tarafından / İsrail saldırısında öldürüldü”", "Killer named: “killed by Israel / in an Israeli strike”"), "#5b6360"], ["failsiz", T("Fail saklı: “öldürüldü”", "Killer hidden: “were killed”"), "#e0702b"], ["oldu", T("Öldürme bile yok: “öldü”, “ölü sayısı”", "Not even a killing: “died”, “death toll”"), "#f2b13a"], ["sehadet", T("Şehadet dili: “şehit oldu”", "Martyrdom: “martyred”"), "#1f7a52"]];
   function faillik(v, G) {
     var k = $("g-faillik"); efsane([], k, FK.map(function (f) { return [f[2], f[1]]; }));
     GR.forEach(function (g) {
@@ -208,7 +206,7 @@
 
   // ---- 5) gazeteciler
   function gazeteci(v) {
-    var k = $("g-gazeteci"); efsane(["bolge", "bati_ana"], k, [["#d5d8d5", T("öldürülen gazeteci (sol eksen)", "journalists killed (left axis)")]]);
+    var k = $("g-gazeteci"); efsane(["bolge", "bati_ana"], k);
     var A = v.aylik, W = 760, H = 260, P = { l: 40, r: 50, t: 18, b: 26 }, n = A.length;
     var x = function (i) { return P.l + (W - P.l - P.r) * (i + 0.5) / n; };
     var enO = Math.max.apply(0, A.map(function (s) { return s.gazeteci_olu || 0; })) || 1;
@@ -217,10 +215,8 @@
     var yb = function (d) { return H - P.b - (H - P.t - P.b) * Math.min(d, enB) / enB; };
     var s = sv("svg", { viewBox: "0 0 " + W + " " + H, "class": "rp-svg", role: "img", "aria-label": T("Öldürülen gazeteciler ve haberleri", "Journalists killed and their coverage") });
     var bw = (W - P.l - P.r) / n * 0.7;
-    A.forEach(function (a, i) { if (a.gazeteci_olu) s.appendChild(baslik(sv("rect", { x: x(i) - bw / 2, y: yo(a.gazeteci_olu), width: bw, height: H - P.b - yo(a.gazeteci_olu), "class": "rp-olu" }), T(ayAd(a.ay) + ": " + a.gazeteci_olu + " gazeteci öldürüldü · bölge basını " + a.bolge.gazeteci_haber + ", Batı ana akım " + a.bati_ana.gazeteci_haber + " başlık", ayAd(a.ay) + ": " + a.gazeteci_olu + " journalists killed · regional press " + a.bolge.gazeteci_haber + ", Western mainstream " + a.bati_ana.gazeteci_haber + " headlines"))); });
     ["bolge", "bati_ana"].forEach(function (g) { s.appendChild(sv("path", { d: A.map(function (a, i) { return (i ? "L" : "M") + x(i).toFixed(1) + "," + yb(a[g].gazeteci_haber).toFixed(1); }).join(""), fill: "none", stroke: R[g], "stroke-width": 2.2 })); });
     [0.5, 1].forEach(function (f) {
-      var t = sv("text", { x: P.l - 6, y: yo(enO * f) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = sayi(enO * f, 0); s.appendChild(t);
       var t2 = sv("text", { x: W - P.r + 6, y: yb(enB * f) + 4, "class": "rp-eksen" }); t2.textContent = sayi(enB * f, 0); s.appendChild(t2);
     });
     var t3 = sv("text", { x: W - P.r + 6, y: P.t - 6, "class": "rp-eksen rp-eksen-ad" }); t3.textContent = T("başlık", "headlines"); s.appendChild(t3);

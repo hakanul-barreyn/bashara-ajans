@@ -41,12 +41,12 @@
       rehine_metin: EN
         ? "On 7 October 251 people were taken hostage. Between then and the October 2025 ceasefire, Western mainstream press ran " + sayi(b.rehine_baslik, 0) + " headlines about hostages and " + sayi(b.filistinli_baslik, 0) + " about the deaths of " + sayi(v.filistin_olu, 0) + " Palestinians: almost as many headlines for 251 people as for tens of thousands of dead. The hostages had names; the Palestinian dead mostly appeared as numbers."
         : "7 Ekim’de 251 kişi rehin alındı. O günden Ekim 2025 ateşkesine kadar Batı ana akım basını rehineler için " + sayi(b.rehine_baslik, 0) + ", " + sayi(v.filistin_olu, 0) + " Filistinlinin ölümü için " + sayi(b.filistinli_baslik, 0) + " başlık attı: 251 kişi için neredeyse on binlerce ölü kadar başlık. Rehinelerin adları vardı; Filistinli ölüler çoğunlukla bir sayı olarak geçti.",
-      rehine_alt: tt("Batı ana akım basını, ay ay: rehine başlıkları (sarı) ve Filistinlilerin ölümünü anlatan başlıklar (yeşil). Gri çubuklar o ay Gazze’de bildirilen ölümler.", "Western mainstream press, month by month: hostage headlines (yellow) and headlines about Palestinian deaths (green). Grey bars: deaths reported in Gaza that month."),
+      rehine_alt: tt("Batı ana akım basını, ay ay: rehine başlıkları (sarı) ve Filistinlilerin ölümünü anlatan başlıklar (yeşil). ", "Western mainstream press, month by month: hostage headlines (yellow) and headlines about Palestinian deaths (green)."),
       bebek_metin: bebekMetin(v),
       ateskes_metin: EN
         ? "After the ceasefire of 10 October 2025 the Gaza Ministry of Health still reported an average of " + sayi(sir.olu_hafta, 0) + " deaths a week (before it: " + sayi(once.olu_hafta, 0) + "; the figure includes bodies recovered from the rubble). The war’s share of Western mainstream headlines fell from " + yz(once.gruplar.bati_ana.savas_pay, 0) + " to " + yz(sir.gruplar.bati_ana.savas_pay, 0) + "; in the Turkish press from " + yz(once.gruplar.turkiye.savas_pay, 0) + " to " + yz(sir.gruplar.turkiye.savas_pay, 0) + ". The word “ceasefire” did not stop the dying; it stopped the headlines."
         : "10 Ekim 2025 ateşkesinden sonra Gazze Sağlık Bakanlığı haftada ortalama " + sayi(sir.olu_hafta, 0) + " ölüm bildirmeye devam etti (öncesinde " + sayi(once.olu_hafta, 0) + "; sayıya enkaz altından çıkarılan cesetler de dahil). Savaşın Batı ana akım başlıklarındaki payı " + yz(once.gruplar.bati_ana.savas_pay, 0) + " düzeyinden " + yz(sir.gruplar.bati_ana.savas_pay, 0) + " düzeyine, Türkiye basınında " + yz(once.gruplar.turkiye.savas_pay, 0) + " düzeyinden " + yz(sir.gruplar.turkiye.savas_pay, 0) + " düzeyine indi. “Ateşkes” kelimesi ölümleri durdurmadı; başlıkları durdurdu.",
-      ateskes_alt: tt("2025 başından bu yana hafta hafta savaşın başlıklardaki payı (çizgiler) ve Gazze’de bildirilen haftalık ölümler (gri). Kesikli çizgiler ateşkeslerin başladığı günler.", "Weekly share of the war in headlines since the start of 2025 (lines) and weekly deaths reported in Gaza (grey). Dashed lines: the days the ceasefires began.")
+      ateskes_alt: tt("2025 başından bu yana hafta hafta savaşın başlıklardaki payı . Kesikli çizgiler ateşkeslerin başladığı günler.", "Weekly share of the war in headlines since the start of 2025 . Dashed lines: the days the ceasefires began.")
     };
     deger.manset = EN
       ? "In Western mainstream press, one Israeli death was worth " + sayi(b.kat, 1) + " Palestinian deaths. 251 hostages got almost as many headlines as " + sayi(v.filistin_olu, 0) + " Palestinians killed."
@@ -58,7 +58,7 @@
     kart(sayi(b.rehine_baslik, 0) + " / " + sayi(b.filistinli_baslik, 0), tt("Batı ana akımında 251 rehine için başlık / " + sayi(v.filistin_olu, 0) + " Filistinli ölü için başlık", "Western mainstream headlines on 251 hostages / on " + sayi(v.filistin_olu, 0) + " Palestinian dead"));
     kart(yz(once.gruplar.bati_ana.savas_pay, 0) + " → " + yz(sir.gruplar.bati_ana.savas_pay, 0), tt("Ekim 2025 ateşkesinden önce ve sonra Batı ana akım başlıklarında savaşın payı", "share of the war in Western mainstream headlines before and after the October 2025 ceasefire"));
     kart(sayi(sir.olu_hafta, 0), tt("ateşkesten sonra Gazze’de haftada bildirilen ortalama ölüm", "average deaths reported in Gaza per week after the ceasefire"));
-    [oranGrafik, oranTablo, rehineGrafik, adTablo, ateskesGrafik, ateskesTablo, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("kimin", er); } });
+    [oranGrafik, oranTablo, rehineGrafik, adTablo, isimCubugu, ateskesGrafik, ateskesTablo, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("kimin", er); } });
   }
 
   function bebekMetin(v) {
@@ -117,8 +117,8 @@
   }
   function rehineGrafik(v) {
     var k = $("g-rehine"), A = v.aylik.filter(function (a) { return a.ay <= v.donem[1].slice(0, 7); });
-    efsane(k, [[REH, tt("rehine başlıkları", "hostage headlines")], [FIL, tt("Filistinli ölüm başlıkları", "Palestinian-death headlines")], ["#d5d8d5", tt("Gazze’de bildirilen ölüm", "deaths reported in Gaza")]]);
-    cizgi(k, A.map(function (a) { return a.ay; }), [{ v: A.map(function (a) { return a.bati_ana.r; }), renk: REH, ad: tt("rehine", "hostages"), kalin: 2.4 }, { v: A.map(function (a) { return a.bati_ana.fo; }), renk: FIL, ad: tt("Filistinli ölüm", "Palestinian deaths"), kalin: 2.4 }], A.map(function (a) { return a.olu; }), null, tt("Rehine ve Filistinli ölüm başlıkları", "Hostage and Palestinian-death headlines"));
+    efsane(k, [[REH, tt("rehine başlıkları", "hostage headlines")], [FIL, tt("Filistinli ölüm başlıkları", "Palestinian-death headlines")]]);
+    cizgi(k, A.map(function (a) { return a.ay; }), [{ v: A.map(function (a) { return a.bati_ana.r; }), renk: REH, ad: tt("rehine", "hostages"), kalin: 2.4 }, { v: A.map(function (a) { return a.bati_ana.fo; }), renk: FIL, ad: tt("Filistinli ölüm", "Palestinian deaths"), kalin: 2.4 }], null, null, tt("Rehine ve Filistinli ölüm başlıkları", "Hostage and Palestinian-death headlines"));
   }
   function adTablo(v) {
     var t = el("table");
@@ -133,11 +133,43 @@
     t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); $("g-adlar").appendChild(kt);
     $("g-adlar").appendChild(el("p", "rp-not", tt("Adlar Latin harfleriyle ve bazıları Arapça yazılışlarıyla arandı; Arapça ve İbranice yayınlardaki sayılar bu yüzden eksik olabilir. Filistinli ölülerin adlarını aynı yöntemle sayan bölüm ayrıca eklenecek.", "Names were searched in Latin script and some in Arabic; counts for Arabic- and Hebrew-language outlets may therefore be low. A section counting the names of Palestinian dead the same way will be added separately.")));
   }
+  // ölüm sayıları istatistik olarak değil, isimlerden oluşan çubuklar olarak
+  function isimCubugu() {
+    var kap = $("g-isim-cubuk");
+    fetch("data/isimler/dizin.json").then(function (r) { return r.json(); }).then(function (d) {
+      var G = [[0, 0, tt("Bir yaşını doldurmadan", "Under one year old")], [1, 4, tt("1–4 yaş", "Aged 1–4")], [5, 9, tt("5–9 yaş", "Aged 5–9")], [10, 14, tt("10–14 yaş", "Aged 10–14")], [15, 17, tt("15–17 yaş", "Aged 15–17")],
+        [18, 29, tt("18–29 yaş", "Aged 18–29")], [30, 44, tt("30–44 yaş", "Aged 30–44")], [45, 59, tt("45–59 yaş", "Aged 45–59")], [60, 200, tt("60 yaş ve üstü", "Aged 60 and over")]];
+      var ys = {}; d.yaslar.forEach(function (y) { ys[y.yas] = y; });
+      var gs = G.map(function (g) { var n = 0, yaslar = []; for (var y = g[0]; y <= g[1]; y++) if (ys[y]) { n += ys[y].n; yaslar.push(y); } return { ad: g[2], n: n, yaslar: yaslar, bas: g[0] }; }).filter(function (g) { return g.n; });
+      var en = Math.max.apply(0, gs.map(function (g) { return g.n; }));
+      var ozet = el("p", "rp-not", tt("Toplam " + sayi(d.toplam, 0) + " kişi, " + sayi(d.cocuk, 0) + " çocuk.", "In all " + sayi(d.toplam, 0) + " people, " + sayi(d.cocuk, 0) + " children."));
+      gs.forEach(function (g) {
+        var s = el("div", "isim-satir");
+        var b = el("div", "isim-bas"); b.append(el("b", null, g.ad), el("span", null, sayi(g.n, 0) + tt(" kişi", " people"))); s.appendChild(b);
+        var c = el("a", "isim-cubuk" + (g.bas < 18 ? " cocuk" : "")); c.href = "isimler.html#yas-" + g.yaslar[0]; c.style.width = Math.max(3, 100 * g.n / en) + "%";
+        c.title = g.ad + ": " + sayi(g.n, 0) + tt(" kişi. Tam liste için tıklayın.", " people. Click for the full list.");
+        s.appendChild(c); kap.appendChild(s);
+        // kutuyu dolduracak kadar isim: yaşları sırayla yükle, ~600 isimde dur
+        var adet = 0, sira = g.yaslar.slice();
+        (function sonraki() {
+          if (!sira.length || adet > 600) return;
+          fetch("data/isimler/yas-" + sira.shift() + ".json").then(function (r) { return r.json(); }).then(function (l) {
+            var parca = document.createDocumentFragment();
+            // liste ada göre sıralı geliyor; karıştır ki çubuk tek bir adla dolmasın (her açılışta aynı sıra)
+            var t = 7 + l.length; l = l.slice().sort(function () { t = (t * 9301 + 49297) % 233280; return t / 233280 - 0.5; });
+            l.slice(0, 600 - adet).forEach(function (k) { var a = k[0] || k[1]; if (!a) return; parca.appendChild(el("span", null, a)); adet++; });
+            c.appendChild(parca); sonraki();
+          }).catch(function () {});
+        })();
+      });
+      kap.appendChild(ozet);
+    }).catch(function () { kap.appendChild(el("p", "rp-not", tt("İsim listesi henüz yüklenmedi.", "The list of names is not loaded yet."))); });
+  }
   function ateskesGrafik(v) {
     var k = $("g-ateskes"), H = v.haftalik;
-    efsane(k, [[R.bati_ana, AD.bati_ana], [R.turkiye, AD.turkiye], [R.bolge, AD.bolge], ["#d5d8d5", tt("haftalık ölüm", "weekly deaths")]]);
+    efsane(k, [[R.bati_ana, AD.bati_ana], [R.turkiye, AD.turkiye], [R.bolge, AD.bolge]]);
     cizgi(k, H.map(function (h) { return h.hafta; }), ["bati_ana", "turkiye", "bolge"].map(function (g) { return { v: H.map(function (h) { return h[g].savas_pay; }), renk: R[g], ad: AD[g] + tt(" · savaş payı %", " · war share %"), kalin: g === "bati_ana" ? 2.6 : 1.6 }; }),
-      H.map(function (h) { return h.olu; }), v.ateskes.map(function (a) { return { gun: a.sirasinda.bas, ad: (EN ? a.ad.replace("Ocak 2025 ateşkesi", "January 2025 ceasefire").replace("Ekim 2025 ateşkesi", "October 2025 ceasefire") : a.ad) }; }), tt("Ateşkesler ve savaş payı", "Ceasefires and the war share"));
+      null, v.ateskes.map(function (a) { return { gun: a.sirasinda.bas, ad: (EN ? a.ad.replace("Ocak 2025 ateşkesi", "January 2025 ceasefire").replace("Ekim 2025 ateşkesi", "October 2025 ceasefire") : a.ad) }; }), tt("Ateşkesler ve savaş payı", "Ceasefires and the war share"));
   }
   function ateskesTablo(v) {
     var t = el("table");
