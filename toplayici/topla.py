@@ -921,6 +921,18 @@ def main():
             if h.get("dil") == "tr" and not h.get("baslik_tr") and h.get("baslik_orj"):
                 h["baslik_tr"] = ekler.guvenli(temiz(h["baslik_orj"], 200))
                 h["baslik_kaba"] = True
+        # Önce başlık çevirisi: özeti henüz yazılmamış ilgili haberlerin başlığı (tek istekte 60 başlık; ucuz ve hızlı),
+        # böylece akışta çevrilmemiş başlık kalmaz; özet yazılınca başlık da yenilenir
+        if model and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI):
+            try:
+                n, kota = diller.baslik_cevir(anahtar, [model] + [m for m in modeller if m != model][:2], eski,
+                                              butce_var=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 60,
+                                              sayac=lambda: gunluk_istek(durum, 1), log=log)
+                if kota:
+                    durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+            except Exception as e:
+                log(f"Başlık çevirisi hatası: {e}")
+
         # Öncelikli yayınlar (Al-Akhbar gibi) ve analizler sıranın başına; geri kalanı en yeniden eskiye
         sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
                        and h.get("deneme", 0) < 3),
@@ -1003,17 +1015,6 @@ def main():
             log(f"{yazilan} özet yazıldı ({model}); bugün {gunluk_istek(durum)} Gemini isteği")
         elif not model:
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
-
-        # Özeti yazılamayan ilgili haberlere en azından başlık çevirisi (tek istekte 60 başlık; ucuz ve hızlı)
-        if model and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI):
-            try:
-                n, kota = diller.baslik_cevir(anahtar, [model] + [m for m in modeller if m != model][:2], eski,
-                                              butce_var=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 60,
-                                              sayac=lambda: gunluk_istek(durum, 1), log=log)
-                if kota:
-                    durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
-            except Exception as e:
-                log(f"Başlık çevirisi hatası: {e}")
 
         # Aynı olayı anlatan haberleri saatte bir kümele ve çerçeve notu yazdır
         son_olay = tarih_coz(durum.get("_olay_son"))

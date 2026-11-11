@@ -63,7 +63,7 @@ Kurallar:
 Yalnızca JSON dizisi döndür: [{"id": "...", "tr": "...", "en": "..."}]
 """
 BASLIK_PARTI = 60
-BASLIK_TUR = 4          # çalıştırma başına en çok istek
+BASLIK_TUR = 8          # çalıştırma başına en çok istek
 
 
 def baslik_cevir(anahtar, modeller, haberler, butce_var, sayac, log=print):
