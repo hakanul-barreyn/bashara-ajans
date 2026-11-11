@@ -19,7 +19,7 @@ import urllib.request
 
 SITE = "https://hakanul-barreyn.github.io/bashara-ajans/"
 KENDI = ["", "raporlar.html", "almanak.html", "olaylar.html", "kimin.html", "liderler.html", "rapor.html", "ebu-safiye.html", "isimler.html"]
-CALISMA_BASINA, GUNLUK = 15, 400
+CALISMA_BASINA, GUNLUK = 12, 400
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 ATLA = ("news.google.com", "t.me/", "telegram.", "facebook.com", "x.com/", "twitter.com/")
 
@@ -68,7 +68,7 @@ def calistir(kok, simdi, log=print):
     kanit, kendi = adaylar(kok, simdi)
     sira = [(u, "k") for u in dict.fromkeys(kanit) if u not in d["adres"]]
     sira = [(u, "s") for u, g in kendi if (d["adres"].get(u) or {}).get("g") != g] + sira   # kendi sayfalarımız günde bir, önde
-    gonderilen = hata = 0
+    gonderilen = hata = ust_uste = 0
     for u, tur in sira:
         if gonderilen >= CALISMA_BASINA or sayac >= GUNLUK:
             break
@@ -77,6 +77,7 @@ def calistir(kok, simdi, log=print):
             d["adres"][u] = {"t": simdi.isoformat()[:16], "g": bugun, "job": c.get("job_id"), "tur": tur}
             gonderilen += 1
             sayac += 1
+            ust_uste = 0
         except urllib.error.HTTPError as e:
             hata += 1
             if e.code in (401, 403):
@@ -86,9 +87,13 @@ def calistir(kok, simdi, log=print):
                 log("İnternet Arşivi: hız sınırı; bu çalıştırma bitti")
                 break
             d["adres"][u] = {"t": simdi.isoformat()[:16], "g": bugun, "hata": e.code, "tur": tur}
-        except Exception as e:  # ağ hatası: sonra yeniden denenir
+        except Exception as e:  # ağ hatası (arşiv bağlantıyı reddediyor): yavaşla, üst üste 3'te bu çalıştırmayı bitir
             hata += 1
-            log(f"İnternet Arşivi: {u[:70]}: {e}")
+            ust_uste += 1
+            if ust_uste >= 3:
+                log(f"İnternet Arşivi: bağlantı reddedildi ({e}); bu çalıştırmada duruldu, sonra devam edilecek")
+                break
+            time.sleep(20)
         time.sleep(5)
     d["gun"] = {g: n for g, n in d["gun"].items() if g >= (simdi.date() - dt.timedelta(days=7)).isoformat()}
     d["gun"][bugun] = sayac
