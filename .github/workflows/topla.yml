@@ -74,6 +74,8 @@ jobs:
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
           TELEGRAM_OTURUM: ${{ secrets.TELEGRAM_OTURUM }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          IA_ERISIM: ${{ secrets.IA_ERISIM }}
+          IA_GIZLI: ${{ secrets.IA_GIZLI }}
           INSTAGRAM_HESAP: ${{ vars.INSTAGRAM_HESAP }}
           IG_GUNLUK: ${{ vars.IG_GUNLUK }}
           IG_SIMDI: ${{ inputs.ig_simdi }}

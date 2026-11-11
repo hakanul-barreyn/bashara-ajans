@@ -1172,6 +1172,11 @@ def main():
     except Exception as e:
         log(f"Konuşmalar hatası: {e}")
     try:
+        import arsivle
+        arsivle.calistir(KOK, SIMDI, log=log)
+    except Exception as e:
+        log(f"İnternet Arşivi hatası: {e}")
+    try:
         toplum.guncelle(KOK, log=log)
     except Exception as e:
         log(f"Toplum verisi hatası: {e}")
