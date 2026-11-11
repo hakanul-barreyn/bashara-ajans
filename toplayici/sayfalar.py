@@ -773,7 +773,7 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <header class="mk-bas">
   <div class="mk-bas-ic">
     <a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="30" height="30"><b data-marka="ad">{_e(M["ad"])}</b><span data-marka="slogan">{_e(M.get("slogan", ""))}</span></a>
-    <nav class="mk-menu"><a href="../">Akış</a><a href="../arsiv.html">Arşiv</a><a href="../almanak.html">Raporlar</a><a href="../kaynaklar.html">Kaynaklar</a><a href="../hakkimizda.html">Hakkımızda</a></nav>
+    <nav class="mk-menu"><a href="../">Akış</a><a href="../arsiv.html">Arşiv</a><a href="../raporlar.html">Raporlar</a><a href="../almanak.html">Almanak</a><a href="../kaynaklar.html">Kaynaklar</a><a href="../hakkimizda.html">Hakkımızda</a></nav>
   </div>
 </header>
 <div class="mk-sayfa">

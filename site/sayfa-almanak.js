@@ -89,7 +89,7 @@
     if (son) { const a = el("a", null, T("Son bölüm →", "Latest chapter →")); a.href = hashOf(son); arac.appendChild(a); }
     yan.appendChild(arac);
     const on = el("div", "ky-grup"); on.appendChild(el("h3", null, T("Ön sayfalar", "Front matter")));
-    [["#kapak", "", T("Kapak", "Cover")], ["#bu-kitap", "", T("Bu kitap ve özel raporlar", "About this book, special reports")], ["#icindekiler", "", T("İçindekiler", "Contents")], ["#sessizlik", "", T("Sessizlik endeksi", "The silence index")]].forEach(([h, n, a]) => {
+    [["#kapak", "", T("Kapak", "Cover")], ["#bu-kitap", "", T("Bu kitap ve özel raporlar", "About this book, special reports")], ["#icindekiler", "", T("İçindekiler", "Contents")], ["#sessizlik", "", T("Sessizlik endeksi", "The silence index")], ["#sonuc", "", T("Sonuç: yıl yıl, çeyrek çeyrek", "Conclusion: year by year, quarter by quarter")]].forEach(([h, n, a]) => {
       const s = el("a", "ky-satir"); s.href = h; s.append(el("span", "no", n), el("span", "ad", a), el("span", "ek")); if (aktif === h) s.setAttribute("aria-current", "page"); on.appendChild(s);
     });
     yan.appendChild(on);
@@ -103,6 +103,7 @@
         ic.appendChild(s);
       };
       if (c.yillik) satir(c.yillik, "yil", T(c.yil + " yılı", "The year " + c.yil));
+      const sn = el("a", "ky-satir yil"); sn.href = "#sonuc-" + c.yil; sn.append(el("span", "no", ""), el("span", "ad", T(c.yil + " sonucu", c.yil + " conclusion")), el("span", "ek")); if (aktif === "#sonuc-" + c.yil) sn.setAttribute("aria-current", "page"); ic.appendChild(sn);
       c.aylar.forEach((a) => {
         if (a.aylik) satir(a.aylik, "ay", ad(a.aylik));
         else ic.appendChild(el("div", "ky-satir ay", tarih(a.ay + "-15", { month: "long", year: "numeric" })));
@@ -282,11 +283,9 @@
       "Periods before the collector started (since October 2023) were written from headlines gathered retrospectively from the outlets’ own archives and the Internet Archive: there you will find figures and event-by-event silence instead of commentary. The figures are measurements; the commentary is written by AI from those figures."),
      T("Her bölüm ayrı yazdırılabilir; bir ay ya da bütün bir cilt tek seferde de yazdırılabilir (A4, sayfa numaralı). Yazdır penceresinde “PDF olarak kaydet” seçerek kitabın kendi kopyasını alabilirsiniz.",
       "Every chapter can be printed on its own; a whole month or a whole volume can also be printed at once (A4, with page numbers). Choose “Save as PDF” in the print dialog to keep your own copy of the book.")].forEach((t, i) => s.appendChild(el("p", "metin" + (i ? "" : " acilis"), t)));
-    const k = kisim(T("Özel raporlar", "Special reports")); k.style.setProperty("--no", '"Ek"');
-    k.appendChild(el("p", null, T("Kitabın ekleri: üç yılı tek soruyla okuyan uzun raporlar.", "The book’s appendices: long reports that read three years through a single question.")));
-    const ul = el("ul", "ic-liste");
-    RAPORLAR.forEach(([h, ust, b2, a]) => { const li = el("li"); const x = el("a"); x.href = h; x.append(el("b", null, b2), el("i", null, ust), el("small", null, a)); li.appendChild(x); ul.appendChild(li); });
-    k.appendChild(ul); const ks = el("div", "kisimlar"); ks.appendChild(k); s.appendChild(ks);
+    const rp = el("p", "metin"); const ra = el("a", null, T("Raporlar sayfasına →", "To the Reports page →")); ra.href = "raporlar.html";
+    rp.append(T("Uzun özel raporlar (kimin ölümü haber oldu, alışma, liderler) kitaptan ayrı, Raporlar sayfasında. ", "The long special reports (whose death made the news, habituation, leaders) are separate from the book, on the Reports page. "), ra);
+    s.appendChild(rp);
     return s;
   }
   function icindekiler() {
@@ -346,6 +345,47 @@
      T("Sayım tür düzeyindedir: o günlerde aynı türden başka bir olayı yazan yayın “yazdı” sayılır. Yani gerçek sessizlik burada görünenden büyüktür.", "Counting is by type: an outlet that wrote about another event of the same type in those days counts as having covered it. The real silence is larger than shown."),
      T("Geriye dönük taramada yayınların arşivlerinin ne kadarına ulaşılabildiği yayından yayına değişir; o yüzden yalnızca o günlerde en az 15 başlığı bulunan yayınlar sayılır. İsrail basınında örneklem küçüktür.", "How much of each outlet’s archive could be reached in the backfill varies; only outlets with at least 15 headlines in the window count. The Israeli press sample is small.")].forEach((t) => k4.appendChild(el("p", null, t)));
     ks.appendChild(k4);
+    s.appendChild(ks);
+    return s;
+  }
+
+  // ---------------------------------------------------------------- sonuç: yıl yıl, çeyrek çeyrek
+  const HAD = { sustu: T("Sustu", "Stayed silent"), fail: T("Faili sakladı", "Hid the killer"), tarti: T("İsrailli ölümü öne çıkardı", "Weighed Israeli deaths more") };
+  function sonucSayfa() {
+    const s = sayfa(null, "ZBS Almanak", T("Sonuç", "Conclusion"), "iv");
+    s.style.setProperty("--no", '"C"');
+    const b = el("div", "acilis-blok"); b.append(el("div", "bolum-ust", T("Sonuç", "Conclusion")), el("h1", "bolum-baslik", T("Yıl yıl, çeyrek çeyrek: kim sustu?", "Year by year, quarter by quarter: who stayed silent?"))); s.appendChild(b);
+    s.appendChild(el("p", "metin acilis", T("Her çeyrek için, başlıklardan bulunan olayların günlerinde yayında olup o olay türünden tek başlık atmayan yayınların payı. Altında o yılın yayın yayın hükümleri: aynı dildeki tanık basından belirgin biçimde ayrılan yayınlar.",
+      "For each quarter, the share of outlets publishing during the events found in the headlines that ran not a single headline of that kind. Below it, that year’s outlet-by-outlet verdicts: outlets that clearly diverged from witness press in the same language.")));
+    const ay = (ALISMA && ALISMA.sessizlik) || [], hy = (ALISMA && ALISMA.hukum_yil) || {};
+    const ks = el("div", "kisimlar");
+    const yillar = [...new Set(ay.map((m) => m.donem.slice(0, 4)))];
+    yillar.forEach((y) => {
+      const k = kisim(T(y + " sonucu", y + " conclusion")); k.id = "sonuc-" + y;
+      const ceyrek = {};
+      ay.filter((m) => m.donem.startsWith(y)).forEach((m) => {
+        const c = "Ç" + (Math.floor((+m.donem.slice(5, 7) - 1) / 3) + 1); const r = ceyrek[c] || (ceyrek[c] = { olay: 0 });
+        r.olay += m.olay; ["bolge", "turkiye", "israil", "bati_ana"].forEach((g) => { const n = m[g + "_n"] || [0, 0]; r[g] = r[g] || [0, 0]; r[g][0] += n[0]; r[g][1] += n[1]; });
+      });
+      const kt = el("div", "tablo-kutu"); const tb = el("table"); const th = el("thead"); const tr0 = el("tr");
+      [T("Çeyrek", "Quarter"), T("Olay", "Events"), ...["bati_ana", "israil", "turkiye", "bolge"].map((g) => GRK[g][1])].forEach((x) => tr0.appendChild(el("th", null, x)));
+      th.appendChild(tr0); tb.appendChild(th); const bd = el("tbody");
+      Object.keys(ceyrek).sort().forEach((c) => {
+        const r = ceyrek[c], tr = el("tr"); tr.appendChild(el("td", null, y + " " + (EN ? c.replace("Ç", "Q") : c))); tr.appendChild(el("td", "sayi", String(r.olay)));
+        ["bati_ana", "israil", "turkiye", "bolge"].forEach((g) => { const v = r[g][1] >= 5 ? Math.round(100 * r[g][0] / r[g][1]) : null; tr.appendChild(el("td", "sayi", v == null ? "–" : (EN ? v + "%" : "%" + v))); });
+        bd.appendChild(tr);
+      });
+      tb.appendChild(bd); kt.appendChild(tb); k.appendChild(kt);
+      const l = hy[y] || [];
+      if (l.length) {
+        const ul = el("ul", "ic-liste");
+        l.forEach((r) => { const li = el("li"); const d = el("a"); d.href = "raporlar.html"; d.append(el("b", null, r.ad), el("i", null, r.hukum.map((h) => HAD[h]).join(" · ")),
+          el("small", null, [r.sessiz_oran != null ? T("susma %" + Math.round(100 * r.sessiz_oran), "silence " + Math.round(100 * r.sessiz_oran) + "%") : null, r.gizli_oran != null ? T("faili saklama %" + Math.round(100 * r.gizli_oran), "killer hidden " + Math.round(100 * r.gizli_oran) + "%") : null, r.kat != null ? T("ölü başına ", "per death ") + Number(r.kat).toLocaleString(YEREL) + "×" : null].filter(Boolean).join(" · "))); li.appendChild(d); ul.appendChild(li); });
+        k.appendChild(ul);
+      } else k.appendChild(el("p", "bekliyor", T("Bu yıl için hüküm verecek kadar ölçüm yok.", "Not enough measurements for a verdict this year.")));
+      ks.appendChild(k);
+    });
+    ks.appendChild(el("p", "dipnot", T("Hüküm ölçütleri raporlarla aynı: yeterli ölçüm, yüksek oran ve aynı dildeki tanık basından belirgin fark.", "Verdict criteria are the same as in the reports: enough measurements, a high rate and a clear gap from witness press in the same language.")));
     s.appendChild(ks);
     return s;
   }
@@ -616,6 +656,7 @@
       return;
     }
     if (h === "#sessizlik") { yanCiz(h); masa.appendChild(sessizlikSayfa()); window.scrollTo(0, 0); return; }
+    if (h === "#sonuc" || /^#sonuc-\d{4}$/.test(h)) { yanCiz(h); masa.appendChild(sonucSayfa()); const y = document.getElementById(h.slice(1)); if (y && h !== "#sonuc") y.scrollIntoView(); else window.scrollTo(0, 0); return; }
     const m = /^#(haftalik|aylik|yillik)-(.+)$/.exec(h);
     const x = m && SIRA.find((y) => y.tur === m[1] && y.anahtar === m[2]);
     if (!x) { location.hash = "#kapak"; return; }

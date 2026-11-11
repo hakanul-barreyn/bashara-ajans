@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 5
+ALISMA_SURUM = 6
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -255,7 +255,7 @@ HUKUM = {"sustu": (0.8, 20), "fail": (0.6, 30), "tarti": (3.0, 30)}   # (eşik, 
 ISRAIL_OLU = 1152 + 822          # kimin.py ile aynı: 7 Ekim saldırısı ve sonrasında ölen İsrailliler (Ynet)
 
 
-def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam):
+def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam, aralik=("2023-10-07", "9999")):
     """Her yayın için üç ölçü: olaylarda susma oranı, Filistinli ölüm başlıklarında faili saklama oranı, İsrailli ölüme
     Filistinli ölüme göre ölü başına kaç kat başlık ayırdığı. Hüküm yalnızca İsrail, Batı ana akım ve bölgede işbirlikçi
     çizgideki yayınlara verilir ve AYNI DİLDEKİ tanık basınla (bölge ve Batı'daki muhalif yayınlar) karşılaştırılır:
@@ -271,6 +271,8 @@ def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam):
                       "olay": 0, "sessiz": 0, "fo": 0, "gizli": 0, "io": 0, "fo_olu": 0, "baslik": 0}
     yn = S["yn"]
     for o in olaylar:
+        if not (aralik[0] <= o["bas"] <= aralik[1]):
+            continue
         b, e = ix.get(o["bas"]), ix.get(o["son"])
         if b is None or e is None:
             continue
@@ -283,7 +285,7 @@ def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam):
             if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
                 r["sessiz"] += 1
     for gun, yayinlar in oz["yayin"].items():
-        if len(gun) != 10 or gun < "2023-10-07":
+        if len(gun) != 10 or not (aralik[0] <= gun <= aralik[1]):
             continue
         for kid, v in yayinlar.items():
             r = sonuc.get(kid)
@@ -503,6 +505,11 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             "gercek": _gercek(S, D, dis, hafta_ix, haftalar),
             "hukum": _yayin_hukum(oz, K, gk, S, D, tum_olaylar, sum(x for g, x in zip(D, olu) if g <= "2025-10-09")),
             "hukum_esik": HUKUM,
+            "hukum_yil": {y: [{k: r[k] for k in ("ad", "grup", "hukum", "sessiz_oran", "gizli_oran", "kat", "olay", "fo")}
+                              for r in _yayin_hukum(oz, K, gk, S, D, tum_olaylar,
+                                                    sum(x for g, x in zip(D, olu) if (y + "-01-01") <= g <= min(y + "-12-31", "2025-10-09")) or 1,
+                                                    (max(y + "-01-01", "2023-10-07"), y + "-12-31")) if r["hukum"]]
+                          for y in sorted({g[:4] for g in D if g >= "2023-10-07"})},
             "toplum": _toplum(tp, S, D), "toplum_indirildi": tp.get("indirildi"),
             "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ,
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}

@@ -57,8 +57,7 @@
     kart(sayi(v.olaylar.length, 0), tt(v.turler.filter(function (t) { return t.olay_sayisi; }).length + " türde, başlıklardan bulunan olay", "events found in the headlines, across " + v.turler.filter(function (t) { return t.olay_sayisi; }).length + " types"));
     if (son) kart(gunAd(son.gun), tt("Batı ana akım basınının bir hastane saldırısına El-Ehli’nin en az yarısı kadar yer ayırdığı son olay (", "the last hospital attack to which Western mainstream press gave at least half the attention it gave Al-Ahli (") + yerAd(son) + ")");
     if (ilk && sonC) kart(yz(ilk.bati_ana * 100, 0) + " → " + yz(sonC.bati_ana * 100, 0), tt("Batı ana akım basınının olaylara, bölge basınına göre ayırdığı yer (", "the space Western mainstream press gave events, relative to the regional press (") + ilk.donem + " → " + sonC.donem + ")");
-    if (og.length) kart(artmayan.length + " / " + og.length, tt("300’den fazla ölümün bildirildiği günlerde Batı ana akım basınında savaş payının artmadığı gün", "days with 300+ reported deaths on which the war’s share in Western mainstream press did not rise"));
-    [hastaneGrafik, turTablo, kucukler, egriGrafik, olumTablo, katalog, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("alisma", er); } });
+    [hastaneGrafik, turTablo, kucukler, egriGrafik, katalog, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("alisma", er); } });
   }
 
   function egriMetin(e) {

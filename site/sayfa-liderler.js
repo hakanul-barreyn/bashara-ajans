@@ -51,7 +51,7 @@
     var ol = olumOzet(og);
     var abd = ol.filter(function (x) { return x.grup === "ABD"; })[0];
     if (abd) kart(abd.sessiz + " / " + abd.n, tt("kitlesel ölüm gününde ABD liderlerinin adı 1,5 kat bile artmadı", "mass-death days on which US leaders’ names did not rise even 1.5 times"));
-    [gruplar, erdoganGrafik, hedef, kelimeler, tetik, function () { olumTablo(ol); }, ornekler, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("liderler", er); } });
+    [gruplar, erdoganGrafik, hedef, kelimeler, tetik, ornekler, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("liderler", er); } });
   }
 
   // ---- Erdoğan'ın resmî konuşmaları (tccb.gov.tr)
