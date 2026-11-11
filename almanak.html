@@ -6,182 +6,36 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0c0e0d">
-<title data-marka-sablon="{ad} Raporlar">ZBS Raporlar</title>
-<meta name="description" content="Haftalık, aylık ve yıllık bültenler: kim neyi yazdı, kim neyi görmedi, kim nasıl anlattı.">
+<title data-marka-sablon="{ad} Almanak">ZBS Almanak</title>
+<meta name="description" content="Her hafta yeni bir bölüm eklenen kitap: 7 Ekim’den bu yana basın neyi yazdı, neyi görmedi, nasıl anlattı. Baskıya hazır.">
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611111940">
-<link rel="stylesheet" href="site/rapor.css?v=202611082330">
+<link rel="stylesheet" href="site/rapor.css?v=202611111700">
 <script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
-<style>
-/* Almanak: solda dönem listesi, sağda bülten; sayılar grafik, yorum düz metin */
-.sayfa{max-width:1180px;margin:0 auto;padding:24px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px}
-.sayfa>h1{grid-column:1/-1;margin:0;font-size:1.8rem;letter-spacing:-.01em}
-.sayfa>.giris{grid-column:1/-1;margin:-14px 0 0;color:var(--soluk);max-width:72ch}
-.yanlik{position:sticky;top:calc(var(--ust) + 16px);align-self:start;display:flex;flex-direction:column;gap:10px}
-.sekmeler{display:flex;gap:4px;background:var(--yuzey2);padding:4px;border-radius:12px}
-.sekmeler button{flex:1;border:0;background:transparent;color:var(--ink2);font-size:.82rem;font-weight:600;padding:7px 4px;border-radius:9px;cursor:pointer}
-.sekmeler button[aria-pressed="true"]{background:var(--kart);color:var(--ink);box-shadow:var(--golge)}
-.donemler{display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - var(--ust) - 140px);overflow-y:auto}
-.donemler button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:transparent;color:var(--ink2);padding:9px 10px;border-radius:10px;cursor:pointer;text-align:left;font-size:.88rem}
-.donemler button:hover{background:var(--yuzey)}
-.donemler button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.donemler small{font-family:var(--mono);font-size:.68rem;opacity:.7}
-.icerik{min-width:0;display:flex;flex-direction:column;gap:16px}
-.kart2{background:var(--kart);box-shadow:var(--golge);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.kart2 h2{margin:0;font-size:1.05rem}
-.kart2 p{margin:0;color:var(--k-ink2);max-width:72ch}
-.bas-ust{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:.74rem;color:var(--k-soluk)}
-.taslak{background:var(--k-amber-acik);color:var(--k-amber);padding:2px 8px;border-radius:999px}
-.bulten-baslik{margin:0;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.2;letter-spacing:-.015em;text-wrap:balance}
-.indir{font-size:.8rem;font-weight:600}
-.bekliyor{font-size:.86rem;color:var(--k-soluk)!important;font-style:italic}
-/* uzaklık çizelgesi: 0–2 ekseninde her grup bir nokta */
-.eksen{display:flex;flex-direction:column;gap:10px}
-.e-satir{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) 3.2rem;gap:12px;align-items:center}
-.e-ad{font-size:.86rem;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.e-ad small{font-family:var(--mono);font-weight:400;color:var(--k-soluk);margin-left:6px;font-size:.68rem}
-.e-cizgi{position:relative;height:22px}
-.e-cizgi::before{content:"";position:absolute;left:0;right:0;top:10px;height:3px;border-radius:3px;background:linear-gradient(90deg,#2b8a5e,#a7aeb3 50%,#4a72c4);opacity:.35}
-.e-nokta{position:absolute;top:3px;width:17px;height:17px;margin-left:-8.5px;border-radius:50%;border:3px solid var(--kart);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-.e-deger{font-family:var(--mono);font-size:.8rem;text-align:right}
-.e-olcek{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) 3.2rem;gap:12px;font-family:var(--mono);font-size:.66rem;color:var(--k-soluk)}
-.e-olcek div{display:flex;justify-content:space-between}
-.alt-baslik{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--k-soluk);margin-top:6px}
-/* görülmeyenler */
-.olay-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.olay-liste li{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--k-cizgi);font-size:.9rem}
-.olay-liste .t{font-family:var(--mono);font-size:.7rem;color:var(--k-soluk)}
-.olay-liste b{font-weight:600;flex:1 1 18rem;min-width:0}
-.kc{font-family:var(--mono);font-size:.66rem;padding:1px 7px;border-radius:999px;color:#fff}
-/* konu tablosu */
-.tablo-kutu{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:.86rem}
-th{text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--k-soluk);padding:6px 8px;border-bottom:1px solid var(--k-cizgi)}
-td{padding:7px 8px;border-bottom:1px solid var(--k-cizgi);color:var(--k-ink2);font-variant-numeric:tabular-nums}
-td.sayi{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:nowrap}
-.oran{display:flex;align-items:center;gap:8px;min-width:9rem}
-.oran i{display:block;height:8px;border-radius:4px;background:#4a72c4}
-.oran span{font-family:var(--mono);font-size:.76rem}
-/* nasıl anlatıldı */
-.anlat{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid var(--k-cizgi)}
-.anlat:last-child{border-bottom:0}
-.anlat h3{margin:0;font-size:.98rem}
-.iki{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.iki h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--k-soluk)}
-.orn{display:flex;flex-direction:column;gap:2px;padding:6px 0;font-size:.84rem}
-.orn .y{font-weight:700;font-size:.78rem;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.orn .b{font-style:italic;color:var(--k-ink2)}
-.orn .c{color:var(--k-soluk);font-size:.8rem}
-.bos2{color:var(--soluk);padding:40px 0}
-@media (max-width:820px){
-  .sayfa{grid-template-columns:minmax(0,1fr);gap:16px}
-  .yanlik{position:static}
-  .donemler{flex-direction:row;overflow-x:auto;max-height:none}
-  .donemler button{flex:none}
-  .iki{grid-template-columns:minmax(0,1fr)}
-  .e-satir,.e-olcek{grid-template-columns:minmax(0,7.5rem) minmax(0,1fr) 2.6rem;gap:8px}
-  .kart2{padding:16px}
-}
+<link rel="stylesheet" href="site/kitap.css?v=202611112100">
 
-/* yeni almanak parçaları */
-.kod{display:inline-grid;place-items:center;min-width:1.5em;height:1.5em;padding:0 .35em;margin:0 2px;border-radius:999px;border:0;background:var(--k-yesil-acik);color:var(--k-yesil);font:600 .68rem/1 var(--mono);cursor:pointer;vertical-align:.15em}
-.kod:hover{background:var(--k-yesil);color:#fff}
-.kanit-panel{position:fixed;z-index:3000;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(440px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--kart);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:16px 18px;display:flex;flex-direction:column;gap:4px}
-.kanit-panel:focus{outline:none}
-.kanit-panel[hidden]{display:none}
-.kp-ust{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
-.kp-kapat{border:0;background:var(--k-yuzey2);border-radius:50%;width:30px;height:30px;cursor:pointer;flex:none}
-.kp-alt{font-family:var(--mono);font-size:.7rem;color:var(--k-soluk);margin-bottom:4px}
-.kanit-panel .orn{border-top:1px solid var(--k-cizgi)}
-.kanit-panel .orn a{font-size:.76rem;font-weight:600;color:var(--k-yesil);text-decoration:none}
-.indirler{display:flex;flex-wrap:wrap;gap:8px 16px}
-.kart-onizle{display:block;max-width:360px;border-radius:14px;overflow:hidden;box-shadow:var(--golge)}
-.kart-onizle img{display:block;width:100%;height:auto}
-.dg{font-family:var(--mono);font-size:.7rem;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--k-yuzey2);color:var(--k-soluk);vertical-align:.1em}
-.dg.art{color:#9b3b36;background:#f8e5e3}.dg.azl{color:#23704f;background:#e3f0e8}
-.e-deger{white-space:nowrap}
-.e-satir{grid-template-columns:minmax(0,11rem) minmax(0,1fr) 5.4rem!important}
-.e-olcek{grid-template-columns:minmax(0,11rem) minmax(0,1fr) 5.4rem!important}
-.egri{width:100%;height:auto;display:block}
-.egri-izgara{stroke:var(--k-cizgi);stroke-width:1}
-.egri-yazi{font:11px var(--mono);fill:var(--k-soluk)}
-.rakamlar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.rakam{background:var(--k-yuzey2);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
-.rakam b{font-size:1.5rem;font-weight:800;color:var(--k-kirmizi);font-variant-numeric:tabular-nums}
-.rakam span{font-size:.8rem;color:var(--k-ink2)}
-.gec-cubuk{flex:0 0 120px;height:8px;border-radius:4px;background:var(--k-yuzey2);overflow:hidden;align-self:center}
-.gec-cubuk i{display:block;height:100%;background:#c9544e;border-radius:4px}
-.dil-tablo{display:flex;flex-direction:column;gap:4px}
-.dil-satir{display:grid;grid-template-columns:minmax(0,1fr) 9.5rem 0 minmax(0,1fr);align-items:center;gap:8px;font-size:.84rem}
-.dil-bas span{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--k-soluk)}
-.dil-bas span:nth-child(2){text-align:right}
-.dil-sol,.dil-sag{display:flex;align-items:center;gap:6px;height:16px;cursor:help}
-.dil-sol{flex-direction:row;justify-content:flex-end}
-.dil-sol i{height:12px;border-radius:3px 0 0 3px;background:#2b8a5e;min-width:1px}
-.dil-sag i{height:12px;border-radius:0 3px 3px 0;background:#4a72c4;min-width:1px}
-.dil-sol em,.dil-sag em{font:500 .72rem var(--mono);color:var(--k-soluk);font-style:normal;min-width:1.6em}
-.dil-sol em{text-align:right}
-.dil-ad{text-align:center;font-weight:700;color:#23704f}
-.dil-is .dil-ad{color:#3d5fa8}
-.takvim{display:flex;flex-direction:column;gap:10px}
-.tk-satir{display:grid;grid-template-columns:9rem minmax(0,1fr);gap:10px;align-items:start}
-.tk-ad{font-size:.82rem;font-weight:600}
-.tk-izgara{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,13px);grid-auto-columns:13px;gap:3px;overflow-x:auto;padding-bottom:4px}
-.tk-gun,.tk-bos{width:13px;height:13px;border-radius:3px;display:block}
-.tk-yok{background:var(--k-yuzey2)}
-.sessiz-harita svg{width:100%;height:auto;display:block;border-radius:14px;background:#eef1f4}
-.sh-kara{fill:#e3e1d9;stroke:#d2cfc5;stroke-width:.8}
-.sh-yer circle{fill:#9aa3ab;fill-opacity:.55}
-.sh-yer.sessiz circle{fill:#c9544e;fill-opacity:.85}
-.sh-yer .sh-hale{fill:#c9544e;fill-opacity:.18!important}
-.sh-ad{font:600 15px var(--f);fill:#9b3b36;paint-order:stroke;stroke:#eef1f4;stroke-width:4px}
-.csv-liste{margin:0;padding-left:1.1em;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 16px;font-size:.86rem}
-@media (max-width:820px){
-  .rakamlar{grid-template-columns:minmax(0,1fr)}
-  .dil-satir{grid-template-columns:minmax(0,1fr) 6.5rem 0 minmax(0,1fr);gap:4px;font-size:.76rem}
-  .tk-satir{grid-template-columns:minmax(0,1fr)}
-  .e-satir,.e-olcek{grid-template-columns:minmax(0,7rem) minmax(0,1fr) 4.6rem!important}
-  .gec-cubuk{flex-basis:70px}
-  .e-olcek .uzun{display:none}
-}
-.e-olcek div span{white-space:nowrap}
-</style>
 </head>
-<body>
+<body class="kitap-govde">
 <header class="ust">
   <div class="ust-ic">
     <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
-    <p class="slogan">Raporlar</p>
-    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a><a href="hakkimizda.html">Hakkımızda</a></nav>
+    <p class="slogan">Raporlar · Almanak</p>
+    <nav class="menu"><a href="./">Akış</a><a href="almanak.html" aria-current="page">Raporlar</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
   </div>
 </header>
-<main class="sayfa">
-  <p class="dil-uyari" data-dil="en">This page is not fully translated yet: headings and buttons are in English, descriptions are still in Turkish.</p><span data-dil="tr" hidden></span>
-  <h1>Raporlar</h1>
-  <p class="giris">Her hafta, ay ve yıl için otomatik bülten: kim neyi ne kadar yazdı, İsrail ve Batı basını neyi görmedi, aynı olay nasıl farklı anlatıldı. Sayılar ölçümdür; yorum metnini yapay zekâ bu sayılara bakarak yazar. Süren dönemlerin bülteni günde bir yenilenen taslaktır.</p>
-  <a class="rapor-afis isim-afis" href="isimler.html"><small>Anma</small><b>İsimleri vardı</b><span>Gazze’de hayatını kaybeden ve kimliği belirlenen her insanın adı, sıfır yaşından başlayarak.</span><i>→</i></a>
-  <a class="rapor-afis" href="rapor.html"><small>Özel rapor</small><b>7 Ekim’den bu yana: aynı savaş, üç ayrı dil</b><span>Bir milyondan fazla başlığın sayımıyla: kim işgal dedi, kim çatışma dedi, Gazze’yi kim ne zaman unuttu.</span><i>→</i></a>
-  <a class="rapor-afis" href="kimin.html"><small>Özel rapor</small><b>Kimin ölümü haber oldu?</b><span>Batı basınında bir İsraillinin ölümü kaç Filistinlinin ölümüne denk geldi; 251 rehine ve on binlerce ölü; ateşkesten sonra susan haber.</span><i>→</i></a>
-  <a class="rapor-afis" href="olaylar.html"><small>Özel rapor</small><b>Alışma: aynı olay tekrarlandıkça</b><span>Hastaneler, çadırlar, yardım bekleyenler, çocuklar: her olayı başlıklardan bulduk. Hangi olay ne zaman tetiklemeyi bıraktı?</span><i>→</i></a>
-  <a class="rapor-afis" href="liderler.html"><small>Özel rapor</small><b>Liderler ne dedi?</b><span>Erdoğan’dan Biden’a, Körfez’den Pekin’e: kim ne zaman konuştu, kimi suçladı, onları ne tetikledi.</span><i>→</i></a>
-  <section class="karne-bolum">
-    <h2>Sessizlik endeksi</h2>
-    <p class="giris">Haftalık: bölge basınında en az 4 yayının yazdığı olaylardan İsrail ve Batı basınının hiç yazmadıklarının oranı. Noktaların üzerine gelince ayrıntı çıkar.</p>
-    <div id="sessizlikEndeksi"></div>
-  </section>
-  <aside class="yanlik">
-    <div class="sekmeler" id="sekmeler" role="group" aria-label="Bülten türü"></div>
-    <nav class="donemler" id="donemler" aria-label="Dönemler"></nav>
-  </aside>
-  <section class="icerik" id="icerik"><p class="bos2">Yükleniyor…</p></section>
+<main class="kitap">
+  <p class="dil-uyari" data-dil="en">The almanac’s chapters are written in Turkish; headings, charts and navigation are in English.</p>
+  <button class="ky-ac" id="kyAc" type="button" aria-controls="kitapYan" aria-expanded="false"></button>
+  <aside class="kitap-yan" id="kitapYan" aria-label="İçindekiler"></aside>
+  <div class="masa" id="masa" aria-live="polite"><p class="bos2">Yükleniyor…</p></div>
   <div class="kanit-panel" id="kanitPanel" hidden tabindex="-1" role="dialog" aria-label="Kanıt"></div>
+  <div class="sk-ipucu" id="ipucu" hidden></div>
 </main>
-<script src="site/sayfa-karne.js?v=202611081749"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/sayfa-almanak.js?v=202611082330"></script>
+<script src="site/sayfa-almanak.js?v=202611112100"></script>
 </body>
 </html>

@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 2
+ALISMA_SURUM = 3
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -75,7 +75,8 @@ def _topla(oz, gk):
     ix = {g: i for i, g in enumerate(D)}
     N = len(D)
     sifir = lambda: {g: [0] * N for g in GK}  # noqa: E731
-    S = {"n": sifir(), "b": sifir(), "g": sifir(), "o": {a: sifir() for a, _ in TURLER}, "l": {}, "lk": {}, "ltr": {}}
+    S = {"n": sifir(), "b": sifir(), "g": sifir(), "o": {a: sifir() for a, _ in TURLER}, "l": {}, "lk": {}, "ltr": {},
+         "yn": {}, "yo": {a: {} for a, _ in TURLER}}   # yayın yayın: yn[kid][gün] başlık, yo[tür][kid][gün] türden başlık
     for gun in gecerli:
         i = ix[gun]
         for kid, v in oz["yayin"][gun].items():
@@ -84,12 +85,14 @@ def _topla(oz, gk):
                 continue
             n, tt = (v, {}) if isinstance(v, int) else (v[0], v[1])
             S["n"][gr][i] += n
+            S["yn"].setdefault(kid, {})[i] = n
             S["b"][gr][i] += tt.get("_b", 0)
             S["g"][gr][i] += tt.get("_s", 0)   # savaş başlığı: Gazze, Filistin, Lübnan
             for a, x in tt.items():
                 if a.startswith("o:"):
                     if a[2:] in S["o"]:
                         S["o"][a[2:]][gr][i] += x
+                        S["yo"][a[2:]].setdefault(kid, {})[i] = x
                 elif a.startswith("l:"):
                     S["l"].setdefault(a[2:], sifir())[gr][i] += x
                 elif a.startswith("lk:"):
@@ -139,6 +142,48 @@ def _izleme(olaylar, anahtar):
             s[g] = round((gs / gt) / (rs / rt), 2) if gt >= 600 and rs else None
             s[g + "_sayi"] = gs
         cikti.append(s)
+    return cikti
+
+
+AKTIF_EN_AZ = 15   # pencerede en az bu kadar başlık yayımlamış yayın "o günlerde yayındaydı" sayılır
+
+
+def _sessiz(S, gk, tur, w):
+    """Pencerede yayında olan yayınlardan kaçı bu türden tek başlık atmadı: {grup: [susan, yayında]}."""
+    say = {g: [0, 0] for g in GK}
+    yo = S["yo"][tur]
+    for kid, gunler in S["yn"].items():
+        g = gk.get(kid)
+        if not g or sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
+            continue
+        say[g][1] += 1
+        if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
+            say[g][0] += 1
+    return say
+
+
+def _sessizlik_donem(olaylar, donemler, anahtar):
+    """Dönem dönem (ay): o dönemde başlayan olaylarda yayında olup susan yayınların payı (grup grup) ve tam sessiz olaylar."""
+    h = {x: {"olay": 0, "buyuk": 0, "tam_sessiz": 0, **{g: [0, 0] for g in GK}} for x in donemler}
+    for o in olaylar:
+        r = h.get(anahtar(o["bas"]))
+        if r is None:
+            continue
+        r["olay"] += 1
+        bolge_yazan = sum(o["sessiz"][g][1] - o["sessiz"][g][0] for g in ("bolge", "turkiye"))
+        if bolge_yazan >= 4:
+            r["buyuk"] += 1
+            dis = sum(o["sessiz"][g][1] - o["sessiz"][g][0] for g in ("israil", "bati_ana", "bati_muhalif"))
+            r["tam_sessiz"] += dis == 0
+        for g in GK:
+            r[g][0] += o["sessiz"][g][0]
+            r[g][1] += o["sessiz"][g][1]
+    cikti = []
+    for x in donemler:
+        r = h[x]
+        cikti.append({"donem": x, "olay": r["olay"], "buyuk": r["buyuk"], "tam_sessiz": r["tam_sessiz"],
+                      **{g: (round(100 * r[g][0] / r[g][1]) if r[g][1] >= 5 else None) for g in GK},
+                      **{g + "_n": r[g] for g in GK}})
     return cikti
 
 
@@ -254,6 +299,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
                             "izleme": round(tep["bati_ana"] / bolge_tum, 2) if tep.get("bati_ana") is not None and bolge_tum else None,
                             "olu": max(olu[i] for i in range(max(0, b - 1), min(N, e + 2))),
                             "lider": {lgk: _artis(lg[lgk], b, e, N)[0] for lgk in OT.LIDER_GRUP},
+                            "sessiz": _sessiz(S, gk, tur, w),
                             "ornek": _ornekler(oz, D, K, gk, b, e, tur)})
         # referans: bölge basınında en büyük olayın en az %40'ı kadar yer bulan ilk olay
         ref = None
@@ -307,6 +353,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             "lider_gruplari": OT.LIDER_GRUP, "haftalar": haftalar, "olu_hafta": gunluk_olu_hafta,
             "esik": {"kat": ESIK_KAT, "pencere": [PENCERE_ONCE, PENCERE_SONRA], "taban_gun": TABAN_GUN},
             "turler": turler, "olaylar": tum_olaylar, "egri": egri, "olum_gunleri": olum_gunleri,
+            "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ,
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}
     almanak._yaz(os.path.join(kok, "data", "bulten", "alisma.json"), veri)
     log(f"Alışma: {len(tum_olaylar)} olay, {len(olum_gunleri)} kitlesel ölüm günü")
