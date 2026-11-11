@@ -1,6 +1,6 @@
 """Yayın karnesi ve sessizlik endeksi (data/karne.json): olay arşivindeki anlatım alanlarından, yapay zekâya yeni istek olmadan.
 
-Yayın karnesi (son 30 gün, en az 5 haber): edilgen dil oranı (fail verilen haberlerde), İsrail ordusuna dayanma oranı,
+Yayın karnesi (son 30 gün): faili saklama oranı (Filistinlilerin ölümünü anlatan özgün başlıklarda öldürenin yazılmaması; en az 10 başlık), İsrail ordusuna dayanma oranı,
 bağlam verme oranı, ortalama gecikme (yayının bir olaydaki ilk haberi, olayın bölge basınındaki ilk haberinden ne kadar sonra).
 Sessizlik endeksi (haftalık): bölge basınından en az 4 yayının yazdığı olaylardan İsrail ve Batı basınının hiç yazmadıklarının oranı.
 """
@@ -59,17 +59,45 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             if ilk_bolge and x.get("t") and k not in gorulen and almanak.kamp(kmap[k]) in almanak.DIS:
                 r["gecikme"].append((dt.datetime.fromisoformat(x["t"]) - dt.datetime.fromisoformat(ilk_bolge)).total_seconds() / 3600)
             gorulen.add(k)
-    karne = []
-    for k, r in y.items():
-        if r["haber"] < 5:
+    # Faili saklama: son 30 günün arşivindeki özgün başlıklar, geriye dönük taramayla aynı ölçüyle (gecmis.faillik).
+    # Filistinlilerin ölümünü anlatan başlıklardan kaçında öldüren yazılmıyor ("öldü", "hayatını kaybetti", failsiz "öldürüldü").
+    import gecmis
+    fk = {}
+    ornek = {}
+    for i in range(30):
+        gun = (simdi.date() - dt.timedelta(days=i)).isoformat()
+        try:
+            gunluk = json.load(open(os.path.join(kok, "data", "arsiv", gun + ".json"), encoding="utf-8"))
+        except (OSError, ValueError):
             continue
-        oran = lambda a, b: round(100 * a / b) if b >= 3 else None
+        for h in gunluk if isinstance(gunluk, list) else []:
+            b = h.get("baslik_orj") or ""
+            if not b or h.get("kaynak") not in kmap:
+                continue
+            f = gecmis.faillik(b, gecmis.katla(b))
+            if f not in ("aktif", "failli", "failsiz", "oldu", "sehadet"):
+                continue
+            r = fk.setdefault(h["kaynak"], {"n": 0, "gizli": 0})
+            r["n"] += 1
+            if f in ("failsiz", "oldu"):
+                r["gizli"] += 1
+                o = ornek.setdefault(h["kaynak"], [])
+                if len(o) < 3:
+                    o.append({"b": b[:200], "tr": (h.get("baslik_tr") or "")[:200], "url": h.get("url"), "gun": gun})
+    karne = []
+    for k in set(y) | set(fk):
+        r = y.get(k) or {"haber": 0, "fail": 0, "edilgen": 0, "dayanak": 0, "ordu": 0, "baglam_n": 0, "baglam": 0, "gecikme": []}
+        f = fk.get(k) or {"n": 0, "gizli": 0}
+        if r["haber"] < 5 and f["n"] < 10:
+            continue
+        oran = lambda a, b: round(100 * a / b) if b >= 3 else None  # noqa: E731
         gec = sorted(g for g in r["gecikme"] if g >= 0)
         karne.append({"id": k, "ad": kmap[k]["ad"], "kamp": almanak.kamp(kmap[k]), "haber": r["haber"],
-                      "edilgen": oran(r["edilgen"], r["fail"]), "ordu": oran(r["ordu"], r["dayanak"]),
+                      "olum_baslik": f["n"], "fail_gizli": round(100 * f["gizli"] / f["n"]) if f["n"] >= 10 else None,
+                      "fail_ornek": ornek.get(k, []), "ordu": oran(r["ordu"], r["dayanak"]),
                       "baglam": oran(r["baglam"], r["baglam_n"]),
                       "gecikme": round(gec[len(gec) // 2], 1) if len(gec) >= 3 else None})
-    karne.sort(key=lambda r: -r["haber"])
+    karne.sort(key=lambda r: -(r["olum_baslik"] or 0))
     sessizlik = [{"hafta": h, **v, "oran": round(100 * v["sessiz"] / v["buyuk"]) if v["buyuk"] else None}
                  for h, v in sorted(hafta.items()) if v["buyuk"] >= 3]
     veri = {"guncellendi": simdi.isoformat(), "donem_gun": 30, "karne": karne, "sessizlik": sessizlik}

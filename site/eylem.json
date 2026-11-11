@@ -19,7 +19,8 @@
    "tr": "BM Güvenlik Konseyi’nde insani ara çağrısı yapan Brezilya tasarısını veto etti.",
    "en": "Vetoed Brazil’s UN Security Council draft calling for humanitarian pauses.",
    "kaynak": "https://www.pbs.org/newshour/world/u-s-vetoes-un-resolution-condemning-all-violence-against-civilians-in-israel-hamas-war",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "PBS: U.S. vetoes UN resolution condemning all violence against civilians in Israel-Hamas war"
   },
   {
    "tarih": "2023-10-31",
@@ -39,7 +40,8 @@
    "tr": "Kızıldeniz’de İsrail bağlantılı Galaxy Leader gemisine el koydu; İsrail’e giden ya da İsrail bağlantılı gemilere yönelik deniz ablukası başladı.",
    "en": "Seized the Israel-linked Galaxy Leader in the Red Sea, beginning a naval blockade of ships bound for or linked to Israel.",
    "kaynak": "https://english.ahram.org.eg/News/512512.aspx",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Ahram Online: Yemen's Houthis hijacked an Israeli-owned vessel in the Red Sea"
   },
   {
    "tarih": "2023-12-03",
@@ -49,7 +51,8 @@
    "tr": "Kıbrıs’taki RAF Akrotiri üssünden Gazze üzerinde casus uçuşları başladı; Mart 2025’e kadar en az 518 uçuş. Hükümet amacın yalnızca rehineleri bulmak olduğunu söylüyor.",
    "en": "Began surveillance flights over Gaza from RAF Akrotiri in Cyprus; at least 518 flights by March 2025. The government says they are solely to locate hostages.",
    "kaynak": "https://www.declassifieduk.org/britain-sent-over-500-spy-flights-to-gaza/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Declassified UK: Britain sent over 500 spy flights to Gaza"
   },
   {
    "tarih": "2023-12-08",
@@ -59,7 +62,8 @@
    "tr": "İnsani ateşkes çağrısı yapan BAE tasarısını veto etti.",
    "en": "Vetoed the UAE draft calling for a humanitarian ceasefire.",
    "kaynak": "https://www.aljazeera.com/news/2023/12/8/antonio-guterres-urges-un-security-council-to-push-for-gaza-ceasefire",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: US vetoes UN resolution calling for Gaza ceasefire"
   },
   {
    "tarih": "2023-12-20",
@@ -79,7 +83,8 @@
    "tr": "Uluslararası Adalet Divanı’nda İsrail aleyhine soykırım davası açtı.",
    "en": "Filed a genocide case against Israel at the International Court of Justice.",
    "kaynak": "https://www.icj-cij.org/case/192",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Uluslararası Adalet Divanı: Güney Afrika - İsrail davası"
   },
   {
    "tarih": "2024-02-20",
@@ -89,7 +94,8 @@
    "tr": "Derhal insani ateşkes çağrısı yapan Cezayir tasarısını veto etti.",
    "en": "Vetoed Algeria’s draft calling for an immediate humanitarian ceasefire.",
    "kaynak": "https://www.aljazeera.com/amp/news/2024/2/20/us-vetoes-another-un-security-council-resolution-urging-gaza-war-ceasefire",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: US vetoes another UN Security Council resolution urging Gaza war ceasefire"
   },
   {
    "tarih": "2024-04-13",
@@ -109,7 +115,8 @@
    "tr": "“Sadık Vaat” operasyonu: Şam’daki konsolosluğuna saldırının ardından İsrail’e 300’den fazla insansız hava aracı ve füze gönderdi.",
    "en": "“True Promise”: after the strike on its Damascus consulate, launched more than 300 drones and missiles at Israel.",
    "kaynak": "https://www.aljazeera.com/news/2024/4/13/israeli-army-says-iran-has-launched-drones-at-israel",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: Iran launches hundreds of missiles, drones in first direct attack on Israel"
   },
   {
    "tarih": "2024-04-24",
@@ -129,7 +136,8 @@
    "tr": "İsrail’le bütün ticareti durdurdu (o güne kadar ticaret sürüyordu).",
    "en": "Halted all trade with Israel (trade had continued until then).",
    "kaynak": "https://www.aljazeera.com/amp/news/2024/5/2/turkey-says-it-halts-trade-with-israel-over-gaza-aid-access",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: Turkey says it halts trade with Israel over Gaza aid access"
   },
   {
    "tarih": "2024-05-01",
@@ -149,7 +157,8 @@
    "tr": "Filistin Devleti’ni tanıdı.",
    "en": "Recognised the State of Palestine.",
    "kaynak": "https://www.pbs.org/newshour/world/spain-ireland-and-norway-formally-recognize-a-palestinian-state",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "PBS: Spain, Ireland and Norway formally recognize a Palestinian state"
   },
   {
    "tarih": "2024-09-02",
@@ -159,7 +168,8 @@
    "tr": "İsrail’e 350 silah ihracat lisansından 30’unu askıya aldı ama F-35 parçalarını istisna tuttu.",
    "en": "Suspended 30 of 350 arms export licences to Israel but exempted F-35 parts.",
    "kaynak": "https://caat.org.uk/publications/the-uk-governments-partial-suspension-of-arms-export-licences-to-israel-and-the-f-35-exemption/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "CAAT: UK arms sales to Israel, the partial export licence suspension, and the F-35 exemption"
   },
   {
    "tarih": "2024-10-01",
@@ -169,7 +179,8 @@
    "tr": "“Sadık Vaat II”: İsrail’e yaklaşık 180 balistik füze gönderdi.",
    "en": "“True Promise II”: fired about 180 ballistic missiles at Israel.",
    "kaynak": "https://www.iranwatch.org/our-publications/articles-reports/irans-second-missile-attack-israel",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Iran Watch: Iran’s Second Missile Attack on Israel"
   },
   {
    "tarih": "2024-10-13",
@@ -189,7 +200,8 @@
    "tr": "Seçilmiş 10 üyenin koşulsuz ateşkes tasarısını veto etti.",
    "en": "Vetoed the elected ten members’ draft for an unconditional ceasefire.",
    "kaynak": "https://aa.com.tr/en/americas/us-once-again-vetoes-un-security-council-cease-fire-resolution-on-gaza/3399296",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Anadolu Ajansı: US once again vetoes UN Security Council cease-fire resolution on Gaza"
   },
   {
    "tarih": "2024-12-18",
@@ -199,7 +211,8 @@
    "tr": "Husilerin Kızıldeniz ablukasını aşmak için BAE’den Suudi Arabistan ve Ürdün üzerinden İsrail’e kara yolu taşımacılığı haberleri; Ürdün böyle bir koridoru yalanladı.",
    "en": "Reports of trucking from the UAE through Saudi Arabia and Jordan to Israel to bypass the Houthi blockade; Jordan denied such a corridor.",
    "kaynak": "https://www.jns.org/uae-israel-land-corridor-operating-despite-war/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "JNS: UAE-Israel land corridor operating despite war"
   },
   {
    "tarih": "2025-06-04",
@@ -209,7 +222,8 @@
    "tr": "Gazze’de kalıcı ateşkes ve yardımın önünün açılmasını isteyen tasarıyı veto etti.",
    "en": "Vetoed a draft demanding a permanent ceasefire in Gaza and unhindered aid.",
    "kaynak": "https://www.aljazeera.com/news/2025/6/4/us-vetoes-unsc-ceasefire-resolution-as-death-starvation-consume-gaza",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: US vetoes UNSC Gaza ceasefire resolution as Israeli strikes kill 95"
   },
   {
    "tarih": "2025-06-13",
@@ -229,7 +243,8 @@
    "tr": "İsrail’in İran savaşına katılarak Fordo, Natanz ve İsfahan nükleer tesislerini bombaladı.",
    "en": "Joined Israel’s war on Iran, bombing the Fordow, Natanz and Isfahan nuclear sites.",
    "kaynak": "https://www.aljazeera.com/amp/news/liveblog/2025/6/22/live-us-joins-israels-attacks-on-iran-bombs-three-nuclear-sites",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al Jazeera: US joins Israel’s attacks on Iran, bombs three nuclear sites"
   },
   {
    "tarih": "2025-08-07",
@@ -239,7 +254,8 @@
    "tr": "İsrail’in Leviathan sahasından 35 milyar dolarlık doğalgaz alım anlaşması imzalandı; İsrail tarihinin en büyük ihracat anlaşması.",
    "en": "A $35 billion deal to import gas from Israel’s Leviathan field was signed, the largest export deal in Israel’s history.",
    "kaynak": "https://worldoil.com/news/2025/8/8/israel-egypt-reach-35-billion-deal-for-natural-gas-supply/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "World Oil: Israel, Egypt reach $35 billion deal for natural gas supply"
   },
   {
    "tarih": "2025-08-29",
@@ -249,7 +265,8 @@
    "tr": "Limanlarını İsrail gemilerine, hava sahasını İsrail’in resmî uçaklarına kapattı (Dışişleri Bakanı Fidan).",
    "en": "Closed its ports to Israeli ships and its airspace to Israeli official flights (Foreign Minister Fidan).",
    "kaynak": "https://www.al-monitor.com/originals/2025/08/turkey-bars-israeli-ships-flights-its-territory",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Al-Monitor: Turkey bars Israeli ships, flights from its territory"
   },
   {
    "tarih": "2025-10-01",
@@ -259,7 +276,8 @@
    "tr": "Kasım 2023 – Ekim 2025 arasında İsrail’in ham petrolünün %70’ini sağladılar (Oil Change International). Azerbaycan petrolü Türkiye’deki Ceyhan limanından yükleniyor.",
    "en": "Supplied 70% of Israel’s crude oil between November 2023 and October 2025 (Oil Change International). Azerbaijani crude is loaded at Ceyhan in Turkey.",
    "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Middle East Eye: Twenty-five states funnelled oil to Israel during genocide, report"
   },
   {
    "tarih": "2025-10-01",
@@ -269,7 +287,8 @@
    "tr": "Aynı dönemde İsrail’e askerî uçaklarda kullanılan JP-8 jet yakıtı taşıyan 9 sevkiyat (360 bin ton) (Oil Change International).",
    "en": "Over the same period, 9 shipments (360,000 tonnes) of JP-8 jet fuel used by military aircraft went to Israel (Oil Change International).",
    "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Middle East Eye: Twenty-five states funnelled oil to Israel during genocide, report"
   },
   {
    "tarih": "2025-10-01",
@@ -279,7 +298,8 @@
    "tr": "Aynı dönemde İsrail’e giden rafine petrol ürünlerinin %45’i Rusya’dan (Oil Change International).",
    "en": "Over the same period, 45% of refined oil products shipped to Israel came from Russia (Oil Change International).",
    "kaynak": "https://www.middleeasteye.net/news/twenty-five-states-funnelled-oil-israel-during-genocide-report",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Middle East Eye: Twenty-five states funnelled oil to Israel during genocide, report"
   },
   {
    "tarih": "2026-01-21",
@@ -289,7 +309,8 @@
    "tr": "Türkiye’nin ticaret yasağına rağmen 2025’te İsrail’in ham petrol ithalatının %46,4’ü Ceyhan’dan yüklenen Azerbaycan petrolüydü; son üç yılın en yüksek düzeyi (Kpler verisi, Reuters).",
    "en": "Despite Turkey’s trade ban, 46.4% of Israel’s crude imports in 2025 were Azerbaijani oil loaded at Ceyhan, a three-year high (Kpler data, Reuters).",
    "kaynak": "https://www.bairdmaritime.com/shipping/tankers/turkey-trade-ban-fails-to-halt-azerbaijani-oil-flows-to-israel-as-imports-hit-three-year-high",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Baird Maritime: Turkey trade ban fails to halt Azerbaijani oil flows to Israel"
   },
   {
    "tarih": "2024-10-04",
@@ -300,7 +321,8 @@
    "tr": "Ticaret yasağından sonra Türkiye’nin “Filistin”e ihracatı katlanarak arttı. Bakanlık bunun Filistinlilere gittiğini söylüyor; Türk ve İsrail basınındaki analizler malların önemli kısmının İsrail’e ulaştığını öne sürüyor. Tartışmalı.",
    "en": "After the trade ban, Turkey’s exports to “Palestine” multiplied. The ministry says they go to Palestinians; analyses in the Turkish and Israeli press argue much of it reaches Israel. Disputed.",
    "kaynak": "https://turkishminute.com/2024/10/04/data-suggest-turkish-good-find-their-way-to-israel-via-palestine-amid-trade-ban/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "Turkish Minute: Data suggest Turkish goods find their way to Israel via Palestine"
   },
   {
    "tarih": "2024-05-01",
@@ -311,7 +333,8 @@
    "tr": "Refah kapısından Gazze’den çıkmak isteyenlerden kişi başı 5.000 dolara varan ücret alındığı ortaya çıktı; şirketin Mısır devletine yakınlığı biliniyor.",
    "en": "It emerged that people leaving Gaza through the Rafah crossing were charged up to $5,000 per person; the company is known to be close to the Egyptian state.",
    "kaynak": "https://www.voanews.com/a/7574866.html",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "VOA: Egyptian firm offers escape from Gaza – for $5,000 a head"
   },
   {
    "tarih": "2025-03-06",
@@ -322,7 +345,8 @@
    "tr": "Savaş sürerken İsrail’den doğalgaz alımını sürdürdüler; İsrail’in Mısır ve Ürdün’e gaz ihracatı 2024’te %13,4 arttı.",
    "en": "Kept importing gas from Israel during the war; Israel’s gas exports to Egypt and Jordan rose 13.4% in 2024.",
    "kaynak": "https://www.fdd.org/analysis/strategic-asset-israeli-natural-gas-exports-to-arab-neighbors-jumped-over-13-percent-in-2024/",
-   "dogrulandi": true
+   "dogrulandi": true,
+   "kaynak_baslik": "FDD: Israeli natural gas exports to Arab neighbors jumped over 13 percent in 2024"
   }
  ]
 }

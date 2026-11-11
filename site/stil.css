@@ -645,3 +645,10 @@ body{overflow-x:clip}
   .sayac-kart b{font-size:5.5rem}
 }
 .slayt-arka a.kredi{text-decoration:none;max-width:min(60vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.karne-acik{display:grid;grid-template-columns:minmax(10rem,auto) 1fr;gap:6px 16px;margin:8px 0 10px;font-size:.84rem;line-height:1.45}
+.karne-acik dt{font-weight:700}.karne-acik dd{margin:0;color:var(--k-ink2,#444)}
+.karne-ipucu{font-size:.8rem;color:var(--k-soluk,#777);margin:0 0 8px}
+tr.karne-acilir{cursor:pointer}tr.karne-acilir:hover{background:rgba(0,0,0,.03)}
+tr.karne-ornek td{background:#faf8f3;font-size:.84rem;line-height:1.5}
+tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
+@media (max-width:600px){.karne-acik{grid-template-columns:minmax(0,1fr)}}

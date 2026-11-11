@@ -11,18 +11,25 @@
   function karne(liste) {
     if (!liste.length) { karneKutu.appendChild(el("p", "bos2", "Karne için yeterli veri birikmedi.")); return; }
     var SUT = [
-      ["ad", "Yayın"], ["kamp", "Kamp"], ["haber", "Haber"],
-      ["edilgen", "Edilgen dil %", "Fail verilmesi gereken haberlerde faili gizleyen edilgen dil kullanımı"],
+      ["ad", "Yayın"], ["kamp", "Kamp"], ["olum_baslik", "Ölüm başlığı", "Son 30 günde Filistinlilerin ölümünü anlatan özgün başlık sayısı"],
+      ["fail_gizli", "Faili saklama %", "Bu başlıkların yüzde kaçında öldüren yazılmamış: “öldü”, “hayatını kaybetti” ya da kimin öldürdüğü belirtilmeden “öldürüldü”"],
       ["ordu", "İsrail ordusuna dayanma %", "Haberin dayanağı İsrail ordusunun açıklaması olan haberlerin payı"],
       ["baglam", "Bağlam verme %", "İşgal, abluka ya da öncesi gibi bir bağlam veren haberlerin payı"],
       ["gecikme", "Gecikme (sa)", "Yalnızca İsrail ve Batı basını: olayın bölge basınındaki ilk haberinden sonra geçen süre (ortanca)"]];
-    var sira = { k: "edilgen", y: -1 }, kamp = "";
+    var sira = { k: "fail_gizli", y: -1 }, kamp = "";
     var arac = el("div", "karne-arac");
     var sec = el("select"); sec.setAttribute("aria-label", "Kamp");
     [["", "Bütün kamplar"]].concat(Array.from(new Set(liste.map(function (r) { return r.kamp; }))).map(function (k) { return [k, k]; }))
       .forEach(function (o) { var op = el("option", null, o[1]); op.value = o[0]; sec.appendChild(op); });
     sec.onchange = function () { kamp = sec.value; ciz(); };
     arac.appendChild(sec); karneKutu.appendChild(arac);
+    var acik = el("dl", "karne-acik");
+    [["Faili saklama %", "Filistinlilerin ölümünü anlatan başlıklardan kaçında öldürenin adı yok. Örnek: “Gazze’de 5 kişi öldü” faili saklar; “İsrail ordusu Gazze’de 5 kişiyi öldürdü” saklamaz. Yüksek oran kötü."],
+     ["İsrail ordusuna dayanma %", "Haberin bilgiyi İsrail ordusunun açıklamasına dayandırdığı haberlerin payı. Yüksek oran, olayın İsrail’in anlatımıyla verildiğini gösterir."],
+     ["Bağlam verme %", "Haberin işgal, abluka ya da olayın öncesi gibi bir bağlam verip vermediği. Yüksek oran iyi."],
+     ["Gecikme", "Yalnızca İsrail ve Batı basını için: olayı bölge basınından kaç saat sonra yazdığı."]].forEach(function (x) { acik.append(el("dt", null, x[0]), el("dd", null, x[1])); });
+    karneKutu.appendChild(acik);
+    karneKutu.appendChild(el("p", "karne-ipucu", "Sütun başlığına tıklayınca tablo o sütuna göre sıralanır. Bir yayının satırına tıklayınca faili saklayan başlıklarından örnekler açılır."));
     var sar = el("div", "karne-sar"); var tab = el("table", "karne"); sar.appendChild(tab); karneKutu.appendChild(sar);
     function ciz() {
       tab.textContent = "";
@@ -42,13 +49,21 @@
         var tr = el("tr");
         SUT.forEach(function (s) {
           var v = r[s[0]], td = el("td");
-          if (["edilgen", "ordu", "baglam"].indexOf(s[0]) >= 0 && v != null) {
+          if (["fail_gizli", "ordu", "baglam"].indexOf(s[0]) >= 0 && v != null) {
             var c = el("span", "karne-cubuk"); var i = el("i"); i.style.width = v + "%";
             i.style.background = s[0] === "baglam" ? "#1f7a52" : "#c9302c"; c.appendChild(i); td.appendChild(c); td.appendChild(el("b", null, v));
           } else td.textContent = v == null ? "–" : v;
           tr.appendChild(td);
         });
         tb.appendChild(tr);
+        if ((r.fail_ornek || []).length) {
+          tr.classList.add("karne-acilir"); tr.title = "Örnekleri göster";
+          var ek = el("tr", "karne-ornek"); ek.hidden = true; var td2 = el("td"); td2.colSpan = SUT.length;
+          td2.appendChild(el("b", null, "Faili saklayan başlıklardan örnekler"));
+          r.fail_ornek.forEach(function (o) { var d = el("div"); var a = el("a", null, o.b); a.href = o.url; a.target = "_blank"; a.rel = "noopener"; a.dir = "auto"; d.appendChild(a); if (o.tr && o.tr !== o.b) d.appendChild(el("small", null, " · " + o.tr)); td2.appendChild(d); });
+          ek.appendChild(td2); tb.appendChild(ek);
+          tr.onclick = function () { ek.hidden = !ek.hidden; };
+        }
       });
       tab.appendChild(tb);
     }

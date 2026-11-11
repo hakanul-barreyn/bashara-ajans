@@ -18,7 +18,7 @@
       L.filter(function (x) { return sec === "hepsi" || x.yon === sec; }).forEach(function (x) {
         var li = el("li", "ey-" + x.yon);
         li.append(el("time", null, gun(x.tarih)), el("b", null, x.ulke + " · " + x.aktor)); if (x.celiskili) li.appendChild(el("span", "ey-celiski", EN ? "Contradictory: words vs deeds" : "Çelişkili: söz ve eylem")); li.appendChild(el("p", null, EN ? x.en : x.tr));
-        var a = el("a", null, EN ? "Source ↗" : "Kaynak ↗"); a.href = x.kaynak; a.target = "_blank"; a.rel = "noopener"; li.appendChild(a);
+        var a = el("a", null, (x.kaynak_baslik || (EN ? "Source" : "Kaynak")) + " ↗"); a.href = x.kaynak; a.target = "_blank"; a.rel = "noopener"; li.appendChild(a);
         ul.appendChild(li);
       });
       k.appendChild(ul);
