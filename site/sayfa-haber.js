@@ -166,13 +166,71 @@
     });
     svg.addEventListener("pointerup", function () { surukle = null; });
   }
+  // Sokak düzeyinde harita: OpenStreetMap verisi (OpenFreeMap vektör karoları) + MapLibre. Ülke etiketleri ve sınır çizgileri
+  // kaldırılır; bölgenin adı "Kuşatma altındaki Filistin", Gazze çevresi kesikli kuşatma hattı. Yüklenemezse eski SVG altlık.
+  var EN = window.DIL === "en";
+  var GAZZE_HAT = [[34.4812, 31.5831], [34.5201, 31.5583], [34.556, 31.5398], [34.5283, 31.5201], [34.4957, 31.4944], [34.4955, 31.4944], [34.4804, 31.4856], [34.3673, 31.3928], [34.3458, 31.3577], [34.3455, 31.3407], [34.3538, 31.3064], [34.3509, 31.2893], [34.3159, 31.2569], [34.2644, 31.2242], [34.2484, 31.2114], [34.2304, 31.2592], [34.2246, 31.2757], [34.2003, 31.3143], [34.2227, 31.3266], [34.2367, 31.3424], [34.2814, 31.3767], [34.3016, 31.4077], [34.3484, 31.4376], [34.3682, 31.4682], [34.4434, 31.5346], [34.4788, 31.5783], [34.4812, 31.5831]];
+  var mlSoz = null;
+  function maplibre() {
+    if (window.maplibregl) return Promise.resolve(window.maplibregl);
+    return mlSoz || (mlSoz = new Promise(function (ok, red) {
+      var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css"; document.head.appendChild(l);
+      var sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js";
+      sc.onload = function () { window.maplibregl ? ok(window.maplibregl) : red(); }; sc.onerror = red; document.head.appendChild(sc);
+      setTimeout(red, 15000);
+    }));
+  }
+  function osmKur(d) {
+    var lat = +d.dataset.lat, lon = +d.dataset.lon; if (!isFinite(lat) || !isFinite(lon)) return Promise.reject();
+    return maplibre().then(function (ml) {
+      return new Promise(function (ok, red) {
+        var kap = document.createElement("div"); kap.className = "mk-ml"; d.textContent = ""; d.appendChild(kap);
+        var gazze = lon > 34.2 && lon < 34.6 && lat > 31.2 && lat < 31.6;
+        var m = new ml.Map({ container: kap, style: "https://tiles.openfreemap.org/styles/liberty", center: [lon, lat], zoom: gazze ? 12.5 : 10, attributionControl: { compact: true }, cooperativeGestures: true });
+        m.addControl(new ml.NavigationControl({ showCompass: false }), "top-right");
+        var bitti = false; setTimeout(function () { if (!bitti) red(); }, 20000);
+        m.on("error", function () { if (!bitti) { bitti = true; red(); } });
+        m.on("load", function () {
+          bitti = true;
+          m.getStyle().layers.forEach(function (l) {
+            var sl = l["source-layer"];
+            if (sl === "boundary" || /boundary/.test(l.id) || (sl === "place" && /country|state/.test(l.id))) m.removeLayer(l.id);
+          });
+          var yakin = []; try { yakin = JSON.parse(d.dataset.yakin || "[]"); } catch (e) { /* yok */ }
+          var f = [{ type: "Feature", properties: { t: "hat" }, geometry: { type: "LineString", coordinates: GAZZE_HAT } },
+            { type: "Feature", properties: { t: "ad", ad: EN ? "BESIEGED PALESTINE" : "KUŞATMA ALTINDAKİ FİLİSTİN", b: 1 }, geometry: { type: "Point", coordinates: [34.95, 31.6] } },
+            { type: "Feature", properties: { t: "ad", ad: EN ? "GAZA STRIP" : "GAZZE ŞERİDİ", b: 0 }, geometry: { type: "Point", coordinates: [34.36, 31.43] } },
+            { type: "Feature", properties: { t: "ad", ad: EN ? "WEST BANK" : "BATI ŞERİA", b: 0 }, geometry: { type: "Point", coordinates: [35.3, 32.0] } }];
+          yakin.forEach(function (y) { f.push({ type: "Feature", properties: { t: "yakin", b: y[2], g: y[3], s: y[4] }, geometry: { type: "Point", coordinates: [y[1], y[0]] } }); });
+          f.push({ type: "Feature", properties: { t: "olay" }, geometry: { type: "Point", coordinates: [lon, lat] } });
+          m.addSource("zbs", { type: "geojson", data: { type: "FeatureCollection", features: f } });
+          m.addLayer({ id: "zbs-hat", type: "line", source: "zbs", filter: ["==", ["get", "t"], "hat"], paint: { "line-color": "#c9302c", "line-width": 2.5, "line-dasharray": [3, 2] } });
+          m.addLayer({ id: "zbs-yakin", type: "circle", source: "zbs", filter: ["==", ["get", "t"], "yakin"], paint: { "circle-radius": 6, "circle-color": "#6b746f", "circle-opacity": 0.75, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5 } });
+          m.addLayer({ id: "zbs-olay", type: "circle", source: "zbs", filter: ["==", ["get", "t"], "olay"], paint: { "circle-radius": 9, "circle-color": "#c9302c", "circle-stroke-color": "#fff", "circle-stroke-width": 3 } });
+          m.addLayer({ id: "zbs-ad", type: "symbol", source: "zbs", filter: ["==", ["get", "t"], "ad"],
+            layout: { "text-field": ["get", "ad"], "text-font": ["Noto Sans Bold"], "text-size": ["case", ["==", ["get", "b"], 1], 18, 14], "text-letter-spacing": 0.12, "text-allow-overlap": true },
+            paint: { "text-color": "#1f5c43", "text-halo-color": "#fffdf8", "text-halo-width": 2 } });
+          m.on("click", "zbs-yakin", function (e) {
+            var p = e.features[0].properties, ic = document.createElement("div"); ic.className = "mk-ml-acik";
+            var b = document.createElement(p.s ? "a" : "span"); b.textContent = p.b; if (p.s) b.href = (/^https?:|^\.\.\//.test(p.s) ? p.s : "../" + p.s);
+            var t = document.createElement("small"); t.textContent = p.g; ic.append(b, t);
+            new ml.Popup({ closeButton: true, maxWidth: "260px" }).setLngLat(e.lngLat).setDOMContent(ic).addTo(m);
+          });
+          m.on("mouseenter", "zbs-yakin", function () { m.getCanvas().style.cursor = "pointer"; });
+          m.on("mouseleave", "zbs-yakin", function () { m.getCanvas().style.cursor = ""; });
+          ok();
+        });
+      });
+    });
+  }
   var haritaGozcu = "IntersectionObserver" in window ? new IntersectionObserver(function (g) {
     g.forEach(function (x) {
       if (!x.isIntersecting) return;
       haritaGozcu.unobserve(x.target);
       var d = x.target;
-      altlik().then(function (A) { haritaKur(d, A); })
-        .catch(function () { d.querySelectorAll("noscript").forEach(function (n) { d.innerHTML = n.textContent; }); });
+      var eski = function () { altlik().then(function (A) { haritaKur(d, A); })
+        .catch(function () { d.querySelectorAll("noscript").forEach(function (n) { d.innerHTML = n.textContent; }); }); };
+      osmKur(d).catch(eski);
     });
   }, { rootMargin: "200px 0px" }) : null;
   function haritalar(kok) { if (haritaGozcu) kok.querySelectorAll(".mk-osm").forEach(function (d) { haritaGozcu.observe(d); }); }

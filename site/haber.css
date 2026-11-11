@@ -185,3 +185,7 @@
 .bh-konum-c{fill:#c9302c;fill-opacity:.18;stroke:#c9302c}
 @media (max-width:560px){.bh-konum{width:78px;height:78px}}
 .bh-yakin-n{fill:#fff;font-family:"JetBrains Mono",monospace;font-weight:700;pointer-events:none}
+.mk-ml{width:100%;height:100%;min-height:260px}
+.mk-ml-acik{display:flex;flex-direction:column;gap:3px;font-size:.82rem;line-height:1.35}
+.mk-ml-acik a{color:#1f5c43;font-weight:700;text-decoration:none}
+.mk-ml-acik small{color:#7b847e;font-family:var(--mono,monospace)}
