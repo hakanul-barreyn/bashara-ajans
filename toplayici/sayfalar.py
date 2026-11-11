@@ -842,6 +842,29 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         h0 = next((f'{x["id"]}.html' for x in o.get("haberler", []) if x["id"] in sayfa_var), None)
         if h0:
             sayfa_hedef[o["id"]] = h0
+    # Ana sayfadaki Gündem slaytı için son 20 karşılaştırma (canlı olaylar bittikten sonra da görünsün)
+    try:
+        hidx = {h["id"]: h for h in haberler}
+        gundem = []
+        for o in sorted(tum.values(), key=lambda o: o.get("son") or "", reverse=True):
+            ks = []
+            for x in o.get("haberler", []):
+                if x.get("k") not in ks:
+                    ks.append(x.get("k"))
+            if len(ks) < 2:
+                continue
+            gorsel = next((hidx[x["id"]].get("gorsel") for x in o["haberler"] if x["id"] in hidx and hidx[x["id"]].get("gorsel")
+                           and not hidx[x["id"]].get("gnews") and not (kmap.get(hidx[x["id"]].get("kaynak")) or {}).get("hassas")), None)
+            gk = next((hidx[x["id"]].get("kaynak") for x in o["haberler"] if x["id"] in hidx and hidx[x["id"]].get("gorsel") == gorsel), None) if gorsel else None
+            gundem.append({"id": o["id"], "baslik": o.get("baslik"), "not": o.get("not"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
+                           "son": o.get("son"), "sayfa": ("data/h/" + sayfa_hedef[o["id"]]) if o["id"] in sayfa_hedef else "arsiv.html#gun-" + (o.get("ilk") or "")[:10], "kaynaklar": ks,
+                           "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk})
+            if len(gundem) >= 20:
+                break
+        with open(os.path.join(kok, "data", "gundem.json"), "w", encoding="utf-8") as f:
+            json.dump({"guncellendi": simdi.isoformat(), "olaylar": gundem}, f, ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        log(f"Gündem listesi yazılamadı: {e}")
     harita_of, og_of = {}, {}
     tut, yeni = set(), 0
     for h in haberler:

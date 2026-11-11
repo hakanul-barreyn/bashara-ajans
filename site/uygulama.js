@@ -336,6 +336,13 @@
     return kutu;
   }
 
+  function kapsamaK(ids) {
+    const kamp = {}, tur = {}, cizgi = {}; let n = 0;
+    ids.forEach((id) => { const k = kaynaklar[id]; if (!k) return; n++; const a = kampAd(k); kamp[a] = (kamp[a] || 0) + 1; const t = TUR_GRUP[k.tur] || "Özel"; tur[t] = (tur[t] || 0) + 1; const c = cizgiAd(k); cizgi[c] = (cizgi[c] || 0) + 1; });
+    return { kamp, tur, cizgi, toplam: n };
+  }
+  let gundemArsiv = null;
+  fetch("data/gundem.json?t=" + Math.floor(Date.now() / 3e5)).then((r) => r.json()).then((d) => { gundemArsiv = d.olaylar || []; if (Object.keys(kaynaklar).length && olaylar.length + gundemArsiv.length) gundemCiz(); }).catch(() => {});
   function kapsama(o) {
     const ks = new Map();
     o.haberler.forEach((i) => { const h = haberIdx[i]; const k = h && kaynaklar[h.kaynak]; if (k && !ks.has(k.id)) ks.set(k.id, k); });
@@ -377,7 +384,11 @@
   function gundemCiz() {
     const kutu = $("gundem"); kutu.innerHTML = "";
     clearInterval(slaytZaman);
-    const liste = olaylar.filter((o) => o.haberler.filter((i) => haberIdx[i]).length >= 2).slice(0, 8);
+    // canlı olaylar önce, sonra son 30 günün arşivinden en yeni karşılaştırmalar: toplam en son 20
+    const liste = olaylar.filter((o) => o.haberler.filter((i) => haberIdx[i]).length >= 2);
+    const gorulen = new Set(liste.flatMap((o) => o.haberler));
+    (gundemArsiv || []).forEach((a) => { if (liste.length < 20 && !liste.some((o) => o.id === a.id) && !a.haberler.some((i) => gorulen.has(i))) { liste.push(Object.assign({ arsiv: true }, a)); a.haberler.forEach((i) => gorulen.add(i)); } });
+    liste.splice(20);
     kutu.hidden = !liste.length || !!olaySec;
     if (!liste.length || olaySec) return;
     const ust = el("div", "slayt-ust");
@@ -390,9 +401,10 @@
     geri.type = ileri.type = "button"; geri.innerHTML = OK(-1); ileri.innerHTML = OK(1);
     geri.setAttribute("aria-label", "Önceki olay"); ileri.setAttribute("aria-label", "Sonraki olay");
     liste.forEach((o, n) => {
-      const kp = kapsama(o);
+      const kp = o.arsiv ? kapsamaK(o.kaynaklar) : kapsama(o);
       const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
-      const gh = o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
+      const gh = o.arsiv ? (o.gorsel && kaynaklar[o.gorsel_kaynak] ? { gorsel: o.gorsel, kaynak: o.gorsel_kaynak } : null)
+        : o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
       const arka = el("div", "slayt-arka");
       if (gh) { const img = document.createElement("img"); img.src = (window.AKTAR || ((u) => u))(gh.gorsel, 1400); img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.onerror = () => img.remove(); arka.appendChild(img);
         arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
@@ -411,7 +423,9 @@
       sat.appendChild(el("b", null, (en ? "Israeli & Western press " : "İsrail ve Batı basını ") + disN));
       if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Israeli and Western outlets did not report it" : "İsrail ve Batı basını yazmadı"));
       ic.appendChild(sat);
-      const b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id);
+      let b;
+      if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = o.sayfa; }
+      else { b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id); }
       ic.appendChild(b);
       sl.appendChild(ic);
       iz.appendChild(sl);

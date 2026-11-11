@@ -591,3 +591,11 @@ body{overflow-x:clip}
 .donem-yil{margin:12px 0 4px;font-size:.72rem;font-weight:800;letter-spacing:.1em;color:var(--soluk);border-bottom:1px solid var(--cizgi);padding-bottom:3px}
 .tablo-kutu.kisa .yayin-dil tbody tr:nth-child(n+26){display:none}
 .daha-goster{margin-top:10px;font:inherit;font-size:.84rem;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid var(--k-cizgi);background:var(--yuzey);color:var(--k-ink);cursor:pointer}
+/* Gündem başlığı slaytın koyu zeminine gömülü */
+.gundem{position:relative}
+.gundem>.slayt-ust{position:absolute;top:0;left:0;right:0;z-index:4;max-width:none;margin:0;padding-top:22px;padding-bottom:40px;pointer-events:none;
+  padding-left:max(var(--kanat),env(safe-area-inset-left,0px),calc((100vw - 1240px)/2 + var(--kanat)));background:linear-gradient(180deg,rgba(6,10,8,.72) 0%,rgba(6,10,8,0) 100%)}
+.gundem>.slayt-ust .bolum{color:#fff;font-size:.82rem;letter-spacing:.14em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gundem>.slayt-ust .bolum::before{content:"";width:9px;height:9px;border-radius:50%;background:#e04a3f;box-shadow:0 0 0 4px rgba(224,74,63,.25)}
+.gundem>.slayt-ust .bolum-ek{color:rgba(255,255,255,.72);font-weight:600;letter-spacing:.06em;text-transform:none;font-size:.8rem}
+.gundem .slayt-ic{padding-top:84px}
