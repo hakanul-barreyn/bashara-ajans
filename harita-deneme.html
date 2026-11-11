@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://tiles.openfreemap.org; worker-src blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Harita denemesi | ZBS</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>html,body{margin:0;height:100%;font-family:system-ui,sans-serif}#harita{position:absolute;inset:0}
+.not{position:absolute;left:12px;bottom:28px;z-index:2;background:#fffdf8;padding:8px 12px;border-radius:8px;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.15);max-width:340px}</style>
+</head>
+<body>
+<div id="harita"></div>
+<div class="not"><b>Deneme:</b> OpenStreetMap verisi (OpenFreeMap). Ülke etiketleri ve sınır çizgileri kaldırıldı; kesikli kırmızı çizgi Gazze’nin kuşatma hattı.</div>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="site/harita-deneme.js?v=1"></script>
+</body>
+</html>
