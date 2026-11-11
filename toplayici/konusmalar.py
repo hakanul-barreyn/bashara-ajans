@@ -17,6 +17,11 @@ import sys
 import time
 import urllib.request
 
+try:
+    import soz_sinif
+except ImportError:      # toplayıcıdan paket olarak çağrıldığında
+    from toplayici import soz_sinif
+
 socket.setdefaulttimeout(30)
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 KOK = "https://www.tccb.gov.tr"
@@ -30,13 +35,18 @@ ILK_ID = 142000    # Ocak 2023'ün konuşma numaraları bu civarda başlıyor
 KELIMELER = [
     ("gazze", r"gazze"), ("filistin", r"filistin"), ("israil", r"israil"), ("netanyahu", r"netanyahu"),
     ("siyonist", r"siyonis"), ("soykirim", r"soykırım"), ("katliam", r"katliam"), ("hamas", r"\bhamas"),
-    ("kudus", r"kudüs"), ("aksa", r"aksa"), ("lubnan", r"lübnan"), ("iran", r"\biran"), ("ateskes", r"ateşkes"),
+    ("kudus", r"kudüs"), ("aksa", r"\baksa\b"), ("lubnan", r"lübnan"), ("iran", r"\biran"), ("ateskes", r"ateşkes"),
     ("abd", r"\babd\b|amerika"), ("trump", r"trump"), ("biden", r"biden"), ("isgal", r"işgal"),
     ("israil_yonetimi", r"israil (?:yönetim|hükümet)|netanyahu (?:yönetim|hükümet)"),
     ("teror_devleti", r"terör devlet"), ("katil", r"\bkatil"),
+    # gündem: Gazze'yi bu olaylar konuşulurken de andı mı?
+    ("nato", r"\bnato"), ("iklim", r"iklim|\bcop ?-?31|\bcop\b"), ("eurofighter", r"eurofighter|typhoon"),
+    ("ingiltere", r"ingiltere|birleşik krallık|starmer"), ("azerbaycan", r"azerbaycan|aliyev|bakü"),
+    ("secim", r"seçim"), ("basortusu", r"başörtü"),
 ]
+SURUM = 2          # 2: cümle sınıfları (kınama / çağrı / eylem) ve gündem kelimeleri; eski kayıtlar yeniden okunur
 DERLI = [(a, re.compile(k)) for a, k in KELIMELER]
-FILISTIN = re.compile(r"gazze|filistin|israil|netanyahu|siyonis|kudüs|aksa")
+FILISTIN = soz_sinif.KONU
 
 
 def al(u, sure=30):
@@ -111,9 +121,18 @@ def say(k):
     m = kucult(k["metin"])
     sayi = {a: len(r.findall(m)) for a, r in DERLI}
     cumleler = [c.strip() for c in re.split(r"(?<=[.!?])\s+", k["metin"]) if FILISTIN.search(kucult(c))]
-    return {"tarih": k["tarih"], "baslik": k["baslik"], "kelime": len(m.split()),
-            "sayi": {a: n for a, n in sayi.items() if n}, "cumle": [c[:320] for c in cumleler[:12]],
-            "filistin_cumle": len(cumleler)}
+    # her Filistin cümlesi sınıflanır (sayılar tam); saklanan en çok on iki cümle eylem > çağrı > kınama sırasıyla seçilir
+    sinif = {"eylem": 0, "somut": 0, "cagri": 0, "kinama": 0, "diger": 0}
+    etiket = []
+    for i, c in enumerate(cumleler):
+        a, somut = soz_sinif.sinif(c)
+        sinif[a] += 1
+        sinif["somut"] += int(somut)
+        etiket.append((soz_sinif.SIRA[a], i, a + ("*" if somut else ""), c))
+    secilen = sorted(sorted(etiket)[:12], key=lambda x: x[1])
+    return {"tarih": k["tarih"], "baslik": k["baslik"], "kelime": len(m.split()), "s": SURUM,
+            "sayi": {a: n for a, n in sayi.items() if n}, "cumle": [x[3][:320] for x in secilen], "cs": [x[2] for x in secilen],
+            "filistin_cumle": len(cumleler), "sinif": {a: n for a, n in sinif.items() if n}}
 
 
 def calistir(klasor, sure=2400, log=print):
@@ -142,6 +161,35 @@ def calistir(klasor, sure=2400, log=print):
         bilinen.add(adres)
         bilinen_id.add(re.search(r"/353/(\d+)/", adres).group(1))
         return k["tarih"]
+
+    # 0) eski sürüm kayıtları yeniden oku (cümle sınıfları için konuşmanın tamamı gerekiyor; metin saklanmadığından)
+    eski = [k for k in veri["konusmalar"] if k.get("s", 1) < SURUM]
+    yenilenen, y_hata = 0, 0
+    for k in sorted(eski, key=lambda k: k["tarih"], reverse=True):
+        if time.time() > bitis - sure * 0.5 or y_hata >= 6:
+            break
+        time.sleep(4)
+        h = None
+        for kaynak in (f"{WAYBACK}/web/2id_/{k['url']}", k["url"]):
+            try:
+                h = al(kaynak, sure=60)
+                if metin_cikar(h):
+                    break
+                h = None
+            except Exception as e:
+                log(f"Yenileme {k['url']} ({kaynak[:30]}): {e}")
+                time.sleep(BEKLE)
+        if not h:
+            y_hata += 1
+            continue
+        y_hata = 0
+        yeni_k = say(metin_cikar(h))
+        yeni_k["url"] = k["url"]
+        k.clear()
+        k.update(yeni_k)
+        yenilenen += 1
+    if eski:
+        log(f"Yenileme: {yenilenen}/{len(eski)} eski kayıt yeniden sınıflandı")
 
     arsiv_hata = 0
     # 1) İnternet Arşivi: hızlı; kayıtlı bütün konuşmalar (sitenin kendisi art arda isteklerde yanıt vermeyi kesiyor)

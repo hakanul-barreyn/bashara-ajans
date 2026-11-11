@@ -3,6 +3,7 @@
   "use strict";
   var $ = function (i) { return document.getElementById(i); };
   var NS = "http://www.w3.org/2000/svg";
+  var EN = window.DIL === "en";
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   function sv(t, a) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); return e; }
   function baslik(e, m) { var t = sv("title"); t.textContent = m; e.appendChild(t); return e; }
@@ -12,7 +13,6 @@
   function yz(n, d) { return EN ? sayi(n, d) + "%" : "%" + sayi(n, d); }
   function gunAd(g) { return +g.slice(8, 10) + " " + AYTAM[+g.slice(5, 7) - 1] + " " + g.slice(0, 4); }
   function ayAd(m) { return AYTAM[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
-  var EN = window.DIL === "en";
   function tt(tr, en) { return EN ? en : tr; }
   var YER = EN ? "en-GB" : "tr-TR";
   var GRUP_EN = { "Türkiye": "Turkey", "ABD": "United States", "Avrupa": "Europe", "Arap ülkeleri": "Arab states", "İran": "Iran", "Asya ve diğer": "Asia and others", "Çin": "China", "Rusya": "Russia", "BM": "UN", "İsrail": "Israel" };
@@ -51,7 +51,7 @@
     var ol = olumOzet(og);
     var abd = ol.filter(function (x) { return x.grup === "ABD"; })[0];
     if (abd) kart(abd.sessiz + " / " + abd.n, tt("kitlesel ölüm gününde ABD liderlerinin adı 1,5 kat bile artmadı", "mass-death days on which US leaders’ names did not rise even 1.5 times"));
-    [gruplar, erdoganGrafik, hedef, kelimeler, tetik, ornekler, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("liderler", er); } });
+    [sozIs, erdoganGrafik, olayEtki, hedef, kelimeler, tetik, ornekler, yontem].forEach(function (f) { try { f(v); } catch (er) { if (window.console) console.error("liderler", er); } });
   }
 
   // ---- Erdoğan'ın resmî konuşmaları (tccb.gov.tr)
@@ -108,6 +108,118 @@
     D.forEach(function (d) { var x = donem(d[1], d[2]); if (!x.n) return; var r = el("tr"); r.append(el("td", null, d[0]), el("td", "sayi", x.n), el("td", "sayi", yz(x.pay, 0)), el("td", "sayi", sayi(x.gf, 1)), el("td", "sayi", sayi(x.soy, 1)), el("td", "sayi", sayi(x.net, 1)), el("td", "sayi", sayi(x.abd, 1))); bd.appendChild(r); });
     t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); $("g-donemler").appendChild(kt);
     konusmaListe();
+  }
+  // ---- Söz ve iş: Filistin cümlelerinin sınıfı (kınama / çağrı / eylem); toplayıcıda konuşmanın tamamından sayılır
+  var SINIF = [["somut", tt("eylem: somut adım", "action: concrete step"), "#1f7a52"], ["genel", tt("eylem / taahhüt: genel", "action / pledge: general"), "#7fbf9c"],
+    ["cagri", tt("çağrı (başkalarından isteme)", "call (asking others)"), "#c39a35"], ["kinama", tt("kınama, adlandırma", "condemnation, naming"), "#c9302c"], ["diger", tt("betimleme, sayı, anma", "description, figures, remembrance"), "#b9bdb9"]];
+  var ENAZ = 8;
+  function siniflu() { return KON && KON.konusmalar ? KON.konusmalar.filter(function (k) { return (k.s || 1) >= 2; }) : []; }
+  function sc(k, a) { var x = k.sinif || {}; return a === "genel" ? (x.eylem || 0) - (x.somut || 0) : (x[a] || 0); }
+  function gazzeli(k) { return (k.filistin_cumle || 0) > 0 && kv(k, "gazze") + kv(k, "filistin") > 0; }
+  function sozIs() {
+    var k = $("g-sozis"); if (!k) return;
+    var hepsi = KON && KON.konusmalar ? KON.konusmalar.filter(function (c) { return c.tarih >= "2023-10-07"; }) : [];
+    var S = siniflu().filter(function (c) { return c.tarih >= "2023-10-07"; });
+    if (S.length < 20) { k.appendChild(el("p", "bekliyor", tt("Konuşmalar cümle cümle yeniden okunuyor (" + S.length + " / " + hepsi.length + "). Sınıflama yeterli sayıya ulaşınca burada çıkacak.", "Speeches are being re-read sentence by sentence (" + S.length + " / " + hepsi.length + "). The classification will appear here once enough are done."))); return; }
+    var G = S.filter(gazzeli), top = { somut: 0, genel: 0, cagri: 0, kinama: 0, diger: 0 };
+    G.forEach(function (c) { SINIF.forEach(function (x) { top[x[0]] += sc(c, x[0]); }); });
+    var cum = SINIF.reduce(function (a, x) { return a + top[x[0]]; }, 0) || 1;
+    var eyl = G.filter(function (c) { return sc(c, "somut") + sc(c, "genel") > 0; }).length, som = G.filter(function (c) { return sc(c, "somut") > 0; }).length;
+    var yalniz = G.filter(function (c) { return sc(c, "kinama") > 0 && !sc(c, "somut") && !sc(c, "genel") && !sc(c, "cagri"); }).length;
+    var kk = el("div", "rp-kartlar"), kart = function (b, m) { var d = el("div", "rp-kart"); d.append(el("b", null, b), el("span", null, m)); kk.appendChild(d); };
+    kart(yuzde(eyl, G.length), tt("Gazze’den söz ettiği konuşmalarda en az bir eylem ya da taahhüt cümlesi var", "of the speeches mentioning Gaza contain at least one action or pledge sentence"));
+    kart(yuzde(som, G.length), tt("konuşmada somut bir adım anılıyor (yardım sevkiyatı, ticaretin kesilmesi, dava, tedavi…)", "of them mention a concrete step (aid shipment, trade halt, court case, medical treatment…)"));
+    kart(yuzde(yalniz, G.length), tt("konuşmada yalnızca kınama var: çağrı da, eylem de yok", "contain only condemnation: no call, no action"));
+    kart(yuzde(top.somut + top.genel, cum), tt("Filistin cümlelerinin eylem / taahhüt payı (" + sayi(cum, 0) + " cümle)", "share of Palestine sentences that are action / pledge (" + sayi(cum, 0) + " sentences)"));
+    k.appendChild(kk);
+    k.appendChild(el("h3", "rp-ara", tt("Çeyrek çeyrek: Filistin cümleleri neyi söylüyor?", "Quarter by quarter: what do the Palestine sentences say?")));
+    efsane(k, SINIF.map(function (x) { return [x[2], x[1]]; }));
+    var C = {}; S.forEach(function (c) {
+      var q = c.tarih.slice(0, 4) + tt(" Ç", " Q") + (Math.floor((+c.tarih.slice(5, 7) - 1) / 3) + 1), x = C[q] = C[q] || { n: 0, g: 0, somut: 0, genel: 0, cagri: 0, kinama: 0, diger: 0 };
+      x.n++; if (gazzeli(c)) { x.g++; SINIF.forEach(function (y) { x[y[0]] += sc(c, y[0]); }); }
+    });
+    Object.keys(C).sort().forEach(function (q) {
+      var x = C[q], t = SINIF.reduce(function (a, y) { return a + x[y[0]]; }, 0);
+      var r = el("div", "rp-yigin-satir"); r.appendChild(el("span", "rp-yigin-ad", q + " · " + x.n + tt(" konuşma", " speeches")));
+      if (x.n < ENAZ || !t) { r.appendChild(el("span", "rp-yetersiz", tt("veri yetersiz", "insufficient data"))); k.appendChild(r); return; }
+      var y = el("div", "rp-yigin");
+      SINIF.forEach(function (h) { var n = x[h[0]]; if (!n) return; var i = el("i", null, n / t >= 0.08 ? yz(100 * n / t, 0) : ""); i.style.width = (100 * n / t) + "%"; i.style.background = h[2]; i.title = h[1] + ": " + n; y.appendChild(i); });
+      r.appendChild(y); k.appendChild(r);
+    });
+    // örnekler: her sınıftan son üç cümle (okur sınıflamayı kendisi denetleyebilsin)
+    k.appendChild(el("h3", "rp-ara", tt("Örnek cümleler", "Example sentences")));
+    k.appendChild(el("p", "rp-not", tt("Her sınıftan en son üç cümle (Türkçe asıl metin). Sınıflama kurala dayalı; hatalı gördüğünüz cümleyi bize bildirin.", "The three most recent sentences of each class (original Turkish). The classification is rule-based; tell us about any sentence you think is misclassified.")));
+    var O = el("div", "rp-sinif-ornek");
+    SINIF.slice(0, 4).forEach(function (h) {
+      var kutu = el("div"), bas = el("b", null, h[1]); bas.style.borderColor = h[2]; kutu.appendChild(bas); var n = 0;
+      S.slice().sort(function (a, b) { return a.tarih < b.tarih ? 1 : -1; }).some(function (c) {
+        (c.cumle || []).forEach(function (cm, i) {
+          var e = (c.cs || [])[i] || ""; var ok = h[0] === "somut" ? e === "eylem*" : h[0] === "genel" ? e === "eylem" : e === h[0];
+          if (!ok || n >= 3) return; n++;
+          var p = el("p", "rp-alinti", "“" + cm + "” "); var a = el("a", null, gunAd(c.tarih)); a.href = c.url; a.target = "_blank"; a.rel = "noopener"; p.appendChild(a); kutu.appendChild(p);
+        });
+        return n >= 3;
+      });
+      if (n) O.appendChild(kutu);
+    });
+    k.appendChild(O);
+  }
+
+  // ---- Gündem Gazze'yi bastırdı mı? Olaydan önceki ve sonraki 30 gün
+  var OLAY_ETKI = [
+    { ad: tt("Türkiye yerel seçimleri", "Turkey’s local elections"), b: "2024-03-31", e: "2024-03-31", k: [["secim"]] },
+    { ad: tt("ABD başkanlık seçimi", "US presidential election"), b: "2024-11-05", e: "2024-11-05", k: [["secim"], ["abd", "trump"]] },
+    { ad: tt("İngiltere ile Eurofighter anlaşması (Starmer Ankara’da)", "Eurofighter deal with the UK (Starmer in Ankara)"), b: "2025-10-27", e: "2025-10-27", k: [["eurofighter", "ingiltere"]], u: "https://www.aljazeera.com/news/2025/10/27/turkiye-signs-deal-with-the-uk-to-buy-20-eurofighter-jets" },
+    { ad: tt("NATO Ankara Zirvesi", "NATO summit in Ankara"), b: "2026-07-07", e: "2026-07-08", k: [["nato"]], u: "https://agenceurope.eu/en/bulletin/article/13694/33/2026-summit-will-be-held-in-ankara-on-7-and-8-july" },
+    { ad: tt("Azerbaycan başörtüsü krizi: Oktay Saral’ın açıklamasından görevden alınmasına", "Azerbaijan headscarf row: from Oktay Saral’s post to his dismissal"), b: "2026-10-13", e: "2026-10-25", k: [["azerbaycan", "basortusu"]], u: "https://serbestiyet.com/haberler/azerbaycan-istedi-basortusu-yasagini-elestiren-oktay-saral-gorevden-alindi-252223/",
+      not: tt("13 Ekim: Cumhurbaşkanı Başdanışmanı Oktay Saral, Azerbaycan’daki başörtüsü yasağını eleştirdi. 20 Ekim: Azerbaycan yönetiminin görevden alınmasını istediği yazıldı. 21 Ekim: Erdoğan Aliyev’le telefonda görüştü. 25 Ekim: Saral görevden ayrıldığını doğruladı.", "13 Oct: presidential chief adviser Oktay Saral criticised Azerbaijan’s headscarf ban. 20 Oct: reports that Baku wanted him removed. 21 Oct: Erdoğan phoned Aliyev. 25 Oct: Saral confirmed he had left the post.") },
+    { ad: tt("İsrail seçimleri", "Israel’s election"), b: "2026-10-27", e: "2026-10-27", k: [["secim"], ["israil"]], u: "https://israelhayom.com/2026/10/29/israels-2026-election-results-released" },
+    { ad: tt("COP31 iklim zirvesi (Antalya)", "COP31 climate summit (Antalya)"), b: "2026-11-09", e: "2026-11-20", k: [["iklim"]], u: "https://unfccc.int/cop31/the-road-to-antalya" }
+  ];
+  function anar(c, k) { return k.every(function (ya) { return ya.some(function (a) { return kv(c, a) > 0; }); }); }
+  function pencere(b, e, olay) {
+    var xs = KON.konusmalar.filter(function (c) { return c.tarih >= b && c.tarih <= e; });
+    var kel = xs.reduce(function (a, c) { return a + c.kelime; }, 0) || 1, gz = xs.filter(gazzeli);
+    var sn = xs.filter(function (c) { return (c.s || 1) >= 2; }), sg = sn.filter(gazzeli), an = sn.filter(function (c) { return anar(c, olay.k); });
+    return { n: xs.length, g: gz.length, on: 1e4 * xs.reduce(function (a, c) { return a + kv(c, "gazze") + kv(c, "filistin"); }, 0) / kel,
+      sn: sn.length, eyl: sg.filter(function (c) { return sc(c, "somut") + sc(c, "genel") > 0; }).length, sg: sg.length,
+      an: an.length, ang: an.filter(gazzeli).length };
+  }
+  function olayEtki() {
+    var k = $("g-olayetki"); if (!k || !KON || !KON.konusmalar) return;
+    var son = (KON.guncellendi || new Date().toISOString()).slice(0, 10);
+    var t = el("table"); t.innerHTML = "<thead><tr><th>" + tt("Olay", "Event") + "</th><th>" + tt("Dönem", "Period") + "</th><th>" + tt("Konuşma", "Speeches") + "</th><th>" + tt("Gazze / Filistin geçen", "Mentioning Gaza / Palestine") + "</th><th>" + tt("On bin kelimede Gazze / Filistin", "Gaza / Palestine per 10,000 words") + "</th><th>" + tt("Gazze konuşmalarında eylem / taahhüt", "Action / pledge in Gaza speeches") + "</th><th>" + tt("Olayı andığı konuşmalarda Gazze de geçen", "Speeches naming the event that also mention Gaza") + "</th></tr></thead>";
+    var bd = el("tbody");
+    OLAY_ETKI.forEach(function (o) {
+      var D = [[tt("önceki 30 gün", "30 days before"), ekleGun(o.b, -30), ekleGun(o.b, -1)]];
+      if (o.e !== o.b) D.push([tt("olay süresince", "during"), o.b, o.e]); else D.push([tt("olay günü", "the day"), o.b, o.e]);
+      D.push([tt("sonraki 30 gün", "30 days after"), ekleGun(o.e, 1), ekleGun(o.e, 30)]);
+      D.forEach(function (d, i) {
+        var r = el("tr", i === 0 ? "oe-ilk" : null);
+        if (i === 0) {
+          var td = el("td", "oe-ad"); td.rowSpan = D.length; var b = el("b", null, o.ad); td.appendChild(b);
+          td.appendChild(el("span", null, gunAd(o.b) + (o.e !== o.b ? " – " + gunAd(o.e) : "")));
+          if (o.not) td.appendChild(el("small", null, o.not));
+          if (o.u) { var a = el("a", null, tt("kaynak", "source")); a.href = o.u; a.target = "_blank"; a.rel = "noopener"; td.appendChild(a); }
+          r.appendChild(td);
+        }
+        var x = pencere(d[1], d[2], o), gelecek = d[1] > son, eksik = !gelecek && d[2] > son;
+        var dn = el("td", null, d[0]); if (eksik) dn.appendChild(el("small", "oe-durum", tt(" (sürüyor: " + son + " itibarıyla)", " (ongoing: as of " + son + ")"))); r.appendChild(dn);
+        if (gelecek) { var g = el("td", "rp-yetersiz", tt("henüz gelmedi", "not yet")); g.colSpan = 5; r.appendChild(g); bd.appendChild(r); return; }
+        r.appendChild(el("td", "sayi", x.n));
+        var az = x.n < ENAZ && !(i === 1 && o.e === o.b);
+        if (az || !x.n) { var y = el("td", "rp-yetersiz", x.n ? tt("veri yetersiz", "insufficient data") : tt("konuşma yok", "no speeches")); y.colSpan = 3; r.appendChild(y); }
+        else {
+          r.append(el("td", "sayi", yuzde(x.g, x.n)), el("td", "sayi", sayi(x.on, 1)), el("td", "sayi", x.sg >= 3 ? yuzde(x.eyl, x.sg) + " (" + x.eyl + "/" + x.sg + ")" : "–"));
+        }
+        r.appendChild(el("td", "sayi", x.an ? x.ang + " / " + x.an : "–"));
+        bd.appendChild(r);
+      });
+    });
+    t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); k.appendChild(kt);
+    var sn = siniflu().length;
+    k.appendChild(el("p", "rp-not", tt("Bir dönemde " + ENAZ + "’den az konuşma varsa sonuç yazılmaz (“veri yetersiz”). Son iki sütun yalnızca cümle cümle yeniden okunmuş konuşmalardan hesaplanır (" + sn + " / " + KON.konusmalar.length + "). “Olayı andığı konuşma”: NATO, iklim / COP31, Eurofighter / İngiltere, Azerbaycan / Aliyev / başörtüsü, seçim (+ ABD ya da İsrail) kelimelerinden biri geçen konuşma.",
+      "No result is shown for a period with fewer than " + ENAZ + " speeches (“insufficient data”). The last two columns use only speeches that have been re-read sentence by sentence (" + sn + " / " + KON.konusmalar.length + "). “Speeches naming the event”: speeches containing NATO, climate / COP31, Eurofighter / UK, Azerbaijan / Aliyev / headscarf, or election (+ US or Israel).")));
   }
   function hedef() {
     var k = $("g-hedef"); if (!KON || !KON.konusmalar || KON.konusmalar.length < 20) return;

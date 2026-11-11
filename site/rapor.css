@@ -269,3 +269,13 @@ body.baski .isim-cubuk{background:#fff;color:#1d2421;border:1px solid #1d2421}
 .kt-arsiv{font-size:.72rem;color:var(--soluk)}
 .kt-tam{font-size:.8rem;font-weight:700;color:var(--yesil);text-decoration:none}
 @media (max-width:760px){.kt-duzen{grid-template-columns:minmax(0,1fr)}.kt-menu{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px 12px}.kt-menu ul{display:flex;flex-wrap:wrap;gap:2px}.kt-menu h3{flex-basis:100%}.kt-gun summary{grid-template-columns:minmax(0,1fr)}}
+
+.rp-yetersiz{font-size:.78rem;color:var(--soluk);font-style:italic}
+.rp-sinif-ornek{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.rp-sinif-ornek>div{min-width:0}
+.rp-sinif-ornek b{display:block;border-left:5px solid;padding-left:8px;margin-bottom:6px;font-size:.85rem}
+.rp-sinif-ornek .rp-alinti a{font-size:.75rem;white-space:nowrap}
+.rp-tablo td.oe-ad{white-space:normal;min-width:200px;vertical-align:top}.oe-ad b{display:block}.oe-ad span,.oe-ad small,.oe-ad a{display:block;font-size:.74rem;color:var(--soluk);margin-top:3px}
+.oe-ad small{max-width:30ch;line-height:1.35}.oe-durum{color:#b06a00}
+tr.oe-ilk td{border-top:2px solid var(--soluk)}
+#g-olayetki th{white-space:normal;vertical-align:bottom;min-width:84px}
