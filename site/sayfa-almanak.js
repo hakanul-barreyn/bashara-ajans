@@ -152,7 +152,8 @@
     k.appendChild(lj);
     olaylar.slice(0, enCok || 40).forEach((o) => {
       const r = el("div", "on-satir");
-      const sol = el("div", "on-olay"); sol.append(el("small", null, tarih(o.bas, { day: "numeric", month: "short", year: "numeric" })), el("b", null, turAd(o.tur)));
+      const sol = el("div", "on-olay"); const oa = el("a", null, turAd(o.tur)); oa.href = "olay.html#" + o.tur + "-" + o.bas; const ob = el("b"); ob.appendChild(oa);
+      sol.append(el("small", null, tarih(o.bas, { day: "numeric", month: "short", year: "numeric" })), ob);
       if ((o.yer || []).length) sol.appendChild(el("span", null, o.yer.join(", ")));
       r.appendChild(sol);
       const sag = el("div", "on-gruplar");

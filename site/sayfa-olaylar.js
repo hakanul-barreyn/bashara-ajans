@@ -209,6 +209,7 @@
       var b = el("div", "rp-olay-bas");
       b.append(el("b", null, (T[x.tur] ? turAd(T[x.tur]) : x.tur) + " · " + yerAd(x)), el("span", null, gunAd(x.bas) + (x.son !== x.bas ? " – " + gunAd(x.son) : "")));
       d.appendChild(b);
+      var ac = el("a", "rp-olay-ac", tt("Olayın sayfası →", "Event page →")); ac.href = "olay.html#" + x.tur + "-" + x.bas; b.appendChild(ac);
       var o = el("p", "rp-olay-olcu");
       o.textContent = EN ? "Regional press " + x.bolge_sayi + " headlines · Western mainstream " + x.sayi.bati_ana + " · Turkey " + x.sayi.turkiye + (x.olu ? " · deaths reported in Gaza that day: " + sayi(x.olu, 0) : "") : "Bölge basını " + x.bolge_sayi + " başlık · Batı ana akım " + x.sayi.bati_ana + " · Türkiye " + x.sayi.turkiye + (x.olu ? " · Gazze’de o gün bildirilen ölüm: " + sayi(x.olu, 0) : "");
       d.appendChild(o);
