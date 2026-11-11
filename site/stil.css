@@ -626,3 +626,21 @@ body{overflow-x:clip}
   .tutsak-kart small{color:#c9a8a3;font-size:.72rem}
 }
 .ss-oge[hidden]{display:none}
+/* haberlerin arasında tutuklu hekim kartı */
+.sayac-kart{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:28px 24px;border-radius:14px;background:#2a0f0d;color:#f1d9d5;text-decoration:none;min-height:280px;text-align:left}
+.sayac-kart:hover{background:#3a1512}
+.sayac-kart .sk-ust{font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#e07b73}
+.sayac-kart b{font:800 4.4rem/1 "Source Serif 4",Georgia,serif;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.sayac-kart .sk-gun{font-weight:700;color:#fff;font-size:1.05rem}
+.sayac-kart strong{font:700 1.25rem/1.2 "Source Serif 4",Georgia,serif;color:#fff;margin-top:8px}
+.sayac-kart .sk-alt{font-size:.88rem;line-height:1.45;color:#d9b9b4}
+.sayac-kart i{font-style:normal;font-weight:700;color:#e07b73;margin-top:10px}
+/* telefonda Instagram gibi: her haber ekranı doldurur, kaydırınca bir sonrakine oturur (hafif: yalnızca CSS scroll-snap) */
+@media (max-width:700px){
+  html{scroll-snap-type:y proximity}
+  .akis>article,.akis>.sayac-kart{scroll-snap-align:start;scroll-margin-top:calc(var(--ust) + 8px);min-height:calc(100svh - var(--ust) - 24px)}
+  .akis>article{display:flex;flex-direction:column}
+  .akis>article .gorsel{flex:0 0 auto}
+  .sayac-kart{justify-content:center}
+  .sayac-kart b{font-size:5.5rem}
+}

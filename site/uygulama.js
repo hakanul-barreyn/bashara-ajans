@@ -814,6 +814,16 @@
       : (sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste);
     const odak = odakId && haberIdx[odakId];
     if (odak && !secOlay) gor = [odak, ...gor.filter((h) => h.id !== odakId)];
+    // Haberlerin arasında tutuklu hekim kartı: Dr. Hüsam Ebu Safiye (27 Aralık 2024'ten bu yana)
+    function sayacKart() {
+      const EN = window.DIL === "en", s = new Date(), gun = Math.floor((Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()) - Date.UTC(2024, 11, 27)) / 864e5);
+      const a = el("a", "sayac-kart"); a.href = "ebu-safiye.html";
+      a.append(el("span", "sk-ust", EN ? "Detained doctor" : "Tutuklu hekim"), el("b", null, gun.toLocaleString(EN ? "en-GB" : "tr-TR")),
+        el("span", "sk-gun", EN ? "days detained" : "gündür tutuklu"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
+        el("span", "sk-alt", EN ? "Director of Kamal Adwan Hospital. No charge, no trial, tortured." : "Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok, işkence var."),
+        el("i", null, EN ? "His story →" : "Hikâyesi →"));
+      return a;
+    }
     const akis = $("akis");
     const kaydir = window.scrollY;
     akis.innerHTML = "";
@@ -840,6 +850,7 @@
       if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
       if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
       akis.appendChild(k);
+      if (i === 4 && !secOlay) akis.appendChild(sayacKart());
       if (i === HARITA_SIRA - 1 && HARITA_BOLUM && !secOlay) akis.appendChild(HARITA_BOLUM);
     });
     if (HARITA_BOLUM) { if (secOlay) HARITA_BOLUM.remove(); else if (!HARITA_BOLUM.isConnected || HARITA_BOLUM.parentNode !== akis) akis.appendChild(HARITA_BOLUM); }
