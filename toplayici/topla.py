@@ -41,6 +41,7 @@ import gecmis  # noqa: E402
 import rapor  # noqa: E402
 import isimler  # noqa: E402
 import alisma  # noqa: E402
+import toplum  # noqa: E402
 import kimin  # noqa: E402
 import konusmalar  # noqa: E402
 import dogrulama  # noqa: E402
@@ -1163,6 +1164,10 @@ def main():
         konusmalar.indir(KOK, log=log)
     except Exception as e:
         log(f"Konuşmalar hatası: {e}")
+    try:
+        toplum.guncelle(KOK, log=log)
+    except Exception as e:
+        log(f"Toplum verisi hatası: {e}")
     try:
         alisma.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:

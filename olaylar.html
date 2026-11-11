@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611111940">
-<link rel="stylesheet" href="site/rapor.css?v=202611111700">
+<link rel="stylesheet" href="site/rapor.css?v=202611112200">
 <script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -43,13 +43,36 @@
   <section class="rp-kartlar" aria-label="Öne çıkan sayılar" id="kartlar"></section>
 
   <nav class="rp-icindekiler" aria-label="Bölümler">
-    <span data-dil="tr"><a href="#hastane">1 · Hastaneler</a><a href="#turler">2 · Tür tür</a><a href="#egri">3 · Alışma eğrisi</a><a href="#olumler">4 · Kitlesel ölüm günleri</a><a href="#katalog">5 · Olay kataloğu</a><a href="#yontem">Yöntem</a></span>
-    <span data-dil="en"><a href="#hastane">1 · Hospitals</a><a href="#turler">2 · Type by type</a><a href="#egri">3 · Habituation curve</a><a href="#olumler">4 · Mass-death days</a><a href="#katalog">5 · Event catalogue</a><a href="#yontem">Method</a></span>
+    <span data-dil="tr"><a href="#gercek">1 · Gerçekte ne oldu</a><a href="#toplum">2 · Toplum ne yaptı</a><a href="#hastane">3 · Hastaneler</a><a href="#turler">4 · Tür tür</a><a href="#egri">5 · Alışma eğrisi</a><a href="#olumler">6 · Kitlesel ölüm günleri</a><a href="#katalog">7 · Olay kataloğu</a><a href="#yontem">Yöntem</a></span>
+    <span data-dil="en"><a href="#gercek">1 · What really happened</a><a href="#toplum">2 · What readers did</a><a href="#hastane">3 · Hospitals</a><a href="#turler">4 · Type by type</a><a href="#egri">5 · Habituation curve</a><a href="#olumler">6 · Mass-death days</a><a href="#katalog">7 · Event catalogue</a><a href="#yontem">Method</a></span>
   </nav>
 
+  <article class="rp-metin" id="gercek">
+    <p data-dil="tr" class="rp-soru">Soru 1 · Gerçek ve basın</p>
+    <p data-dil="en" class="rp-soru">Question 1 · Reality and the press</p>
+    <h2 data-dil="tr">Gerçekte ne oldu, ne kadarı haber oldu?</h2>
+    <h2 data-dil="en">What really happened, and how much of it became news?</h2>
+    <p data-dil="tr">Bu raporun aşağıdaki bölümleri olayları basının kendisinden buluyor: bir tür olay başlıklarda birden çoğalınca o gün bir “olay” sayılıyor. Bu yöntem basının yazmayı bıraktığı şeyi göremez: yüzlerce cami yıkıldı ama başlıklardan yalnızca birkaç düzine cami olayı çıkıyor. O yüzden önce basından bağımsız kayıtlara bakıyoruz: Gazze’deki resmî kurumların tek tek saydığı yapılar ve olaylar. Her nokta bir kayıt. Dolu noktalar haber oldu; boş noktalar sessizliktir.</p>
+    <p data-dil="en">The later sections of this report find events in the press itself: when one kind of event suddenly multiplies in the headlines, that day counts as an “event”. This method cannot see what the press stopped writing about: hundreds of mosques were destroyed, yet only a few dozen mosque events emerge from the headlines. So we first look at records independent of the press: the buildings and events counted one by one by official bodies in Gaza. Each dot is one record. Filled dots became news; hollow dots are silence.</p>
+    <div id="g-gercek"></div>
+    <h3 data-dil="tr" class="rp-ara">Sayılamayan: hapishaneler</h3>
+    <h3 data-dil="en" class="rp-ara">What cannot be counted: the prisons</h3>
+    <div id="g-cezaevi"></div>
+  </article>
+
+  <article class="rp-metin" id="toplum">
+    <p data-dil="tr" class="rp-soru">Soru 2 · Toplum</p>
+    <p data-dil="en" class="rp-soru">Question 2 · Society</p>
+    <h2 data-dil="tr">Basın yazdı, toplum ne yaptı?</h2>
+    <h2 data-dil="en">The press wrote it. What did readers do?</h2>
+    <p data-dil="tr">Bir olay basına yansımış olabilir ama okurlar ona bakmamış olabilir. Okurların ilgisini, her olayın Vikipedi maddesinin olaydan sonraki ilk hafta kaç kez okunduğuyla ölçtük, altı dilde. Basının tepkisiyle yan yana koyduk: ikisi birlikte mi söndü, yoksa okurlar basından önce mi, sonra mı uzaklaştı?</p>
+    <p data-dil="en">An event may have reached the press while readers looked away. We measured reader interest by how many times each event’s Wikipedia article was read in the first week after the event, in six languages, and set it beside the press response: did the two fade together, or did readers drift away before or after the press?</p>
+    <div id="g-toplum"></div>
+  </article>
+
   <article class="rp-metin" id="hastane">
-    <p data-dil="tr" class="rp-soru">Soru 1 · Tepki</p>
-    <p data-dil="en" class="rp-soru">Question 1 · Response</p>
+    <p data-dil="tr" class="rp-soru">Soru 3 · Tepki</p>
+    <p data-dil="en" class="rp-soru">Question 3 · Response</p>
     <h2 data-dil="tr">El-Ehli’den sonra hastaneler</h2>
     <h2 data-dil="en">Hospitals after Al-Ahli</h2>
     <p data-v="hastane_metin"></p>
@@ -59,8 +82,8 @@
   </article>
 
   <article class="rp-metin" id="turler">
-    <p data-dil="tr" class="rp-soru">Soru 2 · Tür tür</p>
-    <p data-dil="en" class="rp-soru">Question 2 · Type by type</p>
+    <p data-dil="tr" class="rp-soru">Soru 4 · Tür tür</p>
+    <p data-dil="en" class="rp-soru">Question 4 · Type by type</p>
     <h2 data-dil="tr">Hangi olay ne zaman tetiklemeyi bıraktı?</h2>
     <h2 data-dil="en">Which kind of event stopped triggering a response, and when?</h2>
     <p data-dil="tr">Her tür için ilk büyük olayı 100 saydık. Bir grubun “son tepkisi”, o grubun tepkisinin ilk olayın yarısını geçtiği son olay. Ondan sonra aynı türden olaylar sürdü; bazıları ilkinden de büyüktü. Ama tepki bir daha o düzeye çıkmadı. Tablonun altındaki küçük grafikler aynı soruyu olayın büyüklüğünden bağımsız bir ölçüyle soruyor: grubun bu türden olaylara bölge basınına göre ne kadar yer ayırdığı.</p>
@@ -70,8 +93,8 @@
   </article>
 
   <article class="rp-metin" id="egri">
-    <p data-dil="tr" class="rp-soru">Soru 3 · Alışma</p>
-    <p data-dil="en" class="rp-soru">Question 3 · Habituation</p>
+    <p data-dil="tr" class="rp-soru">Soru 5 · Alışma</p>
+    <p data-dil="en" class="rp-soru">Question 5 · Habituation</p>
     <h2 data-dil="tr">Alışma eğrisi</h2>
     <h2 data-dil="en">The habituation curve</h2>
     <p data-v="egri_metin"></p>
@@ -79,8 +102,8 @@
   </article>
 
   <article class="rp-metin" id="olumler">
-    <p data-dil="tr" class="rp-soru">Soru 4 · Büyüklük ve sessizlik</p>
-    <p data-dil="en" class="rp-soru">Question 4 · Scale and silence</p>
+    <p data-dil="tr" class="rp-soru">Soru 6 · Büyüklük ve sessizlik</p>
+    <p data-dil="en" class="rp-soru">Question 6 · Scale and silence</p>
     <h2 data-dil="tr">Tek günde yüzlerce ölüm: kim baktı?</h2>
     <h2 data-dil="en">Hundreds killed in a single day: who looked?</h2>
     <p data-v="olum_metin"></p>
@@ -108,5 +131,6 @@
 </main>
 <script src="site/rapor-ortak.js?v=202611111700"></script>
 <script src="site/sayfa-olaylar.js?v=202611111700"></script>
+<script src="site/sayfa-gercek.js?v=202611112200"></script>
 </body>
 </html>

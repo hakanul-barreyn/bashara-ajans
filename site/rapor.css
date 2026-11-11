@@ -200,3 +200,19 @@ body.baski .rp-manset{background:#fff;color:#0c0e0d;border:2px solid #0c0e0d}
 .isim-cubuk:hover{outline-color:#c9302c}
 @media (max-width:640px){.isim-satir{grid-template-columns:1fr;gap:4px}}
 body.baski .isim-cubuk{background:#fff;color:#1d2421;border:1px solid #1d2421}
+/* gerçek ve basın: her nokta bir kayıt; dolu = başlık buldu, boş = sessizlik */
+.gk-tur{margin:22px 0 28px;display:flex;flex-direction:column;gap:10px}
+.gk-tur h3{margin:0}
+.gk-tur figcaption{font-size:.8rem;color:var(--soluk);line-height:1.5}
+.gk-satir{display:grid;grid-template-columns:10.5rem minmax(0,1fr);gap:12px;align-items:start}
+.gk-bas{display:flex;flex-direction:column;gap:2px;font-size:.8rem}
+.gk-bas span{font-size:.74rem;color:var(--soluk)}
+.gk-serit{display:flex;flex-wrap:wrap;gap:2px;align-items:center;min-width:0}
+.gk-serit i{width:7px;height:7px;border-radius:50%;display:block;flex:none}
+.gk-serit i.sus{background:transparent;box-shadow:inset 0 0 0 1.2px currentColor;opacity:.45}
+.gk-yil{font:600 .62rem var(--mono);color:var(--soluk);margin:0 4px 0 6px;flex-basis:auto}
+.gk-kartlar{margin:10px 0}
+.rp-kaynakca{font-size:.78rem;color:var(--soluk);padding-left:1.1em;margin:6px 0 0}
+@media (max-width:700px){.gk-satir{grid-template-columns:minmax(0,1fr);gap:4px}}
+@media print{.gk-serit i{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.rp-tablo td.sayi{white-space:nowrap}

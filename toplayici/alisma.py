@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 3
+ALISMA_SURUM = 4
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -187,6 +187,69 @@ def _sessizlik_donem(olaylar, donemler, anahtar):
     return cikti
 
 
+# Gerçekte ne oldu? Basından bağımsız kayıtlar (dis_veri): her kayıt bir olay ya da bir yapı; basının o türden başlıklarıyla
+# hafta hafta karşılaştırılır. İnsan ölümleri burada nokta yapılmaz (ölümler adlarıyla, isimler sayfasında anılır).
+GERCEK = [("ibadet", ("cami", "kilise"), "Yıkılan ya da hasar gören cami ve kilise", "yapı", "Gazze Hükümet Medya Ofisi"),
+          ("okul", ("okul",), "Yıkılan ya da hasar gören okul ve üniversite binası", "bina", "Gazze Hükümet Medya Ofisi"),
+          ("katliam", ("katliam",), "Gazze Sağlık Bakanlığı’nın kaydettiği katliamlar (bir ailenin birden çok üyesinin öldürüldüğü saldırılar)", "olay",
+           "Gazze Sağlık Bakanlığı")]
+
+
+def _gercek(S, D, dis, hafta_ix, haftalar):
+    cikti = []
+    for tur, alanlar, ad, birim, kaynak in GERCEK:
+        g = [sum(sum((dis.get("gun", {}).get(D[i]) or {}).get(a, 0) for a in alanlar) for i in hafta_ix[h]) for h in haftalar]
+        if sum(g) < 10:
+            continue
+        b = {gr: [sum(S["o"][tur][gr][i] for i in hafta_ix[h]) for h in haftalar] for gr in GK}
+        cikti.append({"anahtar": tur, "ad": ad, "birim": birim, "kaynak": kaynak, "toplam": sum(g), "gercek": g, "baslik": b,
+                      "baslik_toplam": {gr: sum(v) for gr, v in b.items()},
+                      "gorulen": {gr: sum(min(x, y) for x, y in zip(g, b[gr])) for gr in GK}})
+    return cikti
+
+
+def _toplum(tp, S, D):
+    """Her olay maddesi için: okurların ilk 7 ve 30 gündeki okuması (dil dil) ve basının aynı 7 günde o türden başlıkları.
+    Genel maddeler için ay ay okunma ve grupların ay ay savaş payı."""
+    if not tp or not tp.get("olaylar"):
+        return None
+    ix = {g: i for i, g in enumerate(D)}
+    tbas = tp["bas"]
+    tix = lambda g: (dt.date.fromisoformat(g) - dt.date.fromisoformat(tbas)).days  # noqa: E731
+    olaylar = []
+    for o in tp["olaylar"]:
+        i0 = tix(o["gun"])
+        r = {k: o[k] for k in ("anahtar", "tur", "gun", "ad")}
+        r["okunma7"] = {d: sum(v["gun"][i0:i0 + 7]) for d, v in o["diller"].items() if i0 >= 0}
+        r["okunma30"] = {d: sum(v["gun"][i0:i0 + 30]) for d, v in o["diller"].items() if i0 >= 0}
+        r["baslik"] = {d: v["baslik"] for d, v in o["diller"].items()}
+        j = ix.get(o["gun"])
+        if j is not None and o["tur"] in S["o"]:
+            w = range(max(0, j - 1), min(len(D), j + 6))
+            r["basin7"] = {g: sum(S["o"][o["tur"]][g][k] for k in w) for g in GK}
+            r["basin7_toplam"] = {g: sum(S["n"][g][k] for k in w) for g in GK}
+        olaylar.append(r)
+    aylar = sorted({g[:7] for g in D if g >= "2023-10"})
+    genel = []
+    for m in tp.get("genel", []):
+        seri = {}
+        for d, v in m["diller"].items():
+            ay = {}
+            for k, x in enumerate(v["gun"]):
+                g = (dt.date.fromisoformat(tbas) + dt.timedelta(days=k)).isoformat()[:7]
+                ay[g] = ay.get(g, 0) + x
+            seri[d] = [ay.get(a, 0) for a in aylar]
+        genel.append({"anahtar": m["anahtar"], "ad": m["ad"], "aylik": seri, "baslik": {d: v["baslik"] for d, v in m["diller"].items()}})
+    pay = {}
+    for g in GK:
+        ay_n, ay_s = {}, {}
+        for i, gun in enumerate(D):
+            ay_n[gun[:7]] = ay_n.get(gun[:7], 0) + S["n"][g][i]
+            ay_s[gun[:7]] = ay_s.get(gun[:7], 0) + S["g"][g][i]
+        pay[g] = [round(100 * ay_s.get(a, 0) / ay_n[a], 1) if ay_n.get(a, 0) >= 200 else None for a in aylar]
+    return {"kaynak": tp.get("kaynak"), "son": tp.get("son"), "olaylar": olaylar, "aylar": aylar, "genel": genel, "savas_payi": pay}
+
+
 def _pencere(i, j, N):
     return range(max(0, i - PENCERE_ONCE), min(N, j + PENCERE_SONRA + 1))
 
@@ -248,9 +311,11 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         return None
     dis = dis_veri.guncelle(kok, log) or {"gun": {}}
     # özet ve dış veri değişmediyse yeniden hesaplama (toplayıcı 15 dakikada bir çalışır, özet saatte bir yenilenir)
+    tp = almanak._oku(os.path.join(kok, "data", "bulten", "toplum.json"), {})
     eski = almanak._oku(os.path.join(kok, "data", "bulten", "alisma.json"), {})
     if (eski.get("surum") == ALISMA_SURUM and eski.get("ozet_guncellendi") == oz.get("guncellendi")
             and (eski.get("dis") or {}).get("indirildi") == dis.get("indirildi")
+            and eski.get("toplum_indirildi") == tp.get("indirildi")
             and os.path.exists(os.path.join(kok, "data", "bulten", "liderler.json"))):
         return eski
     K = {str(k["id"]): k for k in kaynaklar}
@@ -353,6 +418,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             "lider_gruplari": OT.LIDER_GRUP, "haftalar": haftalar, "olu_hafta": gunluk_olu_hafta,
             "esik": {"kat": ESIK_KAT, "pencere": [PENCERE_ONCE, PENCERE_SONRA], "taban_gun": TABAN_GUN},
             "turler": turler, "olaylar": tum_olaylar, "egri": egri, "olum_gunleri": olum_gunleri,
+            "gercek": _gercek(S, D, dis, hafta_ix, haftalar),
+            "toplum": _toplum(tp, S, D), "toplum_indirildi": tp.get("indirildi"),
             "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ,
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}
     almanak._yaz(os.path.join(kok, "data", "bulten", "alisma.json"), veri)
