@@ -644,3 +644,4 @@ body{overflow-x:clip}
   .sayac-kart{justify-content:center}
   .sayac-kart b{font-size:5.5rem}
 }
+.slayt-arka a.kredi{text-decoration:none;max-width:min(60vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

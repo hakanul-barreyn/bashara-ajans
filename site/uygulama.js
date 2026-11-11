@@ -407,12 +407,13 @@
       const sl = el("article", "slayt"); sl.setAttribute("aria-label", (n + 1) + " / " + liste.length);
       // denetlenmiş görsel (gorsel_denetim.py): yazı grafikleri atlanır, odak noktası kafaları kesmemek için
       const gd = o.arsiv ? o : (gundemArsiv || []).find((a) => a.id === o.id);
-      const gh = gd && "adaylar" in gd ? (gd.gorsel && kaynaklar[gd.gorsel_kaynak] ? { gorsel: gd.gorsel, kaynak: gd.gorsel_kaynak, odak: gd.odak } : null)
+      const gh = gd && "adaylar" in gd ? (gd.gorsel && gd.gorsel_atif ? { gorsel: gd.gorsel, atif: gd.gorsel_atif, sayfa: gd.gorsel_sayfa, odak: gd.odak } : null)
         : o.arsiv ? (o.gorsel && kaynaklar[o.gorsel_kaynak] ? { gorsel: o.gorsel, kaynak: o.gorsel_kaynak } : null)
         : o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
       const arka = el("div", "slayt-arka");
       if (gh) { const img = document.createElement("img"); img.src = (window.AKTAR || ((u) => u))(gh.gorsel, 1400); img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.style.objectPosition = gh.odak || "50% 25%"; img.onerror = () => img.remove(); arka.appendChild(img);
-        arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
+        if (gh.atif) { const kr = el("a", "kredi", (window.DIL === "en" ? "Photo: " : "Fotoğraf: ") + gh.atif); if (gh.sayfa) { kr.href = gh.sayfa; kr.target = "_blank"; kr.rel = "noopener"; } arka.appendChild(kr); }
+        else arka.appendChild(el("span", "kredi", "Görsel: " + kaynaklar[gh.kaynak].ad)); }
       sl.appendChild(arka);
       const ic = el("div", "slayt-ic");
       ic.appendChild(el("span", "slayt-sayi", (n + 1) + " / " + liste.length + " · " + kp.toplam + " kaynak · son " + once(o.son)));

@@ -881,7 +881,8 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
                     break
             gundem.append({"id": o["id"], "baslik": o.get("baslik"), "not": o.get("not"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
                            "son": o.get("son"), "sayfa": ("data/h/" + sayfa_hedef[o["id"]]) if o["id"] in sayfa_hedef else "arsiv.html#gun-" + (o.get("ilk") or "")[:10], "kaynaklar": ks,
-                           "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk, "adaylar": adaylar})
+                           "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk, "adaylar": adaylar,
+                           "konum": list(_konum(o)) if _konum(o) else None, "yer_ad": ((o.get("yer") or {}).get("ad") if isinstance(o.get("yer"), dict) else None)})
             if len(gundem) >= 20:
                 break
         with open(os.path.join(kok, "data", "gundem.json"), "w", encoding="utf-8") as f:
