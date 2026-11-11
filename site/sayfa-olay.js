@@ -19,6 +19,7 @@
     var turAd = function (t) { return EN ? (TUR_EN[t] || TA[t] || t) : (TA[t] || t); };
     function ciz() {
       var id = decodeURIComponent(location.hash.slice(1)), x = v.olaylar.filter(function (o) { return kim(o) === id; })[0];
+      if (!x && /^ay-/.test(id) && k.querySelector(".kt-duzen")) { var y1 = document.getElementById(id); if (y1) y1.scrollIntoView(); return; }
       k.textContent = "";
       if (!x) { liste(); return; }
       var yer = (x.yer || []).join(", ");
@@ -74,12 +75,57 @@
       k.appendChild(nav);
       window.scrollTo(0, 0);
     }
+    // Katalog: gün gün; solda yıl ve ay menüsü; bir güne tıklayınca o günün olayları ve yazan kaynaklar açılır
     function liste() {
-      var b = el("header", "rp-bas"); b.append(el("h1", null, tt("Olay kataloğu", "Event catalogue")), el("p", "rp-dek", tt("Başlıklardan bulunan " + v.olaylar.length + " olay. Birini seçin.", v.olaylar.length + " events found in the headlines. Pick one.")));
+      var b = el("header", "rp-bas"); b.append(el("h1", null, tt("Olay kataloğu", "Event catalogue")),
+        el("p", "rp-dek", tt("Başlıklardan bulunan " + v.olaylar.length + " olay, gün gün. Bir güne tıklayınca o günün olayları ve onları yazan kaynaklar açılır.", v.olaylar.length + " events found in the headlines, day by day. Click a day to see its events and the outlets that covered them.")));
       k.appendChild(b);
-      var ul = el("ul", "ic-olay");
-      v.olaylar.slice().reverse().forEach(function (o) { var li = el("li"); var a = el("a", null, gunAd(o.bas) + " · " + turAd(o.tur) + ((o.yer || []).length ? " · " + o.yer.join(", ") : "")); a.href = "#" + kim(o); li.appendChild(a); ul.appendChild(li); });
-      k.appendChild(ul);
+      var gunler = {};
+      v.olaylar.forEach(function (o) { (gunler[o.bas] = gunler[o.bas] || []).push(o); });
+      var sira = Object.keys(gunler).sort().reverse();
+      var duzen = el("div", "kt-duzen"), menu = el("nav", "kt-menu"), ana = el("div", "kt-ana");
+      menu.setAttribute("aria-label", tt("Yıl ve ay", "Year and month"));
+      var aylar = {};
+      sira.forEach(function (g) { var a = g.slice(0, 7); aylar[a] = (aylar[a] || 0) + gunler[g].length; });
+      var yil = null, ul = null;
+      Object.keys(aylar).sort().reverse().forEach(function (a) {
+        if (a.slice(0, 4) !== yil) { yil = a.slice(0, 4); menu.appendChild(el("h3", null, yil)); ul = el("ul"); menu.appendChild(ul); }
+        var li = el("li"), x = el("a"); x.href = "#ay-" + a;
+        x.append(new Date(a + "-15T12:00:00Z").toLocaleDateString(YER, { month: "long" }), el("small", null, String(aylar[a])));
+        li.appendChild(x); ul.appendChild(li);
+      });
+      var ay = null;
+      sira.forEach(function (g) {
+        if (g.slice(0, 7) !== ay) { ay = g.slice(0, 7); var h = el("h2", "kt-ay", new Date(ay + "-15T12:00:00Z").toLocaleDateString(YER, { month: "long", year: "numeric" })); h.id = "ay-" + ay; ana.appendChild(h); }
+        var d = el("details", "kt-gun"), sm = el("summary");
+        sm.append(el("time", null, gunAd(g)));
+        var cip = el("span", "kt-cipler"); gunler[g].forEach(function (o) { cip.appendChild(el("span", "kt-cip", turAd(o.tur) + ((o.yer || []).length ? " · " + o.yer[0] : ""))); });
+        sm.appendChild(cip); d.appendChild(sm);
+        d.addEventListener("toggle", function () {
+          if (!d.open || d.dataset.dolu) return; d.dataset.dolu = "1";
+          gunler[g].forEach(function (o) {
+            var ol = el("div", "kt-olay");
+            var bas = el("a", "kt-olay-bas", turAd(o.tur) + ((o.yer || []).length ? ": " + o.yer.join(", ") : "")); bas.href = "#" + kim(o); ol.appendChild(bas);
+            var yazan = 0, yayinda = 0; for (var gr in (o.sessiz || {})) { yazan += o.sessiz[gr][1] - o.sessiz[gr][0]; yayinda += o.sessiz[gr][1]; }
+            ol.appendChild(el("small", null, tt("Bölge basınında " + sayi(o.bolge_sayi) + " başlık" + (yayinda ? " · o günlerde yayında olan " + yayinda + " yayından " + yazan + " tanesi yazdı" : ""),
+              sayi(o.bolge_sayi) + " regional headlines" + (yayinda ? " · " + yazan + " of " + yayinda + " outlets publishing at the time covered it" : ""))));
+            var ul2 = el("ul", "kt-kaynak");
+            (o.ornek || []).forEach(function (m) {
+              var li = el("li"); li.appendChild(el("b", null, m.yayin)); li.appendChild(el("span", "kt-grup", AD[m.grup] || ""));
+              var a = el("a", null, m.baslik); a.href = m.url; a.target = "_blank"; a.rel = "noopener"; a.dir = "auto"; li.appendChild(a);
+              var ar = el("a", "kt-arsiv", tt("arşiv", "archive")); ar.href = "https://web.archive.org/web/" + m.url; ar.target = "_blank"; ar.rel = "noopener"; li.appendChild(ar);
+              ul2.appendChild(li);
+            });
+            if (!(o.ornek || []).length) ul2.appendChild(el("li", null, tt("Örnek başlık yok.", "No sample headline.")));
+            ol.appendChild(ul2);
+            var t = el("a", "kt-tam", tt("Olayın sayfası: kim yazdı, kim sustu →", "Event page: who covered it, who stayed silent →")); t.href = "#" + kim(o); ol.appendChild(t);
+            d.appendChild(ol);
+          });
+        });
+        ana.appendChild(d);
+      });
+      duzen.append(menu, ana); k.appendChild(duzen);
+      var h0 = location.hash.slice(1); if (/^ay-/.test(h0)) { var y0 = document.getElementById(h0); if (y0) y0.scrollIntoView(); }
     }
     window.addEventListener("hashchange", ciz); ciz();
   }).catch(function () { k.textContent = tt("Olay verisi okunamadı.", "Could not load the event data."); });
