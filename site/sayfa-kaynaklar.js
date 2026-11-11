@@ -71,7 +71,7 @@
         u.appendChild(avatarK(k));const w=el("div");const ad=el("div","kk-ad");if(bayrakHTML(k))ad.insertAdjacentHTML("afterbegin",bayrakHTML(k));
         const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
-        const rz=el("div","rozetler");if(TUR[k.tur])rz.appendChild(el("span","rozet "+k.tur,TUR[k.tur]));u.appendChild(rz);c.appendChild(u);
+        const rz=el("div","rozetler");if(TUR[k.tur]||k.bagli)rz.appendChild(el("span","rozet "+k.tur,k.bagli||(k.tur==="resmi"&&k.ulke?k.ulke+" devletinin yayını":TUR[k.tur])));u.appendChild(rz);c.appendChild(u);
         const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));

@@ -6,6 +6,8 @@
   const TUR = { resmi: "devlet", grup: "bağlı", bagimsiz: "bağımsız", koop: "kooperatif", ozel: "özel", izle: "özel" };
   // Kartlarda yalnızca okura bir şey söyleyen sahiplik bilgisi gösterilir; ayrıntısı Kaynaklar sayfasında
   const ROZETLI = { resmi: "devlet", grup: "bağlı" };
+  // rozet: okurun anlayacağı açıklama ("Hizbullah’ın yayın organı", "İran devletinin yayını")
+  const rozetMetni = (k) => k.bagli ? k.bagli : k.tur === "resmi" ? (window.DIL === "en" ? "state media" : (k.ulke ? k.ulke + " devletinin yayını" : "devlet yayını")) : ROZETLI[k.tur];
   const DIL = { ar: "Arapça", en: "İngilizce", fr: "Fransızca", tr: "Türkçe", he: "İbranice", es: "İspanyolca", ca: "Katalanca", it: "İtalyanca", de: "Almanca" };
   const DUNYA = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json";
   const SAYFA = 30;
@@ -617,7 +619,7 @@
         const r = el("div", "kim-satir");
         const a = avatar(k); r.appendChild(a);
         const ic = el("div", "kim-ic");
-        const ad = el("div", "kim-ad"); if (bayrakHTML(k)) ad.insertAdjacentHTML("afterbegin", bayrakHTML(k)); ad.append(k.ad); if (ROZETLI[k.tur]) ad.appendChild(el("span", "rozet sahip", ROZETLI[k.tur])); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
+        const ad = el("div", "kim-ad"); if (bayrakHTML(k)) ad.insertAdjacentHTML("afterbegin", bayrakHTML(k)); ad.append(k.ad); if (ROZETLI[k.tur] || k.bagli) ad.appendChild(el("span", "rozet sahip", rozetMetni(k))); ad.appendChild(el("span", "kim-bolge", kampAd(k))); ic.appendChild(ad);
         ic.appendChild(el("div", "kim-baslik", BT(h) || h.baslik_orj));
         if (BT(h) && h.baslik_orj) { const oz = el("div", "kim-ozgun", h.baslik_orj); oz.dir = "auto"; oz.lang = k.dil; ic.appendChild(oz); }
         const bv = o.bakislar && o.bakislar[h.id];
@@ -684,7 +686,7 @@
     if (k.son_dakika && dk(h.tarih) < 120) roz.appendChild(el("span", "rozet yeni", "SON DAKİKA"));
     if (h.nitelik === "analiz") roz.appendChild(el("span", "rozet analiz", "Analiz"));
     if (h.telegram) roz.appendChild(el("span", "rozet tg", /instagram\.com/.test(h.url) ? "Instagram" : "Telegram"));
-    if (ROZETLI[k.tur]) roz.appendChild(el("span", "rozet sahip", ROZETLI[k.tur]));
+    if (ROZETLI[k.tur] || k.bagli) roz.appendChild(el("span", "rozet sahip", rozetMetni(k)));
     ust.appendChild(roz);
     g.appendChild(ust);
     const dg = dogrulama[h.id];
