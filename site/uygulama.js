@@ -271,9 +271,9 @@
 
   // ---------------------------------------------------- kapsama analizi (Ground News benzeri)
   const KAMP = { "Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası", "Mağrip": "Arap dünyası",
-    "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
+    "İran": "İran", "Yemen": "Yemen", "Anadolu-Türkiye": "Türkiye", "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı",
     "İspanya": "Batı", "İtalya": "Batı", "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Diğer" };
-  const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
+  const KAMP_RENK = { "Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran": "#c39a35", "Yemen": "#8f6a2a", "Türkiye": "#c9544e", "İsrail": "#4a72c4", "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#9aa3ab", "Diğer": "#6b746f" };
   const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Özel" };
   const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3" };
   const kampAd = (k) => k.kamp || KAMP[k.bolge] || "Diğer";
@@ -282,7 +282,7 @@
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
   const BAKIS = { filistin: "Filistin bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
   const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
-  const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"];
+  const KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"];
 
   // Bölge gruplarına göre bakış: her haber bir kare (sayı görünür kalsın), satırın sağında
   // grubun Filistin bakışından ortalama uzaklığı (0 = başlangıç noktası, 2 = İsrail / ABD bakışı).
@@ -415,7 +415,7 @@
       if (ON(o)) ic.appendChild(el("p", null, ON(o).length > 220 ? ON(o).slice(0, 217) + "…" : ON(o)));
       // Sade özet: kaç bölge yayını, kaç İsrail/Batı yayını yazdı (ayrıntılar haber sayfasında)
       const kk = kp.kamp || {}, en = window.DIL === "en";
-      const bolgeN = ["Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"].reduce((t, x) => t + (kk[x] || 0), 0);
+      const bolgeN = ["Filistin", "Arap dünyası", "İran", "Yemen", "Türkiye"].reduce((t, x) => t + (kk[x] || 0), 0);
       const disN = ["İsrail", "Batı"].reduce((t, x) => t + (kk[x] || 0), 0);
       const sat = el("p", "slayt-kim");
       sat.appendChild(el("b", null, (en ? "Regional press " : "Bölge basını ") + bolgeN));
@@ -561,7 +561,7 @@
     const ilkH = haberIdx[o.haberler[o.haberler.length - 1]];
     // Gecikme: İsrail ve Batı basınının ilk haberi bölge basınının ilk haberinden ne kadar sonra geldi?
     {
-      const DIS_K = new Set(["İsrail", "Batı"]), IC_K = new Set(["Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"]);
+      const DIS_K = new Set(["İsrail", "Batı"]), IC_K = new Set(["Filistin", "Arap dünyası", "İran", "Yemen", "Türkiye"]);
       let ic = null, ds = null;
       o.haberler.forEach((i) => { const h = haberIdx[i], k = h && kaynaklar[h.kaynak]; if (!k) return; const t = Date.parse(h.tarih), c = kampAd(k);
         if (IC_K.has(c) && (ic == null || t < ic)) ic = t; if (DIS_K.has(c) && (ds == null || t < ds)) ds = t; });

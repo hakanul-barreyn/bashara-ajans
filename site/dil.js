@@ -37,7 +37,7 @@
     "Filistin": "Palestine", "Meşrik": "Mashriq", "Körfez": "Gulf", "Mısır": "Egypt", "İran": "Iran", "Yemen": "Yemen", "Mağrip": "Maghreb",
     "Anadolu-Türkiye": "Anatolia-Türkiye", "İsrail": "Israel", "ABD": "USA", "İngiltere": "UK", "İspanya": "Spain", "İtalya": "Italy",
     "Almanya": "Germany", "Fransa": "France", "Asya ve diğer": "Asia & other", "İsrail’de muhalif basın": "Israeli dissident press",
-    "Arap dünyası": "Arab world", "İran ve Yemen": "Iran & Yemen", "Türkiye": "Türkiye", "Batı": "West", "Diğer": "Other",
+    "Arap dünyası": "Arab world", "İran ve Yemen": "Iran & Yemen", "İran": "Iran", "Yemen": "Yemen", "Türkiye": "Türkiye", "Batı": "West", "Diğer": "Other",
     // konular
     "Gazze": "Gaza", "Batı Şeria": "West Bank", "Kudüs": "Jerusalem", "Lübnan": "Lebanon", "Suriye": "Syria", "Yemen ve Kızıldeniz": "Yemen & Red Sea",
     "Irak": "Iraq", "Ürdün": "Jordan", "Göç": "Migration", "Diplomasi ve müzakere": "Diplomacy & negotiations", "İnsani durum": "Humanitarian situation",

@@ -14,7 +14,7 @@ import zipfile
 
 import marka
 
-KR = {"Filistin": "#2b8a5e", "Arap dünyası": "#6fae92", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4",
+KR = {"Filistin": "#2b8a5e", "Arap dünyası": "#6fae92", "İran": "#c39a35", "Yemen": "#8f6a2a", "İran ve Yemen": "#c39a35", "Türkiye": "#c9544e", "İsrail": "#4a72c4",
       "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#8d969e", "Diğer": "#6b746f"}
 
 

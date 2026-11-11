@@ -95,7 +95,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 7
+OZET_SURUM = 8
 BULTEN_SURUM = 1
 
 
@@ -263,9 +263,9 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             iran = bool(IRAN.search(b) or IRAN.search(kb))
             if iran:
                 tt["_i"] = tt.get("_i", 0) + 1
-            # Savaş başlığı (_s): Gazze, Batı Şeria, Kudüs, Lübnan ve İsrail bağlamındaki bütün başlıklar; yalnızca
-            # İran'la ilgili olanlar hariç. Dikkat ölçüsü budur: Lübnan'a yapılan saldırılar Gazze'den ayrı sayılmaz.
-            if bg and not (iran and not (gz or FILISTIN.search(kb) or LUBNAN.search(kb))):
+            # Savaş başlığı (_s): Gazze, Batı Şeria, Kudüs, Lübnan ve İsrail bağlamındaki bütün başlıklar. Lübnan'a ve
+            # İran'a karşı savaş da aynı savaşın parçasıdır (direniş cephesi); İsrail'le birlikte geçen İran başlıkları da sayılır.
+            if bg:
                 tt["_s"] = tt.get("_s", 0) + 1
             ozgun = r.get("s") != 1
             if bg:

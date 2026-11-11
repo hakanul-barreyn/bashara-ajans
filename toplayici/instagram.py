@@ -195,7 +195,7 @@ Kurallar:
 - "ton": ölüm, yaralanma, yıkım, açlık, salgın ya da yerinden edilme haberiyse "yas"; siyasi, diplomatik, askeri açıklama ya da
   medya çerçevesi haberiyse "medya".
 - "duello": aynı olayı belirgin biçimde farklı çerçeveleyen iki haber kimliği. "a" kampı Filistin / Arap dünyası / Türkiye /
-  İran ve Yemen olan bir haber; "b" kampı İsrail ya da Batı olan bir haber. Belirgin bir çerçeve farkı yoksa null.
+  İran ya da Yemen olan bir haber; "b" kampı İsrail ya da Batı olan bir haber. Belirgin bir çerçeve farkı yoksa null.
 - "rakam": VERİ'de açıkça yazan en çarpıcı tek sayı (ölü, yaralı, yerinden edilmiş, yıkılan ev, su basan çadır, aç kalan çocuk …).
   {"deger": "70.000+", "birim": "çadır su altında", "kaynak": "sayıyı veren yayının adı"}. "deger" yalnızca rakam, nokta ve
   gerekirse + işaretinden oluşur; "birim" en çok 4 kelime. Böyle bir sayı yoksa null.

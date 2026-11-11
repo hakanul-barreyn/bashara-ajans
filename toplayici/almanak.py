@@ -19,11 +19,11 @@ import ekler
 import disa_aktar
 
 KAMP = {"Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası",
-        "Mağrip": "Arap dünyası", "İran": "İran ve Yemen", "Yemen": "İran ve Yemen", "Anadolu-Türkiye": "Türkiye",
+        "Mağrip": "Arap dünyası", "İran": "İran", "Yemen": "Yemen", "Anadolu-Türkiye": "Türkiye",
         "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı", "İspanya": "Batı", "İtalya": "Batı",
         "Almanya": "Batı", "Fransa": "Batı"}
-KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran ve Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"]
-BOLGE_ICI = {"Filistin", "Arap dünyası", "İran ve Yemen", "Türkiye"}   # bölgenin kendi basını
+KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"]
+BOLGE_ICI = {"Filistin", "Arap dünyası", "İran", "Yemen", "Türkiye"}   # bölgenin kendi basını
 DIS = {"Batı", "İsrail"}                                               # İsrail ve Batı basını
 UZAK = {"filistin": 0, "aktarim": 1, "israil": 2}
 CIZGI = {"ad": "Antiemperyalist / dekolonyal", "ara": "Ara / ana akım", "ik": "İşbirlikçi kompradorlar ve emperyalistler"}
