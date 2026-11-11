@@ -21,8 +21,8 @@ import disa_aktar
 KAMP = {"Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası",
         "Mağrip": "Arap dünyası", "İran": "İran", "Yemen": "Yemen", "Anadolu-Türkiye": "Türkiye",
         "İsrail": "İsrail", "ABD": "Batı", "İngiltere": "Batı", "İspanya": "Batı", "İtalya": "Batı",
-        "Almanya": "Batı", "Fransa": "Batı"}
-KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"]
+        "Almanya": "Batı", "Fransa": "Batı", "Asya ve diğer": "Dünya (Batı dışı)", "Afrika": "Dünya (Batı dışı)", "Latin Amerika": "Dünya (Batı dışı)"}
+KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Batı", "Dünya (Batı dışı)", "İsrail", "İsrail’de muhalif basın", "Diğer"]
 BOLGE_ICI = {"Filistin", "Arap dünyası", "İran", "Yemen", "Türkiye"}   # bölgenin kendi basını
 DIS = {"Batı", "İsrail"}                                               # İsrail ve Batı basını
 UZAK = {"filistin": 0, "aktarim": 1, "israil": 2}

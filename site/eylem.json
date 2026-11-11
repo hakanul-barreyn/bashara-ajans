@@ -290,6 +290,39 @@
    "en": "Despite Turkey’s trade ban, 46.4% of Israel’s crude imports in 2025 were Azerbaijani oil loaded at Ceyhan, a three-year high (Kpler data, Reuters).",
    "kaynak": "https://www.bairdmaritime.com/shipping/tankers/turkey-trade-ban-fails-to-halt-azerbaijani-oil-flows-to-israel-as-imports-hit-three-year-high",
    "dogrulandi": true
+  },
+  {
+   "tarih": "2024-10-04",
+   "ulke": "Türkiye",
+   "aktor": "Ticaret verisi",
+   "yon": "israil",
+   "celiskili": true,
+   "tr": "Ticaret yasağından sonra Türkiye’nin “Filistin”e ihracatı katlanarak arttı. Bakanlık bunun Filistinlilere gittiğini söylüyor; Türk ve İsrail basınındaki analizler malların önemli kısmının İsrail’e ulaştığını öne sürüyor. Tartışmalı.",
+   "en": "After the trade ban, Turkey’s exports to “Palestine” multiplied. The ministry says they go to Palestinians; analyses in the Turkish and Israeli press argue much of it reaches Israel. Disputed.",
+   "kaynak": "https://turkishminute.com/2024/10/04/data-suggest-turkish-good-find-their-way-to-israel-via-palestine-amid-trade-ban/",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2024-05-01",
+   "ulke": "Mısır",
+   "aktor": "Hala şirketi (Organi grubu)",
+   "yon": "israil",
+   "celiskili": true,
+   "tr": "Refah kapısından Gazze’den çıkmak isteyenlerden kişi başı 5.000 dolara varan ücret alındığı ortaya çıktı; şirketin Mısır devletine yakınlığı biliniyor.",
+   "en": "It emerged that people leaving Gaza through the Rafah crossing were charged up to $5,000 per person; the company is known to be close to the Egyptian state.",
+   "kaynak": "https://www.voanews.com/a/7574866.html",
+   "dogrulandi": true
+  },
+  {
+   "tarih": "2025-03-06",
+   "ulke": "Mısır, Ürdün",
+   "aktor": "Sisi ve Ürdün hükümetleri",
+   "yon": "israil",
+   "celiskili": true,
+   "tr": "Savaş sürerken İsrail’den doğalgaz alımını sürdürdüler; İsrail’in Mısır ve Ürdün’e gaz ihracatı 2024’te %13,4 arttı.",
+   "en": "Kept importing gas from Israel during the war; Israel’s gas exports to Egypt and Jordan rose 13.4% in 2024.",
+   "kaynak": "https://www.fdd.org/analysis/strategic-asset-israeli-natural-gas-exports-to-arab-neighbors-jumped-over-13-percent-in-2024/",
+   "dogrulandi": true
   }
  ]
 }

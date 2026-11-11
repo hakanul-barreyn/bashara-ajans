@@ -870,9 +870,18 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             gorsel = next((hidx[x["id"]].get("gorsel") for x in o["haberler"] if x["id"] in hidx and hidx[x["id"]].get("gorsel")
                            and not hidx[x["id"]].get("gnews") and not (kmap.get(hidx[x["id"]].get("kaynak")) or {}).get("hassas")), None)
             gk = next((hidx[x["id"]].get("kaynak") for x in o["haberler"] if x["id"] in hidx and hidx[x["id"]].get("gorsel") == gorsel), None) if gorsel else None
+            # aday görseller (gorsel_denetim.py: yazı grafiği olanı atlar, kafaları kesmemek için odak noktası bulur)
+            adaylar = []
+            for x in o["haberler"]:
+                hx = hidx.get(x["id"])
+                if hx and hx.get("gorsel") and not hx.get("gnews") and not (kmap.get(hx.get("kaynak")) or {}).get("hassas") \
+                        and hx["gorsel"] not in [a[0] for a in adaylar]:
+                    adaylar.append([hx["gorsel"], hx.get("kaynak")])
+                if len(adaylar) >= 4:
+                    break
             gundem.append({"id": o["id"], "baslik": o.get("baslik"), "not": o.get("not"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
                            "son": o.get("son"), "sayfa": ("data/h/" + sayfa_hedef[o["id"]]) if o["id"] in sayfa_hedef else "arsiv.html#gun-" + (o.get("ilk") or "")[:10], "kaynaklar": ks,
-                           "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk})
+                           "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk, "adaylar": adaylar})
             if len(gundem) >= 20:
                 break
         with open(os.path.join(kok, "data", "gundem.json"), "w", encoding="utf-8") as f:

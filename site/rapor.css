@@ -241,3 +241,4 @@ body.baski .isim-cubuk{background:#fff;color:#1d2421;border:1px solid #1d2421}
 .ey-liste b{font-size:.92rem}
 .ey-liste p{margin:0;font-size:.95rem;max-width:70ch}
 .ey-liste a{font-size:.78rem;color:var(--yesil);font-weight:700;text-decoration:none}
+.ey-celiski{align-self:flex-start;font:700 .64rem var(--f);letter-spacing:.06em;text-transform:uppercase;color:#85580a;background:#f8edd5;padding:2px 8px;border-radius:999px}
