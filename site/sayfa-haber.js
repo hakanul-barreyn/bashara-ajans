@@ -33,7 +33,12 @@
   // gitmez. İsrail adı ve 1948 öncesi Filistin'in içindeki çizgi çizilmez; bölge "FİLİSTİN" diye yazılır.
   // Olayın yeri kırmızı; olay birden çok yeri ilgilendiriyorsa öteki yerler de işaretli ve hepsi görünecek biçimde açılır.
   var altlikSoz = null, NS = "http://www.w3.org/2000/svg";
-  function altlik() { return altlikSoz || (altlikSoz = fetch(new URL("../site/bolge-harita.json", location.href)).then(function (r) { return r.json(); })); }
+  function altlik() {
+    return altlikSoz || (altlikSoz = Promise.all([
+      fetch(new URL("../site/bolge-harita.json", location.href)).then(function (r) { return r.json(); }),
+      fetch(new URL("../site/bolge-harita-yakin.json", location.href)).then(function (r) { return r.json(); }).catch(function () { return null; })
+    ]).then(function (x) { x[0].yakin = x[1]; return x[0]; }));
+  }
   function sv(t, a) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); return e; }
   function haritaKur(d, A) {
     var yerler = [{ ad: d.dataset.ad || "", lat: +d.dataset.lat, lon: +d.dataset.lon, ana: true }];
@@ -44,6 +49,11 @@
     var W = d.clientWidth || 760, H = d.clientHeight || 380, oran = W / H;
     var g = { x: (Math.min.apply(0, xs) + Math.max.apply(0, xs)) / 2, y: (Math.min.apply(0, ys) + Math.max.apply(0, ys)) / 2,
       w: Math.max(2.6, (Math.max.apply(0, xs) - Math.min.apply(0, xs)) * 1.5, (Math.max.apply(0, ys) - Math.min.apply(0, ys)) * 1.6 * oran) };
+    var Y = A.yakin, P0 = Y && Y.pencere;
+    // Gazze şeridindeki olaylarda şerit ayrıntılı görünsün diye yakından başla
+    var gazzede = function (y) { return y.lat > 31.2 && y.lat < 31.62 && y.lon > 34.19 && y.lon < 34.58; };
+    if (Y && yerler.every(gazzede)) g.w = Math.max(0.62, g.w * 0.3);
+    var yakinlar = []; try { yakinlar = JSON.parse(d.dataset.yakin || "[]"); } catch (e) {}
     d.textContent = "";
     var svg = sv("svg", { "class": "bh-svg", role: "img", "aria-label": d.getAttribute("aria-label") || "Harita" });
     d.appendChild(svg);
@@ -51,11 +61,22 @@
     var kara = sv("path", { "class": "bh-kara", d: A.kara.map(yol).join("") });
     var sinir = sv("path", { "class": "bh-sinir", d: A.sinir.map(function (c) { return "M" + c.map(function (p) { return px(p[0]).toFixed(3) + "," + py(p[1]).toFixed(3); }).join("L"); }).join("") });
     var ust = sv("g", {});
-    svg.append(sv("rect", { "class": "bh-deniz", x: -400, y: -400, width: 800, height: 800 }), kara, sinir, ust);
+    svg.append(sv("rect", { "class": "bh-deniz", x: -400, y: -400, width: 800, height: 800 }), kara, sinir);
+    if (Y) {
+      // ayrıntılı katman (Natural Earth 1:10m): pencerenin içinde kaba altlığın yerine geçer
+      var ic = function (p) { return p[0] > P0[0] && p[0] < P0[2] && p[1] > P0[1] && p[1] < P0[3]; };
+      sinir.setAttribute("d", A.sinir.filter(function (c) { return !ic(c[Math.floor(c.length / 2)]); }).map(function (c) { return "M" + c.map(function (p) { return px(p[0]).toFixed(3) + "," + py(p[1]).toFixed(3); }).join("L"); }).join(""));
+      svg.append(sv("rect", { "class": "bh-deniz", x: px(P0[0]), y: py(P0[3]), width: px(P0[2]) - px(P0[0]), height: py(P0[1]) - py(P0[3]) }),
+        sv("path", { "class": "bh-kara", d: Y.kara.map(function (h) { return "M" + h.map(function (p) { return px(p[0]).toFixed(4) + "," + py(p[1]).toFixed(4); }).join("L") + "Z"; }).join("") }));
+      var sinir2 = sv("path", { "class": "bh-sinir", d: Y.sinir.map(function (c) { return "M" + c.map(function (p) { return px(p[0]).toFixed(4) + "," + py(p[1]).toFixed(4); }).join("L"); }).join("") });
+      svg.appendChild(sinir2);
+    }
+    svg.appendChild(ust);
     function ciz() {
       var h = g.w / oran, b = g.w / W;   // b: bir ekran pikselinin harita birimi
       svg.setAttribute("viewBox", (g.x - g.w / 2) + " " + (g.y - h / 2) + " " + g.w + " " + h);
       sinir.style.strokeWidth = (1.1 * b) + "";
+      if (Y) svg.querySelectorAll(".bh-sinir").forEach(function (x) { x.style.strokeWidth = (1.1 * b) + ""; });
       ust.textContent = "";
       var yazi = function (x, y, metin, sinif, boy, bas) {
         var t = sv("text", { x: x, y: y, "class": sinif, "font-size": boy * b }); t.textContent = metin;
@@ -70,6 +91,7 @@
         kutular.push(k2); return true;
       };
       var genislik = function (metin, boy) { return metin.length * boy * 0.62 * b; };
+      var adlar0 = yerler.map(function (y) { return y.ad; });
       yerler.forEach(function (y) {
         var x = px(y.lon), yy = py(y.lat);
         if (y.ana) ust.appendChild(sv("circle", { cx: x, cy: yy, r: 16 * b, "class": "bh-hale", "stroke-width": b }));
@@ -77,9 +99,34 @@
         if (y.ad) { var t = yazi(x + 11 * b, yy + 5 * b, y.ad, y.ana ? "bh-yer-ad" : "bh-yer-ad bh-yer-ad2", y.ana ? 14 : 12.5); t.setAttribute("stroke-width", 4 * b);
           yer_var(x - 8 * b, yy + 6 * b, genislik(y.ad, y.ana ? 14 : 12.5) + 20 * b, 16 * b); }
       });
+      // son 30 günde bu çevrede yazılan öteki olaylar: gri noktalar (üzerine gelince başlık; sayfası varsa tıklanır)
+      // aynı noktadaki olaylar tek nokta: büyüklüğü ve içindeki sayı olay sayısı
+      var kume = {};
+      yakinlar.forEach(function (o) { var k2 = o[0].toFixed(2) + "," + o[1].toFixed(2); (kume[k2] = kume[k2] || []).push(o); });
+      Object.keys(kume).forEach(function (k2) {
+        var os = kume[k2], o = os[0], x = px(o[1]), y = py(o[0]); if (!icinde(x, y)) return;
+        var r = (4.2 + 2.4 * Math.sqrt(os.length - 1)) * b;
+        var gr = sv("g", { "class": "bh-yakin-g" });
+        gr.appendChild(sv("circle", { cx: x, cy: y, r: r, "class": "bh-yakin", "stroke-width": 1.2 * b }));
+        if (os.length > 1) { var tx = sv("text", { x: x, y: y + 3.4 * b, "text-anchor": "middle", "class": "bh-yakin-n", "font-size": 9.5 * b }); tx.textContent = os.length; gr.appendChild(tx); }
+        var t = sv("title"); t.textContent = os.slice(0, 6).map(function (q) { return q[3] + " · " + q[2]; }).join("\n") + (os.length > 6 ? "\n…" : ""); gr.appendChild(t);
+        var hedef = os.find(function (q) { return q[4]; });
+        if (hedef) { var a2 = sv("a", { href: hedef[4] }); a2.appendChild(gr); ust.appendChild(a2); } else ust.appendChild(gr);
+      });
+      // ayrıntılı yerler: Gazze'nin mahalleleri, kampları, hastaneleri, geçişleri; Batı Şeria ve Güney Lübnan
+      if (Y && g.w < 2.2) Y.yer.forEach(function (c) {
+        var x = px(c[2]), y = py(c[1]); if (!icinde(x, y) || adlar0.indexOf(c[0]) >= 0) return;
+        if (c[3] === "b") { var bn = genislik(c[0], 10.5) * 1.3; if (yer_var(x - bn / 2, y + 2 * b, bn, 11 * b)) yazi(x, y, c[0], "bh-bolge", 10.5, "middle"); return; }
+        if (g.w > 1.3 && c[3] === "y") return;
+        if (!yer_var(x - 3 * b, y + 4 * b, genislik(c[0], 10.5) + 10 * b, 12 * b)) return;
+        if (c[3] === "h") { ust.appendChild(sv("path", { d: "M" + (x - 3.2 * b) + "," + y + "h" + 6.4 * b + "M" + x + "," + (y - 3.2 * b) + "v" + 6.4 * b, "class": "bh-hastane", "stroke-width": 2 * b })); }
+        else if (c[3] === "g") ust.appendChild(sv("rect", { x: x - 2.6 * b, y: y - 2.6 * b, width: 5.2 * b, height: 5.2 * b, "class": "bh-gecis" }));
+        else ust.appendChild(sv("circle", { cx: x, cy: y, r: 2.1 * b, "class": "bh-sehir-n" }));
+        yazi(x + 5 * b, y + 3.6 * b, c[0], "bh-sehir bh-ince" + (c[3] === "h" ? " bh-h" : ""), 10.5);
+      });
       A.ulke.forEach(function (u) { var x = px(u[2]), y = py(u[1]); var boy = u[0] === "FİLİSTİN" ? 15 : 12, gn = genislik(u[0], boy) * 1.25;
         if (icinde(x, y) && (g.w > 4 || u[0] === "FİLİSTİN") && yer_var(x - gn / 2, y + 2 * b, gn, boy * b)) yazi(x, y, u[0], u[0] === "FİLİSTİN" ? "bh-ulke bh-filistin" : "bh-ulke", boy, "middle"); });
-      var onem = g.w > 14 ? 1 : g.w > 5 ? 2 : 3, adlar = yerler.map(function (y) { return y.ad; });
+      var onem = g.w > 14 ? 1 : g.w > 5 ? 2 : 3, adlar = adlar0;
       A.sehir.forEach(function (c) {
         var x = px(c[2]), y = py(c[1]);
         if (c[3] > onem || !icinde(x, y) || adlar.indexOf(c[0]) >= 0 || !yer_var(x - 3 * b, y + 4 * b, genislik(c[0], 11.5) + 8 * b, 13 * b)) return;
@@ -87,6 +134,21 @@
         yazi(x + 5 * b, y + 4 * b, c[0], "bh-sehir", 11.5);
       });
     }
+    var olcek = document.createElement("div"); olcek.className = "bh-olcek"; d.appendChild(olcek);
+    var konum = document.createElementNS(NS, "svg"); konum.setAttribute("class", "bh-konum"); konum.setAttribute("aria-hidden", "true"); d.appendChild(konum);
+    var KB = [31.5, 26.0, 40.5, 37.5];   // konum haritası: batı, güney, doğu, kuzey
+    konum.setAttribute("viewBox", px(KB[0]) + " " + py(KB[3]) + " " + (px(KB[2]) - px(KB[0])) + " " + (py(KB[1]) - py(KB[3])));
+    konum.append(sv("rect", { "class": "bh-deniz", x: px(KB[0]), y: py(KB[3]), width: px(KB[2]) - px(KB[0]), height: py(KB[1]) - py(KB[3]) }), sv("path", { "class": "bh-kara", d: A.kara.map(yol).join("") }));
+    var cerceve = sv("rect", { "class": "bh-konum-c" }); konum.appendChild(cerceve);
+    var ciz0 = ciz;
+    ciz = function () {
+      ciz0();
+      var h = g.w / oran, km = g.w * 111.32, hedef = km / 5, adim = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000].reduce(function (a, c) { return c <= hedef ? c : a; }, 1);
+      olcek.style.width = (100 * adim / km) + "%"; olcek.textContent = adim + " km";
+      cerceve.setAttribute("x", g.x - g.w / 2); cerceve.setAttribute("y", g.y - h / 2); cerceve.setAttribute("width", g.w); cerceve.setAttribute("height", h);
+      cerceve.setAttribute("stroke-width", (px(KB[2]) - px(KB[0])) / 60);
+      konum.style.display = g.w > 6 ? "none" : "";
+    };
     ciz();
     // yakınlaştırma düğmeleri ve sürükleme
     var dg = document.createElement("div"); dg.className = "bh-dugmeler";

@@ -171,3 +171,17 @@
 .bh-dugmeler button{width:32px;height:32px;border:0;border-bottom:1px solid #ddd;background:#fff;color:#161a18;font:700 18px/1 system-ui;cursor:pointer}
 .bh-dugmeler button:last-child{border-bottom:0}
 .bh-atif{position:absolute;right:8px;bottom:6px;font-size:.64rem;color:#6f7772;background:rgba(255,255,255,.75);padding:1px 6px;border-radius:3px}
+/* ayrıntılı harita: yakın olaylar, yerler, ölçek, konum */
+.bh-yakin{fill:#8b928e;fill-opacity:.75;stroke:#fff;cursor:pointer}
+.bh-svg a:hover .bh-yakin{fill:#161a18}
+.bh-bolge{fill:#1f7a52;fill-opacity:.75;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;letter-spacing:.16em}
+.bh-ince{font-weight:500;fill:#5a615d}
+.bh-h{fill:#9b2c27}
+.bh-hastane{stroke:#c9302c;fill:none}
+.bh-gecis{fill:#fff;stroke:#161a18;stroke-width:.0008}
+.bh-olcek{position:absolute;left:12px;bottom:10px;border:2px solid #4a514d;border-top:0;height:6px;font-size:.62rem;font-family:"JetBrains Mono",monospace;color:#4a514d;line-height:0;padding-top:0;text-indent:2px}
+.bh-olcek{display:flex;align-items:flex-end;padding-bottom:12px;box-sizing:content-box;max-width:40%}
+.bh-konum{position:absolute;top:10px;right:10px;width:116px;height:116px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25);background:#d6e4ec}
+.bh-konum-c{fill:#c9302c;fill-opacity:.18;stroke:#c9302c}
+@media (max-width:560px){.bh-konum{width:78px;height:78px}}
+.bh-yakin-n{fill:#fff;font-family:"JetBrains Mono",monospace;font-weight:700;pointer-events:none}

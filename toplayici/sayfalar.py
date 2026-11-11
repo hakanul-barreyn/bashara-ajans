@@ -613,11 +613,25 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
         alt_y = (f'<noscript><img src="{_e(harita)}" alt="" width="600" height="340"></noscript>' if harita else "")
         ekyer = json.dumps([{"ad": y["ad"], "lat": y["lat"], "lon": y["lon"]} for y in (olay or {}).get("yerler") or []
                             if isinstance(y, dict) and y.get("ad")][:3], ensure_ascii=False)
-        ic = (f'<div class="mk-osm" data-lat="{ky[0]:.4f}" data-lon="{ky[1]:.4f}" data-ad="{_e(yer or "")}" data-yerler="{_e(ekyer)}" role="img" '
+        # Haritanın anlattığı: son 30 günde aynı çevrede yazılan başka olaylar (gri noktalar, sayfaları varsa bağlantılı)
+        yakin = []
+        if ky:
+            for o2 in sorted((tum or {}).values(), key=lambda o: o.get("son") or "", reverse=True):
+                y2 = _konum(o2)
+                if not y2 or o2.get("id") == (olay or {}).get("id") or abs(y2[0] - ky[0]) > 0.45 or abs(y2[1] - ky[1]) > 0.45:
+                    continue
+                b2 = (o2.get("baslik_en") if dil == "en" else None) or o2.get("baslik") or ""
+                yakin.append([round(y2[0], 4), round(y2[1], 4), _kisa(b2, 90), (o2.get("ilk") or "")[:10], (sayfa_hedef or {}).get(o2["id"], "")])
+                if len(yakin) >= 30:
+                    break
+        yakin_js = json.dumps(yakin, ensure_ascii=False)
+        ic = (f'<div class="mk-osm" data-lat="{ky[0]:.4f}" data-lon="{ky[1]:.4f}" data-ad="{_e(yer or "")}" data-yerler="{_e(ekyer)}" data-yakin="{_e(yakin_js)}" role="img" '
               f'aria-label="{_e(("Harita: " if dil == "tr" else "Map: ") + (yer or ""))}">{alt_y}</div>') if ky else f'<img src="{_e(harita)}" alt="" width="600" height="340">'
         kapak = (f'<figure class="mk-kapak mk-harita">{ic}'
                  f'<figcaption>{_e(("Olayın yeri: " if dil == "tr" else "Location: ") + (yer or ""))}'
-                 f'</figcaption></figure>')
+                 + (_e((f" · Gri noktalar: son 30 günde bu çevrede yazılan {len(yakin)} olay daha" if dil == "tr"
+                        else f" · Grey dots: {len(yakin)} other events reported nearby in the last 30 days")) if ky and yakin else "")
+                 + '</figcaption></figure>')
     else:
         kapak = ""
     # Karşı manşetler (alıntı kutusu)
