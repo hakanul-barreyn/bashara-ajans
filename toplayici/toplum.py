@@ -15,7 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-SURUM = 1
+SURUM = 2
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 DILLER = ["en", "ar", "tr", "de", "fr", "es"]
 BAS = "2023-10-01"
@@ -28,7 +28,7 @@ OLAYLAR = [
     ("wck", "yardimci", "2024-04-01", "World Central Kitchen konvoyuna saldırı", ["World Central Kitchen aid convoy attack"]),
     ("cadir", "cadir", "2024-05-26", "Tel es-Sultan çadır katliamı", ["Tel al-Sultan massacre", "Tal as-Sultan massacre", "Rafah tent massacre"]),
     ("nuseyrat", "katliam", "2024-06-08", "Nusayrat katliamı", ["Nuseirat rescue and massacre"]),
-    ("tabiin", "okul", "2024-08-10", "Et-Tabiin okulu saldırısı", ["Al-Tabi'in school attack", "Al-Tabi'een school attack"]),
+    ("tabiin", "okul", "2024-08-10", "Et-Tabiin okulu saldırısı", ["Al-Tabi'in school attack", "Al-Tabi'een school attack", "Al-Tabi'in school airstrike", "2024 Al-Tabi'in school attack"]),
     ("advan", "hastane", "2024-12-27", "Kemal Advan Hastanesi baskını", ["Kamal Adwan Hospital raid", "Raid on Kamal Adwan Hospital", "Kamal Adwan Hospital"]),
     ("sihhiye", "saglik", "2025-03-23", "Refah’ta sağlık ekibinin öldürülmesi", ["Rafah paramedic massacre", "2025 Rafah paramedic massacre", "Killing of Palestinian Red Crescent paramedics"]),
     ("ghf", "yardim", "2025-05-27", "Yardım dağıtım noktalarında öldürülenler", ["Gaza Humanitarian Foundation aid distribution killings", "Killings at Gaza Humanitarian Foundation sites", "Gaza Humanitarian Foundation"]),
@@ -76,6 +76,28 @@ def cozumle(adlar):
     return sonuc
 
 
+def yonlendirmeler(dil, basliklar):
+    """{başlık: [o maddeye yönlenen adlar]}: madde adı değiştiyse eski adın okunmaları da sayılsın diye."""
+    cikti = {b: [] for b in basliklar}
+    for i in range(0, len(basliklar), 20):
+        parca = basliklar[i:i + 20]
+        devam = {}
+        for _ in range(10):
+            q = {"action": "query", "format": "json", "prop": "redirects", "rdnamespace": 0, "rdlimit": "max", "titles": "|".join(parca), **devam}
+            try:
+                v = _json(f"https://{dil}.wikipedia.org/w/api.php?" + urllib.parse.urlencode(q))
+            except Exception:
+                break
+            for p in v.get("query", {}).get("pages", {}).values():
+                if p.get("title") in cikti:
+                    cikti[p["title"]] += [r["title"] for r in p.get("redirects", [])]
+            if "continue" not in v:
+                break
+            devam = v["continue"]
+        time.sleep(0.5)
+    return cikti
+
+
 def goruntulenme(dil, baslik, bas, son):
     """{gün: okunma} (insan okurlar)"""
     m = urllib.parse.quote(baslik.replace(" ", "_"), safe="")
@@ -108,16 +130,28 @@ def guncelle(kok, log=print):
             D.append(d.isoformat())
             d += dt.timedelta(days=1)
 
+        # her dilde, bulunan maddelere yönlenen eski adlar (madde taşınmışsa eski okunmalar o addadır)
+        hepsi = {}
+        for b in coz.values():
+            for dil, ad in b.items():
+                hepsi.setdefault(dil, set()).add(ad)
+        yon = {dil: yonlendirmeler(dil, sorted(adlar)) for dil, adlar in hepsi.items()}
+
         def seri(basliklar):
             cikti = {}
             for dil, b in basliklar.items():
-                try:
-                    g = goruntulenme(dil, b, BAS, son)
-                except Exception as e:
-                    log(f"Vikipedi {dil}:{b}: {e}")
-                    continue
-                cikti[dil] = {"baslik": b, "gun": [g.get(x, 0) for x in D]}
-                time.sleep(0.3)
+                toplam = [0] * len(D)
+                adlar = [b] + (yon.get(dil, {}).get(b) or [])[:15]
+                for ad in adlar:
+                    try:
+                        g = goruntulenme(dil, ad, BAS, son)
+                    except Exception as e:
+                        log(f"Vikipedi {dil}:{ad}: {e}")
+                        continue
+                    for k, x in enumerate(D):
+                        toplam[k] += g.get(x, 0)
+                    time.sleep(0.15)
+                cikti[dil] = {"baslik": b, "gun": toplam, "ad_sayisi": len(adlar)}
             return cikti
 
         olaylar = []

@@ -599,3 +599,10 @@ body{overflow-x:clip}
 .gundem>.slayt-ust .bolum::before{content:"";width:9px;height:9px;border-radius:50%;background:#e04a3f;box-shadow:0 0 0 4px rgba(224,74,63,.25)}
 .gundem>.slayt-ust .bolum-ek{color:rgba(255,255,255,.72);font-weight:600;letter-spacing:.06em;text-transform:none;font-size:.8rem}
 .gundem .slayt-ic{padding-top:84px}
+/* tutuklu hekim sayacı (ana sayfa üst şeridi) */
+.tutsak{display:flex;align-items:center;gap:12px;padding:8px max(var(--kanat),env(safe-area-inset-right,0px)) 8px max(var(--kanat),env(safe-area-inset-left,0px));background:#2a0f0d;color:#f1d9d5;text-decoration:none;font-size:.84rem;line-height:1.35;border-top:1px solid #3d1a17}
+.tutsak:hover{background:#3a1512}
+.tutsak-gun{font:800 1.35rem/1 "Source Serif 4",Georgia,serif;color:#fff;font-variant-numeric:tabular-nums;flex:none}
+.tutsak-metin{min-width:0}
+.tutsak-metin b{color:#fff;font-weight:700}
+.tutsak i{margin-left:auto;font-style:normal;color:#e07b73;flex:none}
