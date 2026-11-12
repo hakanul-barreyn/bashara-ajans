@@ -103,6 +103,64 @@ def _haber_satiri(h, kaynaklar):
     return f"• <b>{_e(k.get('ad'))}</b>: {_e(h.get('baslik_tr') or h.get('baslik_orj'))} <code>{h['id']}</code>"
 
 
+def _foto_komut(komut, geri, kok, simdi):
+    """Kişi fotoğrafı listesi (data/kisi-foto.json): fotoğrafları yönetici seçer; sistem yalnızca Commons'taki lisansı okur."""
+    import gorsel_denetim as GD
+    yol = os.path.join(kok, "data", "kisi-foto.json")
+    try:
+        L = json.load(open(yol, encoding="utf-8"))
+    except (OSError, ValueError):
+        L = {"kisiler": []}
+    def kaydet():
+        with open(yol, "w", encoding="utf-8") as f:
+            json.dump(L, f, ensure_ascii=False, indent=1)
+    if komut == "/fotolar":
+        if not L["kisiler"]:
+            return "Liste boş. Eklemek için: /foto Lewis Hamilton = https://commons.wikimedia.org/wiki/File:..."
+        return "\n".join(f"<b>{_e(k['adlar'][0])}</b> ({_e(', '.join(k['adlar'][1:]) or '-')}): {len(k['fotolar'])} fotoğraf" for k in L["kisiler"])
+    if komut == "/fotosil":
+        m = re.match(r"(.+?)\s+(\d+)$", geri.strip())
+        ad, sira = (m.group(1), int(m.group(2))) if m else (geri.strip(), None)
+        k = next((x for x in L["kisiler"] if ad.lower() in [a.lower() for a in x["adlar"]]), None)
+        if not k:
+            return "Bu adla kayıt yok. /fotolar ile listeye bak."
+        if sira and 1 <= sira <= len(k["fotolar"]):
+            k["fotolar"].pop(sira - 1)
+        else:
+            L["kisiler"].remove(k)
+        L["kisiler"] = [x for x in L["kisiler"] if x["fotolar"]]
+        kaydet()
+        return "Silindi."
+    if "=" not in geri:
+        return "Biçim: /foto Ad, diğer yazılış = https://commons.wikimedia.org/wiki/File:..."
+    adlar_, bag = geri.split("=", 1)
+    adlar = [a.strip() for a in adlar_.split(",") if len(a.strip()) >= 3]
+    m = re.search(r"commons\.wikimedia\.org/wiki/(File:[^\s?#]+)", bag)
+    if not adlar or not m:
+        return "Ad ve bir Wikimedia Commons dosya bağlantısı (commons.wikimedia.org/wiki/File:...) gerekli."
+    import urllib.parse as up
+    baslik = up.unquote(m.group(1)).replace("_", " ")
+    try:
+        bulunan = GD._commons({"titles": baslik})
+    except Exception as e:
+        return f"Commons'a ulaşılamadı: {_e(str(e))[:100]}"
+    if not bulunan:
+        return "Bu dosya kullanılamıyor: açık lisanslı değil (yalnızca kamu malı, CC0, CC BY, CC BY-SA) ya da 900 pikselden dar."
+    f = bulunan[0]
+    k = next((x for x in L["kisiler"] if any(a.lower() in [b.lower() for b in x["adlar"]] for a in adlar)), None)
+    if not k:
+        k = {"adlar": adlar, "fotolar": []}
+        L["kisiler"].append(k)
+    else:
+        k["adlar"] += [a for a in adlar if a.lower() not in [b.lower() for b in k["adlar"]]]
+    if any(x["url"] == f["url"] for x in k["fotolar"]):
+        return "Bu fotoğraf zaten listede."
+    k["fotolar"].append({"url": f["url"], "sayfa": f["sayfa"], "atif": f["atif"], "eklendi": simdi.isoformat()})
+    kaydet()
+    return (f"✅ <b>{_e(k['adlar'][0])}</b> için fotoğraf eklendi ({len(k['fotolar'])}. fotoğraf).\n{_e(f['atif'])}\n"
+            "Başlığında bu ad geçen Gündem haberlerinde kullanılacak; şiddet ve müstehcenlik denetimi yine yapılır.")
+
+
 def _komut(metin, kim, kok, veri, haberler, kaynaklar, simdi, site):
     """Yönetici komutunu uygular. Döndürür: yanıt metni"""
     parca = metin.strip().split(maxsplit=1)
@@ -110,7 +168,11 @@ def _komut(metin, kim, kok, veri, haberler, kaynaklar, simdi, site):
     if komut in ("/start", "/yardim", "/help"):
         return ("Doğrulama komutları:\n/yanlis &lt;haber&gt; &lt;kanıt bağlantısı&gt; &lt;açıklama&gt;\n/celiskili &lt;haber&gt; &lt;açıklama&gt;\n"
                 "/dogrulanmamis &lt;haber&gt; &lt;açıklama&gt;\n/kaldir &lt;haber&gt;\n/liste\n"
-                "&lt;haber&gt;: sitedeki haber bağlantısı ya da 12 haneli kimlik.")
+                "&lt;haber&gt;: sitedeki haber bağlantısı ya da 12 haneli kimlik.\n\n"
+                "Kişi fotoğrafları (Gündem görselleri için):\n/foto Ad, diğer yazılış = &lt;Commons dosya bağlantısı&gt;\n"
+                "/fotolar: listeyi göster\n/fotosil Ad: o kişinin bütün fotoğraflarını sil (ya da /fotosil Ad 2: yalnızca ikincisini)")
+    if komut in ("/foto", "/fotolar", "/fotosil"):
+        return _foto_komut(komut, geri, kok, simdi)
     if komut == "/liste":
         e = sorted(veri["etiketler"].items(), key=lambda x: x[1].get("tarih", ""), reverse=True)[:15]
         if not e:

@@ -143,7 +143,47 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
     sinir = (_dt.date.today() - _dt.timedelta(days=30)).isoformat()
     kullan = {u: x for u, x in kullan.items() if x[1] >= sinir}
     simdi_kullan = set()
+    # yöneticinin seçtiği kişi fotoğrafları (dogrulama.py /foto): başlıkta adı geçen kişinin fotoğrafı önce denenir
+    try:
+        KF = json.load(open(os.path.join(kok, "data", "kisi-foto.json"), encoding="utf-8")).get("kisiler", [])
+    except (OSError, ValueError):
+        KF = []
+    kf_son = onb.get("_kisi_son") or {}
     for o in g.get("olaylar", []):
+        bas = ((o.get("baslik") or "") + " " + (o.get("baslik_en") or "")).lower()
+        kisi = [f for k in KF if any(a.lower() in bas for a in k["adlar"]) for f in k["fotolar"]]
+        kisi.sort(key=lambda f: kf_son.get(f["url"], ""))      # en uzun süredir kullanılmayan önce
+        kisi_secilen = None
+        for c in kisi:
+            if c["url"] in simdi_kullan:
+                continue
+            kk = c["url"] + "|" + o["id"]
+            k = onb.get(kk)
+            if k is None and anahtar and model and yeni < EN_COK:
+                try:
+                    veri, tur = _indir(c["url"])
+                    if veri:
+                        if sayac:
+                            sayac()
+                        k = _sor(anahtar, model, veri, tur, o.get("baslik", ""))
+                        yeni += 1
+                        onb[kk] = k
+                except Exception as e:
+                    log(f"Kişi fotoğrafı denetimi: {e}")
+            # yönetici seçtiği için portre ve ilgililik aranmaz; şiddet, müstehcenlik, yazı grafiği ve saygısızlık yine eler
+            if k and not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "saygisiz")):
+                kisi_secilen = (c, k)
+                break
+        if kisi_secilen:
+            c, k = kisi_secilen
+            o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"], o["gorsel_kaynak"] = c["url"], c["atif"], c.get("sayfa"), None
+            simdi_kullan.add(c["url"])
+            kf_son[c["url"]] = bugun + "|" + o["id"] if kf_son.get(c["url"], "").split("|")[-1] != o["id"] else kf_son[c["url"]]
+            try:
+                o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 30))))}%'
+            except (TypeError, ValueError):
+                o["odak"] = "50% 30%"
+            continue
         anah = "commons2:" + o["id"]
         if anah not in onb:
             sorg = []
@@ -200,10 +240,11 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
             except (TypeError, ValueError):
                 o["odak"] = "50% 35%"
     onb["_kullanilan"] = kullan
+    onb["_kisi_son"] = kf_son
     if len(onb) > 4000:
-        k_ = onb.pop("_kullanilan", {})
+        k_, s_ = onb.pop("_kullanilan", {}), onb.pop("_kisi_son", {})
         onb = dict(list(onb.items())[-3000:])
-        onb["_kullanilan"] = k_
+        onb["_kullanilan"], onb["_kisi_son"] = k_, s_
     with open(yol_o, "w", encoding="utf-8") as f:
         json.dump(onb, f, ensure_ascii=False, separators=(",", ":"))
     with open(yol_g, "w", encoding="utf-8") as f:
