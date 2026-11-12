@@ -430,7 +430,7 @@
       if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Israeli and Western outlets did not report it" : "İsrail ve Batı basını yazmadı"));
       ic.appendChild(sat);
       let b;
-      if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = o.sayfa; }
+      if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = String(o.sayfa || "").replace(/^data\/h\//, "h/"); }
       else { b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id); }
       ic.appendChild(b);
       sl.appendChild(ic);

@@ -49,8 +49,8 @@ def adaylar(kok, simdi):
     hab = {h["id"]: h for h in _oku(os.path.join(kok, "data", "haberler.json"), {}).get("haberler", [])}
     for o in _oku(os.path.join(kok, "data", "gundem.json"), {}).get("olaylar", []):
         a += [hab[i].get("url") for i in o.get("haberler", []) if i in hab and hab[i].get("url")]
-        if (o.get("sayfa") or "").startswith("data/h/"):
-            a.append(SITE + o["sayfa"])
+        if (o.get("sayfa") or "").startswith(("data/h/", "h/")):
+            a.append(SITE + o["sayfa"].replace("data/h/", "h/", 1))
     bugun = simdi.date().isoformat()
     kendi = [(SITE + k, bugun) for k in KENDI]
     return [u for u in a if u and u.startswith("http") and not any(x in u for x in ATLA)], kendi
