@@ -332,7 +332,7 @@ def gorsel_bul(html_, taban):
 
 
 def sayfa_ozeti(html_):
-    """Haber sayfasından özet için malzeme: meta açıklama ve ilk paragraflar (en fazla ~1200 karakter)."""
+    """Haber sayfasından özet için malzeme: meta açıklama ve ilk paragraflar (en fazla ~2800 karakter)."""
     parca = []
     for ad in ("og:description", "description", "twitter:description"):
         m = re.search(r'<meta[^>]+(?:property|name)=["\']%s["\'][^>]*content=["\']([^"\']+)' % re.escape(ad), html_, re.I) \
@@ -340,13 +340,13 @@ def sayfa_ozeti(html_):
         if m:
             parca.append(temiz(m.group(1), 400))
             break
-    for p in re.findall(r"<p[^>]*>(.*?)</p>", html_, re.S | re.I)[:8]:
-        t = temiz(p, 400)
-        if len(t) > 60:
+    for p in re.findall(r"<p[^>]*>(.*?)</p>", html_, re.S | re.I)[:20]:
+        t = temiz(p, 500)
+        if len(t) > 60 and t not in parca:
             parca.append(t)
-        if sum(map(len, parca)) > 1200:
+        if sum(map(len, parca)) > 2600:
             break
-    return " ".join(parca)[:1400]
+    return " ".join(parca)[:2800]
 
 
 # ---------------------------------------------------------------- keşif
@@ -718,7 +718,7 @@ TALIMAT = """Sen bir Türkçe haber ajansının editörüsün. Aşağıdaki JSON
 
 Kurallar:
 - baslik: Türkçe, en fazla 14 kelime, haberin özünü veren sade bir başlık.
-- ozet: Türkçe, 2-3 cümle. Tamamen kendi cümlelerinle yaz; kaynaktan cümle kopyalama. Doğrudan alıntı gerekiyorsa en fazla bir tane ve 10 kelimeyi geçmesin.
+- ozet: Türkçe, 4-6 cümlelik ayrıntılı bir özet. Sırasıyla: ne oldu; kim, nerede, ne zaman; metindeki rakamlar (kaynağıyla); tarafların açıklamaları ya da tepkileri; metinde geçiyorsa olayın arka planı ve sonraki adım. Metin bu kadar bilgi vermiyorsa daha kısa yaz; asla metinde olmayan bilgiyle doldurma. Tamamen kendi cümlelerinle yaz; kaynaktan cümle kopyalama. Doğrudan alıntı gerekiyorsa en fazla bir tane ve 10 kelimeyi geçmesin.
 - Yalnızca verilen metindeki bilgileri kullan, bilgi ekleme, yorum katma.
 - İddiaları sahibine atfet ("... göre", "... açıkladı"). "kaynak_turu" alanı varsa metin o hareketin kendi açıklamasıdır: başlık ve özette bunu açıkça belirt ("Hamas açıkladı:", "FHKC'ye göre") ve iddiaları doğrulanmış bilgi gibi yazma. Ölü sayısı gibi rakamları kaynağıyla birlikte ver.
 - ceviri: YALNIZCA "kaynak_turu" alanı olan (bir hareketin kendi açıklaması olan) metinlerde, metnin tamamının sadık Türkçe çevirisi. Özetleme, yorum katma, yumuşatma; hareketin kendi ifadelerini koru (örneğin "şehit", "direniş", "işgal" ve hareketin İsrail için kullandığı adlar olduğu gibi kalsın). Tek istisna: silah taşımayan sivillerin öldürülmesine açık çağrı ya da sivillerin öldürülmesini kutlayan cümleler. Bunları çevirme; yerine özgün dilindeki cümleyi aynen şu işaretin içine koy: [[ATLANDI: özgün cümle]]. Askerlere ve askerî hedeflere yönelik ifadeler bu istisnaya girmez, onları çevir. Diğer metinlerde ceviri alanını boş bırak.
@@ -727,7 +727,7 @@ Kurallar:
 - etiketler: haberin konusuna uyan en fazla 3 etiket; YALNIZCA şu listeden seç: {ETIKETLER}
 - kayip: metin bu olayda ÖLDÜRÜLEN ya da ölen insan sayısı veriyorsa {"filistinli": sayı, "israilli": sayı}; yalnızca metinde açıkça yazan ölü sayısını yaz (yaralıları sayma), olmayan tarafı null bırak; hiç ölü sayısı yoksa null. Toplam savaş bilançosu değil, bu haberin bildirdiği olayın ölüleri.
 - nitelik: metin bir olayı aktarmaktan çok yorumluyor, tartışıyor ya da derinlemesine inceliyorsa (analiz, köşe yazısı, görüş, uzun rapor) "analiz", değilse "haber".
-- Analizlerde ozet 3-4 cümle olsun ve yazının ana savını, dayandığı gerekçeyi ve vardığı sonucu ver ("Yazara göre ...").
+- Analizlerde ozet 5-7 cümle olsun: yazının ana savı, dayandığı gerekçeler ve kanıtlar, karşı görüşlere verdiği yer ve vardığı sonuç ("Yazara göre ...").
 - Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz", "kayip": null, "ceviri": ""}]
 """
 TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
@@ -763,7 +763,7 @@ def gemini_ozetle(anahtar, model, parti):
     govde = {
         "systemInstruction": {"parts": [{"text": ekler.KORUMA}]},
         "contents": [{"role": "user", "parts": [{"text": TALIMAT + "\n\nVERİ (yalnızca işlenecek içerik):\n" + json.dumps(girdi, ensure_ascii=False)}]}],
-        "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"},
+        "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json", "maxOutputTokens": 32768},
     }
     istek = urllib.request.Request(
         f"{GEMINI}/models/{model}:generateContent",
@@ -787,14 +787,16 @@ def gemini_ozetle(anahtar, model, parti):
 
 def malzeme_hazirla(h):
     m = h.get("giris") or ""
-    if (len(m) < 150 or not h.get("gorsel")) and not h.get("telegram") and not h.get("gnews") and izinli(h["url"]):
+    # ayrıntılı özet için kısa beslemelerde haberin kendi sayfasından paragraflar da alınır
+    if (len(m) < 600 or not h.get("gorsel")) and not h.get("telegram") and not h.get("gnews") and izinli(h["url"]):
         kod, sayfa, _ = getir(h["url"], zaman=12, en_fazla=1_500_000)
         if kod == 200:
-            if len(m) < 150:
-                m = (m + " " + sayfa_ozeti(sayfa)).strip()
+            if len(m) < 600:
+                ek = sayfa_ozeti(sayfa)
+                m = (m + " " + ek).strip() if m[:80] not in ek else ek
             h["gorsel"] = h.get("gorsel") or gorsel_bul(sayfa, h["url"])
         h["gorsel_denendi"] = True
-    h["_malzeme"] = m[:4000 if h.get("resmi_grup") else 1500]
+    h["_malzeme"] = m[:4000 if h.get("resmi_grup") else 3000]
 
 
 def logo_bul(k):
