@@ -13,6 +13,7 @@ Kullanım: topla.py her çalıştırmada denetle(kok, anahtar, model, log) çağ
 """
 import base64
 import json
+import time
 import os
 import urllib.request
 
@@ -39,9 +40,10 @@ SORGU = ("Bir haber için Wikimedia Commons'ta açık lisanslı fotoğraf arayac
          "KİŞİ ADI YAZMA: yalnızca yerler, binalar, sokaklar, manzaralar. Yalnızca JSON: {{\"sorgular\": [\"...\"]}}")
 
 
-def _indir(url, sinir=3_000_000):
+def _indir(url, sinir=3_000_000, sure=20):
+    url = _up.quote(url, safe=":/?&=%#+,;@~!$'()*[]")      # Arapça harfli dosya adları
     istek = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "image/*"})
-    with urllib.request.urlopen(istek, timeout=20) as r:
+    with urllib.request.urlopen(istek, timeout=sure) as r:
         tur = (r.headers.get("Content-Type") or "image/jpeg").split(";")[0]
         veri = r.read(sinir + 1)
     if len(veri) > sinir or not tur.startswith("image/") or tur == "image/svg+xml":
@@ -57,7 +59,14 @@ def _sor(anahtar, model, veri, tur, baslik=""):
     with urllib.request.urlopen(istek, timeout=60) as r:
         v = json.loads(r.read())
     metin = v["candidates"][0]["content"]["parts"][0]["text"]
-    return json.loads(metin)
+    return _sozluk(json.loads(metin))
+
+
+def _sozluk(x):
+    """Gemini bazen tek nesne yerine [nesne] döndürüyor"""
+    if isinstance(x, list):
+        x = next((y for y in x if isinstance(y, dict)), {})
+    return x if isinstance(x, dict) else {}
 
 
 def _sorgular(anahtar, model, o):
@@ -156,6 +165,10 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
         onb = json.load(open(yol_o, encoding="utf-8"))
     except (OSError, ValueError):
         onb = {}
+    for _k in [k for k in onb if "|" in k and not isinstance(onb[k], dict)]:
+        onb[_k] = _sozluk(onb[_k]) or None
+        if onb[_k] is None:
+            del onb[_k]
     yeni = 0
     import datetime as _dt
     bugun = _dt.date.today().isoformat()
@@ -171,95 +184,99 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
         KF = []
     kf_son = onb.get("_kisi_son") or {}
     for o in g.get("olaylar", []):
-        bas = ((o.get("baslik") or "") + " " + (o.get("baslik_en") or "")).lower()
-        kisi = [f for k in KF if any(a.lower() in bas for a in k["adlar"]) for f in k["fotolar"]]
-        kisi.sort(key=lambda f: kf_son.get(f["url"], ""))      # en uzun süredir kullanılmayan önce
-        kisi_secilen = None
-        for c in kisi:
-            if c["url"] in simdi_kullan:
-                continue
-            kk = c["url"] + "|" + o["id"]
-            k = onb.get(kk)
-            if k is None and anahtar and model and yeni < EN_COK:
+      try:
+            bas = ((o.get("baslik") or "") + " " + (o.get("baslik_en") or "")).lower()
+            kisi = [f for k in KF if any(a.lower() in bas for a in k["adlar"]) for f in k["fotolar"]]
+            kisi.sort(key=lambda f: kf_son.get(f["url"], ""))      # en uzun süredir kullanılmayan önce
+            kisi_secilen = None
+            for c in kisi:
+                if c["url"] in simdi_kullan:
+                    continue
+                kk = c["url"] + "|" + o["id"]
+                k = onb.get(kk)
+                if k is None and anahtar and model and yeni < EN_COK:
+                    try:
+                        veri, tur = _indir(c["url"])
+                        if veri:
+                            if sayac:
+                                sayac()
+                            k = _sozluk(_sor(anahtar, model, veri, tur, o.get("baslik", "")))
+                            yeni += 1
+                            onb[kk] = k
+                    except Exception as e:
+                        log(f"Kişi fotoğrafı denetimi: {e}")
+                # yönetici seçtiği için portre ve ilgililik aranmaz; şiddet, müstehcenlik, yazı grafiği ve saygısızlık yine eler
+                if k and not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "saygisiz")):
+                    kisi_secilen = (c, k)
+                    break
+            if kisi_secilen:
+                c, k = kisi_secilen
+                o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"], o["gorsel_kaynak"] = c["url"], c["atif"], c.get("sayfa"), None
+                simdi_kullan.add(c["url"])
+                kf_son[c["url"]] = bugun + "|" + o["id"] if kf_son.get(c["url"], "").split("|")[-1] != o["id"] else kf_son[c["url"]]
                 try:
-                    veri, tur = _indir(c["url"])
-                    if veri:
+                    o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 30))))}%'
+                except (TypeError, ValueError):
+                    o["odak"] = "50% 30%"
+                continue
+            anah = "commons3:" + o["id"]
+            if anah not in onb:
+                sorg = []
+                if anahtar and model:
+                    try:
                         if sayac:
                             sayac()
-                        k = _sor(anahtar, model, veri, tur, o.get("baslik", ""))
-                        yeni += 1
+                        sorg = _sorgular(anahtar, model, o)
+                    except Exception as e:
+                        log(f"Görsel arama ifadeleri: {e}")
+                try:
+                    onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"), sorg)[:20]
+                except Exception as e:
+                    log(f"Commons araması: {e}")
+                    onb[anah] = []
+            adaylar = onb.get(anah) or []
+            secilen = None
+            for c in adaylar:
+                url = c["url"]
+                u = kullan.get(url)
+                if url in simdi_kullan or (u and u[0] != o["id"]):
+                    continue
+                kk = url + "|" + o["id"]          # uygunluk habere göre değişir
+                k = onb.get(kk)
+                if k is None and anahtar and model and yeni < EN_COK:
+                    try:
+                        veri, tur = _indir(url)
+                        if veri:
+                            if sayac:
+                                sayac()
+                            k = _sozluk(_sor(anahtar, model, veri, tur, o.get("baslik", "")))
+                            yeni += 1
+                        else:
+                            k = {"yazi_grafik": True, "indirilemedi": True}
+                    except Exception as e:
+                        log(f"Görsel denetimi: {url[:80]}: {e}")
+                        k = None
+                    if k is not None:
                         onb[kk] = k
-                except Exception as e:
-                    log(f"Kişi fotoğrafı denetimi: {e}")
-            # yönetici seçtiği için portre ve ilgililik aranmaz; şiddet, müstehcenlik, yazı grafiği ve saygısızlık yine eler
-            if k and not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "saygisiz")):
-                kisi_secilen = (c, k)
-                break
-        if kisi_secilen:
-            c, k = kisi_secilen
-            o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"], o["gorsel_kaynak"] = c["url"], c["atif"], c.get("sayfa"), None
-            simdi_kullan.add(c["url"])
-            kf_son[c["url"]] = bugun + "|" + o["id"] if kf_son.get(c["url"], "").split("|")[-1] != o["id"] else kf_son[c["url"]]
-            try:
-                o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 30))))}%'
-            except (TypeError, ValueError):
-                o["odak"] = "50% 30%"
-            continue
-        anah = "commons3:" + o["id"]
-        if anah not in onb:
-            sorg = []
-            if anahtar and model:
+                if k is None:
+                    continue                    # denetlenmeden kullanılmaz
+                temiz = not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "portre", "saygisiz"))
+                if temiz and k.get("ilgili") is True and not k.get("insan"):
+                    secilen = (c, k)
+                    break
+            o["gorsel"], o["gorsel_kaynak"], o["gorsel_atif"], o["gorsel_sayfa"] = None, None, None, None
+            if secilen:
+                c, k = secilen
+                o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"] = c["url"], c["atif"], c.get("sayfa")
+                simdi_kullan.add(c["url"])
+                kullan[c["url"]] = [o["id"], bugun]
                 try:
-                    if sayac:
-                        sayac()
-                    sorg = _sorgular(anahtar, model, o)
-                except Exception as e:
-                    log(f"Görsel arama ifadeleri: {e}")
-            try:
-                onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"), sorg)[:20]
-            except Exception as e:
-                log(f"Commons araması: {e}")
-                onb[anah] = []
-        adaylar = onb.get(anah) or []
-        secilen = None
-        for c in adaylar:
-            url = c["url"]
-            u = kullan.get(url)
-            if url in simdi_kullan or (u and u[0] != o["id"]):
-                continue
-            kk = url + "|" + o["id"]          # uygunluk habere göre değişir
-            k = onb.get(kk)
-            if k is None and anahtar and model and yeni < EN_COK:
-                try:
-                    veri, tur = _indir(url)
-                    if veri:
-                        if sayac:
-                            sayac()
-                        k = _sor(anahtar, model, veri, tur, o.get("baslik", ""))
-                        yeni += 1
-                    else:
-                        k = {"yazi_grafik": True, "indirilemedi": True}
-                except Exception as e:
-                    log(f"Görsel denetimi: {url[:80]}: {e}")
-                    k = None
-                if k is not None:
-                    onb[kk] = k
-            if k is None:
-                continue                    # denetlenmeden kullanılmaz
-            temiz = not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "portre", "saygisiz"))
-            if temiz and k.get("ilgili") is True and not k.get("insan"):
-                secilen = (c, k)
-                break
-        o["gorsel"], o["gorsel_kaynak"], o["gorsel_atif"], o["gorsel_sayfa"] = None, None, None, None
-        if secilen:
-            c, k = secilen
-            o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"] = c["url"], c["atif"], c.get("sayfa")
-            simdi_kullan.add(c["url"])
-            kullan[c["url"]] = [o["id"], bugun]
-            try:
-                o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 35))))}%'
-            except (TypeError, ValueError):
-                o["odak"] = "50% 35%"
+                    o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 35))))}%'
+                except (TypeError, ValueError):
+                    o["odak"] = "50% 35%"
+      except Exception as e:     # bir haberdeki hata ötekileri durdurmasın
+        log(f"Görsel denetimi ({o.get('id')}): {e}")
+        o["gorsel"] = None
     onb["_kullanilan"] = kullan
     onb["_kisi_son"] = kf_son
     if len(onb) > 4000:
@@ -277,7 +294,7 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
 AKIS_TALIMAT = ("Bu bir haber sitesinin akışında küçük önizleme olarak gösterilecek görsel. Yalnızca JSON döndür: "
                 "{\"siddet\": true|false, \"mustehcen\": true|false}. siddet: ölü beden, kan, ağır yaralı, parçalanmış beden ya da "
                 "işkence görüntüsü var mı? mustehcen: çıplaklık, cinsel ya da müstehcen öğe var mı? Şüphedeysen true.")
-AKIS_EN_COK = 60
+AKIS_EN_COK = 40
 
 
 def akis_denetle(kok, anahtar, model, log=print, sayac=None):
@@ -294,15 +311,17 @@ def akis_denetle(kok, anahtar, model, log=print, sayac=None):
     except (OSError, ValueError):
         onb = {}
     H = v.get("haberler", [])
-    yeni = 0
+    yeni, hata_n, alan_hata, bitis = 0, 0, {}, time.time() + 150     # en çok iki buçuk dakika; yavaş siteler atlanır
     for h in sorted(H, key=lambda h: h.get("tarih") or "", reverse=True):
         u = h.get("gorsel")
         if not u:
             continue
         k = onb.get(u)
         if k is None and anahtar and model and yeni < AKIS_EN_COK and (h.get("ilgili") or h.get("ozet_tr")):
+            if time.time() > bitis or alan_hata.get(_up.urlsplit(u).netloc, 0) >= 2:
+                continue
             try:
-                veri, tur = _indir(u)
+                veri, tur = _indir(u, sure=8)
                 if veri:
                     if sayac:
                         sayac()
@@ -310,15 +329,16 @@ def akis_denetle(kok, anahtar, model, log=print, sayac=None):
                              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
                     istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),
                                                    headers={"Content-Type": "application/json", "x-goog-api-key": anahtar, "User-Agent": UA})
-                    with urllib.request.urlopen(istek, timeout=60) as r:
-                        x = json.loads(json.loads(r.read())["candidates"][0]["content"]["parts"][0]["text"])
+                    with urllib.request.urlopen(istek, timeout=40) as r:
+                        x = _sozluk(json.loads(json.loads(r.read())["candidates"][0]["content"]["parts"][0]["text"]))
                     k = {"ok": not (x.get("siddet") or x.get("mustehcen")), "s": bool(x.get("siddet")), "m": bool(x.get("mustehcen"))}
                     yeni += 1
                 else:
                     k = {"ok": False, "indirilemedi": True}
                 onb[u] = k
             except Exception as e:
-                log(f"Akış görsel denetimi: {u[:70]}: {e}")
+                alan_hata[_up.urlsplit(u).netloc] = alan_hata.get(_up.urlsplit(u).netloc, 0) + 1
+                hata_n += 1
         h["gorsel_ok"] = bool(k and k.get("ok"))
     if len(onb) > 20000:
         onb = dict(list(onb.items())[-15000:])
@@ -327,4 +347,4 @@ def akis_denetle(kok, anahtar, model, log=print, sayac=None):
     with open(yol_h, "w", encoding="utf-8") as f:
         json.dump(v, f, ensure_ascii=False, separators=(",", ":"))
     if yeni:
-        log(f"Akış görsel denetimi: {yeni} görsel, {sum(1 for x in onb.values() if not x.get('ok'))} elenmiş (toplam)")
+        log(f"Akış görsel denetimi: {yeni} görsel, {hata_n} indirilemedi, {sum(1 for x in onb.values() if not x.get('ok'))} elenmiş (toplam)")
