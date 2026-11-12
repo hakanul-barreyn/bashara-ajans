@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="site/stil.css?v=202611111940">
-<link rel="stylesheet" href="site/rapor.css?v=202611112330">
+<link rel="stylesheet" href="site/rapor.css?v=202611120420">
 <script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -129,11 +129,17 @@
   <article class="rp-metin" id="yayinlar">
     <p data-dil="tr" class="rp-soru">Yayın yayın</p>
     <p data-dil="en" class="rp-soru">Outlet by outlet</p>
-    <h2 data-dil="tr">Hangi yayın faili yazıyor, hangisi işgal diyor?</h2>
-    <h2 data-dil="en">Which outlet names the killer, which says occupation?</h2>
-    <p data-dil="tr">Her nokta bir yayın. Sağa gittikçe “işgal” kelimesini daha sık kullanıyor; yukarı çıktıkça Filistinlilerin ölümünde faili (İsrail’i) daha sık yazıyor. Noktanın büyüklüğü ölçülen başlık sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
-    <p data-dil="en">Each dot is an outlet. Further right, it uses “occupation” more often; higher up, it names the killer (Israel) more often when Palestinians die. Dot size shows the number of headlines measured; hover for the outlet’s name.</p>
-    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption data-dil="tr">Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı ve en az 30 ölüm başlığı olan yayınlar.</figcaption><figcaption data-dil="en">Only outlets with at least 150 headlines on Palestine, Israel or Gaza and at least 30 headlines on deaths.</figcaption></figure>
+    <h2 data-dil="tr">Hangi yayın öldüreni saklıyor?</h2>
+    <h2 data-dil="en">Which outlets hide who did the killing?</h2>
+    <p class="rp-vurgu" id="dagilim-ozet"></p>
+    <p data-dil="tr">Her satır bir basın grubu, her nokta bir yayın. Nokta sağa gittikçe o yayın, Filistinlilerin öldüğünü yazan başlıklarında öldüreni daha sık yazmıyor: “Gazze’de 30 kişi öldü” öldüreni saklar, “İsrail Gazze’de 30 kişiyi öldürdü” saklamaz. Kalın dikey çizgi grubun ortancası: grubun yayınlarının yarısı bu çizginin solunda, yarısı sağında. Noktanın büyüklüğü ölçülen ölüm başlığı sayısını gösteriyor; üzerine gelince yayının adı çıkar.</p>
+    <p data-dil="en">Each row is a press group, each dot an outlet. The further right a dot, the more often that outlet leaves out who did the killing in its headlines on Palestinian deaths: “30 people died in Gaza” hides the killer, “Israel killed 30 people in Gaza” does not. The thick vertical line is the group’s median: half its outlets are to the left, half to the right. Dot size shows the number of death headlines measured; hover for the outlet’s name.</p>
+    <figure class="rp-sekil"><div id="g-dagilim"></div><figcaption data-dil="tr">Yalnızca Filistin, İsrail ya da Gazze bağlamında en az 30 ölüm başlığı olan yayınlar. “Şehit” ya da “şehadet” diyen başlıklar hesaba katılmadı. Kaynak: yayınların özgün başlıkları, 7 Ekim 2023’ten bugüne.</figcaption><figcaption data-dil="en">Only outlets with at least 30 death headlines about Palestine, Israel or Gaza. Headlines saying “martyred” are not counted. Source: the outlets’ original headlines, 7 October 2023 to today.</figcaption></figure>
+    <h3 data-dil="tr" class="rp-ara">Kim “işgal” diyor?</h3>
+    <h3 data-dil="en" class="rp-ara">Who says “occupation”?</h3>
+    <p data-dil="tr">Aynı yayınlarda “işgal” kelimesinin bin başlıkta kaç kez geçtiği. Arapça yayınlarda “işgal” (الاحتلال) İsrail ordusunun olağan adı olduğu için bölge basını çok yukarıda; Batı ana akımında kelime neredeyse hiç geçmiyor.</p>
+    <p data-dil="en">How many times per thousand headlines the word “occupation” appears in the same outlets. In Arabic outlets “the occupation” (الاحتلال) is the ordinary name for the Israeli army, so the regional press is far ahead; in the Western mainstream the word hardly appears.</p>
+    <figure class="rp-sekil"><div id="g-isgal"></div><figcaption data-dil="tr">Filistin, İsrail ya da Gazze bağlamında en az 150 başlığı olan yayınlar; yatay eksen karekök ölçeğinde.</figcaption><figcaption data-dil="en">Outlets with at least 150 headlines about Palestine, Israel or Gaza; horizontal axis on a square-root scale.</figcaption></figure>
     <div id="g-yayinlar" class="rp-tablo"></div>
   </article>
 
@@ -155,7 +161,8 @@
   <p data-dil="en" class="rp-geri"><a href="raporlar.html">← Back to Reports</a> · <a href="olaylar.html">Habituation →</a> · <a href="liderler.html">What did leaders say? →</a></p>
 </main>
 <script src="site/rapor-ortak.js?v=202611111700"></script>
-<script src="site/sayfa-rapor.js?v=202611111700"></script>
+<script src="site/grafik-paylas.js?v=1"></script>
+<script src="site/sayfa-rapor.js?v=202611120420"></script>
 <script src="site/sonuc.js?v=202611112330"></script>
 </body>
 </html>

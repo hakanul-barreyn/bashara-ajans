@@ -225,28 +225,61 @@
   }
 
   // ---- 6) yayın dağılımı: x = işgal (karekök), y = Filistinlilerin ölümünde faili yazma
-  function dagilim(v) {
-    var k = $("g-dagilim"); efsane(GR, k);
-    var Y = v.yayinlar.filter(function (o) { return o.olum_haberi >= 30; }), W = 720, H = 420, P = { l: 48, r: 16, t: 22, b: 40 };
-    var ex = Math.sqrt(Math.max.apply(0, Y.map(function (o) { return o.binde.isgal || 0; })) || 1);
-    var fy = function (o) { return o.fail_yazilan.filistinli || 0; };
-    var x = function (d) { return P.l + (W - P.l - P.r) * Math.sqrt(d || 0) / ex; }, y = function (p) { return H - P.b - (H - P.t - P.b) * Math.min(p, 70) / 70; };
-    var en = Math.max.apply(0, Y.map(function (o) { return o.baglamli; }));
-    var s = sv("svg", { viewBox: "0 0 " + W + " " + H, "class": "rp-svg", role: "img", "aria-label": T("Yayınlar: işgal kelimesi ve faili yazma", "Outlets: the word occupation and naming the killer") });
-    [0, 10, 50, 100, 200].forEach(function (d) { if (Math.sqrt(d) > ex) return; s.appendChild(sv("line", { x1: x(d), x2: x(d), y1: P.t, y2: H - P.b, "class": "rp-izgara" })); var t = sv("text", { x: x(d), y: H - P.b + 16, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = d; s.appendChild(t); });
-    [0, 20, 40, 60].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = yz(p, 0); s.appendChild(t); });
-    var tx = sv("text", { x: W - P.r, y: H - 6, "text-anchor": "end", "class": "rp-eksen rp-eksen-ad" }); tx.textContent = T("“işgal” · binde →", "“occupation” · per thousand →"); s.appendChild(tx);
-    var ty = sv("text", { x: P.l, y: P.t - 8, "class": "rp-eksen rp-eksen-ad" }); ty.textContent = T("↑ Filistinlilerin ölümünde fail yazılan pay", "↑ share naming the killer when Palestinians die"); s.appendChild(ty);
-    Y.slice().sort(function (a, c) { return c.baglamli - a.baglamli; }).forEach(function (o) {
-      s.appendChild(baslik(sv("circle", { cx: x(o.binde.isgal), cy: y(fy(o)), r: 3 + 11 * Math.sqrt(o.baglamli / en), fill: R[o.grup], "fill-opacity": 0.55, stroke: R[o.grup], "stroke-width": 1 }),
-        o.ad + " (" + AD[o.grup] + ")" + T(" · işgal binde ", " · occupation per thousand ") + sayi(o.binde.isgal) + T(" · ölümlerde fail yazılan ", " · killer named in deaths ") + yz(fy(o), 0) + " · " + sayi(o.olum_haberi, 0) + T(" ölüm başlığı", " death headlines")));
-    });
-    var bati = Y.filter(function (o) { return o.grup !== "bolge" && o.olum_haberi >= 80; }).sort(function (a, c) { return fy(c) - fy(a); });
-    bati.slice(0, 3).concat(bati.slice(-3)).forEach(function (o) {
-      var px = x(o.binde.isgal), sag = px > W * 0.7;
-      var t = sv("text", { x: px + (sag ? -10 : 10), y: y(fy(o)) - 8, "text-anchor": sag ? "end" : "start", "class": "rp-nokta-ad" }); t.textContent = o.ad; s.appendChild(t);
+  // Yayın yayın: iki şerit grafik. Her satır bir grup, her nokta bir yayın; dikey çizgi grubun ortancası.
+  // 1) faili saklama: Filistinlilerin ölümünü anlatan başlıklardan öldürenin yazılmadığı pay ("öldü", "hayatını kaybetti");
+  //    "şehit / şehadet" diyen başlıklar ayrı bir anlatım olduğu için paydaya katılmaz. 2) "işgal" kelimesi bin başlıkta.
+  function gizli(f) { var t = (f.aktif || 0) + (f.failli || 0) + (f.failsiz || 0) + (f.oldu || 0); return t >= 20 ? 100 * ((f.failsiz || 0) + (f.oldu || 0)) / t : null; }
+  function ortanca(xs) { if (!xs.length) return null; var a = xs.slice().sort(function (p, q) { return p - q; }), m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; }
+  function serit(k, Y, deger, olcek, eksen, eksenAd, bicim) {
+    var gr = GR.filter(function (g) { return Y.some(function (o) { return o.grup === g && deger(o) != null; }); });
+    var W = 760, satir = 112, P = { l: 150, r: 24, t: 30, b: 34 }, H = P.t + P.b + satir * gr.length;
+    var s = sv("svg", { viewBox: "0 0 " + W + " " + H, "class": "rp-svg", role: "img", "aria-label": eksenAd });
+    var x = function (d) { return P.l + (W - P.l - P.r) * olcek(d); };
+    eksen.forEach(function (d) { s.appendChild(sv("line", { x1: x(d), x2: x(d), y1: P.t - 6, y2: H - P.b, "class": "rp-izgara" })); var t = sv("text", { x: x(d), y: H - P.b + 18, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = bicim(d); s.appendChild(t); });
+    var ty = sv("text", { x: W - P.r, y: H - 4, "text-anchor": "end", "class": "rp-eksen rp-eksen-ad" }); ty.textContent = eksenAd + " →"; s.appendChild(ty);
+    var en = Math.max.apply(0, Y.map(function (o) { return o.olum_haberi; })) || 1;
+    gr.forEach(function (g, i) {
+      var yo = P.t + satir * i + satir / 2, xs = Y.filter(function (o) { return o.grup === g && deger(o) != null; }).sort(function (p, q) { return deger(p) - deger(q); });
+      if (i) s.appendChild(sv("line", { x1: 0, x2: W, y1: P.t + satir * i, y2: P.t + satir * i, stroke: "#ebe9e3" }));
+      var ad = sv("text", { x: 0, y: yo - 4, "class": "rp-serit-ad" }); ad.textContent = AD[g]; s.appendChild(ad);
+      var n = sv("text", { x: 0, y: yo + 13, "class": "rp-eksen" }); n.textContent = xs.length + T(" yayın", " outlets"); s.appendChild(n);
+      var m = ortanca(xs.map(deger));
+      s.appendChild(sv("line", { x1: x(m), x2: x(m), y1: yo - 26, y2: yo + 26, stroke: R[g], "stroke-width": 3 }));
+      var mt = sv("text", { x: x(m), y: yo - 30, "text-anchor": "middle", "class": "rp-serit-orta", fill: R[g] }); mt.textContent = T("ortanca ", "median ") + bicim(m); s.appendChild(mt);
+      xs.forEach(function (o, j) {
+        var r = 3.5 + 7 * Math.sqrt(o.olum_haberi / en), cy = yo + ((j % 3) - 1) * 7;
+        s.appendChild(baslik(sv("circle", { cx: x(deger(o)), cy: cy, r: r, fill: R[g], "fill-opacity": 0.5, stroke: R[g], "stroke-width": 1 }), o.ad + " · " + bicim(deger(o)) + " · " + sayi(o.olum_haberi, 0) + T(" ölüm başlığı", " death headlines")));
+      });
+      // uçlardaki yayınların adları: en düşük ve en yüksek; yazılar çakışırsa ikincisi bir alt satıra iner
+      if (xs.length >= 2) {
+        var lo = xs[0], hi = xs[xs.length - 1], gen = function (o) { return (o.ad.length + 5) * 6.6; };
+        var lx = Math.max(x(deger(lo)) - 6, P.l), hx = Math.min(x(deger(hi)) + 6, W - 2);
+        var ust = lx + gen(lo) + 12 > hx - gen(hi);
+        [[lo, lx, "start", yo + 36], [hi, hx, "end", ust ? yo + 50 : yo + 36]].forEach(function (u) {
+          var t = sv("text", { x: u[1], y: u[3], "text-anchor": u[2], "class": "rp-nokta-ad" }); t.textContent = u[0].ad + " " + bicim(deger(u[0])); s.appendChild(t);
+        });
+      }
     });
     k.appendChild(s);
+    return gr.map(function (g) { return [g, ortanca(Y.filter(function (o) { return o.grup === g && deger(o) != null; }).map(deger))]; });
+  }
+  function dagilim(v) {
+    var k = $("g-dagilim");
+    var Y = v.yayinlar.filter(function (o) { return o.olum_haberi >= 30 && o.faillik; });
+    var ort = serit(k, Y, function (o) { return gizli(o.faillik); }, function (d) { return d / 100; }, [0, 25, 50, 75, 100], T("Filistinlilerin ölümünü anlatırken faili yazmayan başlıklar", "Headlines on Palestinian deaths that do not name the killer"), function (d) { return yz(d, 0); });
+    var O = {}; ort.forEach(function (x) { O[x[0]] = x[1]; });
+    var m = $("dagilim-ozet");
+    if (m && O.bati_ana != null && O.bolge != null) m.textContent = T("Batı ana akım yayınlarının yarısı, Filistinlilerin öldüğünü yazan başlıklarının en az " + inde(O.bati_ana) + " öldüreni yazmıyor (“öldü”, “hayatını kaybetti”). Bölge basınında ortanca " + yz(O.bolge, 0) + ". “Şehit” diyen başlıklar bu hesaba katılmadı: faili yazmasalar da ölümü bir saldırının sonucu olarak anlatıyorlar.",
+      "Half of Western mainstream outlets leave out who did the killing in at least " + yz(O.bati_ana, 0) + " of their headlines on Palestinian deaths (“died”, “lost their lives”). The regional press median is " + yz(O.bolge, 0) + ". Headlines saying “martyred” are left out of this count: even without naming the killer, they present the death as the result of an attack.");
+    var k2 = $("g-isgal"); if (!k2) return;
+    var ex = Math.sqrt(Math.max.apply(0, Y.map(function (o) { return o.binde.isgal || 0; })) || 1);
+    serit(k2, v.yayinlar.filter(function (o) { return o.baglamli >= 150; }), function (o) { return o.binde.isgal || 0; }, function (d) { return Math.sqrt(d) / ex; }, [0, 10, 50, 100, 200, 300].filter(function (d) { return Math.sqrt(d) <= ex; }), T("“işgal” kelimesi, bin başlıkta", "“occupation”, per thousand headlines"), function (d) { return sayi(d, 0); });
+  }
+  function inde(n) {
+    var s = sayi(n, 0); if (EN) return s + "%";
+    var b = { 1: "inde", 2: "sinde", 3: "ünde", 4: "ünde", 5: "inde", 6: "sında", 7: "sinde", 8: "inde", 9: "unda" }, o = { 0: "ında", 1: "unda", 2: "sinde", 3: "unda", 4: "ında", 5: "sinde", 6: "ında", 7: "inde", 8: "inde", 9: "ında" };
+    var x = Math.round(n), e = x % 100 === 0 && x ? "ünde" : x % 10 ? b[x % 10] : o[(x / 10) % 10];
+    return "%" + s + "’" + e;
   }
   function yayinTablo(v) {
     var k = $("g-yayinlar");
