@@ -150,6 +150,7 @@
     const lj = el("div", "sk-lejant");
     const a = el("span"); const i1 = el("i", "nokta"); i1.style.background = "#1f2421"; a.append(i1, T("yazdı", "covered it")); lj.appendChild(a);
     const b = el("span"); const i2 = el("i", "sus"); b.append(i2, T("o günlerde yayındaydı, yazmadı", "was publishing, did not cover it")); lj.appendChild(b);
+    lj.appendChild(el("span", "sk-not", T("Her daire bir yayın; üzerine gelince ya da dokununca adı çıkar. Sağdaki sayı: yazan / o günlerde yayında olan.", "Each circle is one outlet; hover or tap for its name. The number on the right: covered / publishing at the time.")));
     k.appendChild(lj);
     olaylar.slice(0, enCok || 40).forEach((o) => {
       const r = el("div", "on-satir");
@@ -162,8 +163,14 @@
         const x = o.sessiz[g]; if (!x || !x[1]) return;
         const s = el("div", "on-grup"); s.appendChild(el("span", null, gad));
         const nk = el("div", "on-noktalar"); nk.style.color = renk;
-        for (let j = 0; j < x[1]; j++) { const d = el("i", j < x[1] - x[0] ? null : "sus"); if (j < x[1] - x[0]) d.style.background = renk; nk.appendChild(d); }
-        s.appendChild(nk); s.appendChild(el("span", "n", (x[1] - x[0]) + "/" + x[1]));
+        const ad = (o.kim && o.kim[g]) || [[], []];
+        for (let j = 0; j < x[1]; j++) {
+          const y = j < x[1] - x[0], d = el("i", y ? null : "sus"); if (y) d.style.background = renk;
+          const isim = y ? ad[0][j] : ad[1][j - (x[1] - x[0])];
+          if (isim) { d.title = isim + (y ? T(": yazdı", ": covered it") : T(": yazmadı", ": did not cover it")); d.tabIndex = 0; d.setAttribute("aria-label", d.title); d.onclick = (e) => { e.stopPropagation(); nk.dataset.ad = d.title; nk.classList.add("ad-goster"); }; }
+          nk.appendChild(d);
+        }
+        s.appendChild(nk); s.appendChild(el("span", "n", (x[1] - x[0]) + "/" + x[1] + " · %" + Math.round(100 * (x[1] - x[0]) / x[1])));
         s.title = gad + ": " + T(`o günlerde yayında olan ${x[1]} yayından ${x[1] - x[0]} tanesi yazdı, ${x[0]} tanesi tek başlık atmadı`, `${x[1] - x[0]} of the ${x[1]} outlets publishing at the time covered it; ${x[0]} ran no headline`);
         sag.appendChild(s);
       });

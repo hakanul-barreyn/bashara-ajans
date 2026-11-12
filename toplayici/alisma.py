@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 7
+ALISMA_SURUM = 8
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -148,16 +148,36 @@ def _izleme(olaylar, anahtar):
 AKTIF_EN_AZ = 15   # pencerede en az bu kadar başlık yayımlamış yayın "o günlerde yayındaydı" sayılır
 
 
+def _sessiz_kim(S, gk, tur, w, K):
+    """_sessiz ile aynı kural; yayınların adlarıyla: {grup: [[yazanlar], [susanlar]]} (Almanak'taki noktaların üzerinde ad)."""
+    kim = {g: [[], []] for g in GK}
+    yo = S["yo"][tur]
+    for kid, gunler in S["yn"].items():
+        g = gk.get(kid)
+        if not g:
+            continue
+        yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
+        if not yazdi and sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
+            continue
+        kim[g][0 if yazdi else 1].append((K.get(str(kid)) or {}).get("ad", str(kid)))
+    return {g: [sorted(a), sorted(b)] for g, (a, b) in kim.items() if a or b}
+
+
 def _sessiz(S, gk, tur, w):
     """Pencerede yayında olan yayınlardan kaçı bu türden tek başlık atmadı: {grup: [susan, yayında]}."""
     say = {g: [0, 0] for g in GK}
     yo = S["yo"][tur]
     for kid, gunler in S["yn"].items():
         g = gk.get(kid)
-        if not g or sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
+        if not g:
+            continue
+        yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
+        # 15 başlık şartı yalnızca "sustu" demek için: o günlerin kaydı elimizde olmayan yayın susmuş sayılmasın.
+        # Az haber atan bir yayın bu türden yazdıysa yazdı sayılır.
+        if not yazdi and sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
             continue
         say[g][1] += 1
-        if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
+        if not yazdi:
             say[g][0] += 1
     return say
 
@@ -448,7 +468,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
                             "izleme": round(tep["bati_ana"] / bolge_tum, 2) if tep.get("bati_ana") is not None and bolge_tum else None,
                             "olu": max(olu[i] for i in range(max(0, b - 1), min(N, e + 2))),
                             "lider": {lgk: _artis(lg[lgk], b, e, N)[0] for lgk in OT.LIDER_GRUP},
-                            "sessiz": _sessiz(S, gk, tur, w),
+                            "sessiz": _sessiz(S, gk, tur, w), "kim": _sessiz_kim(S, gk, tur, w, K),
                             "ornek": _ornekler(oz, D, K, gk, b, e, tur)})
         # referans: bölge basınında en büyük olayın en az %40'ı kadar yer bulan ilk olay
         ref = None
