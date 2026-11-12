@@ -902,11 +902,15 @@
       haberIdx = { ...arsivBulunan }; haberler.forEach((x) => (haberIdx[x.id] = x));
       hashOku();
       ciz(ilk); ilk = false;
+      karsilamaKapat();
       bilinen = new Set(haberler.map((x) => x.id));
     } catch (e) {
       $("canliMetin").textContent = "Veri okunamadı";
+      window.dispatchEvent(new Event("zbs-hata"));
     }
   }
+  // karşılama ekranı (site/kutlama.js) veriler gelince kapanır
+  function karsilamaKapat() { window.ZBS_HAZIR = true; window.dispatchEvent(new Event("zbs-hazir")); }
 
   // ---------------------------------------------------- denetimler
   ["Tümü", ...BOLGELER].forEach((b) => {

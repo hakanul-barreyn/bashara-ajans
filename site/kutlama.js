@@ -9,6 +9,10 @@
       tr: { ust: "ZBS yayında", bas: "Açıldık!", alt: "Bölgenin, İsrail'in ve Batı'nın basını tek sayfada: aynı olay, kim nasıl yazdı." },
       en: { ust: "ZBS is live", bas: "We're open!", alt: "Regional, Israeli and Western press on one page: the same event, and who told it how." }
     },
+    yukleme: {
+      tr: { ust: "ZBS", bas: "Hoş geldiniz", alt: "Mağrip’ten Körfez’e, İsrail’den Batı’ya yüzlerce yayının son haberleri derleniyor…" },
+      en: { ust: "ZBS", bas: "Welcome", alt: "Gathering the latest from hundreds of outlets, from the Maghreb to the Gulf, Israel and the West…" }
+    },
     ramazan: {
       ar: "عيد فطر مبارك",
       tr: { ust: "Ramazan Bayramı", bas: "Bayramınız mübarek olsun", alt: "Bayramı abluka altında, çadırlarda karşılayan Gazze'yi unutmadan." },
@@ -91,6 +95,10 @@
       '@keyframes kt-pano-cik{to{opacity:0;transform:translateY(-40px) scale(.96)}}' +
       '@keyframes kt-salla{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}' +
       '@keyframes kt-dus{to{transform:translateY(110vh) rotate(720deg)}}' +
+      '#kutlama .kt-cubuk{width:min(240px,70%);height:4px;border-radius:4px;background:#e4e2db;overflow:hidden;margin-top:8px}' +
+      '#kutlama .kt-cubuk i{display:block;height:100%;width:40%;background:' + YESIL + ';border-radius:4px;animation:kt-cubuk 1.3s ease-in-out infinite}' +
+      '#kutlama.kt-hata .kt-cubuk{display:none}#kutlama.kt-hata p{color:' + KIRMIZI + '}' +
+      '@keyframes kt-cubuk{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}' +
       '@media (prefers-reduced-motion:reduce){#kutlama *,#kutlama{animation:none!important}#kutlama .kt-konfeti{display:none}}';
     var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -108,14 +116,15 @@
       '<rect y="90" width="560" height="2" fill="' + SIYAH + '"/></svg>' +
       '<div class="kt-ic">' + (ar ? '<div class="kt-ar" lang="ar" dir="rtl">' + ar + '</div>' : "") +
       '<div class="kt-ust">' + m.ust + '</div><h2>' + m.bas + '</h2><p>' + m.alt + '</p>' +
-      '<div class="kt-ipucu">' + (dil === "en" ? "Scroll to continue" : "Devam etmek için kaydırın") + '</div></div>' +
+      (tur === "yukleme" ? '<div class="kt-cubuk" aria-hidden="true"><i></i></div>'
+        : '<div class="kt-ipucu">' + (dil === "en" ? "Scroll to continue" : "Devam etmek için kaydırın") + '</div>') + '</div>' +
       '<svg viewBox="0 0 560 40" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
       '<rect y="0" width="560" height="2" fill="' + SIYAH + '"/><rect y="4" width="560" height="8" fill="url(#kt-dama)"/>' +
       '<rect y="14" width="560" height="4" fill="' + YESIL + '"/><rect y="18" width="560" height="4" fill="' + BEYAZ + '"/>' +
       '<rect y="22" width="560" height="4" fill="' + SIYAH + '"/><rect y="26" width="560" height="14" fill="' + KIRMIZI + '"/></svg>' +
       '</div>';
     var renk = [YESIL, KIRMIZI, SIYAH, BEYAZ];
-    for (var i = 0; i < (dar ? 22 : 40); i++) {
+    for (var i = 0; i < (tur === "yukleme" ? 0 : dar ? 22 : 40); i++) {
       var c = document.createElement("i"); c.className = "kt-konfeti";
       c.style.left = (Math.random() * 100).toFixed(1) + "%";
       c.style.background = renk[i % 4];
@@ -152,13 +161,36 @@
       kok.classList.add("kt-git");
       setTimeout(function () { kok.remove(); st.remove(); }, 750);
     }
+    kok.querySelector(".kt-kapat").addEventListener("click", git);
+    if (tur === "yukleme") {
+      // haberler gelince kapanır (en az 0,8 saniye görünür); gelmezse uyarı
+      var acildi = Date.now();
+      var hazir = function () { setTimeout(git, Math.max(0, 800 - (Date.now() - acildi))); };
+      if (window.ZBS_HAZIR) hazir(); else addEventListener("zbs-hazir", hazir, { once: true });
+      addEventListener("zbs-hata", function () { kok.classList.add("kt-hata"); kok.querySelector("p").textContent = dil === "en" ? "The news could not be loaded. Please refresh the page." : "Haberler yüklenemedi. Sayfayı yenileyin."; }, { once: true });
+      setTimeout(git, 20000);
+      return;
+    }
     // Açıldıktan sonraki ilk 3 saniyede gelen hareketler yok sayılır: süs görülmeden kapanmasın
     setTimeout(function () { olaylar.forEach(function (o) { addEventListener(o, git, { capture: true, passive: true }); }); }, 3000);
-    kok.querySelector(".kt-kapat").addEventListener("click", git);
   }
   var q = null;
   try { q = new URLSearchParams(location.search).get("kutlama"); } catch (e) {}
   if (q && METIN[q]) { baslat(q, true); return; }
+  // ana sayfanın ilk açılışında, haberler gelene kadar karşılama ekranı
+  if (document.getElementById("akis") && !window.ZBS_HAZIR) {
+    if (document.body) baslat("yukleme", false); else addEventListener("DOMContentLoaded", function () { if (!window.ZBS_HAZIR) baslat("yukleme", false); });
+    // bayram süsü varsa karşılamadan sonra gösterilsin
+    var sonra = function (f) { if (window.ZBS_HAZIR) setTimeout(f, 1200); else addEventListener("zbs-hazir", function () { setTimeout(f, 1200); }, { once: true }); };
+    fetch("site/kutlama.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (k) {
+      if (!k || !METIN[k.tur] || k.tur === "acilis" || k.tur === "yukleme") return;
+      if (k.bitis && new Date().toISOString().slice(0, 10) > k.bitis) return;
+      var anahtar = "zbs-kutlama-" + k.tur + "-" + (k.bitis || "");
+      try { if (localStorage.getItem(anahtar)) return; localStorage.setItem(anahtar, "1"); } catch (e) {}
+      sonra(function () { baslat(k.tur, false); });
+    }).catch(function () {});
+    return;
+  }
   fetch("site/kutlama.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (k) {
     if (!k || !METIN[k.tur]) return;
     if (k.bitis && new Date().toISOString().slice(0, 10) > k.bitis) return;

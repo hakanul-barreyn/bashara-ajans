@@ -69,8 +69,9 @@ def calistir(kok, simdi, log=print):
     sira = [(u, "k") for u in dict.fromkeys(kanit) if u not in d["adres"]]
     sira = [(u, "s") for u, g in kendi if (d["adres"].get(u) or {}).get("g") != g] + sira   # kendi sayfalarımız günde bir, önde
     gonderilen = hata = ust_uste = 0
+    bitis = time.time() + 120        # arşiv yavaşken çalıştırmayı uzatmasın: en çok iki dakika
     for u, tur in sira:
-        if gonderilen >= CALISMA_BASINA or sayac >= GUNLUK:
+        if gonderilen >= CALISMA_BASINA or sayac >= GUNLUK or time.time() > bitis:
             break
         try:
             c = _gonder(u, erisim, gizli)
@@ -93,8 +94,8 @@ def calistir(kok, simdi, log=print):
             if ust_uste >= 3:
                 log(f"İnternet Arşivi: bağlantı reddedildi ({e}); bu çalıştırmada duruldu, sonra devam edilecek")
                 break
-            time.sleep(20)
-        time.sleep(5)
+            time.sleep(8)
+        time.sleep(4)
     d["gun"] = {g: n for g, n in d["gun"].items() if g >= (simdi.date() - dt.timedelta(days=7)).isoformat()}
     d["gun"][bugun] = sayac
     if len(d["adres"]) > 50000:

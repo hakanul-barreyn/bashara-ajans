@@ -652,3 +652,4 @@ tr.karne-acilir{cursor:pointer}tr.karne-acilir:hover{background:rgba(0,0,0,.03)}
 tr.karne-ornek td{background:#faf8f3;font-size:.84rem;line-height:1.5}
 tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
 @media (max-width:600px){.karne-acik{grid-template-columns:minmax(0,1fr)}}
+

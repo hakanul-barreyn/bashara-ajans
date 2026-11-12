@@ -532,14 +532,14 @@ def gdelt_topla(kaynaklar):
             log("GDELT robots.txt tarafından engelli")
             return sonuc
         kod, metin, _ = getir(url, zaman=40)
-        for bekle in (20, 45):
+        for bekle in (10,):    # GDELT reddedince uzun beklemek çalıştırmayı 25 dakikaya taşıyordu; bir kez kısa dene
             if kod != 429 or time.time() - BASLANGIC > CALISMA_SURESI - 120:
                 break
             time.sleep(bekle)
             kod, metin, _ = getir(url, zaman=40)
         if kod == 429:
             ret += 1
-            if ret >= 3:
+            if ret >= 2:
                 log("GDELT üst üste reddediyor; kalan gruplar sonraki çalıştırmaya kaldı")
                 break
         else:
