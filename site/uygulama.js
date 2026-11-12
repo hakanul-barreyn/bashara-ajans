@@ -883,12 +883,16 @@
 
   // ---------------------------------------------------- veri
   let ilk = true;
+  // İlk açılışta önce küçük dosya (en yeni 150 haber) gelir ve sayfa hemen çizilir; tam liste (5-6 MB) arkadan yüklenir.
+  let ilkYuklendi = false;
   async function yukle() {
     const t = Date.now();
+    const ilkTur = !ilkYuklendi;
     try {
       const [k, h, o, lg, dg] = await Promise.all([
-        fetch("kaynaklar.json?t=" + t).then((r) => r.json()),
-        fetch("data/haberler.json?t=" + t).then((r) => r.json()),
+        fetch("kaynaklar.json?t=" + Math.floor(t / 6e5)).then((r) => r.json()),
+        ilkTur ? fetch("data/haberler-ilk.json?t=" + t).then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(() => fetch("data/haberler.json?t=" + t).then((r) => r.json()))
+          : fetch("data/haberler.json?t=" + t).then((r) => r.json()),
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
         fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
         fetch("data/dogrulama.json?t=" + t).then((r) => r.json()).catch(() => ({})),
@@ -900,10 +904,12 @@
       haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
       guncellendi = h.guncellendi;
       haberIdx = { ...arsivBulunan }; haberler.forEach((x) => (haberIdx[x.id] = x));
-      hashOku();
-      ciz(ilk); ilk = false;
+      if (ilkTur || !h.ilk) { hashOku(); ciz(ilk); ilk = false; }
       karsilamaKapat();
-      bilinen = new Set(haberler.map((x) => x.id));
+      if (!h.ilk) bilinen = new Set(haberler.map((x) => x.id));
+      ilkYuklendi = true;
+      // küçük dosya geldiyse tam listeyi hemen arkadan getir (filtreler, arama, şehir haritası bütün haberlerle çalışsın)
+      if (h.ilk) setTimeout(yukle, 50);
     } catch (e) {
       $("canliMetin").textContent = "Veri okunamadı";
       window.dispatchEvent(new Event("zbs-hata"));

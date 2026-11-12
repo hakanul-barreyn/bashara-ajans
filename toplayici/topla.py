@@ -1155,6 +1155,12 @@ def main():
         else:
             h["giris"] = h.get("giris", "")[:300]
     yaz(HABERLER, {"guncellendi": SIMDI.isoformat(), "haberler": tut})
+    # ana sayfanın ilk açılışı için küçük dosya: en yeni 150 bölgeyle ilgili haber (tam liste arkadan gelir)
+    try:
+        ilk = sorted([h for h in tut if h.get("ilgili")], key=lambda h: h.get("tarih") or "", reverse=True)[:150]
+        yaz(os.path.join(KOK, "data", "haberler-ilk.json"), {"guncellendi": SIMDI.isoformat(), "ilk": True, "haberler": ilk})
+    except Exception as e:
+        log(f"İlk açılış dosyası yazılamadı: {e}")
     try:
         ekler.canli_yaz(KOK, tut, SIMDI, log=log)
     except Exception as e:

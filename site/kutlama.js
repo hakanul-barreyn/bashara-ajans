@@ -163,9 +163,9 @@
     }
     kok.querySelector(".kt-kapat").addEventListener("click", git);
     if (tur === "yukleme") {
-      // haberler gelince kapanır (en az 0,8 saniye görünür); gelmezse uyarı
+      // haberler gelince hemen kapanır; gelmezse uyarı
       var acildi = Date.now();
-      var hazir = function () { setTimeout(git, Math.max(0, 800 - (Date.now() - acildi))); };
+      var hazir = function () { git(); };
       if (window.ZBS_HAZIR) hazir(); else addEventListener("zbs-hazir", hazir, { once: true });
       addEventListener("zbs-hata", function () { kok.classList.add("kt-hata"); kok.querySelector("p").textContent = dil === "en" ? "The news could not be loaded. Please refresh the page." : "Haberler yüklenemedi. Sayfayı yenileyin."; }, { once: true });
       setTimeout(git, 20000);
@@ -179,7 +179,8 @@
   if (q && METIN[q]) { baslat(q, true); return; }
   // ana sayfanın ilk açılışında, haberler gelene kadar karşılama ekranı
   if (document.getElementById("akis") && !window.ZBS_HAZIR) {
-    if (document.body) baslat("yukleme", false); else addEventListener("DOMContentLoaded", function () { if (!window.ZBS_HAZIR) baslat("yukleme", false); });
+    // haberler çeyrek saniyede geldiyse karşılama hiç gösterilmez (göz kırpması olmasın)
+    setTimeout(function () { if (!window.ZBS_HAZIR && document.body) baslat("yukleme", false); }, 250);
     // bayram süsü varsa karşılamadan sonra gösterilsin
     var sonra = function (f) { if (window.ZBS_HAZIR) setTimeout(f, 1200); else addEventListener("zbs-hazir", function () { setTimeout(f, 1200); }, { once: true }); };
     fetch("site/kutlama.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (k) {
