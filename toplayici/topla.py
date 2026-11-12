@@ -1154,6 +1154,10 @@ def main():
             h["giris"] = h.get("giris", "")[:300]
     yaz(HABERLER, {"guncellendi": SIMDI.isoformat(), "haberler": tut})
     try:
+        ekler.canli_yaz(KOK, tut, SIMDI, log=log)
+    except Exception as e:
+        log(f"Canlı başlık deposu yazılamadı: {e}")
+    try:
         gun = ekler.arsive_yaz(KOK, tut)
         ekler.rss_yaz(KOK, tut, SIMDI)
         log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")

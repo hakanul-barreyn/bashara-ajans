@@ -24,7 +24,7 @@
     sec.onchange = function () { kamp = sec.value; ciz(); };
     arac.appendChild(sec); karneKutu.appendChild(arac);
     var acik = el("dl", "karne-acik");
-    [["Faili saklama %", "Filistinlilerin ölümünü anlatan başlıklardan kaçında öldürenin adı yok. Örnek: “Gazze’de 5 kişi öldü” faili saklar; “İsrail ordusu Gazze’de 5 kişiyi öldürdü” saklamaz. Yüksek oran kötü."],
+    [["Faili saklama %", "Filistinlilerin ölümünü anlatan başlıklardan kaçında öldürenin adı yok. Örnek: “Gazze’de 5 kişi öldü” faili saklar; “İsrail ordusu Gazze’de 5 kişiyi öldürdü” saklamaz. “Şehit oldu” diyen başlıklar hesaba katılmaz. Yüksek oran kötü."],
      ["İsrail ordusuna dayanma %", "Haberin bilgiyi İsrail ordusunun açıklamasına dayandırdığı haberlerin payı. Yüksek oran, olayın İsrail’in anlatımıyla verildiğini gösterir."],
      ["Bağlam verme %", "Haberin işgal, abluka ya da olayın öncesi gibi bir bağlam verip vermediği. Yüksek oran iyi."],
      ["Gecikme", "Yalnızca İsrail ve Batı basını için: olayı bölge basınından kaç saat sonra yazdığı."]].forEach(function (x) { acik.append(el("dt", null, x[0]), el("dd", null, x[1])); });

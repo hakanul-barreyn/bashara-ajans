@@ -95,7 +95,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 9
+OZET_SURUM = 10
 BULTEN_SURUM = 1
 
 
@@ -196,13 +196,29 @@ def ozetle(tarama_kok, kaynaklar, log=print):
     tarih_yontem, toplu_gun = {}, {}
     toplam = 0
     kok = os.path.join(tarama_kok, "veri")
-    for kid in sorted(os.listdir(kok)) if os.path.isdir(kok) else []:
+    # Canlı toplayıcının günlük başlıkları (veri dalı, data/canli): taramanın son gününden sonrası için. Aynı adres
+    # geriye dönük kayıtlarda da varsa bir kez sayılır.
+    canli = {}
+    ck = os.environ.get("CANLI_KLASOR", os.path.join(tarama_kok, "canli"))
+    for ad in sorted(os.listdir(ck)) if os.path.isdir(ck) else []:
+        if not ad.endswith(".json.gz"):
+            continue
+        try:
+            with gzip.open(os.path.join(ck, ad), "rt", encoding="utf-8") as f:
+                for kid_, u, t, b in json.load(f):
+                    canli.setdefault(str(kid_), []).append({"u": u, "t": t, "b": b, "m": "canli"})
+        except (OSError, ValueError, EOFError) as e:
+            log(f"Canlı başlıklar: {ad} okunamadı: {e}")
+    if canli:
+        log(f"Canlı başlıklar: {sum(len(x) for x in canli.values())} başlık, {len(canli)} yayın")
+    kidler = sorted(set(os.listdir(kok) if os.path.isdir(kok) else []) | set(canli))
+    for kid in kidler:
         k = K.get(kid)
         if not k:
             continue
         kmp, yan = almanak.kamp(k), _yan(k)
         kayitlar = []
-        for ad in sorted(os.listdir(os.path.join(kok, kid))):
+        for ad in sorted(os.listdir(os.path.join(kok, kid))) if os.path.isdir(os.path.join(kok, kid)) else []:
             if not ad.endswith(".jsonl.gz"):
                 continue
             try:
@@ -216,6 +232,9 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                             kayitlar.append(r)
             except (OSError, EOFError) as e:
                 log(f"Geçmiş özeti: {kid}/{ad} okunamadı: {e}")
+        # canlı başlıklar yalnızca taramada kaydı olmayan günler için (aynı haber farklı adresle iki kez sayılmasın)
+        tgun = {r["t"][:10] for r in kayitlar if r.get("m") != "cdx"}
+        kayitlar += [r for r in canli.get(kid, []) if r["t"][:10] not in tgun]
         cdx = [r for r in kayitlar if r.get("m") == "cdx"]
         cdx_tarih, yontem = _cdx_tarihle(cdx) if cdx else ({}, "")
         if cdx:

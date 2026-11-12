@@ -387,3 +387,45 @@ def web_esle(haberler, tarih_coz, log=print):
     if yeni:
         log(f"Telegram → site: {yeni} duyuru sitedeki habere bağlandı")
     return yeni
+
+
+# ---------------------------------------------------------------- canlı başlık deposu (geriye dönük taramanın devamı)
+CANLI_GUN = 45
+
+
+def canli_yaz(kok, haberler, simdi, log=print):
+    """Toplayıcının gördüğü bütün başlıklar (özeti yazılsın yazılmasın) gün gün: data/canli/YYYY-AA-GG.json.gz
+    [[kaynak, adres, zaman, özgün başlık], ...]. Geriye dönük tarama bu dosyaları kendi kayıtlarına ekler (aynı adres bir
+    kez sayılır); böylece raporlar taramanın bittiği günde donmaz. Son 45 gün tutulur."""
+    import gzip
+    klasor = os.path.join(kok, "data", "canli")
+    os.makedirs(klasor, exist_ok=True)
+    gunler = {}
+    for h in haberler:
+        b = (h.get("baslik_orj") or "").strip()
+        if not b or not h.get("url") or not h.get("tarih"):
+            continue
+        gunler.setdefault(h["tarih"][:10], []).append([h["kaynak"], h["url"], h["tarih"][:19], b[:300]])
+    yeni = 0
+    for g, satir in gunler.items():
+        yol = os.path.join(klasor, g + ".json.gz")
+        try:
+            with gzip.open(yol, "rt", encoding="utf-8") as f:
+                var = json.load(f)
+        except (OSError, ValueError, EOFError):
+            var = []
+        gorulen = {x[1] for x in var}
+        ek = [x for x in satir if x[1] not in gorulen]
+        if not ek:
+            continue
+        yeni += len(ek)
+        with gzip.open(yol + ".tmp", "wt", encoding="utf-8") as f:
+            json.dump(var + ek, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(yol + ".tmp", yol)
+    sinir = (simdi - dt.timedelta(days=CANLI_GUN)).date().isoformat()
+    for ad in os.listdir(klasor):
+        if ad.endswith(".json.gz") and ad[:10] < sinir:
+            os.remove(os.path.join(klasor, ad))
+    if yeni:
+        log(f"Canlı başlık deposu: {yeni} yeni başlık")
+    return yeni

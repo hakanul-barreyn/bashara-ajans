@@ -64,18 +64,28 @@ def hesapla(kok, kaynaklar, simdi, log=print):
     import gecmis
     fk = {}
     ornek = {}
+    import gzip
     for i in range(30):
         gun = (simdi.date() - dt.timedelta(days=i)).isoformat()
+        # önce canlı başlık deposu (toplayıcının gördüğü bütün başlıklar), yoksa özeti yazılan haberlerin arşivi
+        satirlar = []
         try:
-            gunluk = json.load(open(os.path.join(kok, "data", "arsiv", gun + ".json"), encoding="utf-8"))
-        except (OSError, ValueError):
-            continue
-        for h in gunluk if isinstance(gunluk, list) else []:
+            with gzip.open(os.path.join(kok, "data", "canli", gun + ".json.gz"), "rt", encoding="utf-8") as f:
+                satirlar = [{"kaynak": k_, "url": u, "baslik_orj": b_} for k_, u, _, b_ in json.load(f)]
+        except (OSError, ValueError, EOFError):
+            try:
+                gunluk = json.load(open(os.path.join(kok, "data", "arsiv", gun + ".json"), encoding="utf-8"))
+                satirlar = gunluk if isinstance(gunluk, list) else []
+            except (OSError, ValueError):
+                continue
+        for h in satirlar:
             b = h.get("baslik_orj") or ""
             if not b or h.get("kaynak") not in kmap:
                 continue
             f = gecmis.faillik(b, gecmis.katla(b))
-            if f not in ("aktif", "failli", "failsiz", "oldu", "sehadet"):
+            # "şehit / şehadet" diyen başlıklar ayrı bir anlatım: faili yazmasa da ölümü saldırının sonucu olarak verir;
+            # paydaya katılmaz (rapordaki "Hangi yayın öldüreni saklıyor?" ölçüsüyle aynı)
+            if f not in ("aktif", "failli", "failsiz", "oldu"):
                 continue
             r = fk.setdefault(h["kaynak"], {"n": 0, "gizli": 0})
             r["n"] += 1

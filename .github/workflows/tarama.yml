@@ -46,6 +46,16 @@ jobs:
           TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
         run: python toplayici/tarama.py
 
+      - name: Canlı toplayıcının günlük başlıkları (veri dalı)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          rm -rf "$RUNNER_TEMP/v"
+          if git clone -q --depth 1 --branch veri --filter=blob:none --sparse "$ADRES" "$RUNNER_TEMP/v" 2>/dev/null; then
+            git -C "$RUNNER_TEMP/v" sparse-checkout set data/canli && echo "CANLI_KLASOR=$RUNNER_TEMP/v/data/canli" >> "$GITHUB_ENV"
+          fi
+
       - name: Almanak için özet
         run: python toplayici/gecmis.py
 
