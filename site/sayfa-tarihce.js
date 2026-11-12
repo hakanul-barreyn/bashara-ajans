@@ -1,0 +1,53 @@
+// Tarihçe: 1917'den bugüne dönüm noktaları (site/donum.json, elle derlendi, her satır kaynağıyla)
+(function () {
+  "use strict";
+  var EN = window.DIL === "en", YER = EN ? "en-GB" : "tr-TR";
+  function tt(tr, en) { return EN ? en : tr; }
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+  function tarihAd(t) {
+    if (t.length === 4) return t;
+    if (t.length === 7) return new Date(t + "-15T12:00:00Z").toLocaleDateString(YER, { month: "long", year: "numeric" });
+    return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
+  }
+  var k = document.getElementById("tarihce");
+  fetch("site/donum.json?v=1").then(function (r) { return r.json(); }).then(function (v) {
+    function ciz() {
+      k.textContent = "";
+      var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
+      var b = el("header", "rp-bas");
+      b.append(el("h1", null, tt("1917’den bugüne", "From 1917 to today")),
+        el("p", "rp-dek", tt("Balfour Deklarasyonu’ndan Gazze soykırımına Filistin’in dönüm noktaları. Her satırın kaynağı bağlantılı; 7 Ekim 2023’ten sonrası için olay kataloğu başlıklardan gün gün bulunan olayları da gösteriyor.",
+          "Palestine’s turning points from the Balfour Declaration to the Gaza genocide. Each entry links to its source; for the period since 7 October 2023 the event catalogue also shows the events found day by day in the headlines.")));
+      var sr = el("div", "kt-sira");
+      [[false, tt("1917’den bugüne", "From 1917 onwards")], [true, tt("Bugünden geriye", "Newest first")]].forEach(function (x) {
+        var d = el("button", null, x[1]); d.type = "button"; d.setAttribute("aria-pressed", String(YENI === x[0]));
+        d.onclick = function () { try { localStorage.setItem("zbs-tarihce-sira", x[0] ? "yeni" : "eski"); } catch (e) {} ciz(); };
+        sr.appendChild(d);
+      });
+      var nav = el("nav", "th-donemler"); nav.setAttribute("aria-label", tt("Dönemler", "Periods"));
+      b.append(sr, nav); k.appendChild(b);
+      var D = v.donemler.slice(); if (YENI) D.reverse();
+      D.forEach(function (d) {
+        var xs = v.olaylar.filter(function (o) { return o.donem === d.anahtar; }).sort(function (a, c) { return a.tarih < c.tarih ? -1 : 1; });
+        if (YENI) xs.reverse();
+        if (!xs.length) return;
+        var a = el("a", null, EN ? d.ad_en : d.ad); a.href = "#" + d.anahtar; nav.appendChild(a);
+        var s = el("section", "th-donem"); s.id = d.anahtar;
+        s.appendChild(el("h2", null, EN ? d.ad_en : d.ad));
+        var ol = el("ol", "th-liste");
+        xs.forEach(function (o) {
+          var li = el("li");
+          li.appendChild(el("time", null, tarihAd(o.tarih)));
+          var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
+          var ka = el("a", null, tt("Kaynak: ", "Source: ") + o.kaynak + " ↗"); ka.href = o.url; ka.target = "_blank"; ka.rel = "noopener"; ic.appendChild(ka);
+          if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
+          li.appendChild(ic); ol.appendChild(li);
+        });
+        s.appendChild(ol); k.appendChild(s);
+      });
+      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi ve kaynaklı; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand with sources; tell us about any entry you think is missing or wrong.")));
+      var h = location.hash.slice(1); if (h) { var y = document.getElementById(h); if (y) y.scrollIntoView(); }
+    }
+    ciz();
+  }).catch(function () { k.textContent = tt("Tarihçe okunamadı.", "Could not load the history."); });
+})();

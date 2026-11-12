@@ -95,7 +95,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 8
+OZET_SURUM = 9
 BULTEN_SURUM = 1
 
 

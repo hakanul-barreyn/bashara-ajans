@@ -33,14 +33,23 @@
     const d=KN[String(k.id)],kutu=el("div","kanit");
     if(!d||!d.olcum.length){kutu.appendChild(el("span","kanit-yok","Henüz ölçüm yok: bu yayının başlıkları bir olay karşılaştırmasına girdikçe burada birikecek."));return kutu;}
     const n=d.olcum.length,c={filistin:0,aktarim:0,israil:0};d.olcum.forEach(x=>c[x[2]]++);
+    // Haftalık eğilim: kapalı bir kutu; açınca eksenleri yazılı, noktaları üzerine gelince değer gösteren grafik
     const egri=(()=>{const U={filistin:0,aktarim:1,israil:2},H={};d.olcum.forEach(([,t,v])=>{const g=new Date(t+"T12:00:00Z");const p=new Date(g);p.setUTCDate(g.getUTCDate()-((g.getUTCDay()+6)%7));const k=p.toISOString().slice(0,10);(H[k]=H[k]||[]).push(U[v]);});
-      const ks=Object.keys(H).sort().filter(k=>H[k].length>=3);if(ks.length<2)return null;const W=160,Hh=34,x=i=>4+(W-8)*i/(ks.length-1),y=v=>4+(Hh-8)*v/2;
-      const d2=ks.map((k,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(H[k].reduce((a,b)=>a+b,0)/H[k].length).toFixed(1)).join("");
-      const sp=document.createElement("span");sp.className="egri-kucuk";sp.title="Haftalık ortalama uzaklık (üst 0 = Filistin bakışı, alt 2 = İsrail / ABD bakışı): "+ks.map(k=>k+" "+(H[k].reduce((a,b)=>a+b,0)/H[k].length).toFixed(2)).join(", ");
-      sp.innerHTML='<svg viewBox="0 0 '+W+' '+Hh+'" width="'+W+'" height="'+Hh+'"><line x1="4" x2="'+(W-4)+'" y1="'+y(1)+'" y2="'+y(1)+'" stroke="#e0dfd8"/><path d="'+d2+'" fill="none" stroke="#1d2421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';return sp;})();
-    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");if(egri)ust.appendChild(egri);kutu.appendChild(ust);
+      const ks=Object.keys(H).sort().filter(k=>H[k].length>=3);if(ks.length<2)return null;
+      const W=520,Hh=150,L=160,R=12,T=12,B=26,x=i=>L+(W-L-R)*i/(ks.length-1),y=v=>T+(Hh-T-B)*v/2,ort=k=>H[k].reduce((a,b)=>a+b,0)/H[k].length;
+      const gun=k=>new Date(k+"T12:00:00Z").toLocaleDateString("tr-TR",{day:"numeric",month:"short",year:"2-digit"});
+      let svg='<svg viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="Haftalık eğilim grafiği">';
+      [[0,"Filistin bakışı",BR.filistin],[1,"aktarım",BR.aktarim],[2,"İsrail / ABD bakışı",BR.israil]].forEach(([v,ad,r])=>{svg+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#e0dfd8"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" fill="'+r+'">'+ad+'</text>';});
+      svg+='<path d="'+ks.map((k,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(ort(k)).toFixed(1)).join("")+'" fill="none" stroke="#1d2421" stroke-width="2" stroke-linejoin="round"/>';
+      ks.forEach((k,i)=>{svg+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(ort(k)).toFixed(1)+'" r="4" fill="#1d2421"><title>'+gun(k)+' haftası: '+H[k].length+' başlık, ortalama '+ort(k).toFixed(2).replace(".",",")+'</title></circle>';});
+      svg+='<text x="'+L+'" y="'+(Hh-6)+'" font-size="11" fill="#6b716d">'+gun(ks[0])+'</text><text x="'+(W-R)+'" y="'+(Hh-6)+'" text-anchor="end" font-size="11" fill="#6b716d">'+gun(ks[ks.length-1])+'</text></svg>';
+      const det=document.createElement("details");det.className="egri";det.appendChild(el("summary",null,"Haftalık eğilim ("+ks.length+" hafta)"));
+      const ic=el("div","egri-ic");ic.innerHTML=svg;det.appendChild(ic);
+      det.appendChild(el("p","egri-not","Her nokta bir hafta: o hafta karşılaştırılan başlıkların (en az üç) ortalaması. Üstte Filistin bakışı, ortada aktarım, altta İsrail / ABD bakışı. Noktanın üzerine gelince sayı görünür."));
+      det.addEventListener("click",e=>e.stopPropagation());return det;})();
+    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
     const bar=el("div","kanit-cubuk");Object.keys(c).forEach(v=>{if(!c[v])return;const i=el("i");i.style.width=(100*c[v]/n)+"%";i.style.background=BR[v];i.title=BK[v]+": "+c[v];bar.appendChild(i);});kutu.appendChild(bar);
-    const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);
+    const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);if(egri)kutu.appendChild(egri);
     if(n>=5){const fi=c.filistin/n,is=c.israil/n;
       if((k.cizgi==="ik"&&fi>=0.6)||(k.cizgi==="ad"&&is>=0.6))kutu.appendChild(el("span","uyusmaz","Ölçüm bu yayının çizgi değerlendirmesiyle uyuşmuyor; değerlendirme gözden geçirilecek."));}
     const det=document.createElement("details");det.appendChild(el("summary",null,"Örnek başlıklar ("+d.ornek.length+")"));

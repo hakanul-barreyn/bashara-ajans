@@ -117,6 +117,13 @@ TURLER = [
         r"açlık grev|hunger[- ]strik|grève de la faim|huelga de hambre|sciopero della fame|hungerstreik|إضراب عن الطعام|الإضراب عن الطعام|معركة الأمعاء"),
     ("mezar", "Toplu mezarlar", [
         r"toplu mezar|mass graves?|fosses? communes?|charnier|fosas? comunes?|fossa comune|fosse comuni|massengrab|مقبرة جماعية|مقابر جماعية|קבר אחים"]),
+    # Kuşatmanın sonucu olan felaket: barınma malzemesi girmediği için çadırları su basıyor (saldırı değil; çadır türünden ayrı)
+    ("sel", "Çadırları su basması, kış fırtınaları", [
+        r"çadır|yerinden edil|\btents?\b|displaced|shelters?\b|\btentes?\b|déplacés|tiendas? de campaña|desplazad|\btend[ae]\b|sfollat|zelte?\b|vertrieben|"
+        r"خيمة|خيام|خيم|النازحين|نازحين|مخيمات النزوح|אוהל|עקורים",
+        r"su bas|sular altında|sel\b|seller|fırtına|sağanak|yağmur|soğuk|donarak|hipotermi|flood|\bstorms?\b|heavy rain|rainwater|downpour|freez|hypotherm|cold weather|winter|"
+        r"inond|tempête|pluies|froid|inund|tormenta|lluvias|frío|allag|tempesta|maltempo|freddo|überschwemm|überflut|unwetter|kälte|"
+        r"غرق|غمرت|مياه الأمطار|الأمطار|أمطار|المنخفض|منخفض جوي|العاصفة|عاصفة|السيول|البرد|البرد القارس|تجمد|הצפ|סערה|גשם"], r"tufan|aqsa flood|al-aqsa flood|طوفان الأقصى|déluge d'al-aqsa|inundación de al aqsa"),
     ("bayrak", "Beyaz bayrak taşıyanlara ateş", [
         r"beyaz bayrak|white flags?|drapeau blanc|bandera blanca|bandiera bianca|weiße fahne|weisse fahne|راية بيضاء|الراية البيضاء|דגל לבן"]),
     ("katliam", "“Katliam” olarak anılan saldırılar", [

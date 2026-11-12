@@ -1,0 +1,426 @@
+{
+ "donemler": [
+  {
+   "anahtar": "manda",
+   "ad": "İngiliz Mandası (1917–1947)",
+   "ad_en": "The British Mandate (1917–1947)"
+  },
+  {
+   "anahtar": "nakba",
+   "ad": "Nakba ve sonrası (1947–1966)",
+   "ad_en": "The Nakba and after (1947–1966)"
+  },
+  {
+   "anahtar": "isgal",
+   "ad": "İşgal (1967–1986)",
+   "ad_en": "Occupation (1967–1986)"
+  },
+  {
+   "anahtar": "intifada",
+   "ad": "İntifadalar ve Oslo (1987–2005)",
+   "ad_en": "Intifadas and Oslo (1987–2005)"
+  },
+  {
+   "anahtar": "abluka",
+   "ad": "Abluka (2006–2023)",
+   "ad_en": "Blockade (2006–2023)"
+  },
+  {
+   "anahtar": "soykirim",
+   "ad": "Gazze soykırımı (7 Ekim 2023’ten bugüne)",
+   "ad_en": "The Gaza genocide (7 October 2023 to today)"
+  }
+ ],
+ "olaylar": [
+  {
+   "tarih": "1917-11-02",
+   "donem": "manda",
+   "baslik": "Balfour Deklarasyonu",
+   "baslik_en": "Balfour Declaration",
+   "metin": "İngiltere Dışişleri Bakanı Arthur Balfour, nüfusun büyük çoğunluğu Arap olan Filistin’de “Yahudi halkı için bir ulusal yurt” kurulmasını destekleyen mektubu yazdı.",
+   "metin_en": "British Foreign Secretary Arthur Balfour wrote the letter backing “a national home for the Jewish people” in Palestine, whose population was overwhelmingly Arab.",
+   "url": "https://en.wikipedia.org/wiki/Balfour_Declaration",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1919-08-28",
+   "donem": "manda",
+   "baslik": "King–Crane Komisyonu raporu",
+   "baslik_en": "King–Crane Commission report",
+   "metin": "ABD’nin gönderdiği komisyon, Filistin halkının büyük çoğunluğunun Siyonist programa karşı olduğunu ve bu programın halkın rızası olmadan ancak zorla uygulanabileceğini yazdı. Rapor yıllarca yayımlanmadı.",
+   "metin_en": "The US commission reported that most of Palestine’s people opposed the Zionist programme and that it could only be carried out by force without their consent. The report went unpublished for years.",
+   "url": "https://en.wikipedia.org/wiki/King%E2%80%93Crane_Commission",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1922-07-24",
+   "donem": "manda",
+   "baslik": "Milletler Cemiyeti Filistin Mandası",
+   "baslik_en": "League of Nations Mandate for Palestine",
+   "metin": "Filistin’in yönetimi İngiltere’ye verildi; Balfour Deklarasyonu manda metnine girdi.",
+   "metin_en": "Palestine was placed under British administration; the Balfour Declaration was written into the mandate.",
+   "url": "https://en.wikipedia.org/wiki/Mandate_for_Palestine",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1936-04",
+   "donem": "manda",
+   "baslik": "Büyük Arap İsyanı (1936–1939)",
+   "baslik_en": "Great Arab Revolt (1936–1939)",
+   "metin": "Genel grevle başlayan isyan, İngiliz yönetimine ve Yahudi göçüne karşıydı; İngiliz kuvvetlerince ağır biçimde bastırıldı.",
+   "metin_en": "Beginning with a general strike against British rule and Jewish immigration, the revolt was harshly crushed by British forces.",
+   "url": "https://en.wikipedia.org/wiki/1936%E2%80%931939_Arab_revolt_in_Palestine",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1947-11-29",
+   "donem": "nakba",
+   "baslik": "BM bölünme planı (181 sayılı karar)",
+   "baslik_en": "UN Partition Plan (Resolution 181)",
+   "metin": "BM Genel Kurulu, Filistin’in Arap ve Yahudi devletlerine bölünmesini önerdi; Filistinliler ve Arap devletleri reddetti.",
+   "metin_en": "The UN General Assembly recommended dividing Palestine into Arab and Jewish states; Palestinians and Arab states rejected it.",
+   "url": "https://en.wikipedia.org/wiki/United_Nations_Partition_Plan_for_Palestine",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1948-04-09",
+   "donem": "nakba",
+   "baslik": "Deir Yasin katliamı",
+   "baslik_en": "Deir Yassin massacre",
+   "metin": "Kudüs yakınındaki Deir Yasin köyünde Irgun ve Lehi milisleri yüzü aşkın köylüyü öldürdü; haberi Filistinlilerin kaçışını hızlandırdı.",
+   "metin_en": "Irgun and Lehi militias killed more than a hundred villagers in Deir Yassin near Jerusalem; news of it accelerated Palestinian flight.",
+   "url": "https://en.wikipedia.org/wiki/Deir_Yassin_massacre",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1948-05-15",
+   "donem": "nakba",
+   "baslik": "Nakba",
+   "baslik_en": "The Nakba",
+   "metin": "İsrail’in 14 Mayıs’ta ilanının ardından savaş büyüdü. 1947–49 arasında yaklaşık 750 bin Filistinli yurdundan sürüldü ya da kaçtı, yüzlerce köy yok edildi. 15 Mayıs Nakba Günü olarak anılıyor.",
+   "metin_en": "After Israel’s declaration on 14 May the war widened. Between 1947 and 1949 some 750,000 Palestinians were expelled or fled and hundreds of villages were destroyed. 15 May is marked as Nakba Day.",
+   "url": "https://en.wikipedia.org/wiki/Nakba",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1948-12-11",
+   "donem": "nakba",
+   "baslik": "BM 194 sayılı karar: geri dönüş hakkı",
+   "baslik_en": "UN Resolution 194: right of return",
+   "metin": "BM Genel Kurulu, evlerine dönmek isteyen mültecilerin bir an önce dönmesine izin verilmesi gerektiğini karara bağladı. Karar bugüne kadar uygulanmadı.",
+   "metin_en": "The UN General Assembly resolved that refugees wishing to return to their homes should be permitted to do so as soon as possible. It has never been implemented.",
+   "url": "https://en.wikipedia.org/wiki/United_Nations_General_Assembly_Resolution_194",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1956-10-29",
+   "donem": "nakba",
+   "baslik": "Kafr Kasım katliamı",
+   "baslik_en": "Kafr Qasim massacre",
+   "metin": "İsrail sınır polisi, sokağa çıkma yasağından habersiz tarladan dönen 49 Filistinli köylüyü öldürdü.",
+   "metin_en": "Israeli border police killed 49 Palestinian villagers returning from the fields, unaware of a curfew.",
+   "url": "https://en.wikipedia.org/wiki/Kafr_Qasim_massacre",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1964-05-28",
+   "donem": "nakba",
+   "baslik": "Filistin Kurtuluş Örgütü kuruldu",
+   "baslik_en": "Palestine Liberation Organization founded",
+   "metin": "FKÖ, Kudüs’te toplanan Filistin Ulusal Konseyi’nde kuruldu.",
+   "metin_en": "The PLO was founded at the Palestinian National Council meeting in Jerusalem.",
+   "url": "https://en.wikipedia.org/wiki/Palestine_Liberation_Organization",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1967-06-05",
+   "donem": "isgal",
+   "baslik": "Altı Gün Savaşı ve Nekse",
+   "baslik_en": "Six-Day War and the Naksa",
+   "metin": "İsrail Batı Şeria’yı, Doğu Kudüs’ü, Gazze’yi, Golan’ı ve Sina’yı işgal etti; yaklaşık 300 bin Filistinli daha yerinden edildi.",
+   "metin_en": "Israel occupied the West Bank, East Jerusalem, Gaza, the Golan and Sinai; some 300,000 more Palestinians were displaced.",
+   "url": "https://en.wikipedia.org/wiki/Six-Day_War",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1967-11-22",
+   "donem": "isgal",
+   "baslik": "BM Güvenlik Konseyi 242 sayılı karar",
+   "baslik_en": "UN Security Council Resolution 242",
+   "metin": "İsrail’in son savaşta işgal ettiği topraklardan çekilmesini istedi.",
+   "metin_en": "Called for Israel’s withdrawal from territories occupied in the recent conflict.",
+   "url": "https://en.wikipedia.org/wiki/United_Nations_Security_Council_Resolution_242",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1976-03-30",
+   "donem": "isgal",
+   "baslik": "Toprak Günü",
+   "baslik_en": "Land Day",
+   "metin": "İsrail’in Celile’deki Arap topraklarına el koymasına karşı genel grev ve gösterilerde altı Filistinli öldürüldü.",
+   "metin_en": "Six Palestinians were killed in a general strike and protests against Israel’s seizure of Arab land in the Galilee.",
+   "url": "https://en.wikipedia.org/wiki/Land_Day",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1982-09-16",
+   "donem": "isgal",
+   "baslik": "Sabra ve Şatila katliamı",
+   "baslik_en": "Sabra and Shatila massacre",
+   "metin": "İsrail ordusunun kuşattığı Beyrut’taki kamplarda Lübnanlı Falanjist milisler yüzlerce, bazı kaynaklara göre binlerce Filistinli ve Lübnanlı sivili öldürdü. İsrail’in Kahan Komisyonu, dönemin Savunma Bakanı Ariel Şaron’u dolaylı sorumlu buldu.",
+   "metin_en": "In camps in Beirut surrounded by the Israeli army, Lebanese Phalangist militias killed hundreds, by some counts thousands, of Palestinian and Lebanese civilians. Israel’s Kahan Commission found then defence minister Ariel Sharon indirectly responsible.",
+   "url": "https://en.wikipedia.org/wiki/Sabra_and_Shatila_massacre",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1987-12-09",
+   "donem": "intifada",
+   "baslik": "Birinci İntifada",
+   "baslik_en": "First Intifada",
+   "metin": "Gazze’de başlayan halk ayaklanması işgal altındaki bütün topraklara yayıldı ve 1993’e kadar sürdü.",
+   "metin_en": "A popular uprising that began in Gaza spread across the occupied territories and lasted until 1993.",
+   "url": "https://en.wikipedia.org/wiki/First_Intifada",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1993-09-13",
+   "donem": "intifada",
+   "baslik": "Oslo I Anlaşması",
+   "baslik_en": "Oslo I Accord",
+   "metin": "FKÖ ile İsrail Washington’da ilkeler bildirgesini imzaladı; Filistin Yönetimi kuruldu. Nihai statü konuları (Kudüs, mülteciler, yerleşimler, sınırlar) ertelendi.",
+   "metin_en": "The PLO and Israel signed the Declaration of Principles in Washington; the Palestinian Authority was created. Final-status issues (Jerusalem, refugees, settlements, borders) were deferred.",
+   "url": "https://en.wikipedia.org/wiki/Oslo_I_Accord",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "1994-02-25",
+   "donem": "intifada",
+   "baslik": "İbrahim Camii katliamı",
+   "baslik_en": "Ibrahimi Mosque massacre",
+   "metin": "El Halil’deki İbrahim Camii’nde yerleşimci Baruch Goldstein sabah namazı kılanlara ateş açarak 29 Filistinliyi öldürdü.",
+   "metin_en": "Settler Baruch Goldstein opened fire on worshippers at dawn prayers in Hebron’s Ibrahimi Mosque, killing 29 Palestinians.",
+   "url": "https://en.wikipedia.org/wiki/Cave_of_the_Patriarchs_massacre",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2000-09-28",
+   "donem": "intifada",
+   "baslik": "İkinci İntifada",
+   "baslik_en": "Second Intifada",
+   "metin": "Ariel Şaron’un silahlı polis eşliğinde Mescid-i Aksa avlusuna girmesinin ardından başlayan ayaklanma 2005’e kadar sürdü.",
+   "metin_en": "The uprising began after Ariel Sharon entered the Al-Aqsa compound with armed police, and lasted until 2005.",
+   "url": "https://en.wikipedia.org/wiki/Second_Intifada",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2004-07-09",
+   "donem": "intifada",
+   "baslik": "Adalet Divanı: ayırma duvarı hukuka aykırı",
+   "baslik_en": "ICJ: the separation wall is unlawful",
+   "metin": "Uluslararası Adalet Divanı, İsrail’in işgal altındaki topraklarda inşa ettiği duvarın uluslararası hukuka aykırı olduğunu ve yıkılması gerektiğini bildirdi.",
+   "metin_en": "The International Court of Justice advised that the wall Israel was building in the occupied territory was contrary to international law and should be dismantled.",
+   "url": "https://en.wikipedia.org/wiki/Legal_Consequences_of_the_Construction_of_a_Wall_in_the_Occupied_Palestinian_Territory",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2005-09-12",
+   "donem": "intifada",
+   "baslik": "İsrail Gazze’deki yerleşimlerden çekildi",
+   "baslik_en": "Israel withdraws settlements from Gaza",
+   "metin": "Yerleşimciler ve askerler çekildi; İsrail Gazze’nin sınırlarını, hava sahasını ve denizini denetlemeyi sürdürdü.",
+   "metin_en": "Settlers and soldiers withdrew; Israel kept control of Gaza’s borders, airspace and sea.",
+   "url": "https://en.wikipedia.org/wiki/Israeli_disengagement_from_Gaza",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2006-01-25",
+   "donem": "abluka",
+   "baslik": "Filistin Yasama Konseyi seçimleri",
+   "baslik_en": "Palestinian legislative election",
+   "metin": "Hamas seçimleri kazandı; İsrail, ABD ve AB yeni hükümeti boykot etti.",
+   "metin_en": "Hamas won the election; Israel, the US and the EU boycotted the new government.",
+   "url": "https://en.wikipedia.org/wiki/2006_Palestinian_legislative_election",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2007-06",
+   "donem": "abluka",
+   "baslik": "Gazze ablukası",
+   "baslik_en": "Blockade of Gaza",
+   "metin": "Hamas’ın Gazze’nin denetimini almasının ardından İsrail ve Mısır kara, hava ve deniz ablukası uyguladı. Abluka o günden beri sürüyor.",
+   "metin_en": "After Hamas took control of Gaza, Israel and Egypt imposed a land, air and sea blockade, in place ever since.",
+   "url": "https://en.wikipedia.org/wiki/Blockade_of_the_Gaza_Strip",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2008-12-27",
+   "donem": "abluka",
+   "baslik": "Dökme Kurşun saldırısı",
+   "baslik_en": "Operation Cast Lead",
+   "metin": "22 gün süren İsrail saldırısında yaklaşık 1.400 Filistinli öldürüldü.",
+   "metin_en": "About 1,400 Palestinians were killed in the 22-day Israeli assault.",
+   "url": "https://en.wikipedia.org/wiki/Gaza_War_(2008%E2%80%932009)",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2010-05-31",
+   "donem": "abluka",
+   "baslik": "Mavi Marmara baskını",
+   "baslik_en": "Mavi Marmara raid",
+   "metin": "İsrail askerleri, ablukayı kırmak için Gazze’ye giden yardım filosuna uluslararası sularda baskın düzenledi; dokuz Türkiye vatandaşı öldürüldü (bir kişi 2014’te hayatını kaybetti).",
+   "metin_en": "Israeli soldiers raided the aid flotilla bound for Gaza in international waters; nine Turkish citizens were killed (a tenth died in 2014).",
+   "url": "https://en.wikipedia.org/wiki/Gaza_flotilla_raid",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2012-11-29",
+   "donem": "abluka",
+   "baslik": "Filistin BM’de gözlemci devlet",
+   "baslik_en": "Palestine becomes a UN observer state",
+   "metin": "BM Genel Kurulu, Filistin’in statüsünü “üye olmayan gözlemci devlet”e yükseltti.",
+   "metin_en": "The UN General Assembly upgraded Palestine to “non-member observer state”.",
+   "url": "https://en.wikipedia.org/wiki/United_Nations_General_Assembly_resolution_67/19",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2014-07-08",
+   "donem": "abluka",
+   "baslik": "Koruyucu Kenar saldırısı",
+   "baslik_en": "Operation Protective Edge",
+   "metin": "51 gün süren İsrail saldırısında 2.200’ü aşkın Filistinli öldürüldü; bunların çoğu sivildi.",
+   "metin_en": "More than 2,200 Palestinians, most of them civilians, were killed in the 51-day Israeli assault.",
+   "url": "https://en.wikipedia.org/wiki/2014_Gaza_War",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2017-12-06",
+   "donem": "abluka",
+   "baslik": "ABD Kudüs’ü İsrail’in başkenti tanıdı",
+   "baslik_en": "US recognises Jerusalem as Israel’s capital",
+   "metin": "Trump yönetimi Kudüs’ü İsrail’in başkenti olarak tanıdı; elçilik Mayıs 2018’de taşındı.",
+   "metin_en": "The Trump administration recognised Jerusalem as Israel’s capital; the embassy moved in May 2018.",
+   "url": "https://en.wikipedia.org/wiki/United_States_recognition_of_Jerusalem_as_capital_of_Israel",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2018-03-30",
+   "donem": "abluka",
+   "baslik": "Büyük Dönüş Yürüyüşü",
+   "baslik_en": "Great March of Return",
+   "metin": "Gazze sınırındaki haftalık gösterilerde İsrail askerleri bir buçuk yılda 200’ü aşkın kişiyi öldürdü, binlercesini yaraladı.",
+   "metin_en": "At weekly protests on the Gaza fence, Israeli soldiers killed more than 200 people and wounded thousands over a year and a half.",
+   "url": "https://en.wikipedia.org/wiki/2018%E2%80%932019_Gaza_border_protests",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2021-05-10",
+   "donem": "abluka",
+   "baslik": "Şeyh Cerrah ve Mayıs 2021 saldırısı",
+   "baslik_en": "Sheikh Jarrah and the May 2021 war",
+   "metin": "Doğu Kudüs’te Şeyh Cerrah’taki tahliyeler ve Mescid-i Aksa baskınlarının ardından İsrail Gazze’yi 11 gün bombaladı; 250’yi aşkın Filistinli öldürüldü.",
+   "metin_en": "After evictions in Sheikh Jarrah and raids on Al-Aqsa, Israel bombed Gaza for 11 days; more than 250 Palestinians were killed.",
+   "url": "https://en.wikipedia.org/wiki/2021_Israel%E2%80%93Palestine_crisis",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2023-10-07",
+   "donem": "soykirim",
+   "baslik": "Aksa Tufanı ve Gazze’ye savaşın başlaması",
+   "baslik_en": "Al-Aqsa Flood and the start of the war on Gaza",
+   "metin": "Hamas ve diğer silahlı Filistin gruplarının Gazze çevresindeki İsrail askeri mevzilerine ve yerleşimlere saldırısında İsrail’de yaklaşık 1.200 kişi öldü, 251 kişi Gazze’ye götürüldü. İsrail aynı gün Gazze’ye savaş ilan etti.",
+   "metin_en": "In the attack by Hamas and other armed Palestinian groups on Israeli military positions and communities around Gaza, about 1,200 people were killed in Israel and 251 were taken to Gaza. Israel declared war on Gaza the same day.",
+   "url": "https://en.wikipedia.org/wiki/October_7_attacks",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2023-11-24",
+   "donem": "soykirim",
+   "baslik": "İlk ateşkes (24 Kasım – 1 Aralık 2023)",
+   "baslik_en": "First truce (24 November – 1 December 2023)",
+   "metin": "Yedi gün süren ateşkeste İsrailli esirler ile Filistinli tutuklular takas edildi.",
+   "metin_en": "During the seven-day truce, Israeli captives were exchanged for Palestinian prisoners.",
+   "url": "https://en.wikipedia.org/wiki/2023_Israel%E2%80%93Hamas_ceasefire",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2024-01-26",
+   "donem": "soykirim",
+   "baslik": "Adalet Divanı’nın ilk tedbir kararı",
+   "baslik_en": "ICJ’s first provisional measures",
+   "metin": "Güney Afrika’nın 29 Aralık 2023’te açtığı soykırım davasında Divan, İsrail’e soykırım eylemlerini önleme yükümlülüğünü hatırlatan geçici tedbirler kararı verdi.",
+   "metin_en": "In the genocide case South Africa filed on 29 December 2023, the Court ordered provisional measures reminding Israel of its obligation to prevent acts of genocide.",
+   "url": "https://en.wikipedia.org/wiki/South_Africa_v._Israel_(Genocide_Convention)",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2024-05-07",
+   "donem": "soykirim",
+   "baslik": "Refah işgali",
+   "baslik_en": "Invasion of Rafah",
+   "metin": "İsrail ordusu bir milyonu aşkın yerinden edilmiş insanın sığındığı Refah’a girdi ve Mısır sınır kapısını ele geçirdi.",
+   "metin_en": "The Israeli army entered Rafah, where more than a million displaced people were sheltering, and seized the Egyptian border crossing.",
+   "url": "https://en.wikipedia.org/wiki/Rafah_offensive",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2024-07-19",
+   "donem": "soykirim",
+   "baslik": "Adalet Divanı: işgal hukuka aykırı",
+   "baslik_en": "ICJ: the occupation is unlawful",
+   "metin": "Divan danışma görüşünde İsrail’in işgal altındaki Filistin topraklarındaki varlığının hukuka aykırı olduğunu ve bir an önce sona ermesi gerektiğini bildirdi.",
+   "metin_en": "In an advisory opinion the Court found Israel’s continued presence in the occupied Palestinian territory unlawful and said it must end as rapidly as possible.",
+   "url": "https://icj-cij.org/node/204160",
+   "kaynak": "Uluslararası Adalet Divanı"
+  },
+  {
+   "tarih": "2024-11-21",
+   "donem": "soykirim",
+   "baslik": "UCM’den Netanyahu ve Gallant için tutuklama kararı",
+   "baslik_en": "ICC arrest warrants for Netanyahu and Gallant",
+   "metin": "Uluslararası Ceza Mahkemesi, savaş yöntemi olarak açlığı kullanma dahil savaş suçları ve insanlığa karşı suçlar gerekçesiyle tutuklama kararı çıkardı.",
+   "metin_en": "The International Criminal Court issued arrest warrants for war crimes and crimes against humanity, including starvation as a method of warfare.",
+   "url": "https://www.icc-cpi.int/node/227337",
+   "kaynak": "Uluslararası Ceza Mahkemesi"
+  },
+  {
+   "tarih": "2025-01-19",
+   "donem": "soykirim",
+   "baslik": "Ocak 2025 ateşkesi",
+   "baslik_en": "January 2025 ceasefire",
+   "metin": "Üç aşamalı ateşkes yürürlüğe girdi; İsrail 18 Mart’ta saldırılara yeniden başladı.",
+   "metin_en": "A three-phase ceasefire took effect; Israel resumed its attacks on 18 March.",
+   "url": "https://en.wikipedia.org/wiki/2025_Gaza_war_ceasefire",
+   "kaynak": "Wikipedia"
+  },
+  {
+   "tarih": "2025-08-22",
+   "donem": "soykirim",
+   "baslik": "Gazze’de kıtlık ilan edildi",
+   "baslik_en": "Famine declared in Gaza",
+   "metin": "IPC, Gazze ilinde kıtlığın gerçekleştiğini doğruladı: Orta Doğu’da ilk kez.",
+   "metin_en": "The IPC confirmed famine in Gaza Governorate, the first ever in the Middle East.",
+   "url": "https://www.who.int/news/item/22-08-2025-famine-confirmed-for-first-time-in-gaza",
+   "kaynak": "Dünya Sağlık Örgütü"
+  },
+  {
+   "tarih": "2025-10-10",
+   "donem": "soykirim",
+   "baslik": "Ekim 2025 ateşkesi",
+   "baslik_en": "October 2025 ceasefire",
+   "metin": "ABD’nin planına dayanan ateşkes öğlen yürürlüğe girdi; İsrail saldırıları sonraki aylarda da sürdü.",
+   "metin_en": "A ceasefire based on the US plan took effect at noon; Israeli strikes continued in the following months.",
+   "url": "https://mb.com.ph/2025/10/10/israeli-military-says-ceasefire-takes-effect-in-gaza-raising-hopes-for-ending-the-war",
+   "kaynak": "Manila Bulletin (AP)"
+  },
+  {
+   "tarih": "2026-11-07",
+   "donem": "soykirim",
+   "baslik": "Yağmurlar 70 bin çadırı su altında bıraktı",
+   "baslik_en": "Rains flood 70,000 tents",
+   "metin": "Gazze’de yerinden edilmiş ailelerin yaklaşık 70 bin çadırını su bastı; İsrail’in barınma malzemesi girişini kısıtlaması aileleri yağmura karşı korumasız bıraktı.",
+   "metin_en": "Rain flooded the tents of some 70,000 displaced families in Gaza, left exposed by Israeli restrictions on shelter materials.",
+   "url": "https://www.aljazeera.com/news/2026/11/7/rains-flood-thousands-of-tents-in-gaza",
+   "kaynak": "Al Jazeera"
+  }
+ ]
+}

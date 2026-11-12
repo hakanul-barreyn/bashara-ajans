@@ -10,11 +10,13 @@
   var R = { bolge: "#1f7a52", turkiye: "#7a3fa0", israil: "#2f5bb7", bati_ana: "#8a6d3b", bati_muhalif: "#c9544e" };
   var AD = EN ? { bolge: "Regional press", turkiye: "Turkish press", israil: "Israeli press", bati_ana: "Western mainstream", bati_muhalif: "Western dissenting" }
     : { bolge: "Bölge basını", turkiye: "Türkiye basını", israil: "İsrail basını", bati_ana: "Batı ana akım", bati_muhalif: "Batı’da muhalif" };
-  var TUR_EN = { hastane: "Attack on hospitals", cadir: "Tents hit", yardim: "Fire on people waiting for aid", keskin: "Sniper fire", bas: "Shot in the head", cocuk: "Children killed", su: "People seeking water shot", guvenli: "Attack on a “safe zone”", okul: "Attack on schools and shelters", ibadet: "Attack on mosques and churches", aksa: "Raid on Al-Aqsa", saglik: "Health workers killed", yardimci: "Aid workers killed", iskence: "Torture and rape in prisons", asagilama: "Humiliation", aclik: "Starvation deaths", mezar: "Mass graves", bayrak: "Fire on people carrying white flags", cocuk_keskin: "Children shot by snipers", cocuk_bas: "Children shot in the head", cocuk_su: "Children carrying water shot", yardim_asagilama: "Humiliation for food" };
+  var TUR_EN = { hastane: "Attack on hospitals", cadir: "Tents hit", yardim: "Fire on people waiting for aid", keskin: "Sniper fire", bas: "Shot in the head", cocuk: "Children killed", su: "People seeking water shot", guvenli: "Attack on a “safe zone”", okul: "Attack on schools and shelters", ibadet: "Attack on mosques and churches", aksa: "Raid on Al-Aqsa", saglik: "Health workers killed", yardimci: "Aid workers killed", iskence: "Torture and rape in prisons", asagilama: "Humiliation", aclik: "Starvation deaths", mezar: "Mass graves", sel: "Flooded tents and winter storms", bayrak: "Fire on people carrying white flags", cocuk_keskin: "Children shot by snipers", cocuk_bas: "Children shot in the head", cocuk_su: "Children carrying water shot", yardim_asagilama: "Humiliation for food" };
   var kim = function (x) { return x.tur + "-" + x.bas; };
   var k = document.getElementById("olay");
 
-  fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (v) {
+  var DONUM = [];
+  fetch("site/donum.json?v=1").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
+  .then(function () { return fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)); }).then(function (r) { return r.json(); }).then(function (v) {
     var TA = {}; v.turler.forEach(function (t) { TA[t.anahtar] = t.ad; });
     var turAd = function (t) { return EN ? (TUR_EN[t] || TA[t] || t) : (TA[t] || t); };
     function ciz() {
@@ -79,16 +81,33 @@
     function liste() {
       var b = el("header", "rp-bas"); b.append(el("h1", null, tt("Olay kataloğu", "Event catalogue")),
         el("p", "rp-dek", tt("Başlıklardan bulunan " + v.olaylar.length + " olay, gün gün. Bir güne tıklayınca o günün olayları ve onları yazan kaynaklar açılır.", v.olaylar.length + " events found in the headlines, day by day. Click a day to see its events and the outlets that covered them.")));
+      var ac = el("details", "kt-nasil"); ac.appendChild(el("summary", null, tt("Bu katalog nasıl yapılıyor?", "How is this catalogue made?")));
+      ac.appendChild(el("p", null, tt("Katalog, İsrail’in Filistinlilere yönelik saldırı ve ihlallerini türlere ayırarak başlıklardan otomatik bulur: hastanelere, okullara, çadırlara, ibadethanelere saldırı, yardım bekleyenlere ateş, çocukların, gazetecilerin, sağlık çalışanlarının öldürülmesi, açlık ölümleri, toplu mezarlar, Mescid-i Aksa baskınları gibi. Bir türün kelimeleri aynı gün bölge basınında yeterince başlıkta geçince o gün olay sayılır; yer adı başlıklardan alınır ve bazen yanlış çıkabilir. Amaç, bu olayları hangi yayının yazıp hangisinin sustuğunu ölçmek.",
+        "The catalogue automatically finds Israeli attacks and violations against Palestinians in the headlines, sorted by kind: attacks on hospitals, schools, tents and places of worship, fire on aid seekers, the killing of children, journalists and health workers, starvation deaths, mass graves, raids on Al-Aqsa and so on. A day counts as an event when the words of a kind appear in enough regional headlines that day; place names are taken from the headlines and are sometimes wrong. The aim is to measure which outlets covered these events and which stayed silent.")));
+      ac.appendChild(el("p", null, tt("7 Ekim gibi dönüm noktaları, ateşkesler, mahkeme kararları ve çadırları su basması gibi felaketler bu ölçüme girmez; onları yeşil şeritli “dönüm noktası” satırları olarak elle, kaynağıyla ekledik. 1917’den bugüne bütün tarihçe ayrı sayfada.",
+        "Turning points such as 7 October, ceasefires, court rulings and disasters such as flooded tents are not part of this measure; we added them by hand, with sources, as “turning point” rows. The full history since 1917 is on a separate page.")));
+      var ta = el("a", "kt-tam", tt("1917’den bugüne tarihçe →", "History since 1917 →")); ta.href = "tarihce.html"; ac.appendChild(ta);
+      b.appendChild(ac);
+      var sr = el("div", "kt-sira"); sr.setAttribute("role", "group"); sr.setAttribute("aria-label", tt("Sıralama", "Order"));
+      var ESKI = false; try { ESKI = localStorage.getItem("zbs-kt-sira") === "eski"; } catch (e) {}
+      [[false, tt("Bugünden geriye", "Newest first")], [true, tt("7 Ekim’den bugüne", "From 7 October to today")]].forEach(function (x) {
+        var d = el("button", null, x[1]); d.type = "button"; d.setAttribute("aria-pressed", String(ESKI === x[0]));
+        d.onclick = function () { try { localStorage.setItem("zbs-kt-sira", x[0] ? "eski" : "yeni"); } catch (e) {} k.textContent = ""; liste(); };
+        sr.appendChild(d);
+      });
+      b.appendChild(sr);
       k.appendChild(b);
-      var gunler = {};
+      var gunler = {}, donum = {};
       v.olaylar.forEach(function (o) { (gunler[o.bas] = gunler[o.bas] || []).push(o); });
-      var sira = Object.keys(gunler).sort().reverse();
+      var ilk = Object.keys(gunler).sort()[0] || "2023-10-07";
+      DONUM.forEach(function (d) { if (d.tarih.length === 10 && d.tarih >= (ilk < "2023-10-07" ? ilk : "2023-10-07")) { (donum[d.tarih] = donum[d.tarih] || []).push(d); if (!gunler[d.tarih]) gunler[d.tarih] = []; } });
+      var sira = Object.keys(gunler).sort(); if (!ESKI) sira.reverse();
       var duzen = el("div", "kt-duzen"), menu = el("nav", "kt-menu"), ana = el("div", "kt-ana");
       menu.setAttribute("aria-label", tt("Yıl ve ay", "Year and month"));
       var aylar = {};
       sira.forEach(function (g) { var a = g.slice(0, 7); aylar[a] = (aylar[a] || 0) + gunler[g].length; });
-      var yil = null, ul = null;
-      Object.keys(aylar).sort().reverse().forEach(function (a) {
+      var yil = null, ul = null, ak = Object.keys(aylar).sort(); if (!ESKI) ak.reverse();
+      ak.forEach(function (a) {
         if (a.slice(0, 4) !== yil) { yil = a.slice(0, 4); menu.appendChild(el("h3", null, yil)); ul = el("ul"); menu.appendChild(ul); }
         var li = el("li"), x = el("a"); x.href = "#ay-" + a;
         x.append(new Date(a + "-15T12:00:00Z").toLocaleDateString(YER, { month: "long" }), el("small", null, String(aylar[a])));
@@ -97,6 +116,15 @@
       var ay = null;
       sira.forEach(function (g) {
         if (g.slice(0, 7) !== ay) { ay = g.slice(0, 7); var h = el("h2", "kt-ay", new Date(ay + "-15T12:00:00Z").toLocaleDateString(YER, { month: "long", year: "numeric" })); h.id = "ay-" + ay; ana.appendChild(h); }
+        (donum[g] || []).forEach(function (d) {
+          var r = el("div", "kt-donum");
+          r.appendChild(el("time", null, gunAd(g)));
+          var ic = el("div"); ic.appendChild(el("small", null, tt("Dönüm noktası", "Turning point"))); ic.appendChild(el("b", null, EN ? d.baslik_en : d.baslik));
+          ic.appendChild(el("p", null, EN ? d.metin_en : d.metin));
+          var a = el("a", null, tt("Kaynak: ", "Source: ") + d.kaynak + " ↗"); a.href = d.url; a.target = "_blank"; a.rel = "noopener"; ic.appendChild(a);
+          r.appendChild(ic); ana.appendChild(r);
+        });
+        if (!gunler[g].length) return;
         var d = el("details", "kt-gun"), sm = el("summary");
         sm.append(el("time", null, gunAd(g)));
         var cip = el("span", "kt-cipler"); gunler[g].forEach(function (o) { cip.appendChild(el("span", "kt-cip", turAd(o.tur) + ((o.yer || []).length ? " · " + o.yer[0] : ""))); });
