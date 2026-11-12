@@ -53,8 +53,17 @@ def topla(kanallar, sinir=4000, adet=40, log=print):
                     metin = _temiz(getattr(m, "message", "") or "")[:sinir]
                     if len(metin) < 15:
                         continue
+                    # mesajdaki bağlantılar (metin içi, gizli bağlantı, önizleme): yayının sitesindeki habere işaret edebilir
+                    bag = re.findall(r"https?://[^\s)\]>\"']+", getattr(m, "message", "") or "")
+                    for e in getattr(m, "entities", None) or []:
+                        if getattr(e, "url", None):
+                            bag.append(e.url)
+                    wp = getattr(getattr(m, "media", None), "webpage", None)
+                    if getattr(wp, "url", None):
+                        bag.append(wp.url)
                     og.append({"url": f"https://t.me/{kanal}/{m.id}", "baslik": metin[:140] + ("…" if len(metin) > 140 else ""),
-                               "tarih": m.date, "giris": metin, "telegram": True, "gorsel": None})
+                               "tarih": m.date, "giris": metin, "telegram": True, "gorsel": None,
+                               "baglantilar": [b for b in bag if "t.me/" not in b][:6]})
                 sonuc[kanal] = og
         finally:
             await istemci.disconnect()

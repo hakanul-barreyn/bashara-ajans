@@ -312,3 +312,78 @@ def kanit_guncelle(kok, olaylar, haberler):
     with open(yol, "w", encoding="utf-8") as f:
         json.dump(defter, f, ensure_ascii=False, separators=(",", ":"))
     return eklenen
+
+
+# ---------------------------------------------------------------- Telegram duyurusunu sitedeki habere bağlama
+_AR_DUR = set("في من على إلى الى عن مع بعد قبل أن ان التي الذي هذا هذه ذلك تلك كان كانت قد لا ما لم لن هو هي هم بين حتى منذ عند خلال حول ضد أو او ثم كل بعض غير أي اي".split())
+_TR_DUR = set("ve ile için gibi daha olan oldu olarak sonra önce kadar bir bu şu o de da ki mi ne en çok son dakika".split())
+
+
+def _ar_kelimeler(s):
+    s = re.sub(r"[ً-ْـ]", "", s or "")            # hareke, tatvil
+    s = re.sub(r"^\s*(عاجل|خبر عاجل)\s*[|:\-–]*", "", s)
+    s = s.replace("أ", "ا").replace("إ", "ا").replace("آ", "ا").replace("ة", "ه").replace("ى", "ي")
+    cikti = set()
+    for w in re.findall(r"[؀-ۿ]+|[A-Za-z0-9]+", s):
+        if w in _AR_DUR:
+            continue
+        for on in ("وال", "بال", "لل", "ال", "و"):
+            if w.startswith(on) and len(w) - len(on) >= 3:
+                w = w[len(on):]
+                break
+        if len(w) >= 3:
+            cikti.add(w.lower())
+    return cikti
+
+
+def _tr_kelimeler(s):
+    s = (s or "").replace("I", "ı").replace("İ", "i").lower()
+    s = re.sub(r"^\s*son dakika\s*[|:\-–]*", "", s)
+    return {w[:5] for w in re.findall(r"[a-zçğıöşü0-9]+", s) if len(w) >= 4 and w not in _TR_DUR}
+
+
+def _benzerlik(a, b):
+    if len(a) < 3 or len(b) < 3:
+        return 0.0, 0
+    ortak = len(a & b)
+    return ortak / min(len(a), len(b)), ortak
+
+
+def web_esle(haberler, tarih_coz, log=print):
+    """Telegram'dan gelen kısa duyuruyu, aynı yayının sitesinde sonradan çıkan habere bağlar (h["web"]).
+    Aynı kaynak, Telegram'dan 2 saat önce ile 36 saat sonra arası; özgün ya da Türkçe başlıkta en az üç ortak kelime
+    ve kısa başlığın en az yarısı. Bulunamazsa haber Telegram bağlantısıyla kalır, sonraki çalıştırmada yeniden aranır."""
+    web = {}
+    for h in haberler:
+        if not h.get("telegram") and "t.me/" not in h.get("url", "") and not h.get("gnews"):
+            web.setdefault(h["kaynak"], []).append(h)
+    yeni = 0
+    for h in haberler:
+        if not h.get("telegram") or h.get("web") or "instagram.com" in h.get("url", ""):
+            continue
+        aday = web.get(h["kaynak"])
+        if not aday:
+            continue
+        t0 = tarih_coz(h.get("tarih"))
+        if not t0:
+            continue
+        a_ar, a_tr = _ar_kelimeler(h.get("baslik_orj")) if h.get("dil") == "ar" else set(), _tr_kelimeler(h.get("baslik_tr"))
+        a_or = a_ar or {w.lower()[:6] for w in re.findall(r"\w{4,}", h.get("baslik_orj") or "")}
+        en, en_p = None, 0.0
+        for w in aday:
+            t1 = tarih_coz(w.get("tarih"))
+            if not t1 or not (-2 * 3600 <= (t1 - t0).total_seconds() <= 36 * 3600):
+                continue
+            b_or = _ar_kelimeler(w.get("baslik_orj")) if a_ar else {x.lower()[:6] for x in re.findall(r"\w{4,}", w.get("baslik_orj") or "")}
+            p1, o1 = _benzerlik(a_or, b_or)
+            p2, o2 = _benzerlik(a_tr, _tr_kelimeler(w.get("baslik_tr"))) if a_tr else (0.0, 0)
+            kabul = lambda p, o: p if (p >= 0.6 and o >= 3) or (p >= 0.5 and o >= 5) else 0
+            p = max(kabul(p1, o1), kabul(p2, o2))
+            if p and p > en_p:
+                en, en_p = w, p
+        if en:
+            h["web"] = {"url": en["url"], "id": en["id"], "benzerlik": round(en_p, 2)}
+            yeni += 1
+    if yeni:
+        log(f"Telegram → site: {yeni} duyuru sitedeki habere bağlandı")
+    return yeni

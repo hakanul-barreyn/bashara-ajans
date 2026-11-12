@@ -4804,5 +4804,71 @@
   "id": 221,
   "telegram": null,
   "cizgi": null
+ },
+ {
+  "ad": "BBC Arabic",
+  "url": "https://www.bbc.com/arabic",
+  "sehir": "Londra",
+  "ulke": "İngiltere",
+  "bolge": "İngiltere",
+  "lat": 51.51,
+  "lon": -0.13,
+  "dil": "ar",
+  "tur": "resmi",
+  "profil": "BBC’nin 1938’de radyo olarak kurulan Arapça servisi.",
+  "dog": "B",
+  "tg": false,
+  "liste": false,
+  "notu": "",
+  "id": 222,
+  "telegram": null,
+  "besleme": [
+   "https://feeds.bbci.co.uk/arabic/rss.xml"
+  ],
+  "telegram_aday": [],
+  "cizgi": "ik",
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "Centre for Media Monitoring'in 7 Ekim 2023 – 6 Ekim 2024 dönemini kapsayan 180 sayfalık raporu: Filistinli ölümler yaklaşık 34 kat fazla olduğu hâlde İsrailli ölümler, ölü başına yazılı haberlerde 33, yayında 19 kat daha sık anıldı.",
+    "kaynak": "The New Arab",
+    "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
+    "tarih": "2025-06"
+   }
+  ]
+ },
+ {
+  "ad": "BBC Türkçe",
+  "url": "https://www.bbc.com/turkce",
+  "sehir": "Londra",
+  "ulke": "İngiltere",
+  "bolge": "İngiltere",
+  "lat": 51.51,
+  "lon": -0.13,
+  "dil": "tr",
+  "tur": "resmi",
+  "profil": "BBC’nin Türkçe servisi (1939’dan beri).",
+  "dog": "B",
+  "tg": false,
+  "liste": false,
+  "notu": "",
+  "id": 223,
+  "telegram": null,
+  "besleme": [
+   "https://feeds.bbci.co.uk/turkce/rss.xml"
+  ],
+  "telegram_aday": [],
+  "cizgi": "ik",
+  "cizgi_tartismali": true,
+  "kanitlar": [
+   {
+    "tur": "araştırma",
+    "metin": "Centre for Media Monitoring'in 7 Ekim 2023 – 6 Ekim 2024 dönemini kapsayan 180 sayfalık raporu: Filistinli ölümler yaklaşık 34 kat fazla olduğu hâlde İsrailli ölümler, ölü başına yazılı haberlerde 33, yayında 19 kat daha sık anıldı.",
+    "kaynak": "The New Arab",
+    "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
+    "tarih": "2025-06"
+   }
+  ]
  }
 ]

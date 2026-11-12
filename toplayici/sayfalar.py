@@ -650,7 +650,10 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
     if oz:
         govde += f'<p class="mk-ilk">{_e(oz)}</p>'
     govde += (f'<p class="mk-kaynak">{_e("Bu haberin kaynağı" if dil == "tr" else "Source of this story")}: '
-              f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>')
+              + (f'<a href="{_e(h["web"]["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a> · '
+                 f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">Telegram ↗</a></p>'
+                 if (h.get("web") or {}).get("url", "").startswith("http") else
+                 f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>'))
     # Ayrıca okuyun (metnin içinde): en yakın ilgili olay
     ayrica = ""
     if ilgili:

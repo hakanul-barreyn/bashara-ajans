@@ -739,10 +739,15 @@
     }
     const o = h.olay && olayHarita[h.olay];
     const ey = el("div", "eylemler");
-    ey.appendChild(eylem(h.telegram ? "Telegram’da aç ↗" : h.gnews ? "Kaynağa git (Google Haberler üzerinden) ↗" : "Kaynağa git ↗", h.url, "ana"));
+    // Telegram duyurusu yayının sitesindeki habere bağlandıysa önce site bağlantısı
+    const web = h.web && /^https?:\/\//.test(h.web.url) ? h.web.url : null;
+    if (web) {
+      ey.appendChild(eylem(k.ad + " sitesinde oku ↗", web, "ana"));
+      ey.appendChild(eylem("Telegram duyurusu ↗", h.url));
+    } else ey.appendChild(eylem(h.telegram ? "Telegram’da aç ↗" : h.gnews ? "Kaynağa git (Google Haberler üzerinden) ↗" : "Kaynağa git ↗", h.url, "ana"));
     if (!h.gnews) {
       if (h.arsiv) ey.appendChild(eylem("Arşivlendi ✓", h.arsiv, "arsivli"));
-      else ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + h.url));
+      else ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + (web || h.url)));
     }
     ey.appendChild(paylasDugme(h));
     g.appendChild(ey);

@@ -201,6 +201,12 @@ def site_haritasi_coz(metin):
     return cikti
 
 
+def basliklilar(ogeler, oran=0.5):
+    """Site haritasının gerçekten haber haritası olduğunu sınar: öğelerin en az yarısının başlığı olmalı
+    (AP'nin seçim sonuçları sayfaları gibi başlıksız proje haritaları haber diye alınmasın)."""
+    return bool(ogeler) and sum(1 for o in ogeler if (o.get("baslik") or "").strip()) >= len(ogeler) * oran
+
+
 def haber_haritasi_mi(metin):
     return "<urlset" in metin[:3000] and ("sitemap-news" in metin[:3000] or "<news:" in metin)
 
@@ -276,6 +282,15 @@ def wp_coz(metin):
     return cikti
 
 
+def alan_adi(u):
+    """'https://www.aljazeera.net/x' -> 'aljazeera.net' (kısaltılmış bağlantılar eşleşmez)"""
+    try:
+        h = urllib.parse.urlsplit(u or "").netloc.lower().split(":")[0]
+    except ValueError:
+        return ""
+    return h[4:] if h.startswith("www.") else h
+
+
 def telegram_coz(metin, kanal, sinir=700):
     cikti = []
     for blok in re.split(r'<div class="tgme_widget_message_wrap', metin)[1:]:
@@ -288,6 +303,10 @@ def telegram_coz(metin, kanal, sinir=700):
         if len(metin_) < 15:
             continue
         g = re.search(r"tgme_widget_message_photo_wrap[^>]+background-image:url\('([^']+)'\)", blok)
+        bag = [html.unescape(b) for b in re.findall(r'href="(https?://[^"]+)"', y.group(1))]
+        on = re.search(r'class="tgme_widget_message_link_preview"[^>]*href="(https?://[^"]+)"', blok)
+        if on:
+            bag.append(html.unescape(on.group(1)))
         cikti.append({
             "url": "https://t.me/" + m.group(1),
             "baslik": metin_[:140] + ("…" if len(metin_) > 140 else ""),
@@ -295,6 +314,7 @@ def telegram_coz(metin, kanal, sinir=700):
             "giris": metin_,
             "telegram": True,
             "gorsel": g.group(1) if g else None,
+            "baglantilar": [b for b in bag if "t.me/" not in b][:6],
         })
     return cikti
 
@@ -341,12 +361,12 @@ def dene_harita(url):
     kod, metin, son = getir(url)
     if kod != 200:
         return None
-    if haber_haritasi_mi(metin) and site_haritasi_coz(metin):
+    if haber_haritasi_mi(metin) and basliklilar(site_haritasi_coz(metin)):
         return {"tip": "harita", "url": son}
     for alt in harita_dizini_alt(metin)[:40]:
         if "news" in alt.lower() and izinli(alt):
             k2, m2, s2 = getir(alt)
-            if k2 == 200 and haber_haritasi_mi(m2) and site_haritasi_coz(m2):
+            if k2 == 200 and haber_haritasi_mi(m2) and basliklilar(site_haritasi_coz(m2)):
                 return {"tip": "harita", "url": s2}
     return None
 
@@ -628,6 +648,8 @@ def kaynak_isle(k, durum):
     ogeler = cek(d.get("yontem")) if d.get("yontem") else None
     if d.get("yontem"):
         d["cek_kod"] = _cek_kod.get(d["yontem"]["url"])
+        if ogeler and d["yontem"].get("tip") == "harita" and not basliklilar(ogeler, 0.2):
+            ogeler = None   # başlıksız harita: haber değil; üç kez olursa yol yeniden aranır
     if ogeler is None:
         d["hata"] = d.get("hata", 0) + 1
         ogeler = []
@@ -906,6 +928,11 @@ def main():
                 "oncelik": bool(k.get("oncelik")) or None,
                 "resmi_grup": k.get("resmi_grup"),
             }
+            if o.get("telegram") and o.get("baglantilar"):
+                site = alan_adi(k.get("url"))
+                w = next((b for b in o["baglantilar"] if site and alan_adi(b) == site), None)
+                if w:   # duyuru, yayının sitesindeki habere bağlantı veriyor
+                    eski[hid]["web"] = {"url": w, "kaynak": "mesaj"}
             yeni += 1
     log(f"{yeni} yeni haber; {sum(1 for _, d, _ in sonuclar if d.get('yontem'))}/{len(kaynaklar)} kaynakta yol bulundu")
 
@@ -1104,6 +1131,12 @@ def main():
             log(f"Wayback: {kaydedilen}/{min(len(sira), 8)} haber arşivlendi")
     for hid in [i for i, k in wb.items() if (SIMDI - (tarih_coz(k.get("zaman")) or SIMDI)).days > 3]:
         wb.pop(hid, None)
+
+    # Telegram duyurularını, aynı yayının sitesinde sonradan çıkan habere bağla
+    try:
+        ekler.web_esle(list(eski.values()), tarih_coz, log=log)
+    except Exception as e:
+        log(f"Telegram → site eşlemesi yapılamadı: {e}")
 
     # Kaydet: eski haberleri at, ham metinleri temizle
     tut = [h for h in eski.values() if (tarih_coz(h["tarih"]) or SIMDI) >= sinir]
