@@ -401,7 +401,17 @@ def canli_yaz(kok, haberler, simdi, log=print):
     klasor = os.path.join(kok, "data", "canli")
     os.makedirs(klasor, exist_ok=True)
     gunler = {}
-    for h in haberler:
+    # ilk kurulumda: canlı deposunda olmayan günler için özeti yazılan haberlerin arşivinden başla
+    ak = os.path.join(kok, "data", "arsiv")
+    eski = []
+    for ad in os.listdir(ak) if os.path.isdir(ak) else []:
+        if re.match(r"\d{4}-\d{2}-\d{2}\.json$", ad) and not os.path.exists(os.path.join(klasor, ad[:10] + ".json.gz")):
+            try:
+                x = json.load(open(os.path.join(ak, ad), encoding="utf-8"))
+                eski += x if isinstance(x, list) else []
+            except (OSError, ValueError):
+                pass
+    for h in eski + list(haberler):
         b = (h.get("baslik_orj") or "").strip()
         if not b or not h.get("url") or not h.get("tarih"):
             continue
