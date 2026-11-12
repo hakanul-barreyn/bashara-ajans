@@ -10,7 +10,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=1").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=2").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -39,13 +39,13 @@
           var li = el("li");
           li.appendChild(el("time", null, tarihAd(o.tarih)));
           var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
-          var ka = el("a", null, tt("Kaynak: ", "Source: ") + o.kaynak + " ↗"); ka.href = o.url; ka.target = "_blank"; ka.rel = "noopener"; ic.appendChild(ka);
+          var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
           if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
           li.appendChild(ic); ol.appendChild(li);
         });
         s.appendChild(ol); k.appendChild(s);
       });
-      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi ve kaynaklı; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand with sources; tell us about any entry you think is missing or wrong.")));
+      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi; kaynaklar Britannica, BM belgeleri, Uluslararası Adalet Divanı, Filistin Araştırmaları Enstitüsü, Al Jazeera, Middle East Eye, Anadolu Ajansı ve Türk Tarih Kurumu Belleten’den; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand; sources are Britannica, UN documents, the International Court of Justice, the Institute for Palestine Studies, Al Jazeera, Middle East Eye, Anadolu Agency and the Turkish Historical Society’s Belleten; tell us about any entry you think is missing or wrong.")));
       var h = location.hash.slice(1); if (h) { var y = document.getElementById(h); if (y) y.scrollIntoView(); }
     }
     ciz();

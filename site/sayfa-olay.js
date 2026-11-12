@@ -15,7 +15,7 @@
   var k = document.getElementById("olay");
 
   var DONUM = [];
-  fetch("site/donum.json?v=1").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
+  fetch("site/donum.json?v=2").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
   .then(function () { return fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)); }).then(function (r) { return r.json(); }).then(function (v) {
     var TA = {}; v.turler.forEach(function (t) { TA[t.anahtar] = t.ad; });
     var turAd = function (t) { return EN ? (TUR_EN[t] || TA[t] || t) : (TA[t] || t); };
@@ -121,7 +121,7 @@
           r.appendChild(el("time", null, gunAd(g)));
           var ic = el("div"); ic.appendChild(el("small", null, tt("Dönüm noktası", "Turning point"))); ic.appendChild(el("b", null, EN ? d.baslik_en : d.baslik));
           ic.appendChild(el("p", null, EN ? d.metin_en : d.metin));
-          var a = el("a", null, tt("Kaynak: ", "Source: ") + d.kaynak + " ↗"); a.href = d.url; a.target = "_blank"; a.rel = "noopener"; ic.appendChild(a);
+          var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (d.kaynaklar || []).forEach(function (q, i) { var a = el("a", null, q.ad + " ↗"); a.href = q.url; a.target = "_blank"; a.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(a); }); ic.appendChild(ks);
           r.appendChild(ic); ana.appendChild(r);
         });
         if (!gunler[g].length) return;
