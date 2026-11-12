@@ -132,7 +132,15 @@ def _foto_komut(komut, geri, kok, simdi):
         kaydet()
         return "Silindi."
     if "=" not in geri:
-        return "Biçim: /foto Ad, diğer yazılış = https://commons.wikimedia.org/wiki/File:..."
+        # yalnızca adlar: her biri için Commons kategori ve arama sayfası (fotoğrafı yönetici seçer)
+        import urllib.parse as up
+        adlar = [a.strip() for a in geri.split(",") if len(a.strip()) >= 3][:10]
+        if not adlar:
+            return "Biçim: /foto Trump, Erdoğan  (bağlantıları gönderir)  ya da  /foto Ad = https://commons.wikimedia.org/wiki/File:..."
+        satir = [f"<b>{_e(a)}</b>\nKategori: https://commons.wikimedia.org/wiki/Category:{up.quote(a.replace(' ', '_'))}\n"
+                 "Arama: " + _e(f"https://commons.wikimedia.org/w/index.php?title=Special:MediaSearch&type=image&search={up.quote(a)}") for a in adlar]
+        return ("\n\n".join(satir) + "\n\nBeğendiğin fotoğrafın sayfasını aç, adresini şöyle gönder:\n/foto " + _e(adlar[0])
+                + " = https://commons.wikimedia.org/wiki/File:...")
     adlar_, bag = geri.split("=", 1)
     adlar = [a.strip() for a in adlar_.split(",") if len(a.strip()) >= 3]
     m = re.search(r"commons\.wikimedia\.org/wiki/(File:[^\s?#]+)", bag)

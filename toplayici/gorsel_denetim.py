@@ -31,6 +31,7 @@ TALIMAT = ("Bu görsel bir haber sitesinde şu haberin başında kullanılacak: 
            "Haberle ilgisi olmayan doğa yakın çekimleri (mantar, çiçek, böcek, hayvan), yemek, eşya, spor ya da eğlence görselleri false. "
            "saygisiz: bu görsel bu haberle yan yana konunca haberdeki kişileri, şehitleri ya da halkı küçümseyen, alay eden ya da "
            "hakaret gibi okunabilecek bir eşleşme olur mu (hayvan, çöp, komik ya da alakasız nesne)? Şüphedeysen true. "
+           "insan: görselde tanınabilir ya da belirgin bir insan var mı (uzaktaki küçük kalabalık siluetleri hariç)? "
            "odak_x, odak_y: insan varsa kafalarının ortalama yeri (yüzde, sol üst 0,0); yoksa ana konunun yeri.")
 SORGU = ("Bir haber için Wikimedia Commons'ta açık lisanslı fotoğraf arayacağız. Haber: «{baslik}» — {not_}. Yer: {yer}. "
          "Öncelik sırasıyla en çok 4 İngilizce Commons arama ifadesi yaz: önce olayın tam yeri (ör. \"Rafah Border Crossing\"), "
@@ -94,21 +95,38 @@ def _commons(params):
         if (ii.get("width") or 0) < 900:
             continue
         sanatci = _re.sub(r"<[^>]+>", "", _html.unescape((md.get("Artist") or {}).get("value", ""))).strip()[:80] or "Wikimedia Commons"
-        cikti.append({"url": ii.get("thumburl") or ii.get("url"), "sayfa": ii.get("descriptionurl"), "atif": f"{sanatci} · {lis} · Wikimedia Commons"})
+        kat = _html.unescape((md.get("Categories") or {}).get("value", ""))
+        yil = _re.search(r"(19|20)\d{2}", _html.unescape((md.get("DateTimeOriginal") or md.get("DateTime") or {}).get("value", "")))
+        w, h = ii.get("width") or 0, ii.get("height") or 1
+        # sıralama puanı: topluluğun "kaliteli / öne çıkan" dediği, 2023 sonrası çekilmiş, yatay fotoğraflar önce
+        puan = (3 if _re.search(r"Quality images|Featured pictures|Valued images", kat) else 0) \
+            + (2 if yil and int(yil.group(0)) >= 2023 else 1 if yil and int(yil.group(0)) >= 2015 else 0) \
+            + (1 if w / h >= 1.3 else -2 if w / h < 1 else 0)
+        cikti.append({"url": ii.get("thumburl") or ii.get("url"), "sayfa": ii.get("descriptionurl"), "atif": f"{sanatci} · {lis} · Wikimedia Commons",
+                      "puan": puan})
     return cikti
 
 
+YEDEK = ["Gaza City", "Gaza Strip", "Khan Yunis", "Rafah", "Deir al-Balah", "Jabalia", "Gaza beach", "Gaza port", "Nablus", "Jerusalem Old City"]
+
+
 def commons_ara(konum, yer_ad, sorgular=None):
-    """Habere uygun olabilecek açık lisanslı fotoğraflar (aday listesi): önce habere özgü aramalar (olayın yeri, şehir,
-    bölge), sonra olayın konumunun 10 km çevresindeki coğrafi etiketli dosyalar. Hepsi sonra görsel denetiminden geçer."""
+    """Habere uygun olabilecek açık lisanslı fotoğraflar (aday listesi): önce habere özgü ifadelerin Commons kategorileri
+    (ör. Category:Rafah Border Crossing), sonra aynı ifadelerle arama, sonra olayın konumunun 10 km çevresi, en sonda genel
+    bir Gazze / Filistin havuzu. Her grup kendi içinde puana göre (kaliteli, yeni, yatay) sıralanır; hepsi sonra görsel
+    denetiminden geçer."""
     a, gorulen = [], set()
     def ekle(xs):
-        for x in xs:
+        for x in sorted(xs, key=lambda x: -x.get("puan", 0)):
             if x["url"] not in gorulen:
                 gorulen.add(x["url"]); a.append(x)
     for q in (sorgular or []):
         try:
-            ekle(_commons({"generator": "search", "gsrsearch": "filetype:bitmap " + q, "gsrnamespace": 6, "gsrlimit": 8}))
+            ekle(_commons({"generator": "categorymembers", "gcmtitle": "Category:" + q, "gcmtype": "file", "gcmlimit": 20}))
+        except Exception:
+            pass
+        try:
+            ekle(_commons({"generator": "search", "gsrsearch": "filetype:bitmap " + q, "gsrnamespace": 6, "gsrlimit": 10}))
         except Exception:
             pass
     if konum:
@@ -116,11 +134,14 @@ def commons_ara(konum, yer_ad, sorgular=None):
             ekle(_commons({"generator": "geosearch", "ggscoord": f"{konum[0]}|{konum[1]}", "ggsradius": 10000, "ggslimit": 15, "ggsnamespace": 6}))
         except Exception:
             pass
-    if len(a) < 3 and not sorgular:
-        try:
-            ekle(_commons({"generator": "search", "gsrsearch": "filetype:bitmap " + ((yer_ad + " ") if yer_ad else "") + "Gaza", "gsrnamespace": 6, "gsrlimit": 15}))
-        except Exception:
-            pass
+    if len(a) < 6:
+        for q in ([yer_ad] if yer_ad else []) + YEDEK[:4]:
+            try:
+                ekle(_commons({"generator": "categorymembers", "gcmtitle": "Category:" + q, "gcmtype": "file", "gcmlimit": 20}))
+            except Exception:
+                pass
+            if len(a) >= 15:
+                break
     return a
 
 
@@ -184,7 +205,7 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
             except (TypeError, ValueError):
                 o["odak"] = "50% 30%"
             continue
-        anah = "commons2:" + o["id"]
+        anah = "commons3:" + o["id"]
         if anah not in onb:
             sorg = []
             if anahtar and model:
@@ -195,7 +216,7 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
                 except Exception as e:
                     log(f"Görsel arama ifadeleri: {e}")
             try:
-                onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"), sorg)[:10]
+                onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"), sorg)[:20]
             except Exception as e:
                 log(f"Commons araması: {e}")
                 onb[anah] = []
@@ -226,7 +247,7 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
             if k is None:
                 continue                    # denetlenmeden kullanılmaz
             temiz = not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "portre", "saygisiz"))
-            if temiz and k.get("ilgili") is True:
+            if temiz and k.get("ilgili") is True and not k.get("insan"):
                 secilen = (c, k)
                 break
         o["gorsel"], o["gorsel_kaynak"], o["gorsel_atif"], o["gorsel_sayfa"] = None, None, None, None

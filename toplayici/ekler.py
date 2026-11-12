@@ -108,7 +108,7 @@ Kurallar:
   kimliklerini ver: {"aciklama": "...", "ids": ["...", "..."]}. Farklı kelime seçimi, farklı vurgu ya da eksik bilgi çelişki DEĞİLDİR.
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın KONUSU olan ya da yaşandığı yer; açıklamanın yapıldığı başkent değil (Ankara'da Sincar üzerine varılan bir mutabakatta yer Sincar'dır). Yalnızca diplomatik bir görüşmenin kendisi haberse görüşmenin yapıldığı şehir. {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık merkez yeter. Belirsizse null.
-- yerler: olay birden çok yeri ilgilendiriyorsa (iki ülke arası anlaşma, birden çok kentte saldırı) "yer" dışındaki en çok 3 yer, aynı biçimde; yoksa [].
+- yerler: haberde adı geçen öteki somut yerler: birden çok hedef ya da saldırı noktası (havalimanı, petrol tesisi, liman, kent, kamp), iki ülke arası anlaşmada öteki ülke. "yer" dışındaki en çok 4 yer, aynı biçimde ve olabildiğince tam konumuyla (ör. Yanbu'daki pompa istasyonu için Yanbu); yoksa [].
 - Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}, "yerler": []}]
 """
 
@@ -146,7 +146,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
         except (TypeError, ValueError):
             yer = None
         yerler = []
-        for y in (g.get("yerler") or [])[:3] if isinstance(g.get("yerler"), list) else []:
+        for y in (g.get("yerler") or [])[:4] if isinstance(g.get("yerler"), list) else []:
             try:
                 if isinstance(y, dict) and -90 <= float(y.get("lat")) <= 90 and -180 <= float(y.get("lon")) <= 180 and y.get("ad"):
                     yerler.append({"ad": guvenli(y.get("ad"))[:60], "lat": round(float(y["lat"]), 2), "lon": round(float(y["lon"]), 2)})

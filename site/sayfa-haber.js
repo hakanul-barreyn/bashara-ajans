@@ -202,13 +202,27 @@
             { type: "Feature", properties: { t: "ad", ad: EN ? "GAZA STRIP" : "GAZZE ŞERİDİ", b: 0 }, geometry: { type: "Point", coordinates: [34.36, 31.43] } },
             { type: "Feature", properties: { t: "ad", ad: EN ? "WEST BANK" : "BATI ŞERİA", b: 0 }, geometry: { type: "Point", coordinates: [35.3, 32.0] } }];
           yakin.forEach(function (y) { f.push({ type: "Feature", properties: { t: "yakin", b: y[2], g: y[3], s: y[4] }, geometry: { type: "Point", coordinates: [y[1], y[0]] } }); });
-          f.push({ type: "Feature", properties: { t: "olay" }, geometry: { type: "Point", coordinates: [lon, lat] } });
+          f.push({ type: "Feature", properties: { t: "olay", ad: d.dataset.ad || "" }, geometry: { type: "Point", coordinates: [lon, lat] } });
+          // haberde adı geçen öteki yerler (ör. Riyad'daki havalimanı ile Yanbu'daki petrol tesisi): kırmızı noktalar, adlarıyla
+          var ek = []; try { ek = JSON.parse(d.dataset.yerler || "[]"); } catch (e) { /* yok */ }
+          ek.forEach(function (y) { if (isFinite(+y.lat) && isFinite(+y.lon)) f.push({ type: "Feature", properties: { t: "olay2", ad: y.ad || "" }, geometry: { type: "Point", coordinates: [+y.lon, +y.lat] } }); });
+          if (ek.length) {
+            var b = new ml.LngLatBounds([lon, lat], [lon, lat]); ek.forEach(function (y) { if (isFinite(+y.lat) && isFinite(+y.lon)) b.extend([+y.lon, +y.lat]); });
+            m.fitBounds(b, { padding: 70, maxZoom: gazze ? 12.5 : 9, duration: 0 });
+          }
           m.addSource("zbs", { type: "geojson", data: { type: "FeatureCollection", features: f } });
           m.addLayer({ id: "zbs-hat", type: "line", source: "zbs", filter: ["==", ["get", "t"], "hat"], paint: { "line-color": "#c9302c", "line-width": 2.5, "line-dasharray": [3, 2] } });
           m.addLayer({ id: "zbs-yakin", type: "circle", source: "zbs", filter: ["==", ["get", "t"], "yakin"], paint: { "circle-radius": 6, "circle-color": "#6b746f", "circle-opacity": 0.75, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5 } });
-          m.addLayer({ id: "zbs-olay", type: "circle", source: "zbs", filter: ["==", ["get", "t"], "olay"], paint: { "circle-radius": 9, "circle-color": "#c9302c", "circle-stroke-color": "#fff", "circle-stroke-width": 3 } });
-          m.addLayer({ id: "zbs-ad", type: "symbol", source: "zbs", filter: ["==", ["get", "t"], "ad"],
-            layout: { "text-field": ["get", "ad"], "text-font": ["Noto Sans Bold"], "text-size": ["case", ["==", ["get", "b"], 1], 18, 14], "text-letter-spacing": 0.12, "text-allow-overlap": true },
+          m.addLayer({ id: "zbs-olay", type: "circle", source: "zbs", filter: ["in", ["get", "t"], ["literal", ["olay", "olay2"]]], paint: { "circle-radius": ["case", ["==", ["get", "t"], "olay"], 9, 7], "circle-color": "#c9302c", "circle-stroke-color": "#fff", "circle-stroke-width": 3 } });
+          m.addLayer({ id: "zbs-olay-ad", type: "symbol", source: "zbs", filter: ["all", ["in", ["get", "t"], ["literal", ["olay", "olay2"]]], ["!=", ["get", "ad"], ""]],
+            layout: { "text-field": ["get", "ad"], "text-font": ["Noto Sans Bold"], "text-size": 13, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 12 },
+            paint: { "text-color": "#8f1f1b", "text-halo-color": "#fffdf8", "text-halo-width": 2 } });
+          // "Kuşatma altındaki Filistin" her ölçekte, normal boyda; Gazze Şeridi ve Batı Şeria yazıları yalnızca yakınlaşınca (üst üste binmesin)
+          m.addLayer({ id: "zbs-ad", type: "symbol", source: "zbs", filter: ["all", ["==", ["get", "t"], "ad"], ["==", ["get", "b"], 1]],
+            layout: { "text-field": ["get", "ad"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-letter-spacing": 0.08, "text-max-width": 9 },
+            paint: { "text-color": "#1f5c43", "text-halo-color": "#fffdf8", "text-halo-width": 2 } });
+          m.addLayer({ id: "zbs-ad-ic", type: "symbol", source: "zbs", minzoom: 7.5, filter: ["all", ["==", ["get", "t"], "ad"], ["==", ["get", "b"], 0]],
+            layout: { "text-field": ["get", "ad"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-letter-spacing": 0.08 },
             paint: { "text-color": "#1f5c43", "text-halo-color": "#fffdf8", "text-halo-width": 2 } });
           m.on("click", "zbs-yakin", function (e) {
             var p = e.features[0].properties, ic = document.createElement("div"); ic.className = "mk-ml-acik";
