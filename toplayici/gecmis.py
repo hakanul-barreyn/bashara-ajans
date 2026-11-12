@@ -47,7 +47,7 @@ FILISTIN_NESNE = re.compile(r"palestin|filistinli|فلسطيني|فلسطيني�
                             r"çocu|genç|journalist|gazeteci|paramedic|\bman\b|\bwoman\b|طفل|أطفال|شاب|شابا|صحفي", re.I)
 ISRAIL_ASKER_OLUM = re.compile(r"(?:\bidf\b|soldiers?|reservists?|troops|soldat|soldad|asker[a-z]*)[ ,:'-]+(?:[a-z0-9]+[ ,:'-]+){0,3}(?:killed|dead|die[sd]?|slain|fall|fell|oldu|olduruldu|hayatini|tues?|muert|uccis|getotet)|"
                            r"مقتل جندي|مقتل جنود|مقتل ضابط|هلاك|مصرع جندي|مصرع جنود|נהרג|נפלו", re.I)
-SEHADET = re.compile(r"şehit|şehadet|martyr|martyre|mártir|martire|märtyrer|استشهاد|شهيد|شهداء|ارتقاء|ارتقى", re.I)
+SEHADET = re.compile(r"şehit|şehadet|\bsehit|\bsehadet|martyr|martyre|mártir|martire|märtyrer|استشهاد|شهيد|شهداء|ارتقاء|ارتقى", re.I)
 GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|صحف|صحاف|مراسل|עיתונא|כתב", re.I)
 
 
@@ -95,7 +95,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 10
+OZET_SURUM = 11
 BULTEN_SURUM = 1
 
 

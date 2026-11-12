@@ -18,13 +18,24 @@ import urllib.request
 
 GEMINI = "https://generativelanguage.googleapis.com/v1beta"
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
-EN_COK = 12
-TALIMAT = ("Bu bir haber görseli. Yalnızca JSON döndür: {\"yazi_grafik\": true|false, \"siddet\": true|false, \"portre\": true|false, \"insan\": true|false, \"odak_x\": 0-100, \"odak_y\": 0-100}. "
-           "yazi_grafik: yazının görselin ana öğesi olduğu TASARLANMIŞ bir grafik mi (son dakika / breaking bandı, haber kartı, afiş, "
-           "alıntı kartı, infografik, logo ekranı, harita)? Gerçek bir fotoğraftaki tabela, pankart ya da yazı bunu true yapmaz. "
-           "Ayrıca \"siddet\": true|false: görselde ölü beden, kan ya da ağır yaralı var mı? "
-           "\"portre\": true|false: görselin ana konusu tanınabilir bir ya da iki kişi mi (portre, kişinin yakın çekimi)? "
-           "odak_x, odak_y: insan varsa kafalarının (yüzlerinin) ortalama yeri, yüzde olarak (sol üst 0,0); insan yoksa görselin ana konusunun yeri.")
+EN_COK = 24
+TALIMAT = ("Bu görsel bir haber sitesinde şu haberin başında kullanılacak: «{baslik}». Yalnızca JSON döndür: "
+           "{{\"yazi_grafik\": true|false, \"siddet\": true|false, \"mustehcen\": true|false, \"portre\": true|false, \"ilgili\": true|false, "
+           "\"saygisiz\": true|false, \"insan\": true|false, \"odak_x\": 0-100, \"odak_y\": 0-100}}. "
+           "yazi_grafik: yazının ana öğe olduğu TASARLANMIŞ grafik mi (son dakika bandı, haber kartı, afiş, alıntı kartı, infografik, logo, harita)? "
+           "Gerçek bir fotoğraftaki tabela ya da pankart bunu true yapmaz. "
+           "siddet: ölü beden, kan, yaralı, silah doğrultulmuş insan, patlama anı ya da yıkım altında insan var mı? "
+           "mustehcen: çıplaklık, cinsel ya da müstehcen herhangi bir öğe var mı? "
+           "portre: görselin ana konusu tanınabilir bir ya da iki kişi mi? "
+           "ilgili: görsel bu haberin yerini (şehir, bölge, sınır kapısı, bina, sokak, manzara) ya da konusunu makul biçimde gösteriyor mu? "
+           "Haberle ilgisi olmayan doğa yakın çekimleri (mantar, çiçek, böcek, hayvan), yemek, eşya, spor ya da eğlence görselleri false. "
+           "saygisiz: bu görsel bu haberle yan yana konunca haberdeki kişileri, şehitleri ya da halkı küçümseyen, alay eden ya da "
+           "hakaret gibi okunabilecek bir eşleşme olur mu (hayvan, çöp, komik ya da alakasız nesne)? Şüphedeysen true. "
+           "odak_x, odak_y: insan varsa kafalarının ortalama yeri (yüzde, sol üst 0,0); yoksa ana konunun yeri.")
+SORGU = ("Bir haber için Wikimedia Commons'ta açık lisanslı fotoğraf arayacağız. Haber: «{baslik}» — {not_}. Yer: {yer}. "
+         "Öncelik sırasıyla en çok 4 İngilizce Commons arama ifadesi yaz: önce olayın tam yeri (ör. \"Rafah Border Crossing\"), "
+         "sonra şehir ya da bölge (ör. \"Rafah\", \"Gaza Strip street\"), sonra konuyla ilgili genel bir yer görüntüsü. "
+         "KİŞİ ADI YAZMA: yalnızca yerler, binalar, sokaklar, manzaralar. Yalnızca JSON: {{\"sorgular\": [\"...\"]}}")
 
 
 def _indir(url, sinir=3_000_000):
@@ -37,8 +48,8 @@ def _indir(url, sinir=3_000_000):
     return veri, tur
 
 
-def _sor(anahtar, model, veri, tur):
-    govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}}, {"text": TALIMAT}]}],
+def _sor(anahtar, model, veri, tur, baslik=""):
+    govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}}, {"text": TALIMAT.format(baslik=baslik or "")}]}],
              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
     istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),
                                    headers={"Content-Type": "application/json", "x-goog-api-key": anahtar, "User-Agent": UA})
@@ -46,6 +57,19 @@ def _sor(anahtar, model, veri, tur):
         v = json.loads(r.read())
     metin = v["candidates"][0]["content"]["parts"][0]["text"]
     return json.loads(metin)
+
+
+def _sorgular(anahtar, model, o):
+    """Gemini'den habere özgü Commons arama ifadeleri (kişi adı içermez)"""
+    govde = {"contents": [{"role": "user", "parts": [{"text": SORGU.format(baslik=o.get("baslik_en") or o.get("baslik", ""),
+                                                                       not_=(o.get("not_en") or o.get("not") or "")[:300], yer=o.get("yer_ad") or "-")}]}],
+             "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
+    istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),
+                                   headers={"Content-Type": "application/json", "x-goog-api-key": anahtar, "User-Agent": UA})
+    with urllib.request.urlopen(istek, timeout=60) as r:
+        v = json.loads(r.read())
+    x = json.loads(v["candidates"][0]["content"]["parts"][0]["text"])
+    return [str(q)[:80] for q in (x.get("sorgular") or []) if str(q).strip()][:4]
 
 
 COMMONS = "https://commons.wikimedia.org/w/api.php"
@@ -74,18 +98,27 @@ def _commons(params):
     return cikti
 
 
-def commons_ara(konum, yer_ad):
-    """Olayın yerine yakın, açık lisanslı fotoğraflar (aday listesi)."""
-    a = []
-    if konum:
+def commons_ara(konum, yer_ad, sorgular=None):
+    """Habere uygun olabilecek açık lisanslı fotoğraflar (aday listesi): önce habere özgü aramalar (olayın yeri, şehir,
+    bölge), sonra olayın konumunun 10 km çevresindeki coğrafi etiketli dosyalar. Hepsi sonra görsel denetiminden geçer."""
+    a, gorulen = [], set()
+    def ekle(xs):
+        for x in xs:
+            if x["url"] not in gorulen:
+                gorulen.add(x["url"]); a.append(x)
+    for q in (sorgular or []):
         try:
-            a += _commons({"generator": "geosearch", "ggscoord": f"{konum[0]}|{konum[1]}", "ggsradius": 10000, "ggslimit": 20, "ggsnamespace": 6})
+            ekle(_commons({"generator": "search", "gsrsearch": "filetype:bitmap " + q, "gsrnamespace": 6, "gsrlimit": 8}))
         except Exception:
             pass
-    if len(a) < 3:
-        ara = (yer_ad + " " if yer_ad else "") + "Gaza"
+    if konum:
         try:
-            a += _commons({"generator": "search", "gsrsearch": "filetype:bitmap " + ara, "gsrnamespace": 6, "gsrlimit": 15})
+            ekle(_commons({"generator": "geosearch", "ggscoord": f"{konum[0]}|{konum[1]}", "ggsradius": 10000, "ggslimit": 15, "ggsnamespace": 6}))
+        except Exception:
+            pass
+    if len(a) < 3 and not sorgular:
+        try:
+            ekle(_commons({"generator": "search", "gsrsearch": "filetype:bitmap " + ((yer_ad + " ") if yer_ad else "") + "Gaza", "gsrnamespace": 6, "gsrlimit": 15}))
         except Exception:
             pass
     return a
@@ -103,12 +136,26 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
     except (OSError, ValueError):
         onb = {}
     yeni = 0
+    import datetime as _dt
+    bugun = _dt.date.today().isoformat()
+    # aynı fotoğraf iki habere konmaz: şu anki Gündem'de ve son 30 günde başka bir haberde kullanılanlar atlanır
+    kullan = onb.get("_kullanilan") or {}
+    sinir = (_dt.date.today() - _dt.timedelta(days=30)).isoformat()
+    kullan = {u: x for u, x in kullan.items() if x[1] >= sinir}
+    simdi_kullan = set()
     for o in g.get("olaylar", []):
-        # Gündem görseli yalnızca açık lisanslı: Commons adayları (önbellekte olay başına)
-        anah = "commons:" + o["id"]
+        anah = "commons2:" + o["id"]
         if anah not in onb:
+            sorg = []
+            if anahtar and model:
+                try:
+                    if sayac:
+                        sayac()
+                    sorg = _sorgular(anahtar, model, o)
+                except Exception as e:
+                    log(f"Görsel arama ifadeleri: {e}")
             try:
-                onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"))[:6]
+                onb[anah] = commons_ara(o.get("konum"), o.get("yer_ad"), sorg)[:10]
             except Exception as e:
                 log(f"Commons araması: {e}")
                 onb[anah] = []
@@ -116,14 +163,18 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
         secilen = None
         for c in adaylar:
             url = c["url"]
-            k = onb.get(url)
+            u = kullan.get(url)
+            if url in simdi_kullan or (u and u[0] != o["id"]):
+                continue
+            kk = url + "|" + o["id"]          # uygunluk habere göre değişir
+            k = onb.get(kk)
             if k is None and anahtar and model and yeni < EN_COK:
                 try:
                     veri, tur = _indir(url)
                     if veri:
                         if sayac:
                             sayac()
-                        k = _sor(anahtar, model, veri, tur)
+                        k = _sor(anahtar, model, veri, tur, o.get("baslik", ""))
                         yeni += 1
                     else:
                         k = {"yazi_grafik": True, "indirilemedi": True}
@@ -131,25 +182,87 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
                     log(f"Görsel denetimi: {url[:80]}: {e}")
                     k = None
                 if k is not None:
-                    onb[url] = k
+                    onb[kk] = k
             if k is None:
-                continue                    # denetlenmeden kullanılmaz (şiddet içerebilir)
-            if not k.get("yazi_grafik") and not k.get("siddet") and not k.get("portre"):
+                continue                    # denetlenmeden kullanılmaz
+            temiz = not any(k.get(a) for a in ("yazi_grafik", "siddet", "mustehcen", "portre", "saygisiz"))
+            if temiz and k.get("ilgili") is True:
                 secilen = (c, k)
                 break
-        o["gorsel"], o["gorsel_kaynak"] = None, None
+        o["gorsel"], o["gorsel_kaynak"], o["gorsel_atif"], o["gorsel_sayfa"] = None, None, None, None
         if secilen:
             c, k = secilen
             o["gorsel"], o["gorsel_atif"], o["gorsel_sayfa"] = c["url"], c["atif"], c.get("sayfa")
+            simdi_kullan.add(c["url"])
+            kullan[c["url"]] = [o["id"], bugun]
             try:
                 o["odak"] = f'{max(0, min(100, int(k.get("odak_x", 50))))}% {max(0, min(100, int(k.get("odak_y", 35))))}%'
             except (TypeError, ValueError):
                 o["odak"] = "50% 35%"
+    onb["_kullanilan"] = kullan
     if len(onb) > 4000:
+        k_ = onb.pop("_kullanilan", {})
         onb = dict(list(onb.items())[-3000:])
+        onb["_kullanilan"] = k_
     with open(yol_o, "w", encoding="utf-8") as f:
         json.dump(onb, f, ensure_ascii=False, separators=(",", ":"))
     with open(yol_g, "w", encoding="utf-8") as f:
         json.dump(g, f, ensure_ascii=False, separators=(",", ":"))
     if yeni:
         log(f"Görsel denetimi: {yeni} yeni görsel")
+
+
+AKIS_TALIMAT = ("Bu bir haber sitesinin akışında küçük önizleme olarak gösterilecek görsel. Yalnızca JSON döndür: "
+                "{\"siddet\": true|false, \"mustehcen\": true|false}. siddet: ölü beden, kan, ağır yaralı, parçalanmış beden ya da "
+                "işkence görüntüsü var mı? mustehcen: çıplaklık, cinsel ya da müstehcen öğe var mı? Şüphedeysen true.")
+AKIS_EN_COK = 60
+
+
+def akis_denetle(kok, anahtar, model, log=print, sayac=None):
+    """Akıştaki haber görselleri (kaynakların kendi fotoğrafları) da gösterilmeden önce denetlenir: şiddet ya da
+    müstehcenlik varsa gösterilmez. Denetlenmemiş görsel de gösterilmez (h["gorsel_ok"] yalnızca denetimden geçince true)."""
+    yol_h = os.path.join(kok, "data", "haberler.json")
+    yol_o = os.path.join(kok, "data", "gorsel-akis.json")
+    try:
+        v = json.load(open(yol_h, encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    try:
+        onb = json.load(open(yol_o, encoding="utf-8"))
+    except (OSError, ValueError):
+        onb = {}
+    H = v.get("haberler", [])
+    yeni = 0
+    for h in sorted(H, key=lambda h: h.get("tarih") or "", reverse=True):
+        u = h.get("gorsel")
+        if not u:
+            continue
+        k = onb.get(u)
+        if k is None and anahtar and model and yeni < AKIS_EN_COK and (h.get("ilgili") or h.get("ozet_tr")):
+            try:
+                veri, tur = _indir(u)
+                if veri:
+                    if sayac:
+                        sayac()
+                    govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}}, {"text": AKIS_TALIMAT}]}],
+                             "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
+                    istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),
+                                                   headers={"Content-Type": "application/json", "x-goog-api-key": anahtar, "User-Agent": UA})
+                    with urllib.request.urlopen(istek, timeout=60) as r:
+                        x = json.loads(json.loads(r.read())["candidates"][0]["content"]["parts"][0]["text"])
+                    k = {"ok": not (x.get("siddet") or x.get("mustehcen")), "s": bool(x.get("siddet")), "m": bool(x.get("mustehcen"))}
+                    yeni += 1
+                else:
+                    k = {"ok": False, "indirilemedi": True}
+                onb[u] = k
+            except Exception as e:
+                log(f"Akış görsel denetimi: {u[:70]}: {e}")
+        h["gorsel_ok"] = bool(k and k.get("ok"))
+    if len(onb) > 20000:
+        onb = dict(list(onb.items())[-15000:])
+    with open(yol_o, "w", encoding="utf-8") as f:
+        json.dump(onb, f, ensure_ascii=False, separators=(",", ":"))
+    with open(yol_h, "w", encoding="utf-8") as f:
+        json.dump(v, f, ensure_ascii=False, separators=(",", ":"))
+    if yeni:
+        log(f"Akış görsel denetimi: {yeni} görsel, {sum(1 for x in onb.values() if not x.get('ok'))} elenmiş (toplam)")

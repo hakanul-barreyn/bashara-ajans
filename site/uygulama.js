@@ -203,7 +203,8 @@
 
   function gorselCiz(h, k) {
     const kutu = el("div", "gorsel" + (k.hassas ? " hassas" : ""));
-    if (h.gorsel) {
+    // yalnızca şiddet ve müstehcenlik denetiminden geçmiş görseller gösterilir (gorsel_ok)
+    if (h.gorsel && h.gorsel_ok === true) {
       const img = document.createElement("img");
       img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.referrerPolicy = "no-referrer";
       img.src = (window.AKTAR || ((u) => u))(h.gorsel, 900);
@@ -408,8 +409,7 @@
       // denetlenmiş görsel (gorsel_denetim.py): yazı grafikleri atlanır, odak noktası kafaları kesmemek için
       const gd = o.arsiv ? o : (gundemArsiv || []).find((a) => a.id === o.id);
       const gh = gd && "adaylar" in gd ? (gd.gorsel && gd.gorsel_atif ? { gorsel: gd.gorsel, atif: gd.gorsel_atif, sayfa: gd.gorsel_sayfa, odak: gd.odak } : null)
-        : o.arsiv ? (o.gorsel && kaynaklar[o.gorsel_kaynak] ? { gorsel: o.gorsel, kaynak: o.gorsel_kaynak } : null)
-        : o.haberler.map((i) => haberIdx[i]).find((h) => h && h.gorsel && !h.gnews && !(kaynaklar[h.kaynak] || {}).hassas);
+        : null;   // Gündem'de yalnızca denetlenmiş, açık lisanslı ve habere uygun görsel; yoksa görselsiz
       const arka = el("div", "slayt-arka");
       if (gh) { const img = document.createElement("img"); img.src = (window.AKTAR || ((u) => u))(gh.gorsel, 1400); img.alt = ""; img.loading = n ? "lazy" : "eager"; img.referrerPolicy = "no-referrer"; img.style.objectPosition = gh.odak || "50% 25%"; img.onerror = () => img.remove(); arka.appendChild(img);
         if (gh.atif) { const kr = el("a", "kredi", (window.DIL === "en" ? "Photo: " : "Fotoğraf: ") + gh.atif); if (gh.sayfa) { kr.href = gh.sayfa; kr.target = "_blank"; kr.rel = "noopener"; } arka.appendChild(kr); }

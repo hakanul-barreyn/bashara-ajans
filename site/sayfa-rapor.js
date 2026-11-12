@@ -271,6 +271,9 @@
     var m = $("dagilim-ozet");
     if (m && O.bati_ana != null && O.bolge != null) m.textContent = T("Batı ana akım yayınlarının yarısı, Filistinlilerin öldüğünü yazan başlıklarının en az " + inde(O.bati_ana) + " öldüreni yazmıyor (“öldü”, “hayatını kaybetti”). Bölge basınında ortanca " + yz(O.bolge, 0) + ". “Şehit” diyen başlıklar bu hesaba katılmadı: faili yazmasalar da ölümü bir saldırının sonucu olarak anlatıyorlar.",
       "Half of Western mainstream outlets leave out who did the killing in at least " + yz(O.bati_ana, 0) + " of their headlines on Palestinian deaths (“died”, “lost their lives”). The regional press median is " + yz(O.bolge, 0) + ". Headlines saying “martyred” are left out of this count: even without naming the killer, they present the death as the result of an attack.");
+    var k3 = $("g-sehadet");
+    if (k3) serit(k3, Y, function (o) { var f = o.faillik, t = (f.aktif || 0) + (f.failli || 0) + (f.failsiz || 0) + (f.oldu || 0) + (f.sehadet || 0); return t >= 20 ? 100 * (f.sehadet || 0) / t : null; },
+      function (d) { return d / 100; }, [0, 25, 50, 75, 100], T("Filistinlilerin ölümünü “şehit” diye yazan başlıklar", "Headlines calling Palestinian dead “martyrs”"), function (d) { return yz(d, 0); });
     var k2 = $("g-isgal"); if (!k2) return;
     var ex = Math.sqrt(Math.max.apply(0, Y.map(function (o) { return o.binde.isgal || 0; })) || 1);
     serit(k2, v.yayinlar.filter(function (o) { return o.baglamli >= 150; }), function (o) { return o.binde.isgal || 0; }, function (d) { return Math.sqrt(d) / ex; }, [0, 10, 50, 100, 200, 300].filter(function (d) { return Math.sqrt(d) <= ex; }), T("“işgal” kelimesi, bin başlıkta", "“occupation”, per thousand headlines"), function (d) { return sayi(d, 0); });

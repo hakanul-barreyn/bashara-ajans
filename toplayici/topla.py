@@ -1166,6 +1166,7 @@ def main():
             import gorsel_denetim
             _gm = gemini_model(os.environ.get("GEMINI_API_KEY", "")) if os.environ.get("GEMINI_API_KEY") and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI) else None
             gorsel_denetim.denetle(KOK, os.environ.get("GEMINI_API_KEY", ""), _gm, log=log, sayac=lambda: gunluk_istek(durum, 1))
+            gorsel_denetim.akis_denetle(KOK, os.environ.get("GEMINI_API_KEY", ""), _gm, log=log, sayac=lambda: gunluk_istek(durum, 1))
         except Exception as e:
             log(f"Görsel denetimi hatası: {e}")
         karne.hesapla(KOK, kaynaklar, SIMDI, log=log)
