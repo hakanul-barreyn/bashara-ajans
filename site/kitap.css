@@ -291,3 +291,9 @@ td.sayi{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:now
 .on-noktalar i[title]{cursor:pointer}
 .on-noktalar.ad-goster::after{content:attr(data-ad);flex-basis:100%;font-size:.74rem;color:var(--ink,#1d2421);margin-top:2px}
 .sk-not{flex-basis:100%;font-size:.76rem;color:var(--soluk,#7b847e)}
+
+.sk-lejant-not{flex-basis:100%;color:var(--silik);font-size:.78rem}
+.sk-altyazi{font-size:.8rem;color:var(--silik);margin-top:6px}
+.kisim-sekil .gp-dugme{top:-34px}.kisim-sekil .sk-buyut{right:76px}
+.sk-buyuk{width:min(1400px,100%)}.sk-buyuk h3{margin:0 40px 10px 0;font:700 1.2rem var(--serif,Georgia,serif)}
+.sk-kaydir{overflow-x:auto}.sk-kaydir .kisim-sekil{min-width:820px}

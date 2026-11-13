@@ -166,7 +166,7 @@
 
   // grafik kutuları: rapor figürleri ve bölümlerdeki g-* kutuları (figür içindekiler figürle birlikte)
   function tara() {
-    var adaylar = [].slice.call(document.querySelectorAll("figure.rp-sekil, .rp-kucuk, article [id^='g-']"));
+    var adaylar = [].slice.call(document.querySelectorAll("figure.rp-sekil, figure.kisim-sekil, .rp-kucuk, article [id^='g-']"));
     adaylar.forEach(function (k) {
       if (k.dataset.gp || k.closest(".rp-buyut")) return;
       if (k.id && k.closest("figure.rp-sekil") || (k.id && k.closest(".rp-kucuk"))) return;

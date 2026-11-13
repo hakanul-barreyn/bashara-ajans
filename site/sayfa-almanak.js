@@ -33,6 +33,7 @@
 
   let dizin = [], SIRA = [], CILT = [], ALISMA = null, KARNE = null, KOD = {}, TUR_ADLARI = {};
   const masa = $("masa"), yan = $("kitapYan");
+  { let zz = 0; new MutationObserver(() => { clearTimeout(zz); zz = setTimeout(() => document.dispatchEvent(new Event("rp-ciz")), 150); }).observe(masa, { childList: true }); }
 
   // ---------------------------------------------------------------- adlar ve tarihler
   const tarih = (g, o) => new Date(g + "T12:00:00Z").toLocaleDateString(YEREL, o || { day: "numeric", month: "long", year: "numeric" });
@@ -197,10 +198,10 @@
   }
 
   // ---------------------------------------------------------------- grafikler: sessizlik endeksi
-  function sessizlikGrafik() {
+  function sessizlikGrafik(buyuk) {
     const ay = (ALISMA && ALISMA.sessizlik) || [], ol = ((ALISMA && ALISMA.olaylar) || []).filter((o) => o.sessiz);
     if (ay.length < 3) return el("p", "bekliyor", T("Endeks için yeterli veri yok.", "Not enough data for the index yet."));
-    const W = 720, H = 300, P = { s: 38, sg: 12, u: 14, a: 30 };
+    const W = buyuk ? 1200 : 720, H = buyuk ? 520 : 300, P = { s: 38, sg: 12, u: 14, a: 30 };
     const t0 = Date.parse(ay[0].donem + "-01T00:00:00Z"), t1 = Date.parse(gunEkle(ay[ay.length - 1].donem + "-28", 4) + "T00:00:00Z");
     const X = (t) => P.s + (W - P.s - P.sg) * (t - t0) / (t1 - t0), Y = (v) => P.u + (H - P.u - P.a) * (1 - v / 100);
     const s = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "sk-cizim", role: "img", "aria-label": T("Sessizlik endeksi, ay ay", "Silence index, month by month") });
@@ -217,8 +218,6 @@
         const v = oran(o, g); if (v == null) return;
         const c = sv("circle", { cx: X(Date.parse(o.bas + "T12:00:00Z")).toFixed(1), cy: Y(v).toFixed(1), r: 3.2, fill: renk, "fill-opacity": g === "bati_ana" ? 0.5 : 0.32 });
         const x = o.sessiz[g];
-        const tt = sv("title"); tt.textContent = tarih(o.bas) + " · " + turAd(o.tur) + (o.yer && o.yer.length ? " · " + o.yer.join(", ") : "") + " — " + GRK[g][1] + ": " + T(`${x[1]} yayından ${x[0]} tanesi yazmadı`, `${x[0]} of ${x[1]} outlets ran nothing`);
-        c.appendChild(tt);
         ipucu(c, () => { const b = el("b", null, turAd(o.tur) + " · " + tarih(o.bas)); const p = el("span", null, (o.yer || []).join(", ")); const q = el("div", null, GRK[g][1] + ": " + T(`${x[1]} yayından ${x[0]} tanesi tek başlık atmadı`, `${x[0]} of ${x[1]} outlets ran no headline`)); return [b, p, q]; });
         s.appendChild(c);
       });
@@ -229,12 +228,30 @@
       ay.forEach((m) => { if (m[g] == null) { d += " "; return; } const x = X(Date.parse(m.donem + "-15T00:00:00Z")).toFixed(1), y = Y(m[g]).toFixed(1); d += (d && !/ $/.test(d) ? "L" : "M") + x + "," + y; });
       s.appendChild(sv("path", { d: d.replace(/ /g, ""), class: "cizgi", stroke: renk, "stroke-width": g === "bati_ana" ? 3 : 2.2 }));
     });
-    const k = el("figure", "kisim-sekil"); k.style.margin = "0"; k.appendChild(s);
+    const k = el("figure", "kisim-sekil"); k.style.margin = "0"; k.id = buyuk ? "" : "g-sessizlik";
+    const ic = el("div", "sk-govde"); ic.appendChild(s);
     const lj = el("div", "sk-lejant");
-    [["#8a6d3b", T("Batı ana akım (ay ortalaması)", "Western mainstream (monthly)")], ["#1f7a52", T("Bölge basını", "Regional press")], ["#7a3fa0", T("Türkiye basını", "Turkish press")]].forEach(([r, l]) => { const e = el("span"); const i = el("i"); i.style.background = r; e.append(i, l); lj.appendChild(e); });
-    const e = el("span"); const i = el("i", "nokta"); i.style.background = "#8a6d3b"; i.style.opacity = ".55"; e.append(i, T("her nokta bir olay", "each dot is one event")); lj.appendChild(e);
-    k.appendChild(lj);
+    [["#8a6d3b", T("Batı ana akım", "Western mainstream")], ["#1f7a52", T("Bölge basını", "Regional press")], ["#7a3fa0", T("Türkiye basını", "Turkish press")]].forEach(([r, l]) => { const e = el("span"); const i = el("i"); i.style.background = r; e.append(i, l); lj.appendChild(e); });
+    lj.appendChild(el("span", "sk-lejant-not", T("Çizgi: aylık ortalama · Nokta: tek bir olay (rengi hangi grup olduğunu gösterir)", "Line: monthly average · Dot: one event (its colour shows the group)")));
+    ic.appendChild(lj); k.appendChild(ic);
+    k.appendChild(el("figcaption", "sk-altyazi", T("Yukarı çıktıkça sessizlik artar. %100: o gruptaki hiçbir yayın olayı başlığa taşımadı. Kaynak: ZBS başlık taraması.", "Higher means more silence. 100%: no outlet in the group ran a headline about the event. Source: ZBS headline scan.")));
+    if (!buyuk) {
+      const b = el("button", "gp-dugme sk-buyut", T("Büyüt", "Enlarge")); b.type = "button";
+      b.onclick = (e) => { e.stopPropagation(); buyutAc(); };
+      k.style.position = "relative"; k.appendChild(b);
+    }
     return k;
+  }
+  function buyutAc() {
+    const perde = el("div", "rp-buyut"); perde.setAttribute("role", "dialog"); perde.setAttribute("aria-modal", "true");
+    const kutu = el("div", "rp-buyut-kutu sk-buyuk"), x = el("button", "rp-buyut-kapat", "×"); x.type = "button"; x.setAttribute("aria-label", T("Kapat", "Close"));
+    const kapat = () => { perde.remove(); ip.hidden = true; document.body.style.overflow = ""; document.removeEventListener("keydown", esc); };
+    const esc = (e) => { if (e.key === "Escape") kapat(); };
+    kutu.append(x, el("h3", null, T("Ay ay sessizlik ve her olay bir nokta", "Silence month by month, each event a dot")));
+    const kay = el("div", "sk-kaydir"); kay.appendChild(sessizlikGrafik(true)); kutu.appendChild(kay);
+    perde.appendChild(kutu); document.body.appendChild(perde); document.body.style.overflow = "hidden";
+    perde.addEventListener("click", (e) => { if (e.target === perde || e.target === x) kapat(); });
+    document.addEventListener("keydown", esc); x.focus();
   }
   function canliGrafik() {
     const h = (KARNE && KARNE.sessizlik) || [];
@@ -330,7 +347,7 @@
       `An event may have reached the press, but who carried it? For every event we found in the headlines, we checked whether each outlet publishing at the time ran a single headline of that kind. In the first three months of the war, on average ${bi}% of Western mainstream outlets carried no headline at all about an event; over the last six months, ${bs}%. In the regional press the same measure was ${oi}% and ${os}%.`)));
     const ks = el("div", "kisimlar");
     const k1 = kisim(T("Ay ay sessizlik ve her olay bir nokta", "Silence month by month, each event a dot"));
-    k1.appendChild(el("p", null, T("Dikey eksen: o olayın günlerinde yayında olup o türden hiç başlık atmayan yayınların payı. Çizgi ayın ortalaması; noktalar tek tek olaylar. Noktaya gelince olay çıkar.", "Vertical axis: the share of outlets publishing during the event that ran no headline of that kind. The lines are monthly averages; the dots are individual events. Hover a dot to see the event.")));
+    k1.appendChild(el("p", null, T("Her olayda şunu sorduk: o günlerde haber yayınlayan yayınların yüzde kaçı bu olayı hiç başlığa taşımadı? Grafik bu “susma oranını” gösteriyor; yukarı çıktıkça sessizlik artıyor. Her nokta tek bir olay, çizgiler aylık ortalama. Bir noktanın üzerine gelince hangi olay olduğu çıkar.", "For every event we asked: what share of the outlets publishing at the time ran no headline about it at all? The chart shows this “silence rate”; higher means more silence. Each dot is one event; the lines are monthly averages. Hover a dot to see the event.")));
     k1.appendChild(sessizlikGrafik());
     ks.appendChild(k1);
     const son = olaylarArasi(gunEkle(new Date().toISOString().slice(0, 10), -120), "9999").reverse();
