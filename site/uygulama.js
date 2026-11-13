@@ -493,15 +493,36 @@
         const eski = resim(g.once, ad + ", " + onceY); eski.className = "uk-once"; kutu.appendChild(eski);
         const cizgi = el("span", "uk-cizgi"); kutu.appendChild(cizgi);
         kutu.append(el("span", "uk-etk uk-etk-sol", EN ? "Before the war" : "Savaştan önce"), el("span", "uk-etk uk-etk-sag", EN ? "Today" : "Bugün"));
-        const sur = el("input", "uk-surgu"); sur.type = "range"; sur.min = 0; sur.max = 100; sur.value = 50;
-        sur.setAttribute("aria-label", EN ? "Compare before the war and today" : "Savaştan önce ile bugünü karşılaştır");
-        const ayar = () => { kutu.style.setProperty("--uk", sur.value + "%"); };
-        sur.addEventListener("input", ayar); sur.addEventListener("click", (e) => e.stopPropagation()); ayar();
-        kutu.appendChild(sur);
+        // Karşılaştırma: resmin üstünde yatay sürükleme çizgiyi taşır, dikey kaydırma sayfaya kalır (touch-action: pan-y).
+        // Dokunmak çizgiyi oraya götürür; alttaki iki düğme tek dokunuşla "savaştan önce" ya da "bugün"ü tam gösterir.
+        let deger = 50, bas = null;
+        const ayar = (v, yumusak) => { deger = Math.max(0, Math.min(100, v)); kutu.classList.toggle("uk-yumusak", !!yumusak); kutu.style.setProperty("--uk", deger + "%"); sec.forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.v === "100" && deger > 97) || (b.dataset.v === "0" && deger < 3) || (b.dataset.v === "50" && deger >= 3 && deger <= 97)))); };
+        const oran = (x) => { const r = kutu.getBoundingClientRect(); return ((x - r.left) / Math.max(1, r.width)) * 100; };
+        kutu.addEventListener("pointerdown", (e) => { bas = { x: e.clientX, y: e.clientY, id: e.pointerId, surukle: false }; });
+        kutu.addEventListener("pointermove", (e) => {
+          if (!bas || e.pointerId !== bas.id) return;
+          if (!bas.surukle) {
+            if (Math.abs(e.clientX - bas.x) < 6) return;
+            bas.surukle = true; try { kutu.setPointerCapture(e.pointerId); } catch (x) {}
+          }
+          e.preventDefault(); ayar(oran(e.clientX));
+        });
+        const bit = (e) => { if (bas && !bas.surukle && e.type === "pointerup" && Math.abs(e.clientY - bas.y) < 8) ayar(oran(e.clientX), true); bas = null; };
+        kutu.addEventListener("pointerup", bit); kutu.addEventListener("pointercancel", () => (bas = null));
+        kutu.addEventListener("click", (e) => e.stopPropagation());
+        kutu.tabIndex = 0; kutu.setAttribute("role", "slider"); kutu.setAttribute("aria-valuemin", "0"); kutu.setAttribute("aria-valuemax", "100");
+        kutu.setAttribute("aria-label", EN ? "Compare before the war and today" : "Savaştan önce ile bugünü karşılaştır");
+        kutu.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); ayar(deger + (e.key === "ArrowRight" ? 5 : -5)); } });
+        const secici = el("div", "uk-secici");
+        const sec = [["100", EN ? "Before the war" : "Savaştan önce"], ["50", EN ? "Compare" : "Karşılaştır"], ["0", EN ? "Today" : "Bugün"]].map(([v, ad]) => {
+          const b = el("button", null, ad); b.type = "button"; b.dataset.v = v; b.onclick = (e) => { e.stopPropagation(); ayar(+v, true); }; secici.appendChild(b); return b;
+        });
+        ayar(50);
+        fig.dataset.secici = "1"; fig._secici = secici;
       }
       const fc = el("figcaption");
       fc.appendChild(el("span", null, ad + " · " + (g.once && onceY ? (EN ? onceY + " and " + simdiY : onceY + " ve " + simdiY) : simdiY)));
-      fig.append(kutu, fc); sahne.appendChild(fig);
+      fig.append(kutu); if (fig._secici) fig.append(fig._secici); fig.append(fc); sahne.appendChild(fig);
     });
     const say = () => { const i = Math.round(sahne.scrollLeft / Math.max(1, sahne.clientWidth)); sira.textContent = (i + 1) + " / " + sahne.children.length; };
     sahne.addEventListener("scroll", () => requestAnimationFrame(say), { passive: true });
@@ -510,7 +531,7 @@
     geri.type = ileri.type = "button"; geri.setAttribute("aria-label", EN ? "Previous" : "Önceki"); ileri.setAttribute("aria-label", EN ? "Next" : "Sonraki");
     geri.onclick = (e) => { e.stopPropagation(); git(-1); }; ileri.onclick = (e) => { e.stopPropagation(); git(1); };
     const alt = el("div", "ok-alt");
-    alt.append(el("span", null, (EN ? "Low-cloud Sentinel-2 images (10 m). Drag the line to compare. " : "Bulutsuz Sentinel-2 görüntüleri (10 m). Karşılaştırmak için çizgiyi kaydırın. ") + UYDU.atif),
+    alt.append(el("span", null, (EN ? "Low-cloud Sentinel-2 images (10 m). Slide sideways on the image to compare; use the arrows for the next area. " : "Bulutsuz Sentinel-2 görüntüleri (10 m). Karşılaştırmak için resmin üstünde parmağını sağa sola kaydır; sonraki bölge için oklar. ") + UYDU.atif),
       kartPaylas(EN ? "Gaza from space, " + simdiY : "Uydudan Gazze, " + simdiY, new URL(K + "gazze.jpg", location.href).href));
     k.append(ust, sahne, geri, ileri, alt); setTimeout(say, 0);
     return k;
@@ -1028,7 +1049,7 @@
   // ---------------------------------------------------- telefon destesi (site/deste.js)
   // Her birim tam bir ekran: dikey kaydırma sonraki konu, yatay kaydırma aynı konunun içi. Deste son 24 saatle sınırlı ve
   // biter; her 12 konuda bir durak kartı gelir. Sıra olay önemi, güncellik ve yayın çeşitliliğiyle kurulur.
-  let desteAcik = true, desteImza = null, desteYeni = 0;
+  const desteAcik = true; let desteImza = null, desteYeni = 0;
   const desteModu = () => telefon() && desteAcik && !!window.ZBSDeste;
   function birim(tur, ek) { const b = el("section", "birim birim-" + tur + (ek ? " " + ek : "")); b.dataset.tur = tur; return b; }
   function birimUst(etiket, sag) { const u = el("div", "b-ust"); u.append(el("span", "b-etiket", etiket)); if (sag) u.append(el("span", "b-sag", sag)); return u; }
@@ -1140,12 +1161,6 @@
     const [s, n] = yatay(b.haberler.map((h) => { const a = haberCiz(h); a.classList.add("b-sayfa"); return a; }));
     u.append(n, s); return u;
   }
-  function kisaBirim(b) {
-    const EN = window.DIL === "en", u = birim("kisa");
-    u.appendChild(birimUst(EN ? "In brief" : "Kısa kısa", saatAraligi(b.haberler, 1)));
-    const g = el("div", "b-govde kisa-liste"); b.haberler.forEach((h) => g.appendChild(satir(h, true))); u.appendChild(g);
-    return u;
-  }
   function tekBirim(b) { const u = birim("tek"); u.appendChild(haberCiz(b.haberler[0])); return u; }
   function bilgiBirim(tip) {
     const u = birim("bilgi", "bilgi-" + tip);
@@ -1175,27 +1190,40 @@
     ey.append(r, a); g.appendChild(ey); u.appendChild(g);
     return u;
   }
-  function sonBirim(b) {
-    const EN = window.DIL === "en", u = birim("son");
-    u.appendChild(birimUst(EN ? "End of today's file" : "Günün dosyasının sonu"));
+  function bolumBirim(b) {
+    const EN = window.DIL === "en", u = birim("bolum", "bolum-" + b.tip);
+    const ad = { gosterilmeyen: [EN ? "Not in the file" : "Dosyada olmayanlar", EN ? "Other items from the last 24 hours" : "Son 24 saatin diğer haberleri",
+        EN ? "Single headlines without a photo or a Turkish summary, newest first." : "Görseli ya da Türkçe özeti olmayan tekil başlıklar, en yeniden eskiye."],
+      eski: [EN ? "Earlier" : "Daha önce", EN ? "Earlier major stories" : "Daha eski önemli haberler",
+        EN ? "Stories that at least three outlets from different camps covered." : "Farklı kamplardan en az üç yayının yazdığı haberler."],
+      analiz: [EN ? "Analysis & opinion" : "Analiz ve görüş", EN ? "Analysis and opinion pieces" : "Analiz ve görüş yazıları",
+        EN ? "Commentary from the outlets we follow, in six-hour blocks." : "Takip ettiğimiz yayınların yorum yazıları, altışar saatlik dilimlerde."] }[b.tip];
+    u.appendChild(birimUst(ad[0], b.sayi.toLocaleString(YR) + (EN ? " cards" : " kart")));
     const g = el("div", "b-govde");
-    g.appendChild(el("h2", "ml-baslik", EN ? "That's the last 24 hours." : "Son 24 saat bu kadar."));
-    g.appendChild(el("p", "ml-not", EN ? "You can also read every item in time order, one by one." : "Bütün haberleri tek tek, saat sırasıyla da okuyabilirsin."));
+    g.append(el("h2", "ml-baslik", ad[1]), el("p", "ml-not", ad[2]), el("p", "bl-ipucu", EN ? "↑ Swipe up to continue" : "↑ Devam etmek için yukarı kaydır"));
+    u.appendChild(g); return u;
+  }
+  function sonBirim() {
+    const EN = window.DIL === "en", u = birim("son");
+    u.appendChild(birimUst(EN ? "End" : "Son"));
+    const g = el("div", "b-govde");
+    g.appendChild(el("h2", "ml-baslik", EN ? "You have reached the end." : "Sona geldin."));
+    g.appendChild(el("p", "ml-not", EN ? "Older items are in the archive; the reports explain the patterns behind the headlines." : "Daha eski haberler arşivde; başlıkların ardındaki örüntüyü raporlar anlatır."));
     const ey = el("div", "ml-eylem");
-    const kr = el("button", "b-dugme", EN ? "All items in time order" : "Saat sırasıyla bütün haberler"); kr.type = "button";
-    kr.onclick = () => { desteAcik = false; kac = SAYFA; ciz(true); };
-    const t = el("a", "b-dugme ikincil", EN ? "History" : "Tarihçe"); t.href = "tarihce.html";
-    const r = el("a", "b-dugme ikincil", EN ? "Reports" : "Raporlar"); r.href = "raporlar.html";
-    ey.append(kr, r, t); g.appendChild(ey); u.appendChild(g);
+    [["arsiv.html", EN ? "Archive" : "Arşiv"], ["raporlar.html", EN ? "Reports" : "Raporlar"], ["almanak.html", EN ? "Almanac" : "Almanak"], ["tarihce.html", EN ? "History" : "Tarihçe"]].forEach(([h, ad], i) => {
+      const a = el("a", "b-dugme" + (i ? " ikincil" : ""), ad); a.href = h; ey.appendChild(a);
+    });
+    g.appendChild(ey); u.appendChild(g);
     return u;
   }
   const DESTE_ILK = 40, DESTE_EK = 40;
-  function devamBirim(kalan, sonra) {
+  function devamBirim(kalan, sonra, ilkKart) {
     const EN = window.DIL === "en", u = birim("devam");
     u.appendChild(birimUst(EN ? "More" : "Devamı"));
     const g = el("div", "b-govde");
-    g.appendChild(el("h2", "ml-baslik", EN ? "That was the main file." : "Günün ana dosyası bu kadar."));
-    g.appendChild(el("p", "ml-not", EN ? kalan + " more cards from the last 24 hours." : "Son 24 saatten " + kalan.toLocaleString(YR) + " kart daha var."));
+    g.appendChild(el("h2", "ml-baslik", ilkKart ? (EN ? "That was today's main file." : "Günün ana dosyası bu kadar.") : (EN ? "40 more cards read." : "40 kart daha geride kaldı.")));
+    g.appendChild(el("p", "ml-not", EN ? kalan + " more cards: the rest of today's items, then earlier major stories, and analysis at the very end."
+      : kalan.toLocaleString(YR) + " kart daha var: önce günün kalan haberleri, sonra daha eski önemli haberler, en sonda analizler."));
     const ey = el("div", "ml-eylem");
     const d = el("button", "b-dugme", EN ? "Show other stories too" : "Diğer haberleri de göster"); d.type = "button";
     d.onclick = () => { const ilk = sonra(); u.remove(); if (ilk) ilk.scrollIntoView({ behavior: "auto" }); };
@@ -1205,18 +1233,18 @@
   }
   function desteCiz(akis) {
     const olaylarHepsi = (olaylar || []).concat(gundemArsiv || []);
-    const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now(), { enCokBirim: 400 });
+    const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now());
     const yayin = new Set(gor.filter((h) => dk(h.tarih) < 1440).map((h) => h.kaynak)).size;
     const ciz1 = (b) => {
       if (b.tur === "kapak") return kapakBirim(b, { haber: r.istatistik.haber, yayin });
       if (b.tur === "hikaye") return hikayeBirim(b);
       if (b.tur === "seri") return seriBirim(b);
       if (b.tur === "analiz") return analizBirim(b);
-      if (b.tur === "kisa") return kisaBirim(b);
+      if (b.tur === "bolum") return bolumBirim(b);
       if (b.tur === "tek") return tekBirim(b);
       if (b.tur === "bilgi") return bilgiBirim(b.tip);
       if (b.tur === "mola") return molaBirim(b);
-      if (b.tur === "son") return sonBirim(b);
+      if (b.tur === "son") return sonBirim();
       return null;
     };
     // önce ilk 40 kart; sonra okur isterse 40'ar 40'ar devamı
@@ -1226,7 +1254,7 @@
       for (; i < son; i++) { const u = ciz1(r.deste[i]); if (u) { akis.appendChild(u); ilk = ilk || u; } }
       // kalan yalnızca "son" kartıysa onu da hemen ekle
       if (r.deste.length - i === 1) { const u = ciz1(r.deste[i++]); if (u) akis.appendChild(u); }
-      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.length - i - 1, () => parti(DESTE_EK)));
+      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i <= DESTE_ILK));
       return ilk;
     };
     parti(DESTE_ILK);

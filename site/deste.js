@@ -5,107 +5,110 @@
      kapak   : günün özeti (tarih, ana konular, sayılar, kullanım ipucu)
      hikaye  : gündemdeki bir olay; farklı yayınların aynı haberi. Sayfalar: özet → yayın yayın anlatım → kim yazdı
      seri    : aynı yayının aynı saatte en az 3 haberi; sayfalar
-     kisa    : aynı saatte farklı yayınlardan tek tük haberler; 5 başlıklık liste kartı
-     tek     : görseli ya da Türkçe özeti olan tekil haber
+     tek     : tekil haber
+     bolum   : bölüm başlığı (gösterilmeyen haberler, daha eski önemli haberler, analizler)
      analiz  : 6 saatlik dilimdeki analiz ve görüş yazıları; sayfalar
      bilgi   : harita, tutuklu hekim sayacı, Gazze fotoğrafları, uydu (yer tutucu; site doldurur)
      mola    : her 12 birimde bir; son 12 birimin ana başlıkları ve oturum özeti
-     son     : destenin sonu; daha eskiye ya da raporlara geçiş
-   Tuzak karşıtı ilkeler: deste sonludur (son 24 saat), mola kartları doğal durak verir, sıra "ilgi çekme"
+     son     : destenin sonu; arşiv ve raporlara geçiş
+   Tuzak karşıtı ilkeler: günün dosyası 40 kartta durur, devamı okur isterse gelir; mola kartları doğal durak verir, sıra "ilgi çekme"
    ölçüsüyle değil olay önemi + güncellik + çeşitlilikle kurulur.
 */
 (function (kok) {
   "use strict";
-  var AYAR = { pencereSaat: 24, seriEnAz: 3, kisaBoy: 5, analizSaat: 6, molaAralik: 12, enCokBirim: 72, yariOmurSaat: 4, kumeSaat: 6, kumeEsik: 0.34, birlesEsik: 0.45 };
+  var AYAR = { pencereSaat: 24, seriEnAz: 3, analizSaat: 6, molaAralik: 12, yariOmurSaat: 4, kumeSaat: 6, kumeEsik: 0.34, birlesEsik: 0.45 };
 
   function saat(t) { return Date.parse(t); }
   function kampOf(K, h) { var k = K[h.kaynak] || {}; return k.kamp || k.bolge || ""; }
 
+  function hikayeYap(havuz, gundem, K, simdi, A, kullanilan, enAzYayin, enAzKamp) {
+    var idx = {}; havuz.forEach(function (h) { idx[h.id] = h; });
+    var yap = function (xs, o) {
+      var kamplar = {}, yayin = {};
+      xs.forEach(function (h) { kamplar[kampOf(K, h)] = (kamplar[kampOf(K, h)] || 0) + 1; yayin[h.kaynak] = 1; });
+      if (Object.keys(yayin).length < enAzYayin || Object.keys(kamplar).length < (enAzKamp || 1)) return null;
+      xs.forEach(function (h) { kullanilan[h.id] = 1; });
+      var son = Math.max.apply(null, xs.map(function (h) { return saat(h.tarih); }));
+      var onem = Math.log2(1 + Object.keys(yayin).length) * 2 + Object.keys(kamplar).length;
+      var tazelik = Math.pow(0.5, (simdi - son) / (A.yariOmurSaat * 36e5));
+      return { tur: "hikaye", olay: o, haberler: xs, kamplar: kamplar, yayinSayisi: Object.keys(yayin).length, son: son, puan: onem * (0.35 + tazelik) };
+    };
+    // gündem olayları, sonra İngilizce başlık benzerliğiyle bulunan ortak haberler
+    var out = (gundem || []).map(function (o) {
+      var xs = (o.haberler || []).map(function (id) { return idx[id]; }).filter(function (h) { return h && !kullanilan[h.id]; });
+      return xs.length >= 2 ? yap(xs, o) : null;
+    }).filter(Boolean);
+    benzerKume(havuz, kullanilan, A).forEach(function (xs) { var x = yap(xs, null); if (x) out.push(x); });
+    return out.sort(function (a, b) { return b.puan - a.puan; });
+  }
+
+  // Deste dört bölümden oluşur ve eski görünüme hiç dönmez:
+  //   1) son 24 saatin dosyası (hikâyeler, yayın serileri, görselli/özetli tekil haberler, bilgi kartları)
+  //   2) dosyada gösterilmeyen son 24 saat haberleri (görselsiz ve özetsiz tekil başlıklar), en yeniden
+  //   3) daha eski önemli haberler: en az 3 yayının yazdığı hikâyeler
+  //   4) en sonda analiz ve görüş yazıları (6 saatlik dilimler)
+  // Her bölüm bir başlık kartıyla açılır; her 12 konuda bir durak kartı gelir.
   function kur(haberler, gundem, K, simdi, ayar) {
     var A = Object.assign({}, AYAR, ayar || {});
     simdi = simdi || Date.now();
     var sinir = simdi - A.pencereSaat * 36e5;
-    var havuz = haberler.filter(function (h) { return !h.atla && K[h.kaynak] && saat(h.tarih) >= sinir; })
+    var hepsi = haberler.filter(function (h) { return !h.atla && K[h.kaynak]; })
       .sort(function (a, b) { return saat(b.tarih) - saat(a.tarih); });
-    var idx = {}; havuz.forEach(function (h) { idx[h.id] = h; });
+    var havuz = hepsi.filter(function (h) { return saat(h.tarih) >= sinir; });
+    var eski = hepsi.filter(function (h) { return saat(h.tarih) < sinir; });
     var kullanilan = {};
-
-    // 1) Hikâyeler: gündem olayları (farklı yayınların aynı haberi)
-    var hikayeler = (gundem || []).map(function (o) {
-      var xs = (o.haberler || []).map(function (id) { return idx[id]; }).filter(Boolean);
-      if (xs.length < 2) return null;
-      var kamplar = {}; xs.forEach(function (h) { kamplar[kampOf(K, h)] = (kamplar[kampOf(K, h)] || 0) + 1; });
-      var yayin = {}; xs.forEach(function (h) { yayin[h.kaynak] = 1; });
-      var son = Math.max.apply(null, xs.map(function (h) { return saat(h.tarih); }));
-      var onem = Math.log2(1 + Object.keys(yayin).length) * 2 + Object.keys(kamplar).length;
-      var tazelik = Math.pow(0.5, (simdi - son) / (A.yariOmurSaat * 36e5));
-      xs.forEach(function (h) { kullanilan[h.id] = 1; });
-      return { tur: "hikaye", olay: o, haberler: xs, kamplar: kamplar, yayinSayisi: Object.keys(yayin).length, son: son, puan: onem * (0.35 + tazelik) };
-    }).filter(Boolean).sort(function (a, b) { return b.puan - a.puan; });
-
-    // 1b) Gündemde olmayan ortak haberler: İngilizce başlıklarda kelime benzerliği (6 saat içinde, en az 2 yayın)
-    benzerKume(havuz, kullanilan, A).forEach(function (xs) {
-      var kamplar = {}, yayin = {};
-      xs.forEach(function (h) { kamplar[kampOf(K, h)] = (kamplar[kampOf(K, h)] || 0) + 1; yayin[h.kaynak] = 1; kullanilan[h.id] = 1; });
-      var son = Math.max.apply(null, xs.map(function (h) { return saat(h.tarih); }));
-      var onem = Math.log2(1 + Object.keys(yayin).length) * 2 + Object.keys(kamplar).length;
-      var tazelik = Math.pow(0.5, (simdi - son) / (A.yariOmurSaat * 36e5));
-      hikayeler.push({ tur: "hikaye", olay: null, haberler: xs, kamplar: kamplar, yayinSayisi: Object.keys(yayin).length, son: son, puan: onem * (0.35 + tazelik) });
-    });
-    hikayeler.sort(function (a, b) { return b.puan - a.puan; });
-
-    // 2) Analizler: 6 saatlik dilimler
+    // analizler her iki pencereden ayrılır, en sona kalır
     var analizKova = {}, analizler = [];
-    havuz.forEach(function (h) {
-      if (kullanilan[h.id] || h.nitelik !== "analiz") return;
+    hepsi.forEach(function (h) {
+      if (h.nitelik !== "analiz") return;
       var k = Math.floor(saat(h.tarih) / (A.analizSaat * 36e5));
       if (!analizKova[k]) { analizKova[k] = { tur: "analiz", haberler: [], son: saat(h.tarih) }; analizler.push(analizKova[k]); }
       analizKova[k].haberler.push(h); kullanilan[h.id] = 1;
     });
 
-    // 3) Kalan haberler: aynı yayının saatlik serisi (en az 3), görseli/özeti olan tekil haber, geri kalanı "kısa kısa"
+    var hikayeler = hikayeYap(havuz, gundem, K, simdi, A, kullanilan, 2);
+
+    // kalan 24 saat haberleri: aynı yayının saatlik serisi (en az 3), görselli/özetli tekil haber; geri kalanı 2. bölüme
     var kova = {};
     havuz.forEach(function (h) {
       if (kullanilan[h.id]) return;
       var k = h.kaynak + ":" + Math.floor(saat(h.tarih) / 36e5);
       (kova[k] = kova[k] || []).push(h);
     });
-    var akis = [], kisaHavuz = [];
+    var akis = [], ciplak = [];
     Object.keys(kova).forEach(function (k) {
       var xs = kova[k];
       if (xs.length >= A.seriEnAz) akis.push({ tur: "seri", haberler: xs, son: saat(xs[0].tarih) });
       else xs.forEach(function (h) {
-        var dolu = (h.gorsel && h.gorsel_ok === true) || h.ozet_tr;
-        if (dolu) akis.push({ tur: "tek", haberler: [h], son: saat(h.tarih) }); else kisaHavuz.push(h);
+        if ((h.gorsel && h.gorsel_ok === true) || h.ozet_tr) akis.push({ tur: "tek", haberler: [h], son: saat(h.tarih) });
+        else ciplak.push({ tur: "tek", haberler: [h], son: saat(h.tarih) });
       });
     });
-    // görseli ve özeti olmayan tekil başlıklar desteye girmez ("kısa kısa" kartları kaldırıldı);
-    // destenin sonundaki "saat sırasıyla bütün haberler" listesinde dururlar
-    var disarida = kisaHavuz.length;
     akis.sort(function (a, b) { return b.son - a.son; });
-    // akış birimlerinde çeşitlilik: aynı yayın 5 birimde bir, aynı kamp en çok 2 ardışık
     akis = cesitle(akis, K);
+    ciplak = cesitle(ciplak.sort(function (a, b) { return b.son - a.son; }), K);
+    var eskiHikaye = hikayeYap(eski, gundem, K, simdi, A, kullanilan, 3, 2);
 
-    // 4) Örgü: kapak, sonra hikâye / akış / akış ... arasına analiz ve bilgi kartları, her 12 birimde mola
-    var deste = [{ tur: "kapak", hikayeler: hikayeler.slice(0, 3), sayi: havuz.length, yayin: Object.keys(havuz.reduce(function (m, h) { m[h.kaynak] = 1; return m; }, {})).length }];
+    var deste = [{ tur: "kapak", hikayeler: hikayeler.slice(0, 3), sayi: havuz.length }];
+    var sayac = 0, molaSon = [];
+    var ekle = function (b) {
+      if (sayac > 0 && sayac % A.molaAralik === 0 && molaSon.length) { deste.push({ tur: "mola", ozet: molaSon.slice(), sira: sayac }); molaSon = []; }
+      deste.push(b); sayac++; molaSon.push(b); if (molaSon.length > A.molaAralik) molaSon.shift();
+    };
+    // 1) günün dosyası: her üç konudan biri hikâye; araya bilgi kartları
     var bilgi = { 4: "harita", 9: "sayac", 15: "foto", 22: "uydu" };
-    var hi = 0, ai = 0, ki = 0, sayac = 0, molaSon = [];
-    while (deste.length < A.enCokBirim && (hi < hikayeler.length || ki < akis.length || ai < analizler.length)) {
-      var n = deste.length;
-      var b;
-      if (bilgi[n]) b = { tur: "bilgi", tip: bilgi[n] };
-      else if (sayac > 0 && sayac % A.molaAralik === 0 && molaSon.length) { b = { tur: "mola", ozet: molaSon.slice(), sira: sayac }; molaSon = []; deste.push(b); sayac++; continue; }
-      else if (sayac % 7 === 5 && ai < analizler.length) b = analizler[ai++];
-      else if ((sayac % 3 === 0 || ki >= akis.length) && hi < hikayeler.length) b = hikayeler[hi++];
-      else if (ki < akis.length) b = akis[ki++];
-      else if (hi < hikayeler.length) b = hikayeler[hi++];
-      else b = analizler[ai++];
-      deste.push(b);
-      if (b.tur !== "bilgi") { sayac++; molaSon.push(b); if (molaSon.length > A.molaAralik) molaSon.shift(); }
+    var hi = 0, ki = 0;
+    while (hi < hikayeler.length || ki < akis.length) {
+      if (bilgi[deste.length]) { deste.push({ tur: "bilgi", tip: bilgi[deste.length] }); continue; }
+      if ((sayac % 3 === 0 || ki >= akis.length) && hi < hikayeler.length) ekle(hikayeler[hi++]);
+      else ekle(akis[ki++]);
     }
-    var kalan = (hikayeler.length - hi) + (akis.length - ki) + (analizler.length - ai);
-    deste.push({ tur: "son", kalan: kalan, toplam: havuz.length });
-    return { deste: deste, istatistik: { disarida: disarida, haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, analiz: analizler.length, kalan: kalan } };
+    var bolum = function (tip, n) { if (n) deste.push({ tur: "bolum", tip: tip, sayi: n }); };
+    bolum("gosterilmeyen", ciplak.length); ciplak.forEach(ekle);
+    bolum("eski", eskiHikaye.length); eskiHikaye.forEach(ekle);
+    bolum("analiz", analizler.length); analizler.forEach(ekle);
+    deste.push({ tur: "son" });
+    return { deste: deste, istatistik: { haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, gosterilmeyen: ciplak.length, eskiHikaye: eskiHikaye.length, analiz: analizler.length } };
   }
 
   var DUR = {"the":1,"and":1,"for":1,"with":1,"from":1,"that":1,"this":1,"after":1,"over":1,"into":1,"amid":1,"says":1,"said":1,"will":1,"have":1,"has":1,"was":1,"were":1,"are":1,"its":1,"his":1,"their":1,"they":1,"been":1,"more":1,"than":1,"about":1,"against":1,"news":1,"report":1,"live":1,"video":1,"israel":1,"israeli":1,"gaza":1,"palestinian":1,"palestinians":1};

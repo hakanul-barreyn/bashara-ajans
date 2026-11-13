@@ -653,12 +653,17 @@ body{overflow-x:clip}
 .ok-alt{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:10px 16px 16px;font-size:.74rem;line-height:1.4;color:#8d9791;margin-top:auto}
 .uydu-resim{display:block;background:#0a0d0c}
 .uydu-kart .ok-foto img{aspect-ratio:auto;object-fit:contain;background:#0a0d0c}
-.uk-kutu{position:relative;--uk:50%;background:#0a0d0c;user-select:none;-webkit-user-select:none;aspect-ratio:1/1;width:100%;overflow:hidden}
+.uk-kutu{position:relative;--uk:50%;touch-action:pan-y;cursor:ew-resize;outline:none;background:#0a0d0c;user-select:none;-webkit-user-select:none;aspect-ratio:1/1;width:100%;overflow:hidden}
 .uydu-kart .uk-kutu img{position:absolute;inset:0;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover;display:block}
 .uk-once{clip-path:inset(0 calc(100% - var(--uk)) 0 0)}
 .uk-cizgi{position:absolute;top:0;bottom:0;left:var(--uk);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,.6);pointer-events:none}
 .uk-cizgi::after{content:"‹ ›";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:#fff;color:#111;
   font:700 .8rem/34px system-ui,sans-serif;text-align:center;letter-spacing:-.05em}
+.uk-yumusak .uk-once{transition:clip-path .45s cubic-bezier(.2,.7,.2,1)}.uk-yumusak .uk-cizgi{transition:left .45s cubic-bezier(.2,.7,.2,1)}
+.uk-kutu:focus-visible{box-shadow:0 0 0 3px #7fd1a4}
+.uk-secici{display:flex;gap:4px;margin:10px auto 0;padding:4px;border-radius:999px;background:rgba(255,255,255,.08);width:max-content;max-width:calc(100% - 32px)}
+.uk-secici button{border:0;background:transparent;color:#c5ccc7;font:700 .74rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.uk-secici button[aria-pressed="true"]{background:#f3f1ec;color:#111}
 .uk-surgu{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y;-webkit-appearance:none;appearance:none}
 .uk-etk{position:absolute;top:10px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:700 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
 .uk-etk-sol{left:10px}.uk-etk-sag{right:10px}
@@ -837,7 +842,10 @@ body{overflow-x:clip}
   html.deste-modu .birim-bilgi .ok-foto img{height:52svh}
   html.deste-modu .birim-bilgi .uk-kutu{max-height:54svh;width:min(100%,54svh)}
   /* durak ve son */
-  html.deste-modu .birim-mola,html.deste-modu .birim-son,html.deste-modu .birim-devam{background:var(--bg);color:var(--ink)}
+  html.deste-modu .birim-mola,html.deste-modu .birim-son,html.deste-modu .birim-devam,html.deste-modu .birim-bolum{background:var(--bg);color:var(--ink)}
+  html.deste-modu .birim-bolum{background:#0f1311;color:#eef0ec}html.deste-modu .birim-bolum .b-etiket{color:#7fd1a4}html.deste-modu .birim-bolum .ml-not{color:#b9c1bb}
+  html.deste-modu .bolum-analiz{background:#15120e}html.deste-modu .bolum-analiz .b-etiket{color:#e0b46b}
+  html.deste-modu .bl-ipucu{margin:0;font:600 .74rem var(--mono);color:#8d968f}
   html.deste-modu .ml-baslik{font:700 1.7rem/1.15 var(--serif);margin:0;text-wrap:balance}
   html.deste-modu .ml-liste{list-style:none;margin:0;padding:0;border-top:1px solid var(--cizgi)}
   html.deste-modu .ml-liste li{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid var(--cizgi)}
