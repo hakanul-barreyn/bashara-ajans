@@ -1,0 +1,42 @@
+name: Media Cloud kapsam
+
+# Elle çalıştırılır. Yayın listemizin Media Cloud'daki karşılıklarını ve aylık haber sayılarını çıkarır;
+# sonucu "mediacloud" dalına yazar. Siteyi etkilemez.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mediacloud
+  cancel-in-progress: false
+
+jobs:
+  kapsam:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q "mediacloud==4.*" || pip install -q mediacloud
+      - name: Önceki çıktı
+        run: |
+          mkdir -p cikti
+          git fetch -q --depth 1 origin mediacloud 2>/dev/null && git show FETCH_HEAD:mc-kapsam.json > cikti/mc-kapsam.json 2>/dev/null || true
+      - name: Kapsam
+        env:
+          MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
+        run: python toplayici/mc_kapsam.py
+      - name: Kaydet
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -f cikti/mc-kapsam.json ] || exit 0
+          cd cikti && git init -q -b mediacloud && git add mc-kapsam.json
+          git -c user.name="zbs-mediacloud" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Media Cloud kapsam"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:mediacloud
