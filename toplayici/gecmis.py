@@ -32,8 +32,13 @@ BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|
 # Faillik: ölüm haberinde fail yazılmış mı? (başlık düzeyinde, kalıplarla)
 OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
 EDILGEN_TR = re.compile(r"öldürül|katledil", re.I)
-OLUM = re.compile(r"öldü|hayatını kaybet|can verdi|\böl[üu]\b|ölü sayısı|\bdie[sd]?\b|\bdead\b|death toll|deaths|\bmeur|\bmorts?\b|muer[et]|muertos|\bmort[ie]\b|muoion|\bstirbt|sterben|starben|\btote\b|todesopfer|استشهاد|شهيد|شهداء|مقتل|وفاة|ضحايا|נהרג|מתו|הרוגים", re.I)
+OLUM = re.compile(r"öldü|hayatını kaybet|can verdi|\böl[üu]\b|ölü sayısı|\bdie[sd]\b|\bdie (?:in|after|from|as|amid|during)\b|\bdead\b|death toll|deaths|\bmeur|\bmorts?\b|muer[et]|muertos|\bmort[ie]\b|muoion|\bstirbt|sterben|starben|\btote\b|todesopfer|استشهاد|شهيد|شهداء|مقتل|وفاة|ضحايا|נהרג|מתו|הרוגים", re.I)
 FAIL_ISRAIL = re.compile(r"israel|israël|israil|isra[eé]l|\bidf\b|tsahal|siyonist|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל", re.I)
+SALDIRI = re.compile(r"saldır|bombard|hava saldırı|attack|strike|shelling|bombing|raid|fire\b|gunfire|frappe|bombardement|ataque|bombardeo|attacco|bombardament|angriff|luftangriff|beschuss|"
+                     r"قصف|غارة|غارات|استهداف|رصاص|عدوان|הפצצה|תקיפה", re.I)
+DOGAL = re.compile(r"\bcold\b|hypotherm|freez|soğuk|donarak|flood|sel(?:de|den|e)?\b|landslide|göçük|dune|collapse|heyelan|kaza|accident|crash|"
+                   r"\bfroid|inondation|effondrement|frío|inundaci|derrumbe|freddo|alluvion|crollo|kälte|erfror|überschwemm|einsturz|"
+                   r"البرد|برد|غرق|السيول|انهيار|حادث", re.I)
 FAIL_HAMAS = re.compile(r"hamas|حماس|חמאס|qassam|kassam|القسام|islamic jihad|cihad|hezbollah|hizbullah|حزب الله|houthi|husi|"
                         r"palestinian (?:gunm[ae]n|attacker|assailant|militant)|\bgunm[ae]n\b|attacker|assailant|saldırgan|terrorist|מחבל|مسلح", re.I)
 FAIL_SONRA = re.compile(r"(?:\b(?:in|by|from|after|amid|during|par|lors|dans|por|en|tras|durante|da|dal|nel|von|durch|bei|nach)\b|"
@@ -90,12 +95,19 @@ def faillik(b, kb):
     if SEHADET.search(b) or SEHADET.search(kb):
         return "sehadet"                             # şehit / istişhad: ölüm bir şehadet olarak anlatılıyor
     if OLUM.search(b) or OLUM.search(kb):
+        metin = b if OLUM.search(b) else kb
+        # "İsrail'in saldırısında 3 Filistinli hayatını kaybetti": fail saldırıyla birlikte yazılmış
+        if FAIL_ISRAIL.search(metin) and SALDIRI.search(metin):
+            return "failli"
+        # soğuk, sel, göçük, kaza: bir öldürme anlatımı değil; faili saklama ölçüsüne girmez
+        if DOGAL.search(metin):
+            return "dogal"
         return "oldu"
     return None
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 11
+OZET_SURUM = 12
 BULTEN_SURUM = 1
 
 

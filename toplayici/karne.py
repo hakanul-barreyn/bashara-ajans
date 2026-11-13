@@ -82,7 +82,12 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             b = h.get("baslik_orj") or ""
             if not b or h.get("kaynak") not in kmap:
                 continue
-            f = gecmis.faillik(b, gecmis.katla(b))
+            kb = gecmis.katla(b)
+            # yalnızca savaş bağlamındaki başlıklar (Gazze, Batı Şeria, Kudüs, Lübnan, İsrail): geriye dönük taramayla aynı süzgeç.
+            # Canlı depoda bütün başlıklar var; süzgeçsiz Yemen, Senegal ya da bir büyükelçinin ölümü de sayılırdı.
+            if not (gecmis.GAZZE.search(b) or gecmis.GAZZE.search(kb) or gecmis.BAGLAM.search(b) or gecmis.BAGLAM.search(kb)):
+                continue
+            f = gecmis.faillik(b, kb)
             # "şehit / şehadet" diyen başlıklar ayrı bir anlatım: faili yazmasa da ölümü saldırının sonucu olarak verir;
             # paydaya katılmaz (rapordaki "Hangi yayın öldüreni saklıyor?" ölçüsüyle aynı)
             if f not in ("aktif", "failli", "failsiz", "oldu"):
