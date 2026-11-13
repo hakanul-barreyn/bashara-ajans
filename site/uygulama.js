@@ -976,6 +976,38 @@
     });
   }
 
+  // Çeşitlilik motoru: akış zaman sırasını büyük ölçüde korur ama aynı yayının, aynı kampın ve aynı olayın arka arkaya
+  // dizilmesini önler. Hiçbir haber atılmaz; yalnızca birkaç sıra ileri ertelenir. Arama, şehir ya da olay seçiliyken çalışmaz.
+  const CESIT = { yayinPencere: 8, kampArdisik: 3, olayPencere: 10, ileriBak: 40, saat: 6 };
+  function cesitlendir(xs) {
+    if (xs.length < 12) return xs;
+    const kalan = xs.slice(), cikti = [];
+    const kampOf = (h) => { const k = kaynaklar[h.kaynak]; return k ? (k.kamp || k.bolge || "") : ""; };
+    while (kalan.length) {
+      const bas = kalan[0], sinir = Date.parse(bas.tarih) - CESIT.saat * 36e5;
+      const sonY = cikti.slice(-CESIT.yayinPencere + 1).map((h) => h.kaynak);
+      const sonK = cikti.slice(-CESIT.kampArdisik).map(kampOf);
+      const sonO = cikti.slice(-CESIT.olayPencere + 1).map((h) => h.olay).filter(Boolean);
+      const kampDolu = sonK.length === CESIT.kampArdisik && sonK.every((x) => x === sonK[0]);
+      const uygun = (h, gevsek) => {
+        if (sonY.includes(h.kaynak) && (!gevsek || sonY.slice(-3).includes(h.kaynak))) return false;
+        if (!gevsek && kampDolu && kampOf(h) === sonK[0]) return false;
+        if (!gevsek && h.olay && sonO.includes(h.olay)) return false;
+        return true;
+      };
+      let sec = -1;
+      for (const gevsek of [false, true]) {
+        for (let i = 0; i < Math.min(kalan.length, CESIT.ileriBak); i++) {
+          if (i > 0 && Date.parse(kalan[i].tarih) < sinir) break;
+          if (uygun(kalan[i], gevsek)) { sec = i; break; }
+        }
+        if (sec >= 0) break;
+      }
+      cikti.push(kalan.splice(sec < 0 ? 0 : sec, 1)[0]);
+    }
+    return cikti;
+  }
+
   function ciz(basaDon, devam) {
     document.querySelectorAll("#fBolge .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === bolge));
     const sc = $("fSehir"); sc.hidden = !sehir; if (sehir) sc.textContent = sehir + "  ✕";
@@ -985,6 +1017,7 @@
     if (olaySec && !secOlay) olaySec = null;
     gor = secOlay ? []
       : (sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste);
+    if (!secOlay && !sehir && !ara) gor = cesitlendir(gor);
     const odak = odakId && haberIdx[odakId];
     if (odak && !secOlay) gor = [odak, ...gor.filter((h) => h.id !== odakId)];
     // Haberlerin arasında tutuklu hekim kartı: Dr. Hüsam Ebu Safiye (27 Aralık 2024'ten bu yana)
