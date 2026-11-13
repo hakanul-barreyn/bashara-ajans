@@ -245,6 +245,15 @@
      "ad": "Britannica",
      "url": "https://www.britannica.com/event/Six-Day-War"
     }
+   ],
+   "gorseller": [
+    {
+     "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Six_Day_War._An_Israeli_troop_carrier_on_the_east_bank_of_the_Suez_Canal_opposite_Ismailia._June_1967._D326-110.jpg/1280px-Six_Day_War._An_Israeli_troop_carrier_on_the_east_bank_of_the_Suez_Canal_opposite_Ismailia._June_1967._D326-110.jpg",
+     "sayfa": "https://commons.wikimedia.org/wiki/File:Six_Day_War._An_Israeli_troop_carrier_on_the_east_bank_of_the_Suez_Canal_opposite_Ismailia._June_1967._D326-110.jpg",
+     "aciklama": "Sina’yı işgal eden İsrail askerleri Süveyş Kanalı’nın doğu kıyısında, İsmailiye karşısında, Haziran 1967.",
+     "aciklama_en": "Israeli soldiers occupying Sinai on the east bank of the Suez Canal, opposite Ismailia, June 1967.",
+     "atif": "Moshe Milner (İsrail Hükümeti Basın Ofisi) · CC BY-SA 4.0 · Wikimedia Commons"
+    }
    ]
   },
   {
@@ -807,6 +816,102 @@
      "url": "https://www.palquest.org/en/node/23294"
     }
    ]
+  },
+  {
+   "tarih": "1916-05",
+   "baslik": "Sykes–Picot gizli anlaşması",
+   "baslik_en": "The secret Sykes–Picot Agreement",
+   "metin": "İngiltere ile Fransa, savaş sürerken Osmanlı’nın Arap topraklarını aralarında paylaştı. Suriye ve Lübnan Fransa’ya, Irak’ın büyük bölümü İngiltere’ye bırakıldı; Filistin için kutsal mekânlar gerekçesiyle “uluslararası yönetim” öngörüldü. Anlaşma 1917’de Bolşevikler tarafından ifşa edildi.",
+   "metin_en": "While the war was still on, Britain and France divided the Ottoman Arab lands between them. Syria and Lebanon went to France and most of Iraq to Britain; for Palestine, because of its holy places, an “international administration” was envisaged. The Bolsheviks made the deal public in 1917.",
+   "kaynaklar": [
+    {
+     "ad": "Britannica",
+     "url": "https://www.britannica.com/event/Sykes-Picot-Agreement"
+    }
+   ],
+   "donem": "osmanli"
+  },
+  {
+   "tarih": "1916-06",
+   "baslik": "Şerif Hüseyin isyanı",
+   "baslik_en": "Sharif Hussein’s revolt",
+   "metin": "Mekke Emiri Şerif Hüseyin, İngiltere’nin Yüksek Komiseri McMahon ile Temmuz 1915 – Ocak 1916 arasında yazıştıktan sonra Haziran 1916’da Mekke’de Osmanlı’ya karşı isyan başlattı. İngiliz desteğindeki Arap kuvvetleri Hicaz demiryolunu ve Osmanlı’nın güney kanadını hedef aldı.",
+   "metin_en": "After corresponding with the British High Commissioner McMahon between July 1915 and January 1916, Sharif Hussein, Emir of Mecca, launched a revolt against the Ottomans in Mecca in June 1916. British-backed Arab forces targeted the Hejaz railway and the Ottoman southern flank.",
+   "kaynaklar": [
+    {
+     "ad": "TDV İslâm Ansiklopedisi",
+     "url": "https://islamansiklopedisi.org.tr/serif-huseyin"
+    }
+   ],
+   "donem": "osmanli"
+  },
+  {
+   "tarih": "1917-03-26",
+   "baslik": "Birinci Gazze Muharebesi",
+   "baslik_en": "First Battle of Gaza",
+   "metin": "Sina’yı geçen İngiliz kuvvetleri 26 Mart 1917’de Gazze’ye saldırdı. Osmanlı savunması takviye alarak direndi; İngilizler su sıkıntısı ve yorgunluk nedeniyle geri çekildi. Gazze Osmanlı’nın elinde kaldı.",
+   "metin_en": "British forces that had crossed the Sinai attacked Gaza on 26 March 1917. The Ottoman defence held with reinforcements; short of water and exhausted, the British withdrew. Gaza stayed in Ottoman hands.",
+   "kaynaklar": [
+    {
+     "ad": "Australian War Memorial London",
+     "url": "https://www.awmlondon.gov.au/battles/gaza"
+    },
+    {
+     "ad": "Nuri Karakaş, Tarih İncelemeleri Dergisi (DergiPark)",
+     "url": "https://dergipark.org.tr/en/pub/egetid/article/282832"
+    }
+   ],
+   "donem": "osmanli"
+  },
+  {
+   "tarih": "1917-04-19",
+   "baslik": "İkinci Gazze Muharebesi",
+   "baslik_en": "Second Battle of Gaza",
+   "metin": "İngilizler 17–19 Nisan 1917’de tanklar ve gaz mermileriyle Gazze’ye cepheden yeniden saldırdı. Saldırı ağır kayıplarla püskürtüldü; ardından İngiliz komutası değişti ve General Allenby göreve getirildi.",
+   "metin_en": "On 17–19 April 1917 the British made a second frontal assault on Gaza, using tanks and gas shells. It was repulsed with heavy losses; the British command was then changed and General Allenby was appointed.",
+   "kaynaklar": [
+    {
+     "ad": "Australian War Memorial London",
+     "url": "https://www.awmlondon.gov.au/battles/gaza"
+    },
+    {
+     "ad": "Nuri Karakaş, Tarih İncelemeleri Dergisi (DergiPark)",
+     "url": "https://dergipark.org.tr/en/pub/egetid/article/282832"
+    }
+   ],
+   "donem": "osmanli"
+  },
+  {
+   "tarih": "1917-10-31",
+   "baslik": "Birüssebi’nin düşüşü ve Gazze’nin kaybı",
+   "baslik_en": "Fall of Beersheba and the loss of Gaza",
+   "metin": "Allenby, Gazze’ye oyalama saldırısı yaparken asıl darbeyi doğudan vurdu: Birüssebi 31 Ekim 1917’de Avustralya atlı birliklerinin eline geçti. Savunma hattı yarılınca Osmanlı kuvvetleri Gazze’yi boşalttı; şehir 7 Kasım’da İngilizlere geçti.",
+   "metin_en": "While feinting at Gaza, Allenby struck the main blow from the east: Beersheba fell to Australian mounted troops on 31 October 1917. With the line broken, Ottoman forces left Gaza, which passed to the British on 7 November.",
+   "kaynaklar": [
+    {
+     "ad": "Australian War Memorial London",
+     "url": "https://www.awmlondon.gov.au/battles/gaza"
+    }
+   ],
+   "donem": "osmanli"
+  },
+  {
+   "tarih": "1917-12-09",
+   "baslik": "Kudüs’ün teslimi",
+   "baslik_en": "Surrender of Jerusalem",
+   "metin": "Osmanlı birlikleri Kudüs’ü 8 Aralık gecesi boşalttı. 9 Aralık 1917’de Kudüs Belediye Başkanı Hüseyin Selim el-Hüseynî, Kudüs Mutasarrıfı İzzet’in imzaladığı teslim belgesini İngilizlere verdi. Allenby iki gün sonra şehre girdi; Kudüs dört asırlık Osmanlı idaresinden çıktı.",
+   "metin_en": "Ottoman troops evacuated Jerusalem on the night of 8 December. On 9 December 1917 the city’s mayor, Hussein Salim al-Husseini, handed the British a surrender document signed by Governor Izzat. Allenby entered the city two days later, ending four centuries of Ottoman rule.",
+   "kaynaklar": [
+    {
+     "ad": "Interactive Encyclopedia of the Palestine Question (PalQuest)",
+     "url": "https://www.palquest.org/en/node/40645"
+    },
+    {
+     "ad": "Nuri Karakaş, Tarih İncelemeleri Dergisi (DergiPark)",
+     "url": "https://dergipark.org.tr/en/pub/egetid/article/282832"
+    }
+   ],
+   "donem": "osmanli"
   }
  ]
 }

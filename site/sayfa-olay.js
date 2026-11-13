@@ -15,7 +15,7 @@
   var k = document.getElementById("olay");
 
   var DONUM = [];
-  fetch("site/donum.json?v=4").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
+  fetch("site/donum.json?v=6").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
   .then(function () { return fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)); }).then(function (r) { return r.json(); }).then(function (v) {
     var TA = {}; v.turler.forEach(function (t) { TA[t.anahtar] = t.ad; });
     var turAd = function (t) { return EN ? (TUR_EN[t] || TA[t] || t) : (TA[t] || t); };
