@@ -121,59 +121,99 @@ def fotolar(cikti, anahtar, model, en_cok=10, en_cok_deneme=36):
 
 
 STAC = "https://earth-search.aws.element84.com/v1/search"
+# Yakın kareler (batı, güney, doğu, kuzey). Savaş öncesi görüntü Ağustos – 6 Ekim 2023 arasından.
+BOLGELER = [
+    ("gazze-kenti", "Gazze kenti", "Gaza City", [34.40, 31.47, 34.50, 31.55]),
+    ("kuzey", "Cebaliye, Beyt Lahiya, Beyt Hanun", "Jabalia, Beit Lahia, Beit Hanoun", [34.46, 31.51, 34.57, 31.59]),
+    ("orta", "Deyr el-Belah ve orta kamplar", "Deir al-Balah and the central camps", [34.32, 31.39, 34.43, 31.47]),
+    ("han-yunus", "Han Yunus", "Khan Yunis", [34.25, 31.31, 34.36, 31.38]),
+    ("refah", "Refah", "Rafah", [34.21, 31.26, 34.31, 31.32]),
+]
+ONCE_ARALIK = ("2023-08-01T00:00:00Z", "2023-10-06T23:59:59Z")
 
 
-def _stac(gun=60, bulut=8):
+def _stac(gun=60, bulut=8, aralik=None):
     bit = dt.datetime.now(dt.timezone.utc)
-    govde = {"collections": ["sentinel-2-l2a"], "bbox": GAZZE_BBOX,
-             "datetime": f"{(bit - dt.timedelta(days=gun)).strftime('%Y-%m-%dT00:00:00Z')}/{bit.strftime('%Y-%m-%dT%H:%M:%SZ')}",
-             "query": {"eo:cloud_cover": {"lt": bulut}}, "sortby": [{"field": "properties.datetime", "direction": "desc"}], "limit": 40}
+    zaman = "/".join(aralik) if aralik else f"{(bit - dt.timedelta(days=gun)).strftime('%Y-%m-%dT00:00:00Z')}/{bit.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+    govde = {"collections": ["sentinel-2-l2a"], "bbox": GAZZE_BBOX, "datetime": zaman,
+             "query": {"eo:cloud_cover": {"lt": bulut}}, "sortby": [{"field": "properties.datetime", "direction": "desc"}], "limit": 60}
     istek = urllib.request.Request(STAC, data=json.dumps(govde).encode(), headers={"Content-Type": "application/json", "User-Agent": UA})
     with urllib.request.urlopen(istek, timeout=60) as r:
         return json.loads(r.read()).get("features", [])
 
 
-def uydu(cikti):
+def _kes(fs, bbox):
+    """Aynı güne ait Sentinel-2 karelerinden bbox'ı keser (10 m). Döndürür: RGB dizisi ya da None (kare eksikse)."""
     import numpy as np
     import rasterio
     from rasterio.merge import merge
     from rasterio.warp import transform_bounds
-    from PIL import Image
-    klasor = os.path.join(cikti, "uydu"); os.makedirs(klasor, exist_ok=True)
-    ogeler = _stac()
+    kaynaklar = [rasterio.open(f["assets"]["visual"]["href"]) for f in fs]
+    crs = kaynaklar[0].crs
+    kaynaklar = [k for k in kaynaklar if k.crs == crs]
+    dizi, _ = merge(kaynaklar, bounds=transform_bounds("EPSG:4326", crs, *bbox), res=10, nodata=0)
+    rgb = np.moveaxis(dizi[:3], 0, -1)
+    return None if float((rgb.sum(axis=2) == 0).mean()) > 0.03 else rgb
+
+
+def _kaydet(rgb, yol, en=2200, kontrast=True):
+    from PIL import Image, ImageEnhance
+    im = Image.fromarray(rgb.astype("uint8"))
+    if kontrast:   # Sentinel "visual" görüntüsü biraz soluk
+        im = ImageEnhance.Contrast(ImageEnhance.Brightness(im).enhance(1.08)).enhance(1.12)
+    if max(im.size) < en:   # yakın kareler 10 m çözünürlükte ~1000 piksel: görüntülemede yumuşak büyütme
+        k = en / max(im.size); im = im.resize((round(im.size[0] * k), round(im.size[1] * k)), Image.LANCZOS)
+    else:
+        im.thumbnail((en, en))
+    im.save(yol, quality=84, optimize=True, progressive=True)
+
+
+def _gun_sec(ogeler, bboxlar):
+    """Bütün bbox'ları eksiksiz kapsayan en yeni gün: {gün: kareler}"""
     gunler = {}
     for f in ogeler:
         gunler.setdefault(f["properties"]["datetime"][:10], []).append(f)
     for gun in sorted(gunler, reverse=True):
-        fs = gunler[gun]
-        bulut = max(f["properties"].get("eo:cloud_cover", 0) for f in fs)
         try:
-            kaynaklar = [rasterio.open(f["assets"]["visual"]["href"]) for f in fs]
-            crs = kaynaklar[0].crs
-            kaynaklar = [k for k in kaynaklar if k.crs == crs]
-            sinir = transform_bounds("EPSG:4326", crs, *GAZZE_BBOX)
-            dizi, _ = merge(kaynaklar, bounds=sinir, res=10, nodata=0)
+            kesitler = [_kes(gunler[gun], b) for b in bboxlar]
         except Exception as e:   # noqa: BLE001
-            print("uydu okunamadı", gun, e)
-            continue
-        rgb = np.moveaxis(dizi[:3], 0, -1)
-        bos = float((rgb.sum(axis=2) == 0).mean())
-        print("uydu", gun, "bulut", bulut, "boş pay", round(bos, 3), rgb.shape)
-        if bos > 0.03:
-            continue   # Gazze'nin bir kısmı bu günün karelerinin dışında
-        im = Image.fromarray(rgb.astype("uint8"))
-        # hafif kontrast: Sentinel "visual" görüntüsü biraz soluk
-        from PIL import ImageEnhance
-        im = ImageEnhance.Contrast(ImageEnhance.Brightness(im).enhance(1.08)).enhance(1.12)
-        b = im.copy(); b.thumbnail((2200, 2200)); b.save(os.path.join(klasor, "gazze.jpg"), quality=84, optimize=True, progressive=True)
-        k = im.copy(); k.thumbnail((900, 900)); k.save(os.path.join(klasor, "gazze-kucuk.jpg"), quality=80, optimize=True, progressive=True)
-        json.dump({"tarih": gun, "bulut": bulut, "uydu": "Sentinel-2", "kare": [f["id"] for f in fs],
-                   "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}), ESA; işleme: ZBS", "lisans": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
-                   "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat()},
-                  open(os.path.join(klasor, "uydu.json"), "w"), ensure_ascii=False, indent=1)
-        print("Uydu görüntüsü:", gun)
-        return
-    print("Son 60 günde uygun uydu görüntüsü yok")
+            print("uydu okunamadı", gun, e); continue
+        if all(k is not None for k in kesitler):
+            return gun, gunler[gun], kesitler
+        print("uydu", gun, "eksik kare, atlandı")
+    return None, None, None
+
+
+def uydu(cikti):
+    klasor = os.path.join(cikti, "uydu"); os.makedirs(klasor, exist_ok=True)
+    meta_yol = os.path.join(klasor, "uydu.json")
+    eski = json.load(open(meta_yol)) if os.path.exists(meta_yol) else {}
+    bboxlar = [GAZZE_BBOX] + [b for *_, b in BOLGELER]
+    gun, fs, kesitler = _gun_sec(_stac(), bboxlar)
+    if not gun:
+        print("Son 60 günde uygun uydu görüntüsü yok"); return
+    _kaydet(kesitler[0], os.path.join(klasor, "gazze.jpg"))
+    _kaydet(kesitler[0], os.path.join(klasor, "gazze-kucuk.jpg"), en=900)
+    for (k, *_), r in zip(BOLGELER, kesitler[1:]):
+        _kaydet(r, os.path.join(klasor, f"{k}-simdi.jpg"), en=1400)
+    # savaş öncesi: bir kez üretilir, sonra saklanır
+    once = eski.get("once")
+    if not once or not all(os.path.exists(os.path.join(klasor, f"{k}-once.jpg")) for k, *_ in BOLGELER):
+        ogun, _, okes = _gun_sec(_stac(bulut=5, aralik=ONCE_ARALIK), [b for *_, b in BOLGELER])
+        if ogun:
+            for (k, *_), r in zip(BOLGELER, okes):
+                _kaydet(r, os.path.join(klasor, f"{k}-once.jpg"), en=1400)
+            once = ogun
+            print("Savaş öncesi görüntü:", ogun)
+    galeri = [{"id": k, "ad": ad, "ad_en": en, "bbox": b, "simdi": f"{k}-simdi.jpg", "once": f"{k}-once.jpg" if once else None}
+              for k, ad, en, b in BOLGELER]
+    json.dump({"tarih": gun, "once": once, "bulut": max(f["properties"].get("eo:cloud_cover", 0) for f in fs), "uydu": "Sentinel-2",
+               "kare": [f["id"] for f in fs], "galeri": galeri,
+               "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}{', ' + once[:4] if once and once[:4] != gun[:4] else ''}), ESA; işleme: ZBS",
+               "lisans": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
+               "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat()},
+              open(meta_yol, "w"), ensure_ascii=False, indent=1)
+    print("Uydu görüntüsü:", gun, "· savaş öncesi:", once)
 
 
 if __name__ == "__main__":
