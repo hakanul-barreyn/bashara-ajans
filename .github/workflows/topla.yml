@@ -99,7 +99,10 @@ jobs:
           git push -q -f "$ADRES" veri
 
       - name: Haber sayfaları
-        run: rm -rf h && (cp -r data/h h || true)
+        run: |
+          rm -rf h && (cp -r data/h h || true)
+          # günlük görseller (uydu, Gazze fotoğrafları): "gorsel" dalından; veri dalına yazılmaz
+          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
 
       - uses: actions/configure-pages@v5
 

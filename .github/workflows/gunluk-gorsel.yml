@@ -1,0 +1,45 @@
+name: Günlük görseller (uydu, Gazze fotoğrafları)
+
+# Günde bir kez: Sentinel-2 uydu görüntüsü ve Commons'tan denetlenmiş Gazze fotoğrafları. "gorsel" dalına yazar;
+# toplayıcı ve hızlı yayın her yayında bu dalı data/gorsel klasörüne koyar.
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gunluk-gorsel
+  cancel-in-progress: false
+
+jobs:
+  gorsel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q rasterio pillow numpy
+      - name: Önceki çıktı
+        run: |
+          mkdir -p cikti
+          if git fetch -q --depth 1 origin gorsel 2>/dev/null; then git archive FETCH_HEAD | tar -x -C cikti; fi
+      - name: Görseller
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          AWS_NO_SIGN_REQUEST: "YES"
+        run: python toplayici/gunluk_gorsel.py cikti
+      - name: Kaydet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd cikti && rm -rf .git && git init -q -b gorsel && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Günlük görseller"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gorsel

@@ -29,6 +29,7 @@ jobs:
           mkdir -p data
           git fetch --depth 1 origin veri && git checkout FETCH_HEAD -- data && git reset -q
           rm -rf h && (cp -r data/h h || true)
+          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

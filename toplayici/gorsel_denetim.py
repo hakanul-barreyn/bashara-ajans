@@ -112,7 +112,7 @@ def _commons(params):
             + (2 if yil and int(yil.group(0)) >= 2023 else 1 if yil and int(yil.group(0)) >= 2015 else 0) \
             + (1 if w / h >= 1.3 else -2 if w / h < 1 else 0)
         cikti.append({"url": ii.get("thumburl") or ii.get("url"), "sayfa": ii.get("descriptionurl"), "atif": f"{sanatci} · {lis} · Wikimedia Commons",
-                      "puan": puan})
+                      "puan": puan, "yil": int(yil.group(0)) if yil else None})
     return cikti
 
 
