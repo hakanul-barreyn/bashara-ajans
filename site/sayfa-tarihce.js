@@ -39,6 +39,11 @@
           var li = el("li");
           li.appendChild(el("time", null, tarihAd(o.tarih)));
           var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
+          if (o.gorsel && o.gorsel.url) {
+            var f = el("figure", "th-gorsel"), im = el("img"); im.src = o.gorsel.url; im.alt = EN ? o.baslik_en : o.baslik; im.loading = "lazy"; im.decoding = "async";
+            var fc = el("figcaption"), fa = el("a", null, (EN ? "Photo: " : "Fotoğraf: ") + (o.gorsel.atif || "")); if (o.gorsel.sayfa) { fa.href = o.gorsel.sayfa; fa.target = "_blank"; fa.rel = "noopener"; }
+            fc.appendChild(fa); f.append(im, fc); ic.appendChild(f);
+          }
           var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
           if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
           li.appendChild(ic); ol.appendChild(li);
