@@ -1,7 +1,8 @@
 name: Media Cloud arşivi
 
-# Arka planda iki saatte bir ~80 dakika çalışır; savaş bağlamındaki haberlerin künyesini (önce Türkiye) ve
-# Türkiye yayınlarının günlük haber sayılarını "mc-arsiv" dalına biriktirir. Siteyi etkilemez.
+# Arka planda iki saatte bir ~80 dakika çalışır. Savaş bağlamındaki haberlerin künyesi (başlık, adres, tarih; önce Türkiye)
+# GİZLİ Hugging Face veri setine (HF_REPO) yüklenir: başlık ve adresler üçüncü tarafların içeriğidir, açık depoya konmaz.
+# Türkiye yayınlarının günlük haber sayıları (toplu sayılar, açıkça yayımlanabilir) "mc-sayim" dalına da yazılır.
 
 on:
   schedule:
@@ -19,31 +20,53 @@ jobs:
   arsiv:
     runs-on: ubuntu-latest
     timeout-minutes: 100
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_REPO: ${{ vars.HF_REPO }}
     steps:
+      - name: Hugging Face ayarı var mı
+        run: |
+          if [ -z "$HF_TOKEN" ] || [ -z "$HF_REPO" ]; then echo "HF_TOKEN ya da HF_REPO yok: künyeler açık depoya yazılmaz, iş duruyor"; exit 1; fi
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -q --upgrade mediacloud
-      - name: Önceki arşiv
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pip install -q --upgrade mediacloud huggingface_hub
+      - name: Önceki durum
         run: |
-          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone -q --depth 1 --branch mc-arsiv "$ADRES" mc-arsiv 2>/dev/null || (mkdir -p mc-arsiv && git -C mc-arsiv init -q -b mc-arsiv)
+          mkdir -p mc-arsiv
           (git fetch -q --depth 1 origin mediacloud && git show FETCH_HEAD:mc-kapsam.json > mc-arsiv/mc-kapsam.json) || true
+          python - <<'PY'
+          import os
+          from huggingface_hub import snapshot_download
+          try:
+              snapshot_download(os.environ["HF_REPO"], repo_type="dataset", local_dir="mc-arsiv", allow_patterns=["durum.json", "gunluk/*"], token=os.environ["HF_TOKEN"])
+          except Exception as e:
+              print("önceki durum yok:", e)
+          PY
       - name: Arşivle
         env:
           MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
           MC_SURE: "4800"
         run: python toplayici/mc_arsiv.py mc-arsiv
-      - name: Kaydet
+      - name: Hugging Face'e yükle
+        if: always()
+        run: |
+          python - <<'PY'
+          import os, datetime
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          api.upload_folder(repo_id=os.environ["HF_REPO"], repo_type="dataset", folder_path="mc-arsiv",
+                            allow_patterns=["arsiv/**", "gunluk/*", "durum.json"],
+                            commit_message="Media Cloud arşivi " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M"))
+          print("yüklendi")
+          PY
+      - name: Günlük sayılar (açık)
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd mc-arsiv && git add -A
-          KIM=(-c user.name="zbs-mediacloud" -c user.email="41898282+github-actions[bot]@users.noreply.github.com")
-          if git rev-parse -q --verify HEAD >/dev/null; then git "${KIM[@]}" commit -q --amend -m "Media Cloud arşivi: $(date -u +'%Y-%m-%d %H:%M') UTC"; else git "${KIM[@]}" commit -q -m "Media Cloud arşivi"; fi
-          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:mc-arsiv
-          du -sh . | cut -f1
+          [ -d mc-arsiv/gunluk ] || exit 0
+          rm -rf sayim && mkdir sayim && cp -r mc-arsiv/gunluk sayim/ && cd sayim && git init -q -b mc-sayim && git add -A
+          git -c user.name="zbs-mediacloud" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Media Cloud günlük sayılar (Türkiye)"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:mc-sayim
