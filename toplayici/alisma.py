@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 8
+ALISMA_SURUM = 9
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -145,7 +145,19 @@ def _izleme(olaylar, anahtar):
     return cikti
 
 
-AKTIF_EN_AZ = 15   # pencerede en az bu kadar başlık yayımlamış yayın "o günlerde yayındaydı" sayılır
+AKTIF_EN_AZ = 15   # eski sabit eşik (Kasım 2026'ya kadar); yerine yayının kendi olağan hacmine göre eşik kullanılır
+AKTIF_PAY = 0.5    # pencerede, yayının olağan (medyan) günlük başlık sayısı × pencere boyunun en az yarısı
+AKTIF_ALT = 4      # ve her durumda en az 4 başlık: kaydı eksik günlerde yayın "sustu" sayılmasın
+_MEDYAN = {}
+
+
+def _aktif_esik(S, kid, w):
+    """Yayının bu pencerede "yayındaydı" sayılması için gereken başlık sayısı: kendi olağan hacmine göre."""
+    tablo = _MEDYAN.setdefault(id(S), {})
+    if kid not in tablo:
+        g = sorted(v for v in (S["yn"].get(kid) or {}).values() if v > 0)
+        tablo[kid] = g[len(g) // 2] if g else 0
+    return max(AKTIF_ALT, AKTIF_PAY * tablo[kid] * len(w))
 
 
 def _sessiz_kim(S, gk, tur, w, K):
@@ -157,7 +169,7 @@ def _sessiz_kim(S, gk, tur, w, K):
         if not g:
             continue
         yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
-        if not yazdi and sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
+        if not yazdi and sum(gunler.get(i, 0) for i in w) < _aktif_esik(S, kid, w):
             continue
         kim[g][0 if yazdi else 1].append((K.get(str(kid)) or {}).get("ad", str(kid)))
     return {g: [sorted(a), sorted(b)] for g, (a, b) in kim.items() if a or b}
@@ -174,7 +186,7 @@ def _sessiz(S, gk, tur, w):
         yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
         # 15 başlık şartı yalnızca "sustu" demek için: o günlerin kaydı elimizde olmayan yayın susmuş sayılmasın.
         # Az haber atan bir yayın bu türden yazdıysa yazdı sayılır.
-        if not yazdi and sum(gunler.get(i, 0) for i in w) < AKTIF_EN_AZ:
+        if not yazdi and sum(gunler.get(i, 0) for i in w) < _aktif_esik(S, kid, w):
             continue
         say[g][1] += 1
         if not yazdi:
@@ -299,7 +311,7 @@ def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam, aralik=("2023-10-07", "99
         w = _pencere(b, e, len(D))
         yo = S["yo"][o["tur"]]
         for kid, r in sonuc.items():
-            if sum((yn.get(kid) or {}).get(i, 0) for i in w) < AKTIF_EN_AZ:
+            if sum((yn.get(kid) or {}).get(i, 0) for i in w) < _aktif_esik(S, kid, w):
                 continue
             r["olay"] += 1
             if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
@@ -313,7 +325,7 @@ def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam, aralik=("2023-10-07", "99
                 continue
             n, tt = (v, {}) if isinstance(v, int) else (v[0], v[1])
             r["baslik"] += n
-            r["fo"] += sum(tt.get("f:" + f, 0) for f in ("aktif", "failli", "failsiz", "oldu", "sehadet"))
+            r["fo"] += sum(tt.get("f:" + f, 0) for f in ("aktif", "failli", "failsiz", "oldu"))   # şehadet anlatımı paydaya girmez (karne ve raporla aynı)
             r["gizli"] += tt.get("f:failsiz", 0) + tt.get("f:oldu", 0)
             if gun <= "2025-10-09":
                 r["io"] += tt.get("k:io", 0)
@@ -531,7 +543,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
                                                     (max(y + "-01-01", "2023-10-07"), y + "-12-31")) if r["hukum"]]
                           for y in sorted({g[:4] for g in D if g >= "2023-10-07"})},
             "toplum": _toplum(tp, S, D), "toplum_indirildi": tp.get("indirildi"),
-            "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ,
+            "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ, "aktif_esik": {"pay": AKTIF_PAY, "alt": AKTIF_ALT},
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}
     almanak._yaz(os.path.join(kok, "data", "bulten", "alisma.json"), veri)
     log(f"Alışma: {len(tum_olaylar)} olay, {len(olum_gunleri)} kitlesel ölüm günü")

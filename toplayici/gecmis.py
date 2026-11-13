@@ -27,33 +27,43 @@ BASLANGIC = dt.date(2023, 10, 7)
 # \b şart: İtalyanca "ragazze" (kızlar) içinde "gazze" geçiyor
 GAZZE = re.compile(r"\bgazze|\bgaza|غزة|غزه|עזה", re.I)
 BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|siyon|zionis|sionis|sionist|cisjord|west bank|batı şeria|"
-                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|\bidf\b|lübnan|lebanon|liban|líbano|libano|hizbullah|hezbollah|hizbollah|hisbollah|nasrallah|لبنان|حزب الله|فلسطين|إسرائيل|اسرائيل|"
-                    r"الاحتلال|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
+                    r"westjordan|kudüs|jerusalem|jérusalem|gerusalem|ramallah|cenin|jenin|hamas|\bidf\b|lübnan|lebanon|\bliban|líbano|libano|hizbullah|hezbollah|hizbollah|hisbollah|nasrallah|لبنان|حزب الله|فلسطين|إسرائيل|اسرائيل|"
+                    r"الاحتلال(?! التركي)|القدس|الضفة|غزة|حماس|ישראל|פלסטינ|עזה|חמאס|יהודה ושומרון", re.I)
 # Faillik: ölüm haberinde fail yazılmış mı? (başlık düzeyinde, kalıplarla)
 OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
 EDILGEN_TR = re.compile(r"öldürül|katledil", re.I)
 OLUM = re.compile(r"öldü|hayatını kaybet|can verdi|\böl[üu]\b|ölü sayısı|\bdie[sd]\b|\bdie (?:in|after|from|as|amid|during)\b|\bdead\b|death toll|deaths|\bmeur|\bmorts?\b|muer[et]|muertos|\bmort[ie]\b|muoion|\bstirbt|sterben|starben|\btote\b|todesopfer|استشهاد|شهيد|شهداء|مقتل|وفاة|ضحايا|נהרג|מתו|הרוגים", re.I)
 FAIL_ISRAIL = re.compile(r"israel|israël|israil|isra[eé]l|\bidf\b|tsahal|siyonist|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל", re.I)
-SALDIRI = re.compile(r"saldır|bombard|hava saldırı|attack|strike|shelling|bombing|raid|fire\b|gunfire|frappe|bombardement|ataque|bombardeo|attacco|bombardament|angriff|luftangriff|beschuss|"
-                     r"قصف|غارة|غارات|استهداف|رصاص|عدوان|הפצצה|תקיפה", re.I)
+SALDIRI = re.compile(r"saldır|bombard|hava saldırı|attack|strike|shelling|bombing|raid|(?<!cease)fire\b|gunfire|frappe|bombardement|ataque|bombardeo|attacco|bombardament|angriff|luftangriff|beschuss|"
+                     r"aggression|agression|agresyon|offensive|ofensiva|offensiva|genocid|soykırım|war on gaza|guerre|krieg|"
+                     r"قصف|غارة|غارات|استهداف|رصاص|عدوان|العدوان|إبادة|הפצצה|תקיפה", re.I)
+# açlık ve abluka koşullarında ölüm: kuşatmanın sonucu ama "öldüreni saklama" ölçüsüne girmez (ayrı sayılır)
+ABLUKA = re.compile(r"açlık|aclik|açlıktan|aclikt|kıtlık|kitlik|starv|famine|malnutri|malnourish|hunger|hambre|hambruna|desnutrici|\bfame\b|denutri|"
+                    r"unterernähr|hungers|تجويع|مجاعة|الجوع|سوء التغذية|نقص الغذاء|נעב|רעב", re.I)
 DOGAL = re.compile(r"\bcold\b|hypotherm|freez|soğuk|donarak|flood|sel(?:de|den|e)?\b|landslide|göçük|dune|collapse|heyelan|kaza|accident|crash|"
                    r"\bfroid|inondation|effondrement|frío|inundaci|derrumbe|freddo|alluvion|crollo|kälte|erfror|überschwemm|einsturz|"
                    r"البرد|برد|غرق|السيول|انهيار|حادث", re.I)
 FAIL_HAMAS = re.compile(r"hamas|حماس|חמאס|qassam|kassam|القسام|islamic jihad|cihad|hezbollah|hizbullah|حزب الله|houthi|husi|"
                         r"palestinian (?:gunm[ae]n|attacker|assailant|militant)|\bgunm[ae]n\b|attacker|assailant|saldırgan|terrorist|מחבל|مسلح", re.I)
-FAIL_SONRA = re.compile(r"(?:\b(?:in|by|from|after|amid|during|par|lors|dans|por|en|tras|durante|da|dal|nel|von|durch|bei|nach)\b|"
-                        r"بقصف|بغارة|بغارات|برصاص|جراء|في قصف|في غارة|في غارات|إثر)\W+(?:\w+\W+){0,3}?"
-                        r"(?:israel|israël|isra[eé]l|israil|idf|tsahal|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל)", re.I)
+FAIL_SONRA = re.compile(r"(?:\b(?:in|by|from|after|amid|during|as|while|when|par|lors|dans|por|en|tras|durante|da|dal|nel|von|durch|bei|nach|nei|negli)\b|"
+                        r"بقصف|بغارة|بغارات|برصاص|جراء|في قصف|في غارة|في غارات|إثر)\W+(?:\w+\W+){0,5}?"
+                        r"(?:israel|israël|isra[eé]l|israil|idf|tsahal|siyon|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל)", re.I)
+# Arapça fiil-özne sırası: "قتل الاحتلال ..." / "يقتل جيش الاحتلال": fiilden hemen sonra gelen İsrail faildir
+FAIL_FIIL_SONRA = re.compile(r"^\W*(?:\w+\W+){0,2}?(?:جيش |قوات |طائرات |مسيرة |مسيّرة )?(?:الاحتلال|إسرائيل|اسرائيل|الجيش الإسرائيلي|الصهاينة|العدو)", re.I)
+# yalnızca fiil: "قتل", "يقتل" (isim olan "القتلى", "مقتل", "قتلى" değil)
+ARAPCA_FIIL = re.compile(r"(?:^|\s)(?:قتل|يقتل|تقتل|قتلت|قتلوا|يقتلون)(?=\s|$)")
+# fiilden hemen sonra gelen İsrailli kurban: "مقتل إسرائيلي", "killed Israeli soldier" değil ama "مقتل جندي إسرائيلي"
+KURBAN_SONRA = re.compile(r"^\W*(?:\w+\W+){0,1}?(?:إسرائيلي|اسرائيلي|إسرائيليين|اسرائيليين|مستوطن|israeli|israelis|israélien|israelí|israeliano|israelisch|israilli)", re.I)
 ISRAIL_KURBAN = re.compile(r"(?:israeli|israélien|israelí|israeliano|israelisch|israilli|إسرائيلي|اسرائيلي)(?:ne|s|es|a|i|e|en)?\W+(?:\w+\W+)?"
                            r"(?:soldier|soldat|soldad|soldat|asker|جندي|جنود|hostage|otage|rehén|ostagg|geisel|rehine|civilian|civil|"
                            r"\bm[ae]n\b|wom[ae]n|settler|reservist|officer|teen|girl|boy|kadın|erkek|مستوطن)|\bisraelis\b|\bisraéliens\b|"
                            r"\bisraelíes\b|\bisraeliani\b|\bisraelis\b|israilliler", re.I)
 FILISTIN_NESNE = re.compile(r"palestin|filistinli|فلسطيني|فلسطينيين|فلسطينيا|gazan|\bchild|children|\bteen|\bboys?\b|\bgirls?\b|"
                             r"çocu|genç|journalist|gazeteci|paramedic|\bman\b|\bwoman\b|طفل|أطفال|شاب|شابا|صحفي", re.I)
-ISRAIL_ASKER_OLUM = re.compile(r"(?:\bidf\b|soldiers?|reservists?|troops|soldat|soldad|asker[a-z]*)[ ,:'-]+(?:[a-z0-9]+[ ,:'-]+){0,3}(?:killed|dead|die[sd]?|slain|fall|fell|oldu|olduruldu|hayatini|tues?|muert|uccis|getotet)|"
+ISRAIL_ASKER_OLUM = re.compile(r"(?:\bidf\b|soldiers?|reservists?|troops|soldat[ie]?n?|soldats|soldad[oa]s?|asker[a-z]*)[ ,:'-]+(?:[a-z0-9]+[ ,:'-]+){0,3}(?:killed|dead|die[sd]?|slain|fall|fell|oldu|olduruldu|hayatini|tues?|muert|uccis|getotet|morti|tot(?:e|en)?\b)|"
                            r"مقتل جندي|مقتل جنود|مقتل ضابط|هلاك|مصرع جندي|مصرع جنود|נהרג|נפלו", re.I)
 SEHADET = re.compile(r"şehit|şehadet|\bsehit|\bsehadet|martyr|martyre|mártir|martire|märtyrer|استشهاد|شهيد|شهداء|ارتقاء|ارتقى", re.I)
-GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|صحف|صحاف|مراسل|עיתונא|כתב", re.I)
+GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|journaliste|صحفي|صحافي|الصحفي|الصحافي|إعلامي|مراسل|עיתונא", re.I)
 
 
 def faillik(b, kb):
@@ -70,6 +80,11 @@ def faillik(b, kb):
         i = FAIL_ISRAIL.search(metin)
         h = FAIL_HAMAS.search(metin)
         edilgen = bool(EDILGEN_TR.search(metin))
+        sonra = metin[m.end():]
+        if KURBAN_SONRA.search(sonra) and not FILISTIN_NESNE.search(sonra[:40]):
+            return "pfail" if h else "ikurban"           # "مقتل إسرائيلي", "مقتل جندي إسرائيلي"
+        if ARAPCA_FIIL.search(metin[max(0, m.start() - 1):m.end() + 1]) and FAIL_FIIL_SONRA.search(sonra) and not edilgen:
+            return "aktif"                               # "قتل الاحتلال ...", "يقتل جيش الاحتلال"
         k = ISRAIL_KURBAN.search(metin[:m.start()])
         if k and FILISTIN_NESNE.search(metin[m.end():m.end() + 60]):
             # "İsrail askerleri 3 Filistinliyi öldürdü": fiilden önceki İsrailli kurban değil, faildir
@@ -102,12 +117,14 @@ def faillik(b, kb):
         # soğuk, sel, göçük, kaza: bir öldürme anlatımı değil; faili saklama ölçüsüne girmez
         if DOGAL.search(metin):
             return "dogal"
+        if ABLUKA.search(metin):
+            return "abluka"                              # açlık, kıtlık: kuşatmanın sonucu, ayrı anlatım
         return "oldu"
     return None
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 12
+OZET_SURUM = 13
 BULTEN_SURUM = 1
 
 
@@ -164,6 +181,12 @@ def lider_bul(kb):
     return [a for a, c in LIDER if c.search(kb)]
 
 
+def bos_baslik(b, tekrar=0):
+    """Haber başlığı yerine geçmeyen kayıt: üçten az kelime ya da aynı yayında 20'den çok tekrarlanan metin."""
+    kel = re.split(r"[\s_\-.|/]+", (b or "").strip())
+    return len([k for k in kel if k]) < 3 or tekrar > 20
+
+
 def _yan(k):
     c = almanak.kamp(k)
     return "dis" if c in almanak.DIS else "ic" if c in almanak.BOLGE_ICI and k.get("cizgi") != "ik" else None
@@ -205,7 +228,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
     olay_ornek = {}   # "2024-01-05": {tür: [[kid, başlık, url, yan], ...]}
     olay_yer = {}     # "2024-01-05": {tür: {yer: n}}
     lider_ornek = {}  # "2024-01": {lider: [[kid, başlık, url, gün], ...]}
-    tarih_yontem, toplu_gun = {}, {}
+    tarih_yontem, toplu_gun, bos_kayit = {}, {}, {}
     toplam = 0
     kok = os.path.join(tarama_kok, "veri")
     # Canlı toplayıcının günlük başlıkları (veri dalı, data/canli): taramanın son gününden sonrası için. Aynı adres
@@ -252,14 +275,25 @@ def ozetle(tarama_kok, kaynaklar, log=print):
         if cdx:
             tarihsiz = sum(1 for v in cdx_tarih.values() if not v)
             tarih_yontem[kid] = {"yontem": yontem, "adres": len(cdx_tarih), "tarihsiz": tarihsiz}
+        # Boş başlıklar: adresten başlık çıkmayan kayıtlar ("article", "opinion", "gazawar5day", "איראן.tag").
+        # Bunlar sayılırsa yayın o gün "yayındaydı ama yazmadı" görünür; İbranice İsrail basınında kayıtların çoğu böyle.
+        tekrar = {}
+        for r in kayitlar:
+            tekrar[r["b"]] = tekrar.get(r["b"], 0) + 1
+        bos_say = 0
         gorulen, tarihli = set(), []
         for r in sorted(kayitlar, key=lambda r: r["t"]):
             if r["u"] in gorulen:
+                continue
+            if bos_baslik(r["b"], tekrar.get(r["b"], 0)):
+                bos_say += 1
                 continue
             gorulen.add(r["u"])
             g = cdx_tarih.get(r["u"]) if r.get("m") == "cdx" else r["t"][:10]
             if g and g >= BASLANGIC.isoformat():
                 tarihli.append((g, r))
+        if bos_say:
+            bos_kayit[kid] = bos_say
         # Site haritasındaki "son değişiklik" tarihi bazen binlerce eski yazıda aynı güne toplu yazılır (ör. bir sitenin
         # arşivini yenilemesi). Bir kaynağın bir günü, o kaynağın olağan günlük sayısının 6 katını (en az 200) aşıyorsa
         # o gün toplu güncelleme sayılır ve dışarıda bırakılır.
@@ -280,6 +314,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             d["k"][kmp] = d["k"].get(kmp, 0) + 1
             kb = katla(b)
             bulunan = [a for a, r1, r2 in TERIM if r1.search(b) or r2.search(kb)]
+            if k.get("dil") in ("fr", "es", "it", "ca", "pt") and "militan" in bulunan and not re.search(r"milicien|miliciano|milizian", kb):
+                bulunan.remove("militan")   # bu dillerde "militant" aktivist demek
             y = yayin.setdefault(g, {})
             eski = y.get(kid, 0)
             n, tt = (eski, {}) if isinstance(eski, int) else (eski[0], eski[1])
@@ -367,7 +403,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
         pass
     veri = {"surum": OZET_SURUM, "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat(), "baslik": toplam,
             "tarama_bitti": ilerleme.get("kalan_gorev") == 0, "ilerleme": ilerleme, "tarih_yontem": tarih_yontem,
-            "tarihsiz": sum(v["tarihsiz"] for v in tarih_yontem.values()), "toplu_gun": toplu_gun,
+            "tarihsiz": sum(v["tarihsiz"] for v in tarih_yontem.values()), "toplu_gun": toplu_gun, "bos_kayit": bos_kayit,
             "gun": gun, "yayin": yayin, "ornek": ornek,
             "olay_ornek": olay_ornek, "olay_yer": olay_yer, "lider_ornek": lider_ornek}
     yol = os.path.join(tarama_kok, "gecmis.json.gz")

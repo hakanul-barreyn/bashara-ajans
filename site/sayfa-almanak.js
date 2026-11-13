@@ -192,8 +192,8 @@
     [[ba, T("Batı ana akımda susan yayınların payı", "share of Western mainstream outlets that stayed silent")], [bo, T("bölge basınında susanların payı", "share of regional outlets that stayed silent")], [is, T("İsrail basınında", "Israeli press")]].forEach(([v, l]) => { if (v == null) return; const d = el("div"); d.append(el("b", null, "%" + v), el("span", null, l)); r.appendChild(d); });
     k.appendChild(r);
     k.appendChild(noktaBulutu(ol, x.tur === "yillik" ? 25 : 40));
-    k.appendChild(el("p", "dipnot", T("Sayım tür düzeyindedir: bir yayın o günlerde aynı türden başka bir olayı yazdıysa “yazdı” sayılır. Bu yüzden gerçek sessizlik burada görünenden büyüktür. Yayında sayılmak için pencerede (bir gün önce, iki gün sonra) en az " + ((ALISMA && ALISMA.aktif_en_az) || 15) + " başlık gerekir.",
-      "Counting is by type: an outlet that covered another event of the same type in those days counts as having covered it, so the real silence is larger than shown. To count as publishing, an outlet needs at least " + ((ALISMA && ALISMA.aktif_en_az) || 15) + " headlines in the window (one day before, two after).")));
+    k.appendChild(el("p", "dipnot", T("Sayım tür düzeyindedir: bir yayın o günlerde aynı türden başka bir olayı yazdıysa “yazdı” sayılır. Bu yüzden gerçek sessizlik burada görünenden büyüktür. Bir yayının “o günlerde yayındaydı” sayılması için pencerede (bir gün önce, iki gün sonra) kendi olağan günlük başlık sayısının yarısı kadar, en az 4 başlığı kayıtlı olmalı; böylece kaydı eksik günler “sustu” sayılmaz.",
+      "Counting is by type: an outlet that covered another event of the same type in those days counts as having covered it, so the real silence is larger than shown. To count as publishing at the time, an outlet needs at least half of its usual daily headline count (and no fewer than 4 headlines) on record in the window (one day before, two after), so days missing from our record are not counted as silence.")));
     return k;
   }
 

@@ -71,9 +71,11 @@ def _ekle(r, n, tt):
 
 def _oran(r):
     olum = sum(r["f"][f] for f in ("aktif", "failli", "failsiz", "oldu", "sehadet"))   # Filistinli ölümlerin anlatımı
+    olum_fs = olum - r["f"]["sehadet"]
     israilli = r["f"]["pfail"] + r["f"]["ikurban"]                                     # İsraillilerin ölümü
     return {
-            "fail_yazilan": {"filistinli": round(100 * (r["f"]["aktif"] + r["f"]["failli"]) / olum, 1) if olum else None,
+            # faili yazılan pay: şehadet anlatımı paydaya girmez (faili yazmasa da ölümü saldırının sonucu olarak verir)
+            "fail_yazilan": {"filistinli": round(100 * (r["f"]["aktif"] + r["f"]["failli"]) / olum_fs, 1) if olum_fs else None,
                              "israilli": round(100 * r["f"]["pfail"] / israilli, 1) if israilli >= 20 else None,
                              "israilli_n": israilli},"n": r["n"], "baglamli": r["b"], "gazze": r["g"], "gazeteci_haber": r["gz"],
             "gazze_pay": round(100 * r["g"] / r["n"], 1) if r["n"] else None,
