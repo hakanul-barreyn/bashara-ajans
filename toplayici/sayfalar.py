@@ -50,11 +50,11 @@ BAKIS = {"filistin": ("Filistin bakışı", "Palestinian lens", "#19e68c"), "akt
 T = {  # sayfadaki sabit yazılar
     "tr": {"git": "Haberin aslı", "paylas": "Paylaş", "kim": "Kim nasıl yazdı", "fark": "Anlatım farkları", "diger": "Öteki haberler",
            "yayin": "yayın karşılaştırıldı", "tek": "Tek yayın", "bu": "bu haber", "ozgun": "Özgün başlık", "farkyok": "Fark yok.",
-           "not": "Özetler ve karşılaştırma, yayınların kendi haberlerinden yapay zekâyla çıkarıldı; haberlerin aslı yayınların sitesinde.",
+           "not": "Özetler ve karşılaştırma, yayınların kendi haberlerinden yapay zekâyla çıkarıldı; haberlerin aslı yayınların sitesinde. Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin karşılaştırılması amacıyla paylaşılır.",
            "akis": "Akış", "haber": "Haber", "analiz": "Analiz", "oku": "Haberi oku ↗", "cerceve": "Çerçeve"},
     "en": {"git": "Original article", "paylas": "Share", "kim": "Who told it how", "fark": "How the framing differs", "diger": "More stories",
            "yayin": "outlets compared", "tek": "Single outlet", "bu": "this story", "ozgun": "Original headline", "farkyok": "No difference.",
-           "not": "Summaries and the comparison were extracted with AI from the outlets' own reports; the originals are on their sites.",
+           "not": "Summaries and the comparison were extracted with AI from the outlets' own reports; the originals are on their sites. Sharing a story does not mean we share its views; stories are shared to inform and to compare how the press tells them.",
            "akis": "Feed", "haber": "News", "analiz": "Analysis", "oku": "Read ↗", "cerceve": "Framing"},
 }
 
