@@ -232,7 +232,7 @@
           const ad = e.features[0].properties.ad; sehir = sehir === ad ? null : ad; kac = SAYFA; ciz(true);
           const sz = document.querySelector(".suzgec"); if (sz && sehir && getComputedStyle(sz).display !== "none") sz.scrollIntoView({ behavior: "smooth", block: "start" });
         });
-        zemin.hidden = true; kutu.classList.add("ml-var"); ML = m;
+        zemin.style.display = "none"; kutu.classList.add("ml-var"); ML = m;
       });
     }).catch(() => {});
   }

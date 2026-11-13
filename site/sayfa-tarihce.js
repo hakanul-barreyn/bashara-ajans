@@ -60,10 +60,10 @@
           if (kis.length) {
             li.className = "kisili";
             KISI_SIRA++;
-            var yan = el("aside", "th-yan " + (KISI_SIRA % 2 ? "sag" : "sol")); yan.setAttribute("aria-label", tt("Kişiler", "People"));
+            var yan = el("aside", "th-yan"); yan.setAttribute("aria-label", tt("Kişiler", "People"));
             kis.forEach(function (q) {
               // telefonda kapalı gelir (dokununca açılır), geniş ekranda açık
-              var kk = el("details", "th-kisi"); if (window.matchMedia("(min-width:641px)").matches) kk.open = true;
+              var kk = el("details", "th-kisi"); kk.open = true;
               var sm = el("summary"); sm.append(el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""));
               kk.append(sm, el("p", null, EN ? q.metin_en : q.metin));
               if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
