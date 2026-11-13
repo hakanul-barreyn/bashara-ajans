@@ -50,6 +50,8 @@ FAIL_SONRA = re.compile(r"(?:\b(?:in|by|from|after|amid|during|as|while|when|par
                         r"(?:israel|israël|isra[eé]l|israil|idf|tsahal|siyon|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל)", re.I)
 # Arapça fiil-özne sırası: "قتل الاحتلال ..." / "يقتل جيش الاحتلال": fiilden hemen sonra gelen İsrail faildir
 FAIL_FIIL_SONRA = re.compile(r"^\W*(?:\w+\W+){0,2}?(?:جيش |قوات |طائرات |مسيرة |مسيّرة )?(?:الاحتلال|إسرائيل|اسرائيل|الجيش الإسرائيلي|الصهاينة|العدو)", re.I)
+# yalnızca fiil: "قتل", "يقتل" (isim olan "القتلى", "مقتل", "قتلى" değil)
+ARAPCA_FIIL = re.compile(r"(?:^|\s)(?:قتل|يقتل|تقتل|قتلت|قتلوا|يقتلون)(?=\s|$)")
 # fiilden hemen sonra gelen İsrailli kurban: "مقتل إسرائيلي", "killed Israeli soldier" değil ama "مقتل جندي إسرائيلي"
 KURBAN_SONRA = re.compile(r"^\W*(?:\w+\W+){0,1}?(?:إسرائيلي|اسرائيلي|إسرائيليين|اسرائيليين|مستوطن|israeli|israelis|israélien|israelí|israeliano|israelisch|israilli)", re.I)
 ISRAIL_KURBAN = re.compile(r"(?:israeli|israélien|israelí|israeliano|israelisch|israilli|إسرائيلي|اسرائيلي)(?:ne|s|es|a|i|e|en)?\W+(?:\w+\W+)?"
@@ -81,7 +83,7 @@ def faillik(b, kb):
         sonra = metin[m.end():]
         if KURBAN_SONRA.search(sonra) and not FILISTIN_NESNE.search(sonra[:40]):
             return "pfail" if h else "ikurban"           # "مقتل إسرائيلي", "مقتل جندي إسرائيلي"
-        if FAIL_FIIL_SONRA.search(sonra) and not edilgen:
+        if ARAPCA_FIIL.search(metin[max(0, m.start() - 1):m.end() + 1]) and FAIL_FIIL_SONRA.search(sonra) and not edilgen:
             return "aktif"                               # "قتل الاحتلال ...", "يقتل جيش الاحتلال"
         k = ISRAIL_KURBAN.search(metin[:m.start()])
         if k and FILISTIN_NESNE.search(metin[m.end():m.end() + 60]):
