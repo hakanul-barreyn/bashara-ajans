@@ -32,6 +32,8 @@ button{font:inherit}
 .harita-bolum{margin:0 0 30px}
 .harita-kutu{position:relative;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:16px;overflow:hidden}
 #zemin{display:block;width:100%;height:auto;aspect-ratio:82/35;max-height:400px}
+.ana-ml{width:100%;height:clamp(300px,38vw,440px)}
+@media (max-width:700px){.ana-ml{height:62svh}}
 .harita-lejant{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 16px 12px;border-top:1px solid var(--cizgi);font-size:.78rem;color:var(--ink2)}
 .harita-lejant span{display:flex;align-items:center;gap:7px}
 .harita-lejant i{display:inline-block;width:10px;height:10px;border-radius:50%}

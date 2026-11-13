@@ -186,7 +186,10 @@
       return new Promise(function (ok, red) {
         var kap = document.createElement("div"); kap.className = "mk-ml"; d.textContent = ""; d.appendChild(kap);
         var gazze = lon > 34.2 && lon < 34.6 && lat > 31.2 && lat < 31.6;
-        var m = new ml.Map({ container: kap, style: "https://tiles.openfreemap.org/styles/liberty", center: [lon, lat], zoom: gazze ? 12.5 : 10, attributionControl: { compact: true }, cooperativeGestures: true });
+        // boğaz, körfez, deniz, kanal: iki kıyı birden görünsün diye daha uzaktan
+        var genis = /boğaz|bogaz|körfez|korfez|deniz|kanal|strait|gulf|sea\b|canal|bab[ -]?el|hürmüz|hormuz|mendeb|mandeb/i.test(d.dataset.ad || "");
+        var yakinlik = gazze ? 12.5 : genis ? 7.4 : 10;
+        var m = new ml.Map({ container: kap, style: "https://tiles.openfreemap.org/styles/liberty", center: [lon, lat], zoom: yakinlik, attributionControl: { compact: true }, cooperativeGestures: true });
         m.addControl(new ml.NavigationControl({ showCompass: false }), "top-right");
         var bitti = false; setTimeout(function () { if (!bitti) red(); }, 20000);
         m.on("error", function () { if (!bitti) { bitti = true; red(); } });
@@ -208,7 +211,7 @@
           ek.forEach(function (y) { if (isFinite(+y.lat) && isFinite(+y.lon)) f.push({ type: "Feature", properties: { t: "olay2", ad: y.ad || "" }, geometry: { type: "Point", coordinates: [+y.lon, +y.lat] } }); });
           if (ek.length) {
             var b = new ml.LngLatBounds([lon, lat], [lon, lat]); ek.forEach(function (y) { if (isFinite(+y.lat) && isFinite(+y.lon)) b.extend([+y.lon, +y.lat]); });
-            m.fitBounds(b, { padding: 70, maxZoom: gazze ? 12.5 : 9, duration: 0 });
+            m.fitBounds(b, { padding: 70, maxZoom: gazze ? 12.5 : genis ? 7.4 : 9, duration: 0 });
           }
           m.addSource("zbs", { type: "geojson", data: { type: "FeatureCollection", features: f } });
           m.addLayer({ id: "zbs-hat", type: "line", source: "zbs", filter: ["==", ["get", "t"], "hat"], paint: { "line-color": "#c9302c", "line-width": 2.5, "line-dasharray": [3, 2] } });

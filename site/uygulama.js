@@ -128,6 +128,7 @@
       adlar.forEach((ad) => sec.appendChild(new Option(ad + (sayac[ad] ? " · " + sayac[ad].n : ""), ad)));
       sec.value = sehir || "";
     }
+    mlVeriHazirla(sirali);
     if (!zNoktalar) return;
     zNoktalar.innerHTML = "";
     // Sessizlik halkaları: bölge basınının yazdığı ama İsrail ve Batı basınının hiç yazmadığı güncel olayların yerleri
@@ -169,6 +170,71 @@
         break;
       }
     });
+  }
+
+  // Ana sayfa haritası: haber sayfalarındaki gibi gerçek, yakınlaştırılabilir harita (MapLibre + OpenFreeMap).
+  // Sınır çizgileri ve ülke adları kaldırılır; Filistin "kuşatma altında" adıyla yazılır. Yüklenemezse SVG zemin kalır.
+  let ML = null, mlBasladi = false, mlSehir = { type: "FeatureCollection", features: [] }, mlSessiz = { type: "FeatureCollection", features: [] };
+  function mlVeriHazirla(sirali) {
+    const DIS_K = new Set(["İsrail", "Batı"]);
+    mlSehir = { type: "FeatureCollection", features: sirali.map(([ad, s], i) => ({ type: "Feature",
+      properties: { ad, n: s.n, taze: s.taze ? 1 : 0, buyuk: i < 14 ? 1 : 0, secili: ad === sehir ? 1 : 0 }, geometry: { type: "Point", coordinates: [s.lon, s.lat] } })) };
+    mlSessiz = { type: "FeatureCollection", features: olaylar.filter((o) => {
+      if (!o.yer) return false;
+      const ks = o.haberler.map((i) => haberIdx[i] && kaynaklar[haberIdx[i].kaynak]).filter(Boolean);
+      return ks.length >= 3 && !ks.some((k) => DIS_K.has(kampAd(k)));
+    }).map((o) => ({ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [o.yer.lon, o.yer.lat] } })) };
+    if (ML) { try { ML.getSource("sehir").setData(mlSehir); ML.getSource("sessiz").setData(mlSessiz); } catch (e) { /* stil henüz yüklenmedi */ } }
+    else if (!mlBasladi && HARITA_BOLUM && "IntersectionObserver" in window) {
+      mlBasladi = true;
+      const g = new IntersectionObserver((xs) => { if (xs.some((x) => x.isIntersecting)) { g.disconnect(); mlKur(); } }, { rootMargin: "600px" });
+      g.observe(HARITA_BOLUM);
+    }
+  }
+  function mlYukle() {
+    if (window.maplibregl) return Promise.resolve(window.maplibregl);
+    return new Promise((ok, red) => {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css"; document.head.appendChild(l);
+      const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js";
+      sc.onload = () => (window.maplibregl ? ok(window.maplibregl) : red()); sc.onerror = red; document.head.appendChild(sc);
+      setTimeout(red, 15000);
+    });
+  }
+  function mlKur() {
+    if (!zemin) return;
+    mlYukle().then((ml) => {
+      const kutu = zemin.parentNode, kap = el("div", "ana-ml"); kutu.insertBefore(kap, zemin);
+      const EN = window.DIL === "en";
+      const m = new ml.Map({ container: kap, style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-10, 12], [64, 44]], attributionControl: { compact: true }, cooperativeGestures: true, dragRotate: false });
+      m.addControl(new ml.NavigationControl({ showCompass: false }), "top-right");
+      let tamam = false;
+      m.on("error", () => { if (!tamam) kap.remove(); });
+      m.on("load", () => {
+        tamam = true;
+        m.getStyle().layers.forEach((l) => { const sl = l["source-layer"]; if (sl === "boundary" || /boundary/.test(l.id) || (sl === "place" && /country|state/.test(l.id))) m.removeLayer(l.id); });
+        m.addSource("sessiz", { type: "geojson", data: mlSessiz });
+        m.addSource("sehir", { type: "geojson", data: mlSehir });
+        m.addSource("filistin", { type: "geojson", data: { type: "Feature", properties: { ad: EN ? "BESIEGED PALESTINE" : "KUŞATMA ALTINDAKİ FİLİSTİN" }, geometry: { type: "Point", coordinates: [34.95, 31.75] } } });
+        const r = ["+", 3, ["*", 1.4, ["sqrt", ["get", "n"]]]];
+        m.addLayer({ id: "sessiz", type: "circle", source: "sessiz", paint: { "circle-radius": 13, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": "#c9302c", "circle-stroke-width": 2, "circle-stroke-opacity": 0.8 } });
+        m.addLayer({ id: "sehir-taze", type: "circle", source: "sehir", filter: ["==", ["get", "taze"], 1], paint: { "circle-radius": ["+", r, 5], "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": "#1f7a52", "circle-stroke-width": 2, "circle-stroke-opacity": 0.7 } });
+        m.addLayer({ id: "sehir", type: "circle", source: "sehir", paint: { "circle-radius": r, "circle-color": ["case", ["==", ["get", "secili"], 1], "#c9302c", "#1f7a52"], "circle-opacity": 0.6, "circle-stroke-color": "#fff", "circle-stroke-width": 1 } });
+        m.addLayer({ id: "sehir-ad", type: "symbol", source: "sehir", filter: ["any", ["==", ["get", "buyuk"], 1], ["==", ["get", "secili"], 1]],
+          layout: { "text-field": ["get", "ad"], "text-size": 11.5, "text-offset": [0, 1.1], "text-anchor": "top", "text-font": ["Noto Sans Bold"], "text-optional": true },
+          paint: { "text-color": "#1d2421", "text-halo-color": "#fff", "text-halo-width": 1.4 } });
+        m.addLayer({ id: "filistin", type: "symbol", source: "filistin", minzoom: 4.5,
+          layout: { "text-field": ["get", "ad"], "text-size": 11, "text-font": ["Noto Sans Bold"], "text-letter-spacing": 0.08, "text-max-width": 9 },
+          paint: { "text-color": "#c9302c", "text-halo-color": "#fff", "text-halo-width": 1.5 } });
+        const pop = new ml.Popup({ closeButton: false, closeOnClick: false, offset: 10 });
+        m.on("mousemove", "sehir", (e) => { m.getCanvas().style.cursor = "pointer"; const p = e.features[0].properties; pop.setLngLat(e.lngLat).setText(p.ad + " · " + p.n + (EN ? " stories" : " haber")).addTo(m); });
+        m.on("mouseleave", "sehir", () => { m.getCanvas().style.cursor = ""; pop.remove(); });
+        m.on("click", "sehir", (e) => {
+          const ad = e.features[0].properties.ad; sehir = sehir === ad ? null : ad; kac = SAYFA; ciz(true);
+          const sz = document.querySelector(".suzgec"); if (sz && sehir && getComputedStyle(sz).display !== "none") sz.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        zemin.hidden = true; kutu.classList.add("ml-var"); ML = m;
+      });
+    }).catch(() => {});
   }
 
   // ---------------------------------------------------- kartlar
