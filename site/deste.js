@@ -79,21 +79,9 @@
         if (dolu) akis.push({ tur: "tek", haberler: [h], son: saat(h.tarih) }); else kisaHavuz.push(h);
       });
     });
-    // kısa kısa: saat dilimi içinde farklı yayınlardan beşerli
-    var kisaKova = {};
-    kisaHavuz.forEach(function (h) { var k = Math.floor(saat(h.tarih) / 36e5); (kisaKova[k] = kisaKova[k] || []).push(h); });
-    Object.keys(kisaKova).forEach(function (k) {
-      var xs = kisaKova[k].sort(function (a, b) { return saat(b.tarih) - saat(a.tarih); });
-      // aynı yayından en çok iki başlık bir kartta
-      var parca = [], say = {};
-      xs.forEach(function (h) {
-        if ((say[h.kaynak] || 0) >= 2) return;
-        say[h.kaynak] = (say[h.kaynak] || 0) + 1; parca.push(h);
-        if (parca.length === A.kisaBoy) { akis.push({ tur: "kisa", haberler: parca, son: saat(parca[0].tarih) }); parca = []; say = {}; }
-      });
-      if (parca.length >= 3) akis.push({ tur: "kisa", haberler: parca, son: saat(parca[0].tarih) });
-      else parca.forEach(function (h) { akis.push({ tur: "tek", haberler: [h], son: saat(h.tarih) }); });
-    });
+    // görseli ve özeti olmayan tekil başlıklar desteye girmez ("kısa kısa" kartları kaldırıldı);
+    // destenin sonundaki "saat sırasıyla bütün haberler" listesinde dururlar
+    var disarida = kisaHavuz.length;
     akis.sort(function (a, b) { return b.son - a.son; });
     // akış birimlerinde çeşitlilik: aynı yayın 5 birimde bir, aynı kamp en çok 2 ardışık
     akis = cesitle(akis, K);
@@ -117,7 +105,7 @@
     }
     var kalan = (hikayeler.length - hi) + (akis.length - ki) + (analizler.length - ai);
     deste.push({ tur: "son", kalan: kalan, toplam: havuz.length });
-    return { deste: deste, istatistik: { haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, analiz: analizler.length, kalan: kalan } };
+    return { deste: deste, istatistik: { disarida: disarida, haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, analiz: analizler.length, kalan: kalan } };
   }
 
   var DUR = {"the":1,"and":1,"for":1,"with":1,"from":1,"that":1,"this":1,"after":1,"over":1,"into":1,"amid":1,"says":1,"said":1,"will":1,"have":1,"has":1,"was":1,"were":1,"are":1,"its":1,"his":1,"their":1,"they":1,"been":1,"more":1,"than":1,"about":1,"against":1,"news":1,"report":1,"live":1,"video":1,"israel":1,"israeli":1,"gaza":1,"palestinian":1,"palestinians":1};
