@@ -105,7 +105,8 @@ def fotolar(cikti, anahtar, model, en_cok=10, en_cok_deneme=36):
         except Exception as e:   # noqa: BLE001
             print("denetim hatası", a["sayfa"][-60:], e)
             if "429" in str(e):
-                time.sleep(60)
+                print("Wikimedia istek sınırı: bugünlük bu kadar, yarın kaldığı yerden")
+                break
             continue
         uygun = c.get("yikim") is True and not any(c.get(k) is not False for k in ("insan", "siddet", "mustehcen", "asker", "yazi_grafik"))
         print("uygun" if uygun else "red", a["sayfa"][-70:], {k: c.get(k) for k in ("insan", "siddet", "yikim", "asker")})
