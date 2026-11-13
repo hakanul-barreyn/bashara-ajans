@@ -1,0 +1,37 @@
+name: Hızlı yayın (yalnızca site)
+
+# Kod değişikliğini toplama turunu beklemeden yayına alır: ana daldaki kod + "veri" dalındaki son veri.
+# Haber çekmez, özet yazmaz; 1-2 dakikada biter.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: hizli-yayin
+  cancel-in-progress: true
+
+jobs:
+  yayin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.yayin.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Son veriyi al
+        run: |
+          mkdir -p data
+          git fetch --depth 1 origin veri && git checkout FETCH_HEAD -- data && git reset -q
+          rm -rf h && (cp -r data/h h || true)
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: yayin
+        uses: actions/deploy-pages@v4
