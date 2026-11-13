@@ -30,14 +30,16 @@ jobs:
               return urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=60).read()
           sonuc = {}
           for b in [x.strip() for x in os.environ.get("BASLIKLAR", "").split("|") if x.strip()]:
-              q = urllib.parse.urlencode({"action": "query", "format": "json", "titles": b, "prop": "imageinfo",
+              # "en:File:..." İngilizce Vikipedi'nin yerel dosyası (çoğu adil kullanım, serbest değil)
+              api = "https://en.wikipedia.org/w/api.php?" if b.startswith("en:") else "https://commons.wikimedia.org/w/api.php?"
+              q = urllib.parse.urlencode({"action": "query", "format": "json", "titles": b[3:] if b.startswith("en:") else b, "prop": "imageinfo",
                                           "iiprop": "url|extmetadata|size", "iiurlwidth": 1200})
               try:
-                  v = json.loads(al("https://commons.wikimedia.org/w/api.php?" + q))
+                  v = json.loads(al(api + q))
                   p = next(iter(v["query"]["pages"].values()))
                   ii = p["imageinfo"][0]
                   md = {k: (x or {}).get("value") for k, x in ii.get("extmetadata", {}).items()
-                        if k in ("LicenseShortName", "Artist", "Credit", "ImageDescription", "DateTimeOriginal", "UsageTerms", "Restrictions", "Copyrighted")}
+                        if k in ("LicenseShortName", "Artist", "Credit", "ImageDescription", "DateTimeOriginal", "UsageTerms", "Restrictions", "Copyrighted", "NonFree")}
                   sonuc[b] = {"thumb": ii.get("thumburl"), "sayfa": ii.get("descriptionurl"), "w": ii.get("width"), "h": ii.get("height"), "md": md}
                   ad = re.sub(r"[^A-Za-z0-9]+", "_", b)[:60] + ".jpg"
                   open("cikti/" + ad, "wb").write(al(ii.get("thumburl").replace("/1200px-", "/500px-")))
