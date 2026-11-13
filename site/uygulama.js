@@ -21,8 +21,10 @@
   const OY = (o, id) => (DL !== "tr" && (o["yorumlar_" + DL] || {})[id]) || (o.yorumlar || {})[id];
   const MARKA_AD = (window.MARKA && window.MARKA.ad) || "ZBS";
   const BAYRAK_AE = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
+  // Birleşik Krallık: Londra'dan yayın yapan ve adı başka bir ülkeyi anan kurumlar için (Iran International gibi)
+  const BAYRAK_GB = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="Londra merkezli yayın"><title>Londra merkezli yayın (Birleşik Krallık)</title><rect width="22" height="16" rx="1.5" fill="#012169"/><path d="M0 0l22 16M22 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l22 16M22 0L0 16" stroke="#c8102e" stroke-width="1.3"/><path d="M11 0v16M0 8h22" stroke="#fff" stroke-width="5"/><path d="M11 0v16M0 8h22" stroke="#c8102e" stroke-width="3"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
   // Uyarı bayrağı: İsrail merkezli yayınlar (muhalif basın hariç) ve kaynaklar.json'da bayrak alanı olanlar
-  const bayrakHTML = (k) => k.bayrak === "ae" ? BAYRAK_AE : (k.bolge === "İsrail" && !k.bayraksiz ? BAYRAK : "");
+  const bayrakHTML = (k) => k.bayrak === "ae" ? BAYRAK_AE : k.bayrak === "gb" ? BAYRAK_GB : (k.bolge === "İsrail" && !k.bayraksiz ? BAYRAK : "");
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
@@ -259,11 +261,14 @@
     const a = el("a", "eylem" + (sinif ? " " + sinif : ""), metin); a.href = url; a.target = "_blank"; a.rel = "noopener"; return a;
   }
 
+  // Görseli olmayan haber: masaüstünde gizli; telefonda kartı dolduran, yayına özgü renkte kapak (logo ya da baş harfler)
+  function renkTonu(ad) { let x = 0; for (const c of ad) x = (x * 31 + c.charCodeAt(0)) % 360; return x; }
   function yerTutucu(kutu, k) {
     kutu.innerHTML = ""; kutu.classList.add("yok");
-    const y = el("div", "yer-tutucu yt-" + k.tur);
-    y.appendChild(el("b", null, bas(k.ad)));
-    y.appendChild(el("span", null, k.ad + " · " + k.sehir));
+    const y = el("div", "yer-tutucu yt-" + k.tur); y.style.setProperty("--yt", renkTonu(k.ad));
+    y.appendChild(avatar(k, "yt-logo"));
+    y.appendChild(el("b", null, k.ad));
+    y.appendChild(el("span", null, k.sehir + (k.ulke && k.ulke !== k.sehir ? " · " + k.ulke : "")));
     kutu.appendChild(y);
   }
 
@@ -976,6 +981,40 @@
     });
   }
 
+  // Telefonda Instagram gönderisi gibi: aynı yayının aynı saat dilimindeki haberleri tek gönderide, sağa kaydırarak.
+  // Analizler 6 saatlik dilimlerde ayrı bir "Analiz ve görüş" gönderisinde. Masaüstünde akış olduğu gibi kalır.
+  const GRUP = { haberDk: 60, analizSaat: 6 };
+  const telefon = () => window.matchMedia("(max-width:700px)").matches;
+  function grupla(xs) {
+    const birim = [], yer = {};
+    xs.forEach((h) => {
+      const t = Date.parse(h.tarih);
+      const anahtar = h.nitelik === "analiz" ? "a:" + Math.floor(t / (GRUP.analizSaat * 36e5)) : h.kaynak + ":" + Math.floor(t / (GRUP.haberDk * 6e4));
+      if (anahtar in yer) birim[yer[anahtar]].push(h); else { yer[anahtar] = birim.length; birim.push([h]); }
+    });
+    return birim;
+  }
+  function saatAraligi(xs, saat) {
+    const t = Math.floor(Date.parse(xs[0].tarih) / (saat * 36e5)) * saat * 36e5, f = (x) => new Date(x).toLocaleTimeString(YR, { hour: "2-digit", minute: "2-digit" });
+    return f(t) + "–" + f(t + saat * 36e5);
+  }
+  function grupKart(xs) {
+    const EN = window.DIL === "en", analiz = xs[0].nitelik === "analiz", k0 = kaynaklar[xs[0].kaynak];
+    const g = el("section", "grup-kart" + (analiz ? " grup-analiz" : "")); g.setAttribute("aria-roledescription", "carousel");
+    const ust = el("div", "gk-ust");
+    if (analiz) ust.append(el("span", "gk-etiket", EN ? "Analysis & opinion" : "Analiz ve görüş"), el("span", "gk-ara", saatAraligi(xs, GRUP.analizSaat) + " · " + xs.length + (EN ? " pieces" : " yazı")));
+    else ust.append(el("span", "gk-etiket", k0.ad), el("span", "gk-ara", saatAraligi(xs, GRUP.haberDk / 60) + " · " + xs.length + (EN ? " stories" : " haber")));
+    const sahne = el("div", "gk-sahne");
+    xs.forEach((h) => { const a = haberCiz(h); if (bilinen && !bilinen.has(h.id)) a.classList.add("taze"); sahne.appendChild(a); });
+    const noktalar = el("div", "gk-noktalar"); xs.forEach((_, i) => noktalar.appendChild(el("i", i ? "" : "on")));
+    sahne.addEventListener("scroll", () => requestAnimationFrame(() => {
+      const i = Math.round(sahne.scrollLeft / Math.max(1, sahne.clientWidth));
+      [...noktalar.children].forEach((n, j) => n.classList.toggle("on", j === i));
+    }), { passive: true });
+    ust.appendChild(noktalar); g.append(ust, sahne);
+    return g;
+  }
+
   function ciz(basaDon, devam) {
     document.querySelectorAll("#fBolge .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === bolge));
     const sc = $("fSehir"); sc.hidden = !sehir; if (sehir) sc.textContent = sehir + "  ✕";
@@ -1018,11 +1057,15 @@
     }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length && !secOlay) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
-    gor.slice(0, kac).forEach((h, i) => {
-      const k = haberCiz(h); if (i === 0 && !secOlay) k.classList.add("manset");
-      if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
-      if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
-      akis.appendChild(k);
+    const gruplu = telefon() && !secOlay && !odakModu && !ara && !sehir;
+    (gruplu ? grupla(gor.slice(0, kac)) : gor.slice(0, kac).map((h) => [h])).forEach((u, i) => {
+      if (u.length > 1) { akis.appendChild(grupKart(u)); }
+      else {
+        const h = u[0], k = haberCiz(h); if (i === 0 && !secOlay) k.classList.add("manset");
+        if (h.id === odakId) { k.classList.add("odak"); k.insertBefore(el("span", "odak-etiket", "Paylaşılan haber"), k.firstChild); }
+        if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
+        akis.appendChild(k);
+      }
       if (i === 4 && !secOlay) akis.appendChild(sayacKart());
       if (i === 9 && !secOlay) { const f = fotoKart(); if (f) akis.appendChild(f); }
       if (i === 15 && !secOlay) { const u = uyduKart(); if (u) akis.appendChild(u); }
