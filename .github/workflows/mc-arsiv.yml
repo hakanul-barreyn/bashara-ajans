@@ -1,0 +1,49 @@
+name: Media Cloud arşivi
+
+# Arka planda iki saatte bir ~80 dakika çalışır; savaş bağlamındaki haberlerin künyesini (önce Türkiye) ve
+# Türkiye yayınlarının günlük haber sayılarını "mc-arsiv" dalına biriktirir. Siteyi etkilemez.
+
+on:
+  schedule:
+    - cron: "23 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mediacloud
+  cancel-in-progress: false
+
+jobs:
+  arsiv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q --upgrade mediacloud
+      - name: Önceki arşiv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADRES="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 --branch mc-arsiv "$ADRES" mc-arsiv 2>/dev/null || (mkdir -p mc-arsiv && git -C mc-arsiv init -q -b mc-arsiv)
+          (git fetch -q --depth 1 origin mediacloud && git show FETCH_HEAD:mc-kapsam.json > mc-arsiv/mc-kapsam.json) || true
+      - name: Arşivle
+        env:
+          MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
+          MC_SURE: "4800"
+        run: python toplayici/mc_arsiv.py mc-arsiv
+      - name: Kaydet
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd mc-arsiv && git add -A
+          KIM=(-c user.name="zbs-mediacloud" -c user.email="41898282+github-actions[bot]@users.noreply.github.com")
+          if git rev-parse -q --verify HEAD >/dev/null; then git "${KIM[@]}" commit -q --amend -m "Media Cloud arşivi: $(date -u +'%Y-%m-%d %H:%M') UTC"; else git "${KIM[@]}" commit -q -m "Media Cloud arşivi"; fi
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:mc-arsiv
+          du -sh . | cut -f1
