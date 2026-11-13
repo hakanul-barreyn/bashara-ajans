@@ -31,6 +31,7 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(__file__))
 from konular import ilgili_mi  # noqa: E402
 import ekler  # noqa: E402
+import turkce_uslup  # noqa: E402
 import marka  # noqa: E402
 import almanak  # noqa: E402
 import telegram_kanal  # noqa: E402
@@ -730,7 +731,7 @@ Kurallar:
 - Analizlerde ozet 5-7 cümle olsun: yazının ana savı, dayandığı gerekçeler ve kanıtlar, karşı görüşlere verdiği yer ve vardığı sonuç ("Yazara göre ...").
 - Yalnızca şu biçimde bir JSON dizisi döndür: [{"id": "...", "baslik": "...", "ozet": "...", "etiketler": ["..."], "nitelik": "haber|analiz", "kayip": null, "ceviri": ""}]
 """
-TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER))
+TALIMAT = TALIMAT.replace("{ETIKETLER}", ", ".join(ekler.ETIKETLER)) + turkce_uslup.USLUP
 
 
 ANALIZ_YOLLARI = ("/opinion", "/opinions/", "/analysis", "/analyse", "/analisis", "/analisi", "/column", "/columns/", "/comment/",
@@ -1019,6 +1020,10 @@ def main():
                         h["baslik_tr"] = ekler.guvenli(temiz(c.get("baslik"), 200))
                         h.pop("baslik_kaba", None)
                         h["ozet_tr"] = ekler.guvenli(temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700))
+                        u = turkce_uslup.olc(h["ozet_tr"])   # doğal Türkçe ölçümü (turkish-anti-ai-skill dedektörü)
+                        if u:
+                            us = durum.setdefault("_uslup", {"n": 0, "bayrak": 0, "temiz": 0, "mektedir": 0.0})
+                            us["n"] += 1; us["bayrak"] += u["bayrak"]; us["temiz"] += u["bayrak"] == 0; us["mektedir"] += u["mektedir"]
                         et = [e for e in (c.get("etiketler") or []) if e in ekler.ETIKETLER][:3]
                         if et:
                             h["etiket"] = et
@@ -1042,6 +1047,10 @@ def main():
                 time.sleep(4)  # dakika başı istek sınırına takılmamak için
             durum["_model"] = model
             log(f"{yazilan} özet yazıldı ({model}); bugün {gunluk_istek(durum)} Gemini isteği")
+            us = durum.get("_uslup")
+            if us and us.get("n"):
+                log(f"Doğal Türkçe (toplam {us['n']} özet): özet başına {us['bayrak'] / us['n']:.2f} kalıp; temiz özet %{100 * us['temiz'] // us['n']}; "
+                    f"100 kelimede {us['mektedir'] / us['n']:.2f} -mAktAdIr")
         elif not model:
             log("Uygun Gemini modeli bulunamadı; GEMINI_MODEL ile elle belirtilebilir")
 

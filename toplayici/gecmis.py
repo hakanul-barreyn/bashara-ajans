@@ -22,6 +22,7 @@ import urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import almanak  # noqa: E402
 import olay_turleri as OT  # noqa: E402
+import turkce_uslup  # noqa: E402
 
 BASLANGIC = dt.date(2023, 10, 7)
 # \b şart: İtalyanca "ragazze" (kızlar) içinde "gazze" geçiyor
@@ -537,6 +538,7 @@ Yalnızca şu JSON'u döndür:
 
 VERİ:
 """
+ANLATI_TARAMA = ANLATI_TARAMA.replace("Kurallar:", "Kurallar:" + turkce_uslup.USLUP.rstrip(), 1)   # doğal Türkçe (turkish-anti-ai-skill)
 
 
 def anlati_yaz(anahtar_api, model, ad, ist):

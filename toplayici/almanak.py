@@ -16,6 +16,7 @@ import os
 import re
 
 import ekler
+import turkce_uslup  # noqa: E402
 import disa_aktar
 
 KAMP = {"Filistin": "Filistin", "Meşrik": "Arap dünyası", "Körfez": "Arap dünyası", "Mısır": "Arap dünyası",
@@ -505,6 +506,7 @@ Yalnızca şu JSON'u döndür:
 
 VERİ:
 """
+ANLATI = ANLATI.replace("Kurallar:", "Kurallar:" + turkce_uslup.USLUP.rstrip(), 1)   # doğal Türkçe (turkish-anti-ai-skill)
 
 
 def anlati_yaz(anahtar_api, model, ad, ist):
