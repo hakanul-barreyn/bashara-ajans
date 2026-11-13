@@ -468,72 +468,88 @@
     k.append(ust, sahne, geri, ileri, alt); setTimeout(say, 0);
     return k;
   }
+  // Uydudan Gazze: bölgeler kaydırmayla değil üstteki sekmelerle değişir (kart içinde yatay kaydırma yok, dokunuşlar çakışmaz).
+  // Karşılaştırmada iki yol var: alttaki "Savaştan önce / Bugün" düğmeleri ya da resmin üstünde parmağı sağa sola kaydırmak.
+  // Kart ilk kez göründüğünde perde bir kez kendi kendine gidip gelir ki okur sürüklenebildiğini görsün.
+  let uyduGosterildi = false;
   function uyduKart() {
     if (!UYDU) return null;
-    const EN = window.DIL === "en", K = "data/gorsel/uydu/", k = el("section", "ozel-kart uydu-kart foto-kart");
+    const EN = window.DIL === "en", K = "data/gorsel/uydu/", k = el("section", "ozel-kart uydu-kart");
     const tY = (g) => new Date(g + "T12:00:00Z").toLocaleDateString(EN ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
     const simdiY = tY(UYDU.tarih), onceY = UYDU.once ? tY(UYDU.once) : null;
     k.setAttribute("aria-label", EN ? "Gaza from space" : "Uydudan Gazze");
-    const ust = el("div", "ok-ust"); const sira = el("span", "ok-sira");
-    ust.append(el("span", "ok-etiket", EN ? "Gaza from space" : "Uydudan Gazze"), sira);
-    const sahne = el("div", "ok-sahne");
-    const resim = (src, alt) => { const im = el("img"); im.src = K + src + "?t=" + gunT; im.alt = alt; im.loading = "lazy"; im.decoding = "async"; im.draggable = false; return im; };
-    // 1) bütün Gazze Şeridi
-    const f0 = el("figure", "ok-foto uydu-genel");
-    const a0 = el("a", "uydu-resim"); a0.href = K + "gazze.jpg"; a0.target = "_blank"; a0.rel = "noopener"; a0.onclick = (e) => e.stopPropagation();
-    a0.appendChild(resim("gazze-kucuk.jpg", (EN ? "The Gaza Strip from space, " : "Uydudan Gazze Şeridi, ") + simdiY));
-    const c0 = el("figcaption"); c0.appendChild(el("span", null, (EN ? "The whole Gaza Strip · " : "Bütün Gazze Şeridi · ") + simdiY)); f0.append(a0, c0); sahne.appendChild(f0);
-    // 2) yakın kareler: savaş öncesi / bugün karşılaştırması (sürgü)
-    (UYDU.galeri || []).forEach((g) => {
-      const fig = el("figure", "ok-foto uydu-yakin"), kutu = el("div", "uk-kutu");
-      const ad = EN ? g.ad_en : g.ad;
-      const bugun = resim(g.simdi, ad + ", " + simdiY); bugun.className = "uk-bugun";
-      kutu.appendChild(bugun);
-      if (g.once && onceY) {
-        const eski = resim(g.once, ad + ", " + onceY); eski.className = "uk-once"; kutu.appendChild(eski);
-        const cizgi = el("span", "uk-cizgi"); kutu.appendChild(cizgi);
-        kutu.append(el("span", "uk-etk uk-etk-sol", EN ? "Before the war" : "Savaştan önce"), el("span", "uk-etk uk-etk-sag", EN ? "Today" : "Bugün"));
-        // Karşılaştırma: resmin üstünde yatay sürükleme çizgiyi taşır, dikey kaydırma sayfaya kalır (touch-action: pan-y).
-        // Dokunmak çizgiyi oraya götürür; alttaki iki düğme tek dokunuşla "savaştan önce" ya da "bugün"ü tam gösterir.
-        let deger = 50, bas = null;
-        const ayar = (v, yumusak) => { deger = Math.max(0, Math.min(100, v)); kutu.classList.toggle("uk-yumusak", !!yumusak); kutu.style.setProperty("--uk", deger + "%"); sec.forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.v === "100" && deger > 97) || (b.dataset.v === "0" && deger < 3) || (b.dataset.v === "50" && deger >= 3 && deger <= 97)))); };
-        const oran = (x) => { const r = kutu.getBoundingClientRect(); return ((x - r.left) / Math.max(1, r.width)) * 100; };
-        kutu.addEventListener("pointerdown", (e) => { bas = { x: e.clientX, y: e.clientY, id: e.pointerId, surukle: false }; });
-        kutu.addEventListener("pointermove", (e) => {
-          if (!bas || e.pointerId !== bas.id) return;
-          if (!bas.surukle) {
-            if (Math.abs(e.clientX - bas.x) < 6) return;
-            bas.surukle = true; try { kutu.setPointerCapture(e.pointerId); } catch (x) {}
-          }
-          e.preventDefault(); ayar(oran(e.clientX));
-        });
-        const bit = (e) => { if (bas && !bas.surukle && e.type === "pointerup" && Math.abs(e.clientY - bas.y) < 8) ayar(oran(e.clientX), true); bas = null; };
-        kutu.addEventListener("pointerup", bit); kutu.addEventListener("pointercancel", () => (bas = null));
-        kutu.addEventListener("click", (e) => e.stopPropagation());
-        kutu.tabIndex = 0; kutu.setAttribute("role", "slider"); kutu.setAttribute("aria-valuemin", "0"); kutu.setAttribute("aria-valuemax", "100");
-        kutu.setAttribute("aria-label", EN ? "Compare before the war and today" : "Savaştan önce ile bugünü karşılaştır");
-        kutu.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); ayar(deger + (e.key === "ArrowRight" ? 5 : -5)); } });
-        const secici = el("div", "uk-secici");
-        const sec = [["100", EN ? "Before the war" : "Savaştan önce"], ["50", EN ? "Compare" : "Karşılaştır"], ["0", EN ? "Today" : "Bugün"]].map(([v, ad]) => {
-          const b = el("button", null, ad); b.type = "button"; b.dataset.v = v; b.onclick = (e) => { e.stopPropagation(); ayar(+v, true); }; secici.appendChild(b); return b;
-        });
-        ayar(50);
-        fig.dataset.secici = "1"; fig._secici = secici;
+    const ust = el("div", "ok-ust"); ust.append(el("span", "ok-etiket", EN ? "Gaza from space" : "Uydudan Gazze"), el("span", "ok-sira", simdiY));
+    const resim = (src, alt) => { const im = el("img"); im.src = K + src + "?t=" + gunT; im.alt = alt; im.decoding = "async"; im.draggable = false; return im; };
+    const bolgeler = [{ ad: EN ? "Whole Strip" : "Tüm Gazze", genel: true }].concat((UYDU.galeri || []).map((g) => ({ ad: EN ? g.ad_en : g.ad, g })));
+    const sekme = el("div", "uk-sekmeler"); sekme.setAttribute("role", "tablist");
+    const sahne = el("div", "uk-sahne"), alt = el("p", "uk-alt");
+    const stopla = (e) => e.stopPropagation();
+    let demoYap = null;
+    const goster = (i) => {
+      [...sekme.children].forEach((b, j) => b.setAttribute("aria-selected", String(i === j)));
+      sahne.innerHTML = ""; demoYap = null;
+      const B = bolgeler[i];
+      if (B.genel) {
+        const a0 = el("a", "uydu-resim"); a0.href = K + "gazze.jpg"; a0.target = "_blank"; a0.rel = "noopener"; a0.onclick = stopla;
+        a0.appendChild(resim("gazze-kucuk.jpg", (EN ? "The Gaza Strip from space, " : "Uydudan Gazze Şeridi, ") + simdiY));
+        sahne.appendChild(a0);
+        alt.textContent = EN ? "The whole Gaza Strip · tap for full size. Pick an area above to compare it with before the war." : "Bütün Gazze Şeridi · büyük hali için dokun. Savaş öncesiyle karşılaştırmak için yukarıdan bir bölge seç.";
+        return;
       }
-      const fc = el("figcaption");
-      fc.appendChild(el("span", null, ad + " · " + (g.once && onceY ? (EN ? onceY + " and " + simdiY : onceY + " ve " + simdiY) : simdiY)));
-      fig.append(kutu); if (fig._secici) fig.append(fig._secici); fig.append(fc); sahne.appendChild(fig);
+      const g = B.g, kutu = el("div", "uk-kutu");
+      const bugun = resim(g.simdi, B.ad + ", " + simdiY); bugun.className = "uk-bugun"; kutu.appendChild(bugun);
+      if (!(g.once && onceY)) { sahne.appendChild(kutu); alt.textContent = B.ad + " · " + simdiY; return; }
+      const eski = resim(g.once, B.ad + ", " + onceY); eski.className = "uk-once"; kutu.appendChild(eski);
+      const cizgi = el("span", "uk-cizgi"); cizgi.appendChild(el("span", "uk-tutamak", EN ? "drag" : "sürükle")); kutu.appendChild(cizgi);
+      kutu.append(el("span", "uk-etk uk-etk-sol", onceY), el("span", "uk-etk uk-etk-sag", simdiY));
+      let deger = 50, bas = null;
+      const dugmeler = el("div", "uk-secici");
+      const ayar = (v, yumusak) => {
+        deger = Math.max(0, Math.min(100, v)); kutu.classList.toggle("uk-yumusak", !!yumusak); kutu.style.setProperty("--uk", deger + "%");
+        kutu.setAttribute("aria-valuenow", String(Math.round(deger))); kutu.classList.toggle("uk-kenar", deger < 12 || deger > 88);
+        [...dugmeler.children].forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.v === "100" && deger > 97) || (b.dataset.v === "0" && deger < 3))));
+      };
+      const oran = (x) => { const r = kutu.getBoundingClientRect(); return ((x - r.left) / Math.max(1, r.width)) * 100; };
+      // yalnızca yatay hareket perdeyi taşır; dikey hareket sayfaya kalır (touch-action: pan-y)
+      kutu.addEventListener("pointerdown", (e) => { e.stopPropagation(); bas = { x: e.clientX, y: e.clientY, id: e.pointerId, surukle: false }; });
+      kutu.addEventListener("pointermove", (e) => {
+        if (!bas || e.pointerId !== bas.id) return;
+        if (!bas.surukle) { if (Math.abs(e.clientX - bas.x) < 6) return; bas.surukle = true; kutu.classList.add("uk-surukleniyor"); try { kutu.setPointerCapture(e.pointerId); } catch (x) {} }
+        e.preventDefault(); ayar(oran(e.clientX));
+      });
+      const bit = () => { bas = null; kutu.classList.remove("uk-surukleniyor"); };
+      kutu.addEventListener("pointerup", bit); kutu.addEventListener("pointercancel", bit); kutu.addEventListener("click", stopla);
+      kutu.tabIndex = 0; kutu.setAttribute("role", "slider"); kutu.setAttribute("aria-valuemin", "0"); kutu.setAttribute("aria-valuemax", "100");
+      kutu.setAttribute("aria-label", EN ? "Before the war (left) and today (right)" : "Savaştan önce (sol) ve bugün (sağ)");
+      kutu.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); ayar(deger + (e.key === "ArrowRight" ? 5 : -5)); } });
+      [["100", EN ? "Before the war" : "Savaştan önce"], ["0", EN ? "Today" : "Bugün"]].forEach(([v, ad]) => {
+        const b = el("button", null, ad); b.type = "button"; b.dataset.v = v;
+        b.addEventListener("pointerdown", stopla); b.onclick = (e) => { e.stopPropagation(); ayar(deger > 97 && v === "100" || deger < 3 && v === "0" ? 50 : +v, true); };
+        dugmeler.appendChild(b);
+      });
+      ayar(50);
+      sahne.append(kutu, dugmeler);
+      alt.textContent = (EN ? "Slide your finger across the image, or use the buttons. " : "Parmağını resmin üstünde sağa sola kaydır ya da düğmelere dokun. ") + B.ad + " · " + onceY + (EN ? " and " : " ve ") + simdiY;
+      demoYap = () => {
+        if (uyduGosterildi || AZ_HAREKET) return; uyduGosterildi = true;
+        kutu.classList.add("uk-demo"); setTimeout(() => kutu.classList.remove("uk-demo"), 2600);
+      };
+    };
+    bolgeler.forEach((B, i) => {
+      const b = el("button", "uk-sekme", B.ad.split(",")[0].split(" ve ")[0].trim()); b.type = "button"; b.setAttribute("role", "tab"); b.title = B.ad;
+      b.addEventListener("pointerdown", stopla); b.onclick = (e) => { e.stopPropagation(); goster(i); if (demoYap) demoYap(); };
+      sekme.appendChild(b);
     });
-    const say = () => { const i = Math.round(sahne.scrollLeft / Math.max(1, sahne.clientWidth)); sira.textContent = (i + 1) + " / " + sahne.children.length; };
-    sahne.addEventListener("scroll", () => requestAnimationFrame(say), { passive: true });
-    const git = (d) => sahne.scrollBy({ left: d * sahne.clientWidth, behavior: "smooth" });
-    const geri = el("button", "ok-ok ok-geri", "‹"), ileri = el("button", "ok-ok ok-ileri", "›");
-    geri.type = ileri.type = "button"; geri.setAttribute("aria-label", EN ? "Previous" : "Önceki"); ileri.setAttribute("aria-label", EN ? "Next" : "Sonraki");
-    geri.onclick = (e) => { e.stopPropagation(); git(-1); }; ileri.onclick = (e) => { e.stopPropagation(); git(1); };
-    const alt = el("div", "ok-alt");
-    alt.append(el("span", null, (EN ? "Low-cloud Sentinel-2 images (10 m). Slide sideways on the image to compare; use the arrows for the next area. " : "Bulutsuz Sentinel-2 görüntüleri (10 m). Karşılaştırmak için resmin üstünde parmağını sağa sola kaydır; sonraki bölge için oklar. ") + UYDU.atif),
+    // ilk açılışta karşılaştırmalı ilk bölge (varsa)
+    goster(bolgeler.length > 1 ? 1 : 0);
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((xs) => { if (xs.some((x) => x.isIntersecting && x.intersectionRatio > 0.6)) { if (demoYap) demoYap(); io.disconnect(); } }, { threshold: [0.6] });
+      io.observe(k);
+    }
+    const son = el("div", "ok-alt");
+    son.append(el("span", null, (EN ? "Low-cloud Sentinel-2 images (10 m). " : "Bulutsuz Sentinel-2 görüntüleri (10 m). ") + UYDU.atif),
       kartPaylas(EN ? "Gaza from space, " + simdiY : "Uydudan Gazze, " + simdiY, new URL(K + "gazze.jpg", location.href).href));
-    k.append(ust, sahne, geri, ileri, alt); setTimeout(say, 0);
+    k.append(ust, sekme, sahne, alt, son);
     return k;
   }
   fetch("data/gundem.json?t=" + Math.floor(Date.now() / 3e5)).then((r) => r.json()).then((d) => { gundemArsiv = d.olaylar || []; if (Object.keys(kaynaklar).length && olaylar.length + gundemArsiv.length) gundemCiz(); }).catch(() => {});

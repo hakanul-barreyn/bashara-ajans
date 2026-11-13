@@ -39,7 +39,9 @@
       var xs = (o.haberler || []).map(function (id) { return idx[id]; }).filter(function (h) { return h && !kullanilan[h.id]; });
       return xs.length >= 2 ? yap(xs, o) : null;
     }).filter(Boolean);
+    // önce İngilizce başlıklar, sonra kalanlar Türkçe çevirileriyle
     benzerKume(havuz, kullanilan, A).forEach(function (xs) { var x = yap(xs, null); if (x) out.push(x); });
+    benzerKume(havuz, kullanilan, A, true).forEach(function (xs) { var x = yap(xs, null); if (x) out.push(x); });
     return out.sort(function (a, b) { return b.puan - a.puan; });
   }
 
@@ -76,11 +78,11 @@
       var k = h.kaynak + ":" + Math.floor(saat(h.tarih) / 36e5);
       (kova[k] = kova[k] || []).push(h);
     });
+    // aynı yayının saatlik serileri kaldırıldı: gruplama yalnızca aynı haberin farklı yayınları için (hikâye)
     var akis = [], ciplak = [];
     Object.keys(kova).forEach(function (k) {
       var xs = kova[k];
-      if (xs.length >= A.seriEnAz) akis.push({ tur: "seri", haberler: xs, son: saat(xs[0].tarih) });
-      else xs.forEach(function (h) {
+      xs.forEach(function (h) {
         if ((h.gorsel && h.gorsel_ok === true) || h.ozet_tr) akis.push({ tur: "tek", haberler: [h], son: saat(h.tarih) });
         else ciplak.push({ tur: "tek", haberler: [h], son: saat(h.tarih) });
       });
@@ -100,7 +102,7 @@
       else if (b.haberler.some(function (x) { return x.ozet_tr; })) p -= 2.5;
       return Math.max(0, p) * (0.4 + Math.pow(0.5, (simdi - b.son) / (8 * 36e5)));
     };
-    var DOSYA_HIKAYE = 14, DOSYA_AKIS = 26, YAYIN_TAVAN = 2;
+    var DOSYA_HIKAYE = 20, DOSYA_AKIS = 20, YAYIN_TAVAN = 2;
     var dosyaH = hikayeler.slice(0, DOSYA_HIKAYE);
     // seri ve tekil haber yarı yarıya; aynı yayından en çok iki kart
     var adaylar = akis.slice().sort(function (a, b) { return akisPuan(b) - akisPuan(a); }), dosyaA = [], yayinSay = {}, turSay = {};
@@ -127,16 +129,16 @@
       deste.push(b); sayac++; molaSon.push(b); if (molaSon.length > A.molaAralik) molaSon.shift();
     };
     var bilgi = { 4: "harita", 9: "sayac", 15: "foto", 22: "uydu" };
-    var or = function (hs, as) {
+    var or = function (hs, as, adim) {
       var hi = 0, ki = 0, n0 = sayac;
       while (hi < hs.length || ki < as.length) {
         if (bilgi[deste.length]) { deste.push({ tur: "bilgi", tip: bilgi[deste.length] }); continue; }
-        if (((sayac - n0) % 3 === 0 || ki >= as.length) && hi < hs.length) ekle(hs[hi++]); else ekle(as[ki++]);
+        if (((sayac - n0) % adim === 0 || ki >= as.length) && hi < hs.length) ekle(hs[hi++]); else ekle(as[ki++]);
       }
     };
-    or(dosyaH, dosyaA);
+    or(dosyaH, dosyaA, 2);
     var dosyaSon = deste.length;
-    or(kalanH, kalanA);
+    or(kalanH, kalanA, 3);
     var bolum = function (tip, n) { if (n) deste.push({ tur: "bolum", tip: tip, sayi: n }); };
     bolum("gosterilmeyen", ciplak.length); ciplak.forEach(ekle);
     bolum("eski", eskiHikaye.length); eskiHikaye.forEach(ekle);
@@ -146,15 +148,23 @@
   }
 
   var DUR = {"the":1,"and":1,"for":1,"with":1,"from":1,"that":1,"this":1,"after":1,"over":1,"into":1,"amid":1,"says":1,"said":1,"will":1,"have":1,"has":1,"was":1,"were":1,"are":1,"its":1,"his":1,"their":1,"they":1,"been":1,"more":1,"than":1,"about":1,"against":1,"news":1,"report":1,"live":1,"video":1,"israel":1,"israeli":1,"gaza":1,"palestinian":1,"palestinians":1};
-  function belirtec(h) {
+  // Türkçe başlıklar için: küçük harf, 4+ harfli kelimelerin ilk 5 harfi (ekleri kabaca atar)
+  var DUR_TR = {"gazze":1,"israi":1,"filis":1,"için":1,"sonra":1,"olara":1,"kadar":1,"karşı":1,"bunu":1,"daha":1,"olan":1,"oldu":1,"ediyo":1,"etti":1,"ettiğ":1,"dedi":1,"açıkl":1,"yaptı":1,"büyük":1,"yeni":1,"haber":1,"canlı":1,"video":1,"bugü":1,"arası":1,"ilgil":1,"üzeri":1,"yönel":1,"birli":1,"başka":1,"verdi":1,"ilişk":1,"bakan":1,"devam":1};
+  function belirtecTr(h) {
+    var b = (h.baslik_tr || (h.dil === "tr" ? h.baslik_orj : "") || "").toLocaleLowerCase("tr");
+    var t = {}; (b.match(/[a-zçğıöşüâîû0-9]{4,}/g) || []).forEach(function (w) { var k = w.slice(0, 5); if (!DUR_TR[k]) t[k] = 1; });
+    return Object.keys(t);
+  }
+  function belirtec(h, tr) {
+    if (tr) return belirtecTr(h);
     var b = (h.baslik_en || (h.dil === "en" ? h.baslik_orj : "") || "").toLowerCase().replace(/[’']s\b/g, "");
     var t = {}; (b.match(/[a-z0-9]{3,}/g) || []).forEach(function (w) { if (!DUR[w]) t[w] = 1; });
     return Object.keys(t);
   }
   // Tek bağlantılı değil, tohum çevresinde kümeleme: tohumla Jaccard >= 0,34 ve en az 2 ortak anlamlı kelime
-  function benzerKume(havuz, kullanilan, A) {
+  function benzerKume(havuz, kullanilan, A, tr) {
     var xs = havuz.filter(function (h) { return !kullanilan[h.id] && h.nitelik !== "analiz"; });
-    var bt = xs.map(belirtec), ters = {};
+    var bt = xs.map(function (h) { return belirtec(h, tr); }), ters = {};
     bt.forEach(function (ts, i) { ts.forEach(function (w) { (ters[w] = ters[w] || []).push(i); }); });
     var alindi = {}, out = [];
     for (var i = 0; i < xs.length; i++) {
@@ -177,7 +187,7 @@
       }
     }
     // birleştirme: iki kümenin herhangi iki haberi tohum eşiğini geçiyorsa tek hikâye
-    var bk = out.map(function (xs) { return xs.map(belirtec); });
+    var bk = out.map(function (xs) { return xs.map(function (h) { return belirtec(h, tr); }); });
     function jac(a, b) { var o = 0, m = {}; a.forEach(function (w) { m[w] = 1; }); b.forEach(function (w) { if (m[w]) o++; }); return o < 2 ? 0 : o / (a.length + b.length - o); }
     for (var a = 0; a < out.length; a++) {
       if (!out[a]) continue;
