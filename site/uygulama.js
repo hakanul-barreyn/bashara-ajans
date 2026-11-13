@@ -1015,6 +1015,214 @@
     return g;
   }
 
+  // Haberlerin arasında tutuklu hekim kartı: Dr. Hüsam Ebu Safiye (27 Aralık 2024'ten bu yana)
+  function sayacKartDis() {
+    const EN = window.DIL === "en", s = new Date(), gun = Math.floor((Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()) - Date.UTC(2024, 11, 27)) / 864e5);
+    const a = el("a", "sayac-kart"); a.href = "ebu-safiye.html";
+    a.append(el("span", "sk-ust", EN ? "Detained doctor" : "Tutuklu hekim"), el("b", null, gun.toLocaleString(EN ? "en-GB" : "tr-TR")),
+      el("span", "sk-gun", EN ? "days detained" : "gündür tutuklu"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
+      el("span", "sk-alt", EN ? "Director of Kamal Adwan Hospital. No charge, no trial, tortured." : "Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok, işkence var."),
+      el("i", null, EN ? "His story →" : "Hikâyesi →"), kartPaylas(EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye", new URL("ebu-safiye.html", location.href).href));
+    return a;
+  }
+  // ---------------------------------------------------- telefon destesi (site/deste.js)
+  // Her birim tam bir ekran: dikey kaydırma sonraki konu, yatay kaydırma aynı konunun içi. Deste son 24 saatle sınırlı ve
+  // biter; her 12 konuda bir durak kartı gelir. Sıra olay önemi, güncellik ve yayın çeşitliliğiyle kurulur.
+  let desteAcik = true, desteImza = null, desteYeni = 0;
+  const desteModu = () => telefon() && desteAcik && !!window.ZBSDeste;
+  function birim(tur, ek) { const b = el("section", "birim birim-" + tur + (ek ? " " + ek : "")); b.dataset.tur = tur; return b; }
+  function birimUst(etiket, sag) { const u = el("div", "b-ust"); u.append(el("span", "b-etiket", etiket)); if (sag) u.append(el("span", "b-sag", sag)); return u; }
+  function baslikSec(h) { return BT(h) || h.baslik_en || h.baslik_orj; }
+  function saatYaz(t) { return new Date(t).toLocaleTimeString(YR, { hour: "2-digit", minute: "2-digit" }); }
+  function yatay(sayfalar, sinif) {
+    const s = el("div", "b-sahne" + (sinif ? " " + sinif : "")); sayfalar.forEach((p) => s.appendChild(p));
+    const n = el("div", "b-noktalar"); sayfalar.forEach((_, i) => n.appendChild(el("i", i ? "" : "on")));
+    s.addEventListener("scroll", () => requestAnimationFrame(() => {
+      const i = Math.round(s.scrollLeft / Math.max(1, s.clientWidth)); [...n.children].forEach((x, j) => x.classList.toggle("on", j === i));
+    }), { passive: true });
+    return [s, sayfalar.length > 1 ? n : el("div", "b-noktalar")];
+  }
+  function satir(h, buyuk) {
+    const k = kaynaklar[h.kaynak], a = el("a", "b-satir" + (buyuk ? " buyuk" : ""));
+    a.href = h.web && /^https?:\/\//.test(h.web.url) ? h.web.url : h.url; a.target = "_blank"; a.rel = "noopener nofollow";
+    const ust = el("span", "bs-kim"); ust.appendChild(avatar(k, "kucuk"));
+    const ad = el("b", null, k.ad); if (bayrakHTML(k)) ad.insertAdjacentHTML("afterbegin", bayrakHTML(k)); ust.appendChild(ad);
+    ust.appendChild(el("span", "bs-kamp", kampAd(k))); ust.appendChild(el("time", null, saatYaz(h.tarih)));
+    const t = el("span", "bs-baslik", baslikSec(h)); if (!BT(h)) t.dir = "auto";
+    a.append(ust, t);
+    if (BT(h) && h.baslik_orj && h.baslik_orj !== BT(h)) { const o = el("span", "bs-orj", h.baslik_orj); o.dir = "auto"; o.lang = k.dil; a.appendChild(o); }
+    return a;
+  }
+  function kampSeridi(xs) {
+    // kamp başına yayın sayısı (aynı yayının birden çok haberi bir sayılır)
+    const kamplar = {}, gorulen = new Set();
+    xs.forEach((h) => { if (gorulen.has(h.kaynak)) return; gorulen.add(h.kaynak); const a = kampAd(kaynaklar[h.kaynak]); kamplar[a] = (kamplar[a] || 0) + 1; });
+    const top = Object.values(kamplar).reduce((a, b) => a + b, 0), s = el("div", "b-kamplar");
+    const cub = el("div", "bk-cubuk"), et = el("div", "bk-etiketler");
+    Object.entries(kamplar).sort((a, b) => KAMP_SIRA.indexOf(a[0]) - KAMP_SIRA.indexOf(b[0])).forEach(([ad, n]) => {
+      const p = el("i"); p.style.flex = String(n); p.style.background = KAMP_RENK[ad] || "#6b746f"; p.title = ad + ": " + n; cub.appendChild(p);
+      const e = el("span"); const d = el("i"); d.style.background = KAMP_RENK[ad] || "#6b746f"; e.append(d, ad + " " + n); et.appendChild(e);
+    });
+    s.append(cub, et); s.setAttribute("aria-label", top + " haber, " + Object.keys(kamplar).length + " kamp");
+    return s;
+  }
+  function kapakBirim(b, sayi) {
+    const EN = window.DIL === "en", u = birim("kapak"), t = new Date();
+    u.appendChild(birimUst(EN ? "Today's file" : "Bugünün dosyası", t.toLocaleDateString(YR, { day: "numeric", month: "long", weekday: "long" })));
+    const g = el("div", "b-govde");
+    g.appendChild(el("h1", "kp-baslik", EN ? "The last 24 hours, outlet by outlet" : "Son 24 saat, yayın yayın"));
+    g.appendChild(el("p", "kp-sayi", sayi.haber.toLocaleString(YR) + (EN ? " stories from " : " haber, ") + sayi.yayin + (EN ? " outlets" : " yayından")));
+    const ol = el("ol", "kp-liste");
+    b.hikayeler.forEach((x, i) => {
+      const li = el("li"); const bt = x.olay ? x.olay.baslik : baslikSec(x.haberler.find((h) => BT(h)) || x.haberler[0]);
+      li.append(el("b", null, String(i + 1).padStart(2, "0")), el("span", null, bt), el("em", null, x.yayinSayisi + (EN ? " outlets" : " yayın")));
+      li.onclick = () => { const h = document.querySelectorAll(".birim-hikaye")[i]; if (h) h.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth" }); };
+      ol.appendChild(li);
+    });
+    g.appendChild(ol);
+    const son = oku("zbs-deste-son"), simdi = Date.now();
+    if (son && +son < simdi - 30 * 6e4) {
+      const yeni = gor.filter((h) => Date.parse(h.eklendi || h.tarih) > +son).length;
+      if (yeni) g.appendChild(el("p", "kp-yeni", (EN ? yeni + " new since your last visit" : "Son ziyaretinden bu yana " + yeni.toLocaleString(YR) + " yeni haber")));
+    }
+    sakla("zbs-deste-son", String(simdi));
+    const ip = el("div", "kp-ipucu");
+    ip.append(el("span", null, EN ? "↑ Swipe up: next story" : "↑ Yukarı kaydır: sonraki konu"), el("span", null, EN ? "← Swipe left: other outlets" : "← Sola kaydır: aynı haber, başka yayınlar"));
+    g.appendChild(ip);
+    u.appendChild(g);
+    return u;
+  }
+  function hikayeBirim(b) {
+    const EN = window.DIL === "en", u = birim("hikaye"), xs = b.haberler;
+    const bas = b.olay ? b.olay.baslik : baslikSec(xs.find((h) => BT(h)) || xs[0]);
+    u.appendChild(birimUst(EN ? "Same story · " + b.yayinSayisi + " outlets" : "Aynı haber · " + b.yayinSayisi + " yayın", once(new Date(b.son).toISOString())));
+    // 1) özet sayfası
+    const p1 = el("article", "b-sayfa hk-ozet");
+    const gor_ = xs.find((h) => h.gorsel && h.gorsel_ok === true);
+    if (gor_) { const g = gorselCiz(gor_, kaynaklar[gor_.kaynak]); g.classList.add("hk-gorsel"); p1.appendChild(g); }
+    else {
+      // görsel yoksa: haberi yazan yayınların simgeleri, tek bir yayının kapağı değil
+      const y = el("div", "hk-yigin"), ks = [...new Set(xs.map((h) => h.kaynak))];
+      ks.slice(0, 12).forEach((id) => y.appendChild(avatar(kaynaklar[id], "kucuk")));
+      if (ks.length > 12) y.appendChild(el("span", "hk-yigin-ek", "+" + (ks.length - 12)));
+      p1.appendChild(y);
+    }
+    p1.appendChild(el("h2", "hk-baslik", bas));
+    const oz = xs.map((h) => OZ(h)).find(Boolean); if (oz) p1.appendChild(el("p", "hk-ozet-metin", oz));
+    p1.appendChild(kampSeridi(xs));
+    p1.appendChild(el("p", "hk-ipucu", EN ? "Swipe to read how each outlet put it →" : "Her yayının nasıl yazdığı için sola kaydır →"));
+    // 2) yayın yayın: kamplara göre sıralı, sayfa başına 3 haber
+    const sirali = xs.slice().sort((a, c) => KAMP_SIRA.indexOf(kampAd(kaynaklar[a.kaynak])) - KAMP_SIRA.indexOf(kampAd(kaynaklar[c.kaynak])) || Date.parse(c.tarih) - Date.parse(a.tarih));
+    const sayfalar = [p1];
+    for (let i = 0; i < sirali.length; i += 3) {
+      const p = el("article", "b-sayfa hk-yayinlar");
+      p.appendChild(el("span", "hk-sayfa-no", (EN ? "How they wrote it · " : "Kim nasıl yazdı · ") + (i / 3 + 1) + "/" + Math.ceil(sirali.length / 3)));
+      sirali.slice(i, i + 3).forEach((h) => p.appendChild(satir(h)));
+      sayfalar.push(p);
+    }
+    // 3) son sayfa: derin okuma
+    const ps = el("article", "b-sayfa hk-son");
+    ps.appendChild(el("p", "hk-son-metin", EN ? "Compare the wording side by side, with context and sources." : "Başlıkları yan yana, bağlam ve kaynaklarla karşılaştır."));
+    const git = el("a", "b-dugme"); git.href = "h/" + encodeURIComponent(xs[0].id) + ".html"; git.textContent = EN ? "Open the comparison page →" : "Karşılaştırma sayfasını aç →";
+    ps.appendChild(git); sayfalar.push(ps);
+    const [s, n] = yatay(sayfalar); u.append(n, s);
+    return u;
+  }
+  function seriBirim(b) {
+    const EN = window.DIL === "en", u = birim("seri"), k = kaynaklar[b.haberler[0].kaynak];
+    u.appendChild(birimUst(k.ad, saatAraligi(b.haberler, 1) + " · " + b.haberler.length + (EN ? " stories" : " haber")));
+    const [s, n] = yatay(b.haberler.map((h) => { const a = haberCiz(h); a.classList.add("b-sayfa"); return a; }));
+    u.append(n, s); return u;
+  }
+  function analizBirim(b) {
+    const EN = window.DIL === "en", u = birim("analiz");
+    u.appendChild(birimUst(EN ? "Analysis & opinion" : "Analiz ve görüş", saatAraligi(b.haberler, GRUP.analizSaat) + " · " + b.haberler.length + (EN ? " pieces" : " yazı")));
+    const [s, n] = yatay(b.haberler.map((h) => { const a = haberCiz(h); a.classList.add("b-sayfa"); return a; }));
+    u.append(n, s); return u;
+  }
+  function kisaBirim(b) {
+    const EN = window.DIL === "en", u = birim("kisa");
+    u.appendChild(birimUst(EN ? "In brief" : "Kısa kısa", saatAraligi(b.haberler, 1)));
+    const g = el("div", "b-govde kisa-liste"); b.haberler.forEach((h) => g.appendChild(satir(h, true))); u.appendChild(g);
+    return u;
+  }
+  function tekBirim(b) { const u = birim("tek"); u.appendChild(haberCiz(b.haberler[0])); return u; }
+  function bilgiBirim(tip) {
+    const u = birim("bilgi", "bilgi-" + tip);
+    let ic = null;
+    if (tip === "harita" && HARITA_BOLUM) ic = HARITA_BOLUM;
+    else if (tip === "sayac") ic = sayacKartDis();
+    else if (tip === "foto") ic = fotoKart();
+    else if (tip === "uydu") ic = uyduKart();
+    if (!ic) return null;
+    u.appendChild(ic); return u;
+  }
+  function molaBirim(b) {
+    const EN = window.DIL === "en", u = birim("mola");
+    u.appendChild(birimUst(EN ? "Pause" : "Durak", b.sira + (EN ? " stories so far" : " konu geride kaldı")));
+    const g = el("div", "b-govde");
+    g.appendChild(el("h2", "ml-baslik", EN ? "What you have read so far" : "Şimdiye kadar okudukların"));
+    const ul = el("ul", "ml-liste");
+    b.ozet.filter((x) => x.haberler).slice(-4).forEach((x) => {
+      const bt = x.olay ? x.olay.baslik : baslikSec(x.haberler[0]);
+      const li = el("li"); li.append(el("span", null, bt), el("em", null, x.tur === "hikaye" ? x.yayinSayisi + (EN ? " outlets" : " yayın") : kaynaklar[x.haberler[0].kaynak].ad)); ul.appendChild(li);
+    });
+    g.appendChild(ul);
+    g.appendChild(el("p", "ml-not", EN ? "Take a breath. The rest of the day's file is below; reports explain the patterns behind the headlines." : "Bir nefes al. Günün dosyasının kalanı aşağıda; başlıkların ardındaki örüntüyü raporlar anlatır."));
+    const ey = el("div", "ml-eylem");
+    const r = el("a", "b-dugme ikincil", EN ? "Reports" : "Raporlar"); r.href = "raporlar.html";
+    const a = el("a", "b-dugme ikincil", EN ? "Almanac" : "Almanak"); a.href = "almanak.html";
+    ey.append(r, a); g.appendChild(ey); u.appendChild(g);
+    return u;
+  }
+  function sonBirim(b) {
+    const EN = window.DIL === "en", u = birim("son");
+    u.appendChild(birimUst(EN ? "End of today's file" : "Günün dosyasının sonu"));
+    const g = el("div", "b-govde");
+    g.appendChild(el("h2", "ml-baslik", EN ? "That's the last 24 hours." : "Son 24 saat bu kadar."));
+    g.appendChild(el("p", "ml-not", EN ? b.kalan + " more items did not fit in the file. You can read every item in time order."
+      : "Dosyaya sığmayan " + b.kalan.toLocaleString(YR) + " haber daha var. Bütün haberleri saat sırasıyla da okuyabilirsin."));
+    const ey = el("div", "ml-eylem");
+    const kr = el("button", "b-dugme", EN ? "All items in time order" : "Saat sırasıyla bütün haberler"); kr.type = "button";
+    kr.onclick = () => { desteAcik = false; kac = SAYFA; ciz(true); };
+    const t = el("a", "b-dugme ikincil", EN ? "History" : "Tarihçe"); t.href = "tarihce.html";
+    const r = el("a", "b-dugme ikincil", EN ? "Reports" : "Raporlar"); r.href = "raporlar.html";
+    ey.append(kr, r, t); g.appendChild(ey); u.appendChild(g);
+    return u;
+  }
+  function desteCiz(akis) {
+    const olaylarHepsi = (olaylar || []).concat(gundemArsiv || []);
+    const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now());
+    const yayin = new Set(gor.filter((h) => dk(h.tarih) < 1440).map((h) => h.kaynak)).size;
+    r.deste.forEach((b) => {
+      let u = null;
+      if (b.tur === "kapak") u = kapakBirim(b, { haber: r.istatistik.haber, yayin });
+      else if (b.tur === "hikaye") u = hikayeBirim(b);
+      else if (b.tur === "seri") u = seriBirim(b);
+      else if (b.tur === "analiz") u = analizBirim(b);
+      else if (b.tur === "kisa") u = kisaBirim(b);
+      else if (b.tur === "tek") u = tekBirim(b);
+      else if (b.tur === "bilgi") u = bilgiBirim(b.tip);
+      else if (b.tur === "mola") u = molaBirim(b);
+      else if (b.tur === "son") u = sonBirim(b);
+      if (u) akis.appendChild(u);
+    });
+    // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
+    let ci = document.querySelector(".deste-ilerleme");
+    if (!ci) { ci = el("div", "deste-ilerleme"); ci.appendChild(el("i")); document.body.appendChild(ci); }
+    desteImza = gor.length; desteYeni = 0;
+    const yp = document.querySelector(".deste-yeni"); if (yp) yp.remove();
+  }
+  function desteYeniBildir(n) {
+    let p = document.querySelector(".deste-yeni");
+    if (!p) { p = el("button", "deste-yeni"); p.type = "button"; p.onclick = () => { p.remove(); ciz(true); }; document.body.appendChild(p); }
+    p.textContent = (window.DIL === "en" ? n + " new · refresh file" : n + " yeni haber · dosyayı yenile");
+  }
+  window.addEventListener("scroll", () => {
+    const ci = document.querySelector(".deste-ilerleme i"); if (!ci || !document.documentElement.classList.contains("deste-modu")) return;
+    const h = document.documentElement.scrollHeight - innerHeight; ci.style.transform = "scaleX(" + (h > 0 ? Math.min(1, scrollY / h) : 0) + ")";
+  }, { passive: true });
+
   function ciz(basaDon, devam) {
     document.querySelectorAll("#fBolge .cip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === bolge));
     const sc = $("fSehir"); sc.hidden = !sehir; if (sehir) sc.textContent = sehir + "  ✕";
@@ -1026,18 +1234,16 @@
       : (sehir ? liste.filter((h) => kaynaklar[h.kaynak].sehir === sehir) : liste);
     const odak = odakId && haberIdx[odakId];
     if (odak && !secOlay) gor = [odak, ...gor.filter((h) => h.id !== odakId)];
-    // Haberlerin arasında tutuklu hekim kartı: Dr. Hüsam Ebu Safiye (27 Aralık 2024'ten bu yana)
-    function sayacKart() {
-      const EN = window.DIL === "en", s = new Date(), gun = Math.floor((Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()) - Date.UTC(2024, 11, 27)) / 864e5);
-      const a = el("a", "sayac-kart"); a.href = "ebu-safiye.html";
-      a.append(el("span", "sk-ust", EN ? "Detained doctor" : "Tutuklu hekim"), el("b", null, gun.toLocaleString(EN ? "en-GB" : "tr-TR")),
-        el("span", "sk-gun", EN ? "days detained" : "gündür tutuklu"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
-        el("span", "sk-alt", EN ? "Director of Kamal Adwan Hospital. No charge, no trial, tortured." : "Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok, işkence var."),
-        el("i", null, EN ? "His story →" : "Hikâyesi →"), kartPaylas(EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye", new URL("ebu-safiye.html", location.href).href));
-      return a;
-    }
     const akis = $("akis");
     const kaydir = window.scrollY;
+    // destede kendiliğinden yenileme konuları yerinden oynatmaz; yeni haber varsa düğme çıkar
+    const deste = desteModu() && !secOlay && !odakId && !ara && !sehir;
+    document.documentElement.classList.toggle("deste-modu", deste);
+    if (deste && !basaDon && desteImza != null && akis.querySelector(".birim")) {
+      const n = gor.length - desteImza; if (n > 0) desteYeniBildir(n);
+      $("canliMetin").textContent = guncellendi ? "Güncellendi · " + once(guncellendi) : "Canlı";
+      return;
+    }
     akis.innerHTML = "";
     gundemCiz(); analizCiz(); seritCiz();
     // Paylaşılan bağlantı (#h-…): sayfa doğrudan o haberle açılır; gündem, analizler ve süzgeç gizlenir
@@ -1057,6 +1263,7 @@
     }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length && !secOlay) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
+    if (deste && gor.length) { desteCiz(akis); if (basaDon && window.scrollY > 0) window.scrollTo({ top: 0 }); haritaCiz(liste); return; }
     const gruplu = telefon() && !secOlay && !odakModu && !ara && !sehir;
     (gruplu ? grupla(gor.slice(0, kac)) : gor.slice(0, kac).map((h) => [h])).forEach((u, i) => {
       if (u.length > 1) { akis.appendChild(grupKart(u)); }
@@ -1066,7 +1273,7 @@
         if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
         akis.appendChild(k);
       }
-      if (i === 4 && !secOlay) akis.appendChild(sayacKart());
+      if (i === 4 && !secOlay) akis.appendChild(sayacKartDis());
       if (i === 9 && !secOlay) { const f = fotoKart(); if (f) akis.appendChild(f); }
       if (i === 15 && !secOlay) { const u = uyduKart(); if (u) akis.appendChild(u); }
       if (i === HARITA_SIRA - 1 && HARITA_BOLUM && !secOlay) akis.appendChild(HARITA_BOLUM);
