@@ -28,7 +28,8 @@ def main():
     if not anahtar:
         sys.exit("MEDIACLOUD_API_KEY yok")
     D, S = mediacloud.api.DirectoryApi(anahtar), mediacloud.api.SearchApi(anahtar)
-    print("Hesap:", {k: v for k, v in D.user_profile().items() if k in ("username", "is_staff", "quotas", "roles")})
+    D.user_profile()   # anahtarı sına (hesap bilgisi kayda yazılmaz)
+    print("Anahtar geçerli")
     K = json.load(open("kaynaklar.json", encoding="utf-8"))
     os.makedirs("cikti", exist_ok=True)
     yol = "cikti/mc-kapsam.json"
