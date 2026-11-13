@@ -10,7 +10,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=4").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=5").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -39,10 +39,17 @@
           var li = el("li");
           li.appendChild(el("time", null, tarihAd(o.tarih)));
           var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
-          if (o.gorsel && o.gorsel.url) {
-            var f = el("figure", "th-gorsel"), im = el("img"); im.src = o.gorsel.url; im.alt = EN ? o.baslik_en : o.baslik; im.loading = "lazy"; im.decoding = "async";
-            var fc = el("figcaption"), fa = el("a", null, (EN ? "Photo: " : "Fotoğraf: ") + (o.gorsel.atif || "")); if (o.gorsel.sayfa) { fa.href = o.gorsel.sayfa; fa.target = "_blank"; fa.rel = "noopener"; }
-            fc.appendChild(fa); f.append(im, fc); ic.appendChild(f);
+          var gs = (o.gorseller || (o.gorsel ? [o.gorsel] : [])).filter(function (g) { return g && g.url; });
+          if (gs.length) {
+            var gk = el("div", "th-gorseller" + (gs.length > 1 ? " cok" : ""));
+            gs.forEach(function (g) {
+              var f = el("figure", "th-gorsel"), im = el("img"); im.src = g.url; im.alt = (EN ? g.aciklama_en : g.aciklama) || (EN ? o.baslik_en : o.baslik); im.loading = "lazy"; im.decoding = "async";
+              im.onerror = function () { f.remove(); };
+              var fc = el("figcaption"); var ac = EN ? g.aciklama_en : g.aciklama; if (ac) fc.appendChild(el("span", null, ac + " "));
+              var fa = el("a", null, (EN ? "Photo: " : "Görsel: ") + (g.atif || "")); if (g.sayfa) { fa.href = g.sayfa; fa.target = "_blank"; fa.rel = "noopener"; }
+              fc.appendChild(fa); f.append(im, fc); gk.appendChild(f);
+            });
+            ic.appendChild(gk);
           }
           var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
           if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
