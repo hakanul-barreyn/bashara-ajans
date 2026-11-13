@@ -18,6 +18,7 @@
   "use strict";
   var AYAR = { pencereSaat: 24, seriEnAz: 3, analizSaat: 6, molaAralik: 12, yariOmurSaat: 4, kumeSaat: 6, kumeEsik: 0.34, birlesEsik: 0.45 };
 
+  var CEKIRDEK = { "Gazze": 1, "İnsani durum": 1, "Batı Şeria": 1, "Kudüs": 1, "Esirler ve tutuklular": 1, "Uluslararası hukuk": 1, "Lübnan": 1, "Yemen ve Kızıldeniz": 1, "Protesto ve dayanışma": 1 };
   function saat(t) { return Date.parse(t); }
   function kampOf(K, h) { var k = K[h.kaynak] || {}; return k.kamp || k.bolge || ""; }
 
@@ -84,8 +85,38 @@
         else ciplak.push({ tur: "tek", haberler: [h], son: saat(h.tarih) });
       });
     });
-    akis.sort(function (a, b) { return b.son - a.son; });
-    akis = cesitle(akis, K);
+    // 1) Günün dosyası (ilk ~40 kart): 24 saatin en önemli hikâyeleri ve en dolu tekil haberleri, önem sırasıyla.
+    //    Tekil haber ve seri için önem: Türkçe özet, denetimden geçmiş görsel, seri büyüklüğü; 8 saatlik yarı ömürle güncellik.
+    var akisPuan = function (b) {
+      var h = b.haberler[0], p = b.tur === "seri" ? 1.5 + Math.log2(b.haberler.length) : 0;
+      if (b.haberler.some(function (x) { return x.ozet_tr; })) p += 2;
+      if (b.haberler.some(function (x) { return x.gorsel && x.gorsel_ok === true; })) p += 1;
+      if (h.olay) p += 1;
+      if (h.oncelik) p += 1;
+      // konu etiketi: savaşın çekirdek konuları öne; özeti olup hiç etiketi olmayan (konu dışı) haber geriye
+      var et = {}; b.haberler.forEach(function (x) { (x.etiket || []).forEach(function (t) { et[t] = 1; }); });
+      var ets = Object.keys(et);
+      if (ets.some(function (t) { return CEKIRDEK[t]; })) p += 1.5; else if (ets.length) p += 0.5;
+      else if (b.haberler.some(function (x) { return x.ozet_tr; })) p -= 2.5;
+      return Math.max(0, p) * (0.4 + Math.pow(0.5, (simdi - b.son) / (8 * 36e5)));
+    };
+    var DOSYA_HIKAYE = 14, DOSYA_AKIS = 26, YAYIN_TAVAN = 2;
+    var dosyaH = hikayeler.slice(0, DOSYA_HIKAYE);
+    // seri ve tekil haber yarı yarıya; aynı yayından en çok iki kart
+    var adaylar = akis.slice().sort(function (a, b) { return akisPuan(b) - akisPuan(a); }), dosyaA = [], yayinSay = {}, turSay = {};
+    [DOSYA_AKIS / 2, DOSYA_AKIS].forEach(function (turTavan) {
+      adaylar.forEach(function (b) {
+        var k = b.haberler[0].kaynak;
+        if (dosyaA.length >= DOSYA_AKIS || dosyaA.indexOf(b) >= 0 || (yayinSay[k] || 0) >= YAYIN_TAVAN || (turSay[b.tur] || 0) >= turTavan) return;
+        yayinSay[k] = (yayinSay[k] || 0) + 1; turSay[b.tur] = (turSay[b.tur] || 0) + 1; dosyaA.push(b);
+      });
+    });
+    dosyaA.sort(function (a, b) { return akisPuan(b) - akisPuan(a); });
+    var dosyada = new Set(dosyaA);
+    dosyaA = cesitle(dosyaA, K);
+    // 2) Sonra kalanlar saat sırasıyla (en yeniden eskiye); hikâyeler yine her üç karttan biri
+    var kalanH = hikayeler.slice(DOSYA_HIKAYE).sort(function (a, b) { return b.son - a.son; });
+    var kalanA = cesitle(akis.filter(function (b) { return !dosyada.has(b); }).sort(function (a, b) { return b.son - a.son; }), K);
     ciplak = cesitle(ciplak.sort(function (a, b) { return b.son - a.son; }), K);
     var eskiHikaye = hikayeYap(eski, gundem, K, simdi, A, kullanilan, 3, 2);
 
@@ -95,20 +126,23 @@
       if (sayac > 0 && sayac % A.molaAralik === 0 && molaSon.length) { deste.push({ tur: "mola", ozet: molaSon.slice(), sira: sayac }); molaSon = []; }
       deste.push(b); sayac++; molaSon.push(b); if (molaSon.length > A.molaAralik) molaSon.shift();
     };
-    // 1) günün dosyası: her üç konudan biri hikâye; araya bilgi kartları
     var bilgi = { 4: "harita", 9: "sayac", 15: "foto", 22: "uydu" };
-    var hi = 0, ki = 0;
-    while (hi < hikayeler.length || ki < akis.length) {
-      if (bilgi[deste.length]) { deste.push({ tur: "bilgi", tip: bilgi[deste.length] }); continue; }
-      if ((sayac % 3 === 0 || ki >= akis.length) && hi < hikayeler.length) ekle(hikayeler[hi++]);
-      else ekle(akis[ki++]);
-    }
+    var or = function (hs, as) {
+      var hi = 0, ki = 0, n0 = sayac;
+      while (hi < hs.length || ki < as.length) {
+        if (bilgi[deste.length]) { deste.push({ tur: "bilgi", tip: bilgi[deste.length] }); continue; }
+        if (((sayac - n0) % 3 === 0 || ki >= as.length) && hi < hs.length) ekle(hs[hi++]); else ekle(as[ki++]);
+      }
+    };
+    or(dosyaH, dosyaA);
+    var dosyaSon = deste.length;
+    or(kalanH, kalanA);
     var bolum = function (tip, n) { if (n) deste.push({ tur: "bolum", tip: tip, sayi: n }); };
     bolum("gosterilmeyen", ciplak.length); ciplak.forEach(ekle);
     bolum("eski", eskiHikaye.length); eskiHikaye.forEach(ekle);
     bolum("analiz", analizler.length); analizler.forEach(ekle);
     deste.push({ tur: "son" });
-    return { deste: deste, istatistik: { haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, gosterilmeyen: ciplak.length, eskiHikaye: eskiHikaye.length, analiz: analizler.length } };
+    return { deste: deste, dosyaSon: dosyaSon, istatistik: { haber: havuz.length, hikaye: hikayeler.length, akis: akis.length, gosterilmeyen: ciplak.length, eskiHikaye: eskiHikaye.length, analiz: analizler.length } };
   }
 
   var DUR = {"the":1,"and":1,"for":1,"with":1,"from":1,"that":1,"this":1,"after":1,"over":1,"into":1,"amid":1,"says":1,"said":1,"will":1,"have":1,"has":1,"was":1,"were":1,"are":1,"its":1,"his":1,"their":1,"they":1,"been":1,"more":1,"than":1,"about":1,"against":1,"news":1,"report":1,"live":1,"video":1,"israel":1,"israeli":1,"gaza":1,"palestinian":1,"palestinians":1};

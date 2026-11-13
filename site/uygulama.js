@@ -1222,8 +1222,8 @@
     u.appendChild(birimUst(EN ? "More" : "Devamı"));
     const g = el("div", "b-govde");
     g.appendChild(el("h2", "ml-baslik", ilkKart ? (EN ? "That was today's main file." : "Günün ana dosyası bu kadar.") : (EN ? "40 more cards read." : "40 kart daha geride kaldı.")));
-    g.appendChild(el("p", "ml-not", EN ? kalan + " more cards: the rest of today's items, then earlier major stories, and analysis at the very end."
-      : kalan.toLocaleString(YR) + " kart daha var: önce günün kalan haberleri, sonra daha eski önemli haberler, en sonda analizler."));
+    g.appendChild(el("p", "ml-not", EN ? kalan + " more cards: the rest of the last 24 hours in time order, then earlier major stories, and analysis at the very end."
+      : kalan.toLocaleString(YR) + " kart daha var: önce son 24 saatin kalan haberleri saat sırasıyla, sonra daha eski önemli haberler, en sonda analizler."));
     const ey = el("div", "ml-eylem");
     const d = el("button", "b-dugme", EN ? "Show other stories too" : "Diğer haberleri de göster"); d.type = "button";
     d.onclick = () => { const ilk = sonra(); u.remove(); if (ilk) ilk.scrollIntoView({ behavior: "auto" }); };
@@ -1254,10 +1254,10 @@
       for (; i < son; i++) { const u = ciz1(r.deste[i]); if (u) { akis.appendChild(u); ilk = ilk || u; } }
       // kalan yalnızca "son" kartıysa onu da hemen ekle
       if (r.deste.length - i === 1) { const u = ciz1(r.deste[i++]); if (u) akis.appendChild(u); }
-      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i <= DESTE_ILK));
+      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i === (r.dosyaSon || DESTE_ILK)));
       return ilk;
     };
-    parti(DESTE_ILK);
+    parti(r.dosyaSon || DESTE_ILK);
     // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
     let ci = document.querySelector(".deste-ilerleme");
     if (!ci) { ci = el("div", "deste-ilerleme"); ci.appendChild(el("i")); document.body.appendChild(ci); }

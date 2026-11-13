@@ -861,6 +861,12 @@ body{overflow-x:clip}
     background:var(--yesil,#1f7a52);color:#fff;font:700 .8rem "Plus Jakarta Sans",system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.25)}
   html.deste-modu .akis>.nota,html.deste-modu .akis>.bos{scroll-snap-align:none}
 }
+@media (max-width:700px) and (max-height:700px){
+  html.deste-modu .birim .haber h2{-webkit-line-clamp:3;font-size:1.2rem}
+  html.deste-modu .birim .haber .govde>p{-webkit-line-clamp:2}
+  html.deste-modu .birim .haber .gorsel{min-height:12svh}
+  html.deste-modu .birim .haber .kart-sayfa span{display:none}
+}
 .slayt-arka a.kredi{text-decoration:none;max-width:min(60vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .karne-acik{display:grid;grid-template-columns:minmax(10rem,auto) 1fr;gap:6px 16px;margin:8px 0 10px;font-size:.84rem;line-height:1.45}
 .karne-acik dt{font-weight:700}.karne-acik dd{margin:0;color:var(--k-ink2,#444)}
