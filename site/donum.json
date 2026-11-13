@@ -1,6 +1,11 @@
 {
  "donemler": [
   {
+   "anahtar": "osmanli",
+   "ad": "Osmanlı Filistini’nin son yılları (1914–1922)",
+   "ad_en": "The last years of Ottoman Palestine (1914–1922)"
+  },
+  {
    "anahtar": "manda",
    "ad": "İngiliz Mandası (1917–1947)",
    "ad_en": "The British Mandate (1917–1947)"
@@ -583,6 +588,150 @@
     {
      "ad": "Al Jazeera",
      "url": "https://www.aljazeera.com/news/2026/11/7/rains-flood-thousands-of-tents-in-gaza"
+    }
+   ]
+  },
+  {
+   "tarih": "1914-10-29",
+   "donem": "osmanli",
+   "baslik": "Osmanlı Birinci Dünya Savaşı’na girdi",
+   "baslik_en": "The Ottoman Empire enters the First World War",
+   "metin": "Amiral Souchon komutasındaki Osmanlı donanması Rusya’nın Karadeniz limanlarını bombaladı. Rusya 2 Kasım’da, İngiltere ile Fransa 5 Kasım’da savaş ilan etti; Osmanlı 11 Kasım’da resmen savaşa girdi. Filistin artık bir cepheydi.",
+   "metin_en": "The Ottoman fleet under Admiral Souchon shelled Russia’s Black Sea ports. Russia declared war on 2 November, Britain and France on 5 November; the Ottomans formally entered the war on 11 November. Palestine became a front.",
+   "kaynaklar": [
+    {
+     "ad": "Ondokuz Mayıs Üniversitesi (makale)",
+     "url": "https://acikerisim.omu.edu.tr/entities/publication/20245c6f-a760-4274-9b71-80536e4de79d"
+    },
+    {
+     "ad": "Küre Ansiklopedisi",
+     "url": "https://kureansiklopedi.com/tr/detay/birinci-dunya-savasi"
+    }
+   ]
+  },
+  {
+   "tarih": "1915-02-03",
+   "donem": "osmanli",
+   "baslik": "Birinci Kanal Harekâtı",
+   "baslik_en": "First Suez Canal offensive",
+   "metin": "Ocak 1915’te Birüssebi’den yola çıkıp Sina Çölü’nü aşan Osmanlı kuvvetleri, 3 Şubat’ta İngilizlerin elindeki Süveyş Kanalı’nı geçmeye çalıştı; saldırı püskürtüldü ve birlikler Filistin’e çekildi. İkinci Kanal Harekâtı Ağustos 1916’da yine sonuçsuz kaldı.",
+   "metin_en": "Ottoman forces that set out from Beersheba in January 1915 and crossed the Sinai tried on 3 February to cross the British-held Suez Canal; the attack was repulsed and the troops withdrew to Palestine. A second canal offensive in August 1916 also failed.",
+   "kaynaklar": [
+    {
+     "ad": "Belgi Dergisi (DergiPark)",
+     "url": "https://dergipark.org.tr/en/pub/belgi/article/388908"
+    }
+   ]
+  },
+  {
+   "tarih": "1915",
+   "donem": "osmanli",
+   "baslik": "NİLİ casusluk örgütü kuruldu",
+   "baslik_en": "The NILI spy ring is founded",
+   "metin": "Aaronsohn kardeşler ve Avşalom Faynberg’in Osmanlı Filistini’nde kurduğu Yahudi örgütü İngilizler hesabına casusluk yaptı: Osmanlı birliklerinin yerini, sayısını ve yolları Mısır’daki İngiliz istihbaratına iletti. Eylül–Ekim 1917’de bir posta güvercininin yakalanmasıyla Osmanlı yetkililerince ortaya çıkarıldı.",
+   "metin_en": "Founded in Ottoman Palestine by the Aaronsohn siblings and Avshalom Feinberg, the Jewish ring spied for Britain, passing the positions and strength of Ottoman troops and routes to British intelligence in Egypt. It was uncovered by the Ottoman authorities in September–October 1917 after a carrier pigeon was caught.",
+   "kaynaklar": [
+    {
+     "ad": "İsrail Ulusal Kütüphanesi",
+     "url": "https://blog.nli.org.il/en/nili/"
+    }
+   ]
+  },
+  {
+   "tarih": "1918-09-19",
+   "donem": "osmanli",
+   "baslik": "Megiddo (Armageddon) muharebesi ve büyük geri çekiliş",
+   "baslik_en": "Battle of Megiddo (Armageddon) and the great retreat",
+   "metin": "General Allenby’nin Megiddo (Armageddon) ovası çevresindeki saldırısı Osmanlı’nın 7. ve 8. ordularını birkaç günde dağıttı. Osmanlı kuvvetleri Şam’a, oradan Halep’e kadar çekildi; Şam 1 Ekim’de, Halep 26 Ekim’de düştü ve Filistin tümüyle İngiliz işgaline girdi.",
+   "metin_en": "General Allenby’s offensive around the plain of Megiddo (Armageddon) broke the Ottoman Seventh and Eighth Armies within days. Ottoman forces fell back to Damascus and then Aleppo; Damascus fell on 1 October and Aleppo on 26 October, leaving all of Palestine under British occupation.",
+   "kaynaklar": [
+    {
+     "ad": "İngiltere Ulusal Arşivi",
+     "url": "https://blog.nationalarchives.gov.uk/apocalypse-then-battle-megiddo-1918"
+    }
+   ]
+  },
+  {
+   "tarih": "1918-10-30",
+   "donem": "osmanli",
+   "baslik": "Mondros Mütarekesi",
+   "baslik_en": "Armistice of Mudros",
+   "metin": "Osmanlı Devleti İtilaf devletleriyle Mondros’ta mütareke imzaladı ve savaştan çekildi. Filistin, Suriye ve Irak’taki Osmanlı garnizonları teslim olacaktı.",
+   "metin_en": "The Ottoman Empire signed an armistice with the Allies at Mudros and left the war. Ottoman garrisons in Palestine, Syria and Iraq were to surrender.",
+   "kaynaklar": [
+    {
+     "ad": "Küre Ansiklopedisi",
+     "url": "https://kureansiklopedi.com/tr/detay/mondros-mutarekesi-2"
+    }
+   ]
+  },
+  {
+   "tarih": "1922-11-01",
+   "donem": "osmanli",
+   "baslik": "Saltanatın kaldırılması: Osmanlı Devleti sona erdi",
+   "baslik_en": "The sultanate is abolished: the end of the Ottoman state",
+   "metin": "Türkiye Büyük Millet Meclisi saltanatı kaldırdı; Osmanlı Devleti resmen sona erdi. Filistin’in yönetimi bu tarihten önce, 24 Temmuz 1922’de Milletler Cemiyeti kararıyla İngiltere’ye verilmişti.",
+   "metin_en": "The Grand National Assembly of Turkey abolished the sultanate, formally ending the Ottoman state. The administration of Palestine had already been given to Britain by the League of Nations on 24 July 1922.",
+   "kaynaklar": [
+    {
+     "ad": "Millî Eğitim Bakanlığı",
+     "url": "https://www.meb.gov.tr/belirligunler/10kasim/inkilaplari/siyasi/saltanat.htm"
+    }
+   ]
+  },
+  {
+   "tarih": "1921",
+   "donem": "manda",
+   "baslik": "İzzeddin el-Kassam Hayfa’ya yerleşti",
+   "baslik_en": "Izz al-Din al-Qassam settles in Haifa",
+   "metin": "1882’de Suriye’nin Cebele kasabasında doğan Kassam, Birinci Dünya Savaşı’nda Osmanlı ordusunda alay imamı olarak görev yaptı; savaştan sonra Suriye’de Fransızlara karşı direnişe katıldı. Fransızlar idamını isteyince 1921’de Hayfa’ya geçti; İstiklal Camii’nde imam ve hatip oldu, köyleri dolaşarak İngiliz işgaline, Siyonist yerleşime ve toprak satışına karşı halkı örgütledi.",
+   "metin_en": "Born in 1882 in Jableh, Syria, Qassam served as a regimental imam in the Ottoman army in the First World War and afterwards joined the resistance against the French in Syria. When the French sought his execution he moved to Haifa in 1921, where he became imam and preacher at the Istiqlal Mosque and toured the villages organising people against British occupation, Zionist settlement and land sales.",
+   "kaynaklar": [
+    {
+     "ad": "TDV İslâm Ansiklopedisi",
+     "url": "https://islamansiklopedisi.org.tr/kassam-izzeddin"
+    }
+   ]
+  },
+  {
+   "tarih": "1935-11-20",
+   "donem": "manda",
+   "baslik": "İzzeddin el-Kassam’ın öldürülmesi",
+   "baslik_en": "The killing of Izz al-Din al-Qassam",
+   "metin": "Kassam, Balfour Deklarasyonu’nun yıl dönümü olan 2 Kasım 1935’te İngilizlere karşı silahlı mücadele başlattı. 20 Kasım’da Nablus ile Cenin arasındaki Yabed’de İngiliz kuvvetleriyle çatışmada öldürüldü. Ölümü 1936 Büyük Arap İsyanı’nın kıvılcımlarından biri oldu; izleyicileri (Kassamiyyun) isyanda önemli rol oynadı.",
+   "metin_en": "Qassam began an armed struggle against the British on 2 November 1935, the anniversary of the Balfour Declaration. On 20 November he was killed in a clash with British forces at Ya’bad, between Nablus and Jenin. His death became one of the sparks of the 1936 Great Arab Revolt, in which his followers (the Qassamites) played a major role.",
+   "kaynaklar": [
+    {
+     "ad": "TDV İslâm Ansiklopedisi",
+     "url": "https://islamansiklopedisi.org.tr/kassam-izzeddin"
+    }
+   ]
+  },
+  {
+   "tarih": "1973",
+   "donem": "isgal",
+   "baslik": "Mücemma el-İslâmî: Gazze’de hayır kurumu",
+   "baslik_en": "Mujama al-Islami: a charity in Gaza",
+   "metin": "Şeyh Ahmed Yasin Gazze’de İslami Merkez’i (Mücemma el-İslâmî) kurdu: cami, sağlık ocağı, kreşler ve zekât komitesi işleten bir hayır ve sosyal hizmet kurumu. 1979’a kadar İsrail işgal yönetiminden resmî izin aldı; yönetimin, bu sosyal faaliyete göz yummanın FKÖ’nün etkisini zayıflatacağını düşündüğü aktarılır.",
+   "metin_en": "Sheikh Ahmed Yassin founded the Islamic Center (Mujama al-Islami) in Gaza: a charitable and social-service body running a mosque, a clinic, nurseries and a zakat committee. By 1979 it held an official permit from the Israeli occupation authorities, which reportedly believed tolerating its social work would weaken the PLO.",
+   "kaynaklar": [
+    {
+     "ad": "Filistin Araştırmaları Enstitüsü (PalQuest)",
+     "url": "https://www.palquest.org/en/node/23294"
+    }
+   ]
+  },
+  {
+   "tarih": "1987-12-14",
+   "donem": "intifada",
+   "baslik": "Hamas kuruldu",
+   "baslik_en": "Hamas is founded",
+   "metin": "Ahmed Yasin başkanlığında yedi kişi 9 Aralık’ta Gazze’de bir araya gelerek İslami Direniş Hareketi’ni (Hamas) kurdu; adı 14 Aralık’taki ilk bildiride, Birinci İntifada’nın başında duyuruldu. Hareket, İslami Merkez’in hayır ve sosyal hizmet ağından doğdu; silahlı kanadına sonradan İzzeddin el-Kassam’ın adı verildi.",
+   "metin_en": "Seven leaders headed by Ahmed Yassin met in Gaza on 9 December and founded the Islamic Resistance Movement (Hamas); its name was announced in its first communiqué on 14 December, at the start of the First Intifada. The movement grew out of the Islamic Center’s charitable and social-service network; its armed wing was later named after Izz al-Din al-Qassam.",
+   "kaynaklar": [
+    {
+     "ad": "Filistin Araştırmaları Enstitüsü (PalQuest)",
+     "url": "https://www.palquest.org/en/node/23294"
     }
    ]
   }

@@ -15,7 +15,7 @@
   var k = document.getElementById("olay");
 
   var DONUM = [];
-  fetch("site/donum.json?v=2").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
+  fetch("site/donum.json?v=4").then(function (r) { return r.json(); }).then(function (d) { DONUM = d.olaylar || []; }).catch(function () {})
   .then(function () { return fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)); }).then(function (r) { return r.json(); }).then(function (v) {
     var TA = {}; v.turler.forEach(function (t) { TA[t.anahtar] = t.ad; });
     var turAd = function (t) { return EN ? (TUR_EN[t] || TA[t] || t) : (TA[t] || t); };
@@ -84,9 +84,9 @@
       var ac = el("details", "kt-nasil"); ac.appendChild(el("summary", null, tt("Bu katalog nasıl yapılıyor?", "How is this catalogue made?")));
       ac.appendChild(el("p", null, tt("Katalog, İsrail’in Filistinlilere yönelik saldırı ve ihlallerini türlere ayırarak başlıklardan otomatik bulur: hastanelere, okullara, çadırlara, ibadethanelere saldırı, yardım bekleyenlere ateş, çocukların, gazetecilerin, sağlık çalışanlarının öldürülmesi, açlık ölümleri, toplu mezarlar, Mescid-i Aksa baskınları gibi. Bir türün kelimeleri aynı gün bölge basınında yeterince başlıkta geçince o gün olay sayılır; yer adı başlıklardan alınır ve bazen yanlış çıkabilir. Amaç, bu olayları hangi yayının yazıp hangisinin sustuğunu ölçmek.",
         "The catalogue automatically finds Israeli attacks and violations against Palestinians in the headlines, sorted by kind: attacks on hospitals, schools, tents and places of worship, fire on aid seekers, the killing of children, journalists and health workers, starvation deaths, mass graves, raids on Al-Aqsa and so on. A day counts as an event when the words of a kind appear in enough regional headlines that day; place names are taken from the headlines and are sometimes wrong. The aim is to measure which outlets covered these events and which stayed silent.")));
-      ac.appendChild(el("p", null, tt("7 Ekim gibi dönüm noktaları, ateşkesler, mahkeme kararları ve çadırları su basması gibi felaketler bu ölçüme girmez; onları yeşil şeritli “dönüm noktası” satırları olarak elle, kaynağıyla ekledik. 1917’den bugüne bütün tarihçe ayrı sayfada.",
-        "Turning points such as 7 October, ceasefires, court rulings and disasters such as flooded tents are not part of this measure; we added them by hand, with sources, as “turning point” rows. The full history since 1917 is on a separate page.")));
-      var ta = el("a", "kt-tam", tt("1917’den bugüne tarihçe →", "History since 1917 →")); ta.href = "tarihce.html"; ac.appendChild(ta);
+      ac.appendChild(el("p", null, tt("7 Ekim gibi dönüm noktaları, ateşkesler, mahkeme kararları ve çadırları su basması gibi felaketler bu ölçüme girmez; onları yeşil şeritli “dönüm noktası” satırları olarak elle, kaynağıyla ekledik. 1914’ten bugüne bütün tarihçe ayrı sayfada.",
+        "Turning points such as 7 October, ceasefires, court rulings and disasters such as flooded tents are not part of this measure; we added them by hand, with sources, as “turning point” rows. The full history since 1914 is on a separate page.")));
+      var ta = el("a", "kt-tam", tt("1914’ten bugüne tarihçe →", "History since 1914 →")); ta.href = "tarihce.html"; ac.appendChild(ta);
       b.appendChild(ac);
       var sr = el("div", "kt-sira"); sr.setAttribute("role", "group"); sr.setAttribute("aria-label", tt("Sıralama", "Order"));
       var ESKI = false; try { ESKI = localStorage.getItem("zbs-kt-sira") === "eski"; } catch (e) {}

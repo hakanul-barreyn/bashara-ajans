@@ -1,4 +1,4 @@
-// Tarihçe: 1917'den bugüne dönüm noktaları (site/donum.json, elle derlendi, her satır kaynağıyla)
+// Tarihçe: 1914'ten bugüne dönüm noktaları (site/donum.json, elle derlendi, her satır kaynağıyla)
 (function () {
   "use strict";
   var EN = window.DIL === "en", YER = EN ? "en-GB" : "tr-TR";
@@ -10,16 +10,16 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=2").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=4").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
       var b = el("header", "rp-bas");
-      b.append(el("h1", null, tt("1917’den bugüne", "From 1917 to today")),
-        el("p", "rp-dek", tt("Balfour Deklarasyonu’ndan Gazze soykırımına Filistin’in dönüm noktaları. Her satırın kaynağı bağlantılı; 7 Ekim 2023’ten sonrası için olay kataloğu başlıklardan gün gün bulunan olayları da gösteriyor.",
-          "Palestine’s turning points from the Balfour Declaration to the Gaza genocide. Each entry links to its source; for the period since 7 October 2023 the event catalogue also shows the events found day by day in the headlines.")));
+      b.append(el("h1", null, tt("1914’ten bugüne", "From 1914 to today")),
+        el("p", "rp-dek", tt("Osmanlı’nın Birinci Dünya Savaşı’na girişinden Gazze soykırımına Filistin’in dönüm noktaları. Her satırın kaynağı bağlantılı; 7 Ekim 2023’ten sonrası için olay kataloğu başlıklardan gün gün bulunan olayları da gösteriyor.",
+          "Palestine’s turning points from the Ottoman entry into the First World War to the Gaza genocide. Each entry links to its source; for the period since 7 October 2023 the event catalogue also shows the events found day by day in the headlines.")));
       var sr = el("div", "kt-sira");
-      [[false, tt("1917’den bugüne", "From 1917 onwards")], [true, tt("Bugünden geriye", "Newest first")]].forEach(function (x) {
+      [[false, tt("1914’ten bugüne", "From 1914 onwards")], [true, tt("Bugünden geriye", "Newest first")]].forEach(function (x) {
         var d = el("button", null, x[1]); d.type = "button"; d.setAttribute("aria-pressed", String(YENI === x[0]));
         d.onclick = function () { try { localStorage.setItem("zbs-tarihce-sira", x[0] ? "yeni" : "eski"); } catch (e) {} ciz(); };
         sr.appendChild(d);
@@ -45,7 +45,7 @@
         });
         s.appendChild(ol); k.appendChild(s);
       });
-      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi; kaynaklar Britannica, BM belgeleri, Uluslararası Adalet Divanı, Filistin Araştırmaları Enstitüsü, Al Jazeera, Middle East Eye, Anadolu Ajansı ve Türk Tarih Kurumu Belleten’den; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand; sources are Britannica, UN documents, the International Court of Justice, the Institute for Palestine Studies, Al Jazeera, Middle East Eye, Anadolu Agency and the Turkish Historical Society’s Belleten; tell us about any entry you think is missing or wrong.")));
+      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi; kaynaklar TDV İslâm Ansiklopedisi, Britannica, BM belgeleri, Uluslararası Adalet Divanı, Filistin Araştırmaları Enstitüsü, Al Jazeera, Middle East Eye, Anadolu Ajansı ve Türk Tarih Kurumu Belleten’den; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand; sources are the TDV Encyclopedia of Islam, Britannica, UN documents, the International Court of Justice, the Institute for Palestine Studies, Al Jazeera, Middle East Eye, Anadolu Agency and the Turkish Historical Society’s Belleten; tell us about any entry you think is missing or wrong.")));
       var h = location.hash.slice(1); if (h) { var y = document.getElementById(h); if (y) y.scrollIntoView(); }
     }
     ciz();
