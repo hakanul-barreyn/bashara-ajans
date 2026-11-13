@@ -1,6 +1,7 @@
 // Tarihçe: 1914'ten bugüne dönüm noktaları (site/donum.json, elle derlendi, her satır kaynağıyla)
 (function () {
   "use strict";
+  var KISI_SIRA = 0;
   var EN = window.DIL === "en", YER = EN ? "en-GB" : "tr-TR";
   function tt(tr, en) { return EN ? en : tr; }
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
@@ -10,7 +11,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=7").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=8").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -58,10 +59,13 @@
           var kis = o.kisiler || [];
           if (kis.length) {
             li.className = "kisili";
-            var yan = el("aside", "th-yan"); yan.setAttribute("aria-label", tt("Kişiler", "People"));
+            KISI_SIRA++;
+            var yan = el("aside", "th-yan " + (KISI_SIRA % 2 ? "sag" : "sol")); yan.setAttribute("aria-label", tt("Kişiler", "People"));
             kis.forEach(function (q) {
-              var kk = el("div", "th-kisi");
-              kk.append(el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""), el("p", null, EN ? q.metin_en : q.metin));
+              // telefonda kapalı gelir (dokununca açılır), geniş ekranda açık
+              var kk = el("details", "th-kisi"); if (window.matchMedia("(min-width:641px)").matches) kk.open = true;
+              var sm = el("summary"); sm.append(el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""));
+              kk.append(sm, el("p", null, EN ? q.metin_en : q.metin));
               if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
               yan.appendChild(kk);
             });
