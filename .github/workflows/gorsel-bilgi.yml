@@ -1,0 +1,66 @@
+name: Görsel bilgisi (Commons / Kongre Kütüphanesi)
+# Yöneticinin seçtiği görsellerin lisans bilgisini ve küçük bir önizlemesini indirir (gorsel-bilgi dalına); sitede bir şey değiştirmez.
+on:
+  workflow_dispatch:
+    inputs:
+      basliklar:
+        description: "Commons dosya adları (File:...), | ile ayrılmış"
+        required: false
+      loc:
+        description: "Kongre Kütüphanesi kimlikleri (ör. matpc.15713), | ile ayrılmış"
+        required: false
+permissions:
+  contents: write
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: İndir
+        env:
+          BASLIKLAR: ${{ inputs.basliklar }}
+          LOC: ${{ inputs.loc }}
+        run: |
+          mkdir -p cikti
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.parse, re, time
+          UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+          def al(u):
+              return urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=60).read()
+          sonuc = {}
+          for b in [x.strip() for x in os.environ.get("BASLIKLAR", "").split("|") if x.strip()]:
+              q = urllib.parse.urlencode({"action": "query", "format": "json", "titles": b, "prop": "imageinfo",
+                                          "iiprop": "url|extmetadata|size", "iiurlwidth": 1200})
+              try:
+                  v = json.loads(al("https://commons.wikimedia.org/w/api.php?" + q))
+                  p = next(iter(v["query"]["pages"].values()))
+                  ii = p["imageinfo"][0]
+                  md = {k: (x or {}).get("value") for k, x in ii.get("extmetadata", {}).items()
+                        if k in ("LicenseShortName", "Artist", "Credit", "ImageDescription", "DateTimeOriginal", "UsageTerms", "Restrictions", "Copyrighted")}
+                  sonuc[b] = {"thumb": ii.get("thumburl"), "sayfa": ii.get("descriptionurl"), "w": ii.get("width"), "h": ii.get("height"), "md": md}
+                  ad = re.sub(r"[^A-Za-z0-9]+", "_", b)[:60] + ".jpg"
+                  open("cikti/" + ad, "wb").write(al(ii.get("thumburl").replace("/1200px-", "/500px-")))
+                  sonuc[b]["dosya"] = ad
+              except Exception as e:
+                  sonuc[b] = {"hata": str(e)}
+              time.sleep(1)
+          for k in [x.strip() for x in os.environ.get("LOC", "").split("|") if x.strip()]:
+              try:
+                  v = json.loads(al(f"https://www.loc.gov/pictures/item/{k.split('.')[-1] if False else k}/?fo=json"))
+                  sonuc["loc:" + k] = v
+              except Exception as e:
+                  try:
+                      v = json.loads(al(f"https://www.loc.gov/pictures/resource/{k}/?fo=json"))
+                      sonuc["loc:" + k] = v
+                  except Exception as e2:
+                      sonuc["loc:" + k] = {"hata": str(e) + " / " + str(e2)}
+          json.dump(sonuc, open("cikti/bilgi.json", "w"), ensure_ascii=False, indent=1)
+          PY
+      - name: Dala yaz
+        run: |
+          cd cikti
+          git init -q && git checkout -q -b gorsel-bilgi
+          git config user.name "zbs-bot" && git config user.email "zbs-bot@users.noreply.github.com"
+          git add -A && git commit -qm "görsel bilgisi"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gorsel-bilgi
