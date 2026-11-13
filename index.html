@@ -20,7 +20,7 @@
 <link rel="alternate" type="application/rss+xml" data-marka-sablon="{ad}" data-marka-oznitelik="title" title="ZBS" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611121250">
+<link rel="stylesheet" href="site/stil.css?v=202611131600">
 <script src="site/dil.js?v=202611090500"></script>
 <script src="site/marka.js?v=202611081749"></script>
 </head>
@@ -50,7 +50,9 @@
     <a class="ss-oge" href="olaylar.html#gercek" hidden><b data-sayac="gun" data-bas="2023-10-07">–</b><span data-dil="tr"><strong>gündür soykırım sürüyor.</strong> Gerçekte ne oldu, ne kadarı haber oldu?</span><span data-dil="en"><strong>days of genocide.</strong> What really happened, and how much of it became news?</span><i aria-hidden="true">→</i></a>
     <a class="ss-oge" href="isimler.html" hidden><b>∞</b><span data-dil="tr"><strong>İsimleri vardı.</strong> Gazze’de öldürülen ve kimliği belirlenen her insan, adıyla.</span><span data-dil="en"><strong>They had names.</strong> Every identified person killed in Gaza, by name.</span><i aria-hidden="true">→</i></a>
   </div>
-  <div class="suzgec">
+  <button class="suzgec-ac" id="suzgecAc" type="button" aria-controls="suzgec" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Ara · Süz</span></button>
+  <div class="suzgec" id="suzgec">
+    <button class="suzgec-kapat" id="suzgecKapat" type="button" aria-label="Kapat">×</button>
     <div class="suzgec-ust">
       <div class="ara-kutu">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -84,7 +86,7 @@
 
 <script src="site/kutlama.js?v=202611121320"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="site/uygulama.js?v=202611121320"></script>
+<script src="site/uygulama.js?v=202611131600"></script>
 <script src="site/sayac.js?v=202611112340"></script>
 </body>
 </html>

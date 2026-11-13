@@ -14,6 +14,8 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.parse
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -28,6 +30,9 @@ FOTO_KATEGORI = ["Destruction in the Gaza Strip", "Damage in the Gaza Strip duri
 # İsrail ordusu, hükümet basın ofisi ve silahlı grupların resmî görselleri alınmaz
 YASAK_KAYNAK = re.compile(r"\bIDF\b|Israel Defense Forces|IDF Spokesperson|צה\"?ל|דובר|Government Press Office|\bGPO\b|Kobi Gideon|"
                           r"Haim Zach|Amos Ben Gershom|Avi Ohayon|Hamas|Qassam|Hezbollah", re.I)
+# dosya adı ya da açıklama Gazze'deki bir yeri anmalı (İsrail ya da başka bir ülkedeki yıkım alınmaz)
+GAZZE_AD = re.compile(r"gaza|gazze|غزة|khan[ _-]?y[ou]n|rafah|jabal[iy]a|jabalya|deir[ _-]?(?:al|el)[ _-]?bala|beit[ _-]?(?:hanoun|lahia|lahiya)|"
+                      r"shati|nuseirat|bureij|maghazi|zeitoun|zaitoun|shuja|rimal|remal|mawasi|tal[ _-]?al[ _-]?hawa|abasan|khuza|bani[ _-]?suhaila", re.I)
 FOTO_TALIMAT = ("Bu fotoğraf bir haber sitesinde \"Gazze'den: yıkım\" başlıklı bir kartta gösterilecek. Yalnızca JSON döndür: "
                 "{\"insan\": true|false, \"siddet\": true|false, \"mustehcen\": true|false, \"yikim\": true|false, \"asker\": true|false, "
                 "\"yazi_grafik\": true|false, \"aciklama\": \"...\", \"aciklama_en\": \"...\"}. "
@@ -83,12 +88,15 @@ def fotolar(cikti, anahtar, model, en_cok=10, en_cok_deneme=36):
             continue
         if a["sayfa"] in red or YASAK_KAYNAK.search(a["atif"]) or YASAK_KAYNAK.search(a["sayfa"]):
             continue
+        if not GAZZE_AD.search(urllib.parse.unquote(a["sayfa"])):
+            red.add(a["sayfa"]); continue
         yil = a.get("yil")
         if yil is not None and yil < 2023:
             red.add(a["sayfa"]); continue
         if en_cok_deneme <= 0 or len(secilen) >= en_cok:
             continue
         en_cok_deneme -= 1
+        time.sleep(4)   # Wikimedia'nın istek sınırı: sık indirmeye 429 döner
         try:
             veri, tur = GD._indir(a["url"])
             if not veri:
@@ -96,6 +104,8 @@ def fotolar(cikti, anahtar, model, en_cok=10, en_cok_deneme=36):
             c = _gemini(anahtar, model, veri, tur, FOTO_TALIMAT)
         except Exception as e:   # noqa: BLE001
             print("denetim hatası", a["sayfa"][-60:], e)
+            if "429" in str(e):
+                time.sleep(60)
             continue
         uygun = c.get("yikim") is True and not any(c.get(k) is not False for k in ("insan", "siddet", "mustehcen", "asker", "yazi_grafik"))
         print("uygun" if uygun else "red", a["sayfa"][-70:], {k: c.get(k) for k in ("insan", "siddet", "yikim", "asker")})

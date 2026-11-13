@@ -635,14 +635,54 @@ body{overflow-x:clip}
 .sayac-kart strong{font:700 1.25rem/1.2 "Source Serif 4",Georgia,serif;color:#fff;margin-top:8px}
 .sayac-kart .sk-alt{font-size:.88rem;line-height:1.45;color:#d9b9b4}
 .sayac-kart i{font-style:normal;font-weight:700;color:#e07b73;margin-top:10px}
-/* telefonda Instagram gibi: her haber ekranı doldurur, kaydırınca bir sonrakine oturur (hafif: yalnızca CSS scroll-snap) */
+/* akıştaki özel kartlar: Gazze'den fotoğraflar, uydudan Gazze */
+.ozel-kart{position:relative;background:#111614;color:#eef0ec;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ok-ust{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px 10px}
+.ok-etiket{font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#9fd3b8}
+.ok-sira{font:600 .74rem var(--mono);color:#aab3ad}
+.ok-sahne{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.ok-sahne::-webkit-scrollbar{display:none}
+.ok-foto{flex:0 0 100%;scroll-snap-align:start;margin:0;display:flex;flex-direction:column;min-width:0}
+.ok-foto img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#222}
+.ok-foto figcaption{padding:8px 16px 0;font-size:.78rem;line-height:1.4;color:#c5ccc7;display:flex;flex-direction:column;gap:2px}
+.ok-foto figcaption a{color:#8d9791;text-decoration:none;font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ok-ok{position:absolute;top:calc(44px + 37%);transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:1.5rem;line-height:1;cursor:pointer}
+.ok-geri{left:8px}.ok-ileri{right:8px}
+.ok-alt{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:10px 16px 16px;font-size:.74rem;line-height:1.4;color:#8d9791;margin-top:auto}
+.uydu-resim{display:block;background:#0a0d0c}
+.uydu-resim img{width:100%;max-height:560px;object-fit:contain;display:block}
+.kart-paylas{flex:0 0 auto;font:700 .78rem "Plus Jakarta Sans",system-ui,sans-serif;padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer}
+.kart-paylas:hover{background:rgba(255,255,255,.12)}
+.sayac-kart .kart-paylas{align-self:flex-start;margin-top:12px}
+.suzgec-ac,.suzgec-kapat{display:none}
+
+/* telefonda TikTok / Reels gibi: her kart bir ekran, tek kaydırmada bir sonrakine oturur; arama ve süzgeç alttaki düğmede */
 @media (max-width:700px){
-  html{scroll-snap-type:y proximity}
-  .akis>article,.akis>.sayac-kart{scroll-snap-align:start;scroll-margin-top:calc(var(--ust) + 8px);min-height:calc(100svh - var(--ust) - 24px)}
-  .akis>article{display:flex;flex-direction:column}
-  .akis>article .gorsel{flex:0 0 auto}
-  .sayac-kart{justify-content:center}
+  html{scroll-snap-type:y mandatory}
+  html:has(body.suzgec-acik){scroll-snap-type:none}
+  .ust,#gundem,#analizler,.sayac-serit,.akis>.harita-bolum,.akis>.nota,.akis>.bos,.akis>.odak-geri{scroll-snap-align:start}
+  .akis{gap:0;margin:0 calc(-1 * max(var(--kanat), env(safe-area-inset-left, 0px)))}
+  .akis>article,.akis>.sayac-kart,.akis>.ozel-kart{scroll-snap-align:start;scroll-snap-stop:always;min-height:100svh;border-radius:0;box-shadow:none;
+    border-bottom:1px solid var(--cizgi);padding-bottom:calc(70px + env(safe-area-inset-bottom, 0px))}
+  .akis>article{display:flex;flex-direction:column;justify-content:center}
+  .akis>article .gorsel{flex:1 1 42svh;aspect-ratio:auto;min-height:34svh;max-height:56svh}
+  .akis>article .gorsel img{width:100%;height:100%;object-fit:cover}
+  .akis>.ozel-kart{justify-content:center}
+  .ozel-kart .ok-foto img{aspect-ratio:auto;height:58svh}
+  .ok-ok{top:calc(44px + 29svh)}
+  .uydu-resim img{max-height:68svh}
+  .sayac-kart{justify-content:center;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
   .sayac-kart b{font-size:5.5rem}
+  /* arama ve süzgeç: alttan açılan panel */
+  .suzgec{display:none}
+  body.suzgec-acik .suzgec{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:2000;max-height:84svh;overflow:auto;overscroll-behavior:contain;
+    margin:0;padding:56px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    background:var(--bg);border-radius:20px 20px 0 0;box-shadow:0 0 0 100vmax rgba(0,0,0,.4),0 -12px 40px rgba(0,0,0,.28);border-bottom:0}
+  .suzgec-kapat{display:block;position:absolute;top:8px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--yuzey2);color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer}
+  .suzgec-ac{display:inline-flex;align-items:center;gap:8px;position:fixed;z-index:1500;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));
+    padding:11px 16px;border-radius:999px;border:0;background:#0c0e0d;color:#fff;font:700 .86rem "Plus Jakarta Sans",system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3);cursor:pointer}
+  .suzgec-ac svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2}
+  body.suzgec-acik .suzgec-ac{display:none}
 }
 .slayt-arka a.kredi{text-decoration:none;max-width:min(60vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .karne-acik{display:grid;grid-template-columns:minmax(10rem,auto) 1fr;gap:6px 16px;margin:8px 0 10px;font-size:.84rem;line-height:1.45}

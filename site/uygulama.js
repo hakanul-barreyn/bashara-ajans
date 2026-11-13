@@ -345,6 +345,73 @@
     return { kamp, tur, cizgi, toplam: n };
   }
   let gundemArsiv = null;
+  // Telefonda arama ve süzgeç alttaki düğmeden açılan bir panelde: akışın tam ekran kaymasını bölmesin
+  (function () {
+    const ac = $("suzgecAc"), kap = $("suzgecKapat"); if (!ac) return;
+    const ayarla = (acik) => { document.body.classList.toggle("suzgec-acik", acik); ac.setAttribute("aria-expanded", String(acik)); if (acik) setTimeout(() => { const f = $("fAra"); if (f && matchMedia("(min-width:701px)").matches === false) f.focus({ preventScroll: true }); }, 50); };
+    ac.onclick = () => ayarla(!document.body.classList.contains("suzgec-acik"));
+    if (kap) kap.onclick = () => ayarla(false);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") ayarla(false); });
+    // bir süzgeç seçilince panel kapanır ve akış başa döner
+    document.addEventListener("click", (e) => { if (document.body.classList.contains("suzgec-acik") && e.target.closest && !e.target.closest("#suzgec, #suzgecAc")) { e.preventDefault(); e.stopPropagation(); ayarla(false); return; } if (document.body.classList.contains("suzgec-acik") && e.target.closest && e.target.closest("#suzgec .cip, #suzgec .sehir-cip")) setTimeout(() => ayarla(false), 120); }, true);
+    const f = $("fAra"); if (f) f.addEventListener("keydown", (e) => { if (e.key === "Enter") { f.blur(); ayarla(false); } });
+  })();
+  // Günlük görseller (uydu, Gazze fotoğrafları): gorsel dalından, günde bir
+  let GAZZE_FOTO = [], UYDU = null;
+  const gunT = Math.floor(Date.now() / 36e5);
+  fetch("data/gorsel/gazze-foto.json?t=" + gunT).then((r) => r.json()).then((d) => { GAZZE_FOTO = (d.fotolar || []).filter((f) => f.url); }).catch(() => {});
+  fetch("data/gorsel/uydu/uydu.json?t=" + gunT).then((r) => r.json()).then((d) => { if (d && d.tarih) UYDU = d; }).catch(() => {});
+  // özel kartlar için paylaş: telefonda paylaşım menüsü, yoksa bağlantıyı kopyala
+  function kartPaylas(baslik, url) {
+    const b = el("button", "kart-paylas", "Paylaş"); b.type = "button";
+    b.onclick = async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (navigator.share) { try { await navigator.share({ title: baslik, url }); } catch (x) {} return; }
+      try { await navigator.clipboard.writeText(url); b.textContent = "Kopyalandı ✓"; } catch (x) { prompt("Bağlantı", url); }
+      setTimeout(() => (b.textContent = "Paylaş"), 2000);
+    };
+    return b;
+  }
+  function fotoKart() {
+    if (!GAZZE_FOTO.length) return null;
+    const EN = window.DIL === "en", k = el("section", "ozel-kart foto-kart"); k.setAttribute("aria-label", EN ? "Photos from Gaza" : "Gazze'den fotoğraflar");
+    const ust = el("div", "ok-ust"); ust.append(el("span", "ok-etiket", EN ? "From Gaza · destruction" : "Gazze'den · yıkım"), el("span", "ok-sira"));
+    const sahne = el("div", "ok-sahne");
+    GAZZE_FOTO.forEach((f, i) => {
+      const fig = el("figure", "ok-foto"); const im = el("img"); im.src = f.url; im.alt = (EN ? f.aciklama_en : f.aciklama) || (EN ? "Destruction in Gaza" : "Gazze'de yıkım");
+      im.loading = i ? "lazy" : "eager"; im.decoding = "async"; im.onerror = () => fig.remove();
+      const fc = el("figcaption"); const ac = EN ? f.aciklama_en : f.aciklama; if (ac) fc.appendChild(el("span", null, ac + (f.yil ? " · " + f.yil : "")));
+      const a = el("a", null, f.atif); a.href = f.sayfa; a.target = "_blank"; a.rel = "noopener"; a.onclick = (e) => e.stopPropagation(); fc.appendChild(a);
+      fig.append(im, fc); sahne.appendChild(fig);
+    });
+    const sira = ust.querySelector(".ok-sira");
+    const say = () => { const i = Math.round(sahne.scrollLeft / Math.max(1, sahne.clientWidth)); sira.textContent = (i + 1) + " / " + sahne.children.length; };
+    sahne.addEventListener("scroll", () => requestAnimationFrame(say), { passive: true });
+    const git = (d) => sahne.scrollBy({ left: d * sahne.clientWidth, behavior: "smooth" });
+    const geri = el("button", "ok-ok ok-geri", "‹"), ileri = el("button", "ok-ok ok-ileri", "›");
+    geri.type = ileri.type = "button"; geri.setAttribute("aria-label", EN ? "Previous" : "Önceki"); ileri.setAttribute("aria-label", EN ? "Next" : "Sonraki");
+    geri.onclick = (e) => { e.stopPropagation(); git(-1); }; ileri.onclick = (e) => { e.stopPropagation(); git(1); };
+    const alt = el("div", "ok-alt");
+    alt.append(el("span", null, EN ? "Openly licensed photos from Wikimedia Commons, checked to show no people and no violence." : "Wikimedia Commons'tan açık lisanslı fotoğraflar; insan ve şiddet görüntüsü içermediği denetlendi."),
+      kartPaylas(EN ? "Photos from Gaza" : "Gazze'den fotoğraflar", location.origin + location.pathname));
+    k.append(ust, sahne, geri, ileri, alt); setTimeout(say, 0);
+    return k;
+  }
+  function uyduKart() {
+    if (!UYDU) return null;
+    const EN = window.DIL === "en", k = el("section", "ozel-kart uydu-kart");
+    const tarihY = new Date(UYDU.tarih + "T12:00:00Z").toLocaleDateString(EN ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
+    k.setAttribute("aria-label", EN ? "Gaza from space" : "Uydudan Gazze");
+    const ust = el("div", "ok-ust"); ust.append(el("span", "ok-etiket", EN ? "Gaza from space" : "Uydudan Gazze"), el("span", "ok-sira", tarihY));
+    const a = el("a", "uydu-resim"); a.href = "data/gorsel/uydu/gazze.jpg"; a.target = "_blank"; a.rel = "noopener";
+    const im = el("img"); im.src = "data/gorsel/uydu/gazze-kucuk.jpg?t=" + gunT; im.alt = EN ? "Satellite image of the Gaza Strip, " + tarihY : "Gazze Şeridi'nin uydu görüntüsü, " + tarihY;
+    im.loading = "lazy"; im.decoding = "async"; a.appendChild(im);
+    const alt = el("div", "ok-alt");
+    alt.append(el("span", null, (EN ? "Latest low-cloud Sentinel-2 image (10 m). Tap for full size. " : "Bulutsuz en son Sentinel-2 görüntüsü (10 m çözünürlük). Büyük hali için dokunun. ") + UYDU.atif),
+      kartPaylas(EN ? "Gaza from space, " + tarihY : "Uydudan Gazze, " + tarihY, new URL("data/gorsel/uydu/gazze.jpg", location.href).href));
+    k.append(ust, a, alt);
+    return k;
+  }
   fetch("data/gundem.json?t=" + Math.floor(Date.now() / 3e5)).then((r) => r.json()).then((d) => { gundemArsiv = d.olaylar || []; if (Object.keys(kaynaklar).length && olaylar.length + gundemArsiv.length) gundemCiz(); }).catch(() => {});
   function kapsama(o) {
     const ks = new Map();
@@ -829,7 +896,7 @@
       a.append(el("span", "sk-ust", EN ? "Detained doctor" : "Tutuklu hekim"), el("b", null, gun.toLocaleString(EN ? "en-GB" : "tr-TR")),
         el("span", "sk-gun", EN ? "days detained" : "gündür tutuklu"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
         el("span", "sk-alt", EN ? "Director of Kamal Adwan Hospital. No charge, no trial, tortured." : "Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok, işkence var."),
-        el("i", null, EN ? "His story →" : "Hikâyesi →"));
+        el("i", null, EN ? "His story →" : "Hikâyesi →"), kartPaylas(EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye", new URL("ebu-safiye.html", location.href).href));
       return a;
     }
     const akis = $("akis");
@@ -859,6 +926,8 @@
       if (bilinen && !bilinen.has(h.id)) k.classList.add("taze");
       akis.appendChild(k);
       if (i === 4 && !secOlay) akis.appendChild(sayacKart());
+      if (i === 9 && !secOlay) { const f = fotoKart(); if (f) akis.appendChild(f); }
+      if (i === 15 && !secOlay) { const u = uyduKart(); if (u) akis.appendChild(u); }
       if (i === HARITA_SIRA - 1 && HARITA_BOLUM && !secOlay) akis.appendChild(HARITA_BOLUM);
     });
     if (HARITA_BOLUM) { if (secOlay) HARITA_BOLUM.remove(); else if (!HARITA_BOLUM.isConnected || HARITA_BOLUM.parentNode !== akis) akis.appendChild(HARITA_BOLUM); }
