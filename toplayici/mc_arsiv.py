@@ -99,12 +99,15 @@ def main():
     K = {str(k["id"]): k for k in oku("kaynaklar.json", [])}
     bizim_tr = [v["mc"]["id"] for kid, v in kapsam.items() if v.get("mc") and (K.get(kid) or {}).get("ulke") == "Türkiye"]
     bizim = [v["mc"]["id"] for v in kapsam.values() if v.get("mc")]
-    # iş sırası: Türkiye koleksiyonları, bizim Türkiye basını, bizim bütün liste
-    gruplar = [("tr-" + str(c["id"]), {"collection_ids": [c["id"]]}) for c in durum["turkiye"]]
+    # iş sırası: önce bizim listemiz (Türkiye basını en başta; raporların yeniden değerlendirmesi bu veriye dayanır),
+    # sonra Media Cloud'un geniş Türkiye koleksiyonları
+    gruplar = []
     if bizim_tr:
         gruplar.append(("liste-tr", {"source_ids": bizim_tr}))
-    for i in range(0, len(bizim), 40):
-        gruplar.append((f"liste-{i // 40:02d}", {"source_ids": bizim[i:i + 40]}))
+    digerleri = [i for i in bizim if i not in set(bizim_tr)]
+    for i in range(0, len(digerleri), 40):
+        gruplar.append((f"liste-{i // 40:02d}", {"source_ids": digerleri[i:i + 40]}))
+    gruplar += [("tr-" + str(c["id"]), {"collection_ids": [c["id"]]}) for c in durum["turkiye"]]
     aylar = ay_listesi()
     toplam = 0
     for grup, secim in gruplar:
