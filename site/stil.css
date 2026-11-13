@@ -837,7 +837,7 @@ body{overflow-x:clip}
   html.deste-modu .birim-bilgi .ok-foto img{height:52svh}
   html.deste-modu .birim-bilgi .uk-kutu{max-height:54svh;width:min(100%,54svh)}
   /* durak ve son */
-  html.deste-modu .birim-mola,html.deste-modu .birim-son{background:var(--bg);color:var(--ink)}
+  html.deste-modu .birim-mola,html.deste-modu .birim-son,html.deste-modu .birim-devam{background:var(--bg);color:var(--ink)}
   html.deste-modu .ml-baslik{font:700 1.7rem/1.15 var(--serif);margin:0;text-wrap:balance}
   html.deste-modu .ml-liste{list-style:none;margin:0;padding:0;border-top:1px solid var(--cizgi)}
   html.deste-modu .ml-liste li{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid var(--cizgi)}

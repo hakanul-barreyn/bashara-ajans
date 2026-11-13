@@ -1180,8 +1180,7 @@
     u.appendChild(birimUst(EN ? "End of today's file" : "Günün dosyasının sonu"));
     const g = el("div", "b-govde");
     g.appendChild(el("h2", "ml-baslik", EN ? "That's the last 24 hours." : "Son 24 saat bu kadar."));
-    g.appendChild(el("p", "ml-not", EN ? b.kalan + " more items did not fit in the file. You can read every item in time order."
-      : "Dosyaya sığmayan " + b.kalan.toLocaleString(YR) + " haber daha var. Bütün haberleri saat sırasıyla da okuyabilirsin."));
+    g.appendChild(el("p", "ml-not", EN ? "You can also read every item in time order, one by one." : "Bütün haberleri tek tek, saat sırasıyla da okuyabilirsin."));
     const ey = el("div", "ml-eylem");
     const kr = el("button", "b-dugme", EN ? "All items in time order" : "Saat sırasıyla bütün haberler"); kr.type = "button";
     kr.onclick = () => { desteAcik = false; kac = SAYFA; ciz(true); };
@@ -1190,23 +1189,47 @@
     ey.append(kr, r, t); g.appendChild(ey); u.appendChild(g);
     return u;
   }
+  const DESTE_ILK = 40, DESTE_EK = 40;
+  function devamBirim(kalan, sonra) {
+    const EN = window.DIL === "en", u = birim("devam");
+    u.appendChild(birimUst(EN ? "More" : "Devamı"));
+    const g = el("div", "b-govde");
+    g.appendChild(el("h2", "ml-baslik", EN ? "That was the main file." : "Günün ana dosyası bu kadar."));
+    g.appendChild(el("p", "ml-not", EN ? kalan + " more cards from the last 24 hours." : "Son 24 saatten " + kalan.toLocaleString(YR) + " kart daha var."));
+    const ey = el("div", "ml-eylem");
+    const d = el("button", "b-dugme", EN ? "Show other stories too" : "Diğer haberleri de göster"); d.type = "button";
+    d.onclick = () => { const ilk = sonra(); u.remove(); if (ilk) ilk.scrollIntoView({ behavior: "auto" }); };
+    const r = el("a", "b-dugme ikincil", EN ? "Reports" : "Raporlar"); r.href = "raporlar.html";
+    ey.append(d, r); g.appendChild(ey); u.appendChild(g);
+    return u;
+  }
   function desteCiz(akis) {
     const olaylarHepsi = (olaylar || []).concat(gundemArsiv || []);
-    const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now());
+    const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now(), { enCokBirim: 400 });
     const yayin = new Set(gor.filter((h) => dk(h.tarih) < 1440).map((h) => h.kaynak)).size;
-    r.deste.forEach((b) => {
-      let u = null;
-      if (b.tur === "kapak") u = kapakBirim(b, { haber: r.istatistik.haber, yayin });
-      else if (b.tur === "hikaye") u = hikayeBirim(b);
-      else if (b.tur === "seri") u = seriBirim(b);
-      else if (b.tur === "analiz") u = analizBirim(b);
-      else if (b.tur === "kisa") u = kisaBirim(b);
-      else if (b.tur === "tek") u = tekBirim(b);
-      else if (b.tur === "bilgi") u = bilgiBirim(b.tip);
-      else if (b.tur === "mola") u = molaBirim(b);
-      else if (b.tur === "son") u = sonBirim(b);
-      if (u) akis.appendChild(u);
-    });
+    const ciz1 = (b) => {
+      if (b.tur === "kapak") return kapakBirim(b, { haber: r.istatistik.haber, yayin });
+      if (b.tur === "hikaye") return hikayeBirim(b);
+      if (b.tur === "seri") return seriBirim(b);
+      if (b.tur === "analiz") return analizBirim(b);
+      if (b.tur === "kisa") return kisaBirim(b);
+      if (b.tur === "tek") return tekBirim(b);
+      if (b.tur === "bilgi") return bilgiBirim(b.tip);
+      if (b.tur === "mola") return molaBirim(b);
+      if (b.tur === "son") return sonBirim(b);
+      return null;
+    };
+    // önce ilk 40 kart; sonra okur isterse 40'ar 40'ar devamı
+    let i = 0;
+    const parti = (n) => {
+      let ilk = null; const son = Math.min(r.deste.length, i + n);
+      for (; i < son; i++) { const u = ciz1(r.deste[i]); if (u) { akis.appendChild(u); ilk = ilk || u; } }
+      // kalan yalnızca "son" kartıysa onu da hemen ekle
+      if (r.deste.length - i === 1) { const u = ciz1(r.deste[i++]); if (u) akis.appendChild(u); }
+      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.length - i - 1, () => parti(DESTE_EK)));
+      return ilk;
+    };
+    parti(DESTE_ILK);
     // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
     let ci = document.querySelector(".deste-ilerleme");
     if (!ci) { ci = el("div", "deste-ilerleme"); ci.appendChild(el("i")); document.body.appendChild(ci); }
