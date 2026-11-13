@@ -10,7 +10,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=6").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=7").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -53,7 +53,21 @@
           }
           var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
           if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
-          li.appendChild(ic); ol.appendChild(li);
+          li.appendChild(ic);
+          // yan sütun: olayla ilgili kişilerin kısa biyografileri
+          var kis = o.kisiler || [];
+          if (kis.length) {
+            li.className = "kisili";
+            var yan = el("aside", "th-yan"); yan.setAttribute("aria-label", tt("Kişiler", "People"));
+            kis.forEach(function (q) {
+              var kk = el("div", "th-kisi");
+              kk.append(el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""), el("p", null, EN ? q.metin_en : q.metin));
+              if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
+              yan.appendChild(kk);
+            });
+            li.appendChild(yan);
+          }
+          ol.appendChild(li);
         });
         s.appendChild(ol); k.appendChild(s);
       });
