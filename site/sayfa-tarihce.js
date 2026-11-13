@@ -11,7 +11,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=8").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=9").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -40,16 +40,20 @@
           var li = el("li");
           li.appendChild(el("time", null, tarihAd(o.tarih)));
           var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
-          var gs = (o.gorseller || (o.gorsel ? [o.gorsel] : [])).filter(function (g) { return g && g.url; });
-          if (gs.length) {
-            var gk = el("div", "th-gorseller" + (gs.length > 1 ? " cok" : ""));
-            gs.forEach(function (g) {
-              var f = el("figure", "th-gorsel"), im = el("img"); im.src = g.url; im.alt = (EN ? g.aciklama_en : g.aciklama) || (EN ? o.baslik_en : o.baslik); im.loading = "lazy"; im.decoding = "async";
+          var hepsi = (o.gorseller || (o.gorsel ? [o.gorsel] : [])).filter(function (g) { return g && g.url; });
+          // "yan": görsel geniş ekranda sol kanatta durur; telefonda kanat gizli olduğundan metnin içinde de gösterilir
+          var gs = hepsi.filter(function (g) { return !g.yan; }), yanG = hepsi.filter(function (g) { return g.yan; });
+          var figur = function (g, sinif) {
+              var f = el("figure", "th-gorsel" + (g.genis ? " genis" : "") + (g.ust ? " ust" : "") + (sinif ? " " + sinif : "")), im = el("img"); im.src = g.url; im.alt = (EN ? g.aciklama_en : g.aciklama) || (EN ? o.baslik_en : o.baslik); im.loading = "lazy"; im.decoding = "async";
               im.onerror = function () { f.remove(); };
               var fc = el("figcaption"); var ac = EN ? g.aciklama_en : g.aciklama; if (ac) fc.appendChild(el("span", null, ac + " "));
               var fa = el("a", null, (EN ? "Photo: " : "Görsel: ") + (g.atif || "")); if (g.sayfa) { fa.href = g.sayfa; fa.target = "_blank"; fa.rel = "noopener"; }
-              fc.appendChild(fa); f.append(im, fc); gk.appendChild(f);
-            });
+              fc.appendChild(fa); f.append(im, fc); return f;
+          };
+          if (gs.length || yanG.length) {
+            var gk = el("div", "th-gorseller" + (gs.length > 1 ? " cok" : ""));
+            gs.forEach(function (g) { gk.appendChild(figur(g)); });
+            yanG.forEach(function (g) { gk.appendChild(figur(g, "yan-kopya")); });
             ic.appendChild(gk);
           }
           var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
@@ -57,7 +61,7 @@
           li.appendChild(ic);
           // yan sütun: olayla ilgili kişilerin kısa biyografileri
           var kis = o.kisiler || [];
-          if (kis.length) {
+          if (kis.length || yanG.length) {
             li.className = "kisili";
             KISI_SIRA++;
             var yan = el("aside", "th-yan"); yan.setAttribute("aria-label", tt("Kişiler", "People"));
@@ -69,6 +73,7 @@
               if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
               yan.appendChild(kk);
             });
+            yanG.forEach(function (g) { yan.appendChild(figur(g, "th-yan-gorsel")); });
             li.appendChild(yan);
           }
           ol.appendChild(li);

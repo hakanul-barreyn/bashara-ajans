@@ -60,7 +60,8 @@
      "sayfa": "https://commons.wikimedia.org/wiki/File:Balfour_declaration_unmarked.jpg",
      "aciklama": "Balfour’un Lord Rothschild’e yazdığı 2 Kasım 1917 tarihli mektup.",
      "aciklama_en": "Balfour’s letter to Lord Rothschild, 2 November 1917.",
-     "atif": "Birleşik Krallık Hükümeti (British Library) · Kamu malı · Wikimedia Commons"
+     "atif": "Birleşik Krallık Hükümeti (British Library) · Kamu malı · Wikimedia Commons",
+     "ust": true
     }
    ]
   },
@@ -136,14 +137,16 @@
      "sayfa": "https://commons.wikimedia.org/wiki/File:Palestine_Land_ownership_by_sub-district_(1945).jpg",
      "aciklama": "BM haritası: 1945’te alt bölgelere göre toprak mülkiyeti; yeşil Arap, kırmızı Yahudi mülkü.",
      "aciklama_en": "UN map: land ownership by sub-district in 1945; green Arab, red Jewish-owned.",
-     "atif": "Birleşmiş Milletler · Kamu malı · Wikimedia Commons"
+     "atif": "Birleşmiş Milletler · Kamu malı · Wikimedia Commons",
+     "yan": true
     },
     {
      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Protests_in_Cairo_against_the_UN_partition_of_Palestine.jpg/1280px-Protests_in_Cairo_against_the_UN_partition_of_Palestine.jpg",
      "sayfa": "https://commons.wikimedia.org/wiki/File:Protests_in_Cairo_against_the_UN_partition_of_Palestine.jpg",
      "aciklama": "Bölünme kararının ardından Kahire’de düzenlenen protesto, 1947.",
      "aciklama_en": "Protest in Cairo after the partition resolution, 1947.",
-     "atif": "Filistin Araştırmaları Enstitüsü arşivi · Kamu malı · Wikimedia Commons"
+     "atif": "Filistin Araştırmaları Enstitüsü arşivi · Kamu malı · Wikimedia Commons",
+     "genis": true
     }
    ]
   },
@@ -316,9 +319,13 @@
    "donem": "intifada",
    "baslik": "Birinci İntifada",
    "baslik_en": "First Intifada",
-   "metin": "Gazze’de başlayan halk ayaklanması işgal altındaki bütün topraklara yayıldı ve 1993’e kadar sürdü.",
-   "metin_en": "A popular uprising that began in Gaza spread across the occupied territories and lasted until 1993.",
+   "metin": "8 Aralık 1987’de bir İsrail askeri kamyonu Gazzeli işçileri taşıyan araçlara çarptı, dört kişi öldü. Ertesi gün Cebaliye kampında başlayan gösterilerde 17 yaşındaki Hatem es-Sisi bir askerin kurşunuyla öldürüldü; ayaklanma birkaç gün içinde Gazze’ye, Kudüs’e ve Batı Şeria’nın kamplarına, köylerine ve kasabalarına yayıldı. Kitlesel gösteriler, genel grevler ve öğleden sonra kapanan dükkânlarla süren ayaklanmaya Fetih, Halk Cephesi, Demokratik Cephe ve Filistin Komünist Partisi’nden oluşan gizli Birleşik Ulusal Ayaklanma Önderliği bildirileriyle yön verdi; sağlık, eğitim, erzak ve tarım için halk komiteleri kuruldu. Aynı günlerde doğan Hamas da kendi bildirileriyle katıldı. Filistinliler beş yılı aşkın süre ateşli silah kullanmama konusunda uzlaştı. Savunma Bakanı İzak Rabin’in “demir yumruk” politikasıyla İsrail ordusu silahsız göstericilere gerçek mermi kullandı, Rabin’in talimatıyla kemik kırma yöntemine başvurdu; sokağa çıkma yasakları, okul ve üniversite kapatmaları, sürgünler geldi. Yalnızca ilk yılda yaklaşık 18 bin kişi tutuklandı, en az 300 Filistinli vurularak öldürüldü. Ayaklanma, 13 Eylül 1993’te Oslo Anlaşması’nın imzalanmasıyla resmen sona erdi.",
+   "metin_en": "On 8 December 1987 an Israeli army truck crashed into vehicles carrying Gaza labourers, killing four. Protests began the next day in Jabalia camp, where 17-year-old Hatem al-Sisi was shot dead by a soldier; within days the uprising spread to Gaza, Jerusalem and the camps, villages and towns of the West Bank. Mass demonstrations, general strikes and afternoon shop closures were directed by communiqués from the clandestine Unified National Leadership of the Uprising, made up of Fatah, the PFLP, the DFLP and the Palestinian Communist Party; popular committees took over health, education, supplies and farming. Hamas, born in the same days, joined with communiqués of its own. Palestinians kept a consensus against using firearms for more than five years. Under Defence Minister Yitzhak Rabin’s “iron fist”, the army used live fire against unarmed protesters and, on Rabin’s instruction, a policy of breaking bones; curfews, school and university closures and deportations followed. In the first year alone some 18,000 people were arrested and at least 300 Palestinians were shot dead. The uprising formally ended with the signing of the Oslo Accords on 13 September 1993.",
    "kaynaklar": [
+    {
+     "ad": "Interactive Encyclopedia of the Palestine Question (PalQuest)",
+     "url": "https://palquest.org/en/node/29773"
+    },
     {
      "ad": "Britannica",
      "url": "https://www.britannica.com/event/first-intifada"
@@ -358,9 +365,13 @@
    "donem": "intifada",
    "baslik": "İkinci İntifada",
    "baslik_en": "Second Intifada",
-   "metin": "Ariel Şaron’un silahlı polis eşliğinde Mescid-i Aksa avlusuna girmesinin ardından başlayan ayaklanma 2005’e kadar sürdü.",
-   "metin_en": "The uprising began after Ariel Sharon entered the Al-Aqsa compound with armed police, and lasted until 2005.",
+   "metin": "Likud lideri Ariel Şaron 28 Eylül 2000’de yaklaşık bin polis eşliğinde Harem-i Şerif’e girdi. Ertesi gün İsrail polisi Kudüs’te yedi göstericiyi öldürdü; Aksa İntifadası böyle başladı. 30 Eylül’de 12 yaşındaki Muhammed ed-Dürre’nin Gazze’de askerlerin ateşiyle öldürülüşünü gösteren görüntüler dünyaya yayıldı; ilk haftada yaklaşık 70 Filistinli öldürüldü. Ekim 2000’de İsrail vatandaşı Filistinlilerin dayanışma gösterilerinde polis bir düzine kadar kişiyi öldürdü. Mart 2002’nin sonunda İsrail, Filistin yönetimine bırakılan şehirleri yeniden işgal etti; Mayıs başına kadar süren saldırılarda yaklaşık 500 Filistinli öldürüldü, on gün süren kuşatmanın ardından Cenin kampının büyük bölümü yıkıldı. Arafat Ramallah’taki karargâhında kuşatıldı ve ömrünün sonuna kadar neredeyse hiç çıkamadı; 11 Kasım 2004’te Paris’te öldü. Ayaklanma Şubat 2005’te Şarm eş-Şeyh ateşkesiyle sona erdi; Filistinliler yaklaşık 4 bin şehit verdi.",
+   "metin_en": "Likud leader Ariel Sharon entered the Haram al-Sharif on 28 September 2000, escorted by about a thousand police. The next day Israeli police shot dead seven protesters in Jerusalem; so began the al-Aqsa Intifada. On 30 September footage of 12-year-old Muhammad al-Durra being killed by soldiers’ fire in Gaza went round the world; about 70 Palestinians were killed in the first week. In October 2000 police killed about a dozen Palestinian citizens of Israel during solidarity protests. In late March 2002 Israel reoccupied the cities handed to the Palestinian Authority; some 500 Palestinians were killed in assaults that lasted into May, and after a ten-day siege much of Jenin camp was razed. Arafat was besieged in his Ramallah headquarters and barely left it again; he died in Paris on 11 November 2004. The uprising ended with the Sharm el-Sheikh ceasefire in February 2005; around 4,000 Palestinians were killed.",
    "kaynaklar": [
+    {
+     "ad": "Interactive Encyclopedia of the Palestine Question (PalQuest)",
+     "url": "https://palquest.org/en/node/33567"
+    },
     {
      "ad": "Britannica",
      "url": "https://www.britannica.com/event/second-intifada"
@@ -510,10 +521,10 @@
   {
    "tarih": "2021-05-10",
    "donem": "abluka",
-   "baslik": "Şeyh Cerrah ve Mayıs 2021 saldırısı",
-   "baslik_en": "Sheikh Jarrah and the May 2021 war",
-   "metin": "Doğu Kudüs’te Şeyh Cerrah’taki tahliyeler ve Mescid-i Aksa baskınlarının ardından İsrail Gazze’yi 11 gün bombaladı; 250’yi aşkın Filistinli öldürüldü.",
-   "metin_en": "After evictions in Sheikh Jarrah and raids on Al-Aqsa, Israel bombed Gaza for 11 days; more than 250 Palestinians were killed.",
+   "baslik": "Şeyh Cerrah, Kudüs Kılıcı ve Mayıs 2021 saldırısı",
+   "baslik_en": "Sheikh Jarrah, the Sword of Jerusalem and the May 2021 war",
+   "metin": "Doğu Kudüs’te Şeyh Cerrah’taki tahliye davaları ve Ramazan’da Mescid-i Aksa’ya düzenlenen baskınlar üzerine Hamas, İsrail’e askerlerini, polisini ve yerleşimcilerini Harem-i Şerif’ten ve Şeyh Cerrah’tan 10 Mayıs saat 18.00’e kadar çekmesi için süre verdi. Süre dolunca Hamas ve Gazze’deki öteki direniş grupları “Kudüs Kılıcı” adını verdikleri karşılıkla, altısı Kudüs’e olmak üzere 150 roket attı. Bu, Gazze’den Kudüs için açılan ilk savaştı. İsrail Gazze’yi 11 gün bombaladı; Gazze Sağlık Bakanlığı’na göre 66’sı çocuk 248 Filistinli öldürüldü, İsrail’de 12 kişi öldü. Aynı günlerde İsrail vatandaşı Filistinliler ile işgal altındaki topraklardaki Filistinliler birlikte sokağa çıktı. Mısır, Katar ve BM’nin aracılık ettiği ateşkes 21 Mayıs’ta yürürlüğe girdi.",
+   "metin_en": "After eviction cases in Sheikh Jarrah in East Jerusalem and raids on Al-Aqsa during Ramadan, Hamas gave Israel until 6 p.m. on 10 May to withdraw its troops, police and settlers from the Haram al-Sharif and Sheikh Jarrah. When the deadline passed, Hamas and other Gaza resistance groups fired 150 rockets, six of them towards Jerusalem, in what they called the “Sword of Jerusalem”: the first war waged from Gaza over Jerusalem. Israel bombed Gaza for 11 days; the Gaza Health Ministry counted 248 Palestinians killed, 66 of them children, and 12 people were killed in Israel. In the same days Palestinian citizens of Israel and Palestinians in the occupied territories took to the streets together. A ceasefire brokered by Egypt, Qatar and the UN took effect on 21 May.",
    "kaynaklar": [
     {
      "ad": "Filistin Araştırmaları Enstitüsü (PalQuest)",
@@ -714,26 +725,38 @@
    "donem": "osmanli",
    "baslik": "NİLİ casusluk örgütü kuruldu",
    "baslik_en": "The NILI spy ring is founded",
-   "metin": "Aaronsohn kardeşler ve Avşalom Faynberg’in Osmanlı Filistini’nde kurduğu Yahudi örgütü İngilizler hesabına casusluk yaptı: Osmanlı birliklerinin yerini, sayısını ve yolları Mısır’daki İngiliz istihbaratına iletti. Eylül–Ekim 1917’de bir posta güvercininin yakalanmasıyla Osmanlı yetkililerince ortaya çıkarıldı.",
-   "metin_en": "Founded in Ottoman Palestine by the Aaronsohn siblings and Avshalom Feinberg, the Jewish ring spied for Britain, passing the positions and strength of Ottoman troops and routes to British intelligence in Egypt. It was uncovered by the Ottoman authorities in September–October 1917 after a carrier pigeon was caught.",
+   "metin": "Aaronsohn kardeşler ve Avşalom Faynberg’in Osmanlı Filistini’nde kurduğu Yahudi örgütü İngilizler hesabına casusluk yaptı: Osmanlı birliklerinin yerini, sayısını ve yolları Mısır’daki İngiliz istihbaratına iletti. Örgütün başındaki ziraatçı Aaron Aaronsohn’u savaşın başında Cemal Paşa çekirge istilasıyla mücadeleye görevlendirmişti. Bu görev, örgüt üyelerine ülkeyi dolaşma ve ordugâhlara girme imkânı verdi. Eylül 1917’de Atlit’ten Mısır’a gönderilen bir posta güvercini yakalandı, Mısır’a geçmeye çalışan Naaman Belkind de ele geçirilip sorgulandı. 1 Ekim’de Zihron Yakov kuşatıldı; tutuklananlar arasındaki Sara Aaronsohn dört günlük sorgunun ardından canına kıydı. Belkind ve Yosef Lişanski 16 Aralık 1917’de Şam’da idam edildi.",
+   "metin_en": "Founded in Ottoman Palestine by the Aaronsohn siblings and Avshalom Feinberg, the Jewish ring spied for Britain, passing the positions and strength of Ottoman troops and routes to British intelligence in Egypt. Its leader, the agronomist Aaron Aaronsohn, had been appointed by Djemal Pasha early in the war to fight a plague of locusts; the post let members travel the country and enter army camps. In September 1917 a carrier pigeon sent from Atlit to Egypt was intercepted, and Na’aman Belkind was caught trying to reach Egypt and interrogated. On 1 October Zikhron Ya’akov was surrounded; Sarah Aaronsohn, among those arrested, took her own life after four days of interrogation. Belkind and Yosef Lishansky were hanged in Damascus on 16 December 1917.",
    "kaynaklar": [
     {
      "ad": "İsrail Ulusal Kütüphanesi",
      "url": "https://blog.nli.org.il/en/nili/"
+    },
+    {
+     "ad": "Encyclopedia Judaica (encyclopedia.com)",
+     "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/nili"
+    },
+    {
+     "ad": "Necmettin Alkan, Nili: Ortadoğu’da Casuslar Savaşı (kitap incelemesi, DergiPark)",
+     "url": "https://dergipark.org.tr/tr/download/article-file/5503446"
     }
    ]
   },
   {
    "tarih": "1918-09-19",
    "donem": "osmanli",
-   "baslik": "Megiddo (Armageddon) muharebesi ve büyük geri çekiliş",
-   "baslik_en": "Battle of Megiddo (Armageddon) and the great retreat",
-   "metin": "General Allenby’nin Megiddo (Armageddon) ovası çevresindeki saldırısı Osmanlı’nın 7. ve 8. ordularını birkaç günde dağıttı. Osmanlı kuvvetleri Şam’a, oradan Halep’e kadar çekildi; Şam 1 Ekim’de, Halep 26 Ekim’de düştü ve Filistin tümüyle İngiliz işgaline girdi.",
-   "metin_en": "General Allenby’s offensive around the plain of Megiddo (Armageddon) broke the Ottoman Seventh and Eighth Armies within days. Ottoman forces fell back to Damascus and then Aleppo; Damascus fell on 1 October and Aleppo on 26 October, leaving all of Palestine under British occupation.",
+   "baslik": "Megiddo muharebesi ve büyük geri çekiliş",
+   "baslik_en": "The Battle of Megiddo and the great retreat",
+   "metin": "19 Eylül 1918 sabahı 05.50’de başlayan ağır topçu ateşinin ardından İngiliz piyadesi kıyı kesiminde Osmanlı hattını bir saat içinde yardı. Süvari tümenleri gedikten Osmanlı gerisine geçti; 20 Eylül’de Nasıra’ya girdiler, Yıldırım Orduları Grubu’nun karargâhı dağıldı. Mustafa Kemal’in 1 Eylül’de yeniden başına geçtiği 7. Ordu, art çarpışmalarla Şeria Nehri’nin doğusuna çekilebildi; 8. Ordu ise birkaç günde dağıldı. Hayfa ve Akka birkaç gün içinde düştü; Osmanlı kuvvetleri Şam’a, oradan Halep’e kadar geri çekildi. Şam 1 Ekim’de, Halep 26 Ekim’de düştü ve Filistin tümüyle İngiliz işgaline girdi.",
+   "metin_en": "After a heavy bombardment that began at 05:50 on 19 September 1918, British infantry broke the Ottoman line on the coastal sector within an hour. Cavalry divisions poured through the gap into the Ottoman rear; on 20 September they entered Nazareth and the Yildirim Army Group headquarters broke up. The Seventh Army, which Mustafa Kemal had taken over again on 1 September, managed to fall back east of the Jordan in rearguard fighting; the Eighth Army collapsed within days. Haifa and Acre fell within days; Ottoman forces retreated to Damascus and then to Aleppo. Damascus fell on 1 October and Aleppo on 26 October, leaving all of Palestine under British occupation.",
    "kaynaklar": [
     {
      "ad": "İngiltere Ulusal Arşivi",
      "url": "https://blog.nationalarchives.gov.uk/apocalypse-then-battle-megiddo-1918"
+    },
+    {
+     "ad": "Turkey in the First World War: Filistin cephesi",
+     "url": "https://turkeyswar.com/campaigns/palestine/"
     }
    ],
    "gorseller": [
@@ -763,10 +786,10 @@
   {
    "tarih": "1922-11-01",
    "donem": "osmanli",
-   "baslik": "Saltanatın kaldırılması: Osmanlı Devleti sona erdi",
-   "baslik_en": "The sultanate is abolished: the end of the Ottoman state",
-   "metin": "Türkiye Büyük Millet Meclisi saltanatı kaldırdı; Osmanlı Devleti resmen sona erdi. Filistin’in yönetimi bu tarihten önce, 24 Temmuz 1922’de Milletler Cemiyeti kararıyla İngiltere’ye verilmişti.",
-   "metin_en": "The Grand National Assembly of Turkey abolished the sultanate, formally ending the Ottoman state. The administration of Palestine had already been given to Britain by the League of Nations on 24 July 1922.",
+   "baslik": "Saltanatın kaldırılması: Osmanlı’da rejim ve hükümet değişti",
+   "baslik_en": "The sultanate is abolished: a new regime and government",
+   "metin": "Türkiye Büyük Millet Meclisi 1 Kasım 1922’de saltanatı kaldırdı; İstanbul’daki son Osmanlı hükümeti 4 Kasım’da istifa etti ve yönetim Ankara’daki meclis hükümetine geçti. Devlet yıkılmadı, rejimi ve hükümeti değişti; Cumhuriyet 29 Ekim 1923’te ilan edildi. Ardından 3 Mart 1924’te hilafet kaldırıldı, 1928’de “Devletin dini İslam’dır” hükmü anayasadan çıkarıldı: yeni Türkiye yönünü başka bir yere çevirdi. Filistin’in yönetimi ise bundan önce, 24 Temmuz 1922’de Milletler Cemiyeti kararıyla İngiltere’ye verilmişti.",
+   "metin_en": "The Grand National Assembly of Turkey abolished the sultanate on 1 November 1922; the last Ottoman government in Istanbul resigned on 4 November and power passed to the assembly government in Ankara. The state did not collapse; its regime and government changed, and the Republic was proclaimed on 29 October 1923. The caliphate was abolished on 3 March 1924, and in 1928 the clause “the religion of the state is Islam” was removed from the constitution: the new Turkey turned in another direction. Palestine had already been handed to Britain by the League of Nations on 24 July 1922.",
    "kaynaklar": [
     {
      "ad": "Millî Eğitim Bakanlığı",
@@ -791,14 +814,27 @@
   {
    "tarih": "1935-11-20",
    "donem": "manda",
-   "baslik": "İzzeddin el-Kassam’ın öldürülmesi",
-   "baslik_en": "The killing of Izz al-Din al-Qassam",
-   "metin": "Kassam, Balfour Deklarasyonu’nun yıl dönümü olan 2 Kasım 1935’te İngilizlere karşı silahlı mücadele başlattı. 20 Kasım’da Nablus ile Cenin arasındaki Yabed’de İngiliz kuvvetleriyle çatışmada öldürüldü. Ölümü 1936 Büyük Arap İsyanı’nın kıvılcımlarından biri oldu; izleyicileri (Kassamiyyun) isyanda önemli rol oynadı.",
-   "metin_en": "Qassam began an armed struggle against the British on 2 November 1935, the anniversary of the Balfour Declaration. On 20 November he was killed in a clash with British forces at Ya’bad, between Nablus and Jenin. His death became one of the sparks of the 1936 Great Arab Revolt, in which his followers (the Qassamites) played a major role.",
+   "baslik": "İzzeddin el-Kassam’ın şehadeti",
+   "baslik_en": "The martyrdom of Izz al-Din al-Qassam",
+   "metin": "Kassam, Balfour Deklarasyonu’nun yıl dönümü olan 2 Kasım 1935’te İngilizlere karşı silahlı mücadele başlattı. 20 Kasım’da Nablus ile Cenin arasındaki Yabed’de İngiliz kuvvetleriyle çatışmada şehit düştü. Ölümü 1936 Büyük Arap İsyanı’nın kıvılcımlarından biri oldu; izleyicileri (Kassamiyyun) isyanda önemli rol oynadı.",
+   "metin_en": "Qassam began an armed struggle against the British on 2 November 1935, the anniversary of the Balfour Declaration. On 20 November he was martyred in a clash with British forces at Ya’bad, between Nablus and Jenin. His death became one of the sparks of the 1936 Great Arab Revolt, in which his followers (the Qassamites) played a major role.",
    "kaynaklar": [
     {
      "ad": "TDV İslâm Ansiklopedisi",
      "url": "https://islamansiklopedisi.org.tr/kassam-izzeddin"
+    }
+   ],
+   "kisiler": [
+    {
+     "ad": "İzzeddin el-Kassam",
+     "ad_en": "Izz al-Din al-Qassam",
+     "yillar": "1882–1935",
+     "metin": "1882’de Suriye’nin Cebele kasabasında doğdu, Kahire’de Ezher’de okudu. Birinci Dünya Savaşı’nda Osmanlı ordusunda alay imamıydı; savaştan sonra Suriye’de Fransızlara karşı direnişe katıldı. Fransızlar idamını isteyince 1921’de Hayfa’ya geçti, İstiklal Camii’nde imam ve hatip oldu. Köy köy dolaşıp İngiliz işgaline, Siyonist yerleşime ve toprak satışına karşı halkı örgütledi, gizli bir silahlı örgüt kurdu. 2 Kasım 1935’te dağa çıktı, 20 Kasım’da Yabed ormanında İngiliz kuvvetleriyle çatışmada şehit düştü. Adı sonradan Hamas’ın silahlı kanadına verildi.",
+     "metin_en": "Born in 1882 in Jableh, Syria, he studied at al-Azhar in Cairo. He was a regimental imam in the Ottoman army in the First World War and afterwards joined the resistance against the French in Syria. When the French sought his execution he moved to Haifa in 1921 and became imam and preacher at the Istiqlal Mosque. He toured the villages organising people against British occupation, Zionist settlement and land sales, and built a clandestine armed group. He took to the hills on 2 November 1935 and was martyred in a clash with British forces in the Ya’bad woods on 20 November. Hamas later named its armed wing after him.",
+     "kaynak": {
+      "ad": "TDV İslâm Ansiklopedisi",
+      "url": "https://islamansiklopedisi.org.tr/kassam-izzeddin"
+     }
     }
    ]
   },
@@ -827,6 +863,19 @@
     {
      "ad": "Filistin Araştırmaları Enstitüsü (PalQuest)",
      "url": "https://www.palquest.org/en/node/23294"
+    }
+   ],
+   "kisiler": [
+    {
+     "ad": "Şeyh Ahmed Yasin",
+     "ad_en": "Sheikh Ahmed Yassin",
+     "yillar": "1936–2004",
+     "metin": "1936’da Mecdel yakınlarındaki el-Cura köyünde doğdu; köy 1948’de yerle bir edilince ailesi Gazze’ye sığındı. 12 yaşında geçirdiği bir spor kazası onu ömür boyu tekerlekli sandalyeye bağladı. 1959’da Kahire’de Ayn Şems Üniversitesi’nde bir yıl okudu, parasızlık yüzünden Gazze’ye döndü; Müslüman Kardeşler’den etkilendi, Arapça ve din dersleri verdi. 1983’te tutuklanıp 13 yıla mahkûm edildi, iki yıl sonra esir takasıyla çıktı. 1987’de Hamas’ı kurdu; 1989’da 40 yıla mahkûm edildi, sekiz yıl yattı ve 1997’de İsrail ile Ürdün Kralı Hüseyin arasındaki anlaşmayla serbest bırakıldı. 22 Mart 2004’te Gazze’de sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle, dokuz kişiyle birlikte şehit edildi.",
+     "metin_en": "Born in 1936 in al-Jura near Majdal; when the village was razed in 1948 his family fled to Gaza. A sports injury at 12 left him using a wheelchair for life. In 1959 he spent a year at Ain Shams University in Cairo before lack of money sent him back to Gaza; influenced by the Muslim Brotherhood, he taught Arabic and religion. Arrested in 1983 and sentenced to 13 years, he was freed two years later in a prisoner exchange. He founded Hamas in 1987; sentenced to 40 years in 1989, he served eight and was released in 1997 under a deal between Israel and King Hussein of Jordan. On 22 March 2004 he was martyred with nine others by missiles from Israeli helicopters as he left a Gaza mosque after dawn prayer.",
+     "kaynak": {
+      "ad": "Al Jazeera",
+      "url": "https://www.aljazeera.com/archive/2004/03/200849163312822658.html"
+     }
     }
    ]
   },
@@ -910,10 +959,10 @@
   },
   {
    "tarih": "1917-12-09",
-   "baslik": "Kudüs’ün teslimi",
-   "baslik_en": "Surrender of Jerusalem",
-   "metin": "Osmanlı birlikleri Kudüs’ü 8 Aralık gecesi boşalttı. 9 Aralık 1917’de Kudüs Belediye Başkanı Hüseyin Selim el-Hüseynî, Kudüs Mutasarrıfı İzzet’in imzaladığı teslim belgesini İngilizlere verdi. Allenby iki gün sonra şehre girdi; Kudüs dört asırlık Osmanlı idaresinden çıktı.",
-   "metin_en": "Ottoman troops evacuated Jerusalem on the night of 8 December. On 9 December 1917 the city’s mayor, Hussein Salim al-Husseini, handed the British a surrender document signed by Governor Izzat. Allenby entered the city two days later, ending four centuries of Ottoman rule.",
+   "baslik": "Kudüs’ün düşüşü",
+   "baslik_en": "The fall of Jerusalem",
+   "metin": "İngilizler 8 Aralık sabahı Nebi Samuel cephesinden saldırdı; Osmanlı birlikleri şehri aynı gece boşalttı. Yıldırım Orduları Grubu’nun Alman komutanı Falkenhayn, kutsal yerlerin top ateşinde zarar göreceğini söyleyerek şehrin savunulmasına karşı çıkmış, takviye de göndermemişti. 9 Aralık’ta Kudüs Belediye Başkanı Hüseyin Selim el-Hüseynî, Mutasarrıf İzzet Bey’in imzaladığı teslim belgesini İngilizlere verdi; Allenby 11 Aralık’ta şehre yaya olarak girdi ve Kudüs dört asırlık Osmanlı idaresinden çıktı. Osmanlı komutanları felaketin yükünü müttefik Alman komutaya bağladı: Ali Fuad Paşa, Cemal Paşa’ya çektiği telgrafta sorumluluğu tamamen Falkenhayn’a verdi. Mustafa Kemal ise iki ay önce, Falkenhayn’la çalışmanın mümkün olmadığını ve Almanların bölgeyi kendi çıkarlarına göre yönettiğini yazarak 7. Ordu komutanlığından istifa etmişti.",
+   "metin_en": "The British attacked from the Nebi Samwil front on the morning of 8 December; Ottoman troops evacuated the city that night. Falkenhayn, the German commander of the Yildirim Army Group, had opposed defending the city on the grounds that the holy places would be damaged by artillery, and had sent no reinforcements. On 9 December the mayor, Hussein Salim al-Husseini, handed the British a surrender document signed by Governor Izzet Bey; Allenby entered on foot on 11 December, ending four centuries of Ottoman rule. Ottoman commanders laid the disaster at the door of their German ally: Ali Fuad Pasha cabled Djemal Pasha that the responsibility lay wholly with Falkenhayn. Two months earlier Mustafa Kemal had resigned command of the Seventh Army, writing that working with Falkenhayn was impossible and that the Germans were running the region for their own ends.",
    "kaynaklar": [
     {
      "ad": "Interactive Encyclopedia of the Palestine Question (PalQuest)",
@@ -922,6 +971,10 @@
     {
      "ad": "Nuri Karakaş, Tarih İncelemeleri Dergisi (DergiPark)",
      "url": "https://dergipark.org.tr/en/pub/egetid/article/282832"
+    },
+    {
+     "ad": "Turkey in the First World War: Filistin cephesi",
+     "url": "https://turkeyswar.com/campaigns/palestine/"
     }
    ],
    "donem": "osmanli"
@@ -1088,6 +1141,34 @@
      "aciklama": "Mısır araçları seyyar köprüyle Süveyş Kanalı’nı geçiyor, 7 Ekim 1973.",
      "aciklama_en": "Egyptian vehicles crossing the Suez Canal on a pontoon bridge, 7 October 1973.",
      "atif": "Cemal Hammad, Mısır Cephesindeki Askerî Muharebeler (Dârü’ş-Şürûk) · Kamu malı · Wikimedia Commons"
+    }
+   ]
+  },
+  {
+   "tarih": "1918-03",
+   "donem": "osmanli",
+   "baslik": "Dokuz aylık bekleyiş: Amman ve Es-Salt’ta İngiliz taarruzları durduruldu",
+   "baslik_en": "Nine months of stalemate: British attacks halted at Amman and Es-Salt",
+   "metin": "Kudüs’ün düşüşünden sonra cephe dokuz ay Yafa’nın kuzeyi ile Şeria (Ürdün) Vadisi arasında kaldı. Alman komutası 24 Şubat 1918’de Falkenhayn’dan Liman von Sanders’e geçti. İngilizler Mart sonunda Şeria Nehri’ni geçip Amman’a yürüdü; 48. Tümen’in savunduğu şehir önünde yağmurla çamurlaşan yollarda ilerleyemeyen kuvvetler 31 Mart’ta geri çekildi. 30 Nisan’da Es-Salt yönünde başlayan ikinci taarruz da 2–4 Mayıs’taki Osmanlı karşı saldırısıyla püskürtüldü. Cephe Eylül’e kadar yeniden kıpırdamadı.",
+   "metin_en": "After the fall of Jerusalem the front stayed for nine months between north of Jaffa and the Jordan Valley. German command passed from Falkenhayn to Liman von Sanders on 24 February 1918. In late March the British crossed the Jordan and marched on Amman; held before the city by the 48th Division, on roads turned to mud by rain, they withdrew on 31 March. A second attack towards Es-Salt, launched on 30 April, was driven back by an Ottoman counter-attack on 2–4 May. The front did not move again until September.",
+   "kaynaklar": [
+    {
+     "ad": "Turkey in the First World War: Filistin cephesi",
+     "url": "https://turkeyswar.com/campaigns/palestine/"
+    }
+   ]
+  },
+  {
+   "tarih": "1991-01-18",
+   "donem": "intifada",
+   "baslik": "Körfez Savaşı: Irak İsrail’e füze attı",
+   "baslik_en": "Gulf War: Iraq fires missiles at Israel",
+   "metin": "Kuveyt’i işgal eden Irak’a karşı ABD öncülüğündeki koalisyonun saldırısı sürerken Saddam Hüseyin 18 Ocak–25 Şubat 1991 arasında İsrail’e Scud füzeleri attırdı; İsrail hükümeti 18 saldırıda yere düşen 39 füze saydı. Saddam Ağustos 1990’da Kuveyt’ten çekilmeyi İsrail’in işgal ettiği topraklardan çekilmesine bağlamayı önermişti; Irak bildirileri saldırıları “Irak’ta ve Filistin’de dökülen Arap kanının intikamı” diye duyurdu. İsrail karşılık vermedi, koalisyon dağılmadı ve Irak birkaç hafta içinde Kuveyt’ten çıkarıldı: füzeler savaşın sonucunu değiştirmedi.",
+   "metin_en": "As the US-led coalition attacked Iraq, which had occupied Kuwait, Saddam Hussein had Scud missiles fired at Israel between 18 January and 25 February 1991; the Israeli government counted 39 missiles striking ground in 18 attacks. In August 1990 Saddam had proposed linking a withdrawal from Kuwait to Israel’s withdrawal from the territories it occupied; Iraqi communiqués announced the strikes as revenge “for the Arab blood in Iraq and Palestine”. Israel did not retaliate, the coalition held, and Iraq was driven out of Kuwait within weeks: the missiles did not change the outcome of the war.",
+   "kaynaklar": [
+    {
+     "ad": "Human Rights Watch, Needless Deaths in the Gulf War (1991)",
+     "url": "https://www.hrw.org/reports/1991/gulfwar/CHAP8.htm"
     }
    ]
   }

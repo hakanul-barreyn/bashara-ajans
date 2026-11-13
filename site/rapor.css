@@ -309,6 +309,14 @@ tr.oe-ilk td{border-top:2px solid var(--soluk)}
   .th-kisi{border-right:3px solid #b08d57}
 }
 @media (max-width:640px){.th-yan{display:none}}
+.th-gorsel.genis{grid-column:1/-1}.th-gorsel.genis img{max-height:520px}
+.th-gorsel.ust img{object-position:top}
+.th-gorsel.yan-kopya{display:none}
+@media (max-width:640px){.th-gorsel.yan-kopya{display:block}}
+.th-yan-gorsel{margin:0;background:var(--yuzey,#fff);border:1px solid #e4dccd;border-radius:10px;padding:8px}
+.th-yan .th-yan-gorsel img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:6px}
+.th-yan-gorsel figcaption{font-size:.68rem;color:var(--soluk);margin-top:5px;line-height:1.35}
+@media (min-width:1380px){.th-yan-gorsel{border-right:3px solid #b08d57}}
 @media (max-width:640px){.th-liste li,.th-liste li.kisili{grid-template-columns:minmax(0,1fr);gap:2px}.th-yan{grid-column:1;margin-top:8px}}
 .gp-dugme{position:absolute;top:4px;right:4px;z-index:2;font:700 .72rem "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 10px;border-radius:999px;border:1px solid var(--cizgi);background:#fff;color:var(--ink);cursor:pointer;opacity:.85}
 .gp-dugme:hover,.gp-dugme:focus-visible{opacity:1;border-color:var(--ink)}
