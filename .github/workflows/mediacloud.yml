@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -q "mediacloud==4.*" || pip install -q mediacloud
+      - run: pip install -q --upgrade mediacloud
       - name: Önceki çıktı
         run: |
           mkdir -p cikti

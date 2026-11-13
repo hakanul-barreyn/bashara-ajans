@@ -56,29 +56,22 @@ def main():
                               "ulke": s.get("pub_country"), "adaylar": [x.get("name") for x in adaylar[:5]]} if s else None)}
         print(k["ad"], "→", s and s.get("name"), s and s["id"])
         json.dump(sonuc, open(yol, "w"), ensure_ascii=False, indent=1)
-    # aylık toplam haber: kaynakları 25'erli gruplarla
-    ids = [v["mc"]["id"] for v in sonuc.values() if v.get("mc")]
-    aylik = {}
-    for i in range(0, len(ids), 25):
-        grup = ids[i:i + 25]
-        satirlar = None
-        for sorgu, aralik in (("*", "month"), ("*", None), ("the OR a OR في OR של OR ve", "month")):
-            try:
-                satirlar = S.stories_by_source_over_interval(sorgu, BAS, SON, source_ids=grup, interval=aralik) if aralik else \
-                    S.stories_by_source_over_interval(sorgu, BAS, SON, source_ids=grup)
-                break
-            except Exception as e:   # noqa: BLE001
-                print("sayım hatası", sorgu, aralik, str(e)[:300])
-        if i == 0:
-            print("örnek satır:", (satirlar or [])[:3])
-        for x in satirlar or []:
-            ad = x.get("media_name") or x.get("name") or x.get("source")
-            kova = str(x.get("bucket") or x.get("interval") or x.get("date") or "")[:7]
-            aylik.setdefault(ad, {})[kova] = x.get("total_stories", x.get("count"))
-        print("sayım", i + len(grup), "/", len(ids))
-    for v in sonuc.values():
-        if v.get("mc"):
-            v["aylik"] = aylik.get(v["mc"]["ad"], {})
+    # günlük toplam haber: yayın başına bir istek (count-over-time, sorgu "*"); daha önce alınanlar atlanır
+    for n, v in enumerate(sonuc.values()):
+        if not v.get("mc") or v.get("gunluk"):
+            continue
+        try:
+            noktalar = S.story_count_over_time("*", BAS, SON, source_ids=[v["mc"]["id"]])
+        except Exception as e:   # noqa: BLE001
+            print("sayım hatası", v["ad"], str(e)[:200])
+            continue
+        v["gunluk"] = {p["date"].isoformat(): p.get("total_count", p.get("count")) for p in noktalar if p.get("total_count", p.get("count"))}
+        v["aylik"] = {}
+        for g, c in v["gunluk"].items():
+            v["aylik"][g[:7]] = v["aylik"].get(g[:7], 0) + c
+        print(v["ad"], "günlük kayıt:", len(v["gunluk"]), "toplam:", sum(v["gunluk"].values()))
+        if n % 10 == 0:
+            json.dump(sonuc, open(yol, "w"), ensure_ascii=False, indent=1)
     json.dump(sonuc, open(yol, "w"), ensure_ascii=False, indent=1)
     bulunan = sum(1 for v in sonuc.values() if v.get("mc"))
     print(f"Bitti: {bulunan}/{len(sonuc)} yayın Media Cloud'da bulundu")
