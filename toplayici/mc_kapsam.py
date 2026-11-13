@@ -61,13 +61,20 @@ def main():
     aylik = {}
     for i in range(0, len(ids), 25):
         grup = ids[i:i + 25]
-        try:
-            satirlar = S.stories_by_source_over_interval("*", BAS, SON, source_ids=grup, interval="month")
-        except Exception as e:   # noqa: BLE001
-            print("sayım hatası", grup[:3], e)
-            continue
-        for x in satirlar:
-            aylik.setdefault(x.get("media_name"), {})[x.get("bucket", x.get("interval", ""))[:7]] = x.get("total_stories")
+        satirlar = None
+        for sorgu, aralik in (("*", "month"), ("*", None), ("the OR a OR في OR של OR ve", "month")):
+            try:
+                satirlar = S.stories_by_source_over_interval(sorgu, BAS, SON, source_ids=grup, interval=aralik) if aralik else \
+                    S.stories_by_source_over_interval(sorgu, BAS, SON, source_ids=grup)
+                break
+            except Exception as e:   # noqa: BLE001
+                print("sayım hatası", sorgu, aralik, str(e)[:300])
+        if i == 0:
+            print("örnek satır:", (satirlar or [])[:3])
+        for x in satirlar or []:
+            ad = x.get("media_name") or x.get("name") or x.get("source")
+            kova = str(x.get("bucket") or x.get("interval") or x.get("date") or "")[:7]
+            aylik.setdefault(ad, {})[kova] = x.get("total_stories", x.get("count"))
         print("sayım", i + len(grup), "/", len(ids))
     for v in sonuc.values():
         if v.get("mc"):
