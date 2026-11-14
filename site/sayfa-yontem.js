@@ -39,6 +39,20 @@
       "Classification is rule-based; no AI is used. To measure accuracy, a random sample of 255 war-context headlines, stratified by press group and automatic class, was drawn. It is being hand-coded with the automatic classes hidden. The results (precision and recall per class) will be published here; until then the figures in the reports are unvalidated automatic measurements.")
   ]);
 
+  // E3: olay eşiği duyarlılığı (alisma.json → duyarlilik)
+  fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (a) {
+    var d = a.duyarlilik; if (!d || !d.length) return;
+    var k = $("g-esikler"), kt = el("div", "tablo-kutu"), tb = el("table"), th = el("thead"), tr0 = el("tr");
+    var G = ["bolge", "israil", "bati_ana", "bati_muhalif"];
+    [tt("Olay eşiği", "Event threshold"), tt("Olay", "Events")].concat(G.map(function (g) { return AD[g]; })).forEach(function (x) { tr0.appendChild(el("th", null, x)); });
+    th.appendChild(tr0); tb.appendChild(th); var bd = el("tbody");
+    d.forEach(function (x) { var r = el("tr"); r.append(el("td", null, sayi(x.kat) + tt(" kat", "×")), el("td", "sayi", sayi(x.olay, 0))); G.forEach(function (g) { var v = x.sessiz_pay[g]; r.appendChild(el("td", "sayi", v == null ? "–" : (EN ? sayi(v) + "%" : "%" + sayi(v)))); }); bd.appendChild(r); });
+    tb.appendChild(bd);
+    k.appendChild(el("h3", null, tt("Duyarlılık: olay eşiği değişirse", "Sensitivity: if the event threshold changes")));
+    k.appendChild(el("p", null, tt("Olay eşiği 2, 2,5 ve 3 kat alındığında olay sayısı ve grup grup “o olay türünden başlık atmayan yayınların payı”. Payların eşikten neredeyse hiç etkilenmemesi, sonucun bu tercihe bağlı olmadığını gösterir.", "Number of events and, group by group, the share of active outlets that ran no headline of that kind, with the event threshold at 2, 2.5 and 3 times. That the shares barely move shows the result does not hinge on this choice.")));
+    kt.appendChild(tb); k.appendChild(kt);
+  }).catch(function () {});
+
   fetch("data/bulten/rapor-7-ekim.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (v) {
     var s = v.surumler || {};
     document.querySelectorAll('[data-v="surum"]').forEach(function (x) { x.textContent = tt("Ölçüm sürümü ", "Measurement version ") + (s.ozet || "–") + " · " + tt("rapor sürümü ", "report version ") + (s.rapor || v.surum) + " · " + new Date(v.guncellendi).toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" }); });
@@ -56,6 +70,7 @@
       tt("İsrail basını: İbranice yayınların geriye dönük arşivi büyük ölçüde boş kayıt çıktı ve atıldı; İsrail basını ölçümü ağırlıkla İngilizce yayınlara dayanır ve örneklemi küçüktür.", "Israeli press: the backfill of Hebrew outlets turned out to be mostly empty records and was dropped; the Israeli press measurement rests mainly on English-language outlets and the sample is small."),
       tt("Kelime sayımı çerçeveyi değil geçişi sayar: Tırnak içi kullanımlar ayrılır, ama haber konusu olarak geçen kelime (“X’i soykırımla suçladı”) yine sayılır.", "Word counts measure occurrence, not framing: quoted uses are set apart, but a word reported as a subject (“accused X of genocide”) is still counted."),
       tt("Olaylar başlıklardan bulunur: Sessizlik ölçüsündeki olaylar basının kendisinden çıkarıldığı için, basının hiç yazmadığı olaylar görünmez. Basından bağımsız olay listeleriyle (Insecurity Insight, WHO, CPJ) karşılaştırma hazırlanıyor.", "Events are found in the headlines: because the events in the silence measure come from the press itself, events the press never covered are invisible. A comparison with event lists independent of the press (Insecurity Insight, WHO, CPJ) is in preparation."),
+      tt("Başlık atmama payı yayının hacmine bağlıdır: az başlık atan yayınlar bir olay türünü daha sık hiç yazmaz. Bu yüzden bu pay gruplar arasında doğrudan karşılaştırılmaz; her yayın aynı dildeki tanık basınla karşılaştırılır.", "The no-headline share depends on an outlet’s volume: outlets that run few headlines more often run nothing on a given kind of event. So this share is not compared directly between groups; each outlet is compared with witness press in the same language."),
       tt("Yapay zekâ metinleri: Almanak’taki yorum metinleri yapay zekâya yazdırılır ve öyle etiketlenir. Ölçümün parçası değildir.", "AI texts: the commentary in the Almanac is written by AI and labelled as such. It is not part of the measurement.")
     ]);
     kapsama(v.kapsama || []);

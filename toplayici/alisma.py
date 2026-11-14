@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 9
+ALISMA_SURUM = 10
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -107,8 +107,9 @@ def _binde(x, n):
     return round(1000 * x / n, 2) if n else None
 
 
-def _olay_gunleri(r, nr, en_az):
+def _olay_gunleri(r, nr, en_az, kat=None):
     """r: bölge basınında türün günlük sayısı, nr: bölge basınının günlük başlık sayısı. Döndürür: [(baş, son, tepe)]."""
+    kat = ESIK_KAT if kat is None else kat
     oran = [1000 * a / b if b >= 50 else None for a, b in zip(r, nr)]
     isaret = []
     for i, x in enumerate(oran):
@@ -116,7 +117,7 @@ def _olay_gunleri(r, nr, en_az):
             continue
         onceki = [v for v in oran[max(0, i - TABAN_GUN):i] if v is not None]
         taban = statistics.median(onceki) if len(onceki) >= 7 else 0
-        if x >= ESIK_KAT * taban + 0.3:
+        if x >= kat * taban + 0.3:
             isaret.append(i)
     olaylar = []
     for i in isaret:
@@ -126,6 +127,28 @@ def _olay_gunleri(r, nr, en_az):
         else:
             olaylar.append((i, i, i))
     return olaylar
+
+
+def _duyarlilik(S, gk, N, nreg, katlar=(2.0, 2.5, 3.0)):
+    """Olay eşiğinin sonucu ne kadar değiştirdiği (E3): her eşikte olay sayısı ve grup grup başlık atmama payı."""
+    out = []
+    for kat in katlar:
+        olay, say = 0, {g: [0, 0] for g in GK}
+        for tur, _ in TURLER:
+            if tur in DURUM:
+                continue
+            o = S["o"][tur]
+            r = [o["bolge"][i] + o["turkiye"][i] for i in range(N)]
+            if sum(r) < 30:
+                continue
+            sifir_olmayan = sorted(x for x in r if x)
+            en_az = max(5, sifir_olmayan[len(sifir_olmayan) // 2] * 2) if sifir_olmayan else 5
+            for b, e, p in _olay_gunleri(r, nreg, en_az, kat):
+                olay += 1
+                for g, (a, n) in _sessiz(S, gk, tur, _pencere(b, e, N)).items():
+                    say[g][0] += a; say[g][1] += n
+        out.append({"kat": kat, "olay": olay, "sessiz_pay": {g: round(100 * a / n, 1) if n else None for g, (a, n) in say.items()}})
+    return out
 
 
 def _izleme(olaylar, anahtar):
@@ -533,6 +556,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             "tarama_bitti": oz.get("tarama_bitti"), "bas": D[0], "son": D[-1], "gruplar": [{"anahtar": g, "ad": a} for g, a in GRUPLAR],
             "lider_gruplari": OT.LIDER_GRUP, "haftalar": haftalar, "olu_hafta": gunluk_olu_hafta,
             "esik": {"kat": ESIK_KAT, "pencere": [PENCERE_ONCE, PENCERE_SONRA], "taban_gun": TABAN_GUN},
+            "duyarlilik": _duyarlilik(S, gk, N, nreg),
             "turler": turler, "olaylar": tum_olaylar, "egri": egri, "olum_gunleri": olum_gunleri,
             "gercek": _gercek(S, D, dis, hafta_ix, haftalar),
             "hukum": _yayin_hukum(oz, K, gk, S, D, tum_olaylar, sum(x for g, x in zip(D, olu) if g <= "2025-10-09")),
