@@ -78,7 +78,7 @@
       const g=el("section","grup");g.appendChild(el("h2",null,r+" · "+ks.length));const iz=el("div","izgara");
       ks.forEach(k=>{const c=el("article","kk"),u=el("div","kk-ust");
         u.appendChild(avatarK(k));const w=el("div");const ad=el("div","kk-ad");if(bayrakHTML(k))ad.insertAdjacentHTML("afterbegin",bayrakHTML(k));
-        const a=el("a",null,k.ad);a.href=k.url;a.target="_blank";a.rel="noopener";ad.appendChild(a);w.appendChild(ad);
+        const a=el("a",null,k.ad);a.href="profil.html?k="+encodeURIComponent(k.id);ad.appendChild(a);const sa=el("a","kk-site","↗");sa.href=k.url;sa.target="_blank";sa.rel="noopener";sa.title=k.url;sa.style.marginLeft="6px";ad.appendChild(sa);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
         const rz=el("div","rozetler");if(TUR[k.tur]||k.bagli)rz.appendChild(el("span","rozet "+k.tur,k.bagli||(k.tur==="resmi"&&k.ulke?k.ulke+" devletinin yayını":TUR[k.tur])));u.appendChild(rz);c.appendChild(u);
         const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
