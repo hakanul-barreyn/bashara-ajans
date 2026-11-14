@@ -1333,26 +1333,85 @@
     return xs.find((h) => ok(h) && BT(h)) || xs.find(ok) || xs.find((h) => BT(h)) || xs[0];
   }
   // bir haberi tam ekran gönderi yap; hikâye verilirse sağdaki "aynı haber" düğmesi açılır
-  function rlGonderi(h, hikaye) {
-    const EN = window.DIL === "en", k = kaynaklar[h.kaynak], u = birim("reel");
-    if (!k) return null;
-    const z = el("div", "rl-zemin"), r = HS.renk(k);
-    u.style.setProperty("--hesap", r.ana);
+  function rlZemin(h, kap) {
+    const EN = window.DIL === "en", z = el("div", "rl-zemin");
     if (h.gorsel && h.gorsel_ok === true) {
-      u.classList.add("rl-gorselli");
+      kap.classList.add("rl-gorselli");
       const src = (window.AKTAR || ((v) => v))(h.gorsel, 900);
       const arka = document.createElement("img"); arka.className = "rl-bulanik"; arka.alt = ""; arka.src = src; arka.loading = "lazy"; arka.referrerPolicy = "no-referrer";
       const on = document.createElement("img"); on.className = "rl-foto"; on.alt = ""; on.src = src; on.loading = "lazy"; on.referrerPolicy = "no-referrer";
-      on.onerror = () => { u.classList.remove("rl-gorselli"); arka.remove(); on.remove(); z.appendChild(el("p", "rl-yazi", baslikSec(h))); };
+      on.onerror = () => { kap.classList.remove("rl-gorselli"); arka.remove(); on.remove(); z.appendChild(el("p", "rl-yazi", baslikSec(h))); };
       z.append(arka, on);
     } else {
       // görselsiz: hesabın rengiyle yazı gönderisi
       z.appendChild(el("p", "rl-yazi", baslikSec(h)));
       if (h.nitelik === "analiz") z.appendChild(el("span", "rl-yazi-et", EN ? "Analysis" : "Analiz"));
     }
-    u.appendChild(z);
-    rlVeri.set(u, { tur: "haber", h, k, hikaye });
+    return z;
+  }
+  // Bir haberi tam ekran gönderi yap. Aynı haberi başka hesaplar da yazdıysa gönderi yana kayar:
+  // 1) bu hesabın gönderisi, 2) karşılaştırma kartı, 3…) öteki hesapların gönderileri.
+  function rlGonderi(h, hikaye) {
+    const EN = window.DIL === "en", k = kaynaklar[h.kaynak], u = birim("reel");
+    if (!k) return null;
+    u.style.setProperty("--hesap", HS.renk(k).ana);
+    const digerleri = hikaye ? hikaye.haberler.filter((x) => x !== h && kaynaklar[x.kaynak]).sort((p, q) => Date.parse(p.tarih) - Date.parse(q.tarih)) : [];
+    if (!digerleri.length) { u.appendChild(rlZemin(h, u)); rlVeri.set(u, { tur: "haber", h, k, hikaye }); return u; }
+    u.classList.add("rl-yatay");
+    const seri = el("div", "rl-seri"), kareler = [];
+    const kare = (x) => {
+      const kx = kaynaklar[x.kaynak], d = el("div", "rl-kare"); d.style.setProperty("--hesap", HS.renk(kx).ana);
+      d.appendChild(rlZemin(x, d)); rlVeri.set(d, { tur: "haber", h: x, k: kx, hikaye }); return d;
+    };
+    const git = (i) => seri.scrollTo({ left: i * seri.clientWidth, behavior: AZ_HAREKET ? "auto" : "smooth" });
+    kareler.push(kare(h));
+    const dk = el("div", "rl-kare rl-kars-kare"); dk.appendChild(rlKarsKart(hikaye, h, digerleri, git)); rlVeri.set(dk, { tur: "kars", hikaye }); kareler.push(dk);
+    digerleri.forEach((x) => kareler.push(kare(x)));
+    kareler.forEach((d) => seri.appendChild(d));
+    const nk = el("div", "rl-noktalar"); kareler.forEach((_, i) => nk.appendChild(el("i", i ? null : "on")));
+    u.append(seri, nk);
+    u._kareler = kareler; u._i = 0; u._git = git;
+    let zm = null;
+    seri.addEventListener("scroll", () => {
+      clearTimeout(zm);
+      zm = setTimeout(() => {
+        const i = Math.max(0, Math.min(kareler.length - 1, Math.round(seri.scrollLeft / Math.max(1, seri.clientWidth))));
+        if (i === u._i) return;
+        u._i = i; nk.querySelectorAll("i").forEach((x, j) => x.classList.toggle("on", j === i));
+        rlGuncelle(u);
+      }, 60);
+    }, { passive: true });
+    rlVeri.set(u, { tur: "seri" });
     return u;
+  }
+  // karşılaştırma kartı: aynı haberi yazan hesaplar yan yana, kampların dağılımı ve rakamlar
+  function rlKarsKart(b, ilk, digerleri, git) {
+    const EN = window.DIL === "en", xs = [ilk].concat(digerleri), c = el("div", "rl-kars");
+    c.appendChild(el("span", "rl-kars-et", EN ? "Comparison" : "Karşılaştırma"));
+    c.appendChild(el("h2", "rl-kars-baslik", b.olay ? OB(b.olay) : baslikSec(ilk)));
+    c.appendChild(kampSeridi(xs));
+    const zaman = xs.map((h) => Date.parse(h.tarih)), ilkT = Math.min(...zaman), sonT = Math.max(...zaman);
+    const sa = (ms) => { const d = Math.round(ms / 6e4); return d < 60 ? d + (EN ? " min" : " dk") : (Math.round(d / 6) / 10).toLocaleString(YR) + (EN ? " h" : " sa"); };
+    const ks = kampSay(xs), ilkH = xs.find((h) => Date.parse(h.tarih) === ilkT);
+    const kut = el("div", "rl-kars-sayi");
+    [[String(xs.length), EN ? "accounts" : "hesap"], [String(Object.keys(ks.kk).length), EN ? "camps" : "kamp"], [sa(sonT - ilkT), EN ? "first to last" : "ilkten sona"]]
+      .forEach(([v, e]) => { const d = el("div"); d.append(el("b", null, v), el("span", null, e)); kut.appendChild(d); });
+    c.appendChild(kut);
+    c.appendChild(el("p", "rl-kars-not", (EN ? "First: " : "İlk yazan: ") + kaynaklar[ilkH.kaynak].ad + " · " + saatYaz(ilkH.tarih)
+      + (!ks.dis && ks.bolge >= 3 ? (EN ? " · No Israeli or Western outlet reported it" : " · İsrail ve Batı basını yazmadı") : "")));
+    const ol = el("ol", "rl-kars-liste");
+    xs.forEach((h, i) => {
+      const k = kaynaklar[h.kaynak], li = el("li");
+      const ust = el("div", "rl-l-ust");
+      const kp = el("span", "rl-l-kamp"); const i_ = el("i"); i_.style.background = KAMP_RENK[kampAd(k)] || "#6b746f"; kp.append(i_, document.createTextNode(HS.kampYaz(k)));
+      ust.append(avatar(k, "kucuk"), el("b", null, k.ad), kp, el("time", null, saatYaz(h.tarih)));
+      li.append(ust, el("p", "rl-l-baslik", baslikSec(h)));
+      li.onclick = () => git(i === 0 ? 0 : i + 1);
+      ol.appendChild(li);
+    });
+    c.appendChild(ol);
+    c.appendChild(el("p", "rl-kars-ipucu", EN ? "Tap a row or keep swiping to see each account’s post" : "Bir satıra dokun ya da kaydırmaya devam et: her hesabın gönderisi"));
+    return c;
   }
   // Alboroto'nun kendi gönderisi (harita, sayaç, uydu, bildirimler)
   function rlZbs(ic, not) {
@@ -1407,7 +1466,9 @@
   }
   // ekrandaki gönderiye göre platformu ve eylemleri yenile
   function rlGuncelle(u) {
-    const kt = rlKatman(), v = rlVeri.get(u), EN = window.DIL === "en";
+    const kt = rlKatman(), EN = window.DIL === "en";
+    let v = rlVeri.get(u), s_ = u;
+    if (v && v.tur === "seri") { s_ = u._kareler[u._i || 0]; v = rlVeri.get(s_); }
     const yan = kt.querySelector(".rl-yan"), pl = kt.querySelector(".rl-platform");
     yan.textContent = ""; pl.textContent = ""; pl.classList.remove("acik");
     kt.classList.toggle("rl-bos", !v || v.tur !== "haber");
@@ -1416,10 +1477,11 @@
       if (v.not) { const s = el("div", "rl-kim"); s.append(avatarZbs(), el("b", null, "Alboroto")); pl.append(s, el("p", "rl-baslik", v.not)); kt.classList.remove("rl-bos"); }
       return;
     }
+    if (v.tur === "kars") return;
     const { h, k, hikaye } = v;
     kt.style.setProperty("--hesap", HS.renk(k).ana);
     // sağ sütun
-    if (hikaye && hikaye.yayinSayisi > 1) yan.appendChild(rlEylem(SVG.katman, hikaye.yayinSayisi, EN ? "Same story" : "Aynı haber", () => rlSayfa(hikaye, h)));
+    if (hikaye && hikaye.yayinSayisi > 1) yan.appendChild(rlEylem(SVG.katman, hikaye.yayinSayisi, EN ? "Same story" : "Aynı haber", () => (u._git ? u._git(1) : rlSayfa(hikaye, h))));
     yan.appendChild(rlEylem(SVG.paylas, null, EN ? "Share" : "Paylaş", () => rlPaylas(baslikSec(h), h.url)));
     const git = rlEylem(SVG.git, null, EN ? "Source" : "Kaynak", () => window.open(h.url, "_blank", "noopener"));
     yan.appendChild(git);
@@ -1432,7 +1494,7 @@
     tk.onclick = (e) => { e.stopPropagation(); const t = HS.takipDegis(k.id); tyaz(); rlBildir(t ? (EN ? "Following " : "Takip ediliyor: ") + k.ad : (EN ? "Unfollowed " : "Takipten çıkıldı: ") + k.ad); };
     tyaz(); kim.appendChild(tk);
     pl.appendChild(kim);
-    const gorselli = u.classList.contains("rl-gorselli");
+    const gorselli = s_.classList.contains("rl-gorselli");
     const nrm = (t) => String(t || "").toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
     const farkli = h.baslik_orj && nrm(h.baslik_orj) !== nrm(baslikSec(h));
     const ana = gorselli ? baslikSec(h) : (OZ(h) || (farkli ? h.baslik_orj : ""));
@@ -1450,6 +1512,12 @@
     const kun = el("p", "rl-kunye"); kun.innerHTML = SVG.dunya;
     kun.appendChild(document.createTextNode([HS.kampYaz(k), HS.dilYaz(h.dil || k.dil), once(h.tarih)].filter(Boolean).join(" · ") + (h.nitelik === "analiz" ? (EN ? " · Analysis" : " · Analiz") : "")));
     pl.appendChild(kun);
+    // yana kayan gönderide ilk karede ipucu
+    if (u._kareler && (u._i || 0) === 0) {
+      const ip = el("button", "rl-kaydir", (EN ? "Compare " : "Karşılaştır · ") + (u._kareler.length - 1) + (EN ? " more →" : " kart →")); ip.type = "button";
+      ip.onclick = (e) => { e.stopPropagation(); u._git(1); };
+      pl.insertBefore(ip, pl.firstChild);
+    }
   }
   function avatarZbs() { const a = el("div", "avatar rl-av logolu"); a.innerHTML = '<img src="site/logo.svg" alt="">'; return a; }
   // aynı haberi yazan öteki hesaplar: alttan açılan sayfa
