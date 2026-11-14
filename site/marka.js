@@ -27,7 +27,26 @@ window.MARKA = {
       if (a) e.setAttribute(a, yaz(e.getAttribute("data-marka-sablon"))); else e.textContent = yaz(e.getAttribute("data-marka-sablon"));
     });
   };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", doldur); else doldur();
+  // Slogan, marka adıyla aynı taban çizgisine oturur: iki yazının taban çizgisi ölçülür, slogan farkı kadar kaydırılır
+  // (yazı tipleri farklı olduğu için dikeyde ortalamak taban çizgilerini hizalamıyor)
+  var taban = function (e) {
+    var i = document.createElement("i"); i.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+    e.appendChild(i); var y = i.getBoundingClientRect().top; i.remove(); return y;
+  };
+  var hizala = function () {
+    var ad = document.querySelector(".ust .marka-ad");
+    var sl = [].filter.call(document.querySelectorAll(".ust .slogan"), function (x) { return x.offsetParent && !x.hidden; })[0];
+    if (!ad || !sl) return;
+    sl.style.transform = "";
+    var d = taban(ad) - taban(sl);
+    if (Math.abs(d) < 12) sl.style.transform = "translateY(" + d.toFixed(1) + "px)";
+  };
+  var hazir = function () {
+    doldur(); hizala();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(hizala);
+    addEventListener("resize", hizala);
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hazir); else hazir();
   // Ziyaret sayacı (GoatCounter): çerez kullanmaz; yalnızca "goatcounter" alanı doluysa yüklenir
   if (M.goatcounter && /^[a-z0-9-]+$/.test(M.goatcounter)) {
     var g = document.createElement("script");
