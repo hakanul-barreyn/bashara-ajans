@@ -38,6 +38,7 @@ UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 SURE = int(os.environ.get("METIN_SURE", "4200"))
 ARALIK = 2.0                      # aynı siteye iki istek arası en az (saniye)
 ESZAMANLI = 12                    # aynı anda işlenen site
+OLCUM_SURUM = 2                   # 1: "bm" atfı büyük/küçük harfe duyarsızdı (Fransızca "un", İngilizce "who" karışıyordu)
 EN_AZ_KELIME = 120                # bundan kısa metin (duvar, özet sayfası) ölçülmez
 ORNEK_YAYIN_AY = 6                # geçmiş örneklemi: yayın x ay başına en çok ölüm başlığı
 DUVARLI = ("nytimes.com", "washingtonpost.com", "wsj.com", "ft.com", "economist.com", "thetimes.co.uk", "telegraph.co.uk",
@@ -47,15 +48,16 @@ DUVARLI = ("nytimes.com", "washingtonpost.com", "wsj.com", "ft.com", "economist.
 
 # ---------------------------------------------------------------- ölçüm
 ATIF = {
-    "ordu": re.compile(r"\bIDF\b|israeli (?:army|military|forces|defen[cs]e forces)|the (?:army|military) (?:said|says|claimed)|"
+    "ordu": re.compile(r"(?-i:\bIDF\b)|israeli (?:army|military|forces|defen[cs]e forces)|the (?:army|military) (?:said|says|claimed)|"
                        r"military spokes|army spokes|israil ordusu|i̇srail ordusu|ordu sözcüsü|tsahal|armée israélienne|ejército israelí|"
                        r"esercito israeliano|israelische armee|جيش الاحتلال|الجيش الإسرائيلي|المتحدث باسم جيش|צה\"ל|דובר צה", re.I),
     "israil_yetkili": re.compile(r"netanyahu|nethanyahu|israeli (?:officials?|government|prime minister|minister)|prime minister'?s office|"
                                  r"gallant|\bkatz\b|smotrich|ben[- ]gvir|herzog|israil hükümeti|israil başbakan|نتنياهو|الحكومة الإسرائيلية", re.I),
     "bakanlik": re.compile(r"health ministry|ministry of health|sağlık bakanlığı|ministère de la santé|ministerio de sanidad|ministerio de salud|"
                            r"ministero della salute|gesundheitsministerium|وزارة الصحة", re.I),
-    "bm": re.compile(r"\bUN\b|united nations|\bUNRWA\b|\bWHO\b|world health organi[sz]ation|\bOCHA\b|\bUNICEF\b|\bBM\b|birleşmiş milletler|"
-                     r"nations unies|naciones unidas|nazioni unite|vereinten nationen|الأمم المتحدة|أونروا|الأونروا|منظمة الصحة", re.I),
+    # kısaltmalar büyük/küçük harfe duyarlı: "UN" Fransızca/İspanyolca "un", "WHO" İngilizce "who" ile karışmasın
+    "bm": re.compile(r"(?-i:\b(?:UN|UNRWA|WHO|OCHA|UNICEF|BM|ONU|OMS)\b)|united nations|world health organi[sz]ation|birleşmiş milletler|"
+                     r"dünya sağlık örgütü|nations unies|naciones unidas|nazioni unite|vereinten nationen|الأمم المتحدة|أونروا|الأونروا|منظمة الصحة", re.I),
     "tanik": re.compile(r"\bwitness(?:es)?\b|eyewitness|residents? (?:said|told|say)|survivors? (?:said|told)|tanık|görgü tanığı|"
                         r"témoin|testigo|testimon|augenzeuge|شهود|شاهد عيان|أفاد سكان", re.I),
     "filistin_yetkili": re.compile(r"palestinian (?:officials?|authority|civil defen[cs]e|red crescent)|civil defen[cs]e|sivil savunma|kızılay|"
@@ -181,7 +183,7 @@ def getir(s, x):
         if len(metin.split()) < EN_AZ_KELIME:
             durum = "kisa"
             continue
-        kayit.update({"durum": "ok", "arsiv": bool(i), "parmak": hashlib.sha256(metin.encode()).hexdigest()[:24],
+        kayit.update({"durum": "ok", "surum": OLCUM_SURUM, "arsiv": bool(i), "parmak": hashlib.sha256(metin.encode()).hexdigest()[:24],
                       "olc": olc(metin, x.get("b") or ""), "tf": kelime_sayilari(metin)})
         del metin, r
         return kayit
@@ -323,7 +325,10 @@ def ozet(durum, cikti):
                     c["baslik_failsiz"] += 1
                     c["baslik_failsiz_govde_fail"] += bool(o.get("govde_fail"))
                 for a in o.get("atif") or {}:
+                    if a == "bm" and k.get("surum", 1) < 2:
+                        continue
                     c["atif:" + a] += 1
+                c["haber_bm"] += k.get("surum", 1) >= 2
                 if (o.get("atif") or {}).get("bakanlik"):
                     c["niteleme_bakanlikla"] += bool(o.get("niteleme"))
                 for a in o.get("baglam") or {}:
@@ -338,7 +343,8 @@ def ozet(durum, cikti):
                       "giris_fail": round(100 * c["giris_fail"] / max(1, c["olum_giris"]), 1) if c["olum_giris"] else None,
                       "baslikta_yok_govdede_var": round(100 * c["baslik_failsiz_govde_fail"] / c["baslik_failsiz"], 1) if c["baslik_failsiz"] else None,
                       "baslik_failsiz_n": c["baslik_failsiz"],
-                      "atif": {a.split(":")[1]: round(100 * v / n, 1) for a, v in c.items() if a.startswith("atif:")},
+                      "atif": {a.split(":")[1]: round(100 * v / (c["haber_bm"] if a == "atif:bm" else n), 1)
+                               for a, v in c.items() if a.startswith("atif:") and (a != "atif:bm" or c["haber_bm"])},
                       "niteleme_bakanlikla": round(100 * c["niteleme_bakanlikla"] / c["atif:bakanlik"], 1) if c["atif:bakanlik"] else None,
                       "baglam": {a.split(":")[1]: round(100 * v / n, 1) for a, v in c.items() if a.startswith("baglam:")},
                       "olum_govde_n": c["olum_govde"]}
