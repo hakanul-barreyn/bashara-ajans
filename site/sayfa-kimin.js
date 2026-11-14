@@ -91,7 +91,9 @@
     var bd = el("tbody");
     ["bati_ana", "bati_muhalif", "bolge", "turkiye", "israil"].forEach(function (g) {
       var o = v.oran[g]; if (!o) return; var r = el("tr");
-      r.append(el("td", null, AD[g]), el("td", "sayi", sayi(o.israilli_baslik, 0)), el("td", "sayi", sayi(100 * o.israilli_olu_basina, 1)), el("td", "sayi", sayi(o.filistinli_baslik, 0)), el("td", "sayi", sayi(100 * o.filistinli_olu_basina, 1)), el("td", "sayi", o.kat == null ? "–" : sayi(o.kat, 1) + "×"), el("td", "sayi", sayi(o.rehine_baslik, 0)));
+      // 100 başlıktan az veriye dayanan oran gösterilmez (yetersiz örneklem)
+      var az = o.israilli_baslik < 100 || o.filistinli_baslik < 100;
+      r.append(el("td", null, AD[g]), el("td", "sayi", sayi(o.israilli_baslik, 0)), el("td", "sayi", az ? "–" : sayi(100 * o.israilli_olu_basina, 1)), el("td", "sayi", sayi(o.filistinli_baslik, 0)), el("td", "sayi", az ? "–" : sayi(100 * o.filistinli_olu_basina, 1)), el("td", "sayi", az ? tt("yetersiz örneklem", "sample too small") : o.kat == null ? "–" : sayi(o.kat, 1) + "×"), el("td", "sayi", sayi(o.rehine_baslik, 0)));
       bd.appendChild(r);
     });
     t.appendChild(bd); var kt = el("div", "tablo-kutu"); kt.appendChild(t); $("g-oran-tablo").appendChild(kt);

@@ -35,7 +35,7 @@
       k.appendChild(bas);
       // kim yazdı: her nokta bir yayın
       var s1 = el("article", "rp-metin");
-      s1.appendChild(el("h2", null, tt("Kim yazdı, kim sustu?", "Who covered it, who stayed silent?")));
+      s1.appendChild(el("h2", null, tt("Kim yazdı, kim yazmadı?", "Who covered it, who did not cover it?")));
       s1.appendChild(el("p", null, tt("Olayın günlerinde (bir gün önce, iki gün sonra) en az 15 başlık yayımlayan her yayın bir nokta. Dolu: bu türden en az bir başlık attı. Boş: yayındaydı, tek başlık atmadı.", "Each outlet that published at least 15 headlines in the event’s window (one day before, two after) is a dot. Filled: ran at least one headline of this kind. Hollow: was publishing, ran none.")));
       ["bolge", "turkiye", "israil", "bati_ana", "bati_muhalif"].forEach(function (g) {
         var s = x.sessiz && x.sessiz[g]; if (!s || !s[1]) return;
@@ -146,7 +146,7 @@
             });
             if (!(o.ornek || []).length) ul2.appendChild(el("li", null, tt("Örnek başlık yok.", "No sample headline.")));
             ol.appendChild(ul2);
-            var t = el("a", "kt-tam", tt("Olayın sayfası: kim yazdı, kim sustu →", "Event page: who covered it, who stayed silent →")); t.href = "#" + kim(o); ol.appendChild(t);
+            var t = el("a", "kt-tam", tt("Olayın sayfası: kim yazdı, kim yazmadı →", "Event page: who covered it, who did not cover it →")); t.href = "#" + kim(o); ol.appendChild(t);
             d.appendChild(ol);
           });
         });

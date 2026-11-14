@@ -16,7 +16,7 @@
   }
   function kat(x) { return x == null ? "–" : Number(x).toLocaleString(YER, { maximumFractionDigits: 1 }) + "×"; }
   var GAD = EN ? { israil: "Israeli press", bati_ana: "Western mainstream", ik: "Collaborationist line (region)" } : { israil: "İsrail basını", bati_ana: "Batı ana akım", ik: "Bölgede işbirlikçi çizgi" };
-  var HAD = EN ? { sustu: "Stayed silent", fail: "Hid the killer", tarti: "Weighed Israeli deaths more" } : { sustu: "Sustu", fail: "Faili sakladı", tarti: "İsrailli ölümü öne çıkardı" };
+  var HAD = EN ? { sustu: "No headline for most events", fail: "Mostly did not name the killer", tarti: "Gave Israeli deaths more space per death" } : { sustu: "Olayların çoğunda başlık atmadı", fail: "Faili çoğunlukla yazmadı", tarti: "İsrailli ölümlere ölü başına daha çok yer verdi" };
   fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (v) {
     var h = v.hukum || [];
     if (!h.length) { k.appendChild(el("p", "bekliyor", tt("Sonuç bölümü toplayıcının bir sonraki çalışmasında yazılacak.", "The conclusion will be written on the collector’s next run."))); return; }
@@ -48,9 +48,9 @@
     // geri kalanlar
     var kalan = h.filter(function (r) { return !r.hukum.length; });
     if (kalan.length) {
-      var det = el("details", "sn-kalan"); det.appendChild(el("summary", null, tt("Hüküm verilmeyen yayınlar (" + kalan.length + ") ve nedeni", "Outlets without a verdict (" + kalan.length + ") and why")));
+      var det = el("details", "sn-kalan"); det.appendChild(el("summary", null, tt("Öne çıkarılmayan yayınlar (" + kalan.length + ") ve nedeni", "Outlets not highlighted (" + kalan.length + ") and why")));
       var tb = el("div", "rp-tablo"); var tbl = el("table"); var th = el("thead"); var tr0 = el("tr");
-      [tt("Yayın", "Outlet"), tt("Susma", "Silence"), tt("Faili saklama", "Killer hidden"), tt("Ölü başına kat", "Per-death ratio"), tt("Tanık basın (aynı dil)", "Witness press (same language)")].forEach(function (x) { tr0.appendChild(el("th", null, x)); });
+      [tt("Yayın", "Outlet"), tt("Başlık atmama", "No headline"), tt("Faili yazmama", "Killer not named"), tt("Ölü başına kat", "Per-death ratio"), tt("Tanık basın (aynı dil)", "Witness press (same language)")].forEach(function (x) { tr0.appendChild(el("th", null, x)); });
       th.appendChild(tr0); tbl.appendChild(th); var bd = el("tbody");
       kalan.forEach(function (r) {
         var t = r.taban || {}; var tr = el("tr");
@@ -61,7 +61,7 @@
       tbl.appendChild(bd); tb.appendChild(tbl); det.appendChild(tb); k.appendChild(det);
     }
     k.appendChild(el("p", "rp-not", tt(
-      "Hüküm üç koşulla verilir: yeterli ölçüm (en az 20 olay, 30 başlık), yüksek oran (susma %80, faili saklama %60, ölü başına 3 kat) ve aynı dildeki tanık basından belirgin fark (en az 15 puan ya da 2 kat). Böylece bir dilde ölçüm aracımız zayıfsa ya da bir yayının arşivi seyrekse hüküm çıkmaz. “Sustu”: o olay türünden tek başlık yok; aynı günlerde aynı türden başka bir olayı yazmak da “yazdı” sayılır. Sayımlar geriye dönük taramanın özgün başlıklarından, yapay zekâ kullanılmadan.",
-      "A verdict needs three things: enough measurements (at least 20 events, 30 headlines), a high rate (silence 80%, killer hidden 60%, a per-death ratio of 3) and a clear gap from witness press in the same language (at least 15 points or twice as much). So if our measurement is weak in a language, or an outlet’s archive is sparse, no verdict is given. “Stayed silent”: no headline of that kind at all; covering another event of the same kind in those days counts as covering it. Counts come from original headlines in the backfill, without AI.")));
+      "Bir ölçüm üç koşulla öne çıkarılır: yeterli ölçüm (en az 20 olay, 30 başlık), yüksek oran (başlık atmama %80, faili yazmama %60, ölü başına 3 kat) ve aynı dildeki tanık basından belirgin fark (en az 15 puan ya da 2 kat). Böylece bir dilde ölçüm aracımız zayıfsa ya da bir yayının arşivi seyrekse öne çıkarılmaz. Bunlar ölçümdür, yayının niyeti hakkında yargı değildir. “Başlık atmadı”: o olay türünden tek başlık yok; aynı günlerde aynı türden başka bir olayı yazmak da “yazdı” sayılır. Sayımlar geriye dönük taramanın özgün başlıklarından, yapay zekâ kullanılmadan.",
+      "A measurement is highlighted only with three things: enough measurements (at least 20 events, 30 headlines), a high rate (no headline 80%, killer not named 60%, a per-death ratio of 3) and a clear gap from witness press in the same language (at least 15 points or twice as much). So if our measurement is weak in a language, or an outlet’s archive is sparse, nothing is highlighted. These are measurements, not judgements about intent. “No headline”: no headline of that kind at all; covering another event of the same kind in those days counts as covering it. Counts come from original headlines in the backfill, without AI.")));
   }).catch(function () { /* veri yok */ });
 })();

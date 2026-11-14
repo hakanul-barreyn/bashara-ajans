@@ -163,7 +163,7 @@
     v.terimler.forEach(function (tr) {
       var en = Math.max.apply(0, GR.map(function (g) { return G[g].binde[tr.anahtar] || 0; })) || 1;
       var s = el("div", "rp-terim-satir");
-      var a = el("div", "rp-terim-ad", "“" + tAd(tr).replace(/[“”]/g, "") + "”"); a.classList.add(tr.yan === "filistin" ? "yesil" : "mavi"); s.appendChild(a);
+      var a = el("div", "rp-terim-ad", "“" + tAd(tr).replace(/[“”]/g, "") + "”"); s.appendChild(a);
       var cs = el("div", "rp-terim-cubuklar");
       GR.forEach(function (g) { var d = G[g].binde[tr.anahtar] || 0, c = el("div", "rp-cubuk"); var i = el("i"); i.style.width = Math.max(0.5, 100 * d / en) + "%"; i.style.background = R[g]; c.appendChild(i); c.appendChild(el("span", null, sayi(d))); c.title = AD[g] + T(": binde ", ": per thousand ") + sayi(d); cs.appendChild(c); });
       s.appendChild(cs); t.appendChild(s);
@@ -172,7 +172,7 @@
   }
 
   // ---- 3) faillik
-  var FK = [["aktif", T("Fail yazılı: “İsrail öldürdü”", "Killer named: “Israel killed”"), "#262a28"], ["failli", T("Fail yazılı: “İsrail tarafından / İsrail saldırısında öldürüldü”", "Killer named: “killed by Israel / in an Israeli strike”"), "#5b6360"], ["failsiz", T("Fail saklı: “öldürüldü”", "Killer hidden: “were killed”"), "#e0702b"], ["oldu", T("Öldürme bile yok: “öldü”, “ölü sayısı”", "Not even a killing: “died”, “death toll”"), "#f2b13a"], ["sehadet", T("Şehadet dili: “şehit oldu”", "Martyrdom: “martyred”"), "#1f7a52"]];
+  var FK = [["aktif", T("Fail yazılı: “İsrail öldürdü”", "Killer named: “Israel killed”"), "#262a28"], ["failli", T("Fail yazılı: “İsrail tarafından / İsrail saldırısında öldürüldü”", "Killer named: “killed by Israel / in an Israeli strike”"), "#5b6360"], ["failsiz", T("Fail yazılmamış: “öldürüldü”", "Killer not named: “were killed”"), "#e0702b"], ["oldu", T("Öldürme bile yok: “öldü”, “ölü sayısı”", "Not even a killing: “died”, “death toll”"), "#f2b13a"], ["sehadet", T("Şehadet dili: “şehit oldu”", "Martyrdom: “martyred”"), "#1f7a52"]];
   function faillik(v, G) {
     var k = $("g-faillik"); efsane([], k, FK.map(function (f) { return [f[2], f[1]]; }));
     GR.forEach(function (g) {
@@ -186,7 +186,7 @@
   function kiminOlumu(v, G) {
     var k = $("g-kimin"); efsane([], k, [["#262a28", T("Filistinlilerin ölümü: fail yazılmış", "Palestinian deaths: killer named")], ["#c9544e", T("İsraillilerin ölümü: fail yazılmış", "Israeli deaths: killer named")]]);
     ["bolge", "bati_ana", "israil"].forEach(function (g) {
-      var f = G[g].fail_yazilan; if (f.israilli == null || f.israilli_n < 60) return;   // küçük örneklemi gösterme
+      var f = G[g].fail_yazilan; if (f.israilli == null || f.israilli_n < 100) return;   // küçük örneklemi gösterme
       var s = el("div", "rp-kimin"); s.appendChild(el("span", "rp-yigin-ad", AD[g]));
       [[f.filistinli, "#262a28"], [f.israilli, "#c9544e"]].forEach(function (x) { var c = el("div", "rp-kimin-cubuk"); var i = el("i"); i.style.width = x[0] + "%"; i.style.background = x[1]; c.append(i, el("em", null, yuzde(x[0]))); s.appendChild(c); });
       k.appendChild(s);

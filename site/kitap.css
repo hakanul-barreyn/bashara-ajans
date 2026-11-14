@@ -58,6 +58,7 @@ details.ky-cilt[open]>summary::after{content:"–"}
 .bolum-tarih{font:500 .82rem var(--mono);color:var(--murekkep2)}
 .bolum-kunye{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 .72rem var(--mono);color:var(--silik);padding:10px 0;border-block:1px solid var(--hat)}
 .bolum-kunye .taslak{color:#85580a;background:#f8edd5;padding:1px 8px;border-radius:999px}
+.yz-etiket{font:500 .74rem/1.45 "Plus Jakarta Sans",system-ui,sans-serif;color:var(--murekkep2);background:color-mix(in srgb,var(--hat) 35%,transparent);border-radius:6px;padding:6px 10px;margin:4px 0 14px}
 .bolum-not{font:italic 400 .95rem/1.55 var(--serif);color:var(--murekkep2);border-left:3px solid var(--hat);padding-left:14px}
 
 /* kısımlar */

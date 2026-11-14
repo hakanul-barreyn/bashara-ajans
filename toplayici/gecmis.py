@@ -557,15 +557,22 @@ def anlati_yaz(anahtar_api, model, ad, ist):
 
 
 def _donemler(son_gun):
-    """7 Ekim 2023'ten son_gun'e (hariç) kadar tamamen biten haftalar, aylar ve yıllar."""
+    """7 Ekim 2023'ten son_gun'e (hariç) kadar tamamen biten haftalar, aylar ve yıllar. Canlı toplayıcının başladığı yıl
+    ise canlı başlangıca kadar kısmi yıl olarak verilir (ad'ında kapsadığı tarih aralığı yazar)."""
     for tur in ("yillik", "aylik", "haftalik"):
         anahtar = almanak.anahtar_bul(tur, BASLANGIC)
         while True:
             bas, bit, ad = almanak.donem(tur, anahtar)
             if bit > son_gun:
+                if tur == "yillik" and bas < son_gun and (son_gun - bas).days > 31:
+                    son = son_gun - dt.timedelta(days=1)
+                    yield tur, anahtar, bas, son_gun, f"{ad} (1 Ocak – {son.day} {AY_AD[son.month - 1]} {son.year})"
                 break
             yield tur, anahtar, bas, bit, ad
             anahtar = almanak.anahtar_bul(tur, bit)
+
+
+AY_AD = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
 
 def bultenler(kok, kaynaklar, simdi, en_cok=300, anahtar_api="", model="", yorum=1, log=print):
@@ -584,8 +591,9 @@ def bultenler(kok, kaynaklar, simdi, en_cok=300, anahtar_api="", model="", yorum
             break
         yol = os.path.join(klasor, tur, anahtar + ".json")
         var = almanak._oku(yol, None)
-        if var and var.get("istatistik", {}).get("kaynak") != "tarama":
-            continue   # canlı bülten varsa ona dokunma
+        # canlı bülten varsa ona dokunma; ama canlı veri dönemin başını kapsamıyorsa (kısmi yıl) tarama sürümü yazılır
+        if var and var.get("kaynak", "canli") != "tarama" and (canli_bas - bas).days <= 2:
+            continue
         if var and var.get("ozet_guncellendi") == oz["guncellendi"] and var.get("surum") == BULTEN_SURUM:
             continue
         ist = istatistik(oz, bas, bit, kaynaklar)

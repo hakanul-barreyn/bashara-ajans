@@ -559,6 +559,11 @@ def bultenleri_guncelle(kok, kaynaklar, anahtar_api, model, simdi, sure_var=lamb
     """Gereken bültenleri üretir. Döndürür: (üretilen sayısı, 429 alındı mı)."""
     klasor = os.path.join(kok, "data", "bulten")
     bugun = simdi.date()
+    # canlı arşivin başladığı gün: bundan önce başlayan ay ve yıl bültenlerini canlı veri tek başına kapsayamaz
+    # (eski hata: "2026 yılına ait 1 günlük dönem"); onları geçmiş taraması (gecmis.py) yazar
+    ark = os.path.join(kok, "data", "arsiv")
+    gunler = sorted(a[:10] for a in os.listdir(ark) if a.endswith(".json") and a[:4].isdigit()) if os.path.isdir(ark) else []
+    canli_bas = dt.date.fromisoformat(gunler[0]) if gunler else bugun
     isler = []
     for tur in ("haftalik", "aylik", "yillik"):
         su_an = anahtar_bul(tur, bugun)
@@ -581,8 +586,13 @@ def bultenleri_guncelle(kok, kaynaklar, anahtar_api, model, simdi, sure_var=lamb
         if var and not var.get("anlati") and var.get("deneme", 0) >= 6 and not taslak:
             continue
         bas, bit, ad = donem(tur, anahtar)
+        if tur != "haftalik" and (canli_bas - bas).days > 2:
+            continue
         ist = istatistik(kok, bas, bit, kaynaklar)
         if not ist:
+            continue
+        # arşiv kısaldıysa (eski günler silindiyse) var olan bülteni daha az veriyle ezme
+        if var and var.get("istatistik", {}).get("haber_sayisi", 0) > ist["haber_sayisi"] * 1.1:
             continue
         o_anahtar = anahtar_bul(tur, bas - dt.timedelta(days=1))
         ob, obit, oad = donem(tur, o_anahtar)

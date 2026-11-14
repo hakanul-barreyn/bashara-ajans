@@ -12,7 +12,7 @@
     if (!liste.length) { karneKutu.appendChild(el("p", "bos2", "Karne için yeterli veri birikmedi.")); return; }
     var SUT = [
       ["ad", "Yayın"], ["kamp", "Kamp"], ["olum_baslik", "Ölüm başlığı", "Son 30 günde Filistinlilerin ölümünü anlatan özgün başlık sayısı"],
-      ["fail_gizli", "Faili saklama %", "Bu başlıkların yüzde kaçında öldüren yazılmamış: “öldü”, “hayatını kaybetti” ya da kimin öldürdüğü belirtilmeden “öldürüldü”"],
+      ["fail_gizli", "Faili yazmama %", "Bu başlıkların yüzde kaçında öldüren yazılmamış: “öldü”, “hayatını kaybetti” ya da kimin öldürdüğü belirtilmeden “öldürüldü”"],
       ["ordu", "İsrail ordusuna dayanma %", "Haberin dayanağı İsrail ordusunun açıklaması olan haberlerin payı"],
       ["baglam", "Bağlam verme %", "İşgal, abluka ya da öncesi gibi bir bağlam veren haberlerin payı"],
       ["gecikme", "Gecikme (sa)", "Yalnızca İsrail ve Batı basını: olayın bölge basınındaki ilk haberinden sonra geçen süre (ortanca)"]];
@@ -24,12 +24,12 @@
     sec.onchange = function () { kamp = sec.value; ciz(); };
     arac.appendChild(sec); karneKutu.appendChild(arac);
     var acik = el("dl", "karne-acik");
-    [["Faili saklama %", "Filistinlilerin ölümünü anlatan başlıklardan kaçında öldürenin adı yok. Örnek: “Gazze’de 5 kişi öldü” faili saklar; “İsrail ordusu Gazze’de 5 kişiyi öldürdü” saklamaz. “Şehit oldu” diyen başlıklar hesaba katılmaz. Yüksek oran kötü."],
+    [["Faili yazmama %", "Filistinlilerin ölümünü anlatan başlıklardan kaçında öldürenin adı yok. Örnek: “Gazze’de 5 kişi öldü” faili yazmaz; “İsrail ordusu Gazze’de 5 kişiyi öldürdü” yazar. “Şehit oldu” diyen başlıklar hesaba katılmaz. Otomatik sayımdır; tek tek başlıklarda hata payı vardır."],
      ["İsrail ordusuna dayanma %", "Haberin bilgiyi İsrail ordusunun açıklamasına dayandırdığı haberlerin payı. Yüksek oran, olayın İsrail’in anlatımıyla verildiğini gösterir."],
      ["Bağlam verme %", "Haberin işgal, abluka ya da olayın öncesi gibi bir bağlam verip vermediği. Yüksek oran iyi."],
      ["Gecikme", "Yalnızca İsrail ve Batı basını için: olayı bölge basınından kaç saat sonra yazdığı."]].forEach(function (x) { acik.append(el("dt", null, x[0]), el("dd", null, x[1])); });
     karneKutu.appendChild(acik);
-    karneKutu.appendChild(el("p", "karne-ipucu", "Sütun başlığına tıklayınca tablo o sütuna göre sıralanır. Bir yayının satırına tıklayınca faili saklayan başlıklarından örnekler açılır."));
+    karneKutu.appendChild(el("p", "karne-ipucu", "Sütun başlığına tıklayınca tablo o sütuna göre sıralanır. Bir yayının satırına tıklayınca faili yazmayan başlıklarından örnekler açılır."));
     var sar = el("div", "karne-sar"); var tab = el("table", "karne"); sar.appendChild(tab); karneKutu.appendChild(sar);
     function ciz() {
       tab.textContent = "";
@@ -59,7 +59,7 @@
         if ((r.fail_ornek || []).length) {
           tr.classList.add("karne-acilir"); tr.title = "Örnekleri göster";
           var ek = el("tr", "karne-ornek"); ek.hidden = true; var td2 = el("td"); td2.colSpan = SUT.length;
-          td2.appendChild(el("b", null, "Faili saklayan başlıklardan örnekler"));
+          td2.appendChild(el("b", null, "Faili yazmayan başlıklardan örnekler"));
           r.fail_ornek.forEach(function (o) { var d = el("div"); var a = el("a", null, o.b); a.href = o.url; a.target = "_blank"; a.rel = "noopener"; a.dir = "auto"; d.appendChild(a); if (o.tr && o.tr !== o.b) d.appendChild(el("small", null, " · " + o.tr)); td2.appendChild(d); });
           ek.appendChild(td2); tb.appendChild(ek);
           tr.onclick = function () { ek.hidden = !ek.hidden; };
