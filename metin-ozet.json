@@ -1,0 +1,211 @@
+{
+ "guncellendi": "2026-11-14T11:57:19.575952Z",
+ "durumlar": {
+  "duvar": 1,
+  "ok": 4701,
+  "kisa": 936,
+  "http": 301,
+  "robots": 162
+ },
+ "gruplar": {
+  "bolge": {
+   "haber": 4266,
+   "govde_fail": 69.3,
+   "govde_fail_ga": [
+    67.9,
+    70.7
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    58.6,
+    65.0
+   ],
+   "giris_fail": 57.0,
+   "baslikta_yok_govdede_var": 61.9,
+   "baslik_failsiz_n": 884,
+   "atif": {
+    "bm": 40.4,
+    "ordu": 62.8,
+    "filistin_yetkili": 21.7,
+    "israil_yetkili": 20.9,
+    "tanik": 14.4,
+    "bakanlik": 38.0
+   },
+   "niteleme_bakanlikla": 7.5,
+   "baglam": {
+    "abluka": 11.6,
+    "isgal": 45.9,
+    "yerlesim": 14.5,
+    "soykirim": 26.5,
+    "yedi_ekim": 27.3,
+    "apartheid": 0.7,
+    "nekbe": 2.3
+   },
+   "olum_govde_n": 4020
+  },
+  "hepsi": {
+   "haber": 4701,
+   "govde_fail": 70.9,
+   "govde_fail_ga": [
+    69.5,
+    72.2
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    60.0,
+    65.9
+   ],
+   "giris_fail": 57.9,
+   "baslikta_yok_govdede_var": 63.0,
+   "baslik_failsiz_n": 1046,
+   "atif": {
+    "bm": 43.1,
+    "ordu": 63.0,
+    "filistin_yetkili": 21.9,
+    "israil_yetkili": 21.7,
+    "tanik": 14.3,
+    "bakanlik": 38.4
+   },
+   "niteleme_bakanlikla": 10.5,
+   "baglam": {
+    "abluka": 11.0,
+    "isgal": 42.7,
+    "yerlesim": 14.0,
+    "soykirim": 24.3,
+    "yedi_ekim": 27.6,
+    "apartheid": 0.6,
+    "nekbe": 2.2
+   },
+   "olum_govde_n": 4437
+  },
+  "bati_ana": {
+   "haber": 186,
+   "govde_fail": 90.1,
+   "govde_fail_ga": [
+    84.9,
+    93.7
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    67.1,
+    85.5
+   ],
+   "giris_fail": 64.4,
+   "baslikta_yok_govdede_var": 77.6,
+   "baslik_failsiz_n": 76,
+   "atif": {
+    "israil_yetkili": 31.2,
+    "bm": 67.2,
+    "ordu": 72.0,
+    "tanik": 11.8,
+    "bakanlik": 60.8,
+    "filistin_yetkili": 29.6
+   },
+   "niteleme_bakanlikla": 38.9,
+   "baglam": {
+    "isgal": 15.6,
+    "abluka": 7.5,
+    "yerlesim": 13.4,
+    "yedi_ekim": 39.8,
+    "nekbe": 2.2,
+    "soykirim": 1.6
+   },
+   "olum_govde_n": 182
+  },
+  "diger": {
+   "haber": 149,
+   "govde_fail": 89.9,
+   "govde_fail_ga": [
+    84.0,
+    93.8
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    65.1,
+    88.0
+   ],
+   "giris_fail": 74.0,
+   "baslikta_yok_govdede_var": 78.7,
+   "baslik_failsiz_n": 47,
+   "atif": {
+    "bm": 64.4,
+    "tanik": 16.1,
+    "israil_yetkili": 34.2,
+    "bakanlik": 36.2,
+    "filistin_yetkili": 22.1,
+    "ordu": 65.8
+   },
+   "niteleme_bakanlikla": 38.9,
+   "baglam": {
+    "yedi_ekim": 32.2,
+    "nekbe": 2.7,
+    "abluka": 4.0,
+    "isgal": 8.7,
+    "yerlesim": 3.4,
+    "soykirim": 3.4,
+    "apartheid": 0.7
+   },
+   "olum_govde_n": 148
+  },
+  "israil": {
+   "haber": 74,
+   "govde_fail": 72.5,
+   "govde_fail_ga": [
+    61.0,
+    81.6
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    35.5,
+    71.2
+   ],
+   "giris_fail": 58.7,
+   "baslikta_yok_govdede_var": 53.8,
+   "baslik_failsiz_n": 26,
+   "atif": {
+    "israil_yetkili": 23.0,
+    "bm": 75.7,
+    "ordu": 48.6,
+    "filistin_yetkili": 18.9,
+    "bakanlik": 12.2,
+    "tanik": 12.2
+   },
+   "niteleme_bakanlikla": 33.3,
+   "baglam": {
+    "nekbe": 1.4,
+    "isgal": 8.1,
+    "yerlesim": 9.5,
+    "yedi_ekim": 2.7,
+    "abluka": 6.8,
+    "apartheid": 1.4
+   },
+   "olum_govde_n": 69
+  },
+  "bati_muhalif": {
+   "haber": 26,
+   "govde_fail": 55.6,
+   "govde_fail_ga": [
+    33.7,
+    75.4
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    4.3,
+    42.2
+   ],
+   "giris_fail": 35.7,
+   "baslikta_yok_govdede_var": 15.4,
+   "baslik_failsiz_n": 13,
+   "atif": {
+    "bm": 100.0,
+    "ordu": 57.7,
+    "bakanlik": 26.9,
+    "israil_yetkili": 11.5,
+    "tanik": 3.8
+   },
+   "niteleme_bakanlikla": 0.0,
+   "baglam": {
+    "yedi_ekim": 30.8,
+    "yerlesim": 15.4,
+    "soykirim": 11.5,
+    "isgal": 3.8
+   },
+   "olum_govde_n": 18
+  }
+ },
+ "not": "Metin saklanmadan ölçüldü; yüzdeler: haber başına (atıf, bağlam) ya da ölüm geçen haberler içinde (fail)."
+}
