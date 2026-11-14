@@ -63,10 +63,7 @@ body.odak-modu .harita-bolum{display:none}
 .ust-ic{max-width:1240px;margin:0 auto;height:var(--ust);display:flex;align-items:center;gap:14px;padding:0 max(var(--kanat),env(safe-area-inset-right,0px)) 0 max(var(--kanat),env(safe-area-inset-left,0px))}
 .marka{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .logo{width:32px;height:32px;display:block;flex:none;border:0;border-radius:0;background:none}
-.marka-ad{position:relative;font-family:Montserrat,var(--f);font-weight:800;font-size:1.32rem;line-height:1;letter-spacing:.01em;text-transform:uppercase;padding-right:.2em}
-/* el yazısı "news": adın sağ altına, karpuz kırmızısıyla, hafif eğik */
-.marka-ad::after{content:"news";position:absolute;right:-1.55em;bottom:-.42em;font:700 .86em/1 Caveat,"Segoe Script","Bradley Hand",cursive;letter-spacing:0;text-transform:none;color:#ff4a45;transform:rotate(-8deg);pointer-events:none}
-.marka{margin-right:1.6em}
+.marka-ad{font-weight:800;font-size:1.3rem;line-height:1;letter-spacing:.06em}
 .slogan{margin:0;flex:1 1 auto;color:var(--soluk);font-size:.86rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .canli{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.74rem;color:var(--soluk);padding:5px 11px;border:1px solid var(--cizgi);border-radius:999px;background:var(--yuzey);white-space:nowrap}
 .nabiz{width:8px;height:8px;border-radius:50%;background:var(--yesil);box-shadow:0 0 0 0 color-mix(in srgb,var(--yesil) 60%,transparent);animation:nabiz 2s infinite}
@@ -345,7 +342,7 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .ust-ic{gap:8px}
   .canli{display:none}
   .marka{flex:none}
-  .marka-ad{font-size:1.12rem}
+  .marka-ad{font-size:1.1rem}
   .menu{margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;gap:4px}
   .menu::-webkit-scrollbar{display:none}
   .menu a{padding:6px 9px;font-size:.8rem}
