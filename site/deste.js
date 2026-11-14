@@ -16,7 +16,7 @@
 */
 (function (kok) {
   "use strict";
-  var AYAR = { pencereSaat: 24, seriEnAz: 3, analizSaat: 6, molaAralik: 12, yariOmurSaat: 4, kumeSaat: 6, kumeEsik: 0.34, birlesEsik: 0.45 };
+  var AYAR = { pencereSaat: 24, seriEnAz: 3, analizSaat: 6, molaAralik: 12, yariOmurSaat: 4, kumeSaat: 6, kumeEsik: 0.34, birlesEsik: 0.45, konuEsik: 0.5 };
 
   var CEKIRDEK = { "Gazze": 1, "İnsani durum": 1, "Batı Şeria": 1, "Kudüs": 1, "Esirler ve tutuklular": 1, "Uluslararası hukuk": 1, "Lübnan": 1, "Yemen ve Kızıldeniz": 1, "Protesto ve dayanışma": 1 };
   function saat(t) { return Date.parse(t); }
@@ -24,11 +24,17 @@
 
   function hikayeYap(havuz, gundem, K, simdi, A, kullanilan, enAzYayin, enAzKamp) {
     var idx = {}; havuz.forEach(function (h) { idx[h.id] = h; });
-    var yap = function (xs, o) {
+    var yap = function (xs0, o) {
+      // aynı yayının birden çok haberi tek satır: Türkçe başlığı olan, yoksa ilk yayımlanan (kalanlar yine "kullanıldı" sayılır)
+      var bir = {};
+      xs0.slice().sort(function (a, b) { return saat(a.tarih) - saat(b.tarih); }).forEach(function (h) {
+        var v = bir[h.kaynak]; if (!v || (!v.baslik_tr && h.baslik_tr)) bir[h.kaynak] = h;
+      });
+      var xs = Object.keys(bir).map(function (k) { return bir[k]; }).sort(function (a, b) { return saat(b.tarih) - saat(a.tarih); });
       var kamplar = {}, yayin = {};
       xs.forEach(function (h) { kamplar[kampOf(K, h)] = (kamplar[kampOf(K, h)] || 0) + 1; yayin[h.kaynak] = 1; });
       if (Object.keys(yayin).length < enAzYayin || Object.keys(kamplar).length < (enAzKamp || 1)) return null;
-      xs.forEach(function (h) { kullanilan[h.id] = 1; });
+      xs0.forEach(function (h) { kullanilan[h.id] = 1; });
       var son = Math.max.apply(null, xs.map(function (h) { return saat(h.tarih); }));
       var onem = Math.log2(1 + Object.keys(yayin).length) * 2 + Object.keys(kamplar).length;
       var tazelik = Math.pow(0.5, (simdi - son) / (A.yariOmurSaat * 36e5));
@@ -42,6 +48,7 @@
     // önce İngilizce başlıklar, sonra kalanlar Türkçe çevirileriyle
     benzerKume(havuz, kullanilan, A).forEach(function (xs) { var x = yap(xs, null); if (x) out.push(x); });
     benzerKume(havuz, kullanilan, A, true).forEach(function (xs) { var x = yap(xs, null); if (x) out.push(x); });
+    out = konuBirlestir(out, havuz, A, yap);
     return out.sort(function (a, b) { return b.puan - a.puan; });
   }
 
@@ -122,7 +129,7 @@
     ciplak = cesitle(ciplak.sort(function (a, b) { return b.son - a.son; }), K);
     var eskiHikaye = hikayeYap(eski, gundem, K, simdi, A, kullanilan, 3, 2);
 
-    var deste = [{ tur: "kapak", hikayeler: hikayeler.slice(0, 3), sayi: havuz.length }];
+    var deste = [{ tur: "kapak", hikayeler: hikayeler.slice(0, 8), sayi: havuz.length }];
     var sayac = 0, molaSon = [];
     var ekle = function (b) {
       if (sayac > 0 && sayac % A.molaAralik === 0 && molaSon.length) { deste.push({ tur: "mola", ozet: molaSon.slice(), sira: sayac }); molaSon = []; }
@@ -160,6 +167,34 @@
     var b = (h.baslik_en || (h.dil === "en" ? h.baslik_orj : "") || "").toLowerCase().replace(/[’']s\b/g, "");
     var t = {}; (b.match(/[a-z0-9]{3,}/g) || []).forEach(function (w) { if (!DUR[w]) t[w] = 1; });
     return Object.keys(t);
+  }
+  // Aynı olayın farklı anlatımları ayrı kümelere düşebilir ("tanker vuruldu" / "tankerde yangın" / "üç tanker infilak etti").
+  // Hikâyelerin Türkçe başlıklarındaki seyrek kelimeler (havuzda en çok 25 haberde geçen) en az ikisi ortaksa ve
+  // 6 saat içindeyseler tek hikâye olur. Gündem editörünün ayırdığı iki olay birleşmez.
+  function konuBirlestir(out, havuz, A, yap) {
+    var df = {}, N = havuz.length || 1;
+    havuz.forEach(function (h) { belirtecTr(h).forEach(function (w) { df[w] = (df[w] || 0) + 1; }); });
+    // hikâye vektörü: kelimenin geçtiği haber payı x idf
+    var vek = function (x) {
+      var t = {}, v = {}, n = x.haberler.length, boy = 0;
+      x.haberler.forEach(function (h) { belirtecTr(h).forEach(function (w) { t[w] = (t[w] || 0) + 1; }); });
+      Object.keys(t).forEach(function (w) { var d = (t[w] / n) * Math.log(N / df[w]); if (d > 0) { v[w] = d; boy += d * d; } });
+      return { v: v, boy: Math.sqrt(boy) || 1 };
+    };
+    var cos = function (p, q) { var s = 0; Object.keys(p.v).forEach(function (w) { if (q.v[w]) s += p.v[w] * q.v[w]; }); return s / (p.boy * q.boy); };
+    var V = out.map(vek);
+    for (var a = 0; a < out.length; a++) {
+      if (!out[a]) continue;
+      for (var b = a + 1; b < out.length; b++) {
+        if (!out[b] || (out[a].olay && out[b].olay)) continue;
+        if (Math.abs(out[a].son - out[b].son) > A.kumeSaat * 36e5) continue;
+        if (cos(V[a], V[b]) < A.konuEsik) continue;
+        var x = yap(out[a].haberler.concat(out[b].haberler), out[a].olay || out[b].olay);
+        if (!x) continue;
+        out[a] = x; V[a] = vek(x); out[b] = null; b = a;
+      }
+    }
+    return out.filter(Boolean);
   }
   // Tek bağlantılı değil, tohum çevresinde kümeleme: tohumla Jaccard >= 0,34 ve en az 2 ortak anlamlı kelime
   function benzerKume(havuz, kullanilan, A, tr) {
