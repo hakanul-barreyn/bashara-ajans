@@ -786,14 +786,26 @@
   {
    "tarih": "1922-11-01",
    "donem": "osmanli",
-   "baslik": "Saltanatın kaldırılması: Osmanlı’da rejim ve hükümet değişti",
+   "baslik": "Saltanat kaldırıldı: Osmanlı’da rejim ve hükümet değişti",
    "baslik_en": "The sultanate is abolished: a new regime and government",
-   "metin": "Türkiye Büyük Millet Meclisi 1 Kasım 1922’de saltanatı kaldırdı; İstanbul’daki son Osmanlı hükümeti 4 Kasım’da istifa etti ve yönetim Ankara’daki meclis hükümetine geçti. Devlet yıkılmadı, rejimi ve hükümeti değişti; Cumhuriyet 29 Ekim 1923’te ilan edildi. Ardından 3 Mart 1924’te hilafet kaldırıldı, 1928’de “Devletin dini İslam’dır” hükmü anayasadan çıkarıldı: yeni Türkiye yönünü başka bir yere çevirdi. Filistin’in yönetimi ise bundan önce, 24 Temmuz 1922’de Milletler Cemiyeti kararıyla İngiltere’ye verilmişti.",
-   "metin_en": "The Grand National Assembly of Turkey abolished the sultanate on 1 November 1922; the last Ottoman government in Istanbul resigned on 4 November and power passed to the assembly government in Ankara. The state did not collapse; its regime and government changed, and the Republic was proclaimed on 29 October 1923. The caliphate was abolished on 3 March 1924, and in 1928 the clause “the religion of the state is Islam” was removed from the constitution: the new Turkey turned in another direction. Palestine had already been handed to Britain by the League of Nations on 24 July 1922.",
+   "metin": "TBMM 1 Kasım 1922’de saltanatı kaldırdı ve yönetim tümüyle Ankara’ya geçti. Devlet yıkılmadı; rejimi ve hükümeti değişti, 29 Ekim 1923’te Cumhuriyet ilan edildi. 1924’te hilafet kaldırıldı, 1928’de “Türkiye Devletinin dini İslam’dır” hükmü anayasadan çıkarıldı: yeni Türkiye başka bir yöne yürüdü. Filistin ise bundan önce, 24 Temmuz 1922’de Milletler Cemiyeti kararıyla İngiliz mandasına verilmişti.",
+   "metin_en": "On 1 November 1922 the Grand National Assembly abolished the sultanate and all power passed to Ankara. The state did not collapse; its regime and government changed, and the Republic was proclaimed on 29 October 1923. The caliphate was abolished in 1924, and in 1928 the clause “the religion of the Turkish State is Islam” was removed from the constitution: the new Turkey set off in another direction. Palestine had already been placed under a British mandate by the League of Nations on 24 July 1922.",
    "kaynaklar": [
     {
-     "ad": "Millî Eğitim Bakanlığı",
-     "url": "https://www.meb.gov.tr/belirligunler/10kasim/inkilaplari/siyasi/saltanat.htm"
+     "ad": "Alev Coşkun, “Padişahlığın sonu: 100 yıl önceki Meclis kararı”, Cumhuriyet",
+     "url": "https://www.cumhuriyet.com.tr/yazarlar/alev-coskun/padisahligin-sonu-100-yil-onceki-meclis-karari-2000026"
+    },
+    {
+     "ad": "Seda Örsten Esirgen, “Lozan Barış Antlaşması Çerçevesinde Halefiyet ve Devamlılık Tartışmaları”, AÜHFD 72(1), 2023",
+     "url": "https://dergipark.org.tr/tr/download/article-file/2963944"
+    },
+    {
+     "ad": "Alev Coşkun, “Halifeliğin kaldırılışı”, Cumhuriyet",
+     "url": "https://www.cumhuriyet.com.tr/yazarlar/alev-coskun/halifeligin-kaldirilisi-teokratik-devletin-yikilisi-2483423"
+    },
+    {
+     "ad": "Ensar Yılmaz, “Laiklikle İlgili Maddelerin 1961 Anayasası’nda Yer Alış Süreci”, Akademik İncelemeler Dergisi 7(2), 2012",
+     "url": "https://dergipark.org.tr/en/download/article-file/17748"
     }
    ]
   },
