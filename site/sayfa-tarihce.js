@@ -11,7 +11,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=11").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=12").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -80,7 +80,7 @@
         });
         s.appendChild(ol); k.appendChild(s);
       });
-      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi; kaynaklar TDV İslâm Ansiklopedisi, Britannica, BM belgeleri, Uluslararası Adalet Divanı, Filistin Araştırmaları Enstitüsü, Al Jazeera, Middle East Eye, Anadolu Ajansı ve Türk Tarih Kurumu Belleten’den; eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand; sources are the TDV Encyclopedia of Islam, Britannica, UN documents, the International Court of Justice, the Institute for Palestine Studies, Al Jazeera, Middle East Eye, Anadolu Agency and the Turkish Historical Society’s Belleten; tell us about any entry you think is missing or wrong.")));
+      k.appendChild(el("p", "rp-not", tt("Tarihçe elle derlendi. 2006 öncesi maddeler ağırlıkla hakemli dergilere (Belleten, Atatürk Yolu, Vakanüvis, Journal of Palestine Studies, IJMES), TDV İslâm Ansiklopedisi’ne ve Filistin Araştırmaları Enstitüsü’nün ansiklopedisine; antlaşma ve kararlar BM ve Uluslararası Adalet Divanı belgelerine dayanır. Son yıllardaki olaylarda BM raporlarının yanında haber kaynakları da kullanıldı. Eksik ya da yanlış gördüğünüz bir satırı bize bildirin.", "The history is compiled by hand. Entries before 2006 rely mainly on peer-reviewed journals (Belleten, Atatürk Yolu, Vakanüvis, Journal of Palestine Studies, IJMES), the TDV Encyclopedia of Islam and the Institute for Palestine Studies’ encyclopedia; treaties and resolutions are sourced to UN and International Court of Justice documents. For recent events, news sources are used alongside UN reports. Tell us about any entry you think is missing or wrong.")));
       var h = location.hash.slice(1); if (h) { var y = document.getElementById(h); if (y) y.scrollIntoView(); }
     }
     ciz();
