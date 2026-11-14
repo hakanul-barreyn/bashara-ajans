@@ -19,7 +19,7 @@ import urllib.request
 
 SITE = "https://hakanul-barreyn.github.io/bashara-ajans/"
 KENDI = ["", "raporlar.html", "almanak.html", "olaylar.html", "kimin.html", "liderler.html", "rapor.html", "ebu-safiye.html", "isimler.html"]
-CALISMA_BASINA, GUNLUK = 12, 400
+CALISMA_BASINA, GUNLUK = 12, 1000
 UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
 ATLA = ("news.google.com", "t.me/", "telegram.", "facebook.com", "x.com/", "twitter.com/")
 
@@ -39,21 +39,75 @@ def _gonder(url, erisim, gizli):
         return json.loads(r.read() or b"{}")
 
 
+# kanıt dosyaları, öncelik sırasıyla: raporlar ve karneler, olay örnekleri, liderlerin sözleri ve konuşmaları, gündem,
+# sonra Almanak bültenleri (yıllık, aylık, haftalık; yeniden eskiye). Dosyalardaki bütün haber adresleri toplanır.
+KANIT = [("data/bulten/rapor-*.json", 0), ("data/bulten/kimin.json", 0), ("data/karne.json", 0), ("data/kanit.json", 0),
+         ("data/bulten/alisma.json", 1), ("data/bulten/liderler.json", 2), ("data/konusma/*.json", 2),
+         ("data/bulten/yillik/*.json", 4), ("data/bulten/aylik/*.json", 5), ("data/bulten/haftalik/*.json", 6)]
+GORSEL = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg")
+ALAN_DISI = ("wikimedia.org", "wikipedia.org", "archive.org", "githubusercontent.com", "hakanul-barreyn.github.io", "huggingface.co")
+
+
+def _adresler(x, out):
+    """JSON içindeki haber adreslerini sırasıyla toplar (görseller ve başvuru siteleri hariç)."""
+    if isinstance(x, dict):
+        for v in x.values():
+            _adresler(v, out)
+    elif isinstance(x, list):
+        for v in x:
+            _adresler(v, out)
+    elif isinstance(x, str) and x.startswith(("http://", "https://")) and " " not in x:
+        yol = urllib.parse.urlsplit(x).path.lower()
+        if not yol.endswith(GORSEL) and not any(a in x for a in ALAN_DISI):
+            out.append(x)
+
+
 def adaylar(kok, simdi):
+    import glob
     a = []
+    # olay örnekleri yeni olaylar önce (alisma.json eskisi gibi)
     al = _oku(os.path.join(kok, "data", "bulten", "alisma.json"), {})
-    for o in reversed(al.get("olaylar", [])):              # yeni olaylar önce
+    for o in reversed(al.get("olaylar", [])):
         a += [m.get("url") for m in o.get("ornek", []) if m.get("url")]
-    for orn in (al.get("lider_ornek") or {}).values() if isinstance(al.get("lider_ornek"), dict) else []:
-        a += [m.get("url") for m in orn if isinstance(m, dict) and m.get("url")]
     hab = {h["id"]: h for h in _oku(os.path.join(kok, "data", "haberler.json"), {}).get("haberler", [])}
+    gundem = []
     for o in _oku(os.path.join(kok, "data", "gundem.json"), {}).get("olaylar", []):
-        a += [hab[i].get("url") for i in o.get("haberler", []) if i in hab and hab[i].get("url")]
+        gundem += [hab[i].get("url") for i in o.get("haberler", []) if i in hab and hab[i].get("url")]
         if (o.get("sayfa") or "").startswith(("data/h/", "h/")):
-            a.append(SITE + o["sayfa"].replace("data/h/", "h/", 1))
+            gundem.append(SITE + o["sayfa"].replace("data/h/", "h/", 1))
+    kat = {}
+    for desen, oncelik in KANIT:
+        for f in sorted(glob.glob(os.path.join(kok, desen)), reverse=True):     # yeni dosya önce
+            out = []
+            _adresler(_oku(f, {}), out)
+            kat.setdefault(oncelik, []).extend(out)
+    sira = kat.get(0, []) + a + kat.get(1, []) + kat.get(2, []) + gundem
+    for k in sorted(x for x in kat if x > 2):
+        sira += kat[k]
     bugun = simdi.date().isoformat()
     kendi = [(SITE + k, bugun) for k in KENDI]
-    return [u for u in a if u and u.startswith("http") and not any(x in u for x in ATLA)], kendi
+    return [u for u in sira if u and u.startswith("http") and not any(x in u for x in ATLA)], kendi
+
+
+def durum_sor(d, erisim, gizli, en_cok=20, log=print):
+    """Gönderilmiş işlerin sonucunu sorar; başarılıysa kopyanın zaman damgasını yazar (kalıcı, alıntılanabilir bağlantı için)."""
+    bak = [(u, v) for u, v in d["adres"].items() if v.get("job") and not v.get("ts") and not v.get("son")][:en_cok]
+    n = 0
+    for u, v in bak:
+        try:
+            istek = urllib.request.Request("https://web.archive.org/save/status/" + v["job"],
+                                           headers={"Authorization": f"LOW {erisim}:{gizli}", "Accept": "application/json", "User-Agent": UA})
+            with urllib.request.urlopen(istek, timeout=20) as r:
+                c = json.load(r)
+        except Exception:   # noqa: BLE001
+            continue
+        if c.get("status") == "success" and c.get("timestamp"):
+            v["ts"] = c["timestamp"]; n += 1
+        elif c.get("status") == "error":
+            v["son"] = (c.get("status_ext") or "error")[:40]
+        time.sleep(1)
+    if bak:
+        log(f"İnternet Arşivi: {len(bak)} işin durumu soruldu, {n} kopya doğrulandı")
 
 
 def calistir(kok, simdi, log=print):
@@ -68,6 +122,7 @@ def calistir(kok, simdi, log=print):
     kanit, kendi = adaylar(kok, simdi)
     sira = [(u, "k") for u in dict.fromkeys(kanit) if u not in d["adres"]]
     sira = [(u, "s") for u, g in kendi if (d["adres"].get(u) or {}).get("g") != g] + sira   # kendi sayfalarımız günde bir, önde
+    durum_sor(d, erisim, gizli, log=log)
     gonderilen = hata = ust_uste = 0
     bitis = time.time() + 120        # arşiv yavaşken çalıştırmayı uzatmasın: en çok iki dakika
     for u, tur in sira:
