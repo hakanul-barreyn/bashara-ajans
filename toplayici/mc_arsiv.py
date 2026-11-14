@@ -119,12 +119,20 @@ def main():
                 continue
             if d["bitti"]:
                 d.update({"bitti": False, "token": None})
+            boy, hata = d.get("boy", 1000), 0
             while time.time() - t0 < SURE:
                 try:
-                    hikayeler, token = S.story_list(SORGU, b, s, page_size=1000, pagination_token=d["token"], **secim)
+                    hikayeler, token = S.story_list(SORGU, b, s, page_size=boy, pagination_token=d["token"], **secim)
+                    hata = 0
                 except Exception as e:   # noqa: BLE001
-                    print("hata", is_, str(e)[:200]); time.sleep(30)
-                    break
+                    # Media Cloud uzun sorgularda zaman aşımına düşüyor: aynı sayfayı daha küçük boyla iki kez daha dene
+                    hata += 1
+                    print("hata", is_, f"(boy {boy}, deneme {hata})", str(e)[:160])
+                    if hata >= 3:
+                        break
+                    boy = max(100, boy // 2); d["boy"] = boy
+                    time.sleep(10)
+                    continue
                 if hikayeler:
                     d["parca"] += 1
                     yol = os.path.join(KOK, "arsiv", grup, f"{b:%Y-%m}", f"p{d['parca']:04d}.jsonl.gz")
