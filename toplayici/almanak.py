@@ -27,7 +27,7 @@ KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Batı"
 BOLGE_ICI = {"Filistin", "Arap dünyası", "İran", "Yemen", "Türkiye"}   # bölgenin kendi basını
 DIS = {"Batı", "İsrail"}                                               # İsrail ve Batı basını
 UZAK = {"filistin": 0, "aktarim": 1, "israil": 2}
-CIZGI = {"ad": "Antiemperyalist / dekolonyal", "ara": "Ara / ana akım", "ik": "İşbirlikçi kompradorlar ve emperyalistler"}
+CIZGI = {"ad": "Antiemperyalist / dekolonyal", "ara": "Ara / ana akım", "ik": "İsrail ve Batı ana akımı"}
 # Dil sayacı: kim hangi kelimeyi kullanıyor? Kalıplar 9 dilde, küçük harfe çevrilmiş özgün başlıkta aranır.
 # "yan": kelimenin hangi anlatıya ait olduğu (renk için); "operasyon" gibi kelimeler bazen direniş eylemi için de kullanılır.
 TERIMLER = [

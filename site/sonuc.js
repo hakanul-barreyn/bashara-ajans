@@ -15,7 +15,7 @@
     return n === 0 ? "ında" : n === 100 ? "ünde" : b ? BIR[b] : ON[o];
   }
   function kat(x) { return x == null ? "–" : Number(x).toLocaleString(YER, { maximumFractionDigits: 1 }) + "×"; }
-  var GAD = EN ? { israil: "Israeli press", bati_ana: "Western mainstream", ik: "Collaborationist line (region)" } : { israil: "İsrail basını", bati_ana: "Batı ana akım", ik: "Bölgede işbirlikçi çizgi" };
+  var GAD = EN ? { israil: "Israeli press", bati_ana: "Western mainstream", ik: "West-based regional outlet" } : { israil: "İsrail basını", bati_ana: "Batı ana akım", ik: "Batı merkezli bölge yayını" };
   var HAD = EN ? { sustu: "No headline for most events", fail: "Mostly did not name the killer", tarti: "Gave Israeli deaths more space per death" } : { sustu: "Olayların çoğunda başlık atmadı", fail: "Faili çoğunlukla yazmadı", tarti: "İsrailli ölümlere ölü başına daha çok yer verdi" };
   fetch("data/bulten/alisma.json?t=" + Math.floor(Date.now() / 6e5)).then(function (r) { return r.json(); }).then(function (v) {
     var h = v.hukum || [];

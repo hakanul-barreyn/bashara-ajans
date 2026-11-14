@@ -3,7 +3,7 @@
   const REG=["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","İsrail’de muhalif basın","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
   const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:""};
   const DIL={ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
-  const CIZ={ad:"Antiemperyalist / dekolonyal",ara:"Ara / ana akım",ik:"İşbirlikçi kompradorlar ve emperyalistler"};
+  const CIZ={ad:"Antiemperyalist / dekolonyal",ara:"Ara / ana akım",ik:"İsrail ve Batı ana akımı"};
   const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress",gnews:"Google Haberler araması (son çare)"};
   const DURUM={iyi:"Çalışıyor",sessiz:"Sessiz (6 saatten uzun)",kopuk:"Okunamıyor",yok:"Henüz denenmedi"};
   const BAYRAK_AE='<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
@@ -81,7 +81,7 @@
         const a=el("a",null,k.ad);a.href="profil.html?k="+encodeURIComponent(k.id);ad.appendChild(a);const sa=el("a","kk-site","↗");sa.href=k.url;sa.target="_blank";sa.rel="noopener";sa.title=k.url;sa.style.marginLeft="6px";ad.appendChild(sa);w.appendChild(ad);
         w.appendChild(el("div","kk-yer",k.sehir+", "+k.ulke+" · "+(DIL[k.dil]||k.dil)));u.appendChild(w);
         const rz=el("div","rozetler");if(TUR[k.tur]||k.bagli)rz.appendChild(el("span","rozet "+k.tur,k.bagli||(k.tur==="resmi"&&k.ulke?k.ulke+" devletinin yayını":TUR[k.tur])));u.appendChild(rz);c.appendChild(u);
-        const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
+        const cz=el("div");cz.appendChild(el("span","cz cz-"+(k.cizgi||"ara"),CIZ[k.cizgi||"ara"]));if(k.cizgi_et)cz.appendChild(el("span","cz-et",(window.DIL==="en"&&k.cizgi_et_en)||k.cizgi_et));if(k.cizgi_tartismali)cz.appendChild(el("span","cz-t","tartışmalı"));c.appendChild(cz);
         c.appendChild(el("p",null,k.profil));
         const d=D[String(k.id)]||{},sd=saglik(k);const iz2=el("div","izleme");iz2.appendChild(el("i","nokta d-"+sd));
         const yol=[];if(d.yontem&&YOL[d.yontem.tip])yol.push(YOL[d.yontem.tip]);if(d.telegram)yol.push("Telegram @"+d.telegram);if(d.gdelt&&!yol.length)yol.push("GDELT haber veritabanı");

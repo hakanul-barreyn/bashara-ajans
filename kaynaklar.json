@@ -75,7 +75,8 @@
   "id": 3,
   "telegram": null,
   "cizgi": "ad",
-  "bagli": "Hizbullah’ın yayın organı"
+  "bagli": "Hizbullah’ın yayın organı",
+  "silahli": true
  },
  {
   "ad": "Al-Manar English",
@@ -95,7 +96,8 @@
   "id": 4,
   "telegram": null,
   "cizgi": "ad",
-  "bagli": "Hizbullah’ın yayın organı"
+  "bagli": "Hizbullah’ın yayın organı",
+  "silahli": true
  },
  {
   "ad": "Al Mayadeen",
@@ -470,7 +472,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "İsrail sağ-merkez basını",
+  "cizgi_et_en": "Israeli centre-right press"
  },
  {
   "ad": "Ynetnews",
@@ -505,7 +509,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "İsrail ana akım basını",
+  "cizgi_et_en": "Israeli mainstream press"
  },
  {
   "ad": "Ynet (İbranice)",
@@ -540,7 +546,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "İsrail ana akım basını",
+  "cizgi_et_en": "Israeli mainstream press"
  },
  {
   "ad": "i24NEWS",
@@ -575,7 +583,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "Fransız-İsrailli sermayeli İsrail kanalı",
+  "cizgi_et_en": "Franco-Israeli-owned Israeli channel"
  },
  {
   "ad": "The Times of Israel",
@@ -603,7 +613,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "İsrail ana akım basını",
+  "cizgi_et_en": "Israeli mainstream press"
  },
  {
   "ad": "Al Jazeera English",
@@ -1308,7 +1320,8 @@
    "almasirah"
   ],
   "cizgi": "ad",
-  "bagli": "Ensarullah’ın (Husiler) yayın organı"
+  "bagli": "Ensarullah’ın (Husiler) yayın organı",
+  "silahli": true
  },
  {
   "ad": "TSA (Tout sur l’Algérie)",
@@ -1858,7 +1871,9 @@
     "url": "https://theintercept.com/2024/01/09/newspapers-israel-palestine-bias-new-york-times/",
     "tarih": "2024-01-09"
    }
-  ]
+  ],
+  "cizgi_et": "ABD ana akım basını",
+  "cizgi_et_en": "US mainstream press"
  },
  {
   "ad": "The Washington Post",
@@ -1891,7 +1906,9 @@
     "url": "https://theintercept.com/2024/01/09/newspapers-israel-palestine-bias-new-york-times/",
     "tarih": "2024-01-09"
    }
-  ]
+  ],
+  "cizgi_et": "ABD ana akım basını",
+  "cizgi_et_en": "US mainstream press"
  },
  {
   "ad": "Axios",
@@ -1919,7 +1936,9 @@
     "url": "https://en.wikipedia.org/wiki/Barak_Ravid",
     "tarih": "2025"
    }
-  ]
+  ],
+  "cizgi_et": "ABD ana akım basını",
+  "cizgi_et_en": "US mainstream press"
  },
  {
   "ad": "Vox",
@@ -2143,7 +2162,9 @@
     "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
     "tarih": "2025-06"
    }
-  ]
+  ],
+  "cizgi_et": "İngiliz kamu yayıncısı",
+  "cizgi_et_en": "British public broadcaster"
  },
  {
   "ad": "The Muslim News",
@@ -2369,7 +2390,9 @@
   "notu": "",
   "id": 101,
   "telegram": null,
-  "cizgi": "ik"
+  "cizgi": "ik",
+  "cizgi_et": "İspanyol sağ-merkez basını",
+  "cizgi_et_en": "Spanish centre-right press"
  },
  {
   "ad": "EFE",
@@ -2590,7 +2613,9 @@
     "url": "https://jacobin.com/2025/08/germany-media-bias-gaza-israel",
     "tarih": "2025-08"
    }
-  ]
+  ],
+  "cizgi_et": "Alman ana akım basını",
+  "cizgi_et_en": "German mainstream press"
  },
  {
   "ad": "Süddeutsche Zeitung",
@@ -2642,7 +2667,9 @@
     "url": "https://www.aljazeera.com/news/2024/12/19/as-gaza-war-rages-deutsche-welle-insiders-accuse-outlet-of-pro-israel-bias",
     "tarih": "2024-12-19"
    }
-  ]
+  ],
+  "cizgi_et": "Alman devlet yayıncısı",
+  "cizgi_et_en": "German state broadcaster"
  },
  {
   "ad": "Le Monde",
@@ -3461,7 +3488,9 @@
    }
   ],
   "ig_gizle": true,
-  "bayrak": "gb"
+  "bayrak": "gb",
+  "cizgi_et": "Londra merkezli muhalif Farsça kanal",
+  "cizgi_et_en": "London-based Persian opposition channel"
  },
  {
   "ad": "MAP",
@@ -3875,7 +3904,9 @@
     "url": "https://jacobin.com/2025/08/germany-media-bias-gaza-israel",
     "tarih": "2025-08"
    }
-  ]
+  ],
+  "cizgi_et": "Alman kamu yayıncısı",
+  "cizgi_et_en": "German public broadcaster"
  },
  {
   "ad": "Novara Media",
@@ -3979,7 +4010,9 @@
     "url": "https://theintercept.com/2024/01/04/cnn-israel-gaza-idf-reporting/",
     "tarih": "2024-01-04"
    }
-  ]
+  ],
+  "cizgi_et": "ABD ana akım basını",
+  "cizgi_et_en": "US mainstream press"
  },
  {
   "ad": "Dawn",
@@ -4059,7 +4092,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "Netanyahu’ya yakın İsrail basını",
+  "cizgi_et_en": "Israeli press close to Netanyahu"
  },
  {
   "ad": "N12",
@@ -4094,7 +4129,9 @@
     "url": "https://www.972mag.com/israeli-military-censor-media-2024/",
     "tarih": "2025-05"
    }
-  ]
+  ],
+  "cizgi_et": "İsrail ana akım televizyonu",
+  "cizgi_et_en": "Israeli mainstream television"
  },
  {
   "id": 184,
@@ -4129,7 +4166,8 @@
   "resmi_grup": "Hamas",
   "cizgi": "ad",
   "hassas": true,
-  "bagli": "Hamas’ın resmî kanalı"
+  "bagli": "Hamas’ın resmî kanalı",
+  "silahli": true
  },
  {
   "id": 186,
@@ -4147,7 +4185,8 @@
   "resmi_grup": "FHKC",
   "cizgi": "ad",
   "hassas": true,
-  "bagli": "FHKC’nin resmî kanalı"
+  "bagli": "FHKC’nin resmî kanalı",
+  "silahli": true
  },
  {
   "id": 187,
@@ -4165,7 +4204,8 @@
   "resmi_grup": "İslami Cihad",
   "cizgi": "ad",
   "hassas": true,
-  "bagli": "İslami Cihad’ın resmî kanalı"
+  "bagli": "İslami Cihad’ın resmî kanalı",
+  "silahli": true
  },
  {
   "id": 188,
@@ -4837,7 +4877,9 @@
     "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
     "tarih": "2025-06"
    }
-  ]
+  ],
+  "cizgi_et": "İngiliz kamu yayıncısının Arapça servisi",
+  "cizgi_et_en": "Arabic service of the British public broadcaster"
  },
  {
   "ad": "BBC Türkçe",
@@ -4870,6 +4912,8 @@
     "url": "https://www.newarab.com/news/bbc-gave-israeli-deaths-33-times-more-coverage-palestinian",
     "tarih": "2025-06"
    }
-  ]
+  ],
+  "cizgi_et": "İngiliz kamu yayıncısının Türkçe servisi",
+  "cizgi_et_en": "Turkish service of the British public broadcaster"
  }
 ]

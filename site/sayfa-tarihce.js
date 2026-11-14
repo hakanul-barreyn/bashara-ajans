@@ -11,7 +11,9 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=18").then(function (r) { return r.json(); }).then(function (v) {
+  // kısıtlı ülkelerde "şehit" yerine olgusal karşılığı (site/bolge.js)
+  var BG = window.ALB_BOLGE, N = function (s) { return BG ? BG.notr(s, EN ? "en" : "tr") : s; };
+  Promise.all([fetch("site/donum.json?v=18").then(function (r) { return r.json(); }), BG ? BG.hazir : null]).then(function (x) { return x[0]; }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -39,7 +41,7 @@
         xs.forEach(function (o) {
           var li = el("li");
           li.appendChild(el("time", null, tarihAd(o.tarih)));
-          var ic = el("div"); ic.appendChild(el("b", null, EN ? o.baslik_en : o.baslik)); ic.appendChild(el("p", null, EN ? o.metin_en : o.metin));
+          var ic = el("div"); ic.appendChild(el("b", null, N(EN ? o.baslik_en : o.baslik))); ic.appendChild(el("p", null, N(EN ? o.metin_en : o.metin)));
           var hepsi = (o.gorseller || (o.gorsel ? [o.gorsel] : [])).filter(function (g) { return g && g.url; });
           // "yan": görsel geniş ekranda sol kanatta durur; telefonda kanat gizli olduğundan metnin içinde de gösterilir
           var gs = hepsi.filter(function (g) { return !g.yan; }), yanG = hepsi.filter(function (g) { return g.yan; });
@@ -65,7 +67,7 @@
             kis.forEach(function (q) {
               var kk = el("details", "th-kisi");
               var sm = el("summary"); sm.append(el("span", "th-kisi-et", tt("Biyografi", "Biography")), el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""));
-              kk.append(sm, el("p", null, EN ? q.metin_en : q.metin));
+              kk.append(sm, el("p", null, N(EN ? q.metin_en : q.metin)));
               if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
               kd.appendChild(kk);
             });

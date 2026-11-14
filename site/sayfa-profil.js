@@ -18,13 +18,14 @@
   const BT = (h) => (EN ? h.baslik_en : h.baslik_tr) || h.baslik_en || h.baslik_orj;
   const OZ = (h) => (EN ? h.ozet_en : h.ozet_tr);
   const CIZGI = { ad: tt("Antiemperyalist / dekolonyal", "Anti-imperialist / decolonial"), ara: tt("Ara / ana akım", "Middle / mainstream"),
-    ik: tt("İşbirlikçi kompradorlar ve emperyalistler", "Collaborationist compradors and imperialists") };
+    ik: tt("İsrail ve Batı ana akımı", "Israeli and Western mainstream") };
 
   if (!id) { kok.textContent = tt("Hesap bulunamadı.", "Account not found."); return; }
-  Promise.all([j("kaynaklar.json", []), j("data/logolar.json", {}), j("data/hesap/" + encodeURIComponent(id) + ".json", null), j("data/karne.json", null)])
+  Promise.all([window.ALB_BOLGE ? window.ALB_BOLGE.hazir : null]).then(() => Promise.all([j("kaynaklar.json", []), j("data/logolar.json", {}), j("data/hesap/" + encodeURIComponent(id) + ".json", null), j("data/karne.json", null)])
     .then(([K, logolar, hs, karne]) => {
       const k = K.find((x) => String(x.id) === String(id));
       if (!k) { kok.textContent = tt("Hesap bulunamadı.", "Account not found."); return; }
+      if (window.ALB_BOLGE && window.ALB_BOLGE.gizli(k)) { kok.textContent = tt("Bu hesap bulunduğun ülkede gösterilmiyor.", "This account is not shown in your country."); return; }
       document.title = k.ad + " · " + document.title.split("·")[0].trim();
       kok.textContent = "";
       const r = H.renk(k);
@@ -36,6 +37,7 @@
       kimlik.appendChild(H.avatar(k, logolar, "pf-avatar"));
       const ad = el("div", "pf-ad");
       ad.append(el("h1", null, k.ad), el("span", "pf-kul", H.kulAd(k)));
+      ad.appendChild(el("span", "pf-resmi-degil", tt("Resmî hesap değil · Bu yayının haberlerini Alboroto derler; her gönderi kaynağına bağlanır.", "Not an official account · Alboroto collects " + k.ad + "’s stories; every post links to the source.")));
       kimlik.appendChild(ad);
       ust.appendChild(kimlik);
       // eylemler
@@ -54,7 +56,9 @@
       }
       if (k.cizgi) {
         const c = el("p", "pf-cizgi");
-        c.append(el("span", "cz cz-" + k.cizgi, CIZGI[k.cizgi] || CIZGI.ara), el("span", null, tt(" Alboroto’nun editoryal değerlendirmesi; ölçütleri Kaynaklar sayfasında.", " Alboroto’s editorial assessment; criteria on the Sources page.")));
+        c.append(el("span", "cz cz-" + k.cizgi, CIZGI[k.cizgi] || CIZGI.ara));
+        if (k.cizgi_et) c.append(el("b", "pf-cizgi-et", " " + ((EN && k.cizgi_et_en) || k.cizgi_et) + "."));
+        c.append(el("span", null, tt(" Alboroto’nun editoryal değerlendirmesi; ölçütleri Kaynaklar sayfasında.", " Alboroto’s editorial assessment; criteria on the Sources page.")));
         ust.appendChild(c);
       }
       // sayılar
@@ -132,5 +136,5 @@
         });
         return g;
       }
-    });
+    }));
 })();

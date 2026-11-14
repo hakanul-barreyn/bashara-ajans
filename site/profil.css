@@ -8,6 +8,7 @@
 .pf-ad{min-width:0;padding-bottom:4px}
 .pf-ad h1{margin:0;font:800 1.35rem/1.15 var(--serif);text-wrap:balance}
 .pf-kul{font:500 .8rem var(--mono);color:var(--soluk)}
+.pf-resmi-degil{display:block;margin-top:4px;font-size:.72rem;color:var(--soluk);line-height:1.35}
 .pf-eylem,.pf-kunye,.pf-bio,.pf-cizgi,.pf-sayilar{padding:0 max(16px,env(safe-area-inset-left,0px))}
 .pf-eylem{display:flex;flex-wrap:wrap;gap:8px}
 .pf-dugme{display:inline-flex;align-items:center;padding:8px 14px;border-radius:10px;border:1px solid var(--cizgi);font-weight:700;font-size:.84rem;color:var(--ink);text-decoration:none;background:transparent}

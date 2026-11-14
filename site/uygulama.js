@@ -351,8 +351,8 @@
   const TUR_GRUP = { resmi: "Devlet", grup: "Bağlı", bagimsiz: "Bağımsız", koop: "Bağımsız", ozel: "Özel", izle: "Özel" };
   const TUR_RENK = { "Devlet": "#c9544e", "Bağlı": "#8c8f8d", "Bağımsız": "#2b8a5e", "Özel": "#6d89a3" };
   const kampAd = (k) => k.kamp || KAMP[k.bolge] || "Diğer";
-  const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İşbirlikçi kompradorlar ve emperyalistler" };
-  const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İşbirlikçi kompradorlar ve emperyalistler": "#c9544e" };
+  const CIZGI = { ad: "Antiemperyalist / dekolonyal", ara: "Ara / ana akım", ik: "İsrail ve Batı ana akımı" };
+  const CIZGI_RENK = { "Antiemperyalist / dekolonyal": "#2b8a5e", "Ara / ana akım": "#9aa3ab", "İsrail ve Batı ana akımı": "#c9544e" };
   const cizgiAd = (k) => CIZGI[k.cizgi] || CIZGI.ara;
   const BAKIS = { filistin: "Filistin bakışı", aktarim: "Aktarım", israil: "İsrail / ABD bakışı" };
   const BAKIS_RENK = { filistin: "#2b8a5e", aktarim: "#a7aeb3", israil: "#4a72c4" };
@@ -564,8 +564,8 @@
   function korNokta(kp) {
     if (kp.toplam < 3) return null;
     const ad = kp.cizgi[CIZGI.ad] || 0, ik = kp.cizgi[CIZGI.ik] || 0;
-    if (ik / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla işbirlikçi ve emperyalist çizgideki yayınlar yazdı (%" + Math.round((100 * ik) / kp.toplam) + ").";
-    if (ad / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla antiemperyalist çizgideki yayınlar yazdı; ana akım ve işbirlikçi çizgideki yayınlar az yazdı (%" + Math.round((100 * ad) / kp.toplam) + ").";
+    if (ik / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla İsrail ve Batı ana akımı yazdı (%" + Math.round((100 * ik) / kp.toplam) + ").";
+    if (ad / kp.toplam >= 0.6) return "Kör nokta: bu olayı ağırlıkla antiemperyalist çizgideki yayınlar yazdı; ana akım yayınlar az yazdı (%" + Math.round((100 * ad) / kp.toplam) + ").";
     const en = Object.entries(kp.kamp).sort((a, b) => b[1] - a[1])[0];
     const arap = (kp.kamp["Filistin"] || 0) + (kp.kamp["Arap dünyası"] || 0);
     const bati = (kp.kamp["Batı"] || 0) + (kp.kamp["İsrail"] || 0);
@@ -1507,6 +1507,7 @@
     if (farkli && h.baslik_orj !== ana) { const o = el("p", "rl-orj", h.baslik_orj); o.dir = "auto"; ek.appendChild(o); }
     const a = el("a", "rl-git", EN ? "Read on " + k.ad + " ↗" : k.ad + " sitesinde oku ↗"); a.href = h.url; a.target = "_blank"; a.rel = "noopener"; ek.appendChild(a);
     if (OZ(h)) ek.appendChild(el("span", "rl-yz", EN ? "Translation and summary: AI" : "Çeviri ve özet: yapay zekâ"));
+    ek.appendChild(el("span", "rl-yz", EN ? "Not an official account: Alboroto collects " + k.ad + "’s stories." : "Resmî hesap değil: bu yayının haberlerini Alboroto derler."));
     pl.appendChild(ek);
     pl.onclick = (e) => { if (e.target.closest("a,button")) return; pl.classList.toggle("acik"); };
     const kun = el("p", "rl-kunye"); kun.innerHTML = SVG.dunya;
@@ -1738,12 +1739,15 @@
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
         fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
         fetch("data/dogrulama.json?t=" + t).then((r) => r.json()).catch(() => ({})),
+        window.ALB_BOLGE ? window.ALB_BOLGE.hazir : null,
       ]);
       logolar = lg || {};
       dogrulama = (dg && dg.etiketler) || {};
       olaylar = o.olaylar || []; olayHarita = {}; olaylar.forEach((x) => (olayHarita[x.id] = x));
       kaynaklar = {}; k.forEach((x) => (kaynaklar[x.id] = x));
-      haberler = (h.haberler || []).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
+      // kısıtlı ülkelerde silahlı grupların resmî kanalları gösterilmez (site/bolge.js)
+      const BG = window.ALB_BOLGE;
+      haberler = (h.haberler || []).filter((x) => !(BG && BG.gizli(kaynaklar[x.kaynak]))).slice().sort((a, b) => (a.tarih < b.tarih ? 1 : -1));
       guncellendi = h.guncellendi; kismiVeri = !!h.ilk;
       haberIdx = { ...arsivBulunan }; haberler.forEach((x) => (haberIdx[x.id] = x));
       if (ilkTur || !h.ilk) { hashOku(); ciz(ilk); ilk = false; }
