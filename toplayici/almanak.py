@@ -552,7 +552,7 @@ BULTEN_SURUM = 2   # yeni ölçüler eklendiğinde artır; eski bültenler bir k
 
 def _site():
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    return f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else ""
+    return __import__("marka").site()
 
 
 def bultenleri_guncelle(kok, kaynaklar, anahtar_api, model, simdi, sure_var=lambda: True, log=print):

@@ -17,10 +17,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-SITE = "https://hakanul-barreyn.github.io/bashara-ajans/"
+SITE = "https://alborotonews.com/"
 KENDI = ["", "raporlar.html", "almanak.html", "olaylar.html", "kimin.html", "liderler.html", "rapor.html", "ebu-safiye.html", "isimler.html"]
 CALISMA_BASINA, GUNLUK = 12, 1000
-UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+UA = "zbs-toplayici (+https://alborotonews.com/)"
 ATLA = ("news.google.com", "t.me/", "telegram.", "facebook.com", "x.com/", "twitter.com/")
 
 
@@ -45,7 +45,7 @@ KANIT = [("data/bulten/rapor-*.json", 0), ("data/bulten/kimin.json", 0), ("data/
          ("data/bulten/alisma.json", 1), ("data/bulten/liderler.json", 2), ("data/konusma/*.json", 2),
          ("data/bulten/yillik/*.json", 4), ("data/bulten/aylik/*.json", 5), ("data/bulten/haftalik/*.json", 6)]
 GORSEL = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg")
-ALAN_DISI = ("wikimedia.org", "wikipedia.org", "archive.org", "githubusercontent.com", "hakanul-barreyn.github.io", "huggingface.co")
+ALAN_DISI = ("wikimedia.org", "wikipedia.org", "archive.org", "githubusercontent.com", "hakanul-barreyn.github.io", "alborotonews.com", "huggingface.co")
 
 
 def _adresler(x, out):

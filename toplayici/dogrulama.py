@@ -218,7 +218,7 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
     kay = durum.setdefault("_dogrulama", {"offset": 0, "oneriler": {}})
     kaynaklar = {k["id"]: k for k in kaynaklar_liste}
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    site = f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else ""
+    site = __import__("marka").site()
     degisti = False
     if token and yonetici:
         # 1) Yöneticiden gelen düğme yanıtları ve komutlar

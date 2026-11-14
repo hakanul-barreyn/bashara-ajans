@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 
 SURUM = 2
-UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+UA = "zbs-toplayici (+https://alborotonews.com/)"
 DILLER = ["en", "ar", "tr", "de", "fr", "es"]
 BAS = "2023-10-01"
 # (anahtar, olay türü (olay_turleri), olay günü, Türkçe ad, İngilizce madde adı adayları)

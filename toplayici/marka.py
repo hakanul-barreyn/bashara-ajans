@@ -24,6 +24,15 @@ def oku(kok=KOK):
         return dict(VARSAYILAN)
 
 
+def site(kok=KOK):
+    """Sitenin herkese açık adresi (marka.js "adres"); yoksa GitHub Pages adresi."""
+    a = oku(kok).get("adres")
+    if a:
+        return a if a.endswith("/") else a + "/"
+    depo = os.environ.get("GITHUB_REPOSITORY", "")
+    return f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else "./"
+
+
 def _sablon(s, M):
     return re.sub(r"\{(\w+)\}", lambda m: str(M.get(m.group(1), "")), s)
 

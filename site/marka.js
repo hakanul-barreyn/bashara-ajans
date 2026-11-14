@@ -8,7 +8,8 @@ window.MARKA = {
   "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
   "slogan_en": "The news about the news",
   "aciklama_en": "Following the press of the Maghreb, the Gulf, the Mashriq and Anatolia, with summaries and a balance of who told the story how.",
-  "goatcounter": "zbshaber"
+  "goatcounter": "zbshaber",
+  "adres": "https://alborotonews.com/"
 };
 
 // Sayfadaki data-marka="ad|kisa_ad|slogan|aciklama" öğelerini ve {ad} geçen başlıkları doldurur.

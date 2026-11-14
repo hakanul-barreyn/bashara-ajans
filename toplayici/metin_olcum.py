@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gecmis  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+UA = "zbs-toplayici (+https://alborotonews.com/)"
 SURE = int(os.environ.get("METIN_SURE", "4200"))
 ARALIK = 2.0                      # aynı siteye iki istek arası en az (saniye)
 ESZAMANLI = 12                    # aynı anda işlenen site

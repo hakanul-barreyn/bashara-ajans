@@ -286,7 +286,7 @@ def hesap_yaz(kok, haberler, simdi):
 # ---------------------------------------------------------------- RSS
 def rss_yaz(kok, haberler, simdi):
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    site = f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else "./"
+    site = __import__("marka").site()
     ozetli = [h for h in haberler if h.get("ozet_tr")][:100]
     e = lambda s: html.escape(s or "", quote=True)
     ogeler = []

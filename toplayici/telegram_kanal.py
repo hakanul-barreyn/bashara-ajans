@@ -29,7 +29,7 @@ BAKIS = {"filistin": "Filistin bakışı", "aktarim": "aktarım", "israil": "İs
 
 def site_adresi():
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    return f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else "./"
+    return __import__("marka").site()
 
 
 def gonder(token, kanal, metin):

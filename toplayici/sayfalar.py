@@ -814,7 +814,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     """haberler: liste. Döndürür: yazılan sayfa sayısı"""
     M = marka.oku(kok)
     depo = os.environ.get("GITHUB_REPOSITORY", "")
-    site = f"https://{depo.split('/')[0]}.github.io/{depo.split('/')[1]}/" if "/" in depo else "./"
+    site = __import__("marka").site()
     kmap = {k["id"]: k for k in kaynaklar}
     try:
         etiketler = json.load(open(os.path.join(kok, "data", "dogrulama.json"), encoding="utf-8")).get("etiketler", {})

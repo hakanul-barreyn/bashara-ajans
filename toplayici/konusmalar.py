@@ -23,7 +23,7 @@ except ImportError:      # toplayıcıdan paket olarak çağrıldığında
     from toplayici import soz_sinif
 
 socket.setdefaulttimeout(30)
-UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+UA = "zbs-toplayici (+https://alborotonews.com/)"
 KOK = "https://www.tccb.gov.tr"
 LISTE = KOK + "/receptayyiperdogan/konusmalar/"
 BASLANGIC = "2023-01-01"     # savaştan önceki dokuz ay karşılaştırma için

@@ -18,7 +18,7 @@ import os
 import urllib.request
 
 GEMINI = "https://generativelanguage.googleapis.com/v1beta"
-UA = "zbs-toplayici (+https://hakanul-barreyn.github.io/bashara-ajans/)"
+UA = "zbs-toplayici (+https://alborotonews.com/)"
 EN_COK = 24
 TALIMAT = ("Bu görsel bir haber sitesinde şu haberin başında kullanılacak: «{baslik}». Yalnızca JSON döndür: "
            "{{\"yazi_grafik\": true|false, \"siddet\": true|false, \"mustehcen\": true|false, \"portre\": true|false, \"ilgili\": true|false, "
