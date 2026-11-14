@@ -1,0 +1,82 @@
+name: Haber metni ölçümü
+
+# Üç saatte bir ~70 dakika çalışır. Haberin metni indirilir, bellekte ölçülür, atılır; metin hiçbir yere yazılmaz.
+# Haber başına ölçümler (adres dahil) GİZLİ Hugging Face veri setine (HF_REPO, "metin/" klasörü) gider.
+# Açık depoya ("metin-sayim" dalı) yalnızca grup düzeyinde toplu yüzdeler yazılır.
+# Kurallar: açık kullanıcı ajanı, robots.txt, siteye 2 saniyede bir istek, ödeme duvarlı sitelere gidilmez.
+
+on:
+  schedule:
+    - cron: "41 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: metin
+  cancel-in-progress: false
+
+jobs:
+  olcum:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_REPO: ${{ vars.HF_REPO }}
+    steps:
+      - name: Hugging Face ayarı var mı
+        run: |
+          if [ -z "$HF_TOKEN" ] || [ -z "$HF_REPO" ]; then echo "HF_TOKEN ya da HF_REPO yok: ölçümler açık depoya yazılmaz, iş duruyor"; exit 1; fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q trafilatura requests huggingface_hub
+      - name: Önceki durum ve canlı haberler
+        run: |
+          mkdir -p metin
+          python - <<'PY'
+          import os
+          from huggingface_hub import snapshot_download
+          try:
+              snapshot_download(os.environ["HF_REPO"], repo_type="dataset", local_dir=".", allow_patterns=["metin/*.json.gz"], token=os.environ["HF_TOKEN"])
+          except Exception as e:
+              print("önceki durum yok:", e)
+          PY
+          git fetch -q --depth 1 origin veri && git show FETCH_HEAD:data/haberler.json > haberler.json || echo '[]' > haberler.json
+          if [ ! -f metin/orneklem.json.gz ]; then
+            echo "Geçmiş örneklemi ilk kez kuruluyor: tarama dalı indiriliyor"
+            git fetch -q --depth 1 origin tarama && mkdir -p tarama && git archive FETCH_HEAD veri | tar -x -C tarama
+          fi
+      - name: Ölç
+        env:
+          METIN_SURE: "4200"
+        run: python toplayici/metin_olcum.py olc metin haberler.json tarama
+      - name: Hugging Face'e yükle
+        if: always()
+        run: |
+          python - <<'PY'
+          import os, datetime
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          api.upload_folder(repo_id=os.environ["HF_REPO"], repo_type="dataset", folder_path="metin", path_in_repo="metin",
+                            allow_patterns=["parca/*.jsonl.gz", "islenen.json.gz", "orneklem.json.gz"],
+                            commit_message="Metin ölçümü " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M"))
+          print("yüklendi")
+          PY
+      - name: Toplu sayılar (açık)
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          from huggingface_hub import snapshot_download
+          snapshot_download(os.environ["HF_REPO"], repo_type="dataset", local_dir=".", allow_patterns=["metin/parca/*"], token=os.environ["HF_TOKEN"])
+          PY
+          rm -rf sayim && mkdir sayim
+          python toplayici/metin_olcum.py ozet metin sayim/metin-ozet.json
+          cd sayim && git init -q -b metin-sayim && git add -A
+          git -c user.name="zbs-metin" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Metin ölçümü toplu sayılar"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:metin-sayim
