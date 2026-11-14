@@ -1,4 +1,4 @@
-"""ZBS haber toplayıcı.
+"""Alboroto haber toplayıcı.
 
 Her çalıştırmada:
  1. kaynaklar.json'daki her kaynak için en iyi izleme yolunu bulur (haber site haritası, RSS/Atom,

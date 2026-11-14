@@ -209,7 +209,7 @@ def uydu(cikti):
               for k, ad, en, b in BOLGELER]
     json.dump({"tarih": gun, "once": once, "bulut": max(f["properties"].get("eo:cloud_cover", 0) for f in fs), "uydu": "Sentinel-2",
                "kare": [f["id"] for f in fs], "galeri": galeri,
-               "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}{', ' + once[:4] if once and once[:4] != gun[:4] else ''}), ESA; işleme: ZBS",
+               "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}{', ' + once[:4] if once and once[:4] != gun[:4] else ''}), ESA; işleme: Alboroto",
                "lisans": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
                "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat()},
               open(meta_yol, "w"), ensure_ascii=False, indent=1)

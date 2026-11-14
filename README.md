@@ -1,4 +1,4 @@
-# ZBS
+# Alboroto
 
 Mağrip’ten Körfez’e, Meşrik’ten Anadolu’ya ve Avrupa ile ABD’ye uzanan basını izleyen, haberleri Türkçe özetleyip harita üzerinde gösteren otomatik haber takip sitesi.
 

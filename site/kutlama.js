@@ -6,12 +6,12 @@
   "use strict";
   var METIN = {
     acilis: {
-      tr: { ust: "ZBS yayında", bas: "Açıldık!", alt: "Bölgenin, İsrail'in ve Batı'nın basını tek sayfada: aynı olay, kim nasıl yazdı." },
-      en: { ust: "ZBS is live", bas: "We're open!", alt: "Regional, Israeli and Western press on one page: the same event, and who told it how." }
+      tr: { ust: "Alboroto yayında", bas: "Açıldık!", alt: "Bölgenin, İsrail'in ve Batı'nın basını tek sayfada: aynı olay, kim nasıl yazdı." },
+      en: { ust: "Alboroto is live", bas: "We're open!", alt: "Regional, Israeli and Western press on one page: the same event, and who told it how." }
     },
     yukleme: {
-      tr: { ust: "ZBS", bas: "Hoş geldiniz", alt: "Mağrip’ten Körfez’e, İsrail’den Batı’ya yüzlerce yayının son haberleri derleniyor…" },
-      en: { ust: "ZBS", bas: "Welcome", alt: "Gathering the latest from hundreds of outlets, from the Maghreb to the Gulf, Israel and the West…" }
+      tr: { ust: "Alboroto", bas: "Hoş geldiniz", alt: "Mağrip’ten Körfez’e, İsrail’den Batı’ya yüzlerce yayının son haberleri derleniyor…" },
+      en: { ust: "Alboroto", bas: "Welcome", alt: "Gathering the latest from hundreds of outlets, from the Maghreb to the Gulf, Israel and the West…" }
     },
     ramazan: {
       ar: "عيد فطر مبارك",

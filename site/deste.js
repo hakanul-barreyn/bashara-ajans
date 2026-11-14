@@ -1,4 +1,4 @@
-/* ZBS telefon destesi: akışı tam ekran "birimlere" böler ve sıralar. Hem sitede (window.ZBSDeste) hem simülasyonda
+/* Alboroto telefon destesi: akışı tam ekran "birimlere" böler ve sıralar. Hem sitede (window.ZBSDeste) hem simülasyonda
    (node: require) aynı kod çalışır.
 
    Birimler (her biri tam bir ekran; dikey kaydırma bir sonraki konu, yatay kaydırma aynı konunun içi):

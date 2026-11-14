@@ -12,7 +12,7 @@ import os
 import re
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VARSAYILAN = {"ad": "ZBS", "kisa_ad": "ZBS", "slogan": "", "aciklama": ""}
+VARSAYILAN = {"ad": "Alboroto", "kisa_ad": "Alboroto", "slogan": "", "aciklama": ""}
 
 
 def oku(kok=KOK):

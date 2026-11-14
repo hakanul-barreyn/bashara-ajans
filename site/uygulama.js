@@ -19,7 +19,7 @@
   const OB = (o) => (DL !== "tr" && o["baslik_" + DL]) || o.baslik;
   const ON = (o) => (DL !== "tr" && o["not_" + DL]) || o.not;
   const OY = (o, id) => (DL !== "tr" && (o["yorumlar_" + DL] || {})[id]) || (o.yorumlar || {})[id];
-  const MARKA_AD = (window.MARKA && window.MARKA.ad) || "ZBS";
+  const MARKA_AD = (window.MARKA && window.MARKA.ad) || "Alboroto";
   const BAYRAK_AE = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
   // Birleşik Krallık: Londra'dan yayın yapan ve adı başka bir ülkeyi anan kurumlar için (Iran International gibi)
   const BAYRAK_GB = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="Londra merkezli yayın"><title>Londra merkezli yayın (Birleşik Krallık)</title><rect width="22" height="16" rx="1.5" fill="#012169"/><path d="M0 0l22 16M22 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l22 16M22 0L0 16" stroke="#c8102e" stroke-width="1.3"/><path d="M11 0v16M0 8h22" stroke="#fff" stroke-width="5"/><path d="M11 0v16M0 8h22" stroke="#c8102e" stroke-width="3"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
@@ -963,9 +963,9 @@
     if (o && o.kaynak_sayisi > 1) {
       sb.classList.add("olayli");
       sb.appendChild(el("b", null, "Kim nasıl yazdı"));
-      sb.appendChild(el("span", null, o.kaynak_sayisi + " yayının karşılaştırması · ZBS analizi"));
+      sb.appendChild(el("span", null, o.kaynak_sayisi + " yayının karşılaştırması · Alboroto analizi"));
     } else {
-      sb.appendChild(el("b", null, "ZBS sayfasında oku"));
+      sb.appendChild(el("b", null, "Alboroto sayfasında oku"));
       sb.appendChild(el("span", null, "Özet, bağlam ve kaynak bilgisi"));
     }
     sb.appendChild(el("i", null, "→"));
@@ -1354,7 +1354,7 @@
     rlVeri.set(u, { tur: "haber", h, k, hikaye });
     return u;
   }
-  // ZBS'nin kendi gönderisi (harita, sayaç, uydu, bildirimler)
+  // Alboroto'nun kendi gönderisi (harita, sayaç, uydu, bildirimler)
   function rlZbs(ic, not) {
     const u = birim("reel", "rl-zbs"); if (!ic) return null;
     const z = el("div", "rl-zbs-ic"); z.appendChild(ic); u.appendChild(z);
@@ -1413,7 +1413,7 @@
     kt.classList.toggle("rl-bos", !v || v.tur !== "haber");
     if (!v) return;
     if (v.tur === "zbs") {
-      if (v.not) { const s = el("div", "rl-kim"); s.append(avatarZbs(), el("b", null, "ZBS")); pl.append(s, el("p", "rl-baslik", v.not)); kt.classList.remove("rl-bos"); }
+      if (v.not) { const s = el("div", "rl-kim"); s.append(avatarZbs(), el("b", null, "Alboroto")); pl.append(s, el("p", "rl-baslik", v.not)); kt.classList.remove("rl-bos"); }
       return;
     }
     const { h, k, hikaye } = v;

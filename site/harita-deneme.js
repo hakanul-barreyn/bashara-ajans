@@ -1,4 +1,4 @@
-// OpenFreeMap (OpenStreetMap) üzerine ZBS haritası: ülke etiketleri ve sınırlar kaldırılır,
+// OpenFreeMap (OpenStreetMap) üzerine Alboroto haritası: ülke etiketleri ve sınırlar kaldırılır,
 // 1948 toprakları dahil bütün bölge "Kuşatma altındaki Filistin" diye adlandırılır, Gazze çevresi kuşatma hattı.
 (function () {
   "use strict";

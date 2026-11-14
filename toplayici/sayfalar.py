@@ -522,8 +522,8 @@ def paylasim_gorseli(kok, olay, kmap):
            + "".join(f'<text x="70" y="{190 + i * boy * 1.12:.0f}" font-family="{F}" font-weight="900" font-size="{boy}" fill="#f6f3ec">{_e(t)}</text>'
                      for i, t in enumerate(sat))
            + (f'<clipPath id="c"><rect x="70" y="520" width="1060" height="14" rx="7"/></clipPath><g clip-path="url(#c)">{cub}</g>' if cub else "")
-           + f'<text x="70" y="580" font-family="{F}" font-weight="900" font-size="30" fill="#f6f3ec">ZBS</text>'
-           f'<text x="140" y="580" font-family="{F}" font-weight="500" font-size="24" fill="#8d9792">Haberin haberi</text></svg>')
+           + f'<text x="70" y="580" font-family="{F}" font-weight="900" font-size="30" fill="#f6f3ec">Alboroto</text>'
+           f'<text x="250" y="580" font-family="{F}" font-weight="500" font-size="24" fill="#8d9792">Haberin haberi</text></svg>')
     os.makedirs(os.path.dirname(yol), exist_ok=True)
     gecici = yol[:-4] + ".svg"
     try:
@@ -570,7 +570,7 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
     n = len({x.get("k") for x in hs})
     kategori = (t["analiz"] if h.get("nitelik") == "analiz" else t["haber"]) + (f" · {yer}" if yer else "")
     # Künye satırı
-    kunye = (f'<span>{_e("ZBS masası" if dil == "tr" else "ZBS desk")}</span>'
+    kunye = (f'<span>{_e("Alboroto masası" if dil == "tr" else "Alboroto desk")}</span>'
              + (f'<span>{n} {t["yayin"]}</span>' if n else f'<span>{_e(k.get("ad"))}</span>')
              + f'<time datetime="{_e(h.get("tarih"))}">{_e(_tarih(h.get("tarih"), dil))}</time>')
     # Gecikme ve ilk yazan

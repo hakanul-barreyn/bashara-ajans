@@ -1,5 +1,5 @@
 # Kaynak: https://github.com/yucezerey/turkish-anti-ai-skill (scripts/detect_tr_ai.py, v1.1.0)
-# MIT Lisansı, Copyright (c) 2026 Yüce Zerey. Değiştirilmeden alındı; ZBS özetlerini ölçmek için kullanılır.
+# MIT Lisansı, Copyright (c) 2026 Yüce Zerey. Değiştirilmeden alındı; Alboroto özetlerini ölçmek için kullanılır.
 #!/usr/bin/env python3
 """
 detect_tr_ai.py - Deterministik Türkçe Yazım Kalıbı Tarayıcısı (AI Türkçesi, çeviri kokusu ve TDK)

@@ -54,7 +54,7 @@
       }
       if (k.cizgi) {
         const c = el("p", "pf-cizgi");
-        c.append(el("span", "cz cz-" + k.cizgi, CIZGI[k.cizgi] || CIZGI.ara), el("span", null, tt(" ZBS’nin editoryal değerlendirmesi; ölçütleri Kaynaklar sayfasında.", " ZBS’s editorial assessment; criteria on the Sources page.")));
+        c.append(el("span", "cz cz-" + k.cizgi, CIZGI[k.cizgi] || CIZGI.ara), el("span", null, tt(" Alboroto’nun editoryal değerlendirmesi; ölçütleri Kaynaklar sayfasında.", " Alboroto’s editorial assessment; criteria on the Sources page.")));
         ust.appendChild(c);
       }
       // sayılar

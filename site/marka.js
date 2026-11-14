@@ -2,8 +2,8 @@
 // Sayfalar, sekme başlıkları, uygulama simgesi adı (manifest) ve RSS başlığı buradan okunur.
 // Toplayıcı (toplayici/marka.py) aşağıdaki süslü parantezler arasındaki JSON'u okur; JSON biçimini bozma.
 window.MARKA = {
-  "ad": "ZBS",
-  "kisa_ad": "ZBS",
+  "ad": "Alboroto",
+  "kisa_ad": "Alboroto",
   "slogan": "Haberin haberi",
   "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
   "slogan_en": "The news about the news",

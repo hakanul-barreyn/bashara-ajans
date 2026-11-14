@@ -95,7 +95,7 @@
       var ctx = cv.getContext("2d"), M = b.k === "story" ? 80 : 64, ic = b.w - 2 * M;
       ctx.fillStyle = "#fbfaf7"; ctx.fillRect(0, 0, b.w, b.h);
       ctx.fillStyle = "#0c0e0d"; ctx.fillRect(0, 0, b.w, b.k === "story" ? 150 : 96);
-      var marka = (window.MARKA && MARKA.ad) || "ZBS";
+      var marka = (window.MARKA && MARKA.ad) || "Alboroto";
       ctx.fillStyle = "#fff"; ctx.font = "800 " + (b.k === "story" ? 48 : 36) + "px 'Plus Jakarta Sans', system-ui, sans-serif"; ctx.textBaseline = "middle";
       ctx.fillText(marka, M, b.k === "story" ? 75 : 48);
       ctx.font = "500 " + (b.k === "story" ? 26 : 22) + "px 'Plus Jakarta Sans', system-ui, sans-serif"; ctx.fillStyle = "#cfd3cf"; ctx.textAlign = "right";

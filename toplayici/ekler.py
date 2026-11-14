@@ -1,4 +1,4 @@
-"""Toplayıcının ek işleri: olay kümeleme ve çerçeve notu, günlük arşiv, ZBS'nin RSS'i, Wayback'e kaydetme."""
+"""Toplayıcının ek işleri: olay kümeleme ve çerçeve notu, günlük arşiv, Alboroto'nun RSS'i, Wayback'e kaydetme."""
 import datetime as dt
 import hashlib
 import html

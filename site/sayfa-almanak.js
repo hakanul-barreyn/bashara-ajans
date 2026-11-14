@@ -1,4 +1,4 @@
-// almanak.html: ZBS Almanak, sürekli yeni bölüm eklenen çevrimiçi kitap.
+// almanak.html: Alboroto Almanak, sürekli yeni bölüm eklenen çevrimiçi kitap.
 // Kitabın yapısı data/bulten/dizin.json'dan kurulur: her yıl bir cilt; ciltte önce yıl bülteni, sonra ay ay
 // aylık bülten ve o ayın haftaları. Bütün bültenler okuma sırasıyla numaralanır (Bölüm 1, 2, ...).
 // Yeni hafta geldikçe kitabın sonuna yeni bir bölüm eklenir. Ön sayfalar: kapak, bu kitap, içindekiler, sessizlik endeksi.
@@ -83,7 +83,7 @@
   // ---------------------------------------------------------------- içindekiler (yan)
   function yanCiz(aktif) {
     yan.innerHTML = "";
-    const b = el("a", "ky-baslik"); b.href = "#kapak"; b.append(el("b", null, "ZBS Almanak"), el("small", null, T("Sürekli yazılan kitap · ", "A book that keeps being written · ") + SIRA.length + T(" bölüm", " chapters")));
+    const b = el("a", "ky-baslik"); b.href = "#kapak"; b.append(el("b", null, "Alboroto Almanak"), el("small", null, T("Sürekli yazılan kitap · ", "A book that keeps being written · ") + SIRA.length + T(" bölüm", " chapters")));
     yan.appendChild(b);
     const arac = el("div", "ky-arac");
     const son = SIRA[SIRA.length - 1];
@@ -234,7 +234,7 @@
     [["#8a6d3b", T("Batı ana akım", "Western mainstream")], ["#1f7a52", T("Bölge basını", "Regional press")], ["#7a3fa0", T("Türkiye basını", "Turkish press")]].forEach(([r, l]) => { const e = el("span"); const i = el("i"); i.style.background = r; e.append(i, l); lj.appendChild(e); });
     lj.appendChild(el("span", "sk-lejant-not", T("Çizgi: aylık ortalama · Nokta: tek bir olay (rengi hangi grup olduğunu gösterir)", "Line: monthly average · Dot: one event (its colour shows the group)")));
     ic.appendChild(lj); k.appendChild(ic);
-    k.appendChild(el("figcaption", "sk-altyazi", T("Yukarı çıktıkça sessizlik artar. %100: o gruptaki hiçbir yayın olayı başlığa taşımadı. Kaynak: ZBS başlık taraması.", "Higher means more silence. 100%: no outlet in the group ran a headline about the event. Source: ZBS headline scan.")));
+    k.appendChild(el("figcaption", "sk-altyazi", T("Yukarı çıktıkça sessizlik artar. %100: o gruptaki hiçbir yayın olayı başlığa taşımadı. Kaynak: Alboroto başlık taraması.", "Higher means more silence. 100%: no outlet in the group ran a headline about the event. Source: Alboroto headline scan.")));
     if (!buyuk) {
       const b = el("button", "gp-dugme sk-buyut", T("Büyüt", "Enlarge")); b.type = "button";
       b.onclick = (e) => { e.stopPropagation(); buyutAc(); };
@@ -264,7 +264,7 @@
   // ---------------------------------------------------------------- ön sayfalar
   function kapak() {
     const s = sayfa("kapak");
-    s.appendChild(el("div", "kapak-ust", T("ZBS · Almanak", "ZBS · Almanac")));
+    s.appendChild(el("div", "kapak-ust", T("Alboroto · Almanak", "Alboroto · Almanac")));
     const h = el("h1", null, T("Almanak", "Almanac")); h.appendChild(el("em", null, T("7 Ekim’den bu yana basın neyi yazdı, neyi görmedi", "What the press wrote and did not see since 7 October"))); s.appendChild(h);
     // kapak sanatı: Batı ana akımın ve bölge basınının sustuğu pay, ay ay
     const ay = (ALISMA && ALISMA.sessizlik) || [];
@@ -297,7 +297,7 @@
     return s;
   }
   function buKitap() {
-    const s = sayfa(null, "ZBS Almanak", T("Bu kitap", "About this book"), "i");
+    const s = sayfa(null, "Alboroto Almanak", T("Bu kitap", "About this book"), "i");
     const b = el("div", "acilis-blok"); b.append(el("div", "bolum-ust", T("Ön söz", "Preface")), el("h1", "bolum-baslik", T("Bu kitap nasıl okunur", "How to read this book"))); s.appendChild(b);
     [T("Bu kitap kendi kendine yazılıyor. Toplayıcımız her gün Filistin’den, Arap dünyasından, İran’dan, Türkiye’den, İsrail’den ve Batı’dan yüzlerce yayının haberini okuyor; her hafta sonunda bu haftanın bölümü, her ay sonunda ayın bölümü kitaba ekleniyor. Süren dönemin bölümü taslaktır ve günde bir yenilenir.",
       "This book writes itself. Every day our collector reads the news of hundreds of outlets from Palestine, the Arab world, Iran, Turkey, Israel and the West; at the end of every week a new chapter for that week is added, and at the end of every month a chapter for the month. The chapter for the current period is a draft and is refreshed daily."),
@@ -313,7 +313,7 @@
     return s;
   }
   function icindekiler() {
-    const s = sayfa(null, "ZBS Almanak", T("İçindekiler", "Contents"), "ii");
+    const s = sayfa(null, "Alboroto Almanak", T("İçindekiler", "Contents"), "ii");
     s.id = "icindekiler-sayfa";
     const b = el("div", "acilis-blok"); b.append(el("div", "bolum-ust", T("İçindekiler", "Contents")), el("h1", "bolum-baslik", T(`${CILT.length} cilt, ${SIRA.length} bölüm`, `${CILT.length} volumes, ${SIRA.length} chapters`))); s.appendChild(b);
     const ul0 = el("ul", "ic-liste");
@@ -334,7 +334,7 @@
     return s;
   }
   function sessizlikSayfa() {
-    const s = sayfa(null, "ZBS Almanak", T("Ön bölüm · Sessizlik endeksi", "Front chapter · The silence index"), "iii");
+    const s = sayfa(null, "Alboroto Almanak", T("Ön bölüm · Sessizlik endeksi", "Front chapter · The silence index"), "iii");
     s.style.setProperty("--no", '"S"');
     const b = el("div", "acilis-blok"); b.append(el("div", "bolum-ust", T("Ön bölüm", "Front chapter")), el("h1", "bolum-baslik", T("Sessizlik endeksi", "The silence index")),
       el("div", "bolum-tarih", T("7 Ekim 2023’ten bugüne", "From 7 October 2023 to today"))); s.appendChild(b);
@@ -376,7 +376,7 @@
   // ---------------------------------------------------------------- sonuç: yıl yıl, çeyrek çeyrek
   const HAD = { sustu: T("Olayların çoğunda başlık atmadı", "No headline for most events"), fail: T("Faili çoğunlukla yazmadı", "Mostly did not name the killer"), tarti: T("İsrailli ölümlere ölü başına daha çok yer verdi", "Gave Israeli deaths more space per death") };
   function sonucSayfa() {
-    const s = sayfa(null, "ZBS Almanak", T("Sonuç", "Conclusion"), "iv");
+    const s = sayfa(null, "Alboroto Almanak", T("Sonuç", "Conclusion"), "iv");
     s.style.setProperty("--no", '"C"');
     const b = el("div", "acilis-blok"); b.append(el("div", "bolum-ust", T("Sonuç", "Conclusion")), el("h1", "bolum-baslik", T("Yıl yıl, çeyrek çeyrek: hangi olaylar haber olmadı?", "Year by year, quarter by quarter: which events went unreported?"))); s.appendChild(b);
     s.appendChild(el("p", "metin acilis", T("Her çeyrek için, başlıklardan bulunan olayların günlerinde yayında olup o olay türünden tek başlık atmayan yayınların payı. Altında o yılın öne çıkan ölçümleri: aynı dildeki tanık basından belirgin biçimde ayrılan yayınlar.",
@@ -510,7 +510,7 @@
     const s0 = b.istatistik, a = b.anlati || {}, on = s0.onceki || null; KOD = s0.kodlar || {};
     const TRM = s0.kaynak === "tarama";
     const c = x.cilt || { roma: "", yil: "" };
-    const s = sayfa("kb-bolum", "ZBS Almanak · " + T("Cilt ", "Vol. ") + c.roma + " · " + c.yil, T("Bölüm ", "Chapter ") + x.no + " · " + kisaAd(x), x.no);
+    const s = sayfa("kb-bolum", "Alboroto Almanak · " + T("Cilt ", "Vol. ") + c.roma + " · " + c.yil, T("Bölüm ", "Chapter ") + x.no + " · " + kisaAd(x), x.no);
     s.style.setProperty("--no", '"' + x.no + '"');
     const ac = el("div", "acilis-blok");
     ac.append(el("div", "bolum-ust", TUR_AD[x.tur]), el("div", "bolum-no", String(x.no)), el("h1", "bolum-baslik", a.baslik || ad(x)));
@@ -680,7 +680,7 @@
     if (!x) { location.hash = "#kapak"; return; }
     yanCiz(h);
     masa.appendChild(el("p", "bos2", T("Yükleniyor…", "Loading…")));
-    try { const b = await getir(x); if (location.hash !== h) return; masa.innerHTML = ""; masa.appendChild(bolumCiz(x, b)); window.scrollTo(0, 0); document.title = "ZBS Almanak · " + T("Bölüm ", "Chapter ") + x.no; }
+    try { const b = await getir(x); if (location.hash !== h) return; masa.innerHTML = ""; masa.appendChild(bolumCiz(x, b)); window.scrollTo(0, 0); document.title = "Alboroto Almanak · " + T("Bölüm ", "Chapter ") + x.no; }
     catch (e) { masa.innerHTML = ""; masa.appendChild(el("p", "bos2", T("Bölüm okunamadı.", "Could not load the chapter."))); }
   }
   window.addEventListener("hashchange", git);

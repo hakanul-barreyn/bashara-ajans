@@ -47,7 +47,7 @@
       const ic=el("div","egri-ic");ic.innerHTML=svg;det.appendChild(ic);
       det.appendChild(el("p","egri-not","Her nokta bir hafta: o hafta karşılaştırılan başlıkların (en az üç) ortalaması. Üstte Filistin bakışı, ortada aktarım, altta İsrail / ABD bakışı. Noktanın üzerine gelince sayı görünür."));
       det.addEventListener("click",e=>e.stopPropagation());return det;})();
-    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"ZBS")+"’nin karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
+    const ust=el("div","kanit-ust");ust.appendChild(el("b",null,"Ölçülmüş söylem"));ust.append(" · "+((window.MARKA&&MARKA.ad)||"Alboroto")+"’nun karşılaştırdığı "+n+" başlık");kutu.appendChild(ust);
     const bar=el("div","kanit-cubuk");Object.keys(c).forEach(v=>{if(!c[v])return;const i=el("i");i.style.width=(100*c[v]/n)+"%";i.style.background=BR[v];i.title=BK[v]+": "+c[v];bar.appendChild(i);});kutu.appendChild(bar);
     const ef=el("div","kanit-efsane");Object.keys(c).forEach(v=>{if(!c[v])return;const x=el("span");const nk=el("i");nk.style.background=BR[v];x.appendChild(nk);x.append(BK[v]+" "+Math.round(100*c[v]/n)+"%");ef.appendChild(x);});kutu.appendChild(ef);if(egri)kutu.appendChild(egri);
     if(n>=5){const fi=c.filistin/n,is=c.israil/n;

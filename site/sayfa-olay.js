@@ -25,7 +25,7 @@
       k.textContent = "";
       if (!x) { liste(); return; }
       var yer = (x.yer || []).join(", ");
-      document.title = turAd(x.tur) + (yer ? " · " + yer : "") + " · " + gunAd(x.bas) + " | ZBS";
+      document.title = turAd(x.tur) + (yer ? " · " + yer : "") + " · " + gunAd(x.bas) + " | Alboroto";
       var bas = el("header", "rp-bas");
       bas.appendChild(el("p", "rp-ust", tt("Olay kataloğu · ", "Event catalogue · ") + turAd(x.tur)));
       bas.appendChild(el("h1", null, turAd(x.tur) + (yer ? ": " + yer : "")));
