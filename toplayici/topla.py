@@ -1178,6 +1178,10 @@ def main():
         gun = ekler.arsive_yaz(KOK, tut)
         ekler.rss_yaz(KOK, tut, SIMDI)
         log(f"Arşiv: {gun} günlük dosya güncellendi; RSS yazıldı")
+        try:
+            log(f"Hesap profilleri: {ekler.hesap_yaz(KOK, tut, SIMDI)} yayın")
+        except Exception as e:
+            log(f"Hesap profilleri yazılamadı: {e}")
         sayfalar.yaz(KOK, tut, kaynaklar, SIMDI, log=log)
         try:
             import gorsel_denetim

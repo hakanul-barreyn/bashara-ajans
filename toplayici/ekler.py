@@ -238,6 +238,51 @@ def arsive_yaz(kok, haberler):
     return len(gunler)
 
 
+# ---------------------------------------------------------------- hesaplar (profil sayfaları)
+HESAP_ALANLAR = ("id", "url", "tarih", "baslik_tr", "baslik_en", "baslik_orj", "ozet_tr", "ozet_en", "dil", "nitelik", "telegram")
+HESAP_GUN, HESAP_EN_COK = 14, 120
+
+
+def hesap_yaz(kok, haberler, simdi):
+    """Her yayın için profil dosyası: son 14 günün haberleri (en çok 120), denetimden geçmiş görselleriyle
+    (data/hesap/<kaynak>.json). Kaynak: günlük arşiv (Türkçe özetli haberler) ve canlı akıştaki ilgili haberler."""
+    klasor = os.path.join(kok, "data", "hesap")
+    os.makedirs(klasor, exist_ok=True)
+    try:
+        denetim = json.load(open(os.path.join(kok, "data", "gorsel-akis.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        denetim = {}
+    esik = (simdi - dt.timedelta(days=HESAP_GUN)).date().isoformat()
+    tum = {}
+    arsiv = os.path.join(kok, "data", "arsiv")
+    for ad in sorted(os.listdir(arsiv)) if os.path.isdir(arsiv) else []:
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}\.json", ad) and ad[:10] >= esik:
+            try:
+                for h in json.load(open(os.path.join(arsiv, ad), encoding="utf-8")):
+                    tum[h["id"]] = h
+            except (OSError, ValueError):
+                pass
+    for h in haberler:
+        if h.get("ilgili") or h.get("ozet_tr"):
+            tum[h["id"]] = {**tum.get(h["id"], {}), **h}
+    yayin = {}
+    for h in tum.values():
+        if (h.get("tarih") or "")[:10] < esik or not h.get("kaynak"):
+            continue
+        x = {k: h[k] for k in HESAP_ALANLAR if h.get(k)}
+        g = h.get("gorsel")
+        if g and (h.get("gorsel_ok") is True or (denetim.get(g) or {}).get("ok") is True):
+            x["gorsel"] = g
+        yayin.setdefault(str(h["kaynak"]), []).append(x)
+    yedi = (simdi - dt.timedelta(days=7)).date().isoformat()
+    for kid, xs in yayin.items():
+        xs.sort(key=lambda x: x.get("tarih") or "", reverse=True)
+        with open(os.path.join(klasor, kid + ".json"), "w", encoding="utf-8") as f:
+            json.dump({"guncellendi": simdi.isoformat()[:16], "gun7": sum(1 for x in xs if x["tarih"][:10] >= yedi),
+                       "gun14": len(xs), "haberler": xs[:HESAP_EN_COK]}, f, ensure_ascii=False, separators=(",", ":"))
+    return len(yayin)
+
+
 # ---------------------------------------------------------------- RSS
 def rss_yaz(kok, haberler, simdi):
     depo = os.environ.get("GITHUB_REPOSITORY", "")

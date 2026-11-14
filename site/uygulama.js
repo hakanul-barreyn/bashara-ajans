@@ -882,7 +882,7 @@
     const ust = el("div", "kart-ust");
     ust.appendChild(avatar(k));
     const kim = el("div", "kim");
-    const adEl = el("span", "ad", k.ad);
+    const adEl = el("a", "ad", k.ad); adEl.href = window.ZBSHesap ? window.ZBSHesap.profil(k.id) : "#";
     if (bayrakHTML(k)) adEl.insertAdjacentHTML("afterbegin", bayrakHTML(k));
     kim.appendChild(adEl);
     const yer = el("span", "yer", k.sehir + " · ");
@@ -1306,17 +1306,239 @@
       : kalan.toLocaleString(YR) + " kart daha var: önce son 24 saatin kalan haberleri saat sırasıyla, sonra daha eski önemli haberler, en sonda analizler."));
     const ey = el("div", "ml-eylem");
     const d = el("button", "b-dugme", EN ? "Show other stories too" : "Diğer haberleri de göster"); d.type = "button";
-    d.onclick = () => { const ilk = sonra(); u.remove(); if (ilk) ilk.scrollIntoView({ behavior: "auto" }); };
+    d.onclick = () => { const ilk = sonra(); (u.closest(".birim-reel") || u).remove(); if (ilk) ilk.scrollIntoView({ behavior: "auto" }); };
     const r = el("a", "b-dugme ikincil", EN ? "Reports" : "Raporlar"); r.href = "raporlar.html";
     ey.append(d, r); g.appendChild(ey); u.appendChild(g);
     return u;
   }
+  // ---------------------------------------------------- telefon: sosyal medya akışı (her yayın bir hesap)
+  // Tam ekran dikey akış; her gönderi bir yayının haberi. Altta sabit platform (simge, hesap adı, takip, başlık, künye),
+  // sağda eylemler; ikisi de yerinde durur, içerikleri ekrandaki gönderiye göre değişir.
+  const HS = window.ZBSHesap;
+  const SVG = {
+    katman: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>',
+    paylas: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 10 14"/><path d="M21 3 14 21l-4-7-7-4 18-7Z"/></svg>',
+    git: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>',
+    dunya: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
+    ev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1v-8Z"/></svg>',
+    ara: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    rapor: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>',
+    kitap: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></svg>',
+    kisiler: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21.5 19"/></svg>',
+  };
+  let rlSekme = "gundem", rlGozlem = null;
+  const rlVeri = new WeakMap();
+  function rlLead(xs) {
+    const ok = (h) => h.gorsel && h.gorsel_ok === true;
+    return xs.find((h) => ok(h) && BT(h)) || xs.find(ok) || xs.find((h) => BT(h)) || xs[0];
+  }
+  // bir haberi tam ekran gönderi yap; hikâye verilirse sağdaki "aynı haber" düğmesi açılır
+  function rlGonderi(h, hikaye) {
+    const EN = window.DIL === "en", k = kaynaklar[h.kaynak], u = birim("reel");
+    if (!k) return null;
+    const z = el("div", "rl-zemin"), r = HS.renk(k);
+    u.style.setProperty("--hesap", r.ana);
+    if (h.gorsel && h.gorsel_ok === true) {
+      u.classList.add("rl-gorselli");
+      const src = (window.AKTAR || ((v) => v))(h.gorsel, 900);
+      const arka = document.createElement("img"); arka.className = "rl-bulanik"; arka.alt = ""; arka.src = src; arka.loading = "lazy"; arka.referrerPolicy = "no-referrer";
+      const on = document.createElement("img"); on.className = "rl-foto"; on.alt = ""; on.src = src; on.loading = "lazy"; on.referrerPolicy = "no-referrer";
+      on.onerror = () => { u.classList.remove("rl-gorselli"); arka.remove(); on.remove(); z.appendChild(el("p", "rl-yazi", baslikSec(h))); };
+      z.append(arka, on);
+    } else {
+      // görselsiz: hesabın rengiyle yazı gönderisi
+      z.appendChild(el("p", "rl-yazi", baslikSec(h)));
+      if (h.nitelik === "analiz") z.appendChild(el("span", "rl-yazi-et", EN ? "Analysis" : "Analiz"));
+    }
+    u.appendChild(z);
+    rlVeri.set(u, { tur: "haber", h, k, hikaye });
+    return u;
+  }
+  // ZBS'nin kendi gönderisi (harita, sayaç, uydu, bildirimler)
+  function rlZbs(ic, not) {
+    const u = birim("reel", "rl-zbs"); if (!ic) return null;
+    const z = el("div", "rl-zbs-ic"); z.appendChild(ic); u.appendChild(z);
+    rlVeri.set(u, { tur: "zbs", not }); return u;
+  }
+  function rlKatman() {
+    let kt = document.getElementById("rlKatman"); if (kt) return kt;
+    const EN = window.DIL === "en";
+    kt = el("div", "rl-katman"); kt.id = "rlKatman";
+    // üst: sekmeler
+    const ust = el("div", "rl-ust");
+    const logo = el("a", "rl-logo"); logo.href = "./"; logo.innerHTML = '<img src="site/logo.svg" alt="" width="26" height="26">';
+    const sek = el("div", "rl-sekmeler");
+    [["gundem", EN ? "Top" : "Gündem"], ["takip", EN ? "Following" : "Takip"]].forEach(([k, ad]) => {
+      const b = el("button", "rl-sekme", ad); b.type = "button"; b.dataset.k = k; b.setAttribute("aria-pressed", k === rlSekme);
+      b.onclick = () => { if (rlSekme === k) { scrollTo(0, 0); return; } rlSekme = k; sek.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x.dataset.k === k)); ciz(true); };
+      sek.appendChild(b);
+    });
+    const hes = el("a", "rl-ikon"); hes.href = "kaynaklar.html"; hes.innerHTML = SVG.kisiler; hes.setAttribute("aria-label", EN ? "Accounts" : "Hesaplar");
+    ust.append(logo, sek, hes);
+    // sağ: eylemler
+    const yan = el("div", "rl-yan");
+    // alt: platform
+    const pl = el("div", "rl-platform");
+    // en alt: gezinme
+    const alt = el("nav", "rl-alt");
+    [["./", SVG.ev, EN ? "Feed" : "Akış"], ["#ara", SVG.ara, EN ? "Search" : "Ara"], ["raporlar.html", SVG.rapor, EN ? "Reports" : "Raporlar"],
+      ["almanak.html", SVG.kitap, EN ? "Almanac" : "Almanak"], ["kaynaklar.html", SVG.kisiler, EN ? "Accounts" : "Hesaplar"]].forEach(([h, ik, ad], i) => {
+      const a = el("a", i ? null : "on"); a.href = h; a.innerHTML = ik; a.appendChild(el("span", null, ad));
+      if (h === "#ara") a.onclick = (e) => { e.preventDefault(); const s = $("suzgecAc"); if (s) s.click(); };
+      if (h === "./") a.onclick = (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: "smooth" }); };
+      alt.appendChild(a);
+    });
+    kt.append(ust, yan, pl, alt);
+    document.body.appendChild(kt);
+    return kt;
+  }
+  function rlEylem(ikon, sayi, ad, f) {
+    const b = el("button", "rl-eylem"); b.type = "button"; b.innerHTML = ikon; b.setAttribute("aria-label", ad);
+    b.appendChild(el("span", null, sayi != null ? String(sayi) : ad));
+    b.onclick = f; return b;
+  }
+  function rlPaylas(baslik, url) {
+    if (navigator.share) { navigator.share({ title: baslik, url }).catch(() => {}); return; }
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => rlBildir(window.DIL === "en" ? "Link copied" : "Bağlantı kopyalandı"), () => {});
+  }
+  function rlBildir(m) {
+    let t = document.querySelector(".rl-bildiri"); if (!t) { t = el("div", "rl-bildiri"); document.body.appendChild(t); }
+    t.textContent = m; t.classList.add("acik"); clearTimeout(t._z); t._z = setTimeout(() => t.classList.remove("acik"), 1800);
+  }
+  // ekrandaki gönderiye göre platformu ve eylemleri yenile
+  function rlGuncelle(u) {
+    const kt = rlKatman(), v = rlVeri.get(u), EN = window.DIL === "en";
+    const yan = kt.querySelector(".rl-yan"), pl = kt.querySelector(".rl-platform");
+    yan.textContent = ""; pl.textContent = ""; pl.classList.remove("acik");
+    kt.classList.toggle("rl-bos", !v || v.tur !== "haber");
+    if (!v) return;
+    if (v.tur === "zbs") {
+      if (v.not) { const s = el("div", "rl-kim"); s.append(avatarZbs(), el("b", null, "ZBS")); pl.append(s, el("p", "rl-baslik", v.not)); kt.classList.remove("rl-bos"); }
+      return;
+    }
+    const { h, k, hikaye } = v;
+    kt.style.setProperty("--hesap", HS.renk(k).ana);
+    // sağ sütun
+    if (hikaye && hikaye.yayinSayisi > 1) yan.appendChild(rlEylem(SVG.katman, hikaye.yayinSayisi, EN ? "Same story" : "Aynı haber", () => rlSayfa(hikaye, h)));
+    yan.appendChild(rlEylem(SVG.paylas, null, EN ? "Share" : "Paylaş", () => rlPaylas(baslikSec(h), h.url)));
+    const git = rlEylem(SVG.git, null, EN ? "Source" : "Kaynak", () => window.open(h.url, "_blank", "noopener"));
+    yan.appendChild(git);
+    // platform
+    const kim = el("div", "rl-kim");
+    const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "rl-av"), el("b", null, k.ad));
+    kim.appendChild(pa);
+    const tk = el("button", "rl-takip"); tk.type = "button";
+    const tyaz = () => { const t = HS.takipte(k.id); tk.textContent = t ? (EN ? "Following" : "Takipte") : (EN ? "Follow" : "Takip et"); tk.classList.toggle("takipte", t); };
+    tk.onclick = (e) => { e.stopPropagation(); const t = HS.takipDegis(k.id); tyaz(); rlBildir(t ? (EN ? "Following " : "Takip ediliyor: ") + k.ad : (EN ? "Unfollowed " : "Takipten çıkıldı: ") + k.ad); };
+    tyaz(); kim.appendChild(tk);
+    pl.appendChild(kim);
+    const gorselli = u.classList.contains("rl-gorselli");
+    const nrm = (t) => String(t || "").toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+    const farkli = h.baslik_orj && nrm(h.baslik_orj) !== nrm(baslikSec(h));
+    const ana = gorselli ? baslikSec(h) : (OZ(h) || (farkli ? h.baslik_orj : ""));
+    const cap = el("p", "rl-baslik", ana || "");
+    if (!ana) cap.hidden = true;
+    pl.appendChild(cap);
+    // açılınca: özet, özgün başlık, habere git
+    const ek = el("div", "rl-ek");
+    if (gorselli && OZ(h)) ek.appendChild(el("p", null, OZ(h)));
+    if (farkli && h.baslik_orj !== ana) { const o = el("p", "rl-orj", h.baslik_orj); o.dir = "auto"; ek.appendChild(o); }
+    const a = el("a", "rl-git", EN ? "Read on " + k.ad + " ↗" : k.ad + " sitesinde oku ↗"); a.href = h.url; a.target = "_blank"; a.rel = "noopener"; ek.appendChild(a);
+    if (OZ(h)) ek.appendChild(el("span", "rl-yz", EN ? "Translation and summary: AI" : "Çeviri ve özet: yapay zekâ"));
+    pl.appendChild(ek);
+    pl.onclick = (e) => { if (e.target.closest("a,button")) return; pl.classList.toggle("acik"); };
+    const kun = el("p", "rl-kunye"); kun.innerHTML = SVG.dunya;
+    kun.appendChild(document.createTextNode([HS.kampYaz(k), HS.dilYaz(h.dil || k.dil), once(h.tarih)].filter(Boolean).join(" · ") + (h.nitelik === "analiz" ? (EN ? " · Analysis" : " · Analiz") : "")));
+    pl.appendChild(kun);
+  }
+  function avatarZbs() { const a = el("div", "avatar rl-av logolu"); a.innerHTML = '<img src="site/logo.svg" alt="">'; return a; }
+  // aynı haberi yazan öteki hesaplar: alttan açılan sayfa
+  function rlSayfa(b, simdiki) {
+    const EN = window.DIL === "en";
+    const ort = el("div", "rl-sayfa-ort"), sy = el("div", "rl-sayfa"); sy.setAttribute("role", "dialog"); sy.setAttribute("aria-modal", "true");
+    const kapat = () => { ort.classList.remove("acik"); setTimeout(() => ort.remove(), 220); document.removeEventListener("keydown", esc); };
+    const esc = (e) => { if (e.key === "Escape") kapat(); };
+    ort.onclick = (e) => { if (e.target === ort) kapat(); };
+    const bas = el("div", "rl-sayfa-bas");
+    bas.append(el("i", "rl-tutamac"), el("b", null, (EN ? "Same story · " : "Aynı haber · ") + b.yayinSayisi + (EN ? " accounts" : " hesap")));
+    const x = el("button", "rl-kapat", "✕"); x.type = "button"; x.setAttribute("aria-label", EN ? "Close" : "Kapat"); x.onclick = kapat; bas.appendChild(x);
+    sy.appendChild(bas);
+    const ic = el("div", "rl-sayfa-ic");
+    ic.appendChild(kampSeridi(b.haberler));
+    const ol = el("ol", "rl-liste");
+    b.haberler.slice().sort((p, q) => Date.parse(p.tarih) - Date.parse(q.tarih)).forEach((h) => {
+      const k = kaynaklar[h.kaynak]; if (!k) return;
+      const li = el("li", h === simdiki ? "su-an" : null);
+      const ust = el("div", "rl-l-ust");
+      const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "kucuk"), el("b", null, k.ad));
+      const kp = el("span", "rl-l-kamp"); const i_ = el("i"); i_.style.background = KAMP_RENK[kampAd(k)] || "#6b746f"; kp.append(i_, document.createTextNode(HS.kampYaz(k)));
+      ust.append(pa, kp, el("time", null, saatYaz(h.tarih)));
+      li.appendChild(ust);
+      li.appendChild(el("p", "rl-l-baslik", baslikSec(h)));
+      if (h.baslik_orj && h.baslik_orj !== baslikSec(h)) { const o = el("p", "rl-l-orj", h.baslik_orj); o.dir = "auto"; li.appendChild(o); }
+      const a = el("a", "rl-l-git", EN ? "Open ↗" : "Habere git ↗"); a.href = h.url; a.target = "_blank"; a.rel = "noopener"; li.appendChild(a);
+      ol.appendChild(li);
+    });
+    ic.appendChild(ol);
+    ic.appendChild(veriSayfa(b));
+    sy.appendChild(ic);
+    ort.appendChild(sy); document.body.appendChild(ort);
+    document.addEventListener("keydown", esc);
+    requestAnimationFrame(() => ort.classList.add("acik"));
+    // tutamaçtan aşağı çekince kapanır
+    let y0 = null;
+    bas.addEventListener("touchstart", (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+    bas.addEventListener("touchmove", (e) => { if (y0 != null) { const d = Math.max(0, e.touches[0].clientY - y0); sy.style.transform = "translateY(" + d + "px)"; } }, { passive: true });
+    bas.addEventListener("touchend", (e) => { const d = y0 == null ? 0 : e.changedTouches[0].clientY - y0; y0 = null; sy.style.transform = ""; if (d > 80) kapat(); });
+  }
+  function rlGozle(u) {
+    if (!rlGozlem) rlGozlem = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) rlGuncelle(e.target); }); }, { threshold: 0.6 });
+    rlGozlem.observe(u);
+  }
+  // takip sekmesi: takip edilen hesapların haberleri, en yeniden eskiye
+  function rlTakipCiz(akis) {
+    const EN = window.DIL === "en", t = new Set(HS.takipler());
+    const xs = gor.filter((h) => t.has(String(h.kaynak)) && (h.ilgili || OZ(h) || BT(h))).sort((p, q) => Date.parse(q.tarih) - Date.parse(p.tarih)).slice(0, 200);
+    xs.forEach((h) => { const u = rlGonderi(h, null); if (u) { akis.appendChild(u); rlGozle(u); } });
+    // öneri: son 24 saatte en çok yazan hesaplar
+    const say = {}; gor.filter((h) => dk(h.tarih) < 1440).forEach((h) => { say[h.kaynak] = (say[h.kaynak] || 0) + 1; });
+    const oner = Object.keys(say).filter((id) => !t.has(String(id)) && kaynaklar[id]).sort((p, q) => say[q] - say[p]).slice(0, 12);
+    const kut = el("div", "rl-oneri");
+    kut.appendChild(el("h2", null, xs.length ? (EN ? "More accounts to follow" : "Takip edebileceğin başka hesaplar") : (EN ? "You don't follow anyone yet" : "Henüz kimseyi takip etmiyorsun")));
+    kut.appendChild(el("p", null, EN ? "Follows are stored only on this device." : "Takip listesi yalnızca bu cihazda tutulur; hesap açmana gerek yok."));
+    const ul = el("ul");
+    oner.forEach((id) => {
+      const k = kaynaklar[id], li = el("li"), pa = el("a", "rl-profil"); pa.href = HS.profil(id);
+      pa.append(avatar(k, "kucuk"), el("b", null, k.ad), el("span", null, HS.kampYaz(k)));
+      li.append(pa, HS.takipDugme(id)); ul.appendChild(li);
+    });
+    kut.appendChild(ul);
+    const u = rlZbs(kut, null); if (u) { u.classList.add("rl-oneri-birim"); akis.appendChild(u); rlGozle(u); }
+  }
   function desteCiz(akis) {
+    rlKatman();
+    if (rlGozlem) { rlGozlem.disconnect(); }
+    if (rlSekme === "takip") {
+      rlTakipCiz(akis);
+      desteImza = gor.length; desteYeni = 0; desteKismi = kismiVeri;
+      const u0 = akis.querySelector(".birim-reel"); if (u0) rlGuncelle(u0);
+      return;
+    }
     const olaylarHepsi = (olaylar || []).concat(gundemArsiv || []);
     const r = window.ZBSDeste.kur(gor, olaylarHepsi, kaynaklar, Date.now());
     hikayeYeri.clear();
     const yayin = new Set(gor.filter((h) => dk(h.tarih) < 1440).map((h) => h.kaynak)).size;
+    const EN_ = window.DIL === "en";
     const ciz1 = (b) => {
+      if (b.tur === "hikaye") { const lead = rlLead(b.haberler); const u = rlGonderi(lead, b); hikayeYeri.set(b, u); return u; }
+      if (b.tur === "tek") return rlGonderi(b.haberler[0], null);
+      if (b.tur === "analiz") { const f = document.createDocumentFragment(); b.haberler.forEach((h) => { const u = rlGonderi(h, null); if (u) { f.appendChild(u); rlGozle(u); } }); return f.firstChild ? f : null; }
+      if (b.tur === "bilgi") { const ic = bilgiBirim(b.tip); return ic ? rlZbs(ic, null) : null; }
+      if (b.tur === "son") return rlZbs(sonBirim(), null);
+      if (b.tur === "kapak" || b.tur === "mola" || b.tur === "bolum") return null;
+      return null;
+    };
+    const ciz0 = (b) => {
       if (b.tur === "kapak") return kapakBirim(b, { haber: r.istatistik.haber, yayin });
       if (b.tur === "hikaye") { const u = hikayeBirim(b); hikayeYeri.set(b, u); return u; }
       if (b.tur === "seri") return seriBirim(b);
@@ -1332,13 +1554,14 @@
     let i = 0;
     const parti = (n) => {
       let ilk = null; const son = Math.min(r.deste.length, i + n);
-      for (; i < son; i++) { const u = ciz1(r.deste[i]); if (u) { akis.appendChild(u); ilk = ilk || u; } }
+      for (; i < son; i++) { const u = ciz1(r.deste[i]); if (u) { const ilkU = u.nodeType === 11 ? u.firstChild : u; if (u.nodeType !== 11) rlGozle(u); akis.appendChild(u); ilk = ilk || ilkU; } }
       // kalan yalnızca "son" kartıysa onu da hemen ekle
-      if (r.deste.length - i === 1) { const u = ciz1(r.deste[i++]); if (u) akis.appendChild(u); }
-      if (i < r.deste.length) akis.appendChild(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i === (r.dosyaSon || DESTE_ILK)));
+      if (r.deste.length - i === 1) { const u = ciz1(r.deste[i++]); if (u) { rlGozle(u); akis.appendChild(u); } }
+      if (i < r.deste.length) akis.appendChild(rlZbs(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i === (r.dosyaSon || DESTE_ILK)), null));
       return ilk;
     };
     parti(r.dosyaSon || DESTE_ILK);
+    const u0 = akis.querySelector(".birim-reel"); if (u0) rlGuncelle(u0);
     // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
     let ci = document.querySelector(".deste-ilerleme");
     if (!ci) { ci = el("div", "deste-ilerleme"); ci.appendChild(el("i")); document.body.appendChild(ci); }
