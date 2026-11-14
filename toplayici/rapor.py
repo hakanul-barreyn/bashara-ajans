@@ -69,6 +69,16 @@ def _ekle(r, n, tt):
         r["f"][f] += tt.get("f:" + f, 0)
 
 
+def wilson(k, n, z=1.96):
+    """%95 Wilson güven aralığı (yüzde olarak, bir ondalık)."""
+    if not n:
+        return None
+    p = k / n
+    m = z * ((p * (1 - p) + z * z / (4 * n)) / n) ** 0.5
+    d = 1 + z * z / n
+    return [round(100 * (p + z * z / (2 * n) - m) / d, 1), round(100 * (p + z * z / (2 * n) + m) / d, 1)]
+
+
 def _oran(r):
     olum = sum(r["f"][f] for f in ("aktif", "failli", "failsiz", "oldu", "sehadet"))   # Filistinli ölümlerin anlatımı
     olum_fs = olum - r["f"]["sehadet"]
@@ -77,7 +87,12 @@ def _oran(r):
             # faili yazılan pay: şehadet anlatımı paydaya girmez (faili yazmasa da ölümü saldırının sonucu olarak verir)
             "fail_yazilan": {"filistinli": round(100 * (r["f"]["aktif"] + r["f"]["failli"]) / olum_fs, 1) if olum_fs else None,
                              "israilli": round(100 * r["f"]["pfail"] / israilli, 1) if israilli >= 20 else None,
-                             "israilli_n": israilli},"n": r["n"], "baglamli": r["b"], "gazze": r["g"], "gazeteci_haber": r["gz"],
+                             "israilli_n": israilli, "filistinli_n": olum_fs,
+                             # %95 güven aralıkları ve duyarlılık: şehadet başlıkları paydaya "fail yazılmamış" olarak katılsa
+                             "filistinli_ga": wilson(r["f"]["aktif"] + r["f"]["failli"], olum_fs),
+                             "israilli_ga": wilson(r["f"]["pfail"], israilli) if israilli >= 20 else None,
+                             "filistinli_sehadet_dahil": round(100 * (r["f"]["aktif"] + r["f"]["failli"]) / olum, 1) if olum else None},
+            "n": r["n"], "baglamli": r["b"], "gazze": r["g"], "gazeteci_haber": r["gz"],
             "gazze_pay": round(100 * r["g"] / r["n"], 1) if r["n"] else None,
             "savas_pay": round(100 * r["s"] / r["n"], 1) if r["n"] else None, "savas": r["s"],
             "iran_pay": round(100 * r["i"] / r["n"], 1) if r["n"] else None,
@@ -91,7 +106,7 @@ def _hafta(g):
     return (d - dt.timedelta(days=d.weekday())).isoformat()
 
 
-RAPOR_SURUM = 7
+RAPOR_SURUM = 8   # 8: güven aralıkları, yayın ağırlıklı ortalama, şehadet duyarlılığı
 
 
 def hesapla(kok, kaynaklar, simdi, log=print):
@@ -173,6 +188,18 @@ def hesapla(kok, kaynaklar, simdi, log=print):
     gruplar = []
     for g, a in GRUPLAR:
         o = _oran(toplam[g])
+        # yayın ağırlıklı ortalama: her yayın bir oy (en az 30 Filistinli ölüm başlığı olanlar); başlık ağırlıklı oranı
+        # birkaç üretken yayının belirlemesine karşı
+        oy = []
+        for kid, r in yay.items():
+            if gk.get(kid) != g:
+                continue
+            fs = sum(r["f"][f] for f in ("aktif", "failli", "failsiz", "oldu"))
+            if fs >= 30:
+                oy.append(100 * (r["f"]["aktif"] + r["f"]["failli"]) / fs)
+        oy.sort()
+        o["fail_yazilan"]["yayin_agirlikli"] = {"ortalama": round(sum(oy) / len(oy), 1) if oy else None,
+                                                "ortanca": round(oy[len(oy) // 2], 1) if oy else None, "yayin": len(oy)}
         gruplar.append({"anahtar": g, "ad": a, "olculen_yayin": sum(1 for kid, r in yay.items() if gk.get(kid) == g and r["n"]), **o})
     toplam_olu = sum(olu_ay.values())
     veri = {
@@ -180,7 +207,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         "bas": aylar[0] if aylar else None, "son": aylar[-1] if aylar else None,
         "baslik": sum(t["n"] for t in toplam.values()), "tarihsiz": oz.get("tarihsiz"),
         "dis": {"kaynak": dis.get("kaynak"), "olu": toplam_olu, "gazeteci": sum(gzt_ay.values()), "indirildi": dis.get("indirildi")},
-        "gruplar": gruplar, "terimler": [{"anahtar": a, "ad": l, "yan": y} for a, l, y in TERIMLER],
+        "gruplar": gruplar, "terimler": [{"anahtar": a, "ad": l} for a, l, y in TERIMLER],
         "ciftler": [{"a": a, "b": b, "ad": ad} for a, b, ad in CIFTLER],
         "olaylar": [{"bas": b, "bit": e, "ad": ad, "tur": t} for b, e, ad, t in OLAYLAR],
         "aylik": seri, "haftalik": haftalar, "ceyrek": ceyrekler, "yayinlar": yayinlar, "soykirim_zirve": zirve,

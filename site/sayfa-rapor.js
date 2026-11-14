@@ -182,6 +182,23 @@
       FK.forEach(function (f) { var d = p[f[0]] || 0; if (!d) return; var i = el("i"); i.style.width = d + "%"; i.style.background = f[2]; i.title = f[1] + ": " + yz(d); if (d >= 8) i.textContent = yz(d, 0); c.appendChild(i); });
       s.appendChild(c); k.appendChild(s);
     });
+    // güven aralığı, yayın ağırlıklı ortalama ve şehadet duyarlılığı (D3, E3)
+    if (!G.bolge.fail_yazilan || !G.bolge.fail_yazilan.filistinli_ga) return;
+    var kt = el("div", "tablo-kutu"), tb = el("table", "rp-ga"), th = el("thead"), tr0 = el("tr");
+    [T("Grup", "Group"), T("Faili yazılan (başlık ağırlıklı)", "Killer named (headline-weighted)"), T("%95 güven aralığı", "95% confidence interval"), T("Yayın ağırlıklı ortalama", "Outlet-weighted mean"), T("Şehadet paydaya katılsa", "If martyrdom headlines were counted")].forEach(function (x) { tr0.appendChild(el("th", null, x)); });
+    th.appendChild(tr0); tb.appendChild(th); var bd = el("tbody");
+    GR.forEach(function (g) {
+      var f = G[g].fail_yazilan, r = el("tr"), ya = f.yayin_agirlikli || {};
+      r.appendChild(el("td", null, AD[g] + " · " + sayi(f.filistinli_n, 0) + T(" başlık", " headlines")));
+      r.appendChild(el("td", "sayi", yz(f.filistinli)));
+      r.appendChild(el("td", "sayi", f.filistinli_ga ? yz(f.filistinli_ga[0]) + "–" + sayi(f.filistinli_ga[1]) : "–"));
+      r.appendChild(el("td", "sayi", ya.yayin >= 3 ? yz(ya.ortalama) + " (" + ya.yayin + T(" yayın)", " outlets)") : T("yetersiz yayın", "too few outlets")));
+      r.appendChild(el("td", "sayi", yz(f.filistinli_sehadet_dahil)));
+      bd.appendChild(r);
+    });
+    tb.appendChild(bd); kt.appendChild(tb); k.appendChild(kt);
+    k.appendChild(el("p", "rp-not", T("Başlık ağırlıklı oran bütün başlıkları birlikte sayar; çok yazan yayınlar ağır basar. Yayın ağırlıklı ortalamada her yayın bir oy (en az 30 Filistinli ölüm başlığı olan yayınlar). Son sütun, şehadet diyen başlıklar “fail yazılmamış” sayılsaydı oranın ne olacağını gösterir: bölge basınının oranı bu tercihe bağlıdır, Batı basınınınki değildir.",
+      "The headline-weighted rate counts all headlines together, so prolific outlets weigh more. In the outlet-weighted mean each outlet gets one vote (outlets with at least 30 headlines on Palestinian deaths). The last column shows the rate if martyrdom headlines were counted as “killer not named”: the regional press figure depends on this choice, the Western figure does not.")));
   }
   function kiminOlumu(v, G) {
     var k = $("g-kimin"); efsane([], k, [["#262a28", T("Filistinlilerin ölümü: fail yazılmış", "Palestinian deaths: killer named")], ["#c9544e", T("İsraillilerin ölümü: fail yazılmış", "Israeli deaths: killer named")]]);

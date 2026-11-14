@@ -79,7 +79,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             except (OSError, ValueError):
                 continue
         for h in satirlar:
-            b = h.get("baslik_orj") or ""
+            b = gecmis.olcum_metni(h.get("baslik_orj") or "", h.get("url") or "")
             if not b or h.get("kaynak") not in kmap:
                 continue
             kb = gecmis.katla(b)

@@ -34,7 +34,8 @@ BAGLAM = re.compile(r"filist|palest|palästin|palestin|israil|israel|isra[eë]l|
 OLDURME = re.compile(r"öldür|katlet|\bkill|\bslay|\btu(?:e|ent|é|és|ée|ées)\b|\bmat(?:a|an|ó|aron|ado|ados)\b|asesin|uccid|uccis|tötet|töten|getötet|قتل|يقتل|تقتل|הרג|נהרג", re.I)
 EDILGEN_TR = re.compile(r"öldürül|katledil", re.I)
 OLUM = re.compile(r"öldü|hayatını kaybet|can verdi|\böl[üu]\b|ölü sayısı|\bdie[sd]\b|\bdie (?:in|after|from|as|amid|during)\b|\bdead\b|death toll|deaths|\bmeur|\bmorts?\b|muer[et]|muertos|\bmort[ie]\b|muoion|\bstirbt|sterben|starben|\btote\b|todesopfer|استشهاد|شهيد|شهداء|مقتل|وفاة|ضحايا|נהרג|מתו|הרוגים", re.I)
-FAIL_ISRAIL = re.compile(r"israel|israël|israil|isra[eé]l|\bidf\b|tsahal|siyonist|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל", re.I)
+FAIL_ISRAIL = re.compile(r"israel|israël|israil|isra[eé]l|\bidf\b|tsahal|siyonist|zionis|sionis|الاحتلال|إسرائيل|اسرائيل|الإسرائيلي|الاسرائيلي|الصهيون|צה\"?ל|ישראל|"
+                         r"settlers?\b|yerleşimci|yerlesimci|\bcolons\b|colonos|\bcoloni\b|siedler|مستوطن", re.I)   # yerleşimciler de İsrailli faildir
 SALDIRI = re.compile(r"saldır|bombard|hava saldırı|attack|strike|shelling|bombing|raid|(?<!cease)fire\b|gunfire|frappe|bombardement|ataque|bombardeo|attacco|bombardament|angriff|luftangriff|beschuss|"
                      r"aggression|agression|agresyon|offensive|ofensiva|offensiva|genocid|soykırım|war on gaza|guerre|krieg|"
                      r"قصف|غارة|غارات|استهداف|رصاص|عدوان|العدوان|إبادة|הפצצה|תקיפה", re.I)
@@ -67,9 +68,37 @@ SEHADET = re.compile(r"şehit|şehadet|\bsehit|\bsehadet|martyr|martyre|mártir|
 GAZETECI = re.compile(r"gazeteci|muhabir|journalist|reporter|photojournalist|periodista|giornalist|journaliste|صحفي|صحافي|الصحفي|الصحافي|إعلامي|مراسل|עיתונא", re.I)
 
 
+# Ölçüm metni (D1, D2, D6): tırnak içindeki sözler (alıntı) başlığın kendi sesi değildir; Telegram gönderisi başlık değil
+# uzun metindir, yalnızca ilk cümlesi başlık sayılır.
+TIRNAK = re.compile(r"“[^”]{0,300}”|„[^“”]{0,300}[“”]|«[^»]{0,300}»|\"[^\"]{0,300}\"|‘[^’]{0,300}’")
+HAYVAN = re.compile(r"\bsheep\b|\bgoats?\b|livestock|cattle|\bcows?\b|camels?|donkeys?|horses?|poultry|chickens?|\bkoyun|keçi|keci|hayvan|büyükbaş|kuzu|"
+                    r"moutons|brebis|ovejas|cabras|ganado|pecore|capre|schafe|ziegen|أغنام|اغنام|ماشية|مواشي|رؤوس من|حيوانات|خراف|ماعز", re.I)
+INSAN = re.compile(r"\d+\s+(?:palestinians|israelis|filistinli|kişi|people)|child|children|people|person|civilian|\bwom[ae]n\b|\bboys?\b|\bgirls?\b|"
+                   r"\bteen|kişi|insan|çocu|sivil|شخص|مواطن|طفل|أطفال|شهيد|شهداء", re.I)   # ölen insan (hayvan sahibi değil)
+
+
+def olcum_metni(b, u=""):
+    """Başlığın ölçülecek kısmı: Telegram gönderisinde ilk cümle (en çok 200 harf)."""
+    if u and "t.me/" in u:
+        b = re.split(r"(?<=[.!?؟])\s+|\n", b.strip(), 1)[0][:200]
+    return b
+
+
+def tirnaksiz(b):
+    return TIRNAK.sub(" ", b)
+
+
 def faillik(b, kb):
     """Başlıktaki ölüm anlatımının türü: aktif (İsrail öldürdü), failli (İsrail'in saldırısında öldürüldü),
-    failsiz (öldürüldü, kim olduğu yok), oldu (öldü / ölü sayısı), pfail (fail olarak Hamas, Hizbullah ya da bir silahlı Filistinli yazılmış), ikurban (ölen İsrailli). Ölüm yoksa None."""
+    failsiz (öldürüldü, kim olduğu yok), oldu (öldü / ölü sayısı), pfail (fail olarak Hamas, Hizbullah ya da bir silahlı Filistinli yazılmış), ikurban (ölen İsrailli). Ölüm yoksa None.
+    Ölüm yalnızca tırnak içinde geçiyorsa (alıntı) ya da ölenler hayvansa None."""
+    b0 = tirnaksiz(b)
+    if b0 != b:
+        if not (OLDURME.search(b0) or OLUM.search(b0) or SEHADET.search(b0)):
+            return None                                  # ölüm yalnızca alıntıda: "Stop killing children"
+        b, kb = b0, katla(b0)
+    if HAYVAN.search(b) and not INSAN.search(b):
+        return None                                      # "yerleşimcilerin zehirlediği 13 koyun öldü"
     if ISRAIL_ASKER_OLUM.search(kb) and not FILISTIN_NESNE.search(kb):
         return "pfail" if (FAIL_HAMAS.search(b) or FAIL_HAMAS.search(kb)) else "ikurban"   # ölen İsrail askeri
     m = OLDURME.search(b) or OLDURME.search(kb)
@@ -80,6 +109,8 @@ def faillik(b, kb):
         m = OLDURME.search(metin)
         i = FAIL_ISRAIL.search(metin)
         h = FAIL_HAMAS.search(metin)
+        if HAYVAN.search(metin[m.end():m.end() + 25]):
+            return None                                  # "kill 20 sheep": öldürülen hayvan
         edilgen = bool(EDILGEN_TR.search(metin))
         sonra = metin[m.end():]
         if KURBAN_SONRA.search(sonra) and not FILISTIN_NESNE.search(sonra[:40]):
@@ -125,7 +156,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 13
+OZET_SURUM = 14   # 14: alıntı ve hayvan ölümü ayrımı, yerleşimci fail, Telegram ilk cümle
 BULTEN_SURUM = 1
 
 
@@ -309,12 +340,16 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                 toplu_gun[kid] = sorted(toplu)
                 tarihli = [(g, r) for g, r in tarihli if g not in toplu]
         for g, r in tarihli:
-            b = r["b"]
+            b = olcum_metni(r["b"], r.get("u") or "")
             toplam += 1
             d = gun.setdefault(g, {"k": {}, "ic": 0, "dis": 0, "gi": 0, "gd": 0, "t": {}})
             d["k"][kmp] = d["k"].get(kmp, 0) + 1
             kb = katla(b)
-            bulunan = [a for a, r1, r2 in TERIM if r1.search(b) or r2.search(kb)]
+            # terimler başlığın kendi sesinde sayılır; yalnızca tırnak içinde (alıntı) geçenler ayrı tutulur ("q:<kelime>")
+            b0 = tirnaksiz(b)
+            kb0 = katla(b0) if b0 != b else kb
+            bulunan = [a for a, r1, r2 in TERIM if r1.search(b0) or r2.search(kb0)]
+            alinti = [a for a, r1, r2 in TERIM if a not in bulunan and (r1.search(b) or r2.search(kb))] if b0 != b else []
             if k.get("dil") in ("fr", "es", "it", "ca", "pt") and "militan" in bulunan and not re.search(r"milicien|miliciano|milizian", kb):
                 bulunan.remove("militan")   # bu dillerde "militant" aktivist demek
             y = yayin.setdefault(g, {})
@@ -322,6 +357,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             n, tt = (eski, {}) if isinstance(eski, int) else (eski[0], eski[1])
             for a in bulunan:
                 tt[a] = tt.get(a, 0) + 1
+            for a in alinti:
+                tt["q:" + a] = tt.get("q:" + a, 0) + 1
             # Rapor için: Gazze geçen başlık (_g) ve Filistin / İsrail / Gazze bağlamındaki başlık (_b); bağlamdaki
             # başlıklarda geçen kelimeler "b:<kelime>" (ör. Ruanda soykırımı haberleri 'soykırım' sayısını şişirmesin)
             gz = bool(GAZZE.search(b) or GAZZE.search(kb))
