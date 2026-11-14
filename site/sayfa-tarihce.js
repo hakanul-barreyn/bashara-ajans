@@ -11,7 +11,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=16").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=17").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -58,21 +58,25 @@
           }
           var ks = el("span", "th-kaynak", tt("Kaynak: ", "Sources: ")); (o.kaynaklar || []).forEach(function (q, i) { var ka = el("a", null, q.ad + " ↗"); ka.href = q.url; ka.target = "_blank"; ka.rel = "noopener"; if (i) ks.append(" · "); ks.appendChild(ka); }); ic.appendChild(ks);
           if (o.tarih >= "2023-10-07" && o.tarih.length === 10) { var oa = el("a", "th-kat", tt("O ayın olayları →", "Events that month →")); oa.href = "olay.html#ay-" + o.tarih.slice(0, 7); ic.appendChild(oa); }
-          li.appendChild(ic);
-          // yan sütun: olayla ilgili kişilerin kısa biyografileri
+          // kısa biyografiler: metnin altında, kapalı gelir (dokununca açılır); her genişlikte aynı akışta, üst üste binmez
           var kis = o.kisiler || [];
-          if (kis.length || yanG.length) {
-            li.className = "kisili";
-            KISI_SIRA++;
-            var yan = el("aside", "th-yan"); yan.setAttribute("aria-label", tt("Kişiler", "People"));
+          if (kis.length) {
+            var kd = el("div", "th-kisiler"); kd.setAttribute("aria-label", tt("Kişiler", "People"));
             kis.forEach(function (q) {
-              // telefonda kapalı gelir (dokununca açılır), geniş ekranda açık
-              var kk = el("details", "th-kisi"); kk.open = true;
-              var sm = el("summary"); sm.append(el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""));
+              var kk = el("details", "th-kisi");
+              var sm = el("summary"); sm.append(el("span", "th-kisi-et", tt("Biyografi", "Biography")), el("b", null, EN ? (q.ad_en || q.ad) : q.ad), el("span", "th-kisi-yil", q.yillar || ""));
               kk.append(sm, el("p", null, EN ? q.metin_en : q.metin));
               if (q.kaynak) { var ka = el("a", null, (EN ? "Source: " : "Kaynak: ") + q.kaynak.ad + " ↗"); ka.href = q.kaynak.url; ka.target = "_blank"; ka.rel = "noopener"; kk.appendChild(ka); }
-              yan.appendChild(kk);
+              kd.appendChild(kk);
             });
+            ic.appendChild(kd);
+          }
+          li.appendChild(ic);
+          // yan sütun: yan görseller (geniş ekranda zaman çizgisinin solunda)
+          if (yanG.length) {
+            li.className = "kisili";
+            KISI_SIRA++;
+            var yan = el("aside", "th-yan");
             yanG.forEach(function (g) { yan.appendChild(figur(g, "th-yan-gorsel")); });
             li.appendChild(yan);
           }
