@@ -1,0 +1,80 @@
+{
+ "tarih": "2026-11-12",
+ "once": "2023-09-27",
+ "bulut": 2.623458,
+ "uydu": "Sentinel-2",
+ "kare": [
+  "S2A_36RXV_20261112_0_L2A",
+  "S2A_36SXA_20261112_0_L2A"
+ ],
+ "galeri": [
+  {
+   "id": "gazze-kenti",
+   "ad": "Gazze kenti",
+   "ad_en": "Gaza City",
+   "bbox": [
+    34.4,
+    31.47,
+    34.5,
+    31.55
+   ],
+   "simdi": "gazze-kenti-simdi.jpg",
+   "once": "gazze-kenti-once.jpg"
+  },
+  {
+   "id": "kuzey",
+   "ad": "Cebaliye, Beyt Lahiya, Beyt Hanun",
+   "ad_en": "Jabalia, Beit Lahia, Beit Hanoun",
+   "bbox": [
+    34.46,
+    31.51,
+    34.57,
+    31.59
+   ],
+   "simdi": "kuzey-simdi.jpg",
+   "once": "kuzey-once.jpg"
+  },
+  {
+   "id": "orta",
+   "ad": "Deyr el-Belah ve orta kamplar",
+   "ad_en": "Deir al-Balah and the central camps",
+   "bbox": [
+    34.32,
+    31.39,
+    34.43,
+    31.47
+   ],
+   "simdi": "orta-simdi.jpg",
+   "once": "orta-once.jpg"
+  },
+  {
+   "id": "han-yunus",
+   "ad": "Han Yunus",
+   "ad_en": "Khan Yunis",
+   "bbox": [
+    34.25,
+    31.31,
+    34.36,
+    31.38
+   ],
+   "simdi": "han-yunus-simdi.jpg",
+   "once": "han-yunus-once.jpg"
+  },
+  {
+   "id": "refah",
+   "ad": "Refah",
+   "ad_en": "Rafah",
+   "bbox": [
+    34.21,
+    31.26,
+    34.31,
+    31.32
+   ],
+   "simdi": "refah-simdi.jpg",
+   "once": "refah-once.jpg"
+  }
+ ],
+ "atif": "Copernicus Sentinel-2 verisi (2026, 2023), ESA; işleme: ZBS",
+ "lisans": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
+ "guncellendi": "2026-11-14T05:09:33.764546+00:00"
+}
