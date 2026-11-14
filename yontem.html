@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://zbshaber.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'; manifest-src 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e0d">
+<title>Yöntem | ZBS</title>
+<meta name="description" content="ZBS raporlarının yöntemi: tanımlar, eşikler, sürümler, yayın yayın kapsama, doğrulama durumu ve indirilebilir toplu sayılar.">
+<meta property="og:title" content="ZBS yöntem notu">
+<meta property="og:description" content="Ölçütler, eşikler, kapsama ve sınırlılıklar.">
+<meta property="og:image" content="https://hakanul-barreyn.github.io/bashara-ajans/site/paylas.png">
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611140400">
+<link rel="stylesheet" href="site/rapor.css?v=202611120420">
+<script src="site/dil.js?v=202611090500"></script>
+<script src="site/marka.js?v=202611081749"></script>
+</head>
+<body class="rapor-govde">
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" aria-label="ZBS ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">ZBS</span></a>
+    <p class="slogan">Raporlar · Yöntem</p>
+    <nav class="menu"><a href="./">Akış</a><a href="raporlar.html">Raporlar</a><a href="almanak.html">Almanak</a><a href="isimler.html">İsimler</a><a href="arsiv.html">Arşiv</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+
+<main class="rp">
+  <header class="rp-bas">
+    <p class="rp-ust" data-dil="tr">Raporlar · Yöntem notu</p>
+    <p class="rp-ust" data-dil="en">Reports · Method note</p>
+    <h1 data-dil="tr">Nasıl ölçüyoruz?</h1>
+    <h1 data-dil="en">How we measure</h1>
+    <p class="rp-dek" data-dil="tr">Bütün raporlar aynı veriden ve aynı tanımlardan çıkar. Bu sayfa tanımları, eşikleri, hangi yayından ne kadar veri olduğunu ve ölçümün sınırlarını bir arada verir. Sayılar ölçümdür; yayınların niyeti hakkında yargı değildir.</p>
+    <p class="rp-dek" data-dil="en">All reports come from the same data and the same definitions. This page brings together the definitions, thresholds, how much data we have from each outlet and the limits of the measurement. The figures are measurements, not judgements about outlets’ intent.</p>
+    <p class="rp-kunye"><span data-dil="tr">ZBS veri masası</span><span data-dil="en">ZBS data desk</span><span data-v="surum"></span></p>
+  </header>
+  <nav class="rp-icindekiler" aria-label="Bölümler">
+    <span data-dil="tr"><a href="#veri">1 · Veri</a><a href="#tanimlar">2 · Tanımlar</a><a href="#esikler">3 · Eşikler</a><a href="#dogrulama">4 · Doğrulama</a><a href="#sinirlar">5 · Sınırlar</a><a href="#kapsama">6 · Kapsama</a></span>
+    <span data-dil="en"><a href="#veri">1 · Data</a><a href="#tanimlar">2 · Definitions</a><a href="#esikler">3 · Thresholds</a><a href="#dogrulama">4 · Validation</a><a href="#sinirlar">5 · Limits</a><a href="#kapsama">6 · Coverage</a></span>
+  </nav>
+  <article class="rp-metin" id="veri"><h2 data-dil="tr">1 · Veri</h2><h2 data-dil="en">1 · Data</h2><div data-v="veri"></div></article>
+  <article class="rp-metin" id="tanimlar"><h2 data-dil="tr">2 · Tanımlar</h2><h2 data-dil="en">2 · Definitions</h2><div id="g-tanimlar"></div></article>
+  <article class="rp-metin" id="esikler"><h2 data-dil="tr">3 · Eşikler</h2><h2 data-dil="en">3 · Thresholds</h2><div id="g-esikler"></div></article>
+  <article class="rp-metin" id="dogrulama"><h2 data-dil="tr">4 · Doğrulama</h2><h2 data-dil="en">4 · Validation</h2><div id="g-dogrulama"></div></article>
+  <article class="rp-metin" id="sinirlar"><h2 data-dil="tr">5 · Bilinen sınırlar</h2><h2 data-dil="en">5 · Known limits</h2><div id="g-sinirlar"></div></article>
+  <article class="rp-metin" id="kapsama"><h2 data-dil="tr">6 · Yayın yayın kapsama</h2><h2 data-dil="en">6 · Coverage by outlet</h2><div id="g-kapsama"></div></article>
+</main>
+<script src="site/rapor-ortak.js?v=202611111700"></script>
+<script src="site/sayfa-yontem.js?v=202611141130"></script>
+</body>
+</html>

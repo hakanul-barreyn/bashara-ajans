@@ -106,7 +106,7 @@ def _hafta(g):
     return (d - dt.timedelta(days=d.weekday())).isoformat()
 
 
-RAPOR_SURUM = 8   # 8: güven aralıkları, yayın ağırlıklı ortalama, şehadet duyarlılığı
+RAPOR_SURUM = 9   # 8: güven aralıkları, yayın ağırlıklı ortalama, şehadet duyarlılığı
 
 
 def hesapla(kok, kaynaklar, simdi, log=print):
@@ -201,6 +201,24 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         o["fail_yazilan"]["yayin_agirlikli"] = {"ortalama": round(sum(oy) / len(oy), 1) if oy else None,
                                                 "ortanca": round(oy[len(oy) // 2], 1) if oy else None, "yayin": len(oy)}
         gruplar.append({"anahtar": g, "ad": a, "olculen_yayin": sum(1 for kid, r in yay.items() if gk.get(kid) == g and r["n"]), **o})
+    # kapsama (E1): yayın başına tarihli başlık, kayıtlı gün, ilk ve son gün, tarihleme yöntemi, tarihsiz adres
+    gunler_k = {}
+    for gun, d in oz["yayin"].items():
+        if len(gun) != 10:
+            continue
+        for kid in d:
+            x = gunler_k.setdefault(kid, [gun, gun, 0]); x[0] = min(x[0], gun); x[1] = max(x[1], gun); x[2] += 1
+    kapsama = []
+    for kid, r in yay.items():
+        if not r["n"]:
+            continue
+        ty = (oz.get("tarih_yontem") or {}).get(kid) or {}
+        g0 = gunler_k.get(kid) or [None, None, 0]
+        kapsama.append({"id": int(kid), "ad": K[kid]["ad"], "grup": gk[kid], "dil": K[kid].get("dil"), "tarihli": r["n"], "baglamli": r["b"],
+                        "olum": sum(r["f"][f] for f in ("aktif", "failli", "failsiz", "oldu", "sehadet")), "gun": g0[2], "ilk": g0[0], "son": g0[1],
+                        "yontem": ty.get("yontem") or "rss", "tarihsiz": ty.get("tarihsiz", 0), "bos": (oz.get("bos_kayit") or {}).get(kid, 0),
+                        "toplu_gun": len((oz.get("toplu_gun") or {}).get(kid, []))})
+    kapsama.sort(key=lambda x: (x["grup"] or "", -x["tarihli"]))
     toplam_olu = sum(olu_ay.values())
     veri = {
         "surum": RAPOR_SURUM, "guncellendi": simdi.isoformat(), "ozet_guncellendi": oz["guncellendi"], "tarama_bitti": oz.get("tarama_bitti"),
@@ -210,7 +228,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         "gruplar": gruplar, "terimler": [{"anahtar": a, "ad": l} for a, l, y in TERIMLER],
         "ciftler": [{"a": a, "b": b, "ad": ad} for a, b, ad in CIFTLER],
         "olaylar": [{"bas": b, "bit": e, "ad": ad, "tur": t} for b, e, ad, t in OLAYLAR],
-        "aylik": seri, "haftalik": haftalar, "ceyrek": ceyrekler, "yayinlar": yayinlar, "soykirim_zirve": zirve,
+        "aylik": seri, "haftalik": haftalar, "ceyrek": ceyrekler, "yayinlar": yayinlar, "soykirim_zirve": zirve, "kapsama": kapsama,
+        "surumler": {"ozet": oz.get("surum"), "rapor": RAPOR_SURUM},
     }
     almanak._yaz(os.path.join(kok, "data", "bulten", "rapor-7-ekim.json"), veri)
     log(f"Rapor (7 Ekim): {veri['baslik']} başlık, {len(yayinlar)} yayın, {len(seri)} ay")
