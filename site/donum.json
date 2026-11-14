@@ -22,13 +22,18 @@
   },
   {
    "anahtar": "intifada",
-   "ad": "İntifadalar ve Oslo (1987–2005)",
-   "ad_en": "Intifadas and Oslo (1987–2005)"
+   "ad": "Birinci İntifada (1987–1993)",
+   "ad_en": "The First Intifada (1987–1993)"
   },
   {
    "anahtar": "abluka",
-   "ad": "Abluka (2006–2023)",
-   "ad_en": "Blockade (2006–2023)"
+   "ad": "Oslo dönemi (1993–2017)",
+   "ad_en": "The Oslo era (1993–2017)"
+  },
+  {
+   "anahtar": "yeni",
+   "ad": "Yeni dönem: Kudüs, gaz ve Aksa Tufanı (2017–2023)",
+   "ad_en": "A new era: Jerusalem, gas and Al-Aqsa Flood (2017–2023)"
   },
   {
    "anahtar": "soykirim",
@@ -366,7 +371,7 @@
   },
   {
    "tarih": "1993-09-13",
-   "donem": "intifada",
+   "donem": "abluka",
    "baslik": "Oslo I Anlaşması",
    "baslik_en": "Oslo I Accord",
    "metin": "FKÖ ile İsrail Washington’da ilkeler bildirgesini imzaladı; Filistin Yönetimi kuruldu. Nihai statü konuları (Kudüs, mülteciler, yerleşimler, sınırlar) ertelendi.",
@@ -384,7 +389,7 @@
   },
   {
    "tarih": "1994-02-25",
-   "donem": "intifada",
+   "donem": "abluka",
    "baslik": "İbrahim Camii katliamı",
    "baslik_en": "Ibrahimi Mosque massacre",
    "metin": "El Halil’deki İbrahim Camii’nde yerleşimci Baruch Goldstein sabah namazı kılanlara ateş açarak 29 Filistinliyi öldürdü.",
@@ -402,7 +407,7 @@
   },
   {
    "tarih": "2000-09-28",
-   "donem": "intifada",
+   "donem": "abluka",
    "baslik": "İkinci İntifada",
    "baslik_en": "Second Intifada",
    "metin": "Likud lideri Ariel Şaron 28 Eylül 2000’de yaklaşık bin polis eşliğinde Harem-i Şerif’e girdi. Ertesi gün İsrail polisi Kudüs’te yedi göstericiyi öldürdü; Aksa İntifadası böyle başladı. 30 Eylül’de 12 yaşındaki Muhammed ed-Dürre’nin Gazze’de askerlerin ateşiyle öldürülüşünü gösteren görüntüler dünyaya yayıldı; ilk haftada yaklaşık 70 Filistinli öldürüldü. Ekim 2000’de İsrail vatandaşı Filistinlilerin dayanışma gösterilerinde polis bir düzine kadar kişiyi öldürdü. Mart 2002’nin sonunda İsrail, Filistin yönetimine bırakılan şehirleri yeniden işgal etti; Mayıs başına kadar süren saldırılarda yaklaşık 500 Filistinli öldürüldü, on gün süren kuşatmanın ardından Cenin kampının büyük bölümü yıkıldı. Arafat Ramallah’taki karargâhında kuşatıldı ve ömrünün sonuna kadar neredeyse hiç çıkamadı; 11 Kasım 2004’te Paris’te öldü. Ayaklanma Şubat 2005’te Şarm eş-Şeyh ateşkesiyle sona erdi; Filistinliler yaklaşık 4 bin şehit verdi.",
@@ -420,7 +425,7 @@
   },
   {
    "tarih": "2004-07-09",
-   "donem": "intifada",
+   "donem": "abluka",
    "baslik": "Adalet Divanı: ayırma duvarı hukuka aykırı",
    "baslik_en": "ICJ: the separation wall is unlawful",
    "metin": "Uluslararası Adalet Divanı, İsrail’in işgal altındaki topraklarda inşa ettiği duvarın uluslararası hukuka aykırı olduğunu ve yıkılması gerektiğini bildirdi.",
@@ -434,7 +439,7 @@
   },
   {
    "tarih": "2005-09-12",
-   "donem": "intifada",
+   "donem": "abluka",
    "baslik": "İsrail Gazze’deki yerleşimlerden çekildi",
    "baslik_en": "Israel withdraws settlements from Gaza",
    "metin": "Yerleşimciler ve askerler çekildi; İsrail Gazze’nin sınırlarını, hava sahasını ve denizini denetlemeyi sürdürdü.",
@@ -544,7 +549,7 @@
   },
   {
    "tarih": "2017-12-06",
-   "donem": "abluka",
+   "donem": "yeni",
    "baslik": "ABD Kudüs’ü İsrail’in başkenti tanıdı",
    "baslik_en": "US recognises Jerusalem as Israel’s capital",
    "metin": "Trump yönetimi Kudüs’ü İsrail’in başkenti olarak tanıdı; elçilik Mayıs 2018’de taşındı.",
@@ -562,7 +567,7 @@
   },
   {
    "tarih": "2018-03-30",
-   "donem": "abluka",
+   "donem": "yeni",
    "baslik": "Büyük Dönüş Yürüyüşü",
    "baslik_en": "Great March of Return",
    "metin": "Gazze sınırındaki haftalık gösterilerde İsrail askerleri bir buçuk yılda 200’ü aşkın kişiyi öldürdü, binlercesini yaraladı.",
@@ -580,7 +585,7 @@
   },
   {
    "tarih": "2021-05-10",
-   "donem": "abluka",
+   "donem": "yeni",
    "baslik": "Şeyh Cerrah, Kudüs Kılıcı ve Mayıs 2021 saldırısı",
    "baslik_en": "Sheikh Jarrah, the Sword of Jerusalem and the May 2021 war",
    "metin": "Doğu Kudüs’te Şeyh Cerrah’taki tahliye davaları ve Ramazan’da Mescid-i Aksa’ya düzenlenen baskınlar üzerine Hamas, İsrail’e askerlerini, polisini ve yerleşimcilerini Harem-i Şerif’ten ve Şeyh Cerrah’tan 10 Mayıs saat 18.00’e kadar çekmesi için süre verdi. Süre dolunca Hamas ve Gazze’deki öteki direniş grupları “Kudüs Kılıcı” adını verdikleri karşılıkla, altısı Kudüs’e olmak üzere 150 roket attı. Bu, Gazze’den Kudüs için açılan ilk savaştı. İsrail Gazze’yi 11 gün bombaladı; Gazze Sağlık Bakanlığı’na göre 66’sı çocuk 248 Filistinli öldürüldü, İsrail’de 12 kişi öldü. Aynı günlerde İsrail vatandaşı Filistinliler ile işgal altındaki topraklardaki Filistinliler birlikte sokağa çıktı. Mısır, Katar ve BM’nin aracılık ettiği ateşkes 21 Mayıs’ta yürürlüğe girdi.",
@@ -594,7 +599,7 @@
   },
   {
    "tarih": "2023-10-07",
-   "donem": "soykirim",
+   "donem": "yeni",
    "baslik": "Aksa Tufanı ve Gazze’ye savaşın başlaması",
    "baslik_en": "Al-Aqsa Flood and the start of the war on Gaza",
    "metin": "Hamas ve diğer silahlı Filistin gruplarının Gazze çevresindeki İsrail askeri mevzilerine ve yerleşimlere saldırısında İsrail’de 1.139 kişi öldü (İsrail verilerine dayanan sayım), 251 kişi Gazze’ye götürüldü. İsrail aynı gün Gazze’ye savaş ilan etti.",
@@ -1280,6 +1285,28 @@
       "ad": "Britannica; Davut Dursun, “İslâm Konferansı Teşkilâtı”, TDV İslâm Ansiklopedisi",
       "url": "https://islamansiklopedisi.org.tr/islam-konferansi-teskilati"
      }
+    }
+   ]
+  },
+  {
+   "tarih": "2019-12-31",
+   "donem": "yeni",
+   "baslik": "Leviathan’dan gaz çıkarılmaya başlandı",
+   "baslik_en": "Gas starts flowing from Leviathan",
+   "metin": "İsrail’in 2010’da Hayfa açıklarında keşfedilen Leviathan doğal gaz sahası 31 Aralık 2019’da üretime başladı; Ocak 2020’de gaz Mısır’a ve Ürdün’e satılmaya başlandı. Doğu Akdeniz gazı İsrail’i bölgede gaz ihraç eden bir ülkeye dönüştürdü ve Arap komşularıyla ilişkisine enerji ortaklığını ekledi. Gazze açıklarındaki Gaza Marine sahası ise 1999’da British Gas tarafından bulunmasına rağmen işletilemedi: İsrail’le satış görüşmeleri 2007’de çöktü, abluka ve deniz kısıtlamaları kuyulara erişimi imkânsız kıldı.",
+   "metin_en": "Israel’s Leviathan gas field, discovered off Haifa in 2010, began production on 31 December 2019; in January 2020 gas sales to Egypt and Jordan began. Eastern Mediterranean gas turned Israel into a regional gas exporter and added an energy partnership to its ties with Arab neighbours. The Gaza Marine field off Gaza, found by British Gas in 1999, has never been developed: sales talks with Israel collapsed in 2007, and the blockade and maritime restrictions made the wells unreachable.",
+   "kaynaklar": [
+    {
+     "ad": "Anaïs Antreasyan, “Gas Finds in the Eastern Mediterranean: Gaza, Israel, and Other Conflicts”, Journal of Palestine Studies 42/3 (2013)",
+     "url": "https://digitalprojects.palestine-studies.org/jps/fulltext/162608"
+    },
+    {
+     "ad": "Simon Henderson, “The Obstacles Still Facing Israel’s Leviathan Gas Field”, Washington Institute (2019)",
+     "url": "https://www.washingtoninstitute.org/pdf/view/1411/en"
+    },
+    {
+     "ad": "Oil & Gas Journal: Gas sales from Leviathan to Israel, Jordan, Egypt underway (2020)",
+     "url": "https://www.ogj.com/general-interest/article/14074854/gas-sales-from-leviathan-to-israel-jordan-egypt-underway"
     }
    ]
   }

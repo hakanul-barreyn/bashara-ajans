@@ -11,7 +11,7 @@
     return new Date(t + "T12:00:00Z").toLocaleDateString(YER, { day: "numeric", month: "long", year: "numeric" });
   }
   var k = document.getElementById("tarihce");
-  fetch("site/donum.json?v=12").then(function (r) { return r.json(); }).then(function (v) {
+  fetch("site/donum.json?v=13").then(function (r) { return r.json(); }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
