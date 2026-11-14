@@ -1183,6 +1183,41 @@
      "url": "https://www.hrw.org/reports/1991/gulfwar/CHAP8.htm"
     }
    ]
+  },
+  {
+   "tarih": "1973-10-17",
+   "donem": "isgal",
+   "baslik": "Kral Faysal ve petrol ambargosu",
+   "baslik_en": "King Faisal and the oil embargo",
+   "metin": "Ekim Savaşı sürerken Kuveyt’te toplanan Arap petrol üreticileri 17 Ekim 1973’te İsrail’e yakın ülkelere sevkiyatı yüzde 5 kısmaya, BM’nin 242 sayılı kararı uygulanana dek her ay yüzde 5 daha azaltmaya karar verdi. Suudi Arabistan Kralı Faysal, İsrail’e verilecek yardımın petrol piyasasında karşılık bulacağını Washington’a defalarca bildirmişti. Nixon İsrail’e 2,2 milyar dolarlık askerî yardım açıklayınca Suudi Arabistan 20 Ekim’de ABD’ye, Hollanda’ya ve İsrail’i destekleyen öteki ülkelere bütün petrol sevkiyatını durdurdu. Varil fiyatı yaklaşık 2,5 dolardan 12 dolara çıktı; ABD İkinci Dünya Savaşı’ndan bu yana ilk yakıt kıtlığını yaşadı, karne ve hız sınırları getirdi. Ambargo Mart 1974’te kaldırıldı. Petrol ilk kez Filistin ve işgal altındaki Arap toprakları için bir silah olarak kullanılmıştı.",
+   "metin_en": "While the October War was under way, Arab oil producers meeting in Kuwait decided on 17 October 1973 to cut deliveries to countries friendly to Israel by 5 percent, and by a further 5 percent each month until UN Resolution 242 was implemented. Saudi Arabia’s King Faisal had repeatedly warned Washington that aid to Israel would meet a response in the oil market. When Nixon announced $2.2 billion in military aid to Israel, Saudi Arabia on 20 October halted all oil shipments to the United States, the Netherlands and other states backing Israel. The price of a barrel rose from about $2.50 to nearly $12; the United States faced its first fuel shortage since the Second World War and brought in rationing and speed limits. The embargo was lifted in March 1974. For the first time, oil had been used as a weapon for Palestine and the occupied Arab lands.",
+   "kaynaklar": [
+    {
+     "ad": "EBSCO Research Starters: Arab Oil Producers Curtail Oil Shipments",
+     "url": "https://www.ebsco.com/research-starters/history/arab-oil-producers-curtail-oil-shipments-industrial-states"
+    },
+    {
+     "ad": "Britannica: Arab oil embargo",
+     "url": "https://www.britannica.com/event/Arab-oil-embargo"
+    },
+    {
+     "ad": "Ohio State University, Origins: The Yom Kippur War and the OPEC Oil Embargo",
+     "url": "https://origins.osu.edu/read/yom-kippur-war-and-opec-oil-embargo"
+    }
+   ],
+   "kisiler": [
+    {
+     "ad": "Kral Faysal",
+     "ad_en": "King Faisal",
+     "yillar": "1906–1975",
+     "metin": "1906 dolaylarında Riyad’da, Kral Abdülaziz’in oğlu olarak doğdu. 1926’da Hicaz genel valisi ve dışişleri bakanı oldu, 1945’te BM’nin kuruluş konferansında ülkesini temsil etti. Kardeşi Suud tahta çıkınca veliaht ve dışişleri bakanı oldu; Suud’un tahttan indirilmesiyle Kasım 1964’te kral oldu. Ekonomide ve eğitimde modernleşmeyi yürüttü, Aramco üzerinde devlet denetimini artırdı. Mescid-i Aksa’nın 1969’da kundaklanmasının ardından kurulan İslam Konferansı Örgütü’nün kurucu ülkeleri arasında Suudi Arabistan da vardı. 25 Mart 1975’te Riyad’da yeğeni Faysal bin Musaid tarafından vurularak öldürüldü.",
+     "metin_en": "Born around 1906 in Riyadh, a son of King Abdulaziz. In 1926 he became viceroy of Hejaz and foreign minister, and in 1945 he represented his country at the UN founding conference. When his brother Saud took the throne he became crown prince and foreign minister; he became king in November 1964 after Saud was deposed. He pushed economic and educational modernisation and increased state control over Aramco. Saudi Arabia was among the founders of the Organization of the Islamic Conference, set up after the 1969 arson attack on Al-Aqsa. He was shot dead in Riyadh by his nephew Faisal bin Musaid on 25 March 1975.",
+     "kaynak": {
+      "ad": "Britannica",
+      "url": "https://www.britannica.com/biography/Faysal"
+     }
+    }
+   ]
   }
  ]
 }
