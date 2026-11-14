@@ -114,15 +114,22 @@ def main():
         for b, s in reversed(aylar):          # en yeni aydan geriye: güncel veri önce
             is_ = f"{grup}/{b:%Y-%m}"
             d = durum["isler"].setdefault(is_, {"n": 0, "parca": 0, "token": None, "bitti": False})
-            # içinde bulunulan ay her gün yeniden açılır (yeni haberler)
-            if d["bitti"] and not (b.year == dt.date.today().year and b.month == dt.date.today().month):
+            # içinde bulunulan ay günde bir kez yeniden açılır; yalnızca son yenilemeden bir gün öncesinden itibaren çekilir
+            # (eskiden ay her çalıştırmada baştan iniyordu: aynı haberler tekrar tekrar geliyor, süre geçmiş aylara kalmıyordu)
+            bu_ay = b.year == dt.date.today().year and b.month == dt.date.today().month
+            if d["bitti"] and not bu_ay:
                 continue
             if d["bitti"]:
-                d.update({"bitti": False, "token": None})
+                son = d.get("yenilendi")
+                if son and son >= dt.date.today().isoformat():
+                    continue
+                d.update({"bitti": False, "token": None,
+                          "bas": max(b, dt.date.fromisoformat(son) - dt.timedelta(days=1)).isoformat() if son else b.isoformat()})
+            bas_ = dt.date.fromisoformat(d["bas"]) if bu_ay and d.get("bas") else b
             boy, hata = d.get("boy", 1000), 0
             while time.time() - t0 < SURE:
                 try:
-                    hikayeler, token = S.story_list(SORGU, b, s, page_size=boy, pagination_token=d["token"], **secim)
+                    hikayeler, token = S.story_list(SORGU, bas_, s, page_size=boy, pagination_token=d["token"], **secim)
                     hata = 0
                 except Exception as e:   # noqa: BLE001
                     # Media Cloud uzun sorgularda zaman aşımına düşüyor: aynı sayfayı daha küçük boyla iki kez daha dene
@@ -145,6 +152,8 @@ def main():
                 d["token"] = token
                 if not token:
                     d["bitti"] = True
+                    if bu_ay:
+                        d["yenilendi"] = dt.date.today().isoformat()
                     print(is_, "bitti:", d["n"], "haber")
                     break
                 yaz(durum_yol, durum)
