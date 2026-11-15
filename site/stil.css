@@ -755,7 +755,7 @@ body{overflow-x:clip}
   html.deste-modu #gundem,html.deste-modu #analizler,html.deste-modu .sayac-serit,html.deste-modu #serit{display:none!important}
   html.deste-modu .ust{position:absolute;left:0;right:0;top:0;z-index:30;background:transparent;color:#f3f1ec;scroll-snap-align:none}
   html.deste-modu .akis{display:block}
-  html.deste-modu .birim{--b-ic:max(18px,env(safe-area-inset-left,0px));position:relative;height:100svh;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;
+  html.deste-modu .birim{--b-ic:max(18px,env(safe-area-inset-left,0px));position:relative;height:100vh;height:100lvh;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;
     display:flex;flex-direction:column;background:var(--kart);color:var(--k-ink);border-bottom:1px solid var(--cizgi);
     padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
   html.deste-modu .b-ust{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:16px var(--b-ic) 6px;flex:0 0 auto}
@@ -1008,7 +1008,7 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
   .rl-kaydir{align-self:flex-start;border:0;background:rgba(255,255,255,.18);color:#fff;font:700 .78rem "Plus Jakarta Sans",system-ui,sans-serif;padding:6px 11px;border-radius:999px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   .rl-kars-kare{background:#0f1311}
   .rl-kars{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;overflow:hidden;
-    padding:calc(70px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(74px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));
+    padding:calc(70px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(74px + env(safe-area-inset-bottom,0px) + 100lvh - 100svh) max(18px,env(safe-area-inset-left,0px));
     background:linear-gradient(170deg,color-mix(in srgb,var(--hesap) 30%,#0f1311),#0f1311 55%);color:#eef0ec;--k-ink:#eef0ec;--k-ink2:#c3cbc5;--k-soluk:#8d968f;--k-cizgi:rgba(255,255,255,.12);--k-yuzey2:rgba(255,255,255,.07)}
   .rl-kars>*{flex-shrink:0}
   .rl-kars-et{font:700 .66rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#9fe0bb}
@@ -1018,8 +1018,8 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
   .rl-kars-sayi b{font:700 1.15rem/1.1 var(--serif)}
   .rl-kars-sayi span{font:600 .6rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:#8d968f}
   .rl-kars-not{margin:0;font:600 .74rem var(--mono);color:#c3cbc5}
-  .rl-kars-liste{list-style:none;margin:0;padding:0;flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column;
-    flex-shrink:1;-webkit-mask-image:linear-gradient(#000 85%,transparent);mask-image:linear-gradient(#000 85%,transparent)}
+  .rl-kars-liste{list-style:none;margin:0;padding:0;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;
+    flex-shrink:1;padding-bottom:24px;scrollbar-width:none;-webkit-mask-image:linear-gradient(#000 85%,transparent);mask-image:linear-gradient(#000 85%,transparent)}
   .rl-kars-liste li{padding:8px 0;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:3px;cursor:pointer}
   .rl-kars-liste .rl-l-ust b{font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .rl-kars-liste .rl-l-ust .avatar.kucuk{width:24px;height:24px;border-radius:50%;font-size:.55rem;flex:0 0 auto}
@@ -1079,12 +1079,15 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
   .rl-oneri .takip-dugme{padding:6px 12px;font-size:.8rem;background:#fff;color:#0f1311}
   .rl-oneri .takip-dugme.takipte{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
   /* ana sayfa kartı (akışın ilk kartı) */
-  .rl-ana{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:13px;
-    padding:calc(62px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(76px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));
+  .rl-ana{position:absolute;inset:0;overflow:hidden;display:flex;flex-direction:column;gap:13px;
+    padding:calc(62px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(76px + env(safe-area-inset-bottom,0px) + 100lvh - 100svh) max(20px,env(safe-area-inset-left,0px));
     background:radial-gradient(110% 70% at 15% 0%,#1d4a35,#0b0d0c 68%);color:#fff}
   .rl-ana-ust{display:flex;align-items:center;gap:10px}
   .rl-ana-ust img{width:36px;height:36px}
   .rl-ana-ust div{display:flex;flex-direction:column;gap:3px}
+  .rl-ana-dil{margin-left:auto;display:flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
+  .rl-ana-dil a{padding:5px 10px;font:700 .72rem var(--mono);color:#cfd8d3;text-decoration:none}
+  .rl-ana-dil a[aria-current]{background:#fff;color:#0f1311}
   .rl-ana-ad{font:800 1.3rem/1 "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.04em}
   .rl-ana-slogan{font:600 .7rem var(--mono);color:#a9cdb9;letter-spacing:.04em}
   .rl-ana-tanim{margin:0;font:600 .98rem/1.42 var(--serif);color:#e8efeb;max-width:34ch;text-wrap:pretty}

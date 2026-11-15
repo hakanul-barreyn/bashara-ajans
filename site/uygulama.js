@@ -1692,8 +1692,10 @@
     // kimlik
     const ust = el("div", "rl-ana-ust");
     const lg = document.createElement("img"); lg.src = "site/logo.svg"; lg.alt = ""; lg.width = 44; lg.height = 44;
-    const ad = el("div"); ad.append(el("b", "rl-ana-ad", M.ad || "Alboroto"), el("span", "rl-ana-slogan", M.slogan || (EN ? "News about the news" : "Haberin haberi")));
-    ust.append(lg, ad); kut.appendChild(ust);
+    const ad = el("div"); ad.append(el("b", "rl-ana-ad", M.ad || "Alboroto"), el("span", "rl-ana-slogan", (EN ? M.slogan_en : M.slogan) || (EN ? "The news about the news" : "Haberin haberi")));
+    const dl = el("nav", "rl-ana-dil"); dl.setAttribute("aria-label", EN ? "Language" : "Dil");
+    [["tr", "TR"], ["en", "EN"]].forEach(([k, t]) => { const a = el("a", null, t); a.href = "?lang=" + k; a.lang = k; if ((EN ? "en" : "tr") === k) a.setAttribute("aria-current", "true"); a.onclick = () => { try { localStorage.setItem("zbs-dil", k); } catch (e) { /* özel pencere */ } }; dl.appendChild(a); });
+    ust.append(lg, ad, dl); kut.appendChild(ust);
     const yayinN = Object.keys(kaynaklar).length;
     kut.appendChild(el("p", "rl-ana-tanim", EN ? "We put the coverage of Palestine and the region by " + yayinN + " outlets worldwide side by side and measure who writes what, and how."
       : "Dünyanın " + yayinN + " yayınının Filistin ve bölge haberlerini yan yana koyuyor, kimin neyi nasıl yazdığını ölçüyoruz."));
