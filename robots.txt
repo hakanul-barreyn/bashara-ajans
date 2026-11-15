@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /data/canli/
+Disallow: /toplayici/
+
+Sitemap: https://alborotonews.com/sitemap.xml

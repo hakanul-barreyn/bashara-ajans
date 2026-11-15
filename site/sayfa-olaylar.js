@@ -215,7 +215,7 @@
       x.ornek.forEach(function (m) {
         var a = el("a", "rp-ornek"); a.href = m.url; a.target = "_blank"; a.rel = "noopener";
         var bb = el("span", "rp-ornek-b", m.baslik); if (/[؀-ۿ]/.test(m.baslik)) { bb.dir = "rtl"; bb.lang = "ar"; }
-        a.append(bb, el("small", null, m.yayin + " · " + AD[m.grup] + " · " + gunAd(m.gun))); d.appendChild(a);
+        a.append(bb, el("small", null, m.yayin + " · " + (AD[m.grup] || tt("Diğer", "Other")) + " · " + gunAd(m.gun))); d.appendChild(a);
       });
       k.appendChild(d);
     });

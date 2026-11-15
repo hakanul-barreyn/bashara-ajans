@@ -53,3 +53,4 @@
 .pf-izgara img{width:100%;height:100%;object-fit:cover;display:block}
 @media (min-width:700px){.pf{padding-top:20px}.pf-ust{border-top:1px solid var(--cizgi);border-radius:18px}.pf-gonderiler{border:1px solid var(--cizgi);border-radius:0 0 14px 14px;overflow:hidden}}
 .pf-g-alt a.pf-hata{color:var(--soluk);font-weight:600}
+@media (max-width:560px){.pf-kimlik{flex-direction:column;align-items:flex-start;gap:8px}.pf-ad{padding-bottom:0}}

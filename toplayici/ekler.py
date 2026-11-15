@@ -304,7 +304,7 @@ def rss_yaz(kok, haberler, simdi):
             f"<description>{e(aciklama)}</description></item>")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>'
            f"<title>{e(MARKA['ad'])}</title><link>{e(site)}</link><language>tr</language>"
-           "<description>Mağrip’ten Körfez’e basının Türkçe takibi</description>"
+           "<description>Dünya basınının Filistin ve bölge haberleri, karşılaştırmalı</description>"
            f"<lastBuildDate>{simdi.strftime('%a, %d %b %Y %H:%M:%S +0000')}</lastBuildDate>"
            + "".join(ogeler) + "</channel></rss>\n")
     with open(os.path.join(kok, "data", "rss.xml"), "w", encoding="utf-8") as f:

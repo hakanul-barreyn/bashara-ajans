@@ -93,6 +93,7 @@
     "Ad, şehir ya da profil ara": "Search name, city or profile", "Çalışıyor": "Working", "Sessiz (6 saatten uzun)": "Quiet (over 6 hours)",
     "Okunamıyor": "Unreachable", "Henüz denenmedi": "Not tried yet", "Belgelenmiş kanıtlar": "Documented evidence", "Ölçülmüş söylem": "Measured discourse",
     "Çizgi değerlendirmesi nasıl yapıldı": "How the editorial-line assessment works",
+    "Tarihçe | Alboroto": "History | Alboroto", "Raporlar | Alboroto": "Reports | Alboroto", "Yöntem | Alboroto": "Method | Alboroto", "Alboroto · Düzeltmeler": "Alboroto · Corrections", "Sayfa bulunamadı": "Page not found",
     "{ad} Arşiv": "{ad} Archive", "{ad} Kaynakları": "{ad} Sources", "{ad} Hakkında": "About {ad}", "{ad} Almanak": "{ad} Almanac", "{ad} ana sayfa": "{ad} home",
     "Bu sayfanın tamamı henüz İngilizceye çevrilmedi; başlıklar ve düğmeler çevrili, açıklamalar Türkçe.": "This page is not fully translated yet: headings and buttons are in English, descriptions are still in Turkish."
   };

@@ -5,9 +5,9 @@ window.MARKA = {
   "ad": "Alboroto",
   "kisa_ad": "Alboroto",
   "slogan": "Haberin haberi",
-  "aciklama": "Mağrip'ten Körfez'e, Meşrik'ten Anadolu'ya basının Türkçe takibi.",
+  "aciklama": "Dünya basınının Filistin ve bölge haberlerini yan yana koyar; kimin neyi nasıl yazdığını ölçer.",
   "slogan_en": "The news about the news",
-  "aciklama_en": "Following the press of the Maghreb, the Gulf, the Mashriq and Anatolia, with summaries and a balance of who told the story how.",
+  "aciklama_en": "Puts the world press’s coverage of Palestine and the region side by side and measures who writes what, and how.",
   "goatcounter": "zbshaber",
   "adres": "https://alborotonews.com/",
   "iletisim": "iletisim@alborotonews.com"

@@ -1,7 +1,7 @@
 {
   "name": "Alboroto",
   "short_name": "Alboroto",
-  "description": "Mağrip’ten Körfez’e basının Türkçe takibi",
+  "description": "Dünya basınının Filistin haberlerini yan yana koyar, kimin neyi nasıl yazdığını ölçer",
   "lang": "tr",
   "start_url": "./",
   "scope": "./",

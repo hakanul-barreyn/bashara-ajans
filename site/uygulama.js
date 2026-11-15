@@ -487,7 +487,7 @@
     const simdiY = tY(UYDU.tarih), onceY = UYDU.once ? tY(UYDU.once) : null;
     k.setAttribute("aria-label", EN ? "Gaza from space" : "Uydudan Gazze");
     const ust = el("div", "ok-ust"); ust.append(el("span", "ok-etiket", EN ? "Gaza from space" : "Uydudan Gazze"), el("span", "ok-sira", simdiY));
-    const resim = (src, alt) => { const im = el("img"); im.src = K + src + "?t=" + gunT; im.alt = alt; im.decoding = "async"; im.draggable = false; return im; };
+    const resim = (src, alt) => { const im = el("img"); im.src = K + src + "?t=" + gunT; im.alt = alt; im.decoding = "async"; im.loading = "lazy"; im.draggable = false; return im; };
     const bolgeler = [{ ad: EN ? "Whole Strip" : "Tüm Gazze", genel: true }].concat((UYDU.galeri || []).map((g) => ({ ad: EN ? g.ad_en : g.ad, g })));
     const sekme = el("div", "uk-sekmeler"); sekme.setAttribute("role", "tablist");
     const sahne = el("div", "uk-sahne"), alt = el("p", "uk-alt");
@@ -1338,8 +1338,9 @@
   let rlSekme = "gundem", rlGozlem = null;
   const rlVeri = new WeakMap();
   function rlLead(xs) {
+    // okurun dilinde başlığı olan haber öne; görsel yalnızca küçük önizleme olduğu için ikinci ölçüt
     const ok = (h) => h.gorsel && h.gorsel_ok === true;
-    return xs.find((h) => ok(h) && BT(h)) || xs.find(ok) || xs.find((h) => BT(h)) || xs[0];
+    return xs.find((h) => ok(h) && BT(h)) || xs.find((h) => BT(h)) || xs.find(ok) || xs[0];
   }
   // bir haberi tam ekran gönderi yap; hikâye verilirse sağdaki "aynı haber" düğmesi açılır
   // Gönderi zemini: hesabın rengi ve büyük başlık. Kaynağın görseli varsa başlığın üstünde küçük önizleme olarak durur
