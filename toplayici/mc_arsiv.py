@@ -97,11 +97,20 @@ def main():
     # bizim listemiz (mc_kapsam çıktısı)
     kapsam = oku(os.path.join(KOK, "mc-kapsam.json"), {})
     K = {str(k["id"]): k for k in oku("kaynaklar.json", [])}
+    # yalnızca Telegram'dan beslenen yayınlar Media Cloud'da t.me'ye eşleşiyor: yanlış eşleşme, alınmaz
+    gecerli = {kid: v for kid, v in kapsam.items() if v.get("mc") and not (K.get(kid) or {}).get("sadece_telegram")}
+    tekil = lambda xs: list(dict.fromkeys(xs))   # noqa: E731  (BBC'nin üç servisi Media Cloud'da tek kaynak)
+    # liste grupları eski bileşimiyle kalır: yarım kalan işlerin sayfa jetonu sorguya bağlı, bileşim değişirse jeton bozulur
     bizim_tr = [v["mc"]["id"] for kid, v in kapsam.items() if v.get("mc") and (K.get(kid) or {}).get("ulke") == "Türkiye"]
     bizim = [v["mc"]["id"] for v in kapsam.values() if v.get("mc")]
+    # öncelik: geriye dönük taramada hiç ya da çok az kaydı olan yayınlar (iş akışı MC_ONCELIK ile verir)
+    onc_kid = [x for x in os.environ.get("MC_ONCELIK", "").split(",") if x in gecerli]
+    oncelik = tekil(gecerli[x]["mc"]["id"] for x in onc_kid)
     # iş sırası: önce bizim listemiz (Türkiye basını en başta; raporların yeniden değerlendirmesi bu veriye dayanır),
     # sonra Media Cloud'un geniş Türkiye koleksiyonları
     gruplar = []
+    for i in range(0, len(oncelik), 15):
+        gruplar.append((f"oncelik-{i // 15:02d}", {"source_ids": oncelik[i:i + 15]}))
     if bizim_tr:
         gruplar.append(("liste-tr", {"source_ids": bizim_tr}))
     digerleri = [i for i in bizim if i not in set(bizim_tr)]
@@ -126,14 +135,19 @@ def main():
                 d.update({"bitti": False, "token": None,
                           "bas": max(b, dt.date.fromisoformat(son) - dt.timedelta(days=1)).isoformat() if son else b.isoformat()})
             bas_ = dt.date.fromisoformat(d["bas"]) if bu_ay and d.get("bas") else b
-            boy, hata = d.get("boy", 1000), 0
+            boy, hata, seri = d.get("boy", 1000), 0, 0
             while time.time() - t0 < SURE:
                 try:
                     hikayeler, token = S.story_list(SORGU, bas_, s, page_size=boy, pagination_token=d["token"], **secim)
                     hata = 0
+                    # zaman aşımından sonra küçülen sayfa boyu, art arda başarılı isteklerde yeniden büyür
+                    # (eskiden 100'de kalıyordu: çalıştırma başına çekilen haber sayısı beşte bire düşüyordu)
+                    seri += 1
+                    if seri >= 3 and boy < 1000:
+                        boy = min(1000, boy * 2); d["boy"] = boy; seri = 0
                 except Exception as e:   # noqa: BLE001
                     # Media Cloud uzun sorgularda zaman aşımına düşüyor: aynı sayfayı daha küçük boyla iki kez daha dene
-                    hata += 1
+                    hata += 1; seri = 0
                     print("hata", is_, f"(boy {boy}, deneme {hata})", str(e)[:160])
                     if hata >= 3:
                         break

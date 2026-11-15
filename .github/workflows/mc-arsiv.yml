@@ -44,6 +44,23 @@ jobs:
           except Exception as e:
               print("önceki durum yok:", e)
           PY
+      - name: Öncelikli yayınlar (taramada az kaydı olanlar)
+        run: |
+          git fetch -q --depth 1 origin tarama || exit 0
+          git ls-tree -r -l FETCH_HEAD veri/ > tarama-liste.txt || exit 0
+          python - <<'PY'
+          import json, os
+          boy = {}
+          for l in open("tarama-liste.txt"):
+              p = l.split()
+              if len(p) >= 5 and p[4].count("/") >= 2:
+                  kid = p[4].split("/")[1]; boy[kid] = boy.get(kid, 0) + int(p[3])
+          kap = json.load(open("mc-arsiv/mc-kapsam.json"))
+          # taramada 60 KB'tan az kaydı olan ve Media Cloud'da en az 1000 haberi olan yayınlar
+          onc = [k for k, v in kap.items() if v.get("mc") and boy.get(k, 0) < 60000 and sum((v.get("aylik") or {}).values()) >= 1000]
+          print("öncelik:", len(onc), [kap[k]["ad"] for k in onc])
+          open(os.environ["GITHUB_ENV"], "a").write("MC_ONCELIK=" + ",".join(onc) + "\n")
+          PY
       - name: Arşivle
         env:
           MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
