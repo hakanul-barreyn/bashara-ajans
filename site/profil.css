@@ -41,8 +41,8 @@
 .pf-g-baslik{margin:0;font:700 1.05rem/1.35 var(--serif)}
 .pf-g-orj{margin:0;font-size:.82rem;color:var(--soluk);line-height:1.4}
 .pf-g-oz{margin:0;font-size:.9rem;line-height:1.5;color:var(--ink2)}
-.pf-g-gorsel{margin:4px 0 0;border-radius:14px;overflow:hidden;border:1px solid var(--cizgi);max-height:340px}
-.pf-g-gorsel img{display:block;width:100%;height:100%;max-height:340px;object-fit:cover}
+.pf-g-gorsel{margin:4px 0 0;border-radius:12px;overflow:hidden;border:1px solid var(--cizgi);width:min(100%,240px);aspect-ratio:16/10}
+.pf-g-gorsel img{display:block;width:100%;height:100%;object-fit:cover}
 .pf-g-alt{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:.8rem}
 .pf-g-alt a{color:var(--yesil);font-weight:700;text-decoration:none}
 .pf-g-alt button{border:0;background:none;padding:0;font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;color:var(--ink2);cursor:pointer}

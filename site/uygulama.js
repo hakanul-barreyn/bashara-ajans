@@ -272,10 +272,12 @@
     kutu.appendChild(y);
   }
 
+  // Görsel gösterilir mi: denetimden geçmiş (gorsel_ok) ve yayın için kapatılmamış (kaynaklar.json "gorsel_yok": telif şikâyetinde)
+  function gorselIzin(h, k) { return !!(h && h.gorsel && h.gorsel_ok === true && !(k && k.gorsel_yok)); }
   function gorselCiz(h, k) {
     const kutu = el("div", "gorsel" + (k.hassas ? " hassas" : ""));
     // yalnızca şiddet ve müstehcenlik denetiminden geçmiş görseller gösterilir (gorsel_ok)
-    if (h.gorsel && h.gorsel_ok === true) {
+    if (gorselIzin(h, k)) {
       const img = document.createElement("img");
       img.loading = "lazy"; img.decoding = "async"; img.alt = ""; img.referrerPolicy = "no-referrer";
       img.src = (window.AKTAR || ((u) => u))(h.gorsel, 900);
@@ -1334,20 +1336,21 @@
     return xs.find((h) => ok(h) && BT(h)) || xs.find(ok) || xs.find((h) => BT(h)) || xs[0];
   }
   // bir haberi tam ekran gönderi yap; hikâye verilirse sağdaki "aynı haber" düğmesi açılır
+  // Gönderi zemini: hesabın rengi ve büyük başlık. Kaynağın görseli varsa başlığın üstünde küçük önizleme olarak durur
+  // (tam ekran gösterilmez; dokununca habere gider). Telif şikâyetinde yayının görselleri kaynaklar.json'dan kapatılır.
   function rlZemin(h, kap) {
-    const EN = window.DIL === "en", z = el("div", "rl-zemin");
-    if (h.gorsel && h.gorsel_ok === true) {
-      kap.classList.add("rl-gorselli");
-      const src = (window.AKTAR || ((v) => v))(h.gorsel, 900);
-      const arka = document.createElement("img"); arka.className = "rl-bulanik"; arka.alt = ""; arka.src = src; arka.loading = "lazy"; arka.referrerPolicy = "no-referrer";
-      const on = document.createElement("img"); on.className = "rl-foto"; on.alt = ""; on.src = src; on.loading = "lazy"; on.referrerPolicy = "no-referrer";
-      on.onerror = () => { kap.classList.remove("rl-gorselli"); arka.remove(); on.remove(); z.appendChild(el("p", "rl-yazi", baslikSec(h))); };
-      z.append(arka, on);
-    } else {
-      // görselsiz: hesabın rengiyle yazı gönderisi
-      z.appendChild(el("p", "rl-yazi", baslikSec(h)));
-      if (h.nitelik === "analiz") z.appendChild(el("span", "rl-yazi-et", EN ? "Analysis" : "Analiz"));
+    const EN = window.DIL === "en", z = el("div", "rl-zemin"), k = kaynaklar[h.kaynak];
+    const ic = el("div", "rl-zemin-ic");
+    if (gorselIzin(h, k)) {
+      const a = el("a", "rl-onizleme"); a.href = h.url; a.target = "_blank"; a.rel = "noopener";
+      const im = document.createElement("img"); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer";
+      im.src = (window.AKTAR || ((v) => v))(h.gorsel, 480); im.onerror = () => a.remove();
+      a.append(im, el("span", null, (EN ? "Photo: " : "Görsel: ") + k.ad));
+      ic.appendChild(a);
     }
+    ic.appendChild(el("p", "rl-yazi", baslikSec(h)));
+    z.appendChild(ic);
+    if (h.nitelik === "analiz") z.appendChild(el("span", "rl-yazi-et", EN ? "Analysis" : "Analiz"));
     return z;
   }
   // Bir haberi tam ekran gönderi yap. Aynı haberi başka hesaplar da yazdıysa gönderi yana kayar:

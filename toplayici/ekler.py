@@ -252,6 +252,10 @@ def hesap_yaz(kok, haberler, simdi):
         denetim = json.load(open(os.path.join(kok, "data", "gorsel-akis.json"), encoding="utf-8"))
     except (OSError, ValueError):
         denetim = {}
+    try:   # telif şikâyetinde yayının görselleri kapatılır (kaynaklar.json "gorsel_yok")
+        kapali = {str(k["id"]) for k in json.load(open(os.path.join(kok, "kaynaklar.json"), encoding="utf-8")) if k.get("gorsel_yok")}
+    except (OSError, ValueError):
+        kapali = set()
     esik = (simdi - dt.timedelta(days=HESAP_GUN)).date().isoformat()
     tum = {}
     arsiv = os.path.join(kok, "data", "arsiv")
@@ -271,7 +275,7 @@ def hesap_yaz(kok, haberler, simdi):
             continue
         x = {k: h[k] for k in HESAP_ALANLAR if h.get(k)}
         g = h.get("gorsel")
-        if g and (h.get("gorsel_ok") is True or (denetim.get(g) or {}).get("ok") is True):
+        if g and str(h["kaynak"]) not in kapali and (h.get("gorsel_ok") is True or (denetim.get(g) or {}).get("ok") is True):
             x["gorsel"] = g
         yayin.setdefault(str(h["kaynak"]), []).append(x)
     yedi = (simdi - dt.timedelta(days=7)).date().isoformat()

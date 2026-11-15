@@ -87,7 +87,7 @@
       const xs = (hs && hs.haberler) || [];
       const sek = el("div", "pf-sekmeler"); sek.setAttribute("role", "tablist");
       const govde = el("div", "pf-govde");
-      const sekmeler = [[tt("Gönderiler", "Posts"), () => gonderiler(xs)], [tt("Görseller", "Photos"), () => izgara(xs.filter((h) => h.gorsel))]];
+      const sekmeler = [[tt("Gönderiler", "Posts"), () => gonderiler(xs)]];
       sekmeler.forEach(([a, f], i) => {
         const b = el("button", "pf-sekme", a); b.type = "button"; b.setAttribute("role", "tab");
         b.onclick = () => { sek.querySelectorAll("button").forEach((x) => x.setAttribute("aria-selected", x === b)); govde.textContent = ""; govde.appendChild(f()); };
@@ -109,9 +109,9 @@
           li.appendChild(el("p", "pf-g-baslik", b));
           if (h.baslik_orj && h.baslik_orj !== b) { const o = el("p", "pf-g-orj", h.baslik_orj); o.lang = h.dil || ""; o.dir = "auto"; li.appendChild(o); }
           if (OZ(h)) li.appendChild(el("p", "pf-g-oz", OZ(h)));
-          if (h.gorsel) {
+          if (h.gorsel && !k.gorsel_yok) {
             const f = el("figure", "pf-g-gorsel"); const im = document.createElement("img");
-            im.src = (window.AKTAR || ((u) => u))(h.gorsel, 720); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; im.onerror = () => f.remove();
+            im.src = (window.AKTAR || ((u) => u))(h.gorsel, 360); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; im.onerror = () => f.remove();
             f.appendChild(im); li.appendChild(f);
           }
           const alt = el("div", "pf-g-alt");
