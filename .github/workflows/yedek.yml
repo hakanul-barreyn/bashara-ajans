@@ -1,0 +1,90 @@
+# Kaçış planı: GitHub bir gün hesabı kapatırsa hiçbir şey kaybolmasın.
+# 1) Kod (main, tüm geçmişiyle) her gece Codeberg'deki aynaya itilir (CODEBERG_TOKEN ve CODEBERG_REPO varsa).
+# 2) Veri dallarının son hâli haftada bir sıkıştırılıp GİZLİ Hugging Face veri setine (HF_REPO, yedek/ klasörü) yüklenir.
+#    Son 4 hafta tutulur. Veri dallarında üçüncü taraf başlıkları olduğu için yedek açık bir yere konmaz.
+# Anahtarlar burada yedeklenmez (GitHub'dan geri okunamaz); listesi ve nereden yeniden alınacağı TASINMA.md'de.
+name: Yedek
+
+on:
+  schedule:
+    - cron: "23 1 * * *"
+  workflow_dispatch:
+    inputs:
+      veri:
+        description: "Veri dallarını da şimdi yedekle"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yedek
+  cancel-in-progress: false
+
+jobs:
+  kod:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+      CODEBERG_REPO: ${{ vars.CODEBERG_REPO }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Codeberg aynası
+        run: |
+          if [ -z "$CODEBERG_TOKEN" ] || [ -z "$CODEBERG_REPO" ]; then
+            echo "::warning::CODEBERG_TOKEN ya da CODEBERG_REPO tanımlı değil; kod aynası atlandı (TASINMA.md, adım 1)"; exit 0
+          fi
+          git push --force "https://oauth2:${CODEBERG_TOKEN}@codeberg.org/${CODEBERG_REPO}.git" HEAD:refs/heads/main
+          git push --force --tags "https://oauth2:${CODEBERG_TOKEN}@codeberg.org/${CODEBERG_REPO}.git" || true
+          echo "Kod aynası güncel: https://codeberg.org/${CODEBERG_REPO}"
+
+  veri:
+    # haftada bir (pazar) ya da elle
+    if: github.event_name == 'schedule' || inputs.veri
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_REPO: ${{ vars.HF_REPO }}
+      ELLE: ${{ inputs.veri }}
+    steps:
+      - name: Gün kontrolü
+        id: gun
+        run: |
+          if [ "$ELLE" = "true" ] || [ "$(date -u +%u)" = "7" ]; then echo "calis=1" >> "$GITHUB_OUTPUT"; else echo "Bugün veri yedeği günü değil (pazar)"; fi
+      - name: Veri dallarını paketle
+        if: steps.gun.outputs.calis == '1'
+        run: |
+          if [ -z "$HF_TOKEN" ] || [ -z "$HF_REPO" ]; then echo "::error::HF_TOKEN ya da HF_REPO yok"; exit 1; fi
+          git init -q d && cd d
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          mkdir -p ../paket
+          for b in veri tarama mediacloud metin-sayim konusma gorsel gorsel-bilgi; do
+            if git fetch -q --depth 1 origin "$b"; then
+              git archive FETCH_HEAD | gzip -6 > "../paket/$b.tar.gz"
+              echo "$b: $(du -h ../paket/$b.tar.gz | cut -f1)"
+            else
+              echo "::warning::$b dalı alınamadı"
+            fi
+          done
+      - name: Gizli veri setine yükle (son 4 hafta)
+        if: steps.gun.outputs.calis == '1'
+        run: |
+          pip install -q huggingface_hub
+          python - <<'EOF'
+          import os, datetime
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"]); repo = os.environ["HF_REPO"]
+          gun = datetime.date.today().isoformat()
+          api.upload_folder(repo_id=repo, repo_type="dataset", folder_path="paket", path_in_repo=f"yedek/{gun}",
+                            commit_message=f"haftalık veri yedeği {gun}")
+          dosyalar = api.list_repo_files(repo, repo_type="dataset")
+          tarihler = sorted({f.split("/")[1] for f in dosyalar if f.startswith("yedek/") and f.count("/") >= 2})
+          for eski in tarihler[:-4]:
+              api.delete_folder(path_in_repo=f"yedek/{eski}", repo_id=repo, repo_type="dataset", commit_message=f"eski yedek silindi {eski}")
+          print("yedekler:", tarihler[-4:])
+          EOF
