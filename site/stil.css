@@ -1077,6 +1077,36 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
   .rl-oneri .avatar.kucuk{width:30px;height:30px;border-radius:50%;font-size:.6rem}
   .rl-oneri .takip-dugme{padding:6px 12px;font-size:.8rem;background:#fff;color:#0f1311}
   .rl-oneri .takip-dugme.takipte{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+  /* ana sayfa kartı (akışın ilk kartı) */
+  .rl-ana{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:13px;
+    padding:calc(62px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(76px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));
+    background:radial-gradient(110% 70% at 15% 0%,#1d4a35,#0b0d0c 68%);color:#fff}
+  .rl-ana-ust{display:flex;align-items:center;gap:10px}
+  .rl-ana-ust img{width:36px;height:36px}
+  .rl-ana-ust div{display:flex;flex-direction:column;gap:3px}
+  .rl-ana-ad{font:800 1.3rem/1 "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.04em}
+  .rl-ana-slogan{font:600 .7rem var(--mono);color:#a9cdb9;letter-spacing:.04em}
+  .rl-ana-tanim{margin:0;font:600 .98rem/1.42 var(--serif);color:#e8efeb;max-width:34ch;text-wrap:pretty}
+  .rl-ana-don{display:flex;flex-direction:column;gap:8px}
+  .rl-ana-don button{all:unset;cursor:pointer;padding:10px 14px;border-radius:12px;background:#fff;color:#0f1311;font:700 .88rem "Plus Jakarta Sans",system-ui,sans-serif}
+  .rl-ana-don .rl-ana-takip{background:rgba(255,255,255,.12);color:#fff}
+  .rl-ana-gundem h2,.rl-ana-et{margin:0 0 4px;font:700 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#8fc4a8}
+  .rl-ana-gundem ol{list-style:none;margin:0;padding:0;counter-reset:g;display:flex;flex-direction:column}
+  .rl-ana-gundem li{counter-increment:g;border-top:1px solid rgba(255,255,255,.12)}
+  .rl-ana-gundem li:last-child{border-bottom:1px solid rgba(255,255,255,.12)}
+  .rl-ana-gundem button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:2px;padding:8px 0}
+  .rl-ana-gundem button::before{content:counter(g);grid-row:span 2;font:800 1.2rem/1.1 var(--serif);color:#5fae85;min-width:1ch}
+  .rl-ana-b{font:700 .93rem/1.3 var(--serif);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rl-ana-n{font:600 .7rem var(--mono);color:#a9b2ad}
+  .rl-ana-olcum{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:3px;align-items:center;padding:11px 13px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;text-decoration:none}
+  .rl-ana-olcum .rl-ana-et{margin:0;grid-column:1/-1}
+  .rl-ana-olcum b{font:800 1.9rem/1 var(--serif);color:#f3e2bf}
+  .rl-ana-ol-m{font-size:.8rem;line-height:1.4;color:#e2e8e4}
+  .rl-ana-ol-alt{grid-column:1/-1;font:600 .64rem var(--mono);color:#a9b2ad}
+  @media (max-height:740px){.rl-ana{gap:10px}.rl-ana-tanim{font-size:.9rem}.rl-ana-gundem li:nth-child(3){display:none}.rl-ana-ol-m{font-size:.76rem}}
+  .rl-ana-ipucu{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:.78rem;color:#cfd8d3}
+  .rl-ana-ipucu li{display:flex;align-items:center;gap:10px}
+  .rl-ana-ipucu i{font-style:normal;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.3);font-weight:700;flex:0 0 auto}
 }
 .takip-dugme{font:700 .84rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 16px;border-radius:10px;border:1px solid transparent;background:var(--hesap,#2b8a5e);color:#fff;cursor:pointer}
 .takip-dugme.takipte{background:transparent;border-color:var(--cizgi);color:var(--ink)}

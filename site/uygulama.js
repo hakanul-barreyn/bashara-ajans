@@ -1530,6 +1530,7 @@
     }
     if (v.tur === "kars") return;
     const { h, k, hikaye } = v;
+    anaKartKaydet(h.id);
     kt.style.setProperty("--hesap", HS.renk(k).ana);
     // sağ sütun
     if (hikaye && hikaye.yayinSayisi > 1) yan.appendChild(rlEylem(SVG.katman, hikaye.yayinSayisi, EN ? "Same story" : "Aynı haber", () => (u._git ? u._git(1) : rlSayfa(hikaye, h))));
@@ -1649,6 +1650,115 @@
     kut.appendChild(ul);
     const u = rlZbs(kut, null); if (u) { u.classList.add("rl-oneri-birim"); akis.appendChild(u); rlGozle(u); }
   }
+  // Ana sayfa kartı (telefon akışının ilk kartı): burası ne, bugün ne var, nasıl kullanılır.
+  // Ziyaret bilgisi yalnızca bu cihazda: kaçıncı giriş, son giriş zamanı, en son bakılan kart.
+  const ANA_ANAHTAR = "zbs-ana";
+  const anaOnceki = (() => { try { return JSON.parse(localStorage.getItem(ANA_ANAHTAR) || "{}") || {}; } catch (e) { return {}; } })();
+  const anaZiyaret = (anaOnceki.n || 0) + 1;
+  (() => { try { localStorage.setItem(ANA_ANAHTAR, JSON.stringify(Object.assign({}, anaOnceki, { n: anaZiyaret, son: Date.now() }))); } catch (e) { /* özel pencere */ } })();
+  let anaKartYaz = 0;
+  function anaKartKaydet(id) {
+    if (!id || window.scrollY < innerHeight * 0.6 || Date.now() - anaKartYaz < 1500) return;
+    anaKartYaz = Date.now();
+    try { const v = JSON.parse(localStorage.getItem(ANA_ANAHTAR) || "{}") || {}; v.kart = id; v.kartT = Date.now(); localStorage.setItem(ANA_ANAHTAR, JSON.stringify(v)); } catch (e) { /* özel pencere */ }
+  }
+  let metinOzet = null;
+  function gununOlcumu(o) {
+    const EN = window.DIL === "en", g = o && o.gruplar, b = g && g.bati_ana, bl = g && g.bolge;
+    if (!b || (b.haber || 0) < 100) return null;
+    const y = (x) => Math.round(x);
+    const at = b.atif || {}, bg = b.baglam || {}, bbg = (bl && bl.baglam) || {};
+    const A = [];
+    if (b.baslikta_yok_govdede_var != null && (b.baslik_failsiz_n || 0) >= 50)
+      A.push(EN ? [y(b.baslikta_yok_govdede_var) + "%", "of Western mainstream stories that leave the killer out of the headline name them in the body of the text.", b.baslik_failsiz_n + " headlines without a perpetrator"]
+        : ["%" + y(b.baslikta_yok_govdede_var), "Batı ana akım yayınlarında öldüreni başlıkta yazmayan haberlerin bu kadarı, faili metnin içinde adıyla veriyor.", b.baslik_failsiz_n + " failsiz başlık"]);
+    if (b.niteleme_bakanlikla != null && bl && bl.niteleme_bakanlikla != null)
+      A.push(EN ? [y(b.niteleme_bakanlikla) + "%", "of Western mainstream stories citing Gaza’s Health Ministry add “Hamas-run”. In the region’s own press: " + y(bl.niteleme_bakanlikla) + "%.", b.haber + " stories measured"]
+        : ["%" + y(b.niteleme_bakanlikla), "Gazze Sağlık Bakanlığı’nı aktaran Batı ana akım haberlerinin bu kadarı “Hamas yönetimindeki” nitelemesini ekliyor. Bölge basınında oran %" + y(bl.niteleme_bakanlikla) + ".", b.haber + " haber ölçüldü"]);
+    if (bg.yedi_ekim != null && bg.isgal != null)
+      A.push(EN ? [y(bg.yedi_ekim) + "%", "of Western mainstream stories mention 7 October; " + y(bg.isgal) + "% mention the occupation (region’s press: " + y(bbg.isgal || 0) + "%).", b.haber + " stories measured"]
+        : ["%" + y(bg.yedi_ekim), "Batı ana akım haberlerinin bu kadarı 7 Ekim’e değiniyor; işgalden söz edenler %" + y(bg.isgal) + " (bölge basınında %" + y(bbg.isgal || 0) + ").", b.haber + " haber ölçüldü"]);
+    if (at.ordu != null && at.tanik != null)
+      A.push(EN ? [y(at.ordu) + "%", "of Western mainstream stories quote the Israeli army. A witness is quoted in " + y(at.tanik) + "%.", b.haber + " stories measured"]
+        : ["%" + y(at.ordu), "Batı ana akım haberlerinin bu kadarında İsrail ordusunun açıklaması aktarılıyor. Tanık sözü aktaran haberler: %" + y(at.tanik) + ".", b.haber + " haber ölçüldü"]);
+    if (!A.length) return null;
+    const gun = Math.floor(Date.now() / 864e5);
+    return A[gun % A.length];
+  }
+  function rlAnasayfa(r) {
+    const EN = window.DIL === "en", M = window.MARKA || {};
+    const kut = el("div", "rl-ana");
+    // kimlik
+    const ust = el("div", "rl-ana-ust");
+    const lg = document.createElement("img"); lg.src = "site/logo.svg"; lg.alt = ""; lg.width = 44; lg.height = 44;
+    const ad = el("div"); ad.append(el("b", "rl-ana-ad", M.ad || "Alboroto"), el("span", "rl-ana-slogan", M.slogan || (EN ? "News about the news" : "Haberin haberi")));
+    ust.append(lg, ad); kut.appendChild(ust);
+    const yayinN = Object.keys(kaynaklar).length;
+    kut.appendChild(el("p", "rl-ana-tanim", EN ? "We put the coverage of Palestine and the region by " + yayinN + " outlets worldwide side by side and measure who writes what, and how."
+      : "Dünyanın " + yayinN + " yayınının Filistin ve bölge haberlerini yan yana koyuyor, kimin neyi nasıl yazdığını ölçüyoruz."));
+    // geri dönen okur (sonradan doldurulur)
+    const don = el("div", "rl-ana-don"); don.hidden = true; kut.appendChild(don);
+    // bugünün gündemi
+    // önce Filistin'le ilgili hikâyeler (toplayıcının "ilgili" işareti), yetmezse ötekiler
+    const hAday = r.deste.filter((x) => x.tur === "hikaye" && x.yayinSayisi >= 2);
+    const ilg = (x) => x.olay || x.haberler.some((h) => h.ilgili);
+    const hik = hAday.filter(ilg).concat(hAday.filter((x) => !ilg(x))).slice(0, 3);
+    if (hik.length) {
+      const gb = el("section", "rl-ana-gundem");
+      gb.appendChild(el("h2", null, EN ? "Today’s top stories" : "Bugünün gündemi"));
+      const ol = el("ol");
+      hik.forEach((b) => {
+        const li = el("li"), bt = el("button"); bt.type = "button";
+        bt.append(el("span", "rl-ana-b", b.olay ? OB(b.olay) : baslikSec(b.haberler.find((h) => BT(h)) || rlLead(b.haberler))), el("span", "rl-ana-n", b.yayinSayisi + (EN ? " outlets" : " yayın")));
+        bt.onclick = () => { const u = hikayeYeri.get(b); if (u) u.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth" }); };
+        li.appendChild(bt); ol.appendChild(li);
+      });
+      gb.appendChild(ol); kut.appendChild(gb);
+    }
+    // günün ölçümü (veri gelince)
+    const ol_ = el("a", "rl-ana-olcum"); ol_.href = "yontem.html"; ol_.hidden = true; kut.appendChild(ol_);
+    const olcumYaz = () => {
+      const f = gununOlcumu(metinOzet); if (!f) return;
+      ol_.textContent = "";
+      ol_.append(el("span", "rl-ana-et", EN ? "Measure of the day" : "Günün ölçümü"), el("b", null, f[0]), el("span", "rl-ana-ol-m", f[1]),
+        el("span", "rl-ana-ol-alt", f[2] + (EN ? " · How we measure →" : " · Nasıl ölçüyoruz →")));
+      ol_.hidden = false;
+    };
+    if (metinOzet) olcumYaz();
+    else fetch("data/metin-ozet.json", { cache: "no-cache" }).then((x) => (x.ok ? x.json() : null)).then((o) => { metinOzet = o; olcumYaz(); }).catch(() => {});
+    // nasıl kullanılır (ilk üç girişte)
+    let ip = null;
+    if (anaZiyaret <= 3) {
+      ip = el("ul", "rl-ana-ipucu");
+      [["↑", EN ? "Swipe up for the next story" : "Yukarı kaydır: sonraki haber"], ["←", EN ? "Swipe sideways: how other outlets told the same story" : "Yana kaydır: aynı haberi başka yayınlar nasıl verdi"]]
+        .forEach(([i, t]) => { const li = el("li"); li.append(el("i", null, i), document.createTextNode(t)); ip.appendChild(li); });
+      kut.appendChild(ip);
+    }
+    const u = rlZbs(kut, null); u.classList.add("rl-ana-birim");
+    // kartlar çizildikten sonra: kaldığın yer ve takip
+    u._doldur = () => {
+      don.textContent = "";
+      const id = anaOnceki.kart, var_ = id && anaOnceki.kartT && Date.now() - anaOnceki.kartT < 36 * 36e5 &&
+        [...document.querySelectorAll(".birim-reel")].some((x) => rlKimlikler(x).includes(id));
+      if (var_) {
+        const b = el("button", "rl-ana-devam", EN ? "Continue where you left off ↓" : "Kaldığın yerden devam et ↓"); b.type = "button";
+        b.onclick = () => rlCapayaDon(id, 0); don.appendChild(b);
+      }
+      const t = new Set(HS.takipler());
+      if (t.size && anaOnceki.son) {
+        const n = gor.filter((h) => t.has(String(h.kaynak)) && Date.parse(h.eklendi || h.tarih) > anaOnceki.son).length;
+        if (n) {
+          const b = el("button", "rl-ana-takip", EN ? n + " new posts from accounts you follow" : "Takip ettiklerinden " + n + " yeni gönderi"); b.type = "button";
+          b.onclick = () => { const s = document.querySelector('.rl-sekme[data-k="takip"]'); if (s) s.click(); };
+          don.appendChild(b);
+        }
+      }
+      don.hidden = !don.childElementCount;
+      // geri dönen okura ipucu yerine kaldığı yer (kart tek ekrana sığsın)
+      if (ip) ip.hidden = !don.hidden;
+    };
+    return u;
+  }
   function desteCiz(akis) {
     rlKatman();
     if (rlGozlem) { rlGozlem.disconnect(); }
@@ -1696,7 +1806,9 @@
       if (i < r.deste.length) akis.appendChild(rlZbs(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i === (r.dosyaSon || DESTE_ILK)), null));
       return ilk;
     };
+    const ana = rlAnasayfa(r); akis.appendChild(ana); rlGozle(ana);
     parti(r.dosyaSon || DESTE_ILK);
+    ana._doldur();
     const u0 = akis.querySelector(".birim-reel"); if (u0) rlGuncelle(u0);
     // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
     let ci = document.querySelector(".deste-ilerleme");

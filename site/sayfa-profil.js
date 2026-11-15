@@ -66,8 +66,8 @@
       const kut = (v, e) => { const d = el("div"); d.append(el("b", null, v), el("span", null, e)); say.appendChild(d); };
       kut(String((hs && hs.gun7) || 0), tt("haber · 7 gün", "stories · 7 days"));
       const kr = karne && (karne.karne || []).find((x) => String(x.id) === String(id));
-      if (kr && kr.olum_baslik >= 20) {
-        kut("%" + Math.round(100 * (1 - kr.fail_gizli / kr.olum_baslik)), tt("ölüm başlığında fail yazılı · 30 gün", "death headlines naming a perpetrator · 30 days"));
+      if (kr && kr.fail_gizli != null && kr.olum_baslik >= 20) {
+        kut("%" + (100 - kr.fail_gizli), tt("ölüm başlığında fail yazılı · 30 gün", "death headlines naming a perpetrator · 30 days"));
         kut(String(kr.olum_baslik), tt("ölüm başlığı · 30 gün", "death headlines · 30 days"));
       }
       ust.appendChild(say);

@@ -103,6 +103,7 @@ jobs:
           rm -rf h && (cp -r data/h h || true)
           # günlük görseller (uydu, Gazze fotoğrafları): "gorsel" dalından; veri dalına yazılmaz
           mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
+          (git fetch -q --depth 1 origin metin-sayim && git show FETCH_HEAD:metin-ozet.json > data/metin-ozet.json) || true
 
       - uses: actions/configure-pages@v5
 
