@@ -71,5 +71,14 @@
     yaz(); return b;
   }
   const profil = (id) => "profil.html?k=" + encodeURIComponent(id);
-  window.ZBSHesap = { KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil };
+  // "Hata bildir": haberin bilgileriyle doldurulmuş e-posta (adres site/marka.js "iletisim")
+  function hataBildir(h, kad) {
+    const adr = (window.MARKA && window.MARKA.iletisim) || "iletisim@alborotonews.com";
+    const sayfa = location.origin + location.pathname.replace(/[^/]*$/, "") + "#h-" + h.id;
+    const konu = (EN() ? "Correction request: " : "Düzeltme talebi: ") + (kad || "") + " · " + h.id;
+    const govde = (EN() ? "Story: " : "Haber: ") + ((EN() ? h.baslik_en : h.baslik_tr) || h.baslik_orj || "") + "\n" + (EN() ? "Source link: " : "Kaynak bağlantısı: ") + (h.url || "") +
+      "\n" + (EN() ? "Alboroto page: " : "Alboroto sayfası: ") + sayfa + "\n\n" + (EN() ? "What is wrong, and how do you know? (a link or document helps)\n" : "Yanlış olan ne ve nereden biliyorsunuz? (bağlantı ya da belge eklemek işi hızlandırır)\n");
+    return "mailto:" + adr + "?subject=" + encodeURIComponent(konu) + "&body=" + encodeURIComponent(govde);
+  }
+  window.ZBSHesap = { KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil, hataBildir };
 })();

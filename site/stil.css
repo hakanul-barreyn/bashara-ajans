@@ -1063,3 +1063,7 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
 }
 .takip-dugme{font:700 .84rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 16px;border-radius:10px;border:1px solid transparent;background:var(--hesap,#2b8a5e);color:#fff;cursor:pointer}
 .takip-dugme.takipte{background:transparent;border-color:var(--cizgi);color:var(--ink)}
+
+.eylem.hata-bildir{color:var(--soluk);border-color:transparent;background:transparent}
+.eylem.hata-bildir:hover{color:var(--kirmizi)}
+@media (max-width:700px){.rl-hata{align-self:flex-start;font-size:.76rem;color:#c3cbc5;text-decoration:underline}}

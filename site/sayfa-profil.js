@@ -119,6 +119,7 @@
           const p = el("button", null, tt("Paylaş", "Share")); p.type = "button";
           p.onclick = () => { const u = h.url; if (navigator.share) navigator.share({ title: b, url: u }).catch(() => {}); else if (navigator.clipboard) navigator.clipboard.writeText(u).then(() => { p.textContent = tt("Bağlantı kopyalandı", "Link copied"); }, () => {}); };
           alt.appendChild(p);
+          const hb = el("a", "pf-hata", tt("Hata bildir", "Report an error")); hb.href = H.hataBildir(h, k.ad); alt.appendChild(hb);
           if (OZ(h)) alt.appendChild(el("span", "pf-yz", tt("Özet ve çeviri: yapay zekâ", "Summary and translation: AI")));
           li.appendChild(alt);
           ol.appendChild(li);

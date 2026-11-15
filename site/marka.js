@@ -9,7 +9,8 @@ window.MARKA = {
   "slogan_en": "The news about the news",
   "aciklama_en": "Following the press of the Maghreb, the Gulf, the Mashriq and Anatolia, with summaries and a balance of who told the story how.",
   "goatcounter": "zbshaber",
-  "adres": "https://alborotonews.com/"
+  "adres": "https://alborotonews.com/",
+  "iletisim": "iletisim@alborotonews.com"
 };
 
 // Sayfadaki data-marka="ad|kisa_ad|slogan|aciklama" öğelerini ve {ad} geçen başlıkları doldurur.
@@ -22,6 +23,7 @@ window.MARKA = {
   if (t) document.title = yaz(t.getAttribute("data-marka-sablon"));
   var doldur = function () {
     document.querySelectorAll("[data-marka]").forEach(function (e) { e.textContent = al(e.getAttribute("data-marka")) || ""; });
+    if (M.iletisim) document.querySelectorAll("[data-iletisim]").forEach(function (e) { e.textContent = M.iletisim; });
     document.querySelectorAll("[data-marka-sablon]:not(title)").forEach(function (e) {
       var a = e.getAttribute("data-marka-oznitelik");
       if (a) e.setAttribute(a, yaz(e.getAttribute("data-marka-sablon"))); else e.textContent = yaz(e.getAttribute("data-marka-sablon"));

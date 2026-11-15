@@ -18,7 +18,7 @@ import urllib.parse
 import urllib.request
 
 SITE = "https://alborotonews.com/"
-KENDI = ["", "raporlar.html", "almanak.html", "olaylar.html", "kimin.html", "liderler.html", "rapor.html", "ebu-safiye.html", "isimler.html"]
+KENDI = ["", "raporlar.html", "almanak.html", "olaylar.html", "kimin.html", "liderler.html", "rapor.html", "ebu-safiye.html", "isimler.html", "duzeltmeler.html", "yontem.html"]
 CALISMA_BASINA, GUNLUK = 12, 1000
 UA = "zbs-toplayici (+https://alborotonews.com/)"
 ATLA = ("news.google.com", "t.me/", "telegram.", "facebook.com", "x.com/", "twitter.com/")

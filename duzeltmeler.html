@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://cdn.jsdelivr.net https://zbshaber.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e0d">
+<title data-marka-sablon="{ad} · Düzeltmeler">Alboroto · Düzeltmeler</title>
+<meta name="description" content="Alboroto'da bir yanlış gördüğünüzde nasıl bildireceğiniz, düzeltme ve cevap hakkı ilkelerimiz ve yapılan düzeltmelerin kaydı.">
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611150430">
+<script src="site/dil.js?v=202611150400"></script>
+<script src="site/marka.js?v=202611150430"></script>
+<style>
+/* Hakkımızda: okunur tek sütun metin, bakış ölçeği görseli, bölüm kartları */
+.sayfa{max-width:860px;margin:0 auto;padding:28px max(var(--kanat),env(safe-area-inset-right,0px)) 72px max(var(--kanat),env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:20px}
+.sayfa h1{margin:0;font-size:clamp(1.8rem,4vw,2.4rem);letter-spacing:-.015em;text-wrap:balance}
+.giris{margin:-6px 0 0;font-size:1.05rem;color:var(--ink2);max-width:66ch}
+.icindekiler{display:flex;flex-wrap:wrap;gap:6px}
+.icindekiler a{font-size:.82rem;font-weight:600;text-decoration:none;color:var(--ink2);border:1px solid var(--cizgi);background:var(--yuzey);padding:6px 12px;border-radius:999px}
+.icindekiler a:hover{border-color:var(--soluk);color:var(--ink)}
+.bolumk{background:var(--kart);box-shadow:var(--golge);border-radius:18px;padding:22px 24px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:calc(var(--ust) + 16px)}
+.bolumk h2{margin:0;font-size:1.2rem;letter-spacing:-.01em}
+.bolumk p,.bolumk li{margin:0;color:var(--k-ink2);font-size:.96rem;max-width:68ch}
+.bolumk ul,.bolumk ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+.ilke{border-left:4px solid var(--yesil);padding:4px 0 4px 14px;font-size:1.05rem!important;color:var(--k-ink)!important;font-weight:600}
+/* bakış ölçeği: başlangıç noktası solda, uzaklaştıkça sağa */
+.olcek{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:4px;position:relative}
+.olcek::before{content:"";position:absolute;left:16px;right:16px;top:15px;height:3px;border-radius:3px;background:linear-gradient(90deg,#2b8a5e,#a7aeb3 50%,#4a72c4)}
+.basamak{position:relative;display:flex;flex-direction:column;gap:6px;padding:0 12px 0 0}
+.basamak .top{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:.78rem;font-weight:500;position:relative;z-index:1;box-shadow:0 0 0 4px var(--kart)}
+.basamak b{font-size:.95rem;color:var(--k-ink);margin-top:4px}
+.basamak small{font-family:var(--mono);font-size:.68rem;color:var(--k-soluk);text-transform:uppercase;letter-spacing:.06em}
+.basamak span{font-size:.86rem;color:var(--k-ink2)}
+.ornekler{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ornekk{border:1px solid var(--k-cizgi);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--k-ink2)}
+.ornekk i{font-style:italic;color:var(--k-ink)}
+.ornekk .bakis-cip{align-self:flex-start}
+.not-kucuk{font-size:.8rem!important;color:var(--k-soluk)!important}
+@media (max-width:700px){
+  .olcek{grid-template-columns:minmax(0,1fr);gap:14px}
+  .olcek::before{left:15px;right:auto;top:16px;bottom:16px;width:3px;height:auto;background:linear-gradient(180deg,#2b8a5e,#a7aeb3 50%,#4a72c4)}
+  .basamak{display:grid;grid-template-columns:33px minmax(0,1fr);column-gap:12px;padding:0}
+  .basamak .top{grid-row:1/span 3}
+  .basamak b{margin-top:0}
+  .ornekler{grid-template-columns:minmax(0,1fr)}
+  .bolumk{padding:18px}
+}
+</style>
+<style>.dz-kayit{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}.dz-kayit li{border-top:1px solid var(--cizgi);padding-top:10px}.dz-kayit time{font:600 .76rem var(--mono);color:var(--soluk)}.dz-kayit p{margin:4px 0 0}.dz-adres{font:700 1.05rem var(--mono);user-select:all}</style>
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="Alboroto ana sayfa"><img class="logo" src="site/logo.svg" alt="" width="32" height="32"><span class="marka-ad" data-marka="ad">Alboroto</span></a>
+    <p class="slogan">Düzeltmeler</p>
+    <nav class="menu"><a href="./">Akış</a><a href="arsiv.html">Arşiv</a><a href="raporlar.html">Raporlar</a><a href="almanak.html">Almanak</a><a href="kaynaklar.html">Kaynaklar</a></nav>
+  </div>
+</header>
+<main class="sayfa">
+<div data-dil="tr">
+  <h1>Düzeltmeler</h1>
+  <p class="giris">Haberleri otomatik topluyor, Türkçe özetlerini yapay zekâyla yazıyoruz; ölçümlerimiz de otomatik. Yanlış yapabiliriz. Bir yanlış gördüğünüzde bize yazın, inceleyip düzeltir ve düzeltmeyi bu sayfada kayda geçiririz.</p>
+  <section class="bolumk">
+    <h2>Nasıl bildirilir</h2>
+    <p>E-posta: <span class="dz-adres" data-iletisim>iletisim@alborotonews.com</span></p>
+    <ul>
+      <li>Her haberin altındaki <b>Hata bildir</b> bağlantısı, haberin bağlantısını ve kimliğini içeren hazır bir e-posta açar.</li>
+      <li>Ne yanlış ve doğrusu ne? Bir bağlantı ya da belge eklemek incelemeyi hızlandırır.</li>
+      <li>Kimliğinizi yazmanız gerekmez; e-posta adresiniz yalnızca yanıt vermek için kullanılır, yayımlanmaz.</li>
+    </ul>
+  </section>
+  <section class="bolumk">
+    <h2>Neleri düzeltiyoruz</h2>
+    <ul>
+      <li><b>Çeviri ve özet hataları:</b> yapay zekânın yanlış çevirdiği ya da yanlış özetlediği haberler.</li>
+      <li><b>Yanlış atıf:</b> bir haberin ya da sözün yanlış yayına, kişiye ya da tarihe bağlanması.</li>
+      <li><b>Ölçüm hataları:</b> bir başlığın yanlış sınıflandırılması (örneğin fail yazıldığı hâlde “yazmadı” sayılması). Bu tür düzeltmeler ölçüm yöntemini de iyileştirir; yöntem sayfasında belirtilir.</li>
+      <li><b>Tarihçe ve kaynaklar:</b> olgusal yanlışlar ve eksik kaynak.</li>
+    </ul>
+    <p>Görüş ve değerlendirmeler (örneğin bir yayının çizgisine ilişkin editoryal değerlendirmemiz) düzeltme konusu değildir; ama ölçütlerimizi açık yazıyoruz ve itirazları dikkate alıyoruz.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Cevap hakkı</h2>
+    <p>Hakkında ölçüm ya da değerlendirme yayımladığımız bir yayın kuruluşu ya da kişi, kısa bir yanıt gönderebilir. Yanıtı ilgili sayfada, kaynağıyla birlikte ve değiştirmeden yayımlarız.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Süre</h2>
+    <p>Talepleri genellikle üç gün içinde yanıtlamayı hedefliyoruz. Açık bir yanlış hemen düzeltilir; tartışmalı durumlarda incelemenin sonucunu yazarız.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Düzeltme kaydı</h2>
+    <ol class="dz-kayit" id="dzKayit"><li>Henüz kayıtlı düzeltme yok.</li></ol>
+  </section>
+</div>
+<div data-dil="en" hidden>
+  <h1>Corrections</h1>
+  <p class="giris">We collect news automatically, AI writes the summaries and translations, and our measurements are automated. We can get things wrong. If you spot an error, write to us: we will review it, correct it and log the correction on this page.</p>
+  <section class="bolumk">
+    <h2>How to report</h2>
+    <p>Email: <span class="dz-adres" data-iletisim>iletisim@alborotonews.com</span></p>
+    <ul>
+      <li>The <b>Report an error</b> link under every story opens a ready email with the story's link and ID.</li>
+      <li>What is wrong and what is correct? A link or document speeds up the review.</li>
+      <li>You do not need to identify yourself; your email address is used only to reply and is never published.</li>
+    </ul>
+  </section>
+  <section class="bolumk">
+    <h2>What we correct</h2>
+    <ul>
+      <li><b>Translation and summary errors</b> made by AI.</li>
+      <li><b>Wrong attribution</b> of a story or quote to an outlet, person or date.</li>
+      <li><b>Measurement errors</b>, such as a headline counted as not naming the perpetrator when it does. Such corrections also improve the method and are noted on the methodology page.</li>
+      <li><b>History and sources:</b> factual errors and missing sources.</li>
+    </ul>
+    <p>Opinions and assessments (such as our editorial assessment of an outlet's line) are not subject to correction, but we publish our criteria and take objections into account.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Right of reply</h2>
+    <p>An outlet or person we measure or assess may send a short reply. We publish it unedited on the relevant page, with its source.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Timing</h2>
+    <p>We aim to answer within three days. Clear errors are corrected at once; in disputed cases we publish the outcome of our review.</p>
+  </section>
+  <section class="bolumk">
+    <h2>Corrections log</h2>
+    <ol class="dz-kayit" id="dzKayitEn"><li>No corrections logged yet.</li></ol>
+  </section>
+</div>
+</main>
+<script src="site/sayfa-duzeltme.js?v=202611150430"></script>
+</body>
+</html>

@@ -957,6 +957,7 @@
       else ey.appendChild(eylem("Wayback’e kaydet", "https://web.archive.org/save/" + (web || h.url)));
     }
     ey.appendChild(paylasDugme(h));
+    if (window.ZBSHesap) { const hb = el("a", "eylem hata-bildir", "Hata bildir"); hb.href = window.ZBSHesap.hataBildir(h, k.ad); hb.title = "Bu haberde bir yanlış mı var? Bize yaz"; ey.appendChild(hb); }
     g.appendChild(ey);
     // Kartın en altında kendi haber sayfamıza giden geniş düğme (kim nasıl yazdı, karşılaştırma, grafikler)
     const sb = el("a", "kart-sayfa"); sb.href = "h/" + encodeURIComponent(h.id) + ".html";
@@ -1508,6 +1509,7 @@
     const a = el("a", "rl-git", EN ? "Read on " + k.ad + " ↗" : k.ad + " sitesinde oku ↗"); a.href = h.url; a.target = "_blank"; a.rel = "noopener"; ek.appendChild(a);
     if (OZ(h)) ek.appendChild(el("span", "rl-yz", EN ? "Translation and summary: AI" : "Çeviri ve özet: yapay zekâ"));
     ek.appendChild(el("span", "rl-yz", EN ? "Not an official account: Alboroto collects " + k.ad + "’s stories." : "Resmî hesap değil: bu yayının haberlerini Alboroto derler."));
+    const hb = el("a", "rl-hata", EN ? "Report an error" : "Hata bildir"); hb.href = HS.hataBildir(h, k.ad); ek.appendChild(hb);
     pl.appendChild(ek);
     pl.onclick = (e) => { if (e.target.closest("a,button")) return; pl.classList.toggle("acik"); };
     const kun = el("p", "rl-kunye"); kun.innerHTML = SVG.dunya;
