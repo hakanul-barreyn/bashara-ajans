@@ -111,9 +111,52 @@ def _commons(params):
         puan = (3 if _re.search(r"Quality images|Featured pictures|Valued images", kat) else 0) \
             + (2 if yil and int(yil.group(0)) >= 2023 else 1 if yil and int(yil.group(0)) >= 2015 else 0) \
             + (1 if w / h >= 1.3 else -2 if w / h < 1 else 0)
-        cikti.append({"url": ii.get("thumburl") or ii.get("url"), "sayfa": ii.get("descriptionurl"), "atif": f"{sanatci} · {lis} · Wikimedia Commons",
-                      "puan": puan, "yil": int(yil.group(0)) if yil else None})
+        c = {"url": ii.get("thumburl") or ii.get("url"), "sayfa": ii.get("descriptionurl"), "atif": f"{sanatci} · {lis} · Wikimedia Commons",
+             "puan": puan, "yil": int(yil.group(0)) if yil else None}
+        if _israil_resmi(c, kat + " " + _html.unescape((md.get("Credit") or {}).get("value", ""))):
+            continue
+        cikti.append(c)
     return cikti
+
+
+# İsrail ordusu ve İsrail hükümet basın ofisi kaynaklı fotoğraflar hiçbir kaynaktan alınmaz
+ISRAIL_RESMI = _re.compile(r"\bIDF\b|Israel Defen[cs]e Forces|IDF Spokesperson|Dover Tzahal|Government Press Office|\bGPO\b|Lishkat|"
+                           r"Kobi Gideon|Amos Ben ?Gershom|Haim Zach|Avi Ohayon|Israeli Army|Israel Defense|צה\"ל|לע\"מ", _re.I)
+
+
+def _israil_resmi(c, ek=""):
+    return bool(ISRAIL_RESMI.search(" ".join([c.get("atif") or "", c.get("sayfa") or "", c.get("url") or "", ek])))
+
+
+OPENVERSE = "https://api.openverse.org/v1/images/"
+
+
+def openverse_ara(sorgular, en_cok=12):
+    """Openverse (WordPress): Commons, Flickr ve başka arşivlerdeki açık lisanslı görseller. Yalnızca CC0, kamu malı, CC BY ve
+    CC BY-SA (ticari olmayan ve türetme yasaklı lisanslar alınmaz, Commons kuralıyla aynı). Anahtarsız kullanım sınırlı olduğu için
+    olay başına bir kez sorulur ve sonuç önbellekte tutulur."""
+    a = []
+    for q in (sorgular or [])[:2]:
+        try:
+            istek = urllib.request.Request(OPENVERSE + "?" + _up.urlencode({"q": q, "license": "cc0,pdm,by,by-sa", "aspect_ratio": "wide",
+                                                                            "mature": "false", "page_size": 20}), headers={"User-Agent": UA})
+            with urllib.request.urlopen(istek, timeout=25) as r:
+                v = json.loads(r.read())
+        except Exception:
+            continue
+        for x in v.get("results") or []:
+            if (x.get("width") or 0) < 900 or not x.get("url"):
+                continue
+            lis = ("CC0" if x.get("license") == "cc0" else "Kamu malı" if x.get("license") == "pdm"
+                   else "CC " + str(x.get("license", "")).upper() + " " + str(x.get("license_version") or "")).strip()
+            c = {"url": x["url"], "sayfa": x.get("foreign_landing_url"), "puan": 0,
+                 "atif": f"{(x.get('creator') or x.get('source') or 'Openverse')[:80]} · {lis} · {str(x.get('source') or 'Openverse').capitalize()} (Openverse)"}
+            if _israil_resmi(c, (x.get("title") or "") + " " + (x.get("creator") or "")):
+                continue
+            a.append(c)
+            if len(a) >= en_cok:
+                return a
+    return a
 
 
 YEDEK = ["Gaza City", "Gaza Strip", "Khan Yunis", "Rafah", "Deir al-Balah", "Jabalia", "Gaza beach", "Gaza port", "Nablus", "Jerusalem Old City"]
@@ -141,6 +184,11 @@ def commons_ara(konum, yer_ad, sorgular=None):
     if konum:
         try:
             ekle(_commons({"generator": "geosearch", "ggscoord": f"{konum[0]}|{konum[1]}", "ggsradius": 10000, "ggslimit": 15, "ggsnamespace": 6}))
+        except Exception:
+            pass
+    if len(a) < 10:
+        try:
+            ekle(openverse_ara(sorgular or ([yer_ad] if yer_ad else [])))
         except Exception:
             pass
     if len(a) < 6:
@@ -219,7 +267,7 @@ def denetle(kok, anahtar, model, log=print, sayac=None):
                 except (TypeError, ValueError):
                     o["odak"] = "50% 30%"
                 continue
-            anah = "commons3:" + o["id"]
+            anah = "commons4:" + o["id"]
             if anah not in onb:
                 sorg = []
                 if anahtar and model:
