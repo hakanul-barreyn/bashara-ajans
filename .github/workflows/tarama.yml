@@ -23,7 +23,7 @@ concurrency:
 jobs:
   tara:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
 
@@ -55,6 +55,32 @@ jobs:
           if git clone -q --depth 1 --branch veri --filter=blob:none --sparse "$ADRES" "$RUNNER_TEMP/v" 2>/dev/null; then
             git -C "$RUNNER_TEMP/v" sparse-checkout set data/canli && echo "CANLI_KLASOR=$RUNNER_TEMP/v/data/canli" >> "$GITHUB_ENV"
           fi
+
+      # Media Cloud künyeleri (gizli HF veri seti): taramada eksik yayınları tamamlar. Önbellekte tutulur, her saat
+      # yalnızca yeni parçalar iner. Künyeler yalnızca bu makinede kalır; özete yalnızca sayılar girer.
+      - name: Media Cloud önbelleği
+        uses: actions/cache@v4
+        with:
+          path: mc-arsiv
+          key: mc-arsiv-${{ github.run_id }}
+          restore-keys: mc-arsiv-
+
+      - name: Media Cloud künyeleri
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_REPO: ${{ vars.HF_REPO }}
+        run: |
+          [ -n "$HF_TOKEN" ] && [ -n "$HF_REPO" ] || { echo "HF ayarı yok, Media Cloud atlandı"; exit 0; }
+          pip install -q huggingface_hub
+          mkdir -p mc-arsiv
+          (git fetch -q --depth 1 origin mediacloud && git show FETCH_HEAD:mc-kapsam.json > mc-arsiv/mc-kapsam.json) || true
+          python - <<'PY' || { echo "Media Cloud indirilemedi, atlandı"; exit 0; }
+          import os
+          from huggingface_hub import snapshot_download
+          snapshot_download(os.environ["HF_REPO"], repo_type="dataset", local_dir="mc-arsiv", allow_patterns=["arsiv/**"], token=os.environ["HF_TOKEN"])
+          PY
+          python toplayici/mc_birlestir.py mc-arsiv "$RUNNER_TEMP/mc-kid" "$RUNNER_TEMP/mc-sayim.json" && echo "MC_KLASOR=$RUNNER_TEMP/mc-kid" >> "$GITHUB_ENV"
+          du -sh mc-arsiv || true
 
       - name: Almanak için özet
         run: python toplayici/gecmis.py

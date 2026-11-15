@@ -252,6 +252,15 @@ def _cdx_tarihle(kayitlar):
     return {u: sonuc.get(u) for u in ilk}, ("adres" if tarihli >= 0.5 * len(ilk) else "kismi" if tarihli else "yok")
 
 
+def _adres_anahtar(u):
+    u = re.sub(r"^https?://(www\.)?", "", (u or "").strip().lower()).split("#")[0]
+    if "?" in u:   # yalnızca izleme parametreleri atılır (?id=123 gibi haber numaraları kalır)
+        y, q = u.split("?", 1)
+        q = "&".join(x for x in q.split("&") if x and not re.match(r"(utm_|fbclid|gclid|at_|ref=|ocid|cmp=|smid)", x))
+        u = y + ("?" + q if q else "")
+    return u.rstrip("/")
+
+
 def ozetle(tarama_kok, kaynaklar, log=print):
     K = {str(k["id"]): k for k in kaynaklar}
     gun = {}      # "2024-01-05": {"k": {kamp: n}, "ic": n, "dis": n, "gi": n, "gd": n, "t": {terim: [ic, dis]}}
@@ -278,7 +287,13 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             log(f"Canlı başlıklar: {ad} okunamadı: {e}")
     if canli:
         log(f"Canlı başlıklar: {sum(len(x) for x in canli.values())} başlık, {len(canli)} yayın")
-    kidler = sorted(set(os.listdir(kok) if os.path.isdir(kok) else []) | set(canli))
+    # Media Cloud künyeleri (mc_birlestir.py çıktısı, geçici klasör): taramada eksik kalan yayınları ve günleri tamamlar.
+    # Yalnızca sayımlara girer; başlıkları ve adresleri örnek olarak hiçbir yere yazılmaz (gizli veri setinin içeriği).
+    mck = os.environ.get("MC_KLASOR", "")
+    mc_kid = {ad[:-9] for ad in os.listdir(mck) if ad.endswith(".jsonl.gz")} if mck and os.path.isdir(mck) else set()
+    if mc_kid:
+        log(f"Media Cloud künyeleri: {len(mc_kid)} yayın")
+    kidler = sorted(set(os.listdir(kok) if os.path.isdir(kok) else []) | set(canli) | mc_kid)
     for kid in kidler:
         k = K.get(kid)
         if not k:
@@ -302,6 +317,12 @@ def ozetle(tarama_kok, kaynaklar, log=print):
         # canlı başlıklar yalnızca taramada kaydı olmayan günler için (aynı haber farklı adresle iki kez sayılmasın)
         tgun = {r["t"][:10] for r in kayitlar if r.get("m") != "cdx"}
         kayitlar += [r for r in canli.get(kid, []) if r["t"][:10] not in tgun]
+        if kid in mc_kid:
+            try:
+                with gzip.open(os.path.join(mck, kid + ".jsonl.gz"), "rt", encoding="utf-8") as f:
+                    kayitlar += [json.loads(x) for x in f if x.strip()]
+            except (OSError, ValueError, EOFError) as e:
+                log(f"Media Cloud: {kid} okunamadı: {e}")
         cdx = [r for r in kayitlar if r.get("m") == "cdx"]
         cdx_tarih, yontem = _cdx_tarihle(cdx) if cdx else ({}, "")
         if cdx:
@@ -314,13 +335,14 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             tekrar[r["b"]] = tekrar.get(r["b"], 0) + 1
         bos_say = 0
         gorulen, tarihli = set(), []
-        for r in sorted(kayitlar, key=lambda r: r["t"]):
-            if r["u"] in gorulen:
+        for r in sorted(kayitlar, key=lambda r: (r["t"][:19], r.get("m") == "mc")):   # aynı haberde taramanın kaydı önce
+            ua = _adres_anahtar(r["u"])   # aynı haber farklı kaynaklardan http/https, www, sorgu farkıyla gelebilir
+            if ua in gorulen:
                 continue
             if bos_baslik(r["b"], tekrar.get(r["b"], 0)):
                 bos_say += 1
                 continue
-            gorulen.add(r["u"])
+            gorulen.add(ua)
             g = cdx_tarih.get(r["u"]) if r.get("m") == "cdx" else r["t"][:10]
             if g and g >= BASLANGIC.isoformat():
                 tarihli.append((g, r))
@@ -372,7 +394,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             # İran'a karşı savaş da aynı savaşın parçasıdır (direniş cephesi); İsrail'le birlikte geçen İran başlıkları da sayılır.
             if bg:
                 tt["_s"] = tt.get("_s", 0) + 1
-            ozgun = r.get("s") != 1
+            ozgun = r.get("s") != 1 and r.get("m") != "mc"   # Media Cloud başlıkları örnek olarak gösterilmez
             if bg:
                 tt["_b"] = tt.get("_b", 0) + 1
                 for a in bulunan:
@@ -432,7 +454,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
                 c = d["t"].setdefault(a, [0, 0])
                 c[0 if yan == "ic" else 1] += 1
                 o = ornek.setdefault(g[:7], {}).setdefault(a, {"ic": [], "dis": []})[yan]
-                if len(o) < 4 and r.get("s") != 1:   # örnek olarak özgün başlıkları tercih et
+                if len(o) < 4 and ozgun:   # örnek olarak özgün başlıkları tercih et (Media Cloud başlıkları hiç)
                     o.append([int(kid), b[:180], r.get("u"), g])
     ilerleme = {}
     try:
