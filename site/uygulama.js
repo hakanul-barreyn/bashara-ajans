@@ -1797,6 +1797,8 @@
   let ilk = true;
   // İlk açılışta önce küçük dosya (en yeni 150 haber) gelir ve sayfa hemen çizilir; tam liste (5-6 MB) arkadan yüklenir.
   let ilkYuklendi = false;
+  // telefonda sayfa yenilenince tarayıcı eski kaydırma konumuna dönmesin (eski kartlar görünüp akış takılıyordu)
+  try { if (desteModu() && "scrollRestoration" in history) { history.scrollRestoration = "manual"; window.scrollTo(0, 0); } } catch (e) { /* eski tarayıcı */ }
   const sabitVeri = { k: null, lg: null, zaman: 0 };
   let tamListe = false;
   async function yukle() {
@@ -1811,7 +1813,8 @@
       const tazeK = sabitVeri.k && t - sabitVeri.zaman < 6e5;
       const [k, h, o, lg, dg] = await Promise.all([
         tazeK ? sabitVeri.k : fetch("kaynaklar.json?t=" + Math.floor(t / 6e5)).then((r) => r.json()),
-        ilkTur ? fetch("data/haberler-ilk.json?t=" + t).then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(akisAl) : akisAl(),
+        // telefonda küçük dosyayla çizip sonra yeniden kurmak akışı takıltıyor: deste doğrudan hafif akış dosyasıyla kurulur
+        ilkTur && !desteModu() ? fetch("data/haberler-ilk.json?t=" + t).then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(akisAl) : akisAl(),
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
         tazeK ? sabitVeri.lg : fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
         fetch("data/dogrulama.json?t=" + t).then((r) => r.json()).catch(() => ({})),

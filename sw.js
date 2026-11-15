@@ -1,6 +1,6 @@
 // Alboroto hizmet çalışanı: sayfa iskeletini önbellekte tutar, haber verisini her zaman ağdan ister.
 // Ağ yoksa son görülen veriyi gösterir.
-const SURUM = "zbs-202611150230";
+const SURUM = "zbs-202611150520";
 const ISKELET = ["./", "index.html", "kaynaklar.html", "arsiv.html", "hakkimizda.html", "almanak.html", "site/dil.js", "manifest.webmanifest", "site/logo.svg", "site/simge-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -13,6 +13,8 @@ self.addEventListener("fetch", (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== "GET" || u.origin !== location.origin) return;
   if (/\/h\/[0-9a-f]+\.html$/.test(u.pathname)) return;   // haber sayfaları önbelleğe alınmaz
+  // Büyük veri dosyaları önbelleğe yazılmaz (6 MB'lık tam liste her yenilemede telefonda diske yazılıyordu)
+  if (/\/data\/(haberler\.json|arsiv\/|bulten\/|hesap\/|canli\/|isimler\/)/.test(u.pathname)) return;
   // Veri ve sayfalar: önce ağ, olmazsa önbellek
   e.respondWith(
     fetch(e.request).then((r) => {
