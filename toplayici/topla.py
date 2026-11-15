@@ -855,6 +855,24 @@ def main():
     durum = oku(DURUM, {})
     eski = {h["id"]: h for h in oku(HABERLER, {}).get("haberler", [])}
     sinir = SIMDI - dt.timedelta(days=SAKLA_GUN)
+    # Gemini kotası dolduğunda başka yoldan (elle ya da başka bir modelle) yapılmış başlık çevirileri:
+    # ceviri/*.json = {haber_id: türkçe başlık}. Yalnızca Türkçe başlığı olmayan haberlere uygulanır.
+    try:
+        import glob as _glob
+        ek_ceviri = {}
+        for f_ in sorted(_glob.glob(os.path.join(KOK, "ceviri", "*.json"))):
+            ek_ceviri.update(oku(f_, {}))
+        n_ek = 0
+        for i_, t_ in ek_ceviri.items():
+            h_ = eski.get(i_)
+            if h_ and t_ and not h_.get("baslik_tr"):
+                h_["baslik_tr"] = ekler.guvenli(temiz(t_, 200))
+                h_["baslik_kaba"] = True
+                n_ek += 1
+        if n_ek:
+            log(f"Ek başlık çevirisi: {n_ek} haber (ceviri/)")
+    except Exception as e:
+        log(f"Ek başlık çevirisi okunamadı: {e}")
 
     # Yalnızca Telegram'dan beslenen kaynaklar hesapla da okunur (web önizlemesi kapalı kanallar için; bilgiler yoksa atlanır)
     if tg_hesap.hazir():
