@@ -84,7 +84,11 @@
   const zemin = $("zemin"), SVGNS = "http://www.w3.org/2000/svg";
   const HARITA_BOLUM = $("haritaBolum"), HARITA_SIRA = 6;   // harita bölümü akışta 6. haberden sonra durur
   const zEl = (t, at) => { const e = document.createElementNS(SVGNS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
-  let zNoktalar = null;
+  let zNoktalar = null, svgKara = () => {};
+  function topojsonYukle() {
+    if (window.topojson) return Promise.resolve();
+    return new Promise((ok, red) => { const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"; sc.onload = ok; sc.onerror = red; document.head.appendChild(sc); });
+  }
   if (zemin) {
     // Bölüm haritası: Mağrip'ten Pakistan'a, Yemen'den Anadolu'ya
     zemin.setAttribute("viewBox", zx(-12) + " " + zy(45) + " " + (zx(70) - zx(-12)) + " " + (zy(10) - zy(45)));
@@ -95,7 +99,8 @@
     });
     const kara = zEl("g", { class: "z-kara" }); zNoktalar = zEl("g", { class: "z-noktalar" });
     zemin.append(kara, zNoktalar);
-    fetch(DUNYA).then((r) => r.json()).then((topo) => {
+    // Eski SVG dünya zemini yalnızca gerçek harita (MapLibre) yüklenemezse çizilir; açılışta hiçbir şey indirilmez
+    svgKara = () => { if (svgKara.oldu) return; svgKara.oldu = true; topojsonYukle().then(() => fetch(DUNYA)).then((r) => r.json()).then((topo) => {
       const halka = (h) => {
         let xs = h.map((p) => p[0]);
         if (Math.max(...xs) < ZB.bat - 5 || Math.min(...xs) > ZB.dogu + 5) return "";
@@ -110,7 +115,7 @@
         poli.forEach((p) => p.forEach((h) => (d += halka(h))));
       });
       kara.appendChild(zEl("path", { d }));
-    }).catch(() => {});
+    }).catch(() => {}); };
   }
 
   function haritaCiz(liste) {
@@ -187,7 +192,8 @@
       return ks.length >= 3 && !ks.some((k) => DIS_K.has(kampAd(k)));
     }).map((o) => ({ type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [o.yer.lon, o.yer.lat] } })) };
     if (ML) { try { ML.getSource("sehir").setData(mlSehir); ML.getSource("sessiz").setData(mlSessiz); } catch (e) { /* stil henüz yüklenmedi */ } }
-    else if (!mlBasladi && HARITA_BOLUM && "IntersectionObserver" in window) {
+    else if (!mlBasladi && HARITA_BOLUM && !("IntersectionObserver" in window)) { mlBasladi = true; svgKara(); }
+    else if (!mlBasladi && HARITA_BOLUM && !desteModu() && "IntersectionObserver" in window) {
       mlBasladi = true;
       const g = new IntersectionObserver((xs) => { if (xs.some((x) => x.isIntersecting)) { g.disconnect(); mlKur(); } }, { rootMargin: "600px" });
       g.observe(HARITA_BOLUM);
@@ -210,7 +216,7 @@
       const m = new ml.Map({ container: kap, style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-10, 12], [64, 44]], attributionControl: { compact: true }, cooperativeGestures: true, dragRotate: false });
       m.addControl(new ml.NavigationControl({ showCompass: false }), "top-right");
       let tamam = false;
-      m.on("error", () => { if (!tamam) kap.remove(); });
+      m.on("error", () => { if (!tamam) { kap.remove(); svgKara(); } });
       m.on("load", () => {
         tamam = true;
         m.getStyle().layers.forEach((l) => { const sl = l["source-layer"]; if (sl === "boundary" || /boundary/.test(l.id) || (sl === "place" && /country|state/.test(l.id))) m.removeLayer(l.id); });
@@ -236,7 +242,7 @@
         });
         zemin.style.display = "none"; kutu.classList.add("ml-var"); ML = m;
       });
-    }).catch(() => {});
+    }).catch(() => svgKara());
   }
 
   // ---------------------------------------------------- kartlar
@@ -1370,6 +1376,7 @@
     const git = (i) => seri.scrollTo({ left: i * seri.clientWidth, behavior: AZ_HAREKET ? "auto" : "smooth" });
     kareler.push(kare(h));
     const dk = el("div", "rl-kare rl-kars-kare"); dk.appendChild(rlKarsKart(hikaye, h, digerleri, git)); rlVeri.set(dk, { tur: "kars", hikaye }); kareler.push(dk);
+    const dO = el("div", "rl-kare rl-kars-kare"); dO.appendChild(rlOrguKart(hikaye, [h].concat(digerleri), git)); rlVeri.set(dO, { tur: "kars", hikaye }); kareler.push(dO);
     digerleri.forEach((x) => kareler.push(kare(x)));
     kareler.forEach((d) => seri.appendChild(d));
     const nk = el("div", "rl-noktalar"); kareler.forEach((_, i) => nk.appendChild(el("i", i ? null : "on")));
@@ -1387,6 +1394,46 @@
     }, { passive: true });
     rlVeri.set(u, { tur: "seri" });
     return u;
+  }
+  // Olay örgüsü kartı: haberin saat saat nasıl geliştiği ve öncesinde yaşanan bağlantılı olaylar
+  let rlOncesi = [];
+  const ORGU_DUR = new Set("israil israel gazze gaza filistin palestinian sonra after their there which haber news says saldırı".split(" "));
+  function orguKok(t) {
+    return new Set(String(t || "").toLocaleLowerCase("tr").replace(/[^\p{L}\s]/gu, " ").split(/\s+/).filter((w) => w.length >= 5 && !ORGU_DUR.has(w)).map((w) => w.slice(0, 5)));
+  }
+  function rlOrguKart(b, xs, git) {
+    const EN = window.DIL === "en", c = el("div", "rl-kars rl-orgu");
+    c.appendChild(el("span", "rl-kars-et", EN ? "Story timeline" : "Olay örgüsü"));
+    c.appendChild(el("h2", "rl-kars-baslik", b.olay ? OB(b.olay) : baslikSec(xs[0])));
+    const sira = xs.slice().sort((p, q) => Date.parse(p.tarih) - Date.parse(q.tarih)), t0 = Date.parse(sira[0].tarih);
+    // öncesi: aynı sözcükleri paylaşan, bu haberden önceki gündem olayları ve hikâyeler (son 7 gün)
+    const kok = orguKok((b.olay ? OB(b.olay) : "") + " " + sira.map((h) => baslikSec(h)).join(" "));
+    const once_ = rlOncesi.filter((o) => o.son < t0 && o.son > t0 - 7 * 864e5 && o.b !== b).map((o) => {
+      let n = 0; orguKok(o.baslik).forEach((w) => { if (kok.has(w)) n++; }); return { o, n };
+    }).filter((x) => x.n >= 2).sort((p, q) => q.n - p.n || q.o.son - p.o.son).slice(0, 3).map((x) => x.o).sort((p, q) => p.son - q.son);
+    if (once_.length) {
+      c.appendChild(el("p", "rl-orgu-bolum", EN ? "Before" : "Öncesi"));
+      const ul = el("ol", "rl-orgu-liste rl-orgu-once");
+      once_.forEach((o) => {
+        const li = el("li"); li.append(el("time", null, new Date(o.son).toLocaleString(YR, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })), el("p", null, o.baslik));
+        if (o.n) li.appendChild(el("em", null, o.n + (EN ? " outlets" : " yayın")));
+        ul.appendChild(li);
+      });
+      c.appendChild(ul);
+    }
+    c.appendChild(el("p", "rl-orgu-bolum", EN ? "How it unfolded" : "Nasıl gelişti"));
+    const ol = el("ol", "rl-orgu-liste");
+    const sa = (ms) => { const d = Math.round(ms / 6e4); return d < 60 ? "+" + d + (EN ? " min" : " dk") : "+" + (Math.round(d / 6) / 10).toLocaleString(YR) + (EN ? " h" : " sa"); };
+    sira.slice(0, 8).forEach((h, i) => {
+      const k = kaynaklar[h.kaynak], li = el("li");
+      const ust = el("div", "rl-l-ust"); ust.append(el("time", null, saatYaz(h.tarih) + (i ? " · " + sa(Date.parse(h.tarih) - t0) : (EN ? " · first" : " · ilk"))), avatar(k, "kucuk"), el("b", null, k.ad));
+      li.append(ust, el("p", "rl-l-baslik", baslikSec(h)));
+      li.onclick = () => { const j = xs.indexOf(h); git(j <= 0 ? 0 : j + 2); };
+      ol.appendChild(li);
+    });
+    if (sira.length > 8) ol.appendChild(el("li", "rl-orgu-diger", "+" + (sira.length - 8) + (EN ? " more" : " haber daha")));
+    c.appendChild(ol);
+    return c;
   }
   // karşılaştırma kartı: aynı haberi yazan hesaplar yan yana, kampların dağılımı ve rakamlar
   function rlKarsKart(b, ilk, digerleri, git) {
@@ -1410,7 +1457,7 @@
       const kp = el("span", "rl-l-kamp"); const i_ = el("i"); i_.style.background = KAMP_RENK[kampAd(k)] || "#6b746f"; kp.append(i_, document.createTextNode(HS.kampYaz(k)));
       ust.append(avatar(k, "kucuk"), el("b", null, k.ad), kp, el("time", null, saatYaz(h.tarih)));
       li.append(ust, el("p", "rl-l-baslik", baslikSec(h)));
-      li.onclick = () => git(i === 0 ? 0 : i + 1);
+      li.onclick = () => git(i === 0 ? 0 : i + 2);
       ol.appendChild(li);
     });
     c.appendChild(ol);
@@ -1565,6 +1612,19 @@
     bas.addEventListener("touchmove", (e) => { if (y0 != null) { const d = Math.max(0, e.touches[0].clientY - y0); sy.style.transform = "translateY(" + d + "px)"; } }, { passive: true });
     bas.addEventListener("touchend", (e) => { const d = y0 == null ? 0 : e.changedTouches[0].clientY - y0; y0 = null; sy.style.transform = ""; if (d > 80) kapat(); });
   }
+  function rlKimlikler(u) {
+    const v = rlVeri.get(u); if (!v) return [];
+    if (v.tur === "seri") return u._kareler.map((d) => (rlVeri.get(d) || {}).h).filter(Boolean).map((h) => h.id);
+    return v.h ? [v.h.id] : [];
+  }
+  function rlAktifId() {
+    const u = [...document.querySelectorAll(".birim-reel")].find((x) => Math.abs(x.getBoundingClientRect().top) < innerHeight / 2);
+    return u ? rlKimlikler(u)[0] || null : null;
+  }
+  function rlCapayaDon(id, y) {
+    const u = [...document.querySelectorAll(".birim-reel")].find((x) => rlKimlikler(x).includes(id));
+    if (u) u.scrollIntoView({ behavior: "auto" }); else window.scrollTo({ top: y });
+  }
   function rlGozle(u) {
     if (!rlGozlem) rlGozlem = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) rlGuncelle(e.target); }); }, { threshold: 0.6 });
     rlGozlem.observe(u);
@@ -1603,11 +1663,13 @@
     hikayeYeri.clear();
     const yayin = new Set(gor.filter((h) => dk(h.tarih) < 1440).map((h) => h.kaynak)).size;
     const EN_ = window.DIL === "en";
+    rlOncesi = r.deste.filter((x) => x.tur === "hikaye").map((x) => ({ b: x, baslik: x.olay ? OB(x.olay) : baslikSec(x.haberler[0]), son: x.son, n: x.yayinSayisi }))
+      .concat((gundemArsiv || []).map((o) => ({ baslik: OB(o), son: Date.parse(o.son), n: (o.kaynaklar || []).length })));
     const ciz1 = (b) => {
       if (b.tur === "hikaye") { const lead = rlLead(b.haberler); const u = rlGonderi(lead, b); hikayeYeri.set(b, u); return u; }
       if (b.tur === "tek") return rlGonderi(b.haberler[0], null);
       if (b.tur === "analiz") { const f = document.createDocumentFragment(); b.haberler.forEach((h) => { const u = rlGonderi(h, null); if (u) { f.appendChild(u); rlGozle(u); } }); return f.firstChild ? f : null; }
-      if (b.tur === "bilgi") { const ic = bilgiBirim(b.tip); return ic ? rlZbs(ic, null) : null; }
+      if (b.tur === "bilgi") { if (b.tip === "harita") return null; const ic = bilgiBirim(b.tip); return ic ? rlZbs(ic, null) : null; }
       if (b.tur === "son") return rlZbs(sonBirim(), null);
       if (b.tur === "kapak" || b.tur === "mola" || b.tur === "bolum") return null;
       return null;
@@ -1669,12 +1731,14 @@
     const deste = desteModu() && !secOlay && !odakId && !ara && !sehir;
     document.documentElement.classList.toggle("deste-modu", deste);
     // ilk çizim küçük dosyadan (en yeni 150 haber) yapıldıysa tam liste gelince deste yeniden kurulur (okur henüz kapaktaysa)
-    const kismiYenile = desteKismi && !kismiVeri && window.scrollY < innerHeight / 2;
+    const kismiYenile = desteKismi && !kismiVeri;
     if (deste && !basaDon && !kismiYenile && desteImza != null && akis.querySelector(".birim")) {
       const n = gor.length - desteImza; if (n > 0) desteYeniBildir(n);
       $("canliMetin").textContent = guncellendi ? "Güncellendi · " + once(guncellendi) : "Canlı";
       return;
     }
+    // tam liste geldiğinde okur akışın ortasındaysa: yeniden kurduktan sonra aynı gönderiye dön
+    const capa = deste && kismiYenile && window.scrollY > innerHeight / 2 ? rlAktifId() : null, capaY = window.scrollY;
     akis.innerHTML = "";
     gundemCiz(); analizCiz(); seritCiz();
     // Paylaşılan bağlantı (#h-…): sayfa doğrudan o haberle açılır; gündem, analizler ve süzgeç gizlenir
@@ -1694,7 +1758,7 @@
     }
     if (!haberler.length) akis.appendChild(el("p", "bos", "Henüz haber yok. Toplayıcı ilk kez çalıştığında haberler burada görünecek."));
     else if (!gor.length && !secOlay) akis.appendChild(el("p", "bos", "Bu süzgeçle eşleşen haber yok. Süzgeçleri gevşetmeyi dene."));
-    if (deste && gor.length) { desteCiz(akis); if (basaDon && window.scrollY > 0) window.scrollTo({ top: 0 }); haritaCiz(liste); return; }
+    if (deste && gor.length) { desteCiz(akis); if (basaDon && window.scrollY > 0) window.scrollTo({ top: 0 }); if (capa) rlCapayaDon(capa, capaY); haritaCiz(liste); return; }
     const gruplu = telefon() && !secOlay && !odakModu && !ara && !sehir;
     (gruplu ? grupla(gor.slice(0, kac)) : gor.slice(0, kac).map((h) => [h])).forEach((u, i) => {
       if (u.length > 1) { akis.appendChild(grupKart(u)); }
@@ -1733,19 +1797,28 @@
   let ilk = true;
   // İlk açılışta önce küçük dosya (en yeni 150 haber) gelir ve sayfa hemen çizilir; tam liste (5-6 MB) arkadan yüklenir.
   let ilkYuklendi = false;
+  const sabitVeri = { k: null, lg: null, zaman: 0 };
+  let tamListe = false;
   async function yukle() {
     const t = Date.now();
     const ilkTur = !ilkYuklendi;
     try {
+      // Akış hafif dosyadan (son 36 saatin ilgili/özetli haberleri, ~750 KB sıkıştırılmış) gelir; tam liste (~6 MB)
+      // yalnızca "Bölgeyle ilgili" süzgeci kapatılınca istenir. Kaynaklar ve logolar 10 dakikada bir yenilenir (her turda değil).
+      const tam = !$("fIlgili").checked;
+      const akisAl = () => fetch((tam ? "data/haberler.json?t=" : "data/haberler-akis.json?t=") + t).then((r) => { if (!r.ok) throw 0; return r.json(); })
+        .catch(() => fetch("data/haberler.json?t=" + t).then((r) => r.json()));
+      const tazeK = sabitVeri.k && t - sabitVeri.zaman < 6e5;
       const [k, h, o, lg, dg] = await Promise.all([
-        fetch("kaynaklar.json?t=" + Math.floor(t / 6e5)).then((r) => r.json()),
-        ilkTur ? fetch("data/haberler-ilk.json?t=" + t).then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(() => fetch("data/haberler.json?t=" + t).then((r) => r.json()))
-          : fetch("data/haberler.json?t=" + t).then((r) => r.json()),
+        tazeK ? sabitVeri.k : fetch("kaynaklar.json?t=" + Math.floor(t / 6e5)).then((r) => r.json()),
+        ilkTur ? fetch("data/haberler-ilk.json?t=" + t).then((r) => { if (!r.ok) throw 0; return r.json(); }).catch(akisAl) : akisAl(),
         fetch("data/olaylar.json?t=" + t).then((r) => r.json()).catch(() => ({ olaylar: [] })),
-        fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
+        tazeK ? sabitVeri.lg : fetch("data/logolar.json?t=" + Math.floor(t / 36e5)).then((r) => r.json()).catch(() => ({})),
         fetch("data/dogrulama.json?t=" + t).then((r) => r.json()).catch(() => ({})),
         window.ALB_BOLGE ? window.ALB_BOLGE.hazir : null,
       ]);
+      if (!tazeK) { sabitVeri.k = k; sabitVeri.lg = lg; sabitVeri.zaman = t; }
+      tamListe = tam;
       logolar = lg || {};
       dogrulama = (dg && dg.etiketler) || {};
       olaylar = o.olaylar || []; olayHarita = {}; olaylar.forEach((x) => (olayHarita[x.id] = x));
@@ -1810,7 +1883,8 @@
   window.addEventListener("hashchange", () => { olaySec = null; hashOku(); ciz(true); });
   document.addEventListener("click", (e) => { if (!e.target.closest(".paylas")) document.querySelectorAll(".paylas-menu").forEach((m) => (m.hidden = true)); });
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-  $("fIlgili").onchange = $("fOzet").onchange = () => { kac = SAYFA; ciz(true); };
+  $("fIlgili").onchange = () => { kac = SAYFA; if (!$("fIlgili").checked && !tamListe) yukle(); else ciz(true); };
+  $("fOzet").onchange = () => { kac = SAYFA; ciz(true); };
   $("fAnaliz").onchange = (e) => { sadeceAnaliz = e.target.checked; kac = SAYFA; ciz(true); };
   const bul = $("fBulanik");
   bul.checked = oku("zbs-bulanik") === "1";

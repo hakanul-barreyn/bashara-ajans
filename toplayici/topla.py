@@ -1170,6 +1170,21 @@ def main():
         yaz(os.path.join(KOK, "data", "haberler-ilk.json"), {"guncellendi": SIMDI.isoformat(), "ilk": True, "haberler": ilk})
     except Exception as e:
         log(f"İlk açılış dosyası yazılamadı: {e}")
+    # ana sayfa akışı için hafif dosya: son 36 saatin bölgeyle ilgili ya da özetli haberleri, yalnızca kullanılan alanlar
+    # (tam liste ~6 MB; bu ~2,5 MB, sıkıştırılmış ~750 KB). Tam liste yalnızca "Bölgeyle ilgili" süzgeci kapatılınca istenir.
+    try:
+        esik = (SIMDI - dt.timedelta(hours=36)).isoformat()
+        DIS = ("giris", "kaynak_ad", "baslik_kaba", "gnews", "oncelik", "_malzeme")
+        def ince(h):
+            y = {k: v for k, v in h.items() if k not in DIS and v not in (None, "", False, [])}
+            if not h.get("gorsel_ok"):
+                y.pop("gorsel", None)
+            return y
+        akis = [ince(h) for h in tut if (h.get("ilgili") or h.get("ozet_tr")) and (h.get("tarih") or "") >= esik]
+        with open(os.path.join(KOK, "data", "haberler-akis.json"), "w", encoding="utf-8") as f:
+            json.dump({"guncellendi": SIMDI.isoformat(), "akis": True, "haberler": akis}, f, ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        log(f"Akış dosyası yazılamadı: {e}")
     try:
         ekler.canli_yaz(KOK, tut, SIMDI, log=log)
     except Exception as e:
