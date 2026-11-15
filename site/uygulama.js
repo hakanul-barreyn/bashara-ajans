@@ -578,8 +578,8 @@
     const arap = (kp.kamp["Filistin"] || 0) + (kp.kamp["Arap dünyası"] || 0);
     const bati = (kp.kamp["Batı"] || 0) + (kp.kamp["İsrail"] || 0);
     if (en && en[1] / kp.toplam >= 0.7) return "Kör nokta: kaynakların %" + Math.round((100 * en[1]) / kp.toplam) + "’i " + en[0] + " basınından.";
-    if (!arap && bati) return "Kör nokta: Filistin ve Arap basını bu olayı yazmadı.";
-    if (!bati && arap) return "Kör nokta: Batı ve İsrail basını bu olayı yazmadı.";
+    if (!arap && bati) return "Kör nokta: İzlediğimiz Filistin ve Arap yayınlarında bu olay yok.";
+    if (!bati && arap) return "Kör nokta: İzlediğimiz Batı ve İsrail yayınlarında bu olay yok.";
     return null;
   }
 
@@ -642,7 +642,7 @@
       sat.appendChild(el("b", null, (en ? "Regional press " : "Bölge basını ") + bolgeN));
       sat.appendChild(document.createTextNode(" · "));
       sat.appendChild(el("b", null, (en ? "Israeli & Western press " : "İsrail ve Batı basını ") + disN));
-      if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Israeli and Western outlets did not report it" : "İsrail ve Batı basını yazmadı"));
+      if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Not in the Israeli and Western outlets we can read" : "İzlediğimiz İsrail ve Batı yayınlarında yok"));
       ic.appendChild(sat);
       let b;
       if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = String(o.sayfa || "").replace(/^data\/h\//, "h/"); }
@@ -787,7 +787,7 @@
       o.haberler.forEach((i) => { const h = haberIdx[i], k = h && kaynaklar[h.kaynak]; if (!k) return; const t = Date.parse(h.tarih), c = kampAd(k);
         if (IC_K.has(c) && (ic == null || t < ic)) ic = t; if (DIS_K.has(c) && (ds == null || t < ds)) ds = t; });
       let metin = null;
-      if (ic != null && ds == null) metin = "İsrail ve Batı basını bu olayı henüz yazmadı.";
+      if (ic != null && ds == null) metin = "İzlediğimiz İsrail ve Batı yayınlarında bu olay henüz yok.";
       else if (ic != null && ds != null) { const sa = (ds - ic) / 36e5;
         metin = Math.abs(sa) < 0.25 ? "İki taraf da aynı saatlerde yazdı." : sa > 0 ? "İsrail ve Batı basını " + (sa < 1 ? Math.round(sa * 60) + " dakika" : sa.toLocaleString(YR, { maximumFractionDigits: 1 }) + " saat") + " sonra yazdı."
           : "İsrail ve Batı basını bölge basınından " + (-sa < 1 ? Math.round(-sa * 60) + " dakika" : (-sa).toLocaleString(YR, { maximumFractionDigits: 1 }) + " saat") + " önce yazdı."; }
@@ -1154,7 +1154,7 @@
       if (oz) ic.appendChild(el("p", "kp-oz", oz));
       const ks = kampSay(xs), sat = el("p", "kp-kim");
       sat.append(el("b", null, (EN ? "Regional press " : "Bölge basını ") + ks.bolge), document.createTextNode(" · "), el("b", null, (EN ? "Israeli & Western " : "İsrail ve Batı ") + ks.dis));
-      if (!ks.dis && ks.bolge >= 3) sat.appendChild(el("span", "kp-sessiz", EN ? "Israeli and Western outlets did not report it" : "İsrail ve Batı basını yazmadı"));
+      if (!ks.dis && ks.bolge >= 3) sat.appendChild(el("span", "kp-sessiz", EN ? "Not in the Israeli and Western outlets we can read" : "İzlediğimiz İsrail ve Batı yayınlarında yok"));
       ic.appendChild(sat);
       const git = el("button", "b-dugme kp-git", EN ? "Who wrote what ↓" : "Kim nasıl yazdı ↓"); git.type = "button";
       git.onclick = () => { const h = hikayeYeri.get(x) || document.querySelector(".birim-hikaye"); if (h) h.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth" }); };
@@ -1450,7 +1450,7 @@
       .forEach(([v, e]) => { const d = el("div"); d.append(el("b", null, v), el("span", null, e)); kut.appendChild(d); });
     c.appendChild(kut);
     c.appendChild(el("p", "rl-kars-not", (EN ? "First: " : "İlk yazan: ") + kaynaklar[ilkH.kaynak].ad + " · " + saatYaz(ilkH.tarih)
-      + (!ks.dis && ks.bolge >= 3 ? (EN ? " · No Israeli or Western outlet reported it" : " · İsrail ve Batı basını yazmadı") : "")));
+      + (!ks.dis && ks.bolge >= 3 ? (EN ? " · Not in the Israeli and Western outlets we can read" : " · İzlediğimiz İsrail ve Batı yayınlarında yok") : "")));
     const ol = el("ol", "rl-kars-liste");
     xs.forEach((h, i) => {
       const k = kaynaklar[h.kaynak], li = el("li");

@@ -72,10 +72,10 @@
     "Bölge ve sahiplik dağılımı kaynak listemizden hesaplanır. Çerçeve notu ve kaynak betimlemeleri başlıklar karşılaştırılarak yapay zekâyla yazılır; haberlerin tamamı için kaynaklara git.": "Region and ownership shares come from our source list. The framing note and source descriptions are written by AI by comparing headlines; go to the sources for the full stories.",
     "Denge çubuğu ": "The balance bar is based on ", "Hakkımızda ": "About ", " sayfasında.": " page.",
     "Filistin bakışından ortalama uzaklık: 0 başlangıç noktası, 1 aktarım, 2 İsrail / ABD bakışı": "Average distance from the Palestinian perspective: 0 starting point, 1 relay, 2 Israeli / US perspective",
-    "⏱ İsrail ve Batı basını bu olayı henüz yazmadı.": "⏱ Israeli and Western press have not reported this yet.",
+    "⏱ İzlediğimiz İsrail ve Batı yayınlarında bu olay henüz yok.": "⏱ Not yet in the Israeli and Western outlets we can read.",
     "⏱ İki taraf da aynı saatlerde yazdı.": "⏱ Both sides reported it at about the same time.",
-    "Kör nokta: Batı ve İsrail basını bu olayı yazmadı.": "Blind spot: Western and Israeli press did not report this.",
-    "Kör nokta: Filistin ve Arap basını bu olayı yazmadı.": "Blind spot: Palestinian and Arab press did not report this.",
+    "Kör nokta: İzlediğimiz Batı ve İsrail yayınlarında bu olay yok.": "Blind spot: not in the Western and Israeli outlets we can read.",
+    "Kör nokta: İzlediğimiz Filistin ve Arap yayınlarında bu olay yok.": "Blind spot: not in the Palestinian and Arab outlets we can read.",
     "Çevrilmedi: sivillere şiddet çağrısı içeriyor": "Not translated: contains a call for violence against civilians",
     " · özgün metni görmek için dokun": " · tap to see the original text",
     // boş durumlar
