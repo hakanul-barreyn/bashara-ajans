@@ -1073,7 +1073,8 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         with open(yol, "w", encoding="utf-8") as f:
             f.write(metin)
         yeni += 1
-    # Akıştan düşen haberlerin sayfaları SAKLA_GUN boyunca kalır, sonra silinir
+    # Akıştan düşen haberlerin sayfaları SAKLA_GUN boyunca kalır, sonra silinir; silahlı grup kanallarınınkiler hemen
+    silahli_sayfa = {f"{h['id']}.html" for h in haberler if (kmap.get(h.get("kaynak")) or {}).get("silahli")}
     silinen, eski = 0, (simdi - dt.timedelta(days=SAKLA_GUN)).timestamp()
     for alt in ("harita", "og"):
         da = os.path.join(d, alt)
@@ -1082,7 +1083,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
                 os.remove(os.path.join(da, ad))
     for ad in os.listdir(d):
         yol = os.path.join(d, ad)
-        if ad.endswith(".html") and ad not in tut and os.path.isfile(yol) and os.path.getmtime(yol) < eski:
+        if ad.endswith(".html") and ad not in tut and os.path.isfile(yol) and (os.path.getmtime(yol) < eski or ad in silahli_sayfa):
             os.remove(yol)
             silinen += 1
     try:
