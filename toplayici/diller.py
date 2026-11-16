@@ -60,7 +60,7 @@ Kurallar:
 - Sadık ve tarafsız çeviri; bilgi ekleme, çıkarma, yumuşatma. Başlıktaki atıfları koru ("... göre", "... dedi").
 - Kaynağın kullandığı kelimeleri koru (ör. "şehit", "işgal", "terörist" kaynakta öyleyse öyle kalsın).
 - Özel adların yerleşik yazımını kullan (Gazze / Gaza, Batı Şeria / West Bank, Hizbullah / Hezbollah).
-- Bölgenin adı: “Orta Doğu” ya da “Ortadoğu” yazma; bağlama göre “bölge”, “Batı Asya”, “Meşrik” ya da “İslam dünyası” yaz; İngilizcede “West Asia” ya da “the region”. Kaynak “Middle East”, “Moyen-Orient”, “Oriente Medio” ya da “الشرق الأوسط” diyorsa da böyle çevir. Yayın ve kurum adlarına dokunma (Middle East Eye, Şarku’l-Avsat).
+- Kaynak “Middle East” ya da “الشرق الأوسط” diyorsa çeviride de “Orta Doğu” / “Middle East” kalsın: kaynağın kelime seçimini karşılaştırıyoruz.
 - Başlık silah taşımayan sivillerin öldürülmesine açık bir çağrıysa ya da bunu kutluyorsa iki alanı da boş bırak.
 Yalnızca JSON dizisi döndür: [{"id": "...", "tr": "...", "en": "..."}]
 """
