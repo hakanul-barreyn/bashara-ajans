@@ -721,7 +721,7 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
     baslik_ol = (olay or {}).get("baslik") if n else None
     aciklama = _kisa((f"{n} yayın bu olayı nasıl anlattı? " if n else "") + (h.get("ozet_tr") or h.get("baslik_orj") or ""), 200)
-    resim = f"{site}h/{og}" if og else f"{site}site/paylas.png"
+    resim = f"{site}h/{og}" if og else f"{site}site/paylas-2026.png"
     v = f"?v={surum}"
     haric = (olay or {}).get("id")
     # Sıradaki haber: "okumaya devam" listesinde bu olaydan sonraki ilk olay (sonsuz akış için)

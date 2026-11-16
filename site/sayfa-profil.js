@@ -43,7 +43,23 @@
       // eylemler
       const ey = el("div", "pf-eylem");
       ey.appendChild(H.takipDugme(k.id, "buyuk"));
-      const site = el("a", "pf-dugme", tt("Web sitesi ↗", "Website ↗")); site.href = k.url; site.target = "_blank"; site.rel = "noopener"; ey.appendChild(site);
+      // Instagram ve X: sitenin içine gömmüyoruz (okurları Meta ve X izlemesine açmamak için); ayrı bir pencerede açılır
+      const sosyal = [];
+      if (k.sadece_instagram) sosyal.push(["Instagram", "https://www.instagram.com/" + k.sadece_instagram + "/", "Instagram’da"]);
+      if (k.x) sosyal.push(["X", "https://x.com/" + k.x, "X’te"]);
+      if (sosyal.length) {
+        sosyal.forEach(([ad, u, ek]) => {
+          const a = el("a", "pf-dugme pf-sosyal", tt(ek + " gör ↗", "See on " + ad + " ↗")); a.href = u; a.target = "_blank"; a.rel = "noopener";
+          a.onclick = (e) => {
+            if (window.matchMedia("(max-width: 760px)").matches) return;   // telefonda yeni sekme ya da uygulama açılır
+            const w = window.open(u, "alb-sosyal", "popup,width=480,height=860,left=" + Math.max(0, screen.width - 520) + ",top=40");
+            if (w) { e.preventDefault(); try { w.opener = null; } catch (x) { /* başka köken */ } }
+          };
+          ey.appendChild(a);
+        });
+      } else {
+        const site = el("a", "pf-dugme", tt("Web sitesi ↗", "Website ↗")); site.href = k.url; site.target = "_blank"; site.rel = "noopener"; ey.appendChild(site);
+      }
       const ka = el("a", "pf-dugme", tt("Kaynaklar sayfası", "Sources page")); ka.href = "kaynaklar.html"; ey.appendChild(ka);
       ust.appendChild(ey);
       // künye
