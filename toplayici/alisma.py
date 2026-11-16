@@ -87,7 +87,7 @@ def _topla(oz, gk):
             S["n"][gr][i] += n
             S["yn"].setdefault(kid, {})[i] = n
             S["b"][gr][i] += tt.get("_b", 0)
-            S["g"][gr][i] += tt.get("_s", 0)   # savaş başlığı: Gazze, Filistin, Lübnan
+            S["g"][gr][i] += tt.get("_si", tt.get("_s", 0))   # savaş başlığı: İsrail'in bütün cepheleri (Gazze, Filistin, Lübnan, İran)
             for a, x in tt.items():
                 if a.startswith("o:"):
                     if a[2:] in S["o"]:

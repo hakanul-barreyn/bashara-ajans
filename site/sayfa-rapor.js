@@ -46,8 +46,9 @@
     }
     var G = {}; v.gruplar.forEach(function (g) { G[g.anahtar] = g; });
     var b = function (g, t) { return G[g].binde[t]; };
-    var iran = v.olaylar.filter(function (o) { return /İran savaşı/.test(o.ad); })[0], lub = v.olaylar.filter(function (o) { return /Lübnan/.test(o.ad); })[0];
-    var ei = iran ? olayEtki(v, iran) : {}, el2 = lub ? olayEtki(v, lub) : {};
+    var iran = v.olaylar.filter(function (o) { return /İran/.test(o.ad); })[0], lub = v.olaylar.filter(function (o) { return /Lübnan/.test(o.ad); })[0];
+    var sur = v.olaylar.filter(function (o) { return /Suriye/.test(o.ad); })[0];
+    var ei = iran ? olayEtki(v, iran) : {}, el2 = lub ? olayEtki(v, lub) : {}, es = sur ? olayEtki(v, sur) : {};
     var gzt = v.dis.gazeteci || 0;
     var deger = {
       donem: ayAd(v.bas) + " – " + ayAd(v.son), baslik: sayi(v.baslik, 0),
@@ -56,6 +57,10 @@
       "k.fail_f": yuzde(G.bati_ana.fail_yazilan.filistinli), "k.fail_i": yuzde(G.bati_ana.fail_yazilan.israilli),
       "k.rehine": sayi(b("bati_ana", "rehine") / b("bati_ana", "esir"), 1) + "×",
       "k.iran": yuzde(ei.bati_sirasinda), "k.iran_once": yuzde(ei.bati_once),
+      "k.suriye": yuzde(es.bati_sirasinda), "k.suriye_once": yuzde(es.bati_once),
+      "e.suriye.bati_once": yuzde(es.bati_once), "e.suriye.bati_sirasinda": yuzde(es.bati_sirasinda),
+      "e.suriye.bolge_once": yuzde(es.bolge_once), "e.suriye.bolge_sirasinda": yuzde(es.bolge_sirasinda),
+      "e.suriye.olu_once": sayi(es.olu_once, 0), "e.suriye.olu_sirasinda": sayi(es.olu_sirasinda, 0),
       "k.gzt": sayi(gzt, 0), "k.gzt_bati": gzt ? sayi(G.bati_ana.gazeteci_haber / gzt, 1) : "–", "k.gzt_bolge": gzt ? sayi(G.bolge.gazeteci_haber / gzt, 1) : "–",
       "e.iran.olu_once": sayi(ei.olu_once, 0), "e.iran.olu_sirasinda": sayi(ei.olu_sirasinda, 0),
       "e.iran.bati_once": yuzde(ei.bati_once), "e.iran.bati_sirasinda": yuzde(ei.bati_sirasinda),
@@ -79,30 +84,45 @@
     kap.appendChild(e);
   }
 
-  // ---- 1) dikkat: haftalık Gazze payı + ölüm çubukları + olay şeritleri
+  // ---- 1) dikkat: iki çizgi (bölge basını, Batı ana akım; dört haftalık ortalama), savaş dışı büyük olaylar gri alan
+  // ve adıyla, altta Gazze'de haftalık ölümler. Son, eksik hafta çizilmez.
+  var KISA = { "Avrupa Futbol Şampiyonası": ["Avrupa Şampiyonası", "Euro 2024"], "Paris Olimpiyatları": ["Olimpiyatlar", "Olympics"], "ABD seçimi": ["ABD seçimi", "US election"],
+    "Suriye'de rejimin çöküşü": ["Suriye’de rejim çöktü", "Syrian government falls"], "Dünya Kupası": ["Dünya Kupası", "World Cup"] };
   function dikkat(v) {
-    var k = $("g-dikkat"); efsane(["bolge", "bati_ana", "bati_muhalif"], k);
-    var H = v.haftalik, W = 760, Hh = 300, P = { l: 40, r: 46, t: 28, b: 26 }, n = H.length;
+    var k = $("g-dikkat"); efsane(["bolge", "bati_ana"], k);
+    var H = v.haftalik.slice();
+    var med = H.map(function (h) { return h.bati_ana.n || 0; }).sort(function (a, b) { return a - b; })[Math.floor(H.length / 2)] || 0;
+    while (H.length && (H[H.length - 1].bati_ana.n || 0) < med * 0.5) H.pop();   // yarım kalan son hafta
+    var W = 760, Hu = 262, Ha = 70, P = { l: 40, r: 150, t: 48, b: 8 }, n = H.length, Hh = Hu + Ha + 24;
     var x = function (i) { return P.l + (W - P.l - P.r) * i / (n - 1); };
-    var enP = 100, enO = Math.max.apply(0, H.map(function (h) { return h.olu || 0; })) || 1;
-    var y = function (p) { return P.t + (Hh - P.t - P.b) * (1 - Math.min(p, enP) / enP); };
-    var yo = function (o) { return Hh - P.b - (Hh - P.t - P.b) * o / enO; };
-    var s = sv("svg", { viewBox: "0 0 " + W + " " + Hh, "class": "rp-svg", role: "img", "aria-label": T("Hafta hafta savaş payı ve ölümler", "Weekly war share and deaths") });
+    var y = function (p) { return P.t + (Hu - P.t - P.b) * (1 - Math.min(p, 100) / 100); };
+    var enO = Math.max.apply(0, H.map(function (h) { return h.olu || 0; })) || 1, y0 = Hu + 18;
+    var s = sv("svg", { viewBox: "0 0 " + W + " " + Hh, "class": "rp-svg", role: "img", "aria-label": T("Hafta hafta savaş payı ve Gazze’de ölümler", "Weekly war share and deaths in Gaza") });
     var idx = function (g) { for (var i = 0; i < n; i++) if (H[i].hafta >= g) return i; return n - 1; };
     var bw = (W - P.l - P.r) / n;
-    v.olaylar.forEach(function (o, j) {
-      var a = idx(ekle(o.bas, -6)), c = idx(o.bit || o.bas);
-      s.appendChild(baslik(sv("rect", { x: x(a) - bw / 2, y: P.t, width: Math.max(bw, x(c) - x(a) + bw), height: Hh - P.t - P.b, "class": "rp-olay rp-olay-" + o.tur }),
-        (j + 1) + " · " + oAd(o) + " · " + gunAd(o.bas) + (o.bit ? " – " + gunAd(o.bit) : "")));
-      var t = sv("text", { x: x(a), y: 11 + (j % 2) * 11, "text-anchor": "middle", "class": "rp-olay-no" }); t.textContent = j + 1; s.appendChild(t);
+    // savaş dışı olaylar
+    var satirSon = [-1e9, -1e9, -1e9, -1e9];   // etiketler üst üste binmesin: her satırın son biten x'i
+    v.olaylar.filter(function (o) { return o.tur !== "gazze" && KISA[o.ad]; }).forEach(function (o) {
+      var a = idx(o.bas), c = idx(o.bit || o.bas), ad = KISA[o.ad][EN ? 1 : 0], x0 = x(a) - bw / 2;
+      var j = 0; while (j < 3 && satirSon[j] > x0 - 6) j++; satirSon[j] = x0 + ad.length * 5.8;
+      s.appendChild(baslik(sv("rect", { x: x(a) - bw / 2, y: P.t, width: Math.max(bw * 1.5, x(c) - x(a) + bw), height: y0 + Ha - P.t, "class": "rp-olay rp-olay-dis" }), oAd(o) + " · " + gunAd(o.bas)));
+      var t = sv("text", { x: x(a) - bw / 2, y: 10 + j * 10, "text-anchor": "start", "class": "rp-olay-ad" }); t.textContent = ad; s.appendChild(t);
+      s.appendChild(sv("line", { x1: x(a) - bw / 2, x2: x(a) - bw / 2, y1: 12 + j * 10, y2: P.t, "class": "rp-olay-cizgi" }));
     });
-    [0, 25, 50, 75, 100].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = yz(p, 0); s.appendChild(t); });
-    H.forEach(function (h, i) { if (h.hafta.slice(5, 7) === "01" && +h.hafta.slice(8) <= 7) { var t = sv("text", { x: x(i), y: Hh - 8, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = h.hafta.slice(0, 4); s.appendChild(t); } });
-    ["bati_muhalif", "bolge", "bati_ana"].forEach(function (g) {
-      var d = "", yeni = true;
-      H.forEach(function (h, i) { var p = h[g].savas_pay; if (p == null) { yeni = true; return; } d += (yeni ? "M" : "L") + x(i).toFixed(1) + "," + y(p).toFixed(1); yeni = false; });
-      s.appendChild(sv("path", { d: d, fill: "none", stroke: R[g], "stroke-width": g === "bati_muhalif" ? 1.2 : 2.2, "stroke-opacity": g === "bati_muhalif" ? 0.55 : 1, "stroke-linejoin": "round" }));
+    [0, 25, 50, 75, 100].forEach(function (p) { s.appendChild(sv("line", { x1: P.l, x2: W - P.r, y1: y(p), y2: y(p), "class": "rp-izgara" })); var t = sv("text", { x: P.l - 6, y: y(p) + 4, "text-anchor": "end", "class": "rp-eksen" }); t.textContent = "%" + p; s.appendChild(t); });
+    H.forEach(function (h, i) { if (h.hafta.slice(5, 7) === "01" && +h.hafta.slice(8) <= 7) { var t = sv("text", { x: x(i), y: y0 - 4, "text-anchor": "middle", "class": "rp-eksen" }); t.textContent = h.hafta.slice(0, 4); s.appendChild(t); } });
+    // dört haftalık ortalama
+    var ort = function (g) { return H.map(function (h, i) { var xs = H.slice(Math.max(0, i - 3), i + 1).map(function (q) { return q[g].savas_pay; }).filter(function (p) { return p != null; }); return xs.length ? xs.reduce(function (a, b) { return a + b; }, 0) / xs.length : null; }); };
+    ["bolge", "bati_ana"].forEach(function (g) {
+      var o = ort(g), d = "", yeni = true, son = null;
+      o.forEach(function (p, i) { if (p == null) { yeni = true; return; } d += (yeni ? "M" : "L") + x(i).toFixed(1) + "," + y(p).toFixed(1); yeni = false; son = [i, p]; });
+      s.appendChild(sv("path", { d: d, fill: "none", stroke: R[g], "stroke-width": 2.4, "stroke-linejoin": "round" }));
+      if (son) { var t = sv("text", { x: x(son[0]) + 6, y: y(son[1]) + 4, "class": "rp-cizgi-ad" }); t.setAttribute("fill", R[g]); t.textContent = (g === "bolge" ? T("Bölge basını", "Regional press") : T("Batı ana akım", "Western mainstream")) + " %" + Math.round(son[1]); s.appendChild(t); }
     });
+    // ölümler
+    var ot = sv("text", { x: P.l, y: y0 + 10, "class": "rp-eksen" }); ot.textContent = T("Gazze’de haftalık ölüm", "Weekly deaths in Gaza"); s.appendChild(ot);
+    H.forEach(function (h, i) { var o = h.olu || 0; if (!o) return; var bh = (Ha - 14) * o / enO; s.appendChild(baslik(sv("rect", { x: x(i) - bw * 0.4, y: y0 + Ha - bh, width: Math.max(1, bw * 0.8), height: bh, "class": "rp-olum" }), gunAd(h.hafta) + " · " + sayi(o, 0))); });
+    var mt = sv("text", { x: W - P.r + 6, y: y0 + 22, "class": "rp-eksen" }); mt.textContent = T("en çok ", "max ") + sayi(enO, 0); s.appendChild(mt);
     k.appendChild(s);
   }
   function olayTablo(v) {

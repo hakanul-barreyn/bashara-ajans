@@ -69,7 +69,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             if not g:
                 continue
             n, tt = (v, {}) if isinstance(v, int) else (v[0], v[1])
-            x = {"n": n, "io": tt.get("k:io", 0), "fo": tt.get("k:fo", 0), "r": tt.get("k:r", 0), "s": tt.get("_s", 0)}
+            x = {"n": n, "io": tt.get("k:io", 0), "fo": tt.get("k:fo", 0), "r": tt.get("k:r", 0), "s": tt.get("_si", tt.get("_s", 0))}
             for hedef in ([donem[g]] if gun <= SON else []) + [ay.setdefault(a, {}).setdefault(g, sifir()), hafta.setdefault(h, {}).setdefault(g, sifir())]:
                 for k2, d in x.items():
                     hedef[k2] += d

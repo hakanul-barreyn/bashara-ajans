@@ -33,10 +33,11 @@ OLAYLAR = [
     ("2024-11-21", None, "UCM tutuklama kararları", "gazze"),
     ("2024-12-08", None, "Suriye'de rejimin çöküşü", "bolge"),
     ("2025-01-19", "2025-03-18", "Ateşkes", "gazze"),
-    ("2025-06-13", "2025-06-24", "İsrail–İran savaşı", "bolge"),
+    ("2025-06-13", "2025-06-24", "İsrail–İran savaşı (12 gün)", "gazze"),
     ("2025-08-22", None, "Gazze'de kıtlık ilanı", "gazze"),
     ("2025-09-16", None, "BM komisyonu: soykırım", "gazze"),
     ("2025-10-10", None, "Ateşkes", "gazze"),
+    ("2026-02-28", "2026-04-08", "ABD ve İsrail’in İran’a savaşı", "gazze"),
     ("2026-06-11", "2026-07-19", "Dünya Kupası", "dunya"),
 ]
 
@@ -60,7 +61,7 @@ def _ekle(r, n, tt):
     r["n"] += n
     r["b"] += tt.get("_b", 0)
     r["g"] += tt.get("_g", 0)
-    r["s"] += tt.get("_s", 0)
+    r["s"] += tt.get("_si", tt.get("_s", 0))   # savaş payı: İsrail'in bütün cepheleri (İran dahil); eski özette yalnızca _s
     r["i"] += tt.get("_i", 0)
     r["gz"] += tt.get("_gz", 0)
     for a in r["t"]:
@@ -106,7 +107,7 @@ def _hafta(g):
     return (d - dt.timedelta(days=d.weekday())).isoformat()
 
 
-RAPOR_SURUM = 9   # 8: güven aralıkları, yayın ağırlıklı ortalama, şehadet duyarlılığı
+RAPOR_SURUM = 10   # 8: güven aralıkları, yayın ağırlıklı ortalama, şehadet duyarlılığı
 
 
 def hesapla(kok, kaynaklar, simdi, log=print):

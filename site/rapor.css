@@ -333,3 +333,9 @@ body.baski .gp-dugme{display:none}
 .rp-vurgu{font:600 1.08rem/1.5 var(--serif);border-left:4px solid var(--yesil);padding:4px 0 4px 14px;max-width:70ch}.rp-vurgu:empty{display:none}
 .th-kaynak{font-size:.78rem;color:var(--soluk)}.th-kaynak a{color:var(--soluk);margin-right:0}
 .th-gorseller{display:grid;gap:10px;margin:10px 0 6px;max-width:560px}.th-gorseller.cok{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));max-width:760px}.th-gorsel{margin:0;min-width:0}.th-gorsel img{display:block;width:100%;height:auto;max-height:360px;object-fit:cover;border-radius:6px;background:#ebe9e3}.th-gorsel figcaption{font-size:.72rem;color:var(--soluk);margin-top:4px;line-height:1.35}.th-gorsel figcaption span{color:var(--metin,inherit)}.th-gorsel figcaption a{color:var(--soluk)}
+
+.rp-olay-dis{fill:#6f7772;fill-opacity:.12}
+.rp-olay-ad{font-family:var(--mono);font-size:9.5px;fill:#4b534e}
+.rp-cizgi-ad{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:11px;font-weight:700}
+.rp-olum{fill:#b3402f;fill-opacity:.55}
+.rp-olay-cizgi{stroke:#6f7772;stroke-width:.6;stroke-dasharray:2 2}

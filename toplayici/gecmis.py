@@ -156,7 +156,7 @@ def faillik(b, kb):
 
 
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
-OZET_SURUM = 14   # 14: alıntı ve hayvan ölümü ayrımı, yerleşimci fail, Telegram ilk cümle
+OZET_SURUM = 15   # 15: geniş savaş başlığı (_si: İsrail'in bütün cepheleri, İran dahil); 14: alıntı ve hayvan ölümü ayrımı, yerleşimci fail, Telegram ilk cümle
 BULTEN_SURUM = 1
 
 
@@ -394,6 +394,10 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             # İran'a karşı savaş da aynı savaşın parçasıdır (direniş cephesi); İsrail'le birlikte geçen İran başlıkları da sayılır.
             if bg:
                 tt["_s"] = tt.get("_s", 0) + 1
+            # Geniş savaş başlığı (_si): İsrail'in savaştığı bütün cepheler tek savaş sayılır (Gazze, Batı Şeria, Kudüs,
+            # Lübnan, İsrail ve İran); İsrail adı geçmeyen İran savaşı başlıkları da buraya girer
+            if bg or iran:
+                tt["_si"] = tt.get("_si", 0) + 1
             ozgun = r.get("s") != 1 and r.get("m") != "mc"   # Media Cloud başlıkları örnek olarak gösterilmez
             if bg:
                 tt["_b"] = tt.get("_b", 0) + 1
