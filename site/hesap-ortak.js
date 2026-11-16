@@ -15,6 +15,13 @@
   const TUR = { resmi: ["Devlet yayını", "State media"], grup: ["Bir harekete bağlı", "Movement-affiliated"], bagimsiz: ["Bağımsız", "Independent"],
     koop: ["Bağımsız (kooperatif)", "Independent (co-op)"], ozel: ["Özel", "Private"], izle: ["Özel", "Private"] };
   const EN = () => window.DIL === "en";
+  // Bayraklar: İsrail merkezli yayınlar (muhalif basın, bayraksiz:true, hariç) ve kaynaklar.json'da bayrak alanı olanlar ("ae", "sa", "gb" ya da liste)
+  const BAYRAK_SVG = { il: '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>', ae: '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>', gb: '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="Londra merkezli yayın"><title>Londra merkezli yayın (Birleşik Krallık)</title><rect width="22" height="16" rx="1.5" fill="#012169"/><path d="M0 0l22 16M22 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l22 16M22 0L0 16" stroke="#c8102e" stroke-width="1.3"/><path d="M11 0v16M0 8h22" stroke="#fff" stroke-width="5"/><path d="M11 0v16M0 8h22" stroke="#c8102e" stroke-width="3"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>', sa: '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="Suudi Arabistan yayını"><title>Suudi Arabistan yayını</title><rect width="22" height="16" rx="1.5" fill="#006c35"/><path d="M5 6.2c1.2-.9 2.1.6 3.2-.2s2 .7 3.2-.1 2.1.6 3.3-.2 1.6.4 2.3.1" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round"/><path d="M5.5 10.6h10.5l1.4-.6" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>' };
+  const bayrak = (k) => {
+    if (!k) return "";
+    const b = k.bayrak ? [].concat(k.bayrak) : (k.bolge === "İsrail" && !k.bayraksiz ? ["il"] : []);
+    return b.map((x) => BAYRAK_SVG[x] || "").join("");
+  };
   const kampAd = (k) => (k && (k.kamp || KAMP[k.bolge])) || "Diğer";
   const kampYaz = (k) => (EN() ? KAMP_EN[kampAd(k)] || kampAd(k) : kampAd(k));
   const dilYaz = (d) => (DIL_AD[d] || [d || "", d || ""])[EN() ? 1 : 0];
@@ -80,5 +87,5 @@
       "\n" + (EN() ? "Alboroto page: " : "Alboroto sayfası: ") + sayfa + "\n\n" + (EN() ? "What is wrong, and how do you know? (a link or document helps)\n" : "Yanlış olan ne ve nereden biliyorsunuz? (bağlantı ya da belge eklemek işi hızlandırır)\n");
     return "mailto:" + adr + "?subject=" + encodeURIComponent(konu) + "&body=" + encodeURIComponent(govde);
   }
-  window.ZBSHesap = { KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil, hataBildir };
+  window.ZBSHesap = { bayrak, KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil, hataBildir };
 })();

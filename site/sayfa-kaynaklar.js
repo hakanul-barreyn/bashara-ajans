@@ -7,7 +7,7 @@
   const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress",gnews:"Google Haberler araması (son çare)"};
   const DURUM={iyi:"Çalışıyor",sessiz:"Sessiz (6 saatten uzun)",kopuk:"Okunamıyor",yok:"Henüz denenmedi"};
   const BAYRAK_AE='<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="BAE yayını"><title>BAE yayını</title><rect width="22" height="16" rx="1.5" fill="#fff"/><path d="M6 0h14.5A1.5 1.5 0 0 1 22 1.5v3.8H6z" fill="#00732f"/><path d="M6 10.7h16v3.8a1.5 1.5 0 0 1-1.5 1.5H6z" fill="#000"/><path d="M1.5 0H6v16H1.5A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0z" fill="#c8102e"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
-  const bayrakHTML=k=>k.bayrak==="ae"?BAYRAK_AE:(k.bolge==="İsrail"&&!k.bayraksiz?BAYRAK:"");
+  const bayrakHTML=k=>window.ZBSHesap&&window.ZBSHesap.bayrak?window.ZBSHesap.bayrak(k):(k.bayrak==="ae"?BAYRAK_AE:(k.bolge==="İsrail"&&!k.bayraksiz?BAYRAK:""));
   const BAYRAK='<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="İsrail merkezli yayın"><title>İsrail merkezli yayın</title><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="#fff" stroke="#c9d1cc" stroke-width=".5"/><rect y="2" width="22" height="2.2" fill="#0038b8"/><rect y="11.8" width="22" height="2.2" fill="#0038b8"/><path d="M11 5.1l2.7 4.6H8.3zM11 10.9 8.3 6.3h5.4z" fill="none" stroke="#0038b8" stroke-width=".8"/></svg>';
   const $=(i)=>document.getElementById(i);
   const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};

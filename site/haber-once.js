@@ -57,6 +57,18 @@
     const t = xs[0] && (EN() ? xs[0].ozet_en : xs[0].ozet_tr);
     return t ? t.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ") : "";
   }
+  // yayın adı + bayrak (İsrail, BAE, Suudi Arabistan…)
+  function adB(k, son) {
+    const b = el("b", null, ((k || {}).ad || "") + (son || "")); const f = k && H().bayrak ? H().bayrak(k) : ""; if (f) b.insertAdjacentHTML("afterbegin", f); return b;
+  }
+  // hikâyenin kendi metnimiz varsa spotu (data/yazi/<no>.json); yoksa geri çağrılmaz
+  const yaziOnbellek = {};
+  function yaziSpot(b, f) {
+    const o = dizin && [...new Set(b.haberler.map((h) => h.id))].map((i) => dizin[i]).find(Boolean);
+    if (!o || EN()) return;
+    (yaziOnbellek[o] = yaziOnbellek[o] || fetch("data/yazi/" + encodeURIComponent(o) + ".json").then((r) => (r.ok ? r.json() : null)).catch(() => null))
+      .then((y) => { if (y && y.spot) f(y.spot); });
+  }
   function onizleme(b, c) {
     return b.haberler.find((h) => h.gorsel && h.gorsel_ok === true && !(c.kaynaklar[h.kaynak] || {}).gorsel_yok);
   }
@@ -135,7 +147,7 @@
         canli.forEach((h) => {
           const l = el("a"); l.href = h.url; l.target = "_blank"; l.rel = "noopener";
           const t = el("time", null, new Date(h.tarih).toLocaleTimeString(EN() ? "en-GB" : "tr-TR", { hour: "2-digit", minute: "2-digit" })); t.dateTime = h.tarih;
-          const sp = el("span"); sp.appendChild(el("b", null, ((c.kaynaklar[h.kaynak] || {}).ad || "") + ": ")); sp.appendChild(document.createTextNode(c.baslikSec(h)));
+          const sp = el("span"); sp.appendChild(adB(c.kaynaklar[h.kaynak], ": ")); sp.appendChild(document.createTextNode(c.baslikSec(h)));
           l.append(t, sp); cs.appendChild(l);
         });
         const tum = el("a", null, tt("Haberin tamamı →", "Full story →")); tum.href = baglanti(manset); tum.style.cssText = "display:block;padding:10px 0;font-size:.82rem;font-weight:700;color:#1f6e4b";
@@ -153,13 +165,15 @@
     let secili = "";
     const listeCiz = () => {
       liste.textContent = "";
-      const xs = digerleri.filter((b) => !secili || (bolgeBul(b, c) || {}).anahtar === secili).slice(0, secili ? 12 : 8);
+      const xs = digerleri.filter((b) => !secili || (bolgeBul(b, c) || {}).anahtar === secili).slice(0, secili ? 20 : 15);
       if (!xs.length) { liste.appendChild(el("p", "hb-ic hb-oge-s", tt("Bu bölgeden şu an birden çok yayının yazdığı hikâye yok.", "No multi-outlet stories from this region right now."))); return; }
       xs.forEach((b) => {
         const a = el("a", "hb-oge"); a.href = baglanti(b);
         const m = el("span", "hb-oge-m");
         const bl = bolgeBul(b, c); if (bl) m.appendChild(el("span", "hb-ust-et", bl.ad));
         m.appendChild(el("span", "hb-oge-b", baslik(b, c)));
+        const sp = spot(b, c); const spEl = el("span", "hb-oge-spot", sp); if (!sp) spEl.hidden = true; m.appendChild(spEl);
+        yaziSpot(b, (t) => { spEl.textContent = t; spEl.hidden = false; });
         const say = kampSay(b, c);
         m.appendChild(el("span", "hb-oge-s", b.yayinSayisi + tt(" yayın · ", " outlets · ") + Object.keys(say).sort((x, y) => say[y] - say[x]).slice(0, 2).map((k) => kampAd(k) + " " + say[k]).join(" · ")));
         a.appendChild(m);
@@ -177,6 +191,33 @@
     });
     listeCiz();
     kok.appendChild(gb);
+
+    // son haberler: bölge basınının en yeni Türkçe başlıkları ve özetleri (gündem hikâyelerinde olmayanlar)
+    const gundemde = new Set(hik.slice(0, 16).flatMap((b) => b.haberler.map((h) => h.id)));
+    const BOLGE = ["Filistin", "Arap dünyası", "Yemen", "İran", "Türkiye"];
+    const goruldu = new Set(), yayinSay = {};
+    const son = c.gor.filter((h) => !gundemde.has(h.id) && (EN() ? h.baslik_en : h.baslik_tr) && BOLGE.includes(H().kampAd(c.kaynaklar[h.kaynak] || {})))
+      .sort((a, b) => Date.parse(b.tarih) - Date.parse(a.tarih))
+      .filter((h) => BOLGE_ANAHTAR.some((x) => x[2].test(EN() ? h.baslik_en : h.baslik_tr)) || /Filistin|Palestin/i.test(EN() ? h.baslik_en : h.baslik_tr))
+      .filter((h) => { const a = (EN() ? h.baslik_en : h.baslik_tr).toLocaleLowerCase("tr").slice(0, 60); if (goruldu.has(a)) return false; goruldu.add(a); return true; })
+      .filter((h) => { yayinSay[h.kaynak] = (yayinSay[h.kaynak] || 0) + 1; return yayinSay[h.kaynak] <= 2; })
+      .slice(0, 12);
+    if (son.length) {
+      const sb = el("section", "hb-bolum hb-son"); sb.setAttribute("aria-label", tt("Son haberler", "Latest news"));
+      sb.appendChild(el("h2", null, tt("SON HABERLER", "LATEST NEWS")));
+      son.forEach((h) => {
+        const k = c.kaynaklar[h.kaynak] || {};
+        const a = el("a", "hb-oge gorselsiz"); a.href = "haber.html?h=" + encodeURIComponent(h.id);
+        const m = el("span", "hb-oge-m");
+        const u = el("span", "hb-ust-et"); u.appendChild(adB(k)); u.appendChild(document.createTextNode(" · " + new Date(h.tarih).toLocaleTimeString(EN() ? "en-GB" : "tr-TR", { hour: "2-digit", minute: "2-digit" })));
+        m.appendChild(u);
+        m.appendChild(el("span", "hb-oge-b", EN() ? h.baslik_en : h.baslik_tr.replace(/^son dakika\s*[|:]\s*/i, "")));
+        const oz = EN() ? h.ozet_en : h.ozet_tr;
+        if (oz) m.appendChild(el("span", "hb-oge-spot", oz.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ")));
+        a.appendChild(m); sb.appendChild(a);
+      });
+      kok.appendChild(sb);
+    }
 
     // bağlam ve ölçüm
     const bg = el("section", "hb-baglam hb-ic"); bg.setAttribute("aria-label", tt("Bağlam ve ölçüm", "Context and measurement"));

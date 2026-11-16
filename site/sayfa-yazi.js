@@ -76,7 +76,7 @@
       gv.appendChild(el("h2", null, tt("Kaynaklar ne diyor", "What the outlets report")));
       tekil.slice(0, 8).forEach((h) => {
         const k = kmap[h.kaynak]; const d = el("div", "hb-derleme");
-        const u = el("span", "hb-derleme-u"); u.appendChild(el("b", null, k.ad)); u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih))); d.appendChild(u);
+        const u = el("span", "hb-derleme-u"); { const bb = el("b", null, k.ad); const f = H.bayrak ? H.bayrak(k) : ""; if (f) bb.insertAdjacentHTML("afterbegin", f); u.appendChild(bb); } u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih))); d.appendChild(u);
         d.appendChild(el("p", null, OZ(h) || BT(h)));
         const l = el("a", null, tt("Habere git ↗", "Open story ↗")); l.href = h.url; l.target = "_blank"; l.rel = "noopener"; l.className = "hb-derleme-u"; l.style.color = "#1f6e4b";
         d.appendChild(l); gv.appendChild(d);
@@ -119,7 +119,7 @@
     const ul = el("ul", "hb-liste");
     tekil.slice().sort((a, b) => Date.parse(a.tarih) - Date.parse(b.tarih)).forEach((h) => {
       const k = kmap[h.kaynak]; const li = el("li"); const a = el("a"); a.href = h.url; a.target = "_blank"; a.rel = "noopener";
-      const u = el("span", "hb-l-u"); u.appendChild(el("b", null, k.ad)); u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih)));
+      const u = el("span", "hb-l-u"); { const bb = el("b", null, k.ad); const f = H.bayrak ? H.bayrak(k) : ""; if (f) bb.insertAdjacentHTML("afterbegin", f); u.appendChild(bb); } u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih)));
       a.append(u, el("span", "hb-l-b", BT(h))); li.appendChild(a); ul.appendChild(li);
     });
     ic.appendChild(ul);

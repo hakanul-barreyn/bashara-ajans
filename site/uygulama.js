@@ -24,7 +24,9 @@
   // Birleşik Krallık: Londra'dan yayın yapan ve adı başka bir ülkeyi anan kurumlar için (Iran International gibi)
   const BAYRAK_GB = '<svg viewBox="0 0 22 16" class="bayrak" role="img" aria-label="Londra merkezli yayın"><title>Londra merkezli yayın (Birleşik Krallık)</title><rect width="22" height="16" rx="1.5" fill="#012169"/><path d="M0 0l22 16M22 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0l22 16M22 0L0 16" stroke="#c8102e" stroke-width="1.3"/><path d="M11 0v16M0 8h22" stroke="#fff" stroke-width="5"/><path d="M11 0v16M0 8h22" stroke="#c8102e" stroke-width="3"/><rect x=".25" y=".25" width="21.5" height="15.5" rx="1.5" fill="none" stroke="#c9d1cc" stroke-width=".5"/></svg>';
   // Uyarı bayrağı: İsrail merkezli yayınlar (muhalif basın hariç) ve kaynaklar.json'da bayrak alanı olanlar
-  const bayrakHTML = (k) => k.bayrak === "ae" ? BAYRAK_AE : k.bayrak === "gb" ? BAYRAK_GB : (k.bolge === "İsrail" && !k.bayraksiz ? BAYRAK : "");
+  const bayrakHTML = (k) => (window.ZBSHesap ? window.ZBSHesap.bayrak(k) : (k.bayrak === "ae" ? BAYRAK_AE : k.bayrak === "gb" ? BAYRAK_GB : (k.bolge === "İsrail" && !k.bayraksiz ? BAYRAK : "")));
+  // ad + bayrak: akıştaki yayın adları
+  const adB = (k) => { const b = el("b", null, k.ad); const f = bayrakHTML(k); if (f) b.insertAdjacentHTML("afterbegin", f); return b; };
   const AZ_HAREKET = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const KONULAR = ["Gazze", "Batı Şeria", "Kudüs", "Lübnan", "Suriye", "Yemen ve Kızıldeniz", "İran", "Irak", "Mısır", "Ürdün", "Mağrip", "Türkiye", "Körfez", "Göç", "Diplomasi ve müzakere", "İnsani durum", "Esirler ve tutuklular", "Uluslararası hukuk", "Protesto ve dayanışma", "Ekonomi ve boykot", "İsrail iç siyaseti", "Avrupa", "ABD"];
@@ -1427,7 +1429,7 @@
     const sa = (ms) => { const d = Math.round(ms / 6e4); return d < 60 ? "+" + d + (EN ? " min" : " dk") : "+" + (Math.round(d / 6) / 10).toLocaleString(YR) + (EN ? " h" : " sa"); };
     sira.slice(0, 8).forEach((h, i) => {
       const k = kaynaklar[h.kaynak], li = el("li");
-      const ust = el("div", "rl-l-ust"); ust.append(el("time", null, saatYaz(h.tarih) + (i ? " · " + sa(Date.parse(h.tarih) - t0) : (EN ? " · first" : " · ilk"))), avatar(k, "kucuk"), el("b", null, k.ad));
+      const ust = el("div", "rl-l-ust"); ust.append(el("time", null, saatYaz(h.tarih) + (i ? " · " + sa(Date.parse(h.tarih) - t0) : (EN ? " · first" : " · ilk"))), avatar(k, "kucuk"), adB(k));
       li.append(ust, el("p", "rl-l-baslik", baslikSec(h)));
       li.onclick = () => { const j = xs.indexOf(h); git(j <= 0 ? 0 : j + 2); };
       ol.appendChild(li);
@@ -1456,7 +1458,7 @@
       const k = kaynaklar[h.kaynak], li = el("li");
       const ust = el("div", "rl-l-ust");
       const kp = el("span", "rl-l-kamp"); const i_ = el("i"); i_.style.background = KAMP_RENK[kampAd(k)] || "#6b746f"; kp.append(i_, document.createTextNode(HS.kampYaz(k)));
-      ust.append(avatar(k, "kucuk"), el("b", null, k.ad), kp, el("time", null, saatYaz(h.tarih)));
+      ust.append(avatar(k, "kucuk"), adB(k), kp, el("time", null, saatYaz(h.tarih)));
       li.append(ust, el("p", "rl-l-baslik", baslikSec(h)));
       li.onclick = () => git(i === 0 ? 0 : i + 2);
       ol.appendChild(li);
@@ -1540,7 +1542,7 @@
     yan.appendChild(git);
     // platform
     const kim = el("div", "rl-kim");
-    const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "rl-av"), el("b", null, k.ad));
+    const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "rl-av"), adB(k));
     kim.appendChild(pa);
     const tk = el("button", "rl-takip"); tk.type = "button";
     const tyaz = () => { const t = HS.takipte(k.id); tk.textContent = t ? (EN ? "Following" : "Takipte") : (EN ? "Follow" : "Takip et"); tk.classList.toggle("takipte", t); };
@@ -1593,7 +1595,7 @@
       const k = kaynaklar[h.kaynak]; if (!k) return;
       const li = el("li", h === simdiki ? "su-an" : null);
       const ust = el("div", "rl-l-ust");
-      const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "kucuk"), el("b", null, k.ad));
+      const pa = el("a", "rl-profil"); pa.href = HS.profil(k.id); pa.append(avatar(k, "kucuk"), adB(k));
       const kp = el("span", "rl-l-kamp"); const i_ = el("i"); i_.style.background = KAMP_RENK[kampAd(k)] || "#6b746f"; kp.append(i_, document.createTextNode(HS.kampYaz(k)));
       ust.append(pa, kp, el("time", null, saatYaz(h.tarih)));
       li.appendChild(ust);
@@ -1645,7 +1647,7 @@
     const ul = el("ul");
     oner.forEach((id) => {
       const k = kaynaklar[id], li = el("li"), pa = el("a", "rl-profil"); pa.href = HS.profil(id);
-      pa.append(avatar(k, "kucuk"), el("b", null, k.ad), el("span", null, HS.kampYaz(k)));
+      pa.append(avatar(k, "kucuk"), adB(k), el("span", null, HS.kampYaz(k)));
       li.append(pa, HS.takipDugme(id)); ul.appendChild(li);
     });
     kut.appendChild(ul);
