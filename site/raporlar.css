@@ -1,0 +1,52 @@
+/* Raporlar girişi: kitap kapağı gibi koyu yeşil zemin, üzerinde dokuma şeritler (Bayeux duvar halısı gibi);
+   her şerit bir rapor, kendi deseniyle (isimler, hastane tabelası, kelimeler, noktalar, eğri, tırnaklar, anahtar). */
+.rk{--rk-yesil:#26463a;--rk-yesil2:#1d382e;--rk-kagit:#f1ead8;--rk-kagit2:#e7dcc2;--rk-murekkep:#1c2420;--rk-kirmizi:#b3402f;--rk-hardal:#a8741c}
+.rk-kapak{background:radial-gradient(1200px 500px at 20% 0%,#2e5445 0%,var(--rk-yesil) 45%,var(--rk-yesil2) 100%);color:var(--rk-kagit);padding:48px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+.rk-bas{max-width:1080px;margin:0 auto 30px}
+.rk-ust{margin:0 0 8px;font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#cfe3d6}
+.rk-bas h1{margin:0;font:700 clamp(2.6rem,6vw,4.4rem)/1 "Source Serif 4",Georgia,serif;color:var(--rk-kagit);letter-spacing:-.01em}
+.rk-dek{margin:14px 0 0;max-width:46ch;font:400 1.08rem/1.5 "Source Serif 4",Georgia,serif;color:#d9e4dc}
+.rk-seritler{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+/* şerit: kâğıt, üstte ve altta dikiş, hafif doku */
+.rk-serit{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr) auto;align-items:center;gap:18px;min-height:150px;padding:18px 22px;
+  background:linear-gradient(180deg,rgba(0,0,0,.035),transparent 18%,transparent 82%,rgba(0,0,0,.05)),var(--rk-kagit);color:var(--rk-murekkep);text-decoration:none;
+  box-shadow:0 1px 0 rgba(0,0,0,.25),0 10px 24px -14px rgba(0,0,0,.6);transition:transform .2s ease,box-shadow .2s ease}
+.rk-serit::before,.rk-serit::after{content:"";position:absolute;left:10px;right:10px;height:0;border-top:1.5px dashed rgba(28,36,32,.35)}
+.rk-serit::before{top:7px}.rk-serit::after{bottom:7px}
+.rk-serit:nth-child(even){background:linear-gradient(180deg,rgba(0,0,0,.035),transparent 18%,transparent 82%,rgba(0,0,0,.05)),var(--rk-kagit2)}
+.rk-serit:hover,.rk-serit:focus-visible{transform:translateY(-2px);box-shadow:0 1px 0 rgba(0,0,0,.25),0 16px 30px -14px rgba(0,0,0,.7);outline:none}
+.rk-serit:focus-visible{box-shadow:0 0 0 3px #7ee2a8}
+.rk-yazi{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;z-index:1}
+.rk-yazi small{font:800 .7rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--rk-kirmizi)}
+.rk-yazi b{font:700 clamp(1.3rem,2.4vw,1.75rem)/1.15 "Source Serif 4",Georgia,serif;text-wrap:balance}
+.rk-yazi span{font-size:.9rem;line-height:1.45;color:#4b534e;max-width:44ch}
+.rk-desen{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:center;min-width:0;height:130px;overflow:hidden;position:relative}
+.rk-ok{grid-column:3;grid-row:1;font:700 1.6rem "Plus Jakarta Sans",sans-serif;color:var(--rk-murekkep);transition:transform .2s ease}
+.rk-serit:hover .rk-ok{transform:translateX(4px)}
+.rk-svg{width:100%;height:100%;max-width:420px}
+/* isimler: sıfır yaşındaki çocukların adları, Arapça, soluk satırlar */
+.rk-adlar{position:absolute;inset:0;display:block;direction:rtl;text-align:justify;font:600 .82rem/1.55 "Noto Naskh Arabic","Amiri",serif;color:rgba(28,36,32,.55);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);overflow:hidden;padding:4px 0}
+/* Ebu Safiye: tabela ve gün sayacı */
+.rk-gun{position:absolute;right:6px;bottom:4px;font:500 .72rem "JetBrains Mono",monospace;color:var(--rk-kirmizi);background:rgba(241,234,216,.9);padding:2px 6px;border-radius:4px}
+/* kelimeler: aynı şeyin iki adı */
+.rk-kelime{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:700 1.05rem "Source Serif 4",Georgia,serif;max-width:420px}
+.rk-kelime span{color:var(--rk-murekkep)}.rk-kelime s{color:#8c938e;text-decoration-color:var(--rk-kirmizi);text-decoration-thickness:2px}
+/* liderler: tırnaklar */
+.rk-alinti{display:flex;gap:18px;font:700 6rem/1 "Source Serif 4",Georgia,serif;color:rgba(28,36,32,.18)}
+.rk-alinti span:nth-child(2n){color:rgba(179,64,47,.35)}
+/* alt bağlantılar */
+.rk-alt{max-width:1080px;margin:28px auto 64px;padding:0 max(16px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rk-alt a{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-top:3px solid var(--rk-yesil);background:#fff;color:var(--rk-murekkep);text-decoration:none}
+.rk-alt a:hover{background:#f6f3ea}
+.rk-alt small{font:800 .68rem "Plus Jakarta Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6f7772}
+.rk-alt b{font:700 1.15rem "Source Serif 4",Georgia,serif}
+@media (max-width:760px){
+  .rk-kapak{padding-top:32px;padding-bottom:36px}
+  .rk-serit{grid-template-columns:minmax(0,1fr) auto;min-height:0;padding:16px 16px 18px}
+  .rk-desen{grid-column:1/-1;grid-row:1;height:96px}
+  .rk-yazi{grid-column:1;grid-row:2}.rk-ok{grid-column:2;grid-row:2}
+  .rk-alinti{font-size:4.4rem}
+  .rk-alt{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.rk-serit,.rk-ok{transition:none}}
