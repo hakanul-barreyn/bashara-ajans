@@ -18,6 +18,7 @@
 .pf-kamp{display:inline-flex;align-items:center;gap:6px;font-weight:700}
 .pf-kamp i{width:9px;height:9px;border-radius:3px;display:inline-block}
 .pf-bio{margin:0;font-size:.92rem;line-height:1.55;max-width:62ch}
+.pf-uyari{margin:0;padding:0 max(16px,env(safe-area-inset-left,0px));font-size:.8rem;font-weight:600;color:#a8741c}
 .pf-cizgi{margin:0;font-size:.74rem;color:var(--soluk);line-height:1.6}
 .pf-cizgi .cz{display:inline-block;font-family:var(--mono);font-size:.66rem;padding:2px 8px;border-radius:999px;color:#fff;font-weight:600}
 .cz-ad{background:#2b8a5e}.cz-ara{background:#7f8b96}.cz-ik{background:#c9544e}

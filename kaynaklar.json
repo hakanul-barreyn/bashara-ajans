@@ -5342,5 +5342,27 @@
   "id": 242,
   "telegram": null,
   "cizgi": null
+ },
+ {
+  "ad": "MenchOsint",
+  "url": "https://x.com/MenchOsint",
+  "sehir": "",
+  "ulke": "Belirsiz",
+  "bolge": "Asya ve diğer",
+  "lat": null,
+  "lon": null,
+  "dil": "en",
+  "tur": "bagimsiz",
+  "profil": "X’te paylaşım yapan bir OSINT (açık kaynak istihbaratı) hesabı. Paylaşımları Alboroto tarafından doğrulanmadı; hesabın kimin olduğu ve nerede çalıştığı bilinmiyor.",
+  "profil_en": "An OSINT (open-source intelligence) account posting on X. Its posts have not been verified by Alboroto; who runs it and where is not known.",
+  "dog": "?",
+  "tg": false,
+  "liste": false,
+  "notu": "Kasım 2026’da eklendi. X otomatik okunamadığı için gönderileri akışa düşmez; profilde X bağlantısı var.",
+  "id": 243,
+  "telegram": null,
+  "cizgi": null,
+  "x": "MenchOsint",
+  "dogrulanmadi": true
  }
 ]

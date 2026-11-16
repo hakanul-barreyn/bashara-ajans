@@ -610,6 +610,10 @@ def cek_telegram(kanal, sinir=700):
 
 def kaynak_isle(k, durum):
     d = dict(durum.get(str(k["id"]), {}))
+    if k.get("x") and not k.get("sadece_instagram") and not k.get("sadece_telegram") and "x.com/" in (k.get("url") or ""):
+        # Yalnızca X hesabı olan kaynak: X otomatik okunmaya izin vermiyor (robots.txt), profilde bağlantı olarak durur
+        d.update({"yontem": None, "surum": KESIF_SURUMU, "son_oge": 0, "yalniz_baglanti": True})
+        return k, d, []
     if k.get("sadece_instagram"):
         # Yalnızca Instagram hesabı olan kaynak (saha muhabirleri): kendi Instagram hesabımızın jetonuyla, ücretsiz
         og = instagram.baska_hesap(k["sadece_instagram"], log=log)

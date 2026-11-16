@@ -68,8 +68,9 @@
       const kp = el("span", "pf-kamp"); const i_ = el("i"); i_.style.background = r.ana; kp.append(i_, document.createTextNode(H.kampYaz(k))); kun.appendChild(kp);
       ust.appendChild(kun);
       if (k.profil) {
-        const p = el("p", "pf-bio", k.profil); if (EN) p.lang = "tr"; ust.appendChild(p);
+        const p = el("p", "pf-bio", (EN && k.profil_en) || k.profil); if (EN && !k.profil_en) p.lang = "tr"; ust.appendChild(p);
       }
+      if (k.dogrulanmadi) ust.appendChild(el("p", "pf-uyari", tt("OSINT hesabı · Paylaşımları doğrulanmadı.", "OSINT account · Its posts have not been verified.")));
       if (k.cizgi) {
         const c = el("p", "pf-cizgi");
         c.append(el("span", "cz cz-" + k.cizgi, CIZGI[k.cizgi] || CIZGI.ara));
