@@ -291,6 +291,8 @@ tr.oe-ilk td{border-top:2px solid var(--soluk)}
 .th-liste{list-style:none;margin:0;padding:0;border-left:3px solid #c9dccf}
 .th-liste li{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:12px;padding:12px 0 12px 16px;position:relative;border-bottom:1px solid var(--cizgi)}
 .th-liste li::before{content:"";position:absolute;left:-8px;top:18px;width:13px;height:13px;border-radius:50%;background:var(--yesil);border:2px solid #fff}
+.th-liste li.yan-olay b{font-size:.92rem;font-weight:600}.th-liste li.yan-olay p{font-size:.84rem;color:var(--soluk)}.th-liste li.yan-olay::before{background:var(--yuzey,#fff);border-color:#9aa59e;width:11px;height:11px;left:-7px}
+.th-yan-et{display:block;font:600 .64rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soluk);margin-bottom:2px}
 .th-liste time{font:600 .8rem var(--mono);color:var(--soluk);padding-top:3px}.th-liste b{font:700 1.02rem var(--serif)}
 .th-liste p{margin:4px 0;font-size:.9rem;max-width:70ch;line-height:1.5}.th-liste a{font-size:.78rem;color:var(--soluk);margin-right:12px}.th-liste a.th-kat{color:var(--yesil);font-weight:700;text-decoration:none}
 /* kısa biyografiler: geniş ekranda zaman çizgisinin solundaki boşlukta, sıkıştırılmış kart; orta genişlikte metnin altında; telefonda yok */

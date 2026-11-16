@@ -13,7 +13,7 @@
   var k = document.getElementById("tarihce");
   // kısıtlı ülkelerde "şehit" yerine olgusal karşılığı (site/bolge.js)
   var BG = window.ALB_BOLGE, N = function (s) { return BG ? BG.notr(s, EN ? "en" : "tr") : s; };
-  Promise.all([fetch("site/donum.json?v=18").then(function (r) { return r.json(); }), BG ? BG.hazir : null]).then(function (x) { return x[0]; }).then(function (v) {
+  Promise.all([fetch("site/donum.json?v=19").then(function (r) { return r.json(); }), BG ? BG.hazir : null]).then(function (x) { return x[0]; }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}
@@ -40,8 +40,11 @@
         var ol = el("ol", "th-liste");
         xs.forEach(function (o) {
           var li = el("li");
+          if (o.yan_olay) li.classList.add("yan-olay");   // yan olay: bölgeyi etkileyen ama Filistin’in kendi dönüm noktası olmayan olaylar
           li.appendChild(el("time", null, tarihAd(o.tarih)));
-          var ic = el("div"); ic.appendChild(el("b", null, N(EN ? o.baslik_en : o.baslik))); ic.appendChild(el("p", null, N(EN ? o.metin_en : o.metin)));
+          var ic = el("div");
+          if (o.yan_olay) ic.appendChild(el("span", "th-yan-et", tt("Yan olay", "Side event")));
+          ic.appendChild(el("b", null, N(EN ? o.baslik_en : o.baslik))); ic.appendChild(el("p", null, N(EN ? o.metin_en : o.metin)));
           var hepsi = (o.gorseller || (o.gorsel ? [o.gorsel] : [])).filter(function (g) { return g && g.url; });
           // "yan": görsel geniş ekranda sol kanatta durur; telefonda kanat gizli olduğundan metnin içinde de gösterilir
           var gs = hepsi.filter(function (g) { return !g.yan; }), yanG = hepsi.filter(function (g) { return g.yan; });
@@ -76,7 +79,7 @@
           li.appendChild(ic);
           // yan sütun: yan görseller (geniş ekranda zaman çizgisinin solunda)
           if (yanG.length) {
-            li.className = "kisili";
+            li.classList.add("kisili");
             KISI_SIRA++;
             var yan = el("aside", "th-yan");
             yanG.forEach(function (g) { yan.appendChild(figur(g, "th-yan-gorsel")); });
