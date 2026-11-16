@@ -45,8 +45,10 @@ Kurallar:
   {"baslik": "...", "spot": "...", "paragraflar": [{"metin": "...", "kaynaklar": [1, 3]}], "baglam": {"metin": "...", "kaynaklar": [2]} }
 """ + turkce_uslup.USLUP
 
-EN_COK_CALISMA = 3      # bir toplama turunda en fazla kaç metin yazılır
-EN_AZ_YAYIN = 3         # olayı en az kaç farklı yayın yazmış olmalı
+EN_COK_CALISMA = 5      # bir toplama turunda en fazla kaç metin yazılır
+EN_AZ_YAYIN = 2         # olayı en az kaç farklı yayın yazmış olmalı
+YENIDEN_YAZ_HABER = 3   # var olan metin ancak en az bu kadar yeni haber gelince ya da
+YENIDEN_YAZ_SAAT = 2    # son yazımın üstünden bu kadar saat geçince yeniden yazılır
 BOLGE = ("Filistin", "Arap dünyası", "Lübnan", "Yemen", "İran", "Türkiye")
 _BAG = re.compile(r"(https?://\S+|www\.\S+|t\.me/\S+)", re.I)
 
@@ -86,17 +88,26 @@ def yaz(kok, anahtar, model, kaynaklar, simdi, log=print, sayac=None, butce=lamb
     dizin_yol = os.path.join(klasor, "dizin.json")
     dizin = _oku(dizin_yol, {})
     yazilan = 0
-    for o in gundem[:12]:
+    for o in gundem[:20]:
         xs = [hab[i] for i in o.get("haberler", []) if i in hab]
         ks = {h.get("kaynak") for h in xs}
         if len(ks) < EN_AZ_YAYIN:
             continue
-        if sum(1 for k in ks if any(b in str(_kamp(kmap.get(k, {}))) for b in BOLGE)) < 2:
+        if sum(1 for k in ks if any(b in str(_kamp(kmap.get(k, {}))) for b in BOLGE)) < 1:
             continue
         imza = _imza([h["id"] for h in xs])
         onceki = _oku(os.path.join(klasor, o["id"] + ".json"), None)
         if onceki and (onceki.get("imza") == imza or onceki.get("yetersiz_imza") == imza):
             continue
+        if onceki and onceki.get("baslik"):
+            # metin var: her yeni haberde baştan yazma (maliyet); birkaç yeni haber birikince ya da birkaç saat geçince yenile
+            yeni_n = len({h["id"] for h in xs} - set(onceki.get("haberler") or []))
+            try:
+                gecen = (simdi - dt.datetime.fromisoformat(onceki.get("guncellendi"))).total_seconds() / 3600
+            except Exception:
+                gecen = 99
+            if yeni_n < YENIDEN_YAZ_HABER and gecen < YENIDEN_YAZ_SAAT:
+                continue
         if not (anahtar and model) or yazilan >= EN_COK_CALISMA or not butce():
             continue
         xs.sort(key=lambda h: h.get("tarih") or "")

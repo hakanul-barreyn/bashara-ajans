@@ -48,7 +48,11 @@
     const yer = (yazi && yazi.yer_ad) || (olay && olay.yer_ad);
     bas.appendChild(el("span", "hb-et", (yer ? yer + " · " : "") + tt("Haber", "Story"))).style.color = "#2b8a5e";
     bas.appendChild(el("h1", null, baslik));
-    const spot = (yazi && !EN && yazi.spot) || (olay && ((EN && olay.not_en) || (!EN && olay.not))) || "";
+    // spot haberi anlatır: kendi metnimizin spotu, yoksa en dolu bölge özetinin ilk iki cümlesi (çerçeve notu aşağıda, "Kim nasıl yazdı"da)
+    const ozluler = tekil.filter((h) => OZ(h).length > 80);
+    const ilkOz = ozluler[0];
+    const spot = (yazi && !EN && yazi.spot) ||
+      (ilkOz ? OZ(ilkOz).split(/(?<=[.!?])\s+/).slice(0, 2).join(" ") : "") || "";
     if (spot) bas.appendChild(el("p", "hb-spot", spot));
     const yazili = !!(yazi && yazi.baslik && !EN);
     const meta = el("p", "hb-meta");
@@ -75,7 +79,8 @@
       if (yazi.baglam) { gv.appendChild(el("h2", null, tt("Bağlam", "Context"))); gv.appendChild(el("p", null, yazi.baglam.metin)); gv.appendChild(atifCiz(yazi.baglam.kaynaklar)); }
     } else {
       gv.appendChild(el("h2", null, tt("Kaynaklar ne diyor", "What the outlets report")));
-      tekil.slice(0, 8).forEach((h) => {
+      // önce özeti olanlar (haberi anlatanlar), sonra yalnızca başlığı olanlar
+      tekil.slice().sort((a, b) => (OZ(b).length > 80) - (OZ(a).length > 80)).slice(0, 8).forEach((h) => {
         const k = kmap[h.kaynak]; const d = el("div", "hb-derleme");
         const u = el("span", "hb-derleme-u"); { const bb = el("b", null, k.ad); const f = H.bayrak ? H.bayrak(k) : ""; if (f) bb.insertAdjacentHTML("afterbegin", f); u.appendChild(bb); } u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih))); d.appendChild(u);
         d.appendChild(el("p", null, OZ(h) || BT(h)));
@@ -106,8 +111,8 @@
     const idSet = new Set(xs.map((h) => h.id));
     const od = (canli.olaylar || []).find((o) => o.id === q.get("o")) ||
       (canli.olaylar || []).map((o) => [o, (o.haberler || []).filter((i) => idSet.has(i)).length]).filter((x) => x[1] >= 2).sort((a, b) => b[1] - a[1]).map((x) => x[0])[0] || null;
-    const ON_ = od && ((EN && od.not_en) || (!EN && od.not));
-    if (ON_ && ON_ !== spot) ic.appendChild(el("p", "hb-kim-not", ON_));
+    const ON_ = (od && ((EN && od.not_en) || (!EN && od.not))) || (olay && ((EN && olay.not_en) || (!EN && olay.not)));
+    if (ON_) ic.appendChild(el("p", "hb-kim-not", ON_));
     if (od && od.celiski && od.celiski.aciklama && !EN) ic.appendChild(el("p", "hb-kim-not hb-celiski", "Çelişki: " + od.celiski.aciklama));
     const BAK = { filistin: [tt("Filistin bakışı", "Palestinian view"), "#2b8a5e"], aktarim: [tt("Aktarım", "Reporting"), "#a7aeb3"], israil: [tt("İsrail / ABD bakışı", "Israeli / US view"), "#4a72c4"] };
     const bk = (od && od.bakislar) || {};
@@ -159,6 +164,5 @@
     const git = el("a", "hb-git", tt("Akışta karşılaştır →", "Compare in the feed →")); git.href = "./#h-" + encodeURIComponent(tekil[0].id);
     ic.appendChild(git);
     document.body.appendChild(kb);
-    if (location.hash === "#kim") requestAnimationFrame(() => kb.scrollIntoView());
   });
 })();

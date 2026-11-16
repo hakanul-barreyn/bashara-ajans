@@ -1027,7 +1027,12 @@ def main():
                       key=lambda h: (h.get("eklendi") or h["tarih"]) if h["tarih"][11:19] == "00:00:00" else h["tarih"], reverse=True)
         kmap_ = {k["id"]: k for k in kaynaklar}
         sd = lambda h: bool((kmap_.get(h["kaynak"]) or {}).get("son_dakika") or h.get("resmi_grup"))
-        sira = sorted(sira, key=lambda h: (not sd(h), not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
+        # sitede hikâye olarak gösterilen haberler önce: gündem olaylarındaki haberlerin özeti, haber sayfasında haberin kendisini anlatır
+        try:
+            gundemde = {i for o in oku(os.path.join(KOK, "data", "gundem.json"), {}).get("olaylar", [])[:20] for i in o.get("haberler", [])}
+        except Exception:
+            gundemde = set()
+        sira = sorted(sira, key=lambda h: (h["id"] not in gundemde, not sd(h), not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
         if model and sira:
             with ThreadPoolExecutor(max_workers=8) as ex:
                 list(ex.map(malzeme_hazirla, sira))

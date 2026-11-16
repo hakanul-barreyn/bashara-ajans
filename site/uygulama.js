@@ -652,12 +652,8 @@
       sat.appendChild(el("b", null, (en ? "Israeli & Western press " : "İsrail ve Batı basını ") + disN));
       if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Not in the Israeli and Western outlets we can read" : "İzlediğimiz İsrail ve Batı yayınlarında yok"));
       ic.appendChild(sat);
-      if (yaziVar.has(o.id)) {
-        const hb = el("a", "slayt-dugme slayt-haber", en ? "Read the story →" : "Haberi oku →"); hb.href = "haber.html?o=" + encodeURIComponent(o.id);
-        ic.appendChild(hb);
-      }
-      let b;
-      b = el("a", "slayt-dugme", en ? "Who wrote what →" : "Kim nasıl yazdı →"); b.href = "haber.html?o=" + encodeURIComponent(o.id) + "#kim";
+      // tek düğme: haber sayfası önce haberi anlatır, kim nasıl yazdı altında
+      const b = el("a", "slayt-dugme slayt-haber", en ? "Read the story →" : "Haberi oku →"); b.href = "haber.html?o=" + encodeURIComponent(o.id);
       ic.appendChild(b);
       sl.appendChild(ic);
       iz.appendChild(sl);
