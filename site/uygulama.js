@@ -657,8 +657,7 @@
         ic.appendChild(hb);
       }
       let b;
-      if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = String(o.sayfa || "").replace(/^data\/h\//, "h/"); }
-      else { b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id); }
+      b = el("a", "slayt-dugme", en ? "Who wrote what →" : "Kim nasıl yazdı →"); b.href = "haber.html?o=" + encodeURIComponent(o.id) + "#kim";
       ic.appendChild(b);
       sl.appendChild(ic);
       iz.appendChild(sl);

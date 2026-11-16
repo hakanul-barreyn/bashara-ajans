@@ -20,9 +20,10 @@
   Promise.all([window.ALB_BOLGE ? window.ALB_BOLGE.hazir : null]).then(() => Promise.all([
     j("kaynaklar.json", []), j("data/haberler-akis.json", null), j("data/gundem.json", { olaylar: [] }),
     q.get("o") ? j("data/yazi/" + encodeURIComponent(q.get("o")) + ".json", null) : null,
-  ])).then(async ([K, akis, gundem, yazi]) => {
+    j("data/olaylar.json", { olaylar: [] }),
+  ])).then(async ([K, akis, gundem, yazi, canli]) => {
     const kmap = {}; K.forEach((k) => { kmap[k.id] = k; });
-    const olay = q.get("o") ? (gundem.olaylar || []).find((o) => o.id === q.get("o")) : null;
+    const olay = q.get("o") ? ((gundem.olaylar || []).find((o) => o.id === q.get("o")) || (canli.olaylar || []).find((o) => o.id === q.get("o"))) : null;
     let ids = (yazi && yazi.haberler) || (olay && olay.haberler) || (q.get("h") || "").split(",").filter(Boolean);
     ids = ids.slice(0, 40);
     let hab = (akis && akis.haberler) || [];
@@ -97,14 +98,34 @@
     nas.appendChild(bg); mak.appendChild(nas);
     kok.appendChild(mak);
     // haberin haberi
-    const kb = el("section", "hb-koyu"); kb.setAttribute("aria-label", tt("Haberin haberi", "The news about the news"));
+    const kb = el("section", "hb-koyu"); kb.id = "kim"; kb.setAttribute("aria-label", tt("Kim nasıl yazdı", "Who wrote what"));
     const ic = el("div", "hb-koyu-ic"); kb.appendChild(ic);
     ic.appendChild(el("span", "hb-et", tt("Haberin haberi", "The news about the news")));
-    ic.appendChild(el("h2", null, tt("Bu haberi kim nasıl verdi?", "Who reported this, and how?")));
+    ic.appendChild(el("h2", null, tt("Kim nasıl yazdı?", "Who wrote what, and how?")));
+    // olayın çerçeve analizi (data/olaylar.json): yayın yayın anlatım, bakış ve fail; yoksa yalnızca başlıklar
+    const idSet = new Set(xs.map((h) => h.id));
+    const od = (canli.olaylar || []).find((o) => o.id === q.get("o")) ||
+      (canli.olaylar || []).map((o) => [o, (o.haberler || []).filter((i) => idSet.has(i)).length]).filter((x) => x[1] >= 2).sort((a, b) => b[1] - a[1]).map((x) => x[0])[0] || null;
+    const ON_ = od && ((EN && od.not_en) || (!EN && od.not));
+    if (ON_ && ON_ !== spot) ic.appendChild(el("p", "hb-kim-not", ON_));
+    if (od && od.celiski && od.celiski.aciklama && !EN) ic.appendChild(el("p", "hb-kim-not hb-celiski", "Çelişki: " + od.celiski.aciklama));
+    const BAK = { filistin: [tt("Filistin bakışı", "Palestinian view"), "#2b8a5e"], aktarim: [tt("Aktarım", "Reporting"), "#a7aeb3"], israil: [tt("İsrail / ABD bakışı", "Israeli / US view"), "#4a72c4"] };
+    const bk = (od && od.bakislar) || {};
+    const bs = {}; tekil.forEach((h) => { const v = bk[h.id]; if (BAK[v]) bs[v] = (bs[v] || 0) + 1; });
+    if (Object.keys(bs).length) {
+      const bb = el("div", "hb-bakis");
+      const ser2 = el("div", "hb-serit"); ser2.setAttribute("aria-hidden", "true");
+      Object.keys(BAK).forEach((v) => { if (!bs[v]) return; const i = el("i"); i.style.flex = bs[v]; i.style.background = BAK[v][1]; ser2.appendChild(i); });
+      const ef = el("div", "hb-dag");
+      Object.keys(BAK).forEach((v) => { if (!bs[v]) return; const sp = el("span"); const i = el("i"); i.style.background = BAK[v][1]; sp.append(i, document.createTextNode(BAK[v][0] + " " + bs[v])); ef.appendChild(sp); });
+      bb.append(el("span", "hb-bakis-et", tt("Başlıklar kimin gözünden anlatıyor", "Whose perspective the headlines take")), ser2, ef);
+      ic.appendChild(bb);
+    }
     const say = {}; yayinlar.forEach((kid) => { const a = H.kampAd(kmap[kid]); say[a] = (say[a] || 0) + 1; });
     const sira = Object.keys(say).sort((a, b) => say[b] - say[a]);
     const ser = el("div", "hb-serit"); ser.setAttribute("aria-hidden", "true");
     sira.forEach((a) => { const i = el("i"); i.style.flex = say[a]; i.style.background = H.KAMP_RENK[a] || "#6b746f"; ser.appendChild(i); });
+    ic.appendChild(el("span", "hb-bakis-et", tt("Yayınların kampı", "Outlets by camp")));
     ic.appendChild(ser);
     const dag = el("div", "hb-dag");
     sira.forEach((a) => { const s = el("span"); const i = el("i"); i.style.background = H.KAMP_RENK[a] || "#6b746f"; s.append(i, document.createTextNode((EN ? ({ "Filistin": "Palestine", "Arap dünyası": "Arab world", "İran": "Iran", "Türkiye": "Türkiye", "İsrail": "Israel", "Batı": "West", "Yemen": "Yemen", "Diğer": "Other" }[a] || a) : a) + " " + say[a])); dag.appendChild(s); });
@@ -120,11 +141,24 @@
     tekil.slice().sort((a, b) => Date.parse(a.tarih) - Date.parse(b.tarih)).forEach((h) => {
       const k = kmap[h.kaynak]; const li = el("li"); const a = el("a"); a.href = h.url; a.target = "_blank"; a.rel = "noopener";
       const u = el("span", "hb-l-u"); { const bb = el("b", null, k.ad); const f = H.bayrak ? H.bayrak(k) : ""; if (f) bb.insertAdjacentHTML("afterbegin", f); u.appendChild(bb); } u.appendChild(document.createTextNode(" · " + H.kampYaz(k) + " · " + saat(h.tarih)));
-      a.append(u, el("span", "hb-l-b", BT(h))); li.appendChild(a); ul.appendChild(li);
+      a.append(u, el("span", "hb-l-b", BT(h)));
+      const yr = od && (((EN && od.yorumlar_en) || od.yorumlar || {})[h.id]);
+      if (yr && !(EN && !od.yorumlar_en)) a.appendChild(el("span", "hb-l-y", yr));
+      const an = od && (od.anlatim || {})[h.id], v = bk[h.id];
+      if (an || BAK[v]) {
+        const et = el("span", "hb-l-et");
+        if (BAK[v]) { const c = el("span", "hb-cip", BAK[v][0]); c.style.borderColor = BAK[v][1]; et.appendChild(c); }
+        if (an && an.fail) et.appendChild(el("span", "hb-cip", ({ acik: tt("fail açık", "perpetrator named"), edilgen: tt("edilgen anlatım", "passive voice"), yok: tt("fail yok", "no perpetrator") }[an.fail]) || an.fail));
+        if (an && an.dayanak && !EN) et.appendChild(el("span", "hb-cip", "Dayanak: " + an.dayanak));
+        a.appendChild(et);
+      }
+      li.appendChild(a); ul.appendChild(li);
     });
     ic.appendChild(ul);
+    if (od) ic.appendChild(el("p", "hb-yz", tt("Yorumlar, bakış ve fail kodlaması: yapay zekâ başlıklardan ve özetlerden çıkardı; ölçeğin başlangıç noktası Filistin bakışıdır.", "Comments, perspective and perpetrator coding were extracted by AI from headlines and summaries; the scale starts from the Palestinian perspective.")));
     const git = el("a", "hb-git", tt("Akışta karşılaştır →", "Compare in the feed →")); git.href = "./#h-" + encodeURIComponent(tekil[0].id);
     ic.appendChild(git);
     document.body.appendChild(kb);
+    if (location.hash === "#kim") requestAnimationFrame(() => kb.scrollIntoView());
   });
 })();
