@@ -889,6 +889,9 @@ def main():
     kaynaklar = oku(KAYNAKLAR, [])
     durum = oku(DURUM, {})
     eski = {h["id"]: h for h in oku(HABERLER, {}).get("haberler", [])}
+    # kaynaklar.json'dan çıkarılan yayınların haberleri akıştan da çıkar
+    kidler = {k["id"] for k in kaynaklar}
+    eski = {i: h for i, h in eski.items() if h.get("kaynak") in kidler}
     sinir = SIMDI - dt.timedelta(days=SAKLA_GUN)
     # Gemini kotası dolduğunda başka yoldan (elle ya da başka bir modelle) yapılmış başlık çevirileri:
     # ceviri/*.json = {haber_id: türkçe başlık}. Yalnızca Türkçe başlığı olmayan haberlere uygulanır.
