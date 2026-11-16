@@ -35,7 +35,7 @@ def iki(metin, gorev, sistem=ekler.KORUMA, gorsel=None, en_cok=8192):
         t = time.time()
         kod, v = yz.cagir(metin, gorev=gorev, gemini=(GA, GM), sistem=sistem, gorsel=gorsel, en_cok_cikti=en_cok, yalniz=ad, zaman=150)
         sonuc[ad] = {"kod": kod, "cikti": v, "sure": round(time.time() - t, 1), "usd": round(yz._oku()["usd"] - once, 5) if ad == "claude" else None}
-        print(gorev, ad, kod, sonuc[ad]["sure"], "s")
+        print(gorev, ad, kod, sonuc[ad]["sure"], "s", yz._oku().get("son_hata", "") if kod != 200 else "")
     return sonuc
 
 
@@ -108,5 +108,6 @@ for h in hs:
         break
 
 cikti["toplam_claude_usd"] = round(yz._oku()["usd"], 5)
+cikti["son_hata"] = yz._oku().get("son_hata")
 json.dump(cikti, open("karsilastirma.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("Claude toplam:", cikti["toplam_claude_usd"], "$")

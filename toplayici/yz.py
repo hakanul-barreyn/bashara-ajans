@@ -119,8 +119,13 @@ def _claude(metin, sistem, gorsel, sicaklik, zaman, en_cok_cikti, gorev):
         with urllib.request.urlopen(istek, timeout=zaman) as r:
             yanit = json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        try:
+            _oku()["son_hata"] = f"{e.code} " + e.read().decode("utf-8", "replace")[:300]
+        except Exception:
+            pass
         return e.code, None
-    except Exception:
+    except Exception as e:
+        _oku()["son_hata"] = f"0 {e}"[:300]
         return 0, None
     u = yanit.get("usage") or {}
     girdi = (u.get("input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0)
