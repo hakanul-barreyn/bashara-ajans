@@ -1,0 +1,30 @@
+# Anthropic anahtarı denetimi: anahtarı göstermeden tek kısa istek atar, yalnızca HTTP durumunu yz-durum dalına yazar.
+name: yz-anahtar
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/yz-anahtar.yml"]
+permissions:
+  contents: write
+jobs:
+  dene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Anahtarı dene
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "anahtar_yok" > sonuc.txt; else
+          kod=$(curl -s -o yanit.json -w '%{http_code}' https://api.anthropic.com/v1/messages \
+            -H "x-api-key: $ANTHROPIC_API_KEY" -H "anthropic-version: 2023-06-01" -H "content-type: application/json" \
+            -d '{"model":"claude-haiku-5-5","max_tokens":20,"messages":[{"role":"user","content":"Türkçe tek kelimeyle cevap ver: Gazze hangi denizin kıyısında?"}]}')
+          echo "http=$kod" > sonuc.txt
+          python3 -c "import json;d=json.load(open('yanit.json'));print('cevap=',(d.get('content') or [{}])[0].get('text'),'hata=',(d.get('error') or {}).get('message'),'kullanim=',d.get('usage'))" >> sonuc.txt || true
+          fi
+          date -u +%FT%TZ >> sonuc.txt; cat sonuc.txt
+      - name: Sonucu yaz
+        run: |
+          git init -q d && cd d && git checkout -q -b yz-durum && cp ../sonuc.txt . && git add sonuc.txt
+          git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "anahtar denetimi"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-durum
