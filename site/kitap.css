@@ -159,8 +159,8 @@ details.ky-cilt[open]>summary::after{content:"–"}
 
 /* ---- baskı: A4, her bölüm yeni sayfada; sayfa numarası altta */
 @page{size:A4;margin:18mm 17mm 20mm;
-  @bottom-center{content:counter(page);font:9pt "JetBrains Mono",monospace;color:#7f857f}
-  @top-left{content:"ZBS Almanak";font:7.5pt "JetBrains Mono",monospace;color:#7f857f;letter-spacing:.08em;text-transform:uppercase}}
+  @bottom-center{content:counter(page);font:9pt "Plus Jakarta Sans",system-ui,sans-serif;color:#7f857f}
+  @top-left{content:"ZBS Almanak";font:7.5pt "Plus Jakarta Sans",system-ui,sans-serif;color:#7f857f;letter-spacing:.08em;text-transform:uppercase}}
 @page :first{@top-left{content:none}@bottom-center{content:none}}
 @media print{
   html,body.kitap-govde{background:#fff!important}

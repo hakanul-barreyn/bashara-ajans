@@ -77,6 +77,7 @@ Kurallar:
 - Bir grup en az İKİ FARKLI kaynaktan haber içermeli. Tek kaynaklı olayları yazma.
 - Bölgenin adı: “Orta Doğu” ya da “Ortadoğu” yazma; bağlama göre “bölge”, “Batı Asya”, “Meşrik” ya da “İslam dünyası” yaz. Kaynak “Middle East”, “Moyen-Orient”, “Oriente Medio” ya da “الشرق الأوسط” diyorsa da böyle çevir. Yayın ve kurum adlarına dokunma (Middle East Eye, Şarku’l-Avsat).
 - Yalnızca gerçekten aynı olaya (aynı saldırı, aynı açıklama, aynı toplantı, aynı karar) ait haberleri birleştir; yalnızca konusu benzeyenleri birleştirme.
+- Bir haber için "bu olayla ilgisi yok", "başka bir konu", "bağlantılı değil" diye yazman gerekecekse o haberi gruba KOYMA. Yine de koyduysan kimliğini "ilgisiz" listesine yaz; o haber gruptan çıkarılır.
 - baslik: olayı anlatan, tarafsız, en fazla 12 kelimelik Türkçe başlık.
 - not: 1-3 cümlelik Türkçe çerçeve notu. Kaynakların olayı nasıl farklı anlattığını betimle: hangi kaynak hangi kelimeyi seçti (özgün kelimeyi tırnak içinde, en fazla 4 kelime), kimin açıklamasını öne çıkardı, hangi bilgiyi verdi ya da vermedi. Yalnızca verilen başlıklardan çıkarılabilecekleri yaz. Hüküm verme, hangi kaynağın haklı olduğunu söyleme. Kaynaklar aynı şekilde anlatıyorsa bunu kısaca söyle.
 - yorumlar: gruptaki HER haber için o kaynağın olayı nasıl sunduğunu anlatan en fazla 18 kelimelik Türkçe betimleme. Hangi kelimeyi seçtiğini (özgün kelime tırnak içinde, en fazla 4 kelime), kimi kaynak gösterdiğini ya da neyi öne çıkardığını yaz. Hüküm verme, "taraflı" gibi nitelemeler kullanma.
@@ -113,8 +114,13 @@ Kurallar:
   Hangisinin doğru olduğuna karar verme. Çelişki yoksa null.
 - yer: olayın KONUSU olan ya da yaşandığı yer; açıklamanın yapıldığı başkent değil (Ankara'da Sincar üzerine varılan bir mutabakatta yer Sincar'dır). Yalnızca diplomatik bir görüşmenin kendisi haberse görüşmenin yapıldığı şehir. {"ad": "Türkçe yer adı", "lat": enlem, "lon": boylam}; yaklaşık merkez yeter. Belirsizse null.
 - yerler: haberde adı geçen öteki somut yerler: birden çok hedef ya da saldırı noktası (havalimanı, petrol tesisi, liman, kent, kamp), iki ülke arası anlaşmada öteki ülke. "yer" dışındaki en çok 4 yer, aynı biçimde ve olabildiğince tam konumuyla (ör. Yanbu'daki pompa istasyonu için Yanbu); yoksa [].
-- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}, "yerler": []}]
+- Yalnızca şu biçimde JSON döndür: [{"baslik": "...", "not": "...", "ids": ["...", "..."], "yorumlar": {"id": "betimleme"}, "bakislar": {"id": "filistin|aktarim|israil"}, "anlatim": {"id": {"dayanak": "...", "fail": "acik|edilgen|yok", "baglam": false, "rakam": null, "kelime": "..."}}, "ortak": null, "fark": true, "olgular": [{"olgu": "...", "ids": ["..."]}], "golgeleme": [], "dogrulanmamis": null, "celiski": null, "yer": {"ad": "...", "lat": 0, "lon": 0}, "yerler": [], "ilgisiz": []}]
 """
+
+
+# Modelin kendi betimlemesinde "bu olayla ilgisi yok" dediği haberler gruptan çıkar (ör. Pekin görüşmesi bir sevkiyat saldırısının altında)
+ILGISIZ_RE = re.compile(r"(bağlantılı bir [^.;]{0,40} değil|ilgisi (yok|bulunmuyor)|ilgili değil|başka bir (konu|olay|haber)|"
+                        r"bağlantı(sı)? (yok|kurulmuyor|bulunmuyor)|ilişki(si)? [^.;]{0,40}yer almıyor|doğrudan ilgili değil|konuyla ilgisiz|olayla ilgisiz)", re.I)
 
 
 def olaylari_kumele(anahtar, model, haberler, simdi):
@@ -135,7 +141,10 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
     for g in sonuc:
         if not isinstance(g, dict):
             continue
-        ids = [i for i in dict.fromkeys(map(str, g.get("ids") or [])) if i in var]
+        ilgisiz = set(map(str, g.get("ilgisiz") or [])) if isinstance(g.get("ilgisiz"), list) else set()
+        yor0 = g.get("yorumlar") if isinstance(g.get("yorumlar"), dict) else {}
+        ilgisiz |= {str(i) for i, v in yor0.items() if isinstance(v, str) and ILGISIZ_RE.search(v)}
+        ids = [i for i in dict.fromkeys(map(str, g.get("ids") or [])) if i in var and i not in ilgisiz]
         kaynaklar = {var[i]["kaynak"] for i in ids}
         if len(kaynaklar) < 2:
             continue

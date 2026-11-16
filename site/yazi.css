@@ -2,7 +2,7 @@
    Bilerek tek görünüm: açık zemin haberi, koyu zemin "haberin haberi"ni taşır. */
 .hb{--hb-zemin:#faf8f4;--hb-murekkep:#141816;--hb-ikincil:#333a36;--hb-soluk:#5d6560;--hb-cizgi:#e3dfd6;--hb-kart:#fff;--hb-yesil:#1f6e4b;
   --hb-kirmizi:#b3261e;--hb-hardal:#8a5a12;--hb-koyu:#0b0d0c;--hb-koyu-cizgi:#26302b;--hb-serif:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --hb-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --hb-mono:"Plus Jakarta Sans",system-ui,sans-serif;
   background:var(--hb-zemin);color:var(--hb-murekkep);font-family:"Plus Jakarta Sans",system-ui,sans-serif;color-scheme:light}
 .hb a{color:inherit;text-decoration:none}
 .hb-ust{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:6px;background:var(--hb-zemin);border-bottom:1px solid var(--hb-cizgi);

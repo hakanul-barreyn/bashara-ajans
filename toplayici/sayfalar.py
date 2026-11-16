@@ -13,6 +13,7 @@ import os
 import re
 
 import almanak
+import ekler
 import marka
 
 SAKLA_GUN = 7
@@ -161,6 +162,12 @@ def _taksim_cip(k, dil):
     return out
 
 
+def _alan(u):
+    """Bağlantının alan adı (www. olmadan): okur nereye gideceğini görsün."""
+    m = re.match(r"https?://(?:www\.)?([^/:?#]+)", u or "")
+    return m.group(1) if m else ""
+
+
 def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     """Haberin ait olduğu olayı öteki yayınlar nasıl anlattı: kamp kamp, bakış, anlatım çipleri ve kısa betimleme."""
     if not olay or len(olay.get("haberler", [])) < 2:
@@ -170,7 +177,8 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     satir = []
     # Yayın başına tek satır: yayının ilk (ya da bu sayfanın) haberi; öteki haberlerinin sayısı yanında
     gorulen, ek = {}, {}
-    sirali = sorted(olay["haberler"], key=lambda x: (x["id"] != h["id"], sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
+    hepsi = [x for x in olay["haberler"] if x["id"] == h["id"] or not ekler.ILGISIZ_RE.search(x.get("y") or "")]
+    sirali = sorted(hepsi, key=lambda x: (x["id"] != h["id"], sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
     secilen = []
     anah = lambda x: (kmap.get(x.get("k")) or {}).get("kurum") or x.get("k")   # AA, TRT, BBC: masaları tek kurum
     for x in sirali:
@@ -191,7 +199,7 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
             hedef = ""
         dis = f' href="{_e(hedef)}" target="_blank" rel="noopener"'
         gad = k.get("kurum") or k["ad"]
-        ad = f'<a{dis}>{_e(gad)} <span aria-hidden="true">↗</span></a>' if hedef else f"<b>{_e(gad)}</b>"
+        ad = f"<b>{_e(gad)}</b>"
         if k.get("kurum") and k["ad"] != k["kurum"]:
             ad += f' <small>{_e(k["ad"])}</small>'
         bu = f' <span class="hs-cip">{t["bu"]}</span>' if x["id"] == h["id"] else ""
@@ -214,7 +222,7 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         satir.append(f'<li><div class="hs-su"><i style="background:{b[2] if b else "#c9cfcb"}"></i>{ad}{bu}</div>'
                      f'<small>{meta}</small>'
                      + (f'<div class="hs-su hs-taksim">{tc}</div>' if tc else "")
-                     + ((f'<a class="hs-kim-bas"{dis}>{_e(x.get("bt") or x.get("bo"))}</a>' if hedef else f'<span>{_e(x.get("bt") or x.get("bo"))}</span>')
+                     + ((f'<a class="hs-kim-bas"{dis}>{_e(x.get("bt") or x.get("bo"))}<small class="hs-alan">{_e(_alan(hedef))} ↗</small></a>' if hedef else f'<span>{_e(x.get("bt") or x.get("bo"))}</span>')
                         if (x.get("bt") or x.get("bo")) else "")
                      + (f'<span style="color:var(--k-ink2)">{_e(x.get("ye") if dil == "en" and x.get("ye") else x.get("y"))}</span>' if x.get("y") else "")
                      + (f'<div class="hs-su">{cip}</div>' if cip else "") + "</li>")
@@ -752,12 +760,6 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
                      f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>'))
     anlatim = (f'<section class="hs-bolum"><h2>{"Kaynaklar nasıl anlattı" if dil == "tr" else "How the outlets framed it"}</h2><p>{_e(not_)}</p></section>'
                if not_ else "")
-    # Ayrıca okuyun (metnin içinde): en yakın ilgili olay
-    ayrica = ""
-    if ilgili:
-        o2, hedef2 = ilgili[0]
-        ayrica = (f'<a class="mk-ayrica" href="{_e(hedef2)}"><small>{_e("Ayrıca okuyun" if dil == "tr" else "Also read")}</small>'
-                  f'<b>{_e(o2.get("baslik_en") if dil == "en" and o2.get("baslik_en") else o2.get("baslik"))}</b></a>')
     paylas = (f'<div class="mk-paylas"><button type="button" data-paylas>{t["paylas"]}</button>'
               f'<a data-ag="whatsapp" href="#" rel="noopener">WhatsApp</a><a data-ag="telegram" href="#" rel="noopener">Telegram</a>'
               f'<a data-ag="x" href="#" rel="noopener">X</a></div>')
@@ -771,11 +773,11 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
             + (f'<p class="mk-gec">⏱ {_e(gec.strip())}</p>' if gec else "")
             + _dogrulama_blogu(dg, dil)
             + paylas + kapak + denge
-            + f'<div class="mk-metin">{govde}{alinti}{ayrica}</div>'
+            + f'<div class="mk-metin">{govde}{alinti}</div>'
+            + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
             + anlatim + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
             + _grafikler([_dil_terazisi(olay, kmap, dil), _soz(olay, kmap, dil), _fail_grafik(olay, kmap, dil), _rakam_grafik(olay, kmap, dil),
                           _zaman(olay, kmap, dil), _yayilis(olay, kmap, dil), _seyir(olay, tum or {}, dil)], dil)
-            + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
             + (f'<div class="mk-etiket">{etiket}</div>' if etiket else "")
             + f'<p class="mk-not">{T[dil]["not"]}</p>'
             + "</div>")
@@ -866,7 +868,7 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <meta name="twitter:description" content="{_e(aciklama)}">
 <meta name="twitter:image" content="{_e(resim)}">
 <link rel="icon" href="../site/logo.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
 <link rel="stylesheet" href="../site/stil.css{v}">
 <link rel="stylesheet" href="../site/haber.css{v}">
 <script src="../site/dil.js{v}"></script>

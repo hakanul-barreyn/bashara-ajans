@@ -9,7 +9,10 @@
   var g = document.getElementById("rkGun");
   if (g) {
     var gun = Math.floor((Date.now() - Date.parse("2024-12-27T00:00:00Z")) / 864e5);
-    g.textContent = EN ? "day " + gun.toLocaleString("en-GB") + " in detention" : "tutukluluğunun " + gun.toLocaleString("tr-TR") + ". günü";
+    // Skor tabelası: her rakam halkadan sarkan ayrı bir kart; altta ne saydığı
+    var kartlar = String(gun).split("").map(function (r) { return '<span class="rk-kart"><i></i><b>' + r + '</b></span>'; }).join("");
+    g.innerHTML = '<span class="rk-kartlar">' + kartlar + '</span><small>' + (EN ? "days in detention" : "gündür tutuklu") + '</small>';
+    g.setAttribute("aria-label", EN ? gun + " days in detention" : gun + " gündür tutuklu");
   }
 })();
 /* Şerit fotoğraflarının künyesi (Commons; CC BY-SA ve kamu malı) */

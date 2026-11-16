@@ -38,7 +38,14 @@
 .rk-adlar{position:absolute;inset:0;display:block;direction:rtl;text-align:justify;font:600 .82rem/1.55 "Noto Naskh Arabic","Amiri",serif;color:rgba(241,234,216,.62);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);overflow:hidden;padding:4px 0}
 /* Ebu Safiye: tabela ve gün sayacı */
-.rk-gun{position:absolute;right:6px;bottom:4px;font:500 .72rem "JetBrains Mono",monospace;color:var(--rk-kirmizi);background:rgba(13,24,19,.85);color:#f0b2a4;padding:2px 6px;border-radius:4px}
+.rk-gun{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px}
+.rk-kartlar{display:flex;gap:3px;padding:5px 5px 4px;background:#d9dcd8;border-radius:3px;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.rk-kart{position:relative;display:grid;place-items:center;width:23px;height:31px;background:#111;border-radius:3px;box-shadow:inset 0 -15px 0 rgba(255,255,255,.04)}
+.rk-kart::after{content:"";position:absolute;left:2px;right:2px;top:50%;border-top:1px solid rgba(255,255,255,.14)}
+.rk-kart b{font:800 1.3rem/1 "Plus Jakarta Sans",system-ui,sans-serif;color:#fff;font-variant-numeric:tabular-nums}
+.rk-kart:first-child b{color:#f3d21b}
+.rk-kart i{position:absolute;top:-8px;left:50%;width:9px;height:11px;margin-left:-4.5px;border:2px solid #c3c7c4;border-bottom-color:transparent;border-radius:50% 50% 0 0}
+.rk-gun small{font:700 .62rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#f0b2a4;text-shadow:0 1px 4px rgba(0,0,0,.8)}
 /* kelimeler: aynı şeyin iki adı */
 .rk-kelime{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:700 1.05rem "Source Serif 4",Georgia,serif;max-width:420px}
 .rk-kelime span{color:#fbf7ec}.rk-kelime s{color:#9aa49e;text-decoration-color:var(--rk-kirmizi);text-decoration-thickness:2px}
@@ -80,4 +87,4 @@
 @media (prefers-reduced-motion:reduce){.rk-kefiye span,.rk-kefiye b{animation:none}}
 .rk-seritler{gap:22px}
 .rk-bas{padding-top:22px}
-.rk-ebu .rk-gun{right:auto;left:50%;transform:translateX(-50%);bottom:2px}
+
