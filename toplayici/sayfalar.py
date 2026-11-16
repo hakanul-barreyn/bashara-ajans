@@ -559,6 +559,28 @@ def _konum(olay):
         return None
 
 
+_KOK = None
+_YAZI = {}
+
+
+def _yazi(olay):
+    """Olayın kendi haber metni (data/yazi/<olay no>.json, haber_yaz.py), yoksa None."""
+    oid = (olay or {}).get("id")
+    if not oid or not _KOK:
+        return None
+    if oid not in _YAZI:
+        try:
+            y = json.load(open(os.path.join(_KOK, "data", "yazi", oid + ".json"), encoding="utf-8"))
+            _YAZI[oid] = y if y.get("baslik") and y.get("paragraflar") else None
+        except Exception:
+            _YAZI[oid] = None
+    return _YAZI[oid]
+
+
+def _cumleler(t):
+    return [c for c in re.split(r"(?<=[.!?])\s+", (t or "").strip()) if c]
+
+
 def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef, ilgili, site):
     """Bir dilde makale gövdesi: üst bilgi, başlık, özet, künye, paylaş, kapak, metin, bölümler, etiketler."""
     t = T[dil]
@@ -644,16 +666,43 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
                   f'<blockquote><cite>{_e(k.get("ad"))} · {_e(almanak.kamp(k))}</cite><p>“{_e(_kisa(b1, 170))}”</p></blockquote>'
                   f'<blockquote><cite>{_e(kmap[karsi["k"]]["ad"])} · {_e(almanak.kamp(kmap[karsi["k"]]))}</cite>'
                   f'<p>“{_e(_kisa(karsi.get("bt") or karsi.get("bo"), 170))}”</p></blockquote></aside>')
-    # Metin: paylaşılan haberin özeti, çerçeve notu
+    # Önce haber: kendi metnimiz varsa o; yoksa bu haberin özeti (ilk cümlesi spot olur).
+    # Çerçeve notu (kaynakların olayı nasıl anlattığı) haberin altında, "Kaynaklar nasıl anlattı" bölümünde.
     not_ = ((olay or {}).get("not_en") if dil == "en" and (olay or {}).get("not_en") else (olay or {}).get("not")) if hs else ""
-    govde = ""
-    if oz:
-        govde += f'<p class="mk-ilk">{_e(oz)}</p>'
-    govde += (f'<p class="mk-kaynak">{_e("Bu haberin kaynağı" if dil == "tr" else "Source of this story")}: '
-              + (f'<a href="{_e(h["web"]["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a> · '
-                 f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">Telegram ↗</a></p>'
-                 if (h.get("web") or {}).get("url", "").startswith("http") else
-                 f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>'))
+    yz = _yazi(olay) if dil == "tr" else None
+    govde, spot = "", ""
+    if yz:
+        bas = yz["baslik"]
+        spot = yz.get("spot") or ""
+
+        def atif(liste):
+            ls, gor = [], set()
+            for x in liste or []:
+                if kmap.get(x.get("k")) and str(x.get("u") or "").startswith("http") and x.get("k") not in gor:
+                    gor.add(x.get("k"))
+                    ls.append(f'<a href="{_e(x.get("u"))}" target="_blank" rel="noopener">{_e(kmap[x["k"]].get("ad"))} ↗</a>')
+            return f'<p class="mk-kaynak">Kaynak: {" · ".join(ls)}</p>' if ls else ""
+        for i, p_ in enumerate(yz["paragraflar"]):
+            sinif = ' class="mk-ilk"' if i == 0 else ""
+            govde += f'<p{sinif}>{_e(p_.get("metin"))}</p>' + atif(p_.get("kaynaklar"))
+        bg_ = yz.get("baglam") or {}
+        if bg_.get("metin"):
+            govde += f'<h2 class="mk-ara">Bağlam</h2><p>{_e(bg_["metin"])}</p>' + atif(bg_.get("kaynaklar"))
+        govde += (f'<p class="mk-kaynak">Bu metni Alboroto, {yz.get("yayin_sayisi") or n} yayının haberlerinden yapay zekâ yardımıyla derledi; '
+                  'her bilgi kaynağıyla verilir, kaynaklarda olmayan bilgi eklenmez.</p>')
+    else:
+        cs = _cumleler(oz)
+        spot = cs[0] if len(cs) > 1 else ""
+        govde_metin = " ".join(cs[1:]) if len(cs) > 1 else oz
+        if govde_metin:
+            govde += f'<p class="mk-ilk">{_e(govde_metin)}</p>'
+        govde += (f'<p class="mk-kaynak">{_e("Bu haberin kaynağı" if dil == "tr" else "Source of this story")}: '
+                  + (f'<a href="{_e(h["web"]["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a> · '
+                     f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">Telegram ↗</a></p>'
+                     if (h.get("web") or {}).get("url", "").startswith("http") else
+                     f'<a href="{_e(h["url"])}" target="_blank" rel="noopener">{_e(k.get("ad"))} ↗</a></p>'))
+    anlatim = (f'<section class="hs-bolum"><h2>{"Kaynaklar nasıl anlattı" if dil == "tr" else "How the outlets framed it"}</h2><p>{_e(not_)}</p></section>'
+               if not_ else "")
     # Ayrıca okuyun (metnin içinde): en yakın ilgili olay
     ayrica = ""
     if ilgili:
@@ -668,13 +717,13 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
     return (f'<div data-dil="{dil}" class="mk-dil">'
             f'<p class="mk-ust">{_e(kategori)}</p>'
             f'<h1 class="mk-baslik">{_e(bas)}</h1>'
-            + (f'<p class="mk-ozet">{_e(_kisa(not_, 300))}</p>' if not_ else "")
+            + (f'<p class="mk-ozet">{_e(_kisa(spot, 320))}</p>' if spot else "")
             + f'<div class="mk-kunye">{kunye}</div>'
             + (f'<p class="mk-gec">⏱ {_e(gec.strip())}</p>' if gec else "")
             + _dogrulama_blogu(dg, dil)
             + paylas + kapak + denge
             + f'<div class="mk-metin">{govde}{alinti}{ayrica}</div>'
-            + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
+            + anlatim + _olgular(olay, kmap, dil) + _fark(olay or {}, kmap, dil) + _kim_nasil(olay, h, kmap, sayfa_var, dil)
             + _grafikler([_dil_terazisi(olay, kmap, dil), _soz(olay, kmap, dil), _fail_grafik(olay, kmap, dil), _rakam_grafik(olay, kmap, dil),
                           _zaman(olay, kmap, dil), _yayilis(olay, kmap, dil), _seyir(olay, tum or {}, dil)], dil)
             + _onceki(olay, tum or {}, sayfa_hedef or {}, dil)
@@ -720,7 +769,10 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     hs = (olay or {}).get("haberler", [])
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
     baslik_ol = (olay or {}).get("baslik") if n else None
-    aciklama = _kisa((f"{n} yayın bu olayı nasıl anlattı? " if n else "") + (h.get("ozet_tr") or h.get("baslik_orj") or ""), 200)
+    aciklama = _kisa((h.get("ozet_tr") or h.get("baslik_orj") or ""), 200)
+    yz_ = _yazi(olay)
+    if yz_:
+        baslik_ol, aciklama = yz_["baslik"], _kisa(yz_.get("spot") or aciklama, 200)
     resim = f"{site}h/{og}" if og else f"{site}site/paylas-2026.png"
     v = f"?v={surum}"
     haric = (olay or {}).get("id")
@@ -812,6 +864,9 @@ def _foto_sec(kok, yer_ad, tohum):
 
 def yaz(kok, haberler, kaynaklar, simdi, log=print):
     """haberler: liste. Döndürür: yazılan sayfa sayısı"""
+    global _KOK
+    _KOK = kok
+    _YAZI.clear()
     M = marka.oku(kok)
     depo = os.environ.get("GITHUB_REPOSITORY", "")
     site = __import__("marka").site()

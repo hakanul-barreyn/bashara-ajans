@@ -26,6 +26,10 @@
     const olay = q.get("o") ? ((gundem.olaylar || []).find((o) => o.id === q.get("o")) || (canli.olaylar || []).find((o) => o.id === q.get("o"))) : null;
     let ids = (yazi && yazi.haberler) || (olay && olay.haberler) || (q.get("h") || "").split(",").filter(Boolean);
     ids = ids.slice(0, 40);
+    // Haberin kendi sayfası (h/<no>.html, sitenin haber tasarımı) varsa oraya git; bu sayfa yalnızca yedek
+    for (const i of ids.slice(0, 6)) {
+      try { const r = await fetch("h/" + i + ".html", { method: "HEAD" }); if (r.ok) { location.replace("h/" + i + ".html"); return; } } catch (e) { /* çevrimdışı */ }
+    }
     let hab = (akis && akis.haberler) || [];
     let bul = () => ids.map((i) => hab.find((h) => h.id === i)).filter(Boolean);
     let xs = bul();
