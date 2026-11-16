@@ -39,6 +39,7 @@ def iki(metin, gorev, sistem=ekler.KORUMA, gorsel=None, en_cok=8192):
     return sonuc
 
 
+# deneme 2: temperature kaldırıldı
 cikti = {"claude_model": yz.MODEL, "gemini_model": GM, "haber": [], "ozet": [], "gorsel": []}
 
 # 1) haber metni

@@ -110,7 +110,7 @@ def _claude(metin, sistem, gorsel, sicaklik, zaman, en_cok_cikti, gorev):
         veri, tur = gorsel
         icerik.append({"type": "image", "source": {"type": "base64", "media_type": tur, "data": base64.b64encode(veri).decode()}})
     icerik.append({"type": "text", "text": metin + "\n\nYanıt olarak yalnızca geçerli JSON döndür; önüne ya da arkasına açıklama yazma."})
-    govde = {"model": MODEL, "max_tokens": en_cok_cikti, "temperature": sicaklik, "messages": [{"role": "user", "content": icerik}]}
+    govde = {"model": MODEL, "max_tokens": en_cok_cikti, "messages": [{"role": "user", "content": icerik}]}   # Haiku 5.5 temperature kabul etmiyor
     if sistem:
         govde["system"] = sistem
     istek = urllib.request.Request(ANTHROPIC, data=json.dumps(govde).encode("utf-8"), headers={
