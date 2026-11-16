@@ -607,7 +607,7 @@ def anlati_yaz(anahtar_api, model, ad, ist):
                                                | {"ornek_ic": [o["baslik"] for o in t["ornek_ic"]], "ornek_dis": [o["baslik"] for o in t["ornek_dis"]]}
                                                for t in ist["dil"]["terimler"]]}
     hafif["yayin_dil"] = ist.get("yayin_dil", [])[:40]
-    kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI_TARAMA.replace("{ad}", ad) + json.dumps(hafif, ensure_ascii=False)[:60000], zaman=100)
+    kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI_TARAMA.replace("{ad}", ad) + json.dumps(hafif, ensure_ascii=False)[:60000], zaman=100, gorev="almanak")
     if kod != 200 or not isinstance(cevap, dict):
         return kod, None
     temiz = lambda x, n: ekler.guvenli(x)[:n]

@@ -39,8 +39,11 @@ def guvenli(metin):
     return re.sub(r"\s{2,}", " ", _BAGLANTI.sub("", gorunmezsiz(str(metin or "")))).strip()
 
 
-def gemini_cagir(anahtar, model, metin, zaman=120):
-    """(durum kodu, ayrıştırılmış JSON ya da None)"""
+def gemini_cagir(anahtar, model, metin, zaman=120, gorev="diger"):
+    """(durum kodu, ayrıştırılmış JSON ya da None). Ara katman açıksa (yz.etkin) önce Claude, yedek olarak Gemini."""
+    import yz
+    if yz.etkin():
+        return yz.cagir(metin, gorev=gorev, gemini=(anahtar, model), sistem=KORUMA, zaman=zaman)
     govde = {
         "systemInstruction": {"parts": [{"text": KORUMA}]},
         "contents": [{"role": "user", "parts": [{"text": metin}]}],
@@ -123,7 +126,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
         return None
     girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "baslik": h["baslik_tr"], "ozgun": h["baslik_orj"][:160],
               "ozet": (h.get("ozet_tr") or "")[:240]} for h in son]
-    kod, sonuc = gemini_cagir(anahtar, model, OLAY_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=180)
+    kod, sonuc = gemini_cagir(anahtar, model, OLAY_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=180, gorev="olay")
     if kod != 200 or not isinstance(sonuc, list):
         return kod
     var = {h["id"]: h for h in son}

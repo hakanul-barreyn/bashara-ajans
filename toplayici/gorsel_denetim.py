@@ -51,7 +51,20 @@ def _indir(url, sinir=3_000_000, sure=20):
     return veri, tur
 
 
+
+def _yz_gorsel(anahtar, model, metin, veri=None, tur=None):
+    """Ara katman açıksa görsel sorusu Claude'a (yedek Gemini) gider; hata olursa istisna fırlatır (eski davranış)."""
+    import yz
+    kod, v = yz.cagir(metin, gorev="gorsel", gemini=(anahtar, model), gorsel=(veri, tur) if veri else None, sicaklik=0, zaman=60, en_cok_cikti=1024)
+    if kod != 200 or v is None:
+        raise RuntimeError(f"yz {kod}")
+    return v
+
+
 def _sor(anahtar, model, veri, tur, baslik=""):
+    import yz
+    if yz.etkin():
+        return _sozluk(_yz_gorsel(anahtar, model, TALIMAT.format(baslik=baslik or ""), veri, tur))
     govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}}, {"text": TALIMAT.format(baslik=baslik or "")}]}],
              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
     istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),
@@ -71,6 +84,11 @@ def _sozluk(x):
 
 def _sorgular(anahtar, model, o):
     """Gemini'den habere özgü Commons arama ifadeleri (kişi adı içermez)"""
+    import yz
+    if yz.etkin():
+        x = _sozluk(_yz_gorsel(anahtar, model, SORGU.format(baslik=o.get("baslik_en") or o.get("baslik", ""),
+                                                          not_=(o.get("not_en") or o.get("not") or "")[:300], yer=o.get("yer_ad") or "-")))
+        return [str(q)[:80] for q in (x.get("sorgular") or []) if str(q).strip()][:4]
     govde = {"contents": [{"role": "user", "parts": [{"text": SORGU.format(baslik=o.get("baslik_en") or o.get("baslik", ""),
                                                                        not_=(o.get("not_en") or o.get("not") or "")[:300], yer=o.get("yer_ad") or "-")}]}],
              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
@@ -373,6 +391,14 @@ def akis_denetle(kok, anahtar, model, log=print, sayac=None):
                 if veri:
                     if sayac:
                         sayac()
+                    import yz
+                    if yz.etkin():
+                        x = _sozluk(_yz_gorsel(anahtar, model, AKIS_TALIMAT, veri, tur))
+                        k = {"ok": not (x.get("siddet") or x.get("mustehcen")), "s": bool(x.get("siddet")), "m": bool(x.get("mustehcen"))}
+                        yeni += 1
+                        onb[u] = k
+                        h["gorsel_ok"] = bool(k.get("ok"))
+                        continue
                     govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}}, {"text": AKIS_TALIMAT}]}],
                              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}
                     istek = urllib.request.Request(f"{GEMINI}/models/{model}:generateContent", data=json.dumps(govde).encode(),

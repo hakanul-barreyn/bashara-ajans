@@ -47,6 +47,9 @@ FOTO_TALIMAT = ("Bu fotoğraf bir haber sitesinde \"Gazze'den: yıkım\" başlı
 
 
 def _gemini(anahtar, model, veri, tur, talimat):
+    import yz
+    if yz.etkin():
+        return GD._sozluk(GD._yz_gorsel(anahtar, model, talimat, veri, tur))
     govde = {"contents": [{"role": "user", "parts": [{"inline_data": {"mime_type": tur, "data": base64.b64encode(veri).decode()}},
                                                      {"text": talimat}]}],
              "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}

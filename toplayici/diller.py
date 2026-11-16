@@ -35,7 +35,7 @@ def cevir(anahtar, model, haberler, butce_var, sayac, log=print):
             parti = sira[i:i + PARTI]
             girdi = [{"id": h["id"], "baslik": h["baslik_tr"], "ozet": h["ozet_tr"]} for h in parti]
             sayac()
-            durum, sonuc = ekler.gemini_cagir(anahtar, model, TALIMAT.replace("{DIL}", ad) + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=120)
+            durum, sonuc = ekler.gemini_cagir(anahtar, model, TALIMAT.replace("{DIL}", ad) + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=120, gorev="ceviri")
             if durum == 429:
                 return toplam, True
             cevap = {str(c.get("id")): c for c in (sonuc or []) if isinstance(c, dict)} if isinstance(sonuc, list) else {}
@@ -82,7 +82,7 @@ def baslik_cevir(anahtar, modeller, haberler, butce_var, sayac, log=print):
         durum, sonuc = 0, None
         for m in [model] + [x for x in modeller if x != model]:
             sayac()
-            durum, sonuc = ekler.gemini_cagir(anahtar, m, metin, zaman=90)
+            durum, sonuc = ekler.gemini_cagir(anahtar, m, metin, zaman=90, gorev="ceviri")
             if durum == 200:
                 model = m
                 break
@@ -122,7 +122,7 @@ def olay_cevir(anahtar, model, olaylar, sayac, log=print):
         if not girdi:
             continue
         sayac()
-        durum, sonuc = ekler.gemini_cagir(anahtar, model, OLAY_TALIMAT.replace("{DIL}", ad) + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=150)
+        durum, sonuc = ekler.gemini_cagir(anahtar, model, OLAY_TALIMAT.replace("{DIL}", ad) + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=150, gorev="ceviri")
         if durum == 429:
             return True
         cevap = {str(c.get("id")): c for c in (sonuc or []) if isinstance(c, dict)} if isinstance(sonuc, list) else {}

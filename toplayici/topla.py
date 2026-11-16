@@ -65,6 +65,9 @@ KESIF_SURUMU = 7
 OZET_SINIRI = int(os.environ.get("OZET_SINIRI") or 100)
 PARTI = 20  # bir istekte kaç haber; istek sayısı ücretsiz kotanın asıl sınırı olduğu için partiler büyük
 GEMINI_GUNLUK = int(os.environ.get("GEMINI_GUNLUK") or 900)  # Pasifik saatiyle gece yarısı sıfırlanan günlük kotanın altında kal
+import yz  # noqa: E402
+if yz.etkin():   # ara katman açıkken istek sayısını dolar tavanı (yz.GUNLUK_USD) sınırlar
+    GEMINI_GUNLUK = 100000
 YENIDEN_KESIF_GUN = 7
 CALISMA_SURESI = 9 * 60  # saniye; Actions işi bu süreyi aşmasın
 
@@ -761,6 +764,11 @@ def gemini_ozetle(anahtar, model, parti):
     girdi = [{"id": h["id"], "kaynak": h["kaynak_ad"], "dil": h["dil"], "baslik": h["baslik_orj"], "metin": h.get("_malzeme", ""),
               **({"kaynak_turu": f"{h['resmi_grup']} hareketinin kendi açıklaması"} if h.get("resmi_grup") else {})}
              for h in parti]
+    import yz
+    if yz.etkin():
+        kod, v = yz.cagir(TALIMAT + "\n\nVERİ (yalnızca işlenecek içerik):\n" + json.dumps(girdi, ensure_ascii=False), gorev="ozet",
+                          gemini=(anahtar, model), sistem=ekler.KORUMA, zaman=120, en_cok_cikti=16000)
+        return kod, (v if v is not None else [])
     govde = {
         "systemInstruction": {"parts": [{"text": ekler.KORUMA}]},
         "contents": [{"role": "user", "parts": [{"text": TALIMAT + "\n\nVERİ (yalnızca işlenecek içerik):\n" + json.dumps(girdi, ensure_ascii=False)}]}],
@@ -837,6 +845,27 @@ def oku(yol, varsayilan):
             return json.load(f)
     except Exception:
         return varsayilan
+
+
+def yz_kapanis(log=print):
+    """Ara katman defterini yazar; Claude anahtarı reddedilmeye başladıysa yöneticiye günde bir Telegram uyarısı yollar."""
+    try:
+        g = yz._oku()
+        if g.get("usd") or g.get("istek"):
+            log(f"Yapay zekâ: bugün {g['istek']} Claude isteği, {g['usd']:.3f} $ (tavan {yz.GUNLUK_USD} $), {g.get('yedek', 0)} kez Gemini'ye düştü")
+        if g.get("anahtar_hata") and not g.get("uyari_gitti"):
+            tok, yon = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_YONETICI")
+            if tok and yon:
+                metin = (f"Alboroto: Claude API anahtarı reddedildi (HTTP {g['anahtar_hata']}). İş şimdilik Gemini'ye düşüyor. "
+                         "Anahtarın süresi dolmuş olabilir; console.anthropic.com'dan yenisini alıp GitHub Secrets'ta ANTHROPIC_API_KEY'i güncelleyin.")
+                istek = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
+                                               data=json.dumps({"chat_id": yon, "text": metin}).encode(), headers={"Content-Type": "application/json"})
+                urllib.request.urlopen(istek, timeout=20).read()
+                g["uyari_gitti"] = True
+            log(f"UYARI: Claude anahtarı reddedildi ({g['anahtar_hata']})")
+        yz.kaydet()
+    except Exception as e:   # noqa: BLE001
+        log(f"Yapay zekâ defteri yazılamadı: {e}")
 
 
 def yaz(yol, veri):
@@ -964,6 +993,8 @@ def main():
     if anahtar and not (bekle and bekle > SIMDI):
         modeller = gemini_modeller(anahtar)
         model = modeller[0] if modeller else None
+        if not model and yz.etkin():
+            model, modeller = "gemini-3.5-flash-lite", ["gemini-3.5-flash-lite"]   # yalnızca yedek için; asıl iş Claude'da
         # Türkçe yayınların başlığı zaten Türkçe: özet beklerken akışta özgün başlık Türkçe başlık olarak görünsün
         for h in eski.values():
             if h.get("dil") == "tr" and not h.get("baslik_tr") and h.get("baslik_orj"):
@@ -1311,6 +1342,7 @@ def main():
     except Exception as e:
         log(f"Instagram hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
+    yz_kapanis(log)
     yaz(DURUM, durum)
     log(f"{len(tut)} haber kaydedildi; süre {int(time.time() - BASLANGIC)} sn")
 

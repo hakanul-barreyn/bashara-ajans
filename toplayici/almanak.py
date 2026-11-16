@@ -513,7 +513,7 @@ def anlati_yaz(anahtar_api, model, ad, ist):
     hafif = {k: v for k, v in ist.items() if k not in ("kodlar", "gunluk", "yayin_tum", "yerler")}
     hafif["olay_kodlari"] = {k: {"baslik": v["baslik"], "tarih": v["tarih"]} for k, v in ist.get("kodlar", {}).items()}
     girdi = json.dumps(hafif, ensure_ascii=False)[:70000]
-    kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI.replace("{ad}", ad) + girdi, zaman=100)
+    kod, cevap = ekler.gemini_cagir(anahtar_api, model, ANLATI.replace("{ad}", ad) + girdi, zaman=100, gorev="almanak")
     if kod != 200 or not isinstance(cevap, dict):
         return kod, None
     temiz = lambda s, n: ekler.guvenli(s)[:n]

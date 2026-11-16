@@ -1,0 +1,30 @@
+# Claude (Haiku) ile Gemini'yi aynı işlerde karşılaştırır; sonuç yz-durum dalına yazılır. Siteye bir şey yazmaz.
+name: yz-karsilastir
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/yz-karsilastir.yml", "toplayici/yz_karsilastir.py"]
+permissions:
+  contents: write
+jobs:
+  karsilastir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Son veriyi al
+        run: git fetch --depth 1 origin veri && git checkout FETCH_HEAD -- data && git reset -q
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Karşılaştır
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YZ_DEFTER: ${{ runner.temp }}/defter.json
+        run: python toplayici/yz_karsilastir.py
+      - name: Sonucu yaz
+        run: |
+          git init -q d && cd d && git checkout -q -b yz-durum && cp ../karsilastirma.json . && git add karsilastirma.json
+          git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "karşılaştırma"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-durum

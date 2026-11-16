@@ -109,7 +109,7 @@ def yaz(kok, anahtar, model, kaynaklar, simdi, log=print, sayac=None, butce=lamb
             "\n\nHaberler:\n" + json.dumps(girdi, ensure_ascii=False)
         if sayac:
             sayac()
-        kod, v = ekler.gemini_cagir(anahtar, model, metin, zaman=150)
+        kod, v = ekler.gemini_cagir(anahtar, model, metin, zaman=150, gorev="haber_yaz")
         if kod == 429:
             log("Haber metni: Gemini kotası doldu")
             return yazilan if yazilan else -1
