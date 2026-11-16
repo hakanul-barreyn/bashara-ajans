@@ -161,7 +161,7 @@
         if (an && an.dayanak && !EN) et.appendChild(el("span", "hb-cip", "Dayanak: " + an.dayanak));
         a.appendChild(et);
       }
-      li.appendChild(a); ul.appendChild(li);
+      li.appendChild(a); if (H.taksimCip) li.appendChild(H.taksimCip(k)); ul.appendChild(li);
     });
     ic.appendChild(ul);
     if (od) ic.appendChild(el("p", "hb-yz", tt("Yorumlar, bakış ve fail kodlaması: yapay zekâ başlıklardan ve özetlerden çıkardı; ölçeğin başlangıç noktası Filistin bakışıdır.", "Comments, perspective and perpetrator coding were extracted by AI from headlines and summaries; the scale starts from the Palestinian perspective.")));

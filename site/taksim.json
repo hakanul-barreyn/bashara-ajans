@@ -1,0 +1,142 @@
+{
+ "grup": {
+  "Filistin": {
+   "tr": "Filistin’den yayın yapan ya da Filistinli gazetecilerin çıkardığı yayınlar. İsrail vatandaşı Filistinlilerin ve diasporanın yayınları da bu grupta.",
+   "en": "Outlets in Palestine or run by Palestinian journalists, including those of Palestinian citizens of Israel and the diaspora."
+  },
+  "Arap dünyası": {
+   "tr": "Meşrik, Körfez, Mısır ve Mağrip’ten yayınlar. Londra’da çıkan ama sermayesi Körfez’den gelen Arap yayınları (Şarku’l-Avsat, The New Arab, MEE gibi) da bu grupta.",
+   "en": "Outlets from the Mashriq, the Gulf, Egypt and the Maghreb, including London-based Arab outlets with Gulf capital."
+  },
+  "BAE": {
+   "tr": "Birleşik Arap Emirlikleri’nde çıkan yayınlar ve Dubai merkezli Al Arabiya (sahibi Suudi MBC grubu). Ölçümde büyük olayların çoğunda susuyorlar: The National %93, Gulf News %92,7; İngilizce yayınların ortalaması %74,7. Yazdıklarında faili çoğu zaman açık yazıyorlar.",
+   "en": "Outlets in the UAE and Dubai-based Al Arabiya (owned by Saudi MBC). In our measurement they are silent on most major events (The National 93%, Gulf News 92.7%; English-language average 74.7%), though when they report they mostly name the perpetrator."
+  },
+  "İran": {
+   "tr": "İran’dan yayınlar ve Londra merkezli Iran International.",
+   "en": "Outlets from Iran and London-based Iran International."
+  },
+  "Yemen": {
+   "tr": "Ensarullah yönetimindeki Sana’dan yayın yapan kanal ve ajans.",
+   "en": "The channel and agency broadcasting from Ansarallah-run Sanaa."
+  },
+  "Türkiye": {
+   "tr": "Türkiye’den yayınlar. Kasım 2026’da eklenen ana akım ve muhalif yayınların Filistin tutumu ölçüm biriktikçe yazılacak.",
+   "en": "Outlets from Türkiye. Stances for mainstream and opposition outlets added in November 2026 will be set once measurements accumulate."
+  },
+  "İsrail": {
+   "tr": "İsrail merkezli yayınlar. İsrail’de muhalif çizgideki Haaretz bayraksız gösterilir; +972 ve Local Call Filistin grubunda.",
+   "en": "Israel-based outlets. Haaretz, a dissenting voice in Israel, is shown without a flag; +972 and Local Call are in the Palestine group."
+  },
+  "ABD": {
+   "tr": "ABD merkezli yayınlar. Siyasi çizgi ABD’nin kendi siyasi yelpazesine göre yazılır.",
+   "en": "Outlets based in the US. Political leaning is given on the US’s own spectrum."
+  },
+  "İngiltere": {
+   "tr": "İngiltere merkezli yayınlar. Siyasi çizgi İngiltere’nin kendi siyasi yelpazesine göre yazılır. BBC’nin Arapça ve Türkçe servisleri de bu grupta.",
+   "en": "Outlets based in the UK. Political leaning is given on the UK’s own spectrum. BBC’s Arabic and Turkish services are in this group."
+  },
+  "İspanya": {
+   "tr": "İspanya merkezli yayınlar. Siyasi çizgi İspanya’nın kendi siyasi yelpazesine göre yazılır. Katalan ve Bask yayınları da bu grupta. İspanyolcada fail ölçümü zayıf çalıştığı için tutum etiketleri çoğunlukla editoryal.",
+   "en": "Outlets based in Spain. Political leaning is given on Spain’s own spectrum. Catalan and Basque outlets are included. Perpetrator measurement is weak in Spanish, so stance labels are mostly editorial."
+  },
+  "Almanya": {
+   "tr": "Almanya merkezli yayınlar. Siyasi çizgi Almanya’nın kendi siyasi yelpazesine göre yazılır. Almancada fail ölçümü zayıf çalıştığı için tutum etiketleri çoğunlukla editoryal.",
+   "en": "Outlets based in Germany. Political leaning is given on Germany’s own spectrum. Perpetrator measurement is weak in German, so stance labels are mostly editorial."
+  },
+  "Fransa": {
+   "tr": "Fransa merkezli yayınlar. Siyasi çizgi Fransa’nın kendi siyasi yelpazesine göre yazılır. Fransızcada fail ölçümü zayıf çalıştığı için tutum etiketleri çoğunlukla editoryal.",
+   "en": "Outlets based in France. Political leaning is given on France’s own spectrum. Perpetrator measurement is weak in French, so stance labels are mostly editorial."
+  },
+  "İtalya": {
+   "tr": "İtalya merkezli yayınlar. Siyasi çizgi İtalya’nın kendi siyasi yelpazesine göre yazılır. İtalyancada fail ölçümü zayıf çalıştığı için tutum etiketleri çoğunlukla editoryal.",
+   "en": "Outlets based in Italy. Political leaning is given on Italy’s own spectrum. Perpetrator measurement is weak in Italian, so stance labels are mostly editorial."
+  },
+  "Diğer": {
+   "tr": "Asya, Afrika ve Latin Amerika’dan yayınlar; Rusya ve Çin devlet yayınları da burada.",
+   "en": "Outlets from Asia, Africa and Latin America, including Russian and Chinese state media."
+  }
+ },
+ "siyasi": {
+  "sol": {
+   "tr": "Ülkenin kendi siyasi yelpazesinde solda.",
+   "en": "On the left of its own country’s spectrum."
+  },
+  "merkez-sol": {
+   "tr": "Ülkenin kendi siyasi yelpazesinde merkez solda.",
+   "en": "Centre-left on its own country’s spectrum."
+  },
+  "merkez": {
+   "tr": "Ülkenin kendi siyasi yelpazesinde merkezde.",
+   "en": "Centre on its own country’s spectrum."
+  },
+  "merkez-sağ": {
+   "tr": "Ülkenin kendi siyasi yelpazesinde merkez sağda.",
+   "en": "Centre-right on its own country’s spectrum."
+  },
+  "sağ": {
+   "tr": "Ülkenin kendi siyasi yelpazesinde sağda.",
+   "en": "On the right of its own country’s spectrum."
+  },
+  "ulusalcı": {
+   "tr": "Kemalist ve ulusalcı çizgi.",
+   "en": "Kemalist and nationalist line."
+  },
+  "İslami düşünce": {
+   "tr": "Sol-sağ eksenine oturmayan, İslami düşünceye dayanan yayın.",
+   "en": "Grounded in Islamic thought rather than the left–right axis."
+  },
+  "devlet / kamu": {
+   "tr": "Resmî ajans, devlet ya da kamu yayıncısı; çizgisi hükümetin çizgisi.",
+   "en": "State agency or public broadcaster; follows the government line."
+  },
+  "parti / hareket organı": {
+   "tr": "Bir partinin ya da hareketin kendi yayın organı.",
+   "en": "The outlet of a party or movement."
+  },
+  "belirsiz": {
+   "tr": "Siyasi çizgisi için yeterli bilgi yok.",
+   "en": "Not enough information on its political leaning."
+  }
+ },
+ "tutum": {
+  "yanli": {
+   "tr": "Filistin yanlısı: Filistinli ölüm başlıklarında faili açık yazıyor, Filistinli kaynakları merkeze alıyor.",
+   "en": "Pro-Palestinian: names the perpetrator in headlines on Palestinian deaths and centres Palestinian sources."
+  },
+  "arada": {
+   "tr": "Arada: ana akım; faili çoğu zaman edilgen anlatımla gizliyor ya da iki tarafı eşitliyor.",
+   "en": "In between: mainstream; often hides the perpetrator through passive voice or treats both sides as equal."
+  },
+  "israil": {
+   "tr": "İsrail anlatısına yakın: İsrail ordusunun ve hükümetinin açıklamalarını doğrulanmış bilgi gibi veriyor.",
+   "en": "Close to the Israeli narrative: presents Israeli army and government statements as established fact."
+  },
+  "_olcum": {
+   "tr": "Etiket ölçüme dayanıyor: yayın, kendi dilindeki tanık basının ortalamasıyla karşılaştırıldı.",
+   "en": "Based on measurement against the average of witness press in the same language."
+  },
+  "_editoryal": {
+   "tr": "Editoryal değerlendirme: bu yayın için ölçüm yapacak kadar veri yok.",
+   "en": "Editorial assessment: not enough data for measurement."
+  },
+  "_bekliyor": {
+   "tr": "Yeni eklendi; tutum ölçüm biriktikçe yazılacak.",
+   "en": "Recently added; stance will be set once measurements accumulate."
+  }
+ },
+ "tutum_ad": {
+  "yanli": {
+   "tr": "Filistin yanlısı",
+   "en": "Pro-Palestinian"
+  },
+  "arada": {
+   "tr": "Arada",
+   "en": "In between"
+  },
+  "israil": {
+   "tr": "İsrail anlatısına yakın",
+   "en": "Close to the Israeli narrative"
+  }
+ }
+}

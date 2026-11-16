@@ -35,7 +35,12 @@
    "/news/world/",
    "/news/syria/",
    "/news/palestine/"
-  ]
+  ],
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Bir ölçüde ortalamanın gerisinde (susma); etiket korundu Filistinli ölüm başlıklarında faili gizleme %58,9 (Arapça tanık basın ortalaması %46,5, 185 başlık); büyük olaylarda susma %90,9 (ortalama %59,6, 408 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,3 kat (ortalama 3,0)"
  },
  {
   "ad": "Al-Akhbar English",
@@ -55,7 +60,11 @@
   "id": 2,
   "telegram": null,
   "cizgi": "ad",
-  "oncelik": true
+  "oncelik": true,
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Al-Manar",
@@ -76,7 +85,12 @@
   "telegram": null,
   "cizgi": "ad",
   "bagli": "Hizbullah’ın yayın organı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Arap dünyası",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %60,0 (Arapça tanık basın ortalaması %46,5, 1486 başlık); büyük olaylarda susma %21,0 (ortalama %59,6, 310 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,7 kat (ortalama 3,0)"
  },
  {
   "ad": "Al-Manar English",
@@ -97,7 +111,12 @@
   "telegram": null,
   "cizgi": "ad",
   "bagli": "Hizbullah’ın yayın organı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Arap dünyası",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %31,5 (İngilizce tanık basın ortalaması %25,3, 657 başlık); büyük olaylarda susma %66,9 (ortalama %74,7, 502 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,3 kat (ortalama 2,1)"
  },
  {
   "ad": "Al Mayadeen",
@@ -121,7 +140,12 @@
    "almayadeen",
    "AlMayadeenNews"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %25,0 (Arapça tanık basın ortalaması %46,5, 188 başlık); büyük olaylarda susma %41,2 (ortalama %59,6, 68 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 3,0)"
  },
  {
   "ad": "Al Mayadeen English",
@@ -145,7 +169,12 @@
    "AlMayadeenEnglish",
    "almayadeenenglish"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Ölçüm faili gizleme ve susmada ortalamanın belirgin altında; elle bakılmalı) Filistinli ölüm başlıklarında faili gizleme %60,1 (İngilizce tanık basın ortalaması %25,3, 138 başlık); büyük olaylarda susma %89,7 (ortalama %74,7, 87 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 8,0 kat (ortalama 2,1)"
  },
  {
   "ad": "The Cradle",
@@ -172,7 +201,11 @@
    "thecradlemedia",
    "TheCradleMedia"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The Cradle Türkiye",
@@ -191,7 +224,11 @@
   "notu": "",
   "id": 8,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "L’Orient-Le Jour",
@@ -214,7 +251,11 @@
    "https://www.lorientlejour.com/rss"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Daraj",
@@ -233,7 +274,11 @@
   "notu": "",
   "id": 10,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Quds News Network",
@@ -260,7 +305,11 @@
    "QudsN"
   ],
   "cizgi": "ad",
-  "son_dakika": true
+  "son_dakika": true,
+  "grup": "Filistin",
+  "siyasi": "belirsiz",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Al-Quds",
@@ -279,7 +328,12 @@
   "notu": "",
   "id": 12,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %45,5 (Arapça tanık basın ortalaması %46,5, 902 başlık); büyük olaylarda susma %45,7 (ortalama %59,6, 276 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 3,0)"
  },
  {
   "ad": "WAFA",
@@ -303,8 +357,12 @@
    "WAFAgency",
    "wafanews"
   ],
-  "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi": "ad",
+  "cizgi_tartismali": true,
+  "grup": "Filistin",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Arab48",
@@ -323,7 +381,12 @@
   "notu": "Merkez şehri teyit edilecek.",
   "id": 14,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %53,9 (Arapça tanık basın ortalaması %46,5, 857 başlık); büyük olaylarda susma %61,1 (ortalama %59,6, 507 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,0 kat (ortalama 3,0)"
  },
  {
   "ad": "+972 Magazine",
@@ -348,7 +411,11 @@
   "telegram_aday": [
    "mag972"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Middle East Monitor",
@@ -367,7 +434,12 @@
   "notu": "",
   "id": 16,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %28,5 (İngilizce tanık basın ortalaması %25,3, 1901 başlık); büyük olaylarda susma %47,6 (ortalama %74,7, 504 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,8 kat (ortalama 2,1)"
  },
  {
   "ad": "Mondoweiss",
@@ -386,7 +458,12 @@
   "notu": "",
   "id": 17,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %30,0 (İngilizce tanık basın ortalaması %25,3, 140 başlık); büyük olaylarda susma %89,6 (ortalama %74,7, 483 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,8 kat (ortalama 2,1)"
  },
  {
   "ad": "Electronic Intifada",
@@ -409,7 +486,11 @@
    "https://electronicintifada.net/rss.xml"
   ],
   "telegram_aday": [],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Haaretz",
@@ -437,7 +518,12 @@
    "/ty-article-opinion",
    "/ty-article-magazine",
    "/opinion/"
-  ]
+  ],
+  "grup": "İsrail",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %35,5 (İngilizce tanık basın ortalaması %25,3, 1390 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 18,9 kat (ortalama 2,1)"
  },
  {
   "ad": "The Jerusalem Post",
@@ -474,7 +560,12 @@
    }
   ],
   "cizgi_et": "İsrail sağ-merkez basını",
-  "cizgi_et_en": "Israeli centre-right press"
+  "cizgi_et_en": "Israeli centre-right press",
+  "grup": "İsrail",
+  "siyasi": "merkez-sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %39,9 (İngilizce tanık basın ortalaması %25,3, 1484 başlık); büyük olaylarda susma %83,5 (ortalama %74,7, 497 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 34,0 kat (ortalama 2,1)"
  },
  {
   "ad": "Ynetnews",
@@ -511,7 +602,12 @@
    }
   ],
   "cizgi_et": "İsrail ana akım basını",
-  "cizgi_et_en": "Israeli mainstream press"
+  "cizgi_et_en": "Israeli mainstream press",
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %49,1 (İngilizce tanık basın ortalaması %25,3, 768 başlık); büyük olaylarda susma %90,9 (ortalama %74,7, 496 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 70,9 kat (ortalama 2,1)"
  },
  {
   "ad": "Ynet (İbranice)",
@@ -548,7 +644,11 @@
    }
   ],
   "cizgi_et": "İsrail ana akım basını",
-  "cizgi_et_en": "Israeli mainstream press"
+  "cizgi_et_en": "Israeli mainstream press",
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "i24NEWS",
@@ -585,7 +685,12 @@
    }
   ],
   "cizgi_et": "Fransız-İsrailli sermayeli İsrail kanalı",
-  "cizgi_et_en": "Franco-Israeli-owned Israeli channel"
+  "cizgi_et_en": "Franco-Israeli-owned Israeli channel",
+  "grup": "İsrail",
+  "siyasi": "merkez-sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %60,0 (İngilizce tanık basın ortalaması %25,3, 155 başlık); büyük olaylarda susma %96,4 (ortalama %74,7, 110 olay)"
  },
  {
   "ad": "The Times of Israel",
@@ -615,7 +720,12 @@
    }
   ],
   "cizgi_et": "İsrail ana akım basını",
-  "cizgi_et_en": "Israeli mainstream press"
+  "cizgi_et_en": "Israeli mainstream press",
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %50,2 (İngilizce tanık basın ortalaması %25,3, 866 başlık); büyük olaylarda susma %82,1 (ortalama %74,7, 252 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 30,7 kat (ortalama 2,1)"
  },
  {
   "ad": "Al Jazeera English",
@@ -634,7 +744,7 @@
   "notu": "",
   "id": 25,
   "telegram": null,
-  "cizgi": "ara",
+  "cizgi": "ad",
   "cizgi_tartismali": true,
   "kanitlar": [
    {
@@ -651,7 +761,12 @@
     "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
     "tarih": "2023-12-22"
    }
-  ]
+  ],
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde Filistinli ölüm başlıklarında faili gizleme %17,7 (İngilizce tanık basın ortalaması %25,3, 3334 başlık); büyük olaylarda susma %47,0 (ortalama %74,7, 504 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,5 kat (ortalama 2,1)"
  },
  {
   "ad": "Al Jazeera Arabic",
@@ -687,7 +802,12 @@
     "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
     "tarih": "2023-12-22"
    }
-  ]
+  ],
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %45,7 (Arapça tanık basın ortalaması %46,5, 2519 başlık); büyük olaylarda susma %39,0 (ortalama %59,6, 508 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,4 kat (ortalama 3,0)"
  },
  {
   "ad": "Asharq Al-Awsat",
@@ -706,7 +826,7 @@
   "notu": "",
   "id": 27,
   "telegram": null,
-  "cizgi": "ara",
+  "cizgi": "ad",
   "kanitlar": [
    {
     "tur": "söylem",
@@ -716,7 +836,12 @@
     "tarih": "2024-03-14"
    }
   ],
-  "bagli": "Suudi sermayeli (SRMG)"
+  "bagli": "Suudi sermayeli (SRMG)",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde Filistinli ölüm başlıklarında faili gizleme %36,8 (Arapça tanık basın ortalaması %46,5, 4009 başlık); büyük olaylarda susma %50,1 (ortalama %59,6, 503 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,1 kat (ortalama 3,0)"
  },
  {
   "ad": "Asharq Al-Awsat Türkçe",
@@ -750,7 +875,11 @@
     "tarih": "2024-03-14"
    }
   ],
-  "bagli": "Suudi sermayeli (SRMG)"
+  "bagli": "Suudi sermayeli (SRMG)",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Al-Quds Al-Arabi",
@@ -770,7 +899,12 @@
   "id": 29,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %30,8 (Arapça tanık basın ortalaması %46,5, 208 başlık); büyük olaylarda susma %41,0 (ortalama %59,6, 61 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,0 kat (ortalama 3,0)"
  },
  {
   "ad": "Al-Araby Al-Jadeed / The New Arab",
@@ -790,7 +924,11 @@
   "id": 30,
   "telegram": null,
   "cizgi": "ara",
-  "bagli": "Katar sermayeli"
+  "bagli": "Katar sermayeli",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Rai al-Youm",
@@ -813,7 +951,11 @@
   "telegram_aday": [
    "raialyoum"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Middle East Eye",
@@ -837,7 +979,12 @@
    "middleeasteye"
   ],
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %22,2 (İngilizce tanık basın ortalaması %25,3, 3497 başlık); büyük olaylarda susma %48,1 (ortalama %74,7, 387 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,0 kat (ortalama 2,1)"
  },
  {
   "ad": "Al Arabiya",
@@ -883,7 +1030,11 @@
   "bayrak": [
    "sa",
    "ae"
-  ]
+  ],
+  "grup": "BAE",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Arab News",
@@ -907,7 +1058,12 @@
   ],
   "telegram_aday": [],
   "cizgi": "ara",
-  "bagli": "Suudi sermayeli (SRMG)"
+  "bagli": "Suudi sermayeli (SRMG)",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %21,5 (İngilizce tanık basın ortalaması %25,3, 260 başlık); büyük olaylarda susma %64,2 (ortalama %74,7, 95 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,5 kat (ortalama 2,1)"
  },
  {
   "ad": "The National",
@@ -928,7 +1084,12 @@
   "telegram": null,
   "cizgi": "ara",
   "bayrak": "ae",
-  "bagli": "Abu Dabi yönetimine yakın"
+  "bagli": "Abu Dabi yönetimine yakın",
+  "grup": "BAE",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %23,1 (İngilizce tanık basın ortalaması %25,3, 108 başlık); büyük olaylarda susma %93,0 (ortalama %74,7, 114 olay)"
  },
  {
   "ad": "AGBI",
@@ -947,7 +1108,11 @@
   "notu": "Sahiplik bilgisi kontrol edilecek.",
   "id": 36,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Ahram Online",
@@ -976,7 +1141,11 @@
     "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
     "tarih": "2023-12-22"
    }
-  ]
+  ],
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Egypt Today",
@@ -1012,7 +1181,11 @@
     "tarih": "2023-12-22"
    }
   ],
-  "bagli": "Mısır istihbaratına bağlı olduğu bildirilen grubun"
+  "bagli": "Mısır istihbaratına bağlı olduğu bildirilen grubun",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Daily News Egypt",
@@ -1031,7 +1204,12 @@
   "notu": "",
   "id": 39,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %21,9 (İngilizce tanık basın ortalaması %25,3, 155 başlık); büyük olaylarda susma %95,0 (ortalama %74,7, 358 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,5 kat (ortalama 2,1)"
  },
  {
   "ad": "Mada Masr",
@@ -1060,7 +1238,12 @@
     "url": "https://www.arab-reform.net/publication/the-gaza-war-in-middle-east-media-how-palestine-is-spun-around-the-region/",
     "tarih": "2023-12-22"
    }
-  ]
+  ],
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %32,1 (İngilizce tanık basın ortalaması %25,3, 196 başlık); büyük olaylarda susma %87,6 (ortalama %74,7, 250 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 2,1)"
  },
  {
   "ad": "Al-Manassa",
@@ -1083,7 +1266,11 @@
   "telegram_aday": [
    "almanassa"
   ],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Rassd",
@@ -1104,7 +1291,11 @@
   "telegram": null,
   "cizgi": "ad",
   "cizgi_tartismali": true,
-  "bagli": "Müslüman Kardeşler’e yakın"
+  "bagli": "Müslüman Kardeşler’e yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Enab Baladi",
@@ -1130,7 +1321,11 @@
    "EnabBaladiEnglish",
    "enabbaladi"
   ],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "SANA",
@@ -1150,7 +1345,12 @@
   "id": 44,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %34,2 (İngilizce tanık basın ortalaması %25,3, 1636 başlık); büyük olaylarda susma %59,0 (ortalama %74,7, 349 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,6 kat (ortalama 2,1)"
  },
  {
   "ad": "Rudaw (Türkçe)",
@@ -1172,7 +1372,11 @@
   "cizgi": "ara",
   "cizgi_tartismali": true,
   "ig_gizle": true,
-  "bagli": "KDP’ye yakın"
+  "bagli": "KDP’ye yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "parti / hareket organı",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Shafaq News",
@@ -1191,7 +1395,11 @@
   "notu": "Merkez ve sahiplik kontrol edilecek.",
   "id": 46,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Roya News",
@@ -1210,7 +1418,11 @@
   "notu": "",
   "id": 47,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Tehran Times",
@@ -1229,7 +1441,12 @@
   "notu": "",
   "id": 48,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %30,9 (İngilizce tanık basın ortalaması %25,3, 372 başlık); büyük olaylarda susma %82,3 (ortalama %74,7, 462 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,3 kat (ortalama 2,1)"
  },
  {
   "ad": "IRNA",
@@ -1248,7 +1465,11 @@
   "notu": "",
   "id": 49,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Tasnim",
@@ -1273,7 +1494,12 @@
    "Tasnimnews"
   ],
   "cizgi": "ad",
-  "bagli": "Devrim Muhafızları’na yakın"
+  "bagli": "Devrim Muhafızları’na yakın",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %31,7 (İngilizce tanık basın ortalaması %25,3, 811 başlık); büyük olaylarda susma %65,3 (ortalama %74,7, 360 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,3 kat (ortalama 2,1)"
  },
  {
   "ad": "Press TV",
@@ -1299,7 +1525,12 @@
   "telegram_aday": [
    "presstv"
   ],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %20,4 (İngilizce tanık basın ortalaması %25,3, 1574 başlık); büyük olaylarda susma %56,4 (ortalama %74,7, 454 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,7 kat (ortalama 2,1)"
  },
  {
   "ad": "Al-Masirah",
@@ -1325,7 +1556,11 @@
   ],
   "cizgi": "ad",
   "bagli": "Ensarullah’ın (Husiler) yayın organı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Yemen",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "TSA (Tout sur l’Algérie)",
@@ -1344,7 +1579,11 @@
   "notu": "Senin listende “Paris”; güncel merkez Cezayir.",
   "id": 53,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Maghreb Emergent",
@@ -1363,7 +1602,11 @@
   "notu": "2022’deki baskın ve El Kadi’nin tutuklanmasından sonra yayının sürüp sürmediği kontrol edilecek.",
   "id": 54,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Casbah Tribune",
@@ -1382,7 +1625,11 @@
   "notu": "Eski adresi casbah-tribune.com; güncel adres kontrol edilecek.",
   "id": 55,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Algatedz",
@@ -1401,7 +1648,11 @@
   "notu": "Profil senin verdiğin bilgiye dayanıyor; sahiplik ve yayın dili kurulumda teyit edilecek.",
   "id": 56,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "APS",
@@ -1424,7 +1675,12 @@
    "https://www.aps.dz/fr/?format=feed&type=rss"
   ],
   "telegram_aday": [],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %46,2 (Fransızca tanık basın ortalaması %55,6, 91 başlık); büyük olaylarda susma %74,5 (ortalama %93,7, 314 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,0 kat (ortalama 0,6)"
  },
  {
   "ad": "El Watan",
@@ -1447,7 +1703,11 @@
    "https://elwatan-dz.com/feed"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Le Matin d’Algérie",
@@ -1466,7 +1726,12 @@
   "notu": "Yayın merkezi kontrol edilecek.",
   "id": 59,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %46,3 (Fransızca tanık basın ortalaması %55,6, 80 başlık); büyük olaylarda susma %95,3 (ortalama %93,7, 193 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 7,7 kat (ortalama 0,6)"
  },
  {
   "ad": "Hespress",
@@ -1486,7 +1751,12 @@
   "id": 60,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %58,3 (Fransızca tanık basın ortalaması %55,6, 96 başlık); büyük olaylarda susma %97,2 (ortalama %93,7, 361 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,0 kat (ortalama 0,6)"
  },
  {
   "ad": "Le360",
@@ -1515,7 +1785,11 @@
     "tarih": "2016"
    }
   ],
-  "bagli": "Fas sarayına yakın"
+  "bagli": "Fas sarayına yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Business News",
@@ -1538,7 +1812,11 @@
    "https://www.businessnews.com.tn/rss.xml"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Nawaat",
@@ -1557,7 +1835,11 @@
   "notu": "",
   "id": 63,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Libya Herald",
@@ -1576,7 +1858,11 @@
   "notu": "",
   "id": 64,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Libya Observer",
@@ -1600,7 +1886,11 @@
    "https://libyaobserver.ly/feed"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Anadolu Ajansı (Dünya)",
@@ -1622,7 +1912,13 @@
   "besleme": [
    "https://www.aa.com.tr/en/rss/default?cat=world"
   ],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor.  Dünya masası akışı olduğu için olaylarda susma oranı yüksek; Gazze haberleri Orta Doğu akışında. Filistinli ölüm başlıklarında faili gizleme %23,7 (İngilizce tanık basın ortalaması %25,3, 80 başlık); büyük olaylarda susma %96,6 (ortalama %74,7, 475 olay) Kurumun bütün masaları birlikte değerlendirildi.",
+  "kurum": "Anadolu Ajansı"
  },
  {
   "ad": "Anadolu Ajansı (Bölge)",
@@ -1644,7 +1940,13 @@
   "besleme": [
    "https://www.aa.com.tr/en/rss/default?cat=middle-east"
   ],
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor. Ters giden tek gösterge İsrailli ölüye ayrılan başlık: ortalamanın üstünde. Bu, İsrail kayıplarının ayrıntılı haberleştirilmesinden kaynaklanıyor olabilir; sempati ölçüsü değil. Filistinli ölüm başlıklarında faili gizleme %13,5 (İngilizce tanık basın ortalaması %25,3, 4353 başlık); büyük olaylarda susma %38,5 (ortalama %74,7, 480 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,5 kat (ortalama 2,1)",
+  "kurum": "Anadolu Ajansı"
  },
  {
   "ad": "TRT World",
@@ -1663,7 +1965,13 @@
   "notu": "",
   "id": 68,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor.  Filistinli ölüm başlıklarında faili gizleme %17,0 (İngilizce tanık basın ortalaması %25,3, 1171 başlık); büyük olaylarda susma %61,4 (ortalama %74,7, 498 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,2 kat (ortalama 2,1)",
+  "kurum": "TRT"
  },
  {
   "ad": "Evrensel",
@@ -1682,7 +1990,12 @@
   "notu": "",
   "id": 69,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %20,8 (Türkçe tanık basın ortalaması %30,9, 1042 başlık); büyük olaylarda susma %72,9 (ortalama %89,4, 435 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,8 kat (ortalama 3,7)"
  },
  {
   "ad": "Harici",
@@ -1701,7 +2014,11 @@
   "notu": "Künye bilgisi kontrol edilecek.",
   "id": 70,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Yakın Doğu Haber (YDH)",
@@ -1720,7 +2037,11 @@
   "notu": "Profil senin verdiğin bilgiye dayanıyor; merkez şehri kurulumda teyit edilecek.",
   "id": 71,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Serbestiyet",
@@ -1739,7 +2060,11 @@
   "notu": "",
   "id": 72,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez-sağ",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Gazete Mecra (GZT)",
@@ -1758,7 +2083,11 @@
   "notu": "Sahiplik kontrol edilecek.",
   "id": 73,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez-sağ",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "CGTN Türk",
@@ -1777,7 +2106,11 @@
   "notu": "",
   "id": 74,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Sputnik Türkiye",
@@ -1796,7 +2129,11 @@
   "notu": "",
   "id": 75,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Yeni Şafak",
@@ -1815,8 +2152,13 @@
   "notu": "",
   "id": 76,
   "telegram": null,
-  "cizgi": "ara",
-  "bagli": "İktidara yakın (Albayrak Grubu)"
+  "cizgi": "ad",
+  "bagli": "İktidara yakın (Albayrak Grubu)",
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor.  Filistinli ölüm başlıklarında faili gizleme %28,3 (Türkçe tanık basın ortalaması %30,9, 938 başlık); büyük olaylarda susma %72,4 (ortalama %89,4, 479 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,2 kat (ortalama 3,7)"
  },
  {
   "ad": "Bianet",
@@ -1840,7 +2182,11 @@
    "https://bianet.org/biamag.rss"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The New York Times",
@@ -1877,7 +2223,12 @@
    }
   ],
   "cizgi_et": "ABD ana akım basını",
-  "cizgi_et_en": "US mainstream press"
+  "cizgi_et_en": "US mainstream press",
+  "grup": "ABD",
+  "siyasi": "merkez-sol",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %48,1 (İngilizce tanık basın ortalaması %25,3, 428 başlık); büyük olaylarda susma %84,1 (ortalama %74,7, 459 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,1 kat (ortalama 2,1)"
  },
  {
   "ad": "The Washington Post",
@@ -1912,7 +2263,12 @@
    }
   ],
   "cizgi_et": "ABD ana akım basını",
-  "cizgi_et_en": "US mainstream press"
+  "cizgi_et_en": "US mainstream press",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %48,9 (İngilizce tanık basın ortalaması %25,3, 88 başlık); büyük olaylarda susma %83,1 (ortalama %74,7, 59 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 5,5 kat (ortalama 2,1)"
  },
  {
   "ad": "Axios",
@@ -1942,7 +2298,11 @@
    }
   ],
   "cizgi_et": "ABD ana akım basını",
-  "cizgi_et_en": "US mainstream press"
+  "cizgi_et_en": "US mainstream press",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Vox",
@@ -1961,7 +2321,11 @@
   "notu": "İspanya’daki Vox partisiyle ilgisi yok.",
   "id": 81,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "ABD",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Drop Site News",
@@ -1980,7 +2344,11 @@
   "notu": "Listende iki kez geçiyordu; bir kez aldım.",
   "id": 82,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "ABD",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Zeteo",
@@ -2000,7 +2368,11 @@
   "id": 83,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "ABD",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The Intercept",
@@ -2029,7 +2401,11 @@
     "url": "https://theintercept.com/2024/04/15/nyt-israel-gaza-genocide-palestine-coverage/",
     "tarih": "2024-04-15"
    }
-  ]
+  ],
+  "grup": "ABD",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Associated Press",
@@ -2048,7 +2424,12 @@
   "notu": "",
   "id": 85,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %27,8 (İngilizce tanık basın ortalaması %25,3, 773 başlık); büyük olaylarda susma %80,9 (ortalama %74,7, 392 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,0 kat (ortalama 2,1)"
  },
  {
   "ad": "The Maritime Executive",
@@ -2071,7 +2452,11 @@
    "https://maritime-executive.com/articles.rss"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "MuslimMatters",
@@ -2094,7 +2479,11 @@
    "https://muslimmatters.org/feed/"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "ABD",
+  "siyasi": "belirsiz",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Reuters",
@@ -2113,7 +2502,11 @@
   "notu": "",
   "id": 88,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İngiltere",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The Guardian",
@@ -2132,7 +2525,12 @@
   "notu": "",
   "id": 89,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İngiltere",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %36,5 (İngilizce tanık basın ortalaması %25,3, 792 başlık); büyük olaylarda susma %75,3 (ortalama %74,7, 502 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,1 kat (ortalama 2,1)"
  },
  {
   "ad": "BBC News",
@@ -2168,7 +2566,13 @@
    }
   ],
   "cizgi_et": "İngiliz kamu yayıncısı",
-  "cizgi_et_en": "British public broadcaster"
+  "cizgi_et_en": "British public broadcaster",
+  "grup": "İngiltere",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %28,4 (İngilizce tanık basın ortalaması %25,3, 327 başlık); büyük olaylarda susma %80,1 (ortalama %74,7, 376 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 8,2 kat (ortalama 2,1)",
+  "kurum": "BBC"
  },
  {
   "ad": "The Muslim News",
@@ -2191,7 +2595,11 @@
    "https://muslimnews.co.uk/feed/"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İngiltere",
+  "siyasi": "belirsiz",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "elDiario.es",
@@ -2210,7 +2618,12 @@
   "notu": "",
   "id": 92,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %37,3 (İspanyolca tanık basın ortalaması %42,2, 378 başlık); büyük olaylarda susma %87,3 (ortalama %92,8, 495 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,2 kat (ortalama 0,6)"
  },
  {
   "ad": "Público",
@@ -2233,7 +2646,12 @@
    "https://www.publico.es/rss/"
   ],
   "telegram_aday": [],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %25,4 (İspanyolca tanık basın ortalaması %42,2, 252 başlık); büyük olaylarda susma %83,7 (ortalama %92,8, 178 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,8 kat (ortalama 0,6)"
  },
  {
   "ad": "El Salto",
@@ -2252,7 +2670,12 @@
   "notu": "",
   "id": 94,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %43,0 (İspanyolca tanık basın ortalaması %42,2, 93 başlık); büyük olaylarda susma %96,1 (ortalama %92,8, 382 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,6 kat (ortalama 0,6)"
  },
  {
   "ad": "CTXT",
@@ -2275,7 +2698,11 @@
    "https://ctxt.es/es/rss"
   ],
   "telegram_aday": [],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Naiz / Gara",
@@ -2295,7 +2722,12 @@
   "id": 96,
   "telegram": null,
   "cizgi": "ad",
-  "bagli": "Bask sol milliyetçi çizgide"
+  "bagli": "Bask sol milliyetçi çizgide",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %47,7 (İspanyolca tanık basın ortalaması %42,2, 543 başlık); büyük olaylarda susma %91,1 (ortalama %92,8, 384 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,5 kat (ortalama 0,6)"
  },
  {
   "ad": "VilaWeb",
@@ -2314,7 +2746,11 @@
   "notu": "",
   "id": 97,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Ara",
@@ -2333,7 +2769,11 @@
   "notu": "",
   "id": 98,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "La Directa",
@@ -2352,7 +2792,11 @@
   "notu": "",
   "id": 99,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "El País",
@@ -2375,7 +2819,12 @@
    "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/internacional/portada"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %45,1 (İspanyolca tanık basın ortalaması %42,2, 317 başlık); büyük olaylarda susma %90,1 (ortalama %92,8, 475 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,6 kat (ortalama 0,6)"
  },
  {
   "ad": "El Mundo",
@@ -2396,7 +2845,12 @@
   "telegram": null,
   "cizgi": "ik",
   "cizgi_et": "İspanyol sağ-merkez basını",
-  "cizgi_et_en": "Spanish centre-right press"
+  "cizgi_et_en": "Spanish centre-right press",
+  "grup": "İspanya",
+  "siyasi": "merkez-sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %43,9 (İspanyolca tanık basın ortalaması %42,2, 187 başlık); büyük olaylarda susma %94,1 (ortalama %92,8, 477 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,6 kat (ortalama 0,6)"
  },
  {
   "ad": "EFE",
@@ -2415,7 +2869,12 @@
   "notu": "",
   "id": 102,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %31,3 (İspanyolca tanık basın ortalaması %42,2, 377 başlık); büyük olaylarda susma %84,3 (ortalama %92,8, 204 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 0,6)"
  },
  {
   "ad": "il manifesto",
@@ -2434,7 +2893,12 @@
   "notu": "",
   "id": 103,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İtalya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %82,2 (İtalyanca tanık basın ortalaması %82,2, 174 başlık); büyük olaylarda susma %90,0 (ortalama %90,0, 431 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,8 kat (ortalama 1,8)"
  },
  {
   "ad": "Il Fatto Quotidiano",
@@ -2453,7 +2917,12 @@
   "notu": "",
   "id": 104,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İtalya",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %63,8 (İtalyanca tanık basın ortalaması %82,2, 417 başlık); büyük olaylarda susma %83,7 (ortalama %90,0, 472 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,9 kat (ortalama 1,8)"
  },
  {
   "ad": "la Repubblica",
@@ -2473,7 +2942,12 @@
   "id": 105,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "İtalya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %61,6 (İtalyanca tanık basın ortalaması %82,2, 310 başlık); büyük olaylarda susma %87,5 (ortalama %90,0, 464 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 9,0 kat (ortalama 1,8)"
  },
  {
   "ad": "Corriere della Sera",
@@ -2492,7 +2966,11 @@
   "notu": "",
   "id": 106,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İtalya",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "ANSA",
@@ -2511,7 +2989,12 @@
   "notu": "",
   "id": 107,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İtalya",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %57,7 (İtalyanca tanık basın ortalaması %82,2, 1902 başlık); büyük olaylarda susma %76,2 (ortalama %90,0, 478 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 5,9 kat (ortalama 1,8)"
  },
  {
   "ad": "Avvenire",
@@ -2531,7 +3014,11 @@
   "id": 108,
   "telegram": null,
   "cizgi": "ara",
-  "bagli": "İtalya Piskoposlar Konferansı’nın"
+  "bagli": "İtalya Piskoposlar Konferansı’nın",
+  "grup": "İtalya",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "junge Welt",
@@ -2550,7 +3037,11 @@
   "notu": "",
   "id": 109,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Almanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "taz",
@@ -2569,7 +3060,11 @@
   "notu": "",
   "id": 110,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Almanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "nd",
@@ -2588,7 +3083,11 @@
   "notu": "",
   "id": 111,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Almanya",
+  "siyasi": "sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Der Spiegel",
@@ -2619,7 +3118,11 @@
    }
   ],
   "cizgi_et": "Alman ana akım basını",
-  "cizgi_et_en": "German mainstream press"
+  "cizgi_et_en": "German mainstream press",
+  "grup": "Almanya",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Süddeutsche Zeitung",
@@ -2642,7 +3145,11 @@
    "https://rss.sueddeutsche.de/rss/Politik"
   ],
   "telegram_aday": [],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Almanya",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Deutsche Welle",
@@ -2673,7 +3180,11 @@
    }
   ],
   "cizgi_et": "Alman devlet yayıncısı",
-  "cizgi_et_en": "German state broadcaster"
+  "cizgi_et_en": "German state broadcaster",
+  "grup": "Almanya",
+  "siyasi": "devlet / kamu",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Le Monde",
@@ -2692,7 +3203,12 @@
   "notu": "",
   "id": 115,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Fransa",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %38,6 (Fransızca tanık basın ortalaması %55,6, 736 başlık); büyük olaylarda susma %87,7 (ortalama %93,7, 503 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,7 kat (ortalama 0,6)"
  },
  {
   "ad": "Libération",
@@ -2711,7 +3227,11 @@
   "notu": "",
   "id": 116,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Fransa",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "L’Humanité",
@@ -2731,7 +3251,12 @@
   "id": 117,
   "telegram": null,
   "cizgi": "ad",
-  "bagli": "Fransız Komünist Partisi’ne yakın"
+  "bagli": "Fransız Komünist Partisi’ne yakın",
+  "grup": "Fransa",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %60,0 (Fransızca tanık basın ortalaması %55,6, 285 başlık); büyük olaylarda susma %91,0 (ortalama %93,7, 434 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,2 kat (ortalama 0,6)"
  },
  {
   "ad": "Mediapart",
@@ -2751,7 +3276,11 @@
   "id": 118,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Fransa",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Orient XXI",
@@ -2774,7 +3303,11 @@
    "https://orientxxi.info/?page=backend"
   ],
   "telegram_aday": [],
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Fransa",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Le Monde diplomatique",
@@ -2793,7 +3326,11 @@
   "notu": "",
   "id": 120,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Fransa",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "AFP",
@@ -2812,7 +3349,11 @@
   "notu": "",
   "id": 121,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Fransa",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "France 24",
@@ -2831,7 +3372,12 @@
   "notu": "",
   "id": 122,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Fransa",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %43,0 (İngilizce tanık basın ortalaması %25,3, 3508 başlık); büyük olaylarda susma %61,8 (ortalama %74,7, 497 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,0 kat (ortalama 2,1)"
  },
  {
   "ad": "South China Morning Post",
@@ -2850,7 +3396,12 @@
   "notu": "",
   "id": 123,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %34,7 (İngilizce tanık basın ortalaması %25,3, 352 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,0 kat (ortalama 2,1)"
  },
  {
   "ad": "CGTN",
@@ -2869,7 +3420,11 @@
   "notu": "",
   "id": 124,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The Africa Report",
@@ -2888,7 +3443,11 @@
   "notu": "",
   "id": 125,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Ma’an News Agency",
@@ -2911,7 +3470,11 @@
    "maannewsagency",
    "MaanNews"
   ],
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Shehab News Agency",
@@ -2935,7 +3498,11 @@
    "shehabagency"
   ],
   "cizgi": "ad",
-  "bagli": "Hamas’a yakın"
+  "bagli": "Hamas’a yakın",
+  "grup": "Filistin",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Palestine Chronicle",
@@ -2954,7 +3521,12 @@
   "notu": "Merkez şehri teyit edilecek.",
   "id": 128,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "belirsiz",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %30,7 (İngilizce tanık basın ortalaması %25,3, 1680 başlık); büyük olaylarda susma %58,9 (ortalama %74,7, 508 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 5,6 kat (ortalama 2,1)"
  },
  {
   "ad": "Ultra Palestine",
@@ -2973,7 +3545,11 @@
   "notu": "",
   "id": 129,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "belirsiz",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "An-Nahar",
@@ -2993,7 +3569,12 @@
   "id": 130,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sağ",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %51,2 (Arapça tanık basın ortalaması %46,5, 768 başlık); büyük olaylarda susma %74,3 (ortalama %59,6, 491 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,1 kat (ortalama 3,0)"
  },
  {
   "ad": "Naharnet",
@@ -3012,7 +3593,12 @@
   "notu": "",
   "id": 131,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %14,3 (İngilizce tanık basın ortalaması %25,3, 1185 başlık); büyük olaylarda susma %83,1 (ortalama %74,7, 492 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 16,4 kat (ortalama 2,1)"
  },
  {
   "ad": "Ulusal Haber Ajansı (NNA)",
@@ -3034,7 +3620,11 @@
   "telegram_aday": [
    "NNALeb"
   ],
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Al Jadeed",
@@ -3057,7 +3647,11 @@
    "Aljadeedtv"
   ],
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Syria TV",
@@ -3076,7 +3670,12 @@
   "notu": "",
   "id": 134,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %49,0 (Arapça tanık basın ortalaması %46,5, 653 başlık); büyük olaylarda susma %70,3 (ortalama %59,6, 192 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 9,4 kat (ortalama 3,0)"
  },
  {
   "ad": "North Press Agency",
@@ -3095,8 +3694,13 @@
   "notu": "",
   "id": 135,
   "telegram": null,
-  "cizgi": "ara",
-  "ig_gizle": true
+  "cizgi": "ik",
+  "ig_gizle": true,
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski etiket \"arada\"; ölçüm İsrail anlatısına yakınlık gösteriyor Filistinli ölüm başlıklarında faili gizleme %43,1 (İngilizce tanık basın ortalaması %25,3, 202 başlık); büyük olaylarda susma %99,2 (ortalama %74,7, 505 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 21,7 kat (ortalama 2,1)"
  },
  {
   "ad": "Kurdistan24",
@@ -3121,7 +3725,11 @@
   ],
   "cizgi": "ara",
   "ig_gizle": true,
-  "bagli": "KDP’ye yakın"
+  "bagli": "KDP’ye yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "parti / hareket organı",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Irak Haber Ajansı (INA)",
@@ -3140,7 +3748,11 @@
   "notu": "",
   "id": 138,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Petra",
@@ -3160,7 +3772,12 @@
   "id": 139,
   "telegram": null,
   "cizgi": "ara",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %32,9 (İngilizce tanık basın ortalaması %25,3, 568 başlık); büyük olaylarda susma %51,7 (ortalama %74,7, 116 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,5 kat (ortalama 2,1)"
  },
  {
   "ad": "Jordan Times",
@@ -3181,7 +3798,12 @@
   "telegram": null,
   "cizgi": "ara",
   "cizgi_tartismali": true,
-  "bagli": "Ürdün devletine yakın"
+  "bagli": "Ürdün devletine yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %22,2 (İngilizce tanık basın ortalaması %25,3, 144 başlık); büyük olaylarda susma %89,3 (ortalama %74,7, 252 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,6 kat (ortalama 2,1)"
  },
  {
   "ad": "Gulf News",
@@ -3201,7 +3823,11 @@
   "id": 141,
   "telegram": null,
   "cizgi": "ara",
-  "bayrak": "ae"
+  "bayrak": "ae",
+  "grup": "BAE",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "WAM",
@@ -3221,7 +3847,12 @@
   "id": 142,
   "telegram": null,
   "cizgi": "ara",
-  "bayrak": "ae"
+  "bayrak": "ae",
+  "grup": "BAE",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %38,6 (İngilizce tanık basın ortalaması %25,3, 295 başlık); büyük olaylarda susma %88,9 (ortalama %74,7, 450 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,7 kat (ortalama 2,1)"
  },
  {
   "ad": "Katar Haber Ajansı (QNA)",
@@ -3240,7 +3871,12 @@
   "notu": "",
   "id": 143,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %36,2 (İngilizce tanık basın ortalaması %25,3, 5778 başlık); büyük olaylarda susma %37,7 (ortalama %74,7, 491 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,1 kat (ortalama 2,1)"
  },
  {
   "ad": "KUNA",
@@ -3259,7 +3895,11 @@
   "notu": "",
   "id": 144,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Arabi21",
@@ -3278,7 +3918,12 @@
   "notu": "",
   "id": 145,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %56,1 (Arapça tanık basın ortalaması %46,5, 1167 başlık); büyük olaylarda susma %55,9 (ortalama %59,6, 508 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,6 kat (ortalama 3,0)"
  },
  {
   "ad": "Saba (Sana)",
@@ -3301,7 +3946,11 @@
    "sabanews"
   ],
   "cizgi": "ad",
-  "bagli": "Sana’daki Ensarullah yönetiminin resmî ajansı"
+  "bagli": "Sana’daki Ensarullah yönetiminin resmî ajansı",
+  "grup": "Yemen",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Egypt Independent",
@@ -3320,7 +3969,12 @@
   "notu": "",
   "id": 147,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %29,7 (İngilizce tanık basın ortalaması %25,3, 407 başlık); büyük olaylarda susma %85,1 (ortalama %74,7, 496 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,6 kat (ortalama 2,1)"
  },
  {
   "ad": "Al-Shorouk",
@@ -3339,7 +3993,12 @@
   "notu": "",
   "id": 148,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %43,5 (Arapça tanık basın ortalaması %46,5, 2122 başlık); büyük olaylarda susma %29,1 (ortalama %59,6, 502 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,7 kat (ortalama 3,0)"
  },
  {
   "ad": "Youm7",
@@ -3375,7 +4034,12 @@
     "tarih": "2023-12-22"
    }
   ],
-  "bagli": "Mısır istihbaratına bağlı olduğu bildirilen grubun"
+  "bagli": "Mısır istihbaratına bağlı olduğu bildirilen grubun",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %53,9 (Arapça tanık basın ortalaması %46,5, 1576 başlık); büyük olaylarda susma %36,9 (ortalama %59,6, 488 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,3 kat (ortalama 3,0)"
  },
  {
   "ad": "Mehr",
@@ -3398,7 +4062,12 @@
    "MehrNewsAgency"
   ],
   "cizgi": "ad",
-  "bagli": "İslami Propaganda Örgütü’ne bağlı"
+  "bagli": "İslami Propaganda Örgütü’ne bağlı",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %24,7 (İngilizce tanık basın ortalaması %25,3, 791 başlık); büyük olaylarda susma %79,6 (ortalama %74,7, 416 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,7 kat (ortalama 2,1)"
  },
  {
   "ad": "Fars",
@@ -3422,7 +4091,11 @@
    "farsna"
   ],
   "cizgi": "ad",
-  "bagli": "Devrim Muhafızları’na yakın"
+  "bagli": "Devrim Muhafızları’na yakın",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "ISNA",
@@ -3441,7 +4114,11 @@
   "notu": "",
   "id": 152,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Iran International",
@@ -3473,7 +4150,11 @@
   "ig_gizle": true,
   "bayrak": "gb",
   "cizgi_et": "Londra merkezli muhalif Farsça kanal",
-  "cizgi_et_en": "London-based Persian opposition channel"
+  "cizgi_et_en": "London-based Persian opposition channel",
+  "grup": "İran",
+  "siyasi": "belirsiz",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "MAP",
@@ -3492,7 +4173,11 @@
   "notu": "",
   "id": 154,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Le Desk",
@@ -3511,7 +4196,11 @@
   "notu": "",
   "id": 155,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Yabiladi",
@@ -3530,7 +4219,11 @@
   "notu": "",
   "id": 156,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "El Khabar",
@@ -3549,7 +4242,12 @@
   "notu": "",
   "id": 157,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm İsrail anlatısına yakınlık gösteriyor) Filistinli ölüm başlıklarında faili gizleme %80,4 (Arapça tanık basın ortalaması %46,5, 97 başlık); büyük olaylarda susma %92,9 (ortalama %59,6, 340 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,7 kat (ortalama 3,0)"
  },
  {
   "ad": "Echorouk",
@@ -3568,7 +4266,12 @@
   "notu": "",
   "id": 158,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sağ",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Ölçüm faili gizleme ve susmada ortalamanın belirgin altında; elle bakılmalı) Filistinli ölüm başlıklarında faili gizleme %62,0 (Arapça tanık basın ortalaması %46,5, 92 başlık); büyük olaylarda susma %89,8 (ortalama %59,6, 216 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,9 kat (ortalama 3,0)"
  },
  {
   "ad": "TAP",
@@ -3587,7 +4290,11 @@
   "notu": "",
   "id": 159,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Inkyfada",
@@ -3607,7 +4314,11 @@
   "id": 160,
   "telegram": null,
   "cizgi": "ad",
-  "cizgi_tartismali": true
+  "cizgi_tartismali": true,
+  "grup": "Arap dünyası",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Kapitalis",
@@ -3626,7 +4337,11 @@
   "notu": "",
   "id": 161,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Libya Ahrar",
@@ -3646,7 +4361,11 @@
   "id": 162,
   "telegram": null,
   "cizgi": "ara",
-  "bagli": "Batı Libya yönetimine yakın"
+  "bagli": "Batı Libya yönetimine yakın",
+  "grup": "Arap dünyası",
+  "siyasi": "merkez-sağ",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "LANA",
@@ -3665,7 +4384,11 @@
   "notu": "",
   "id": 163,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Arap dünyası",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Medyascope",
@@ -3684,7 +4407,12 @@
   "notu": "",
   "id": 164,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm İsrail anlatısına yakınlık gösteriyor) Filistinli ölüm başlıklarında faili gizleme %51,5 (Türkçe tanık basın ortalaması %30,9, 134 başlık); büyük olaylarda susma %94,2 (ortalama %89,4, 413 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 7,6 kat (ortalama 3,7)"
  },
  {
   "ad": "T24",
@@ -3703,7 +4431,11 @@
   "notu": "",
   "id": 165,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Daily Sabah",
@@ -3722,8 +4454,13 @@
   "notu": "",
   "id": 167,
   "telegram": null,
-  "cizgi": "ara",
-  "bagli": "Hükümete yakın (Turkuvaz Medya)"
+  "cizgi": "ad",
+  "bagli": "Hükümete yakın (Turkuvaz Medya)",
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor.  Filistinli ölüm başlıklarında faili gizleme %16,9 (İngilizce tanık basın ortalaması %25,3, 780 başlık); büyük olaylarda susma %76,1 (ortalama %74,7, 472 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,8 kat (ortalama 2,1)"
  },
  {
   "ad": "Hürriyet Daily News",
@@ -3742,7 +4479,12 @@
   "notu": "",
   "id": 168,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %25,9 (İngilizce tanık basın ortalaması %25,3, 317 başlık); büyük olaylarda susma %87,5 (ortalama %74,7, 502 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 2,4 kat (ortalama 2,1)"
  },
  {
   "ad": "TRT Arabi",
@@ -3761,7 +4503,13 @@
   "notu": "",
   "id": 169,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor. Ters giden tek gösterge İsrailli ölüye ayrılan başlık: ortalamanın üstünde. Bu, İsrail kayıplarının ayrıntılı haberleştirilmesinden kaynaklanıyor olabilir; sempati ölçüsü değil. Filistinli ölüm başlıklarında faili gizleme %35,8 (Arapça tanık basın ortalaması %46,5, 1090 başlık); büyük olaylarda susma %56,1 (ortalama %59,6, 485 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,7 kat (ortalama 3,0)",
+  "kurum": "TRT"
  },
  {
   "ad": "Anadolu Ajansı (Arapça)",
@@ -3780,7 +4528,13 @@
   "notu": "",
   "id": 170,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski \"arada\" etiketi bizim elle verdiğimiz bir etiketti, ölçüme dayanmıyordu. Veri, faili yazmada bu yayını aynı dildeki tanık basın ortalamasının üstünde gösteriyor.  Filistinli ölüm başlıklarında faili gizleme %39,6 (Arapça tanık basın ortalaması %46,5, 782 başlık); büyük olaylarda susma %28,7 (ortalama %59,6, 80 olay)",
+  "kurum": "Anadolu Ajansı"
  },
  {
   "ad": "infoLibre",
@@ -3799,7 +4553,12 @@
   "notu": "",
   "id": 171,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Ölçüm farklı gösteriyor ama bu dilde ya da bu örneklemle ölçüm zayıf; etiket korundu (Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde) Filistinli ölüm başlıklarında faili gizleme %29,8 (İspanyolca tanık basın ortalaması %42,2, 329 başlık); büyük olaylarda susma %83,7 (ortalama %92,8, 410 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,4 kat (ortalama 0,6)"
  },
  {
   "ad": "La Marea",
@@ -3818,7 +4577,11 @@
   "notu": "",
   "id": 172,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İspanya",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Il Post",
@@ -3837,7 +4600,12 @@
   "notu": "",
   "id": 173,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "İtalya",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %63,0 (İtalyanca tanık basın ortalaması %82,2, 146 başlık); büyük olaylarda susma %92,6 (ortalama %90,0, 435 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 9,8 kat (ortalama 1,8)"
  },
  {
   "ad": "tagesschau",
@@ -3868,7 +4636,11 @@
    }
   ],
   "cizgi_et": "Alman kamu yayıncısı",
-  "cizgi_et_en": "German public broadcaster"
+  "cizgi_et_en": "German public broadcaster",
+  "grup": "Almanya",
+  "siyasi": "devlet / kamu",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Novara Media",
@@ -3887,7 +4659,11 @@
   "notu": "",
   "id": 175,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İngiltere",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Declassified UK",
@@ -3906,7 +4682,11 @@
   "notu": "",
   "id": 176,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "İngiltere",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Democracy Now!",
@@ -3925,7 +4705,12 @@
   "notu": "",
   "id": 177,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "ABD",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %23,8 (İngilizce tanık basın ortalaması %25,3, 223 başlık); büyük olaylarda susma %88,5 (ortalama %74,7, 434 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 2,1)"
  },
  {
   "ad": "Responsible Statecraft",
@@ -3944,7 +4729,11 @@
   "notu": "",
   "id": 178,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ara",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "CNN",
@@ -3974,7 +4763,11 @@
    }
   ],
   "cizgi_et": "ABD ana akım basını",
-  "cizgi_et_en": "US mainstream press"
+  "cizgi_et_en": "US mainstream press",
+  "grup": "ABD",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Dawn",
@@ -3993,7 +4786,12 @@
   "notu": "",
   "id": 180,
   "telegram": null,
-  "cizgi": "ara"
+  "cizgi": "ad",
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Eski etiket \"arada\"; ölçüm faili yazma ve olaylara ilgide ortalamanın üstünde Filistinli ölüm başlıklarında faili gizleme %17,9 (İngilizce tanık basın ortalaması %25,3, 336 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,5 kat (ortalama 2,1)"
  },
  {
   "ad": "Sicha Mekomit (Local Call)",
@@ -4012,7 +4810,11 @@
   "notu": "",
   "id": 181,
   "telegram": null,
-  "cizgi": "ad"
+  "cizgi": "ad",
+  "grup": "Filistin",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Israel Hayom",
@@ -4056,7 +4858,12 @@
    }
   ],
   "cizgi_et": "Netanyahu’ya yakın İsrail basını",
-  "cizgi_et_en": "Israeli press close to Netanyahu"
+  "cizgi_et_en": "Israeli press close to Netanyahu",
+  "grup": "İsrail",
+  "siyasi": "sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %52,6 (İngilizce tanık basın ortalaması %25,3, 137 başlık); büyük olaylarda susma %98,4 (ortalama %74,7, 486 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 60,5 kat (ortalama 2,1)"
  },
  {
   "ad": "N12",
@@ -4093,7 +4900,11 @@
    }
   ],
   "cizgi_et": "İsrail ana akım televizyonu",
-  "cizgi_et_en": "Israeli mainstream television"
+  "cizgi_et_en": "Israeli mainstream television",
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 184,
@@ -4110,7 +4921,12 @@
   "sadece_telegram": "muhamadalsharif",
   "son_dakika": true,
   "cizgi": "ad",
-  "hassas": true
+  "hassas": true,
+  "grup": "Filistin",
+  "siyasi": "belirsiz",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %53,2 (Arapça tanık basın ortalaması %46,5, 1274 başlık); büyük olaylarda susma %20,5 (ortalama %59,6, 346 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 1,4 kat (ortalama 3,0)"
  },
  {
   "id": 185,
@@ -4129,7 +4945,11 @@
   "cizgi": "ad",
   "hassas": true,
   "bagli": "Hamas’ın resmî kanalı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Filistin",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 186,
@@ -4148,7 +4968,11 @@
   "cizgi": "ad",
   "hassas": true,
   "bagli": "FHKC’nin resmî kanalı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Filistin",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 187,
@@ -4167,7 +4991,11 @@
   "cizgi": "ad",
   "hassas": true,
   "bagli": "İslami Cihad’ın resmî kanalı",
-  "silahli": true
+  "silahli": true,
+  "grup": "Filistin",
+  "siyasi": "parti / hareket organı",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 188,
@@ -4182,7 +5010,11 @@
   "tur": "grup",
   "profil": "1991’den bu yana “Kur’an’ın aydınlığına doğru” şiarıyla yayımlanan aylık Haksöz dergisinin haber sitesi. Türkiye’deki İslami hareket çevresinin yayın organlarından; Filistin, ümmet ve emperyalizm karşıtlığı başlıca gündemleri. Haberin yanında yorum ve analiz yazıları da yayımlar.",
   "cizgi": "ad",
-  "bagli": "Haksöz dergisinin sitesi"
+  "bagli": "Haksöz dergisinin sitesi",
+  "grup": "Türkiye",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 189,
@@ -4200,7 +5032,11 @@
   "analiz_yolu": [
    "iktibasdergisi.com/20"
   ],
-  "bagli": "İktibas dergisinin sitesi"
+  "bagli": "İktibas dergisinin sitesi",
+  "grup": "Türkiye",
+  "siyasi": "İslami düşünce",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "id": 190,
@@ -4217,7 +5053,11 @@
   "son_dakika": true,
   "sadece_instagram": "courtneybonneauphotography",
   "x": "cbonneauimages",
-  "profil": "Yaklaşık iki yıldır Güney Lübnan'da, sınır hattında ve İsrail işgali altındaki bölgede çalışan bağımsız savaş muhabiri ve fotoğrafçı. İsrail'in sivil evleri yıkmasını ve bölgedeki askerî üsleri belgeliyor. Paylaşımları X'te (@cbonneauimages) ve Instagram'da."
+  "profil": "Yaklaşık iki yıldır Güney Lübnan'da, sınır hattında ve İsrail işgali altındaki bölgede çalışan bağımsız savaş muhabiri ve fotoğrafçı. İsrail'in sivil evleri yıkmasını ve bölgedeki askerî üsleri belgeliyor. Paylaşımları X'te (@cbonneauimages) ve Instagram'da.",
+  "grup": "Arap dünyası",
+  "siyasi": "belirsiz",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Maariv",
@@ -4236,7 +5076,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 191,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "merkez-sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Kan Haber",
@@ -4255,7 +5099,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 192,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "devlet / kamu",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Walla",
@@ -4274,7 +5122,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 193,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Israel Hayom (İbranice)",
@@ -4293,7 +5145,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 194,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Arutz Sheva",
@@ -4312,7 +5168,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 195,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %61,0 (İngilizce tanık basın ortalaması %25,3, 264 başlık); büyük olaylarda susma %93,4 (ortalama %74,7, 457 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 81,3 kat (ortalama 2,1)"
  },
  {
   "ad": "Makor Rishon",
@@ -4331,7 +5192,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 196,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "sağ",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Globes",
@@ -4350,7 +5215,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 197,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İsrail",
+  "siyasi": "merkez",
+  "tutum": "israil",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Al-Alam",
@@ -4369,7 +5238,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 198,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "İran",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "TASS",
@@ -4388,7 +5261,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 199,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %29,4 (İngilizce tanık basın ortalaması %25,3, 1269 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,0 kat (ortalama 2,1)"
  },
  {
   "ad": "RIA Novosti",
@@ -4407,7 +5285,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 200,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "RT Arabic",
@@ -4426,7 +5308,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 201,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Xinhua",
@@ -4445,7 +5331,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 202,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Global Times",
@@ -4464,7 +5354,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 203,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "The Hindu",
@@ -4483,7 +5377,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 204,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez-sol",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %20,4 (İngilizce tanık basın ortalaması %25,3, 731 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,9 kat (ortalama 2,1)"
  },
  {
   "ad": "The Indian Express",
@@ -4502,7 +5401,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 205,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %25,9 (İngilizce tanık basın ortalaması %25,3, 495 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 6,4 kat (ortalama 2,1)"
  },
  {
   "ad": "NDTV",
@@ -4521,7 +5425,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 206,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %29,5 (İngilizce tanık basın ortalaması %25,3, 606 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 17,6 kat (ortalama 2,1)"
  },
  {
   "ad": "The News International",
@@ -4540,7 +5449,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 207,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Bernama",
@@ -4559,7 +5472,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 208,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %37,8 (İngilizce tanık basın ortalaması %25,3, 283 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,6 kat (ortalama 2,1)"
  },
  {
   "ad": "The Star (Malezya)",
@@ -4578,7 +5496,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 209,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Bir ölçüde ortalamanın gerisinde (faili gizleme); etiket korundu Filistinli ölüm başlıklarında faili gizleme %43,4 (İngilizce tanık basın ortalaması %25,3, 106 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 3,2 kat (ortalama 2,1)"
  },
  {
   "ad": "Malaysiakini",
@@ -4597,7 +5520,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 210,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Antara",
@@ -4616,7 +5543,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 211,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Kompas",
@@ -4635,7 +5566,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 212,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Republika",
@@ -4654,7 +5589,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 213,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez-sağ",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Daily Maverick",
@@ -4673,7 +5612,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 214,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez-sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %29,3 (İngilizce tanık basın ortalaması %25,3, 157 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 5,6 kat (ortalama 2,1)"
  },
  {
   "ad": "Mail & Guardian",
@@ -4692,7 +5636,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 215,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez-sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "Premium Times",
@@ -4711,7 +5659,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 216,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "merkez",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "APS",
@@ -4730,7 +5682,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 217,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "La Jornada",
@@ -4749,7 +5705,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 218,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %46,2 (İspanyolca tanık basın ortalaması %42,2, 489 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,5 kat (ortalama 0,6)"
  },
  {
   "ad": "Página/12",
@@ -4768,7 +5729,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 219,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %43,4 (İspanyolca tanık basın ortalaması %42,2, 145 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,4 kat (ortalama 0,6)"
  },
  {
   "ad": "Brasil de Fato",
@@ -4787,7 +5753,11 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 220,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "sol",
+  "tutum": "yanli",
+  "tutum_dayanak": "editoryal"
  },
  {
   "ad": "teleSUR",
@@ -4806,7 +5776,12 @@
   "notu": "Kasım 2026’da eklendi.",
   "id": 221,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Diğer",
+  "siyasi": "devlet / kamu",
+  "tutum": "yanli",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %22,1 (İspanyolca tanık basın ortalaması %42,2, 639 başlık); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 0,9 kat (ortalama 0,6)"
  },
  {
   "ad": "BBC Arabic",
@@ -4841,7 +5816,13 @@
    }
   ],
   "cizgi_et": "İngiliz kamu yayıncısının Arapça servisi",
-  "cizgi_et_en": "Arabic service of the British public broadcaster"
+  "cizgi_et_en": "Arabic service of the British public broadcaster",
+  "grup": "İngiltere",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %49,5 (Arapça tanık basın ortalaması %46,5, 323 başlık); büyük olaylarda susma %86,6 (ortalama %59,6, 500 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,4 kat (ortalama 3,0)",
+  "kurum": "BBC"
  },
  {
   "ad": "BBC Türkçe",
@@ -4876,7 +5857,13 @@
    }
   ],
   "cizgi_et": "İngiliz kamu yayıncısının Türkçe servisi",
-  "cizgi_et_en": "Turkish service of the British public broadcaster"
+  "cizgi_et_en": "Turkish service of the British public broadcaster",
+  "grup": "İngiltere",
+  "siyasi": "devlet / kamu",
+  "tutum": "arada",
+  "tutum_dayanak": "olcum",
+  "tutum_not": "Filistinli ölüm başlıklarında faili gizleme %36,2 (Türkçe tanık basın ortalaması %30,9, 80 başlık); büyük olaylarda susma %96,1 (ortalama %89,4, 456 olay); İsrailli ölüye ölü başına ayrılan başlık Filistinli ölüye göre 4,9 kat (ortalama 3,7)",
+  "kurum": "BBC"
  },
  {
   "ad": "CNN Türk",
@@ -4899,7 +5886,10 @@
   "bagli": "Demirören Medya",
   "besleme": [
    "https://www.cnnturk.com/feed/rss/all/news"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Habertürk",
@@ -4921,7 +5911,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.haberturk.com/rss"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Bloomberg HT",
@@ -4943,7 +5936,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.bloomberght.com/rss"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "A Haber",
@@ -4967,7 +5963,10 @@
   "besleme": [
    "https://www.ahaber.com.tr/rss/dunya.xml",
    "https://www.ahaber.com.tr/rss/gundem.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Haber Global",
@@ -4989,7 +5988,10 @@
   "cizgi": null,
   "besleme": [
    "https://haberglobal.com.tr/rss"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez-sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Hürriyet",
@@ -5013,7 +6015,10 @@
   "besleme": [
    "https://www.hurriyet.com.tr/rss/dunya",
    "https://www.hurriyet.com.tr/rss/anasayfa"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez-sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Milliyet",
@@ -5036,7 +6041,10 @@
   "bagli": "Demirören Medya",
   "besleme": [
    "https://www.milliyet.com.tr/rss/rssnew/dunyarss.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez-sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Sabah",
@@ -5060,7 +6068,10 @@
   "besleme": [
    "https://www.sabah.com.tr/rss/dunya.xml",
    "https://www.sabah.com.tr/rss/gundem.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Haber7",
@@ -5079,7 +6090,10 @@
   "notu": "Kasım 2026’da Türkiye basını çalışması için eklendi.",
   "id": 232,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "En Son Haber",
@@ -5101,7 +6115,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.ensonhaber.com/rss/ensonhaber.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "sağ",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Haberler.com",
@@ -5123,7 +6140,10 @@
   "cizgi": null,
   "besleme": [
    "https://rss.haberler.com/rss.asp"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "belirsiz",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "NTV",
@@ -5146,7 +6166,10 @@
   "besleme": [
    "https://www.ntv.com.tr/dunya.rss",
    "https://www.ntv.com.tr/gundem.rss"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "TRT Haber",
@@ -5169,7 +6192,13 @@
   "besleme": [
    "https://www.trthaber.com/dunya_articles.rss",
    "https://www.trthaber.com/manset_articles.rss"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "devlet / kamu",
+  "tutum_dayanak": "bekliyor",
+  "kurum": "TRT",
+  "tutum": "yanli",
+  "tutum_not": "Kurumun bütün masaları birlikte değerlendirildi."
  },
  {
   "ad": "Sözcü",
@@ -5192,7 +6221,10 @@
   "besleme": [
    "https://www.sozcu.com.tr/feeds-rss-category-dunya",
    "https://www.sozcu.com.tr/rss/dunya.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "ulusalcı",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Cumhuriyet",
@@ -5214,7 +6246,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.cumhuriyet.com.tr/rss/son_dakika.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "ulusalcı",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "BirGün",
@@ -5236,7 +6271,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.birgun.net/rss/home"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "sol",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Halk TV",
@@ -5258,7 +6296,10 @@
   "cizgi": null,
   "besleme": [
    "https://halktv.com.tr/service/rss.php"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "merkez-sol",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Oda TV",
@@ -5280,7 +6321,10 @@
   "cizgi": null,
   "besleme": [
    "https://www.odatv.com/rss.xml"
-  ]
+  ],
+  "grup": "Türkiye",
+  "siyasi": "ulusalcı",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "Aydınlık",
@@ -5299,7 +6343,10 @@
   "notu": "Kasım 2026’da Türkiye basını çalışması için eklendi.",
   "id": 242,
   "telegram": null,
-  "cizgi": null
+  "cizgi": null,
+  "grup": "Türkiye",
+  "siyasi": "ulusalcı",
+  "tutum_dayanak": "bekliyor"
  },
  {
   "ad": "MenchOsint",
@@ -5321,6 +6368,9 @@
   "telegram": null,
   "cizgi": null,
   "x": "MenchOsint",
-  "dogrulanmadi": true
+  "dogrulanmadi": true,
+  "grup": "Diğer",
+  "siyasi": "belirsiz",
+  "tutum_dayanak": "bekliyor"
  }
 ]

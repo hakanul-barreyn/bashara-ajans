@@ -55,3 +55,16 @@
 @media (min-width:700px){.pf{padding-top:20px}.pf-ust{border-top:1px solid var(--cizgi);border-radius:18px}.pf-gonderiler{border:1px solid var(--cizgi);border-radius:0 0 14px 14px;overflow:hidden}}
 .pf-g-alt a.pf-hata{color:var(--soluk);font-weight:600}
 @media (max-width:560px){.pf-kimlik{flex-direction:column;align-items:flex-start;gap:8px}.pf-ad{padding-bottom:0}}
+
+/* Yeni taksim çipleri (hesap-ortak.js taksimCip) */
+.tx-cipler{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tx-cip{display:inline-flex;flex-wrap:wrap;align-items:center;font-size:.74rem;padding:2px 9px;border-radius:999px;border:1px solid #cfd5d1;color:#46504a;background:#fff}
+.tx-cip.tutum-yanli{border-color:#2b8a5e;color:#1f6e4b}.tx-cip.tutum-israil{border-color:#4a72c4;color:#3557a0}
+.tx-bilgi{display:inline;margin-left:4px}
+.tx-bilgi summary{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid currentColor;font:italic 700 .62rem/1 Georgia,serif;cursor:pointer;list-style:none;opacity:.75}
+.tx-bilgi summary::-webkit-details-marker{display:none}
+.tx-bilgi>span{display:block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#f3f1ec;border:1px solid #e3dfd6;color:#46504a;font-size:.8rem;line-height:1.45}
+.tx-cip:has(.tx-bilgi[open]){border-radius:10px;flex-basis:100%}
+.pf-taksim{padding:0 max(16px,env(safe-area-inset-left,0px))}
+.hb-koyu .tx-cip{background:transparent;border-color:#4a554f;color:#c9d1cc}
+.hb-koyu .tx-bilgi>span{background:#1a201d;border-color:#2e3531;color:#c9d1cc}

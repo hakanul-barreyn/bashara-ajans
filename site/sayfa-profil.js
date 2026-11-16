@@ -67,6 +67,7 @@
       [k.sehir && k.ulke ? k.sehir + ", " + k.ulke : k.ulke, H.dilYaz(k.dil), H.turYaz(k)].filter(Boolean).forEach((x) => kun.appendChild(el("span", null, x)));
       const kp = el("span", "pf-kamp"); const i_ = el("i"); i_.style.background = r.ana; kp.append(i_, document.createTextNode(H.kampYaz(k))); kun.appendChild(kp);
       ust.appendChild(kun);
+      if (H.taksimCip) { const tx = H.taksimCip(k); tx.classList.add("pf-taksim"); ust.appendChild(tx); }
       if (k.profil) {
         const p = el("p", "pf-bio", (EN && k.profil_en) || k.profil); if (EN && !k.profil_en) p.lang = "tr"; ust.appendChild(p);
       }

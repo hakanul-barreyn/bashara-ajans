@@ -189,3 +189,14 @@
 .mk-ml-acik{display:flex;flex-direction:column;gap:3px;font-size:.82rem;line-height:1.35}
 .mk-ml-acik a{color:#1f5c43;font-weight:700;text-decoration:none}
 .mk-ml-acik small{color:#7b847e;font-family:var(--mono,monospace)}
+/* Yeni taksim: grup, siyasi çizgi, Filistin tutumu; ⓘ dokununca kısa açıklama */
+.hs-taksim{margin-top:2px}
+.hs-cip.tutum-yanli{border-color:#2b8a5e;color:#1f6e4b}
+.hs-cip.tutum-israil{border-color:#4a72c4;color:#3557a0}
+.hs-bilgi{display:inline;margin-left:4px;position:relative}
+.hs-bilgi summary{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid currentColor;font:700 .62rem/1 Georgia,serif;font-style:italic;cursor:pointer;list-style:none;vertical-align:1px;opacity:.75}
+.hs-bilgi summary::-webkit-details-marker{display:none}
+.hs-bilgi[open] summary{opacity:1}
+.hs-bilgi>span{display:block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#f3f1ec;border:1px solid var(--mk-cizgi);color:var(--mk-yazi2);font-size:.8rem;line-height:1.45;white-space:normal;max-width:34rem}
+.hs-taksim .hs-cip{display:inline-flex;flex-wrap:wrap;align-items:center}
+.hs-taksim .hs-cip:has(.hs-bilgi[open]){border-radius:10px;flex-basis:100%}

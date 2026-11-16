@@ -87,5 +87,27 @@
       "\n" + (EN() ? "Alboroto page: " : "Alboroto sayfası: ") + sayfa + "\n\n" + (EN() ? "What is wrong, and how do you know? (a link or document helps)\n" : "Yanlış olan ne ve nereden biliyorsunuz? (bağlantı ya da belge eklemek işi hızlandırır)\n");
     return "mailto:" + adr + "?subject=" + encodeURIComponent(konu) + "&body=" + encodeURIComponent(govde);
   }
-  window.ZBSHesap = { bayrak, KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil, hataBildir };
+  // Yeni taksim: grup, siyasi çizgi ve Filistin tutumu; her biri ⓘ ile kısa açıklamalı (site/taksim.json)
+  let TX = null;
+  const txHazir = fetch("site/taksim.json?v=1").then((r) => r.json()).then((d) => { TX = d; return d; }).catch(() => ({}));
+  function taksimCip(k) {
+    const kok = document.createElement("div"); kok.className = "tx-cipler";
+    txHazir.then(() => {
+      const L = EN() ? "en" : "tr", t = TX || {};
+      const cip = (ad, acik, sinif) => {
+        const c = document.createElement("span"); c.className = "tx-cip" + (sinif ? " " + sinif : ""); c.textContent = ad;
+        if (acik) { const d = document.createElement("details"); d.className = "tx-bilgi"; const sm = document.createElement("summary"); sm.textContent = "i"; sm.setAttribute("aria-label", EN() ? "Info" : "Bilgi"); const sp = document.createElement("span"); sp.textContent = acik; d.append(sm, sp); c.appendChild(d); }
+        kok.appendChild(c);
+      };
+      if (k.grup) cip(k.grup, ((t.grup || {})[k.grup] || {})[L]);
+      if (k.siyasi && k.siyasi !== "belirsiz") cip(k.siyasi, ((t.siyasi || {})[k.siyasi] || {})[L]);
+      if (k.tutum) {
+        const ad = ((t.tutum_ad || {})[k.tutum] || {})[L] || k.tutum;
+        const acik = [((t.tutum || {})[k.tutum] || {})[L], ((t.tutum || {})["_" + (k.tutum_dayanak || "editoryal")] || {})[L], L === "tr" ? k.tutum_not : ""].filter(Boolean).join(" ");
+        cip(ad, acik, "tutum-" + k.tutum);
+      } else if (k.tutum_dayanak === "bekliyor") cip(EN() ? "stance pending" : "tutum ölçülüyor", ((t.tutum || {})._bekliyor || {})[L]);
+    });
+    return kok;
+  }
+  window.ZBSHesap = { taksimCip, bayrak, KAMP, KAMP_RENK, kampAd, kampYaz, dilYaz, turYaz, kulAd, renk, avatar, takipler, takipte, takipDegis, takipDugme, profil, hataBildir };
 })();

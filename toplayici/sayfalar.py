@@ -118,6 +118,49 @@ def _fark(olay, kmap, dil):
     return f'<section class="hs-bolum" id="fark-{dil}"><h2>{t["fark"]}</h2>{icerik}</section>'
 
 
+_TAKSIM = None
+
+
+def _taksim():
+    """site/taksim.json: grup, siyasi çizgi ve Filistin tutumu için kısa açıklamalar (ⓘ)."""
+    global _TAKSIM
+    if _TAKSIM is None:
+        try:
+            _TAKSIM = json.load(open(os.path.join(_KOK or os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site", "taksim.json"), encoding="utf-8"))
+        except Exception:
+            _TAKSIM = {}
+    return _TAKSIM
+
+
+def _bilgi(metin, dil):
+    if not metin:
+        return ""
+    return (f'<details class="hs-bilgi"><summary aria-label="{"Bilgi" if dil == "tr" else "Info"}">i</summary>'
+            f'<span>{_e(metin)}</span></details>')
+
+
+def _taksim_cip(k, dil):
+    """Yayının grubu, siyasi çizgisi ve Filistin tutumu: her biri ⓘ ile kısa açıklamalı."""
+    tx, out = _taksim(), ""
+    g = k.get("grup")
+    if g:
+        out += f'<span class="hs-cip">{_e(g)}{_bilgi(((tx.get("grup") or {}).get(g) or {}).get(dil), dil)}</span>'
+    sy = k.get("siyasi")
+    if sy and sy != "belirsiz":
+        out += f'<span class="hs-cip">{_e(sy)}{_bilgi(((tx.get("siyasi") or {}).get(sy) or {}).get(dil), dil)}</span>'
+    tu = k.get("tutum")
+    if tu:
+        ad = ((tx.get("tutum_ad") or {}).get(tu) or {}).get(dil) or tu
+        acik = (((tx.get("tutum") or {}).get(tu) or {}).get(dil) or "") + " " + \
+            (((tx.get("tutum") or {}).get("_" + (k.get("tutum_dayanak") or "editoryal")) or {}).get(dil) or "")
+        if dil == "tr" and k.get("tutum_not"):
+            acik += " " + k["tutum_not"]
+        out += f'<span class="hs-cip tutum-{_e(tu)}">{_e(ad)}{_bilgi(acik.strip(), dil)}</span>'
+    elif k.get("tutum_dayanak") == "bekliyor":
+        out += f'<span class="hs-cip">{"tutum ölçülüyor" if dil == "tr" else "stance pending"}{_bilgi(((tx.get("tutum") or {}).get("_bekliyor") or {}).get(dil), dil)}</span>'
+    return out
+
+
 def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     """Haberin ait olduğu olayı öteki yayınlar nasıl anlattı: kamp kamp, bakış, anlatım çipleri ve kısa betimleme."""
     if not olay or len(olay.get("haberler", [])) < 2:
@@ -129,11 +172,12 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     gorulen, ek = {}, {}
     sirali = sorted(olay["haberler"], key=lambda x: (x["id"] != h["id"], sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
     secilen = []
+    anah = lambda x: (kmap.get(x.get("k")) or {}).get("kurum") or x.get("k")   # AA, TRT, BBC: masaları tek kurum
     for x in sirali:
-        if x.get("k") in gorulen:
-            ek[x["k"]] = ek.get(x["k"], 0) + 1
+        if anah(x) in gorulen:
+            ek[anah(x)] = ek.get(anah(x), 0) + 1
             continue
-        gorulen[x.get("k")] = True
+        gorulen[anah(x)] = True
         secilen.append(x)
     secilen.sort(key=lambda x: (sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
     for x in secilen:
@@ -146,10 +190,13 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
         if not hedef.startswith(("http://", "https://")):
             hedef = ""
         dis = f' href="{_e(hedef)}" target="_blank" rel="noopener"'
-        ad = f'<a{dis}>{_e(k["ad"])} <span aria-hidden="true">↗</span></a>' if hedef else f"<b>{_e(k['ad'])}</b>"
+        gad = k.get("kurum") or k["ad"]
+        ad = f'<a{dis}>{_e(gad)} <span aria-hidden="true">↗</span></a>' if hedef else f"<b>{_e(gad)}</b>"
+        if k.get("kurum") and k["ad"] != k["kurum"]:
+            ad += f' <small>{_e(k["ad"])}</small>'
         bu = f' <span class="hs-cip">{t["bu"]}</span>' if x["id"] == h["id"] else ""
-        if ek.get(x.get("k")):
-            bu += f' <small>+{ek[x["k"]]} {"haber daha" if dil == "tr" else "more"}</small>'
+        if ek.get(anah(x)):
+            bu += f' <small>+{ek[anah(x)]} {"haber daha" if dil == "tr" else "more"}</small>'
         cip = ""
         a = x.get("an") or {}
         if a.get("dayanak"):
@@ -162,16 +209,18 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
             cip += '<span class="hs-cip iyi">Bağlam var</span>'
         if a.get("rakam"):
             cip += f'<span class="hs-cip">{_e(a["rakam"])}</span>'
-        meta = _e(almanak.kamp(k)) + (" · " + _e(b[0] if dil == "tr" else b[1]) if b else "")
+        meta = (_e(b[0] if dil == "tr" else b[1]) + " · " if b else "") + (_e(k.get("ulke") or "") if k.get("ulke") and k.get("ulke") != "Belirsiz" else "")
+        tc = _taksim_cip(k, dil)
         satir.append(f'<li><div class="hs-su"><i style="background:{b[2] if b else "#c9cfcb"}"></i>{ad}{bu}</div>'
                      f'<small>{meta}</small>'
+                     + (f'<div class="hs-su hs-taksim">{tc}</div>' if tc else "")
                      + ((f'<a class="hs-kim-bas"{dis}>{_e(x.get("bt") or x.get("bo"))}</a>' if hedef else f'<span>{_e(x.get("bt") or x.get("bo"))}</span>')
                         if (x.get("bt") or x.get("bo")) else "")
                      + (f'<span style="color:var(--k-ink2)">{_e(x.get("ye") if dil == "en" and x.get("ye") else x.get("y"))}</span>' if x.get("y") else "")
                      + (f'<div class="hs-su">{cip}</div>' if cip else "") + "</li>")
     if len(satir) < 2:
         return ""
-    return (f'<section class="hs-bolum" id="kim-{dil}"><h2>{t["kim"]} · {len({x.get("k") for x in olay["haberler"]})}</h2>'
+    return (f'<section class="hs-bolum" id="kim-{dil}"><h2>{t["kim"]} · {len(satir)}</h2>'
             + f'<ul class="hs-kim">{"".join(satir[:10])}</ul>'
             + (f'<details class="hs-kim-daha"><summary>{"Tümünü göster" if dil == "tr" else "Show all"} ({len(satir)})</summary>'
                f'<ul class="hs-kim">{"".join(satir[10:])}</ul></details>' if len(satir) > 10 else "")
