@@ -1,0 +1,82 @@
+/* Raporlar girişi: kitap kapağı gibi koyu yeşil zemin, üzerinde dokuma şeritler (Bayeux duvar halısı gibi);
+   her şerit bir rapor, kendi deseniyle (isimler, hastane tabelası, kelimeler, noktalar, eğri, tırnaklar, anahtar). */
+.rk{--rk-yesil:#26463a;--rk-yesil2:#1d382e;--rk-kagit:#f1ead8;--rk-kagit2:#e7dcc2;--rk-murekkep:#1c2420;--rk-kirmizi:#b3402f;--rk-hardal:#a8741c}
+.rk-kapak{background:radial-gradient(1200px 500px at 20% 0%,#2e5445 0%,var(--rk-yesil) 45%,var(--rk-yesil2) 100%);color:var(--rk-kagit);padding:48px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+.rk-bas{max-width:1080px;margin:0 auto 30px}
+.rk-ust{margin:0 0 8px;font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#cfe3d6}
+.rk-bas h1{margin:0;font:700 clamp(2.6rem,6vw,4.4rem)/1 "Source Serif 4",Georgia,serif;color:var(--rk-kagit);letter-spacing:-.01em}
+.rk-dek{margin:14px 0 0;max-width:46ch;font:400 1.08rem/1.5 "Source Serif 4",Georgia,serif;color:#d9e4dc}
+.rk-seritler{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+/* şerit: arka planda siyah-beyaz fotoğraf (Nekbe, kamplar, uydu), soldan koyulaşan örtü; üstte ve altta dikiş */
+.rk-serit{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr) auto;align-items:center;gap:18px;min-height:170px;padding:22px 24px;
+  background:#16211c;color:var(--rk-kagit);text-decoration:none;border-radius:2px;
+  box-shadow:0 1px 0 rgba(0,0,0,.35),0 12px 26px -14px rgba(0,0,0,.75);transition:transform .2s ease,box-shadow .2s ease}
+.rk-serit>.rk-foto{position:absolute;inset:0;z-index:-2;background-position:center;background-size:cover;background-repeat:no-repeat;filter:grayscale(1) contrast(1.08) brightness(.9);transform:scale(1.02);transition:transform .6s ease,filter .4s ease}
+.rk-serit::before{content:"";position:absolute;inset:0;z-index:-1;border:0;
+  background:linear-gradient(90deg,rgba(13,24,19,.94) 0%,rgba(13,24,19,.82) 38%,rgba(13,24,19,.45) 70%,rgba(13,24,19,.62) 100%)}
+.rk-serit::after{content:"";position:absolute;left:10px;right:10px;top:7px;bottom:7px;border-top:1.5px dashed rgba(241,234,216,.35);border-bottom:1.5px dashed rgba(241,234,216,.35);pointer-events:none}
+.rk-serit:hover>.rk-foto,.rk-serit:focus-visible>.rk-foto{transform:scale(1.06);filter:grayscale(.6) contrast(1.08) brightness(.95)}
+.rk-serit:hover,.rk-serit:focus-visible{transform:translateY(-2px);box-shadow:0 1px 0 rgba(0,0,0,.35),0 18px 32px -14px rgba(0,0,0,.85);outline:none}
+.rk-serit:focus-visible{box-shadow:0 0 0 3px #7ee2a8}
+.rk-yazi{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;z-index:1}
+.rk-yazi small{font:800 .7rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#e9a08f}
+.rk-yazi b{font:700 clamp(1.3rem,2.4vw,1.75rem)/1.15 "Source Serif 4",Georgia,serif;text-wrap:balance;color:#fbf7ec;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.rk-yazi span{font-size:.9rem;line-height:1.45;color:#d5ddd8;max-width:44ch}
+.rk-desen{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:center;min-width:0;height:130px;overflow:hidden;position:relative}
+.rk-ok{grid-column:3;grid-row:1;font:700 1.6rem "Plus Jakarta Sans",sans-serif;color:var(--rk-kagit);transition:transform .2s ease}
+.rk-serit:hover .rk-ok{transform:translateX(4px)}
+.rk-svg{width:100%;height:100%;max-width:420px}
+.rk-svg [stroke="#1c2420"],.rk-svg [stroke="#3d4541"]{stroke:#e9e2cf}.rk-svg [fill="#1c2420"]{fill:#e9e2cf}
+.rk-svg [fill="#1f6e4b"]{fill:#5fbf8f}.rk-ebu .rk-svg [fill="#1f6e4b"]{fill:#1f6e4b}
+/* siyasi çizgi şeridi: aynı ülkede beş çizgi */
+.rk-cizgi{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}
+.rk-cizgi span{font:700 .9rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;padding:6px 12px;border:1.5px solid rgba(241,234,216,.6);border-radius:999px;color:#fbf7ec;background:rgba(13,24,19,.45)}
+.rk-cizgi span:nth-child(4){border-color:#e9a08f;color:#f0b2a4}
+.rk-kunye{max-width:1080px;margin:14px auto 0;padding:0 max(16px,env(safe-area-inset-left,0px));font:400 .72rem/1.5 "Plus Jakarta Sans",sans-serif;color:#6f7772}
+.rk-kunye a{color:inherit}
+/* isimler: sıfır yaşındaki çocukların adları, Arapça, soluk satırlar */
+.rk-adlar{position:absolute;inset:0;display:block;direction:rtl;text-align:justify;font:600 .82rem/1.55 "Noto Naskh Arabic","Amiri",serif;color:rgba(241,234,216,.62);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);overflow:hidden;padding:4px 0}
+/* Ebu Safiye: tabela ve gün sayacı */
+.rk-gun{position:absolute;right:6px;bottom:4px;font:500 .72rem "JetBrains Mono",monospace;color:var(--rk-kirmizi);background:rgba(13,24,19,.85);color:#f0b2a4;padding:2px 6px;border-radius:4px}
+/* kelimeler: aynı şeyin iki adı */
+.rk-kelime{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font:700 1.05rem "Source Serif 4",Georgia,serif;max-width:420px}
+.rk-kelime span{color:#fbf7ec}.rk-kelime s{color:#9aa49e;text-decoration-color:var(--rk-kirmizi);text-decoration-thickness:2px}
+/* liderler: tırnaklar */
+.rk-alinti{display:flex;gap:18px;font:700 6rem/1 "Source Serif 4",Georgia,serif;color:rgba(241,234,216,.28)}
+.rk-alinti span:nth-child(2n){color:rgba(233,160,143,.5)}
+/* alt bağlantılar */
+.rk-alt{max-width:1080px;margin:28px auto 64px;padding:0 max(16px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rk-alt a{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-top:3px solid var(--rk-yesil);background:#fff;color:var(--rk-murekkep);text-decoration:none}
+.rk-alt a:hover{background:#f6f3ea}
+.rk-alt small{font:800 .68rem "Plus Jakarta Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#6f7772}
+.rk-alt b{font:700 1.15rem "Source Serif 4",Georgia,serif}
+@media (max-width:760px){
+  .rk-kapak{padding-top:32px;padding-bottom:36px}
+  .rk-serit{grid-template-columns:minmax(0,1fr) auto;min-height:0;padding:16px 16px 18px}
+  .rk-desen{grid-column:1/-1;grid-row:1;height:96px}
+  .rk-serit::before{background:linear-gradient(180deg,rgba(13,24,19,.5) 0%,rgba(13,24,19,.88) 55%,rgba(13,24,19,.95) 100%)}
+  .rk-yazi{grid-column:1;grid-row:2}.rk-ok{grid-column:2;grid-row:2}
+  .rk-alinti{font-size:4.4rem}
+  .rk-alt{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.rk-serit,.rk-ok,.rk-foto{transition:none}}
+.rk-dil>.rk-foto{filter:grayscale(1) contrast(1) brightness(.55)}.rk-dil:hover>.rk-foto{filter:grayscale(.6) brightness(.6)}
+
+/* Kefiye: sitenin kenarlarındaki dokunun aynısı (kefiye.png), koyu yeşilin üzerinde açık gri ve saydam. SVG gürültü filtresiyle
+   kumaş gibi hafifçe kıvrılır; desen yavaşça akar, üstünden geçen ışık kıvrımları rüzgârda savrulan bir örtü etkisi verir.
+   Şeritler üstte ve gölgeli, desen yalnızca aralarda ve kenarlarda görünür. */
+.rk-kapak{position:relative;isolation:isolate;overflow:hidden}
+.rk-kefiye{position:absolute;inset:-60px;z-index:-2;pointer-events:none;overflow:hidden}
+.rk-kefiye span{position:absolute;inset:0;transform-origin:30% 0;animation:rk-savrul 11s ease-in-out infinite alternate;will-change:transform}
+.rk-kefiye i{position:absolute;inset:0;background:url(kefiye.png) 0 0/264px 264px repeat;opacity:.13;filter:url(#rk-ruzgar) invert(1)}
+.rk-kefiye b{position:absolute;top:0;bottom:0;left:-50%;width:200%;background:repeating-linear-gradient(104deg,rgba(255,255,255,0) 0,rgba(255,255,255,.035) 160px,rgba(0,0,0,.12) 320px,rgba(255,255,255,0) 480px);
+  animation:rk-isik 16s ease-in-out infinite alternate;will-change:transform}
+@keyframes rk-savrul{0%{transform:translate(0,0) skew(0,0)}50%{transform:translate(-14px,6px) skew(-1.2deg,.4deg)}100%{transform:translate(10px,14px) skew(.9deg,-.5deg) scale(1.015)}}
+@keyframes rk-isik{from{transform:translateX(0)}to{transform:translateX(480px)}}
+.rk-serit{z-index:0;box-shadow:0 0 0 1px rgba(241,234,216,.12),0 2px 0 rgba(0,0,0,.4),0 22px 40px -16px rgba(0,0,0,.9)}
+.rk-serit:hover,.rk-serit:focus-visible{box-shadow:0 0 0 1px rgba(241,234,216,.3),0 2px 0 rgba(0,0,0,.4),0 28px 46px -16px rgba(0,0,0,.95)}
+@media (hover:none),(max-width:760px){.rk-kefiye span,.rk-kefiye b{animation:none}}
+@media (prefers-reduced-motion:reduce){.rk-kefiye span,.rk-kefiye b{animation:none}}
+.rk-seritler{gap:22px}
+.rk-bas{padding-top:22px}
