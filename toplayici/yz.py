@@ -28,7 +28,7 @@ GUNLUK_USD = float(os.environ.get("YZ_GUNLUK_USD") or 0.66)
 FIYAT = {"claude-haiku-5-5": ((0.10, 0.50), (0.50, 2.50))}
 UZUN_ISTEK = 100_000
 # Görevin günlük tavanın en fazla ne kadarını kullanabileceği: tavan dolarken önce görsel, en son haber metni durur
-PAY = {"haber_yaz": 1.0, "ozet": 0.9, "ceviri": 0.9, "olay": 0.8, "almanak": 0.7, "diger": 0.7, "gorsel": 0.6}
+PAY = {"haber_yaz": 1.0, "ceviri": 0.85, "olay": 0.8, "ozet": 0.65, "almanak": 0.6, "diger": 0.6, "gorsel": 0.5}
 GORSEL_TUR = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 UA = "alboroto-yz/1.0"
 
@@ -141,8 +141,14 @@ def _claude(metin, sistem, gorsel, sicaklik, zaman, en_cok_cikti, gorev):
     gg["usd"] = round(gg["usd"] + usd, 6)
     t = "".join(p.get("text", "") for p in yanit.get("content") or [] if p.get("type") == "text")
     if yanit.get("stop_reason") == "refusal":
+        g["ret"] = g.get("ret", 0) + 1
+        g["son_ret"] = gorev
         return 200, None
-    return 200, json_coz(t)
+    v = json_coz(t)
+    if v is None:   # okunamayan çıktı: sebebini görmek için başı ve sonu deftere
+        g["okunamadi"] = g.get("okunamadi", 0) + 1
+        g["son_ham"] = {"gorev": gorev, "bitis": yanit.get("stop_reason"), "bas": t[:300], "son": t[-300:]}
+    return 200, v
 
 
 def _gemini(anahtar, model, metin, sistem, gorsel, sicaklik, zaman, en_cok_cikti):

@@ -32,6 +32,8 @@ jobs:
       - name: Görseller
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          YZ_SAGLAYICI: anthropic   # Claude Haiku önce, Gemini yedek (toplayici/yz.py); kapatmak için bu satırı silin
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
           AWS_NO_SIGN_REQUEST: "YES"

@@ -68,6 +68,8 @@ GEMINI_GUNLUK = int(os.environ.get("GEMINI_GUNLUK") or 900)  # Pasifik saatiyle 
 import yz  # noqa: E402
 if yz.etkin():   # ara katman açıkken istek sayısını dolar tavanı (yz.GUNLUK_USD) sınırlar
     GEMINI_GUNLUK = 100000
+    # özet en pahalı iş (sayfa metni + 4-6 cümle): turda en çok 6, en yeniler önce; başlık çevirisi bütün haberleri kapsar
+    OZET_SINIRI = min(OZET_SINIRI, int(os.environ.get("YZ_OZET_SINIRI") or 6))
 YENIDEN_KESIF_GUN = 7
 CALISMA_SURESI = 9 * 60  # saniye; Actions işi bu süreyi aşmasın
 
