@@ -63,9 +63,20 @@
 @media (prefers-reduced-motion:reduce){.rk-serit,.rk-ok,.rk-foto{transition:none}}
 .rk-dil>.rk-foto{filter:grayscale(1) contrast(1) brightness(.55)}.rk-dil:hover>.rk-foto{filter:grayscale(.6) brightness(.6)}
 
-/* kefiye deseni: koyu yeşilin üzerinde saydam gri balık ağı, üstte ve altta zeytin dalı bandı (şeritlerin arasında görünür) */
-.rk-kapak{position:relative;isolation:isolate}
-.rk-kapak::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.1;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='34' viewBox='0 0 48 34'%3E%3Cg fill='%23d8ddd9'%3E%3Crect y='0' width='48' height='4'/%3E%3Crect y='30' width='48' height='4'/%3E%3Crect y='16.2' width='48' height='1.6'/%3E%3Cellipse cx='12' cy='11' rx='8' ry='3.2' transform='rotate(-28 12 11)'/%3E%3Cellipse cx='12' cy='23' rx='8' ry='3.2' transform='rotate(28 12 23)'/%3E%3Cellipse cx='36' cy='11' rx='8' ry='3.2' transform='rotate(-28 36 11)'/%3E%3Cellipse cx='36' cy='23' rx='8' ry='3.2' transform='rotate(28 36 23)'/%3E%3C/g%3E%3C/svg%3E") 0 14px/48px 34px repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='34' viewBox='0 0 48 34'%3E%3Cg fill='%23d8ddd9'%3E%3Crect y='0' width='48' height='4'/%3E%3Crect y='30' width='48' height='4'/%3E%3Crect y='16.2' width='48' height='1.6'/%3E%3Cellipse cx='12' cy='11' rx='8' ry='3.2' transform='rotate(-28 12 11)'/%3E%3Cellipse cx='12' cy='23' rx='8' ry='3.2' transform='rotate(28 12 23)'/%3E%3Cellipse cx='36' cy='11' rx='8' ry='3.2' transform='rotate(-28 36 11)'/%3E%3Cellipse cx='36' cy='23' rx='8' ry='3.2' transform='rotate(28 36 23)'/%3E%3C/g%3E%3C/svg%3E") 0 calc(100% - 14px)/48px 34px repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Cg fill='none' stroke='%23d8ddd9' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M0 0L36 36M36 0L0 36'/%3E%3C/g%3E%3Cg fill='%23d8ddd9'%3E%3Crect x='15' y='1' width='6' height='2.4'/%3E%3Crect x='15' y='32.6' width='6' height='2.4'/%3E%3Crect x='1' y='15' width='2.4' height='6'/%3E%3Crect x='32.6' y='15' width='2.4' height='6'/%3E%3C/g%3E%3C/svg%3E") 0 0/36px 36px repeat}
+/* Kefiye: sitenin kenarlarındaki dokunun aynısı (kefiye.png), koyu yeşilin üzerinde açık gri ve saydam. SVG gürültü filtresiyle
+   kumaş gibi hafifçe kıvrılır; desen yavaşça akar, üstünden geçen ışık kıvrımları rüzgârda savrulan bir örtü etkisi verir.
+   Şeritler üstte ve gölgeli, desen yalnızca aralarda ve kenarlarda görünür. */
+.rk-kapak{position:relative;isolation:isolate;overflow:hidden}
+.rk-kefiye{position:absolute;inset:-60px;z-index:-2;pointer-events:none;overflow:hidden}
+.rk-kefiye span{position:absolute;inset:0;transform-origin:30% 0;animation:rk-savrul 11s ease-in-out infinite alternate;will-change:transform}
+.rk-kefiye i{position:absolute;inset:0;background:url(kefiye.png) 0 0/264px 264px repeat;opacity:.13;filter:url(#rk-ruzgar) invert(1)}
+.rk-kefiye b{position:absolute;top:0;bottom:0;left:-50%;width:200%;background:repeating-linear-gradient(104deg,rgba(255,255,255,0) 0,rgba(255,255,255,.035) 160px,rgba(0,0,0,.12) 320px,rgba(255,255,255,0) 480px);
+  animation:rk-isik 16s ease-in-out infinite alternate;will-change:transform}
+@keyframes rk-savrul{0%{transform:translate(0,0) skew(0,0)}50%{transform:translate(-14px,6px) skew(-1.2deg,.4deg)}100%{transform:translate(10px,14px) skew(.9deg,-.5deg) scale(1.015)}}
+@keyframes rk-isik{from{transform:translateX(0)}to{transform:translateX(480px)}}
+.rk-serit{z-index:0;box-shadow:0 0 0 1px rgba(241,234,216,.12),0 2px 0 rgba(0,0,0,.4),0 22px 40px -16px rgba(0,0,0,.9)}
+.rk-serit:hover,.rk-serit:focus-visible{box-shadow:0 0 0 1px rgba(241,234,216,.3),0 2px 0 rgba(0,0,0,.4),0 28px 46px -16px rgba(0,0,0,.95)}
+@media (hover:none),(max-width:760px){.rk-kefiye span,.rk-kefiye b{animation:none}}
+@media (prefers-reduced-motion:reduce){.rk-kefiye span,.rk-kefiye b{animation:none}}
 .rk-seritler{gap:22px}
 .rk-bas{padding-top:22px}
