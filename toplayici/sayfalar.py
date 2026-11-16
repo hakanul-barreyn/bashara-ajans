@@ -817,6 +817,8 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     bas_tr = h.get("baslik_tr") or h.get("baslik_orj") or ""
     yayin = k.get("ad", "")
     adres = f"{site}h/{h['id']}.html"
+    # Aynı olayın her haberi ayrı sayfa; arama motoruna olayın tek sayfası gösterilir (yinelenen içerik sayılmasın)
+    kanon = f"{site}h/{(sayfa_hedef or {}).get((olay or {}).get('id'), h['id'] + '.html')}"
     hs = (olay or {}).get("haberler", [])
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
     baslik_ol = (olay or {}).get("baslik") if n else None
@@ -852,7 +854,8 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <meta name="theme-color" content="#0c0e0d">
 <title>{_e(baslik_sekme)} | {_e(M["ad"])}</title>
 <meta name="description" content="{_e(aciklama)}">
-<link rel="canonical" href="{_e(adres)}">
+<link rel="canonical" href="{_e(kanon)}">
+<script type="application/ld+json">{_ld(h, baslik_ol or bas_tr, aciklama, kanon, resim, M, site)}</script>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="{_e(M["ad"])}">
 <meta property="og:title" content="{_e(_kisa(baslik_ol or bas_tr, 110))}{"" if n else " · " + _e(yayin)}">
@@ -891,6 +894,44 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 </body>
 </html>
 """
+
+
+def _ld(h, baslik, aciklama, adres, resim, M, site):
+    """NewsArticle yapılandırılmış verisi (arama motorları için); </script> kaçışıyla."""
+    v = {"@context": "https://schema.org", "@type": "NewsArticle", "headline": _kisa(baslik, 110), "description": aciklama,
+         "datePublished": h.get("tarih"), "dateModified": h.get("tarih"), "inLanguage": "tr", "mainEntityOfPage": adres, "image": [resim],
+         "author": {"@type": "Organization", "name": f'{M["ad"]} masası', "url": site},
+         "publisher": {"@type": "Organization", "name": M["ad"], "logo": {"@type": "ImageObject", "url": f"{site}site/logo.svg"}}}
+    return json.dumps(v, ensure_ascii=False).replace("</", "<\\/")
+
+
+def site_haritasi(d, haberler, sayfa_hedef, olay_of, site, simdi):
+    """h/ klasörüne iki harita: sitemap-haber.xml (olay başına tek sayfa ve kendi metnimiz olanlar, son SAKLA_GUN gün)
+    ve sitemap-news.xml (Google News: son 48 saat). Tek kaynaklı sayfalar haritaya girmez (ince içerik)."""
+    from xml.sax.saxutils import escape as x
+    secili = {}
+    for h in haberler:
+        o = olay_of.get(h["id"])
+        if not o or len(o.get("haberler", [])) < 2:
+            continue
+        ad = sayfa_hedef.get(o["id"])
+        if not ad or not os.path.isfile(os.path.join(d, ad)):
+            continue
+        t = max(o.get("son") or "", h.get("tarih") or "")
+        if ad not in secili or t > secili[ad][0]:
+            secili[ad] = (t, o.get("baslik") or h.get("baslik_tr") or "", o.get("ilk") or h.get("tarih") or "")
+    sirali = sorted(secili.items(), key=lambda x: x[1][0], reverse=True)
+    satir = [f"<url><loc>{x(site)}h/{x(ad)}</loc><lastmod>{x(t[:19])}+00:00</lastmod></url>" for ad, (t, _, _) in sirali[:45000]]
+    with open(os.path.join(d, "sitemap-haber.xml"), "w", encoding="utf-8") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(satir) + "\n</urlset>\n")
+    sinir = (simdi - dt.timedelta(hours=48)).isoformat()
+    haber = [f"<url><loc>{x(site)}h/{x(ad)}</loc><news:news><news:publication><news:name>Alboroto</news:name><news:language>tr</news:language>"
+             f"</news:publication><news:publication_date>{x(ilk[:19])}+00:00</news:publication_date><news:title>{x(b[:200])}</news:title></news:news></url>"
+             for ad, (t, b, ilk) in sirali if ilk >= sinir][:1000]
+    with open(os.path.join(d, "sitemap-news.xml"), "w", encoding="utf-8") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+                'xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n' + "\n".join(haber) + "\n</urlset>\n")
+    return len(satir), len(haber)
 
 
 def _foto_sec(kok, yer_ad, tohum):
@@ -1039,5 +1080,10 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         if ad.endswith(".html") and ad not in tut and os.path.isfile(yol) and os.path.getmtime(yol) < eski:
             os.remove(yol)
             silinen += 1
+    try:
+        n1, n2 = site_haritasi(d, haberler, sayfa_hedef, olay_of, site, simdi)
+        log(f"Site haritası: {n1} haber sayfası, son 48 saatte {n2}")
+    except Exception as e:
+        log(f"Site haritası yazılamadı: {e}")
     log(f"Haber sayfaları: {len(tut)} sayfa ({yeni} yeni ya da güncel, {silinen} eski silindi)")
     return yeni

@@ -4,3 +4,5 @@ Disallow: /data/canli/
 Disallow: /toplayici/
 
 Sitemap: https://alborotonews.com/sitemap.xml
+Sitemap: https://alborotonews.com/h/sitemap-haber.xml
+Sitemap: https://alborotonews.com/h/sitemap-news.xml
