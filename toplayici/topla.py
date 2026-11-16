@@ -1223,6 +1223,15 @@ def main():
             gorsel_denetim.akis_denetle(KOK, os.environ.get("GEMINI_API_KEY", ""), _gm, log=log, sayac=lambda: gunluk_istek(durum, 1))
         except Exception as e:
             log(f"Görsel denetimi hatası: {e}")
+        # Alboroto'nun kendi haber metinleri (gündem olayları; Gemini yoksa sayfa kaynak özetlerinden derleme gösterir)
+        try:
+            import haber_yaz
+            _gm = gemini_model(os.environ.get("GEMINI_API_KEY", "")) if os.environ.get("GEMINI_API_KEY") and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI) else None
+            if haber_yaz.yaz(KOK, os.environ.get("GEMINI_API_KEY", ""), _gm, kaynaklar, SIMDI, log=log, sayac=lambda: gunluk_istek(durum, 1),
+                             butce=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 60) == -1:
+                durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
+        except Exception as e:
+            log(f"Haber metni hatası: {e}")
         karne.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:  # arşiv hatası toplamayı durdurmasın
         log(f"Arşiv/RSS hatası: {e}")

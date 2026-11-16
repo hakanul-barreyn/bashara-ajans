@@ -1767,6 +1767,7 @@
     if (rlGozlem) { rlGozlem.disconnect(); }
     if (rlSekme === "takip") {
       rlTakipCiz(akis);
+      if (window.ALBHaberOnce) window.ALBHaberOnce.bak();
       desteImza = gor.length; desteYeni = 0; desteKismi = kismiVeri;
       const u0 = akis.querySelector(".birim-reel"); if (u0) rlGuncelle(u0);
       return;
@@ -1809,9 +1810,22 @@
       if (i < r.deste.length) akis.appendChild(rlZbs(devamBirim(r.deste.filter((x, j) => j >= i && x.tur !== "mola" && x.tur !== "bolum" && x.tur !== "son").length, () => parti(DESTE_EK), i === (r.dosyaSon || DESTE_ILK)), null));
       return ilk;
     };
-    const ana = rlAnasayfa(r); akis.appendChild(ana); rlGozle(ana);
-    parti(r.dosyaSon || DESTE_ILK);
-    ana._doldur();
+    // önce haber (site/haber-once.js): manşet, gelişmeler, gündem; altından "haberin haberi" kayan akışı başlar
+    const HO = window.ALBHaberOnce;
+    if (HO) {
+      const ilkReel = () => akis.querySelector(".birim-reel");
+      const ho = HO.ciz(r, { kaynaklar, gor, BT, OB, baslikSec, AK: window.AKTAR || ((u) => u),
+        hikayeyeGit: (b) => { const u = hikayeYeri.get(b); (u || ilkReel() || akis).scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth" }); },
+        akisaGec: () => { const u = ilkReel(); if (u) u.scrollIntoView({ behavior: AZ_HAREKET ? "auto" : "smooth" }); },
+        olcum: (geri) => { if (metinOzet) geri(gununOlcumu(metinOzet)); else fetch("data/metin-ozet.json", { cache: "no-cache" }).then((x) => (x.ok ? x.json() : null)).then((o) => { metinOzet = o; geri(gununOlcumu(o)); }).catch(() => {}); } });
+      akis.appendChild(ho);
+      parti(r.dosyaSon || DESTE_ILK);
+      HO.izle(); HO.bak();
+    } else {
+      const ana = rlAnasayfa(r); akis.appendChild(ana); rlGozle(ana);
+      parti(r.dosyaSon || DESTE_ILK);
+      ana._doldur();
+    }
     const u0 = akis.querySelector(".birim-reel"); if (u0) rlGuncelle(u0);
     // ilerleme çizgisi (üstte ince); deste sonlu olduğu için okurun nerede olduğunu gösterir
     let ci = document.querySelector(".deste-ilerleme");
