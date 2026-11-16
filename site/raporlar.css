@@ -80,3 +80,4 @@
 @media (prefers-reduced-motion:reduce){.rk-kefiye span,.rk-kefiye b{animation:none}}
 .rk-seritler{gap:22px}
 .rk-bas{padding-top:22px}
+.rk-ebu .rk-gun{right:auto;left:50%;transform:translateX(-50%);bottom:2px}
