@@ -155,6 +155,21 @@ def faillik(b, kb):
     return None
 
 
+# Savaş dışı başlıklarda özel adlar (büyük harfle başlayan, başlığın ilk kelimesi değil): kırılma haftasında ne konuşuldu
+OZEL_AD = re.compile(r"\b([A-ZÀ-ÖØ-ÞĞİŞÇÜ][A-Za-zÀ-ÖØ-öø-ÿĞİŞÇÜğışçü'’\-]{2,})")
+OZEL_AD_DEGIL = {"the", "and", "for", "with", "from", "this", "that", "what", "how", "why", "who", "new", "after", "over", "into", "about",
+                 "les", "des", "une", "der", "die", "das", "und", "den", "dem", "ein", "eine", "del", "los", "las", "una", "con", "por", "para",
+                 "della", "delle", "degli", "nel", "alla", "sul", "per", "con", "live", "video", "opinion", "analysis", "news", "says", "say",
+                 "his", "her", "its", "our", "your", "they", "she", "you", "but", "not", "are", "was", "has", "have", "will", "can", "could",
+                 "would", "more", "most", "first", "last", "year", "years", "week", "day", "today", "here", "there", "when", "where",
+                 "watch", "photos", "update", "updates", "breaking", "exclusive", "report", "reports", "pictures", "podcast"}
+
+
+def _hafta_bas(g):
+    d = dt.date.fromisoformat(g)
+    return (d - dt.timedelta(days=d.weekday())).isoformat()
+
+
 IRAN = re.compile(r"\biran|إيران|ايران|איראן|tahran|tehran|téhéran|teheran|teherán", re.I)
 OZET_SURUM = 15   # 15: geniş savaş başlığı (_si: İsrail'in bütün cepheleri, İran dahil); 14: alıntı ve hayvan ölümü ayrımı, yerleşimci fail, Telegram ilk cümle
 BULTEN_SURUM = 1
@@ -270,6 +285,7 @@ def ozetle(tarama_kok, kaynaklar, log=print):
     olay_yer = {}     # "2024-01-05": {tür: {yer: n}}
     lider_ornek = {}  # "2024-01": {lider: [[kid, başlık, url, gün], ...]}
     tarih_yontem, toplu_gun, bos_kayit = {}, {}, {}
+    kelime = {}   # "2024-12-02" (hafta) → {"bati_ana"|"bolge": {özel ad: n}}: savaş dışı başlıklarda geçen özel adlar (kırılmalar için)
     toplam = 0
     kok = os.path.join(tarama_kok, "veri")
     # Canlı toplayıcının günlük başlıkları (veri dalı, data/canli): taramanın son gününden sonrası için. Aynı adres
@@ -299,6 +315,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
         if not k:
             continue
         kmp, yan = almanak.kamp(k), _yan(k)
+        kgrup = ("bolge" if kmp in almanak.BOLGE_ICI and k.get("cizgi") != "ik" else
+                 "bati_ana" if kmp == "Batı" and k.get("cizgi") != "ad" else None)
         kayitlar = []
         for ad in sorted(os.listdir(os.path.join(kok, kid))) if os.path.isdir(os.path.join(kok, kid)) else []:
             if not ad.endswith(".jsonl.gz"):
@@ -398,6 +416,12 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             # Lübnan, İsrail ve İran); İsrail adı geçmeyen İran savaşı başlıkları da buraya girer
             if bg or iran:
                 tt["_si"] = tt.get("_si", 0) + 1
+            elif kgrup:
+                # savaş dışı başlık: o hafta basının neyi konuştuğu (yalnızca sayı; başlık ya da adres yazılmaz)
+                kh = kelime.setdefault(_hafta_bas(g), {}).setdefault(kgrup, {})
+                for w in set(OZEL_AD.findall(b)[1:] if b[:1].isupper() else OZEL_AD.findall(b)):
+                    if w.lower() not in OZEL_AD_DEGIL:
+                        kh[w] = kh.get(w, 0) + 1
             ozgun = r.get("s") != 1 and r.get("m") != "mc"   # Media Cloud başlıkları örnek olarak gösterilmez
             if bg:
                 tt["_b"] = tt.get("_b", 0) + 1
@@ -469,7 +493,8 @@ def ozetle(tarama_kok, kaynaklar, log=print):
             "tarama_bitti": ilerleme.get("kalan_gorev") == 0, "ilerleme": ilerleme, "tarih_yontem": tarih_yontem,
             "tarihsiz": sum(v["tarihsiz"] for v in tarih_yontem.values()), "toplu_gun": toplu_gun, "bos_kayit": bos_kayit,
             "gun": gun, "yayin": yayin, "ornek": ornek,
-            "olay_ornek": olay_ornek, "olay_yer": olay_yer, "lider_ornek": lider_ornek}
+            "olay_ornek": olay_ornek, "olay_yer": olay_yer, "lider_ornek": lider_ornek,
+            "kelime": {h: {gr: sorted(c.items(), key=lambda x: -x[1])[:80] for gr, c in d.items()} for h, d in kelime.items()}}
     yol = os.path.join(tarama_kok, "gecmis.json.gz")
     with gzip.open(yol, "wt", encoding="utf-8") as f:
         json.dump(veri, f, ensure_ascii=False, separators=(",", ":"))

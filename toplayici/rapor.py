@@ -42,6 +42,32 @@ OLAYLAR = [
 ]
 
 
+def kirilmalar(haftalar, kelime, esik=10, en_az_n=0.5):
+    """Savaş payının önceki dört haftanın ortalamasından en az `esik` puan düştüğü haftalar; her biri için o hafta savaş
+    dışı başlıklarda öne çıkan özel adlar (önceki dört haftaya göre en çok artanlar). Yarım kalan son hafta atlanır."""
+    out = []
+    for g in ("bati_ana", "bolge"):
+        ns = sorted(h[g]["n"] for h in haftalar if h[g]["n"])
+        med = ns[len(ns) // 2] if ns else 0
+        tam = [h for h in haftalar if h[g]["n"] >= med * en_az_n and h[g]["savas_pay"] is not None]
+        for i in range(4, len(tam)):
+            once = sum(x[g]["savas_pay"] for x in tam[i - 4:i]) / 4
+            p = tam[i][g]["savas_pay"]
+            if once - p < esik:
+                continue
+            h = tam[i]["hafta"]
+            simdi_k = dict((kelime.get(h) or {}).get(g) or [])
+            onceki = {}
+            for x in tam[i - 4:i]:
+                for w, n in (kelime.get(x["hafta"]) or {}).get(g) or []:
+                    onceki[w] = onceki.get(w, 0) + n / 4
+            puan = sorted(((n / (onceki.get(w, 0) + 3), w, n) for w, n in simdi_k.items() if n >= 8), reverse=True)
+            out.append({"hafta": h, "grup": g, "once": round(once, 1), "sirasinda": p, "dusus": round(once - p, 1),
+                        "olu": tam[i].get("olu"), "kelimeler": [[w, n] for _, w, n in puan[:8]]})
+    out.sort(key=lambda x: (x["hafta"], x["grup"]))
+    return out
+
+
 def grup(k):
     c = almanak.kamp(k)
     if c in almanak.BOLGE_ICI:
@@ -229,6 +255,7 @@ def hesapla(kok, kaynaklar, simdi, log=print):
         "gruplar": gruplar, "terimler": [{"anahtar": a, "ad": l} for a, l, y in TERIMLER],
         "ciftler": [{"a": a, "b": b, "ad": ad} for a, b, ad in CIFTLER],
         "olaylar": [{"bas": b, "bit": e, "ad": ad, "tur": t} for b, e, ad, t in OLAYLAR],
+        "kirilmalar": kirilmalar(haftalar, oz.get("kelime") or {}),
         "aylik": seri, "haftalik": haftalar, "ceyrek": ceyrekler, "yayinlar": yayinlar, "soykirim_zirve": zirve, "kapsama": kapsama,
         "surumler": {"ozet": oz.get("surum"), "rapor": RAPOR_SURUM},
     }

@@ -42,6 +42,7 @@ import gecmis  # noqa: E402
 import rapor  # noqa: E402
 import isimler  # noqa: E402
 import alisma  # noqa: E402
+import taksim_rapor  # noqa: E402
 import toplum  # noqa: E402
 import kimin  # noqa: E402
 import konusmalar  # noqa: E402
@@ -1330,6 +1331,10 @@ def main():
         alisma.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Alışma ve liderler hatası: {e}")
+    try:
+        taksim_rapor.hesapla(KOK, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Taksim raporu hatası: {e}")
     # Sitenin Telegram kanalına gündem, öncelikli analizler ve bültenler
     try:
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)

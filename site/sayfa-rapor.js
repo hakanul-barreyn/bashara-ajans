@@ -72,7 +72,7 @@
       ["aktif", "failli", "failsiz", "oldu", "sehadet"].forEach(function (f) { deger["g." + g + ".fp." + f] = yuzde(G[g].faillik_pay[f]); }); deger["g." + g + ".fp.gizli"] = yuzde((G[g].faillik_pay.failsiz || 0) + (G[g].faillik_pay.oldu || 0));
     });
     document.querySelectorAll("[data-v]").forEach(function (x) { var d = deger[x.dataset.v]; x.textContent = d == null ? "–" : d; if (x.dataset.v === "taslak" && !d) x.hidden = true; });
-    [dikkat, olayTablo, takvim, ciftler, terimGrafik, faillik, kiminOlumu, zirve, gazeteci, dagilim, yayinTablo, yontem].forEach(function (f) {
+    [dikkat, olayTablo, kirilmaTablo, takvim, ciftler, terimGrafik, faillik, kiminOlumu, zirve, gazeteci, dagilim, yayinTablo, yontem].forEach(function (f) {
       try { f(v, G); } catch (e) { if (window.console) console.error("rapor", e); }
     });
   }
@@ -124,6 +124,25 @@
     H.forEach(function (h, i) { var o = h.olu || 0; if (!o) return; var bh = (Ha - 14) * o / enO; s.appendChild(baslik(sv("rect", { x: x(i) - bw * 0.4, y: y0 + Ha - bh, width: Math.max(1, bw * 0.8), height: bh, "class": "rp-olum" }), gunAd(h.hafta) + " · " + sayi(o, 0))); });
     var mt = sv("text", { x: W - P.r + 6, y: y0 + 22, "class": "rp-eksen" }); mt.textContent = T("en çok ", "max ") + sayi(enO, 0); s.appendChild(mt);
     k.appendChild(s);
+  }
+  function kirilmaTablo(v) {
+    var k = $("g-kirilma"); if (!k) return;
+    var L = v.kirilmalar || [];
+    if (!L.length) { k.appendChild(el("p", "rp-not", T("Kırılmalar bir sonraki hesaplamada burada olacak.", "Breaks will appear after the next recalculation."))); return; }
+    var t = el("table");
+    t.innerHTML = EN ? "<thead><tr><th>Week</th><th>Group</th><th>War share<br><small>4 weeks before → that week</small></th><th>Deaths in Gaza</th><th>What rose in other headlines</th></tr></thead>"
+      : "<thead><tr><th>Hafta</th><th>Grup</th><th>Savaşın payı<br><small>önceki 4 hafta → o hafta</small></th><th>Gazze’de ölüm</th><th>Öteki başlıklarda öne çıkan</th></tr></thead>";
+    var tb = el("tbody");
+    L.forEach(function (x) {
+      var tr = el("tr");
+      tr.appendChild(el("td", null, gunAd(x.hafta)));
+      tr.appendChild(el("td", null, x.grup === "bolge" ? T("Bölge basını", "Regional press") : T("Batı ana akım", "Western mainstream")));
+      var p = el("td"); p.append(yuzde(x.once) + " → "); p.appendChild(el("b", "rp-dus", yuzde(x.sirasinda))); tr.appendChild(p);
+      tr.appendChild(el("td", null, sayi(x.olu, 0)));
+      tr.appendChild(el("td", "rp-kelimeler", (x.kelimeler || []).map(function (w) { return w[0]; }).join(" · ") || "–"));
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); var sar = el("div", "tablo-kutu"); sar.appendChild(t); k.appendChild(sar);
   }
   function olayTablo(v) {
     var k = $("g-olaylar"); var t = el("table");

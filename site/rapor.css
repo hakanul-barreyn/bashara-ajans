@@ -339,3 +339,9 @@ body.baski .gp-dugme{display:none}
 .rp-cizgi-ad{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:11px;font-weight:700}
 .rp-olum{fill:#b3402f;fill-opacity:.55}
 .rp-olay-cizgi{stroke:#6f7772;stroke-width:.6;stroke-dasharray:2 2}
+.rp-dus{color:#b3402f}.rp-kelimeler{font-size:.86rem;color:#3d4541}
+.tk-cumleler{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:10px}
+.tk-cumleler li{border-left:3px solid var(--ink);padding:4px 0 4px 12px;font-family:var(--serif);font-size:1.02rem;line-height:1.5}
+.tk-cumleler li.az{border-left-color:#1f7a52}
+.tk-cumleler li small{display:block;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.76rem;color:var(--soluk);margin-top:2px}
+.rp-tablo td.tk-ust{font-weight:700;background:rgba(0,0,0,.03)}
