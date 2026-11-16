@@ -264,6 +264,7 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
 .slayt .dagilim{max-width:520px}
 .slayt .dagilim-efsane{color:rgba(255,255,255,.8)}
 .slayt-dugme{align-self:flex-start;border:0;background:#fff;color:#1d2421;font-weight:700;font-size:.9rem;padding:10px 18px;border-radius:999px;cursor:pointer}
+.slayt-haber{background:#2b8a5e;color:#fff;text-decoration:none;margin-bottom:8px}
 .slayt-dugme:hover{background:#dff5e8}
 .slayt-noktalar{display:flex;justify-content:center;gap:6px;margin-top:10px}
 .slayt-noktalar button{width:8px;height:8px;border-radius:999px;border:0;background:var(--cizgi);cursor:pointer;padding:0;transition:width .25s,background .25s}

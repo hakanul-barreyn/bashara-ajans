@@ -562,6 +562,12 @@
     k.append(ust, sekme, sahne, alt, son);
     return k;
   }
+  // kendi haber metinlerimiz (data/yazi): hangi gündem olayının metni varsa slaytta "Haberi oku" çıkar
+  let yaziVar = new Set();
+  fetch("data/yazi/dizin.json?t=" + Math.floor(Date.now() / 3e5)).then((r) => (r.ok ? r.json() : {})).then((d) => {
+    yaziVar = new Set(Object.values(d || {}));
+    if (yaziVar.size && $("gundem") && $("gundem").children.length) gundemCiz();
+  }).catch(() => {});
   fetch("data/gundem.json?t=" + Math.floor(Date.now() / 3e5)).then((r) => r.json()).then((d) => { gundemArsiv = d.olaylar || []; if (Object.keys(kaynaklar).length && olaylar.length + gundemArsiv.length) gundemCiz(); }).catch(() => {});
   function kapsama(o) {
     const ks = new Map();
@@ -646,6 +652,10 @@
       sat.appendChild(el("b", null, (en ? "Israeli & Western press " : "İsrail ve Batı basını ") + disN));
       if (!disN && bolgeN >= 3) sat.appendChild(el("span", "slayt-sessiz", en ? "Not in the Israeli and Western outlets we can read" : "İzlediğimiz İsrail ve Batı yayınlarında yok"));
       ic.appendChild(sat);
+      if (yaziVar.has(o.id)) {
+        const hb = el("a", "slayt-dugme slayt-haber", en ? "Read the story →" : "Haberi oku →"); hb.href = "haber.html?o=" + encodeURIComponent(o.id);
+        ic.appendChild(hb);
+      }
       let b;
       if (o.arsiv) { b = el("a", "slayt-dugme", "Kim nasıl yazdı →"); b.href = String(o.sayfa || "").replace(/^data\/h\//, "h/"); }
       else { b = el("button", "slayt-dugme", "Kim nasıl yazdı →"); b.type = "button"; b.onclick = () => olayAc(o.id); }
