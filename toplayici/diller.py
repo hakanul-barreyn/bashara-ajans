@@ -17,6 +17,7 @@ Rules:
 - Faithful, neutral, natural news {DIL}. Do not add, remove or soften information. Keep attributions ("according to ...", "... said").
 - Keep the original terms used by the sources when the Turkish text puts them in quotation marks.
 - Keep proper names in their usual {DIL} spelling (Gaza, West Bank, Hezbollah, Al-Akhbar, Haaretz ...).
+- Never write "Middle East" in your own wording or translations; use "West Asia" or "the region" (or "the Mashriq" / "the Muslim world" where that is what is meant). Do not change the names of outlets or institutions (Middle East Eye, Asharq Al-Awsat).
 - "baslik" is a headline: keep it short. "ozet" is a 2-4 sentence summary.
 Return ONLY a JSON array: [{"id": "...", "baslik": "...", "ozet": "..."}]
 """
@@ -59,6 +60,7 @@ Kurallar:
 - Sadık ve tarafsız çeviri; bilgi ekleme, çıkarma, yumuşatma. Başlıktaki atıfları koru ("... göre", "... dedi").
 - Kaynağın kullandığı kelimeleri koru (ör. "şehit", "işgal", "terörist" kaynakta öyleyse öyle kalsın).
 - Özel adların yerleşik yazımını kullan (Gazze / Gaza, Batı Şeria / West Bank, Hizbullah / Hezbollah).
+- Bölgenin adı: “Orta Doğu” ya da “Ortadoğu” yazma; bağlama göre “bölge”, “Batı Asya”, “Meşrik” ya da “İslam dünyası” yaz; İngilizcede “West Asia” ya da “the region”. Kaynak “Middle East”, “Moyen-Orient”, “Oriente Medio” ya da “الشرق الأوسط” diyorsa da böyle çevir. Yayın ve kurum adlarına dokunma (Middle East Eye, Şarku’l-Avsat).
 - Başlık silah taşımayan sivillerin öldürülmesine açık bir çağrıysa ya da bunu kutluyorsa iki alanı da boş bırak.
 Yalnızca JSON dizisi döndür: [{"id": "...", "tr": "...", "en": "..."}]
 """
@@ -110,6 +112,7 @@ def baslik_cevir(anahtar, modeller, haberler, butce_var, sayac, log=print):
 OLAY_TALIMAT = """Translate these Turkish news-event summaries into {DIL}. For each event translate "baslik" (headline), "not" (framing note)
 and every value in "yorumlar" (one short description per article; keep the same keys).
 Rules: faithful and neutral; keep quoted source words as they are; do not add or remove information; usual {DIL} spelling of names.
+- Never write "Middle East" in your own wording or translations; use "West Asia" or "the region" (or "the Mashriq" / "the Muslim world" where that is what is meant). Do not change the names of outlets or institutions (Middle East Eye, Asharq Al-Awsat).
 Return ONLY a JSON array: [{"id": "...", "baslik": "...", "not": "...", "yorumlar": {"articleId": "..."}}]
 """
 

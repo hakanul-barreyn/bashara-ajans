@@ -13,7 +13,7 @@
   var k = document.getElementById("tarihce");
   // kısıtlı ülkelerde "şehit" yerine olgusal karşılığı (site/bolge.js)
   var BG = window.ALB_BOLGE, N = function (s) { return BG ? BG.notr(s, EN ? "en" : "tr") : s; };
-  Promise.all([fetch("site/donum.json?v=19").then(function (r) { return r.json(); }), BG ? BG.hazir : null]).then(function (x) { return x[0]; }).then(function (v) {
+  Promise.all([fetch("site/donum.json?v=20").then(function (r) { return r.json(); }), BG ? BG.hazir : null]).then(function (x) { return x[0]; }).then(function (v) {
     function ciz() {
       k.textContent = "";
       var YENI = false; try { YENI = localStorage.getItem("zbs-tarihce-sira") === "yeni"; } catch (e) {}

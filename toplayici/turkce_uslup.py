@@ -16,6 +16,7 @@ Türkçe yazım (doğal haber dili; çeviri kokusu olmasın):
 - Sahneleme girişi ve ders veren kapanış yazma: doğrudan olayla başla, son cümle bilgi versin, yorum ya da özet kuyruğu olmasın.
 - Cümle uzunluklarını çeşitlendir: kısa ve uzun cümleler karışsın; her cümle aynı ekle bitmesin.
 - Uzun çizgi (—) kullanma; ara söz için virgül kullan ya da cümleyi böl. "ve", "veya" bağlacından önce virgül koyma. Sayı aralığında kısa çizgi (2024-2026), saatte nokta (14.30), ondalıkta virgül (%12,5).
+- Bölgenin adı: “Orta Doğu” ya da “Ortadoğu” yazma; bağlama göre “bölge”, “Batı Asya”, “Meşrik” ya da “İslam dünyası” yaz. Kaynak “Middle East”, “Moyen-Orient”, “Oriente Medio” ya da “الشرق الأوسط” diyorsa da böyle çevir. Yayın ve kurum adlarına dokunma (Middle East Eye, Şarku’l-Avsat).
 - Kaynakta olmayan hiçbir sayı, ad, tarih, sıfat ya da neden-sonuç bağı ekleme; kesinlik derecesini değiştirme ("iddia etti" ile "açıkladı" aynı değildir).
 """
 

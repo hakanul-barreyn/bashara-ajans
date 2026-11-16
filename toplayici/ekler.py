@@ -75,6 +75,7 @@ Görevin: AYNI OLAYI anlatan haberleri gruplamak.
 
 Kurallar:
 - Bir grup en az İKİ FARKLI kaynaktan haber içermeli. Tek kaynaklı olayları yazma.
+- Bölgenin adı: “Orta Doğu” ya da “Ortadoğu” yazma; bağlama göre “bölge”, “Batı Asya”, “Meşrik” ya da “İslam dünyası” yaz. Kaynak “Middle East”, “Moyen-Orient”, “Oriente Medio” ya da “الشرق الأوسط” diyorsa da böyle çevir. Yayın ve kurum adlarına dokunma (Middle East Eye, Şarku’l-Avsat).
 - Yalnızca gerçekten aynı olaya (aynı saldırı, aynı açıklama, aynı toplantı, aynı karar) ait haberleri birleştir; yalnızca konusu benzeyenleri birleştirme.
 - baslik: olayı anlatan, tarafsız, en fazla 12 kelimelik Türkçe başlık.
 - not: 1-3 cümlelik Türkçe çerçeve notu. Kaynakların olayı nasıl farklı anlattığını betimle: hangi kaynak hangi kelimeyi seçti (özgün kelimeyi tırnak içinde, en fazla 4 kelime), kimin açıklamasını öne çıkardı, hangi bilgiyi verdi ya da vermedi. Yalnızca verilen başlıklardan çıkarılabilecekleri yaz. Hüküm verme, hangi kaynağın haklı olduğunu söyleme. Kaynaklar aynı şekilde anlatıyorsa bunu kısaca söyle.
