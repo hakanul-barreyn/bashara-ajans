@@ -1,0 +1,19 @@
+# Tek seferlik aday görsel araması (raporlar girişi): sonuç yz-durum dalına yazılır, siteye bir şey yazmaz.
+name: commons-ara
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/commons-ara.yml", "toplayici/commons_ara.py"]
+permissions:
+  contents: write
+jobs:
+  ara:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: python toplayici/commons_ara.py
+      - run: |
+          git init -q d && cd d && git checkout -q -b yz-durum && cp ../commons.json . && git add commons.json
+          git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "commons"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-durum
