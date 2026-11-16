@@ -237,14 +237,36 @@
     });
     kok.appendChild(bg);
 
-    // akışa geçiş
+    // Haberin haberi: kısa video rafı gibi yan yana dikey kartlar. Kayan akış kendiliğinden başlamaz;
+    // okur bir karta dokununca açılır ve o hikâyeden başlar (html.akis-kapali kalkar).
     const gc = el("section", "hb-gecis"); gc.setAttribute("aria-label", tt("Haberin haberi", "The news about the news"));
     gc.append(el("span", "hb-et", tt("Haberin haberi", "The news about the news")), el("h2", null, tt("Aynı haberi kim nasıl verdi?", "Who told the same story, and how?")),
-      el("p", null, tt("Buradan sonrası kayan akış: her hikâyede yayınların başlıkları yan yana; yana kaydırınca karşılaştırma ve olay örgüsü.",
-        "From here on, a swipe feed: outlets’ headlines side by side for each story; swipe sideways for comparison and timeline.")));
-    const kb = el("button", null, tt("Kaydırmaya başla ↓", "Start swiping ↓")); kb.type = "button"; kb.onclick = () => c.akisaGec();
+      el("p", null, tt("Bir karta dokun: yayınların başlıkları yan yana açılır, aşağı kaydırdıkça sıradaki hikâyeye geçersin.",
+        "Tap a card: the outlets’ headlines open side by side; scroll down for the next story.")));
+    const raf = el("div", "hb-raf"); raf.setAttribute("role", "list");
+    hik.slice(0, 16).forEach((b, i) => {
+      const k = el("button", "hb-kisa"); k.type = "button"; k.setAttribute("role", "listitem");
+      const og = b.olay && b.olay.gorsel ? b.olay : null;
+      const g = og ? c.AK(og.gorsel, 420) : ((onizleme(b, c) || {}).gorsel ? c.AK(onizleme(b, c).gorsel, 420) : "");
+      if (g) { const im = document.createElement("img"); im.src = g; im.alt = ""; im.loading = i < 3 ? "eager" : "lazy"; im.referrerPolicy = "no-referrer"; if (og && og.odak) im.style.objectPosition = og.odak; im.onerror = () => { im.remove(); k.classList.add("gorselsiz"); }; k.appendChild(im); }
+      else k.classList.add("gorselsiz");
+      const bl = bolgeBul(b, c); if (bl) k.appendChild(el("span", "hb-kisa-yer", bl.ad));
+      const say = kampSay(b, c);
+      const alt = el("span", "hb-kisa-alt");
+      alt.append(el("b", null, baslik(b, c)), serit(say));
+      k.appendChild(alt);
+      const m = el("span", "hb-kisa-m", b.yayinSayisi + tt(" yayın", " outlets")); k.appendChild(m);
+      k.setAttribute("aria-label", baslik(b, c) + " · " + b.yayinSayisi + tt(" yayın", " outlets"));
+      k.onclick = () => { akisAc(); requestAnimationFrame(() => c.hikayeyeGit(b)); };
+      raf.appendChild(k);
+    });
+    gc.appendChild(raf);
+    const kb = el("button", "hb-raf-hepsi", tt("Baştan kaydır ↓", "Swipe from the start ↓")); kb.type = "button"; kb.onclick = () => { akisAc(); requestAnimationFrame(() => c.akisaGec()); };
     gc.appendChild(kb);
     kok.appendChild(gc);
+    if (/^#[ho]-/.test(location.hash)) acildi = true;   // paylaşılan bir hikâye bağlantısıyla gelen okur doğrudan akışta
+    if (/^#[ho]-/.test(location.hash)) acildi = true;   // paylaşılan bir hikâye bağlantısıyla gelen okur doğrudan akışta
+    if (!acildi) document.documentElement.classList.add("akis-kapali");
 
     // menü
     menuKur(mb, c, (k) => { const bt = [...nav.querySelectorAll("button")].find((x) => x.textContent === (SEKMELER.find((s) => s[0] === k) || [])[EN() ? 2 : 1]); if (bt) bt.click(); });
@@ -267,7 +289,7 @@
     nav.appendChild(el("span", null, tt("HABERLER", "NEWS")));
     SEKMELER.forEach(([k, tr, en]) => { const b = el("button", null, EN() ? en : tr); b.type = "button"; b.onclick = () => { kapa(); bolgeSec(k); }; nav.appendChild(b); });
     nav.appendChild(el("span", null, tt("HABERİN HABERİ", "THE NEWS ABOUT THE NEWS")));
-    const ak = el("button", "hb-m2", tt("Akış: kim nasıl verdi", "Feed: who told it how")); ak.type = "button"; ak.onclick = () => { kapa(); c.akisaGec(); }; nav.appendChild(ak);
+    const ak = el("button", "hb-m2", tt("Akış: kim nasıl verdi", "Feed: who told it how")); ak.type = "button"; ak.onclick = () => { kapa(); akisAc(); requestAnimationFrame(() => c.akisaGec()); }; nav.appendChild(ak);
     [["raporlar.html", tt("Raporlar", "Reports")], ["almanak.html", tt("Almanak", "Almanac")], ["kaynaklar.html", tt("Hesaplar ve kaynaklar", "Accounts and sources")], ["tarihce.html", tt("Tarihçe", "History")]]
       .forEach(([h, t]) => { const a = el("a", "hb-m2", t); a.href = h; nav.appendChild(a); });
     const alt = el("div", "hb-alt");
@@ -280,6 +302,10 @@
     dugme.onclick = () => { m.hidden = false; document.documentElement.style.overflow = "hidden"; kapat.focus(); };
     document.body.appendChild(m);
   }
+
+  // Kayan akış okur bir karta dokunana kadar kapalı; bir kez açılınca sayfa yenilenene kadar açık kalır
+  let acildi = false;
+  function akisAc() { acildi = true; document.documentElement.classList.remove("akis-kapali"); if (window.ALBHaberOnce) window.ALBHaberOnce.bak(); }
 
   // haber bölümündeyken kayan akışın kilidi (scroll-snap) ve üst katmanı kapalı
   let bagli = false;

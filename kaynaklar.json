@@ -2039,9 +2039,10 @@
   "telegram": null,
   "cizgi": "ad",
   "grup": "Türkiye",
-  "siyasi": "sol",
+  "siyasi": "belirsiz",
   "tutum": "yanli",
-  "tutum_dayanak": "editoryal"
+  "tutum_dayanak": "editoryal",
+  "siyasi_not": "Direniş eksenine yakın, sol ya da İslami düşünce kalıbına oturmuyor"
  },
  {
   "ad": "Serbestiyet",
@@ -5036,7 +5037,8 @@
   "grup": "Türkiye",
   "siyasi": "İslami düşünce",
   "tutum": "yanli",
-  "tutum_dayanak": "editoryal"
+  "tutum_dayanak": "editoryal",
+  "periyot": "aylık"
  },
  {
   "id": 190,

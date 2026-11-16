@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 11
+ALISMA_SURUM = 12
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -174,6 +174,10 @@ AKTIF_ALT = 4      # ve her durumda en az 4 başlık: kaydı eksik günlerde yay
 _MEDYAN = {}
 
 
+# Aylık ya da haftalık yayınlar (dergiler): olay günlerinde başlık atmamaları susma sayılmaz (kaynaklar.json "periyot")
+SEYREK = set()
+
+
 def _aktif_esik(S, kid, w):
     """Yayının bu pencerede "yayındaydı" sayılması için gereken başlık sayısı: kendi olağan hacmine göre."""
     tablo = _MEDYAN.setdefault(id(S), {})
@@ -189,7 +193,7 @@ def _sessiz_kim(S, gk, tur, w, K):
     yo = S["yo"][tur]
     for kid, gunler in S["yn"].items():
         g = gk.get(kid)
-        if not g:
+        if not g or kid in SEYREK:
             continue
         yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
         if not yazdi and sum(gunler.get(i, 0) for i in w) < _aktif_esik(S, kid, w):
@@ -204,7 +208,7 @@ def _sessiz(S, gk, tur, w):
     yo = S["yo"][tur]
     for kid, gunler in S["yn"].items():
         g = gk.get(kid)
-        if not g:
+        if not g or kid in SEYREK:
             continue
         yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
         # 15 başlık şartı yalnızca "sustu" demek için: o günlerin kaydı elimizde olmayan yayın susmuş sayılmasın.
@@ -334,7 +338,7 @@ def _yayin_hukum(oz, K, gk, S, D, olaylar, olu_toplam, aralik=("2023-10-07", "99
         w = _pencere(b, e, len(D))
         yo = S["yo"][o["tur"]]
         for kid, r in sonuc.items():
-            if sum((yn.get(kid) or {}).get(i, 0) for i in w) < _aktif_esik(S, kid, w):
+            if kid in SEYREK or sum((yn.get(kid) or {}).get(i, 0) for i in w) < _aktif_esik(S, kid, w):
                 continue
             r["olay"] += 1
             if not sum((yo.get(kid) or {}).get(i, 0) for i in w):
@@ -458,6 +462,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
             and os.path.exists(os.path.join(kok, "data", "bulten", "liderler.json"))):
         return eski
     K = {str(k["id"]): k for k in kaynaklar}
+    SEYREK.clear()
+    SEYREK.update(kid for kid, k in K.items() if k.get("periyot") in ("aylık", "haftalık", "aylik", "haftalik"))
     gk = {kid: grup(k) for kid, k in K.items()}
     t = _topla(oz, gk)
     if not t:
