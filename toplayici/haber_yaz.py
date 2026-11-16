@@ -32,6 +32,9 @@ Kurallar:
 - Kendi sesinde ölüm için "öldürüldü" ya da "hayatını kaybetti" yaz. "Şehit", "terörist", "Hamas yönetimindeki" gibi ifadeleri
   yalnızca bir kaynağa atfederek ve tırnak içinde kullan.
 - Kaynaklar birbirini tutmuyorsa (sayı, fail, olayın nasıl olduğu) bunu açıkça yaz; hangisinin doğru olduğuna karar verme.
+- "acıklama": true olan haber bir silahlı grubun KENDİ kanalından gelir (yayın değil, tarafın açıklaması). Onu yalnızca o grubun
+  açıklaması olarak aktar ("Hamas açıklamasında ... dedi", "İslami Cihad ... üstlendiğini duyurdu"); doğrulanmış bilgi gibi verme.
+  Övgü, slogan, tehdit ve çağrı cümlelerini aktarma; yalnızca olguya dair iddiayı ver. Kanalın adını ya da adresini yazma.
 - Grafik ayrıntı (yaraların, cesetlerin tarifi) yazma. Sivillerin öldürülmesine çağrıyı ya da bunu kutlayan sözleri aktarma.
 - Kendi cümlelerinle yaz, kaynaktan cümle kopyalama. Doğrudan alıntı en fazla bir tane ve 10 kelimeyi geçmesin.
 - Yorum, değerlendirme, sıfat yüklemesi yapma; haber dili kullan.
@@ -90,7 +93,7 @@ def yaz(kok, anahtar, model, kaynaklar, simdi, log=print, sayac=None, butce=lamb
     yazilan = 0
     for o in gundem[:20]:
         xs = [hab[i] for i in o.get("haberler", []) if i in hab]
-        ks = {h.get("kaynak") for h in xs}
+        ks = {h.get("kaynak") for h in xs if not kmap.get(h.get("kaynak"), {}).get("silahli")}   # tarafın açıklaması yayın sayılmaz
         if len(ks) < EN_AZ_YAYIN:
             continue
         if sum(1 for k in ks if any(b in str(_kamp(kmap.get(k, {}))) for b in BOLGE)) < 1:
@@ -114,7 +117,8 @@ def yaz(kok, anahtar, model, kaynaklar, simdi, log=print, sayac=None, butce=lamb
         girdi = []
         for i, h in enumerate(xs[:14], 1):
             k = kmap.get(h.get("kaynak"), {})
-            girdi.append({"no": i, "yayin": k.get("ad"), "kamp": _kamp(k), "saat": (h.get("tarih") or "")[:16].replace("T", " "),
+            girdi.append({"no": i, "yayin": (k.get("ad") or "").replace(" (resmî kanal)", "").replace(" (kanal)", "") + (" açıklaması" if k.get("silahli") else ""),
+                          "kamp": "tarafın kendi açıklaması" if k.get("silahli") else _kamp(k), **({"acıklama": True} if k.get("silahli") else {}), "saat": (h.get("tarih") or "")[:16].replace("T", " "),
                           "baslik": h.get("baslik_tr") or h.get("baslik_orj"), "ozet": (h.get("ozet_tr") or "")[:900]})
         metin = YAZI_TALIMAT + "\n\nOlay (yalnızca yön göstermek için, bilgi kaynağı değildir): " + str(o.get("baslik") or "") + \
             "\n\nHaberler:\n" + json.dumps(girdi, ensure_ascii=False)

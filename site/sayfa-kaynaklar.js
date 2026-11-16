@@ -106,7 +106,7 @@
   }
   fetch("data/dogrulama.json?t="+Date.now()).then(r=>r.json()).then(d=>{DG=(d&&d.etiketler)||{};if(K.length)ciz();}).catch(()=>{});
   Promise.all([fetch("kaynaklar.json?t="+Date.now()).then(r=>r.json()),fetch("data/durum.json?t="+Date.now()).then(r=>r.json()).catch(()=>({})),fetch("data/haberler.json?t="+Date.now()).then(r=>r.json()).catch(()=>({haberler:[]})),fetch("data/kanit.json?t="+Date.now()).then(r=>r.json()).catch(()=>({}))])
-  .then(([k,d,h,kn])=>{K=k;D=d;KN=kn||{};(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
+  .then(([k,d,h,kn])=>{K=k.filter(x=>!x.silahli);D=d;KN=kn||{};(h.haberler||[]).forEach(x=>N[x.kaynak]=(N[x.kaynak]||0)+1);
     ["Tümü",...REG].forEach(r=>{const b=el("button","cip",r);b.type="button";b.dataset.k=r;b.onclick=()=>{bolge=r;ciz();};$("bolgeler").appendChild(b);});
     Object.entries(CIZ).forEach(([k,l])=>{const b=el("button","cip",l);b.type="button";b.dataset.k="cz-"+k;b.onclick=()=>{bolge="cz-"+k;ciz();};$("bolgeler").appendChild(b);});ciz();})
   .catch(()=>{$("liste").textContent="Kaynak listesi okunamadı.";});

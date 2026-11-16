@@ -35,8 +35,9 @@
     }).catch(function () { return B; }),
     new Promise(function (ok) { setTimeout(function () { ok(B); }, 700); })
   ]);
-  // kısıtlı modda gösterilmeyen yayınlar: kaynaklar.json'da "silahli": true
-  B.gizli = function (k) { return !!(B.kisitli && k && k.silahli); };
+  // Silahlı grupların resmî kanalları (kaynaklar.json "silahli": true) hiçbir ülkede yayın olarak gösterilmez;
+  // açıklamaları yalnızca bizim haber metinlerimizde, kime ait olduğu yazılarak ve bağlantısız aktarılır (toplayici/haber_yaz.py)
+  B.gizli = function (k) { return !!(k && k.silahli); };
   // tarihçe metinleri: "şehit" sözcüğü olgusal karşılığıyla
   var TR = [[/şehit edilişini/g, "öldürülüşünü"], [/şehit edilmesinin/g, "öldürülmesinin"], [/şehit edilince/g, "öldürülünce"], [/şehit edildi/g, "öldürüldü"],
     [/şehit düştüğü/g, "öldürüldüğü"], [/şehit düştü/g, "öldürüldü"], [/şehit eden/g, "öldüren"], [/şehit etti/g, "öldürdü"], [/şehit oldu/g, "hayatını kaybetti"],

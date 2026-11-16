@@ -177,7 +177,8 @@ def _kim_nasil(olay, h, kmap, sayfa_var, dil):
     satir = []
     # Yayın başına tek satır: yayının ilk (ya da bu sayfanın) haberi; öteki haberlerinin sayısı yanında
     gorulen, ek = {}, {}
-    hepsi = [x for x in olay["haberler"] if x["id"] == h["id"] or not ekler.ILGISIZ_RE.search(x.get("y") or "")]
+    hepsi = [x for x in olay["haberler"] if not (kmap.get(x.get("k")) or {}).get("silahli")
+             and (x["id"] == h["id"] or not ekler.ILGISIZ_RE.search(x.get("y") or ""))]
     sirali = sorted(hepsi, key=lambda x: (x["id"] != h["id"], sira.get(almanak.kamp(kmap.get(x.get("k"))), 99), x.get("t") or ""))
     secilen = []
     anah = lambda x: (kmap.get(x.get("k")) or {}).get("kurum") or x.get("k")   # AA, TRT, BBC: masaları tek kurum
@@ -735,7 +736,11 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
         def atif(liste):
             ls, gor = [], set()
             for x in liste or []:
-                if kmap.get(x.get("k")) and str(x.get("u") or "").startswith("http") and x.get("k") not in gor:
+                if kmap.get(x.get("k")) and kmap[x["k"]].get("silahli") and x.get("k") not in gor:
+                    # silahlı grubun kendi kanalı: bağlantı verilmez, yalnızca kimin açıklaması olduğu yazılır
+                    gor.add(x.get("k"))
+                    ls.append(_e(re.sub(r"\s*\((resmî )?kanal\)", "", kmap[x["k"]].get("ad") or "") + " açıklaması"))
+                elif kmap.get(x.get("k")) and str(x.get("u") or "").startswith("http") and x.get("k") not in gor:
                     gor.add(x.get("k"))
                     ls.append(f'<a href="{_e(x.get("u"))}" target="_blank" rel="noopener">{_e(kmap[x["k"]].get("ad"))} ↗</a>')
             return f'<p class="mk-kaynak">Kaynak: {" · ".join(ls)}</p>' if ls else ""
@@ -1043,7 +1048,7 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     tut, yeni = set(), 0
     for h in haberler:
         k = kmap.get(h.get("kaynak"))
-        if not k or not h.get("url", "").startswith(("http://", "https://")) or not (h.get("baslik_tr") or h.get("baslik_orj")):
+        if not k or k.get("silahli") or not h.get("url", "").startswith(("http://", "https://")) or not (h.get("baslik_tr") or h.get("baslik_orj")):
             continue
         if (h.get("tarih") or "") < sinir or h.get("atla"):
             continue
