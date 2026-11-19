@@ -3,7 +3,7 @@ name: kapak-indir
 on:
   workflow_dispatch:
   push:
-    paths: [".github/workflows/kapak-indir.yml", "toplayici/kapak_indir.py"]
+    paths: [".github/workflows/kapak-indir.yml"]
 permissions:
   contents: write
 concurrency:

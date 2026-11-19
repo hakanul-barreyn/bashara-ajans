@@ -1,7 +1,17 @@
 """Tek seferlik: Wikimedia Commons'ta kategori kategori açık lisanslı görsel listesi (raporlar girişi için aday arama)."""
 import json, sys, urllib.parse, urllib.request
 UA = "alboroto-gorsel/1.0 (+https://alborotonews.com)"
-KAT = sys.argv[1:] or ["Kamal_Adwan_Hospital", "Nakba", "1948_Palestinian_expulsion_and_flight", "Palestinian_refugees_in_1948", "Palestinian_refugee_camps_in_the_1940s"]
+KAT = sys.argv[1:] or [
+    # tarihçe akışları için aday görseller
+    "Ottoman_Palestine", "Sinai_and_Palestine_campaign", "Fall_of_Jerusalem_(1917)", "Balfour_Declaration", "Sykes-Picot_Agreement",
+    "Izz_ad-Din_al-Qassam", "1936–1939_Arab_revolt_in_Palestine", "Arab_Higher_Committee", "Peel_Commission",
+    "United_Nations_Partition_Plan_for_Palestine", "1948_Palestine_war", "Nakba", "1949_Armistice_Agreements", "Kafr_Qasim_massacre",
+    "Gamal_Abdel_Nasser", "Suez_Crisis", "Ba'ath_Party", "Six-Day_War", "Battle_of_Karameh", "Yom_Kippur_War",
+    "Fatah", "Palestine_Liberation_Organization", "Yasser_Arafat", "Popular_Front_for_the_Liberation_of_Palestine", "George_Habash",
+    "Leila_Khaled", "Dawson's_Field_hijackings", "Ghassan_Kanafani", "Black_September_in_Jordan", "Algerian_War",
+    "Land_Day", "First_Intifada", "Palestinian_Declaration_of_Independence", "Gulf_War_Scud_attacks_on_Israel", "Oslo_Accords",
+    "Ahmed_Yassin", "Hamas", "Fathi_Shaqaqi", "Second_Intifada", "Hassan_Nasrallah", "Ismail_Haniyeh",
+    "Great_March_of_Return", "Shireen_Abu_Akleh", "Gaza_flotilla_raid", "Naji_al-Ali", "Handala"]
 out = {}
 for kat in KAT:
     q = {"action": "query", "format": "json", "generator": "categorymembers", "gcmtitle": "Category:" + kat, "gcmtype": "file|subcat", "gcmlimit": 80,

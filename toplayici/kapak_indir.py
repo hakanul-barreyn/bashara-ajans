@@ -1,6 +1,6 @@
 """Raporlar girişinin arka plan görselleri: seçilmiş Commons dosyalarını (açık lisans, İsrail ordusu/GPO kaynaklı değil,
 grafik değil) 1600 piksel genişlikte indirir ve künyeleriyle kapak.json'a yazar. Çıktı klasörü argümandır (gorsel dalı)."""
-import json, os, re, sys, urllib.parse, urllib.request
+import json, os, re, sys, urllib.error, urllib.parse, urllib.request
 UA = "alboroto-gorsel/1.0 (+https://alborotonews.com)"
 SECIM = [
     ("dheisheh-1952", "File:Dheisheh Camp 1952.jpg", "Dehişe kampı, 1952", "Dheisheh camp, 1952"),
@@ -13,6 +13,8 @@ SECIM = [
     ("ayn-hilve", "File:Palestinian refugees in Ein El Hilweh refugee camp in Lebanon.jpg", "Ayn el-Hilve kampı, Lübnan", "Ein el-Hilweh camp, Lebanon"),
 ]
 cik = sys.argv[1] if len(sys.argv) > 1 else "kapak"
+if len(sys.argv) > 2:  # ikinci argüman: seçim listesi (JSON: [ad, dosya, tr, en])
+    SECIM = [tuple(x) for x in json.load(open(sys.argv[2], encoding="utf-8"))]
 os.makedirs(cik, exist_ok=True)
 q = {"action": "query", "format": "json", "titles": "|".join(t for _, t, _, _ in SECIM), "prop": "imageinfo",
      "iiprop": "url|extmetadata|mime", "iiurlwidth": 1600}
@@ -35,8 +37,20 @@ for ad, t, tr, en in SECIM:
     md = ii.get("extmetadata") or {}
     g = lambda k: temiz((md.get(k) or {}).get("value"))   # noqa: E731
     uz = ".jpg" if "jpeg" in (ii.get("thumbmime") or ii.get("mime") or "jpeg") else os.path.splitext(urllib.parse.urlparse(url).path)[1]
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60) as r:
-        open(os.path.join(cik, ad + uz), "wb").write(r.read())
+    import time
+    veri = None
+    for bekle in (2, 8, 20, 45):   # Wikimedia istek sınırı (429): yavaşla ve yeniden dene
+        time.sleep(bekle)
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60) as r:
+                veri = r.read()
+            break
+        except urllib.error.HTTPError as e:
+            if e.code != 429:
+                break
+    if not veri:
+        print("indirilemedi:", ad); continue
+    open(os.path.join(cik, ad + uz), "wb").write(veri)
     kunye.append({"ad": ad, "dosya": ad + uz, "tr": tr, "en": en, "yazar": g("Artist")[:120] or "Bilinmiyor", "lisans": g("LicenseShortName"),
                   "lisans_url": g("LicenseUrl"), "sayfa": ii.get("descriptionurl")})
     print("indi:", ad, uz)
