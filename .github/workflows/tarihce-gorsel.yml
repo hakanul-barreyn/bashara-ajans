@@ -3,7 +3,7 @@ name: tarihce-gorsel
 on:
   workflow_dispatch:
   push:
-    paths: [".github/workflows/tarihce-gorsel.yml", "toplayici/tarihce_gorsel.json"]
+    paths: [".github/workflows/tarihce-gorsel.yml", "toplayici/tarihce_gorsel.json", "toplayici/kapak_indir.py"]
 permissions:
   contents: write
 concurrency:
