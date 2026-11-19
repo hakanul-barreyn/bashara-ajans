@@ -1,0 +1,26 @@
+# Tarihçe haritasının gölgeli arazi zemini: AWS Terrain Tiles'tan üretilir, "gorsel" dalının arazi/ klasörüne yazılır.
+name: arazi
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/arazi.yml", "toplayici/arazi_yap.py", "site/tarihce-harita.json"]
+permissions:
+  contents: write
+concurrency:
+  group: gunluk-gorsel
+  cancel-in-progress: false
+jobs:
+  yap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q numpy pillow
+      - run: |
+          mkdir cikti
+          if git fetch -q --depth 1 origin gorsel 2>/dev/null; then git archive FETCH_HEAD | tar -x -C cikti; fi
+          mkdir -p cikti/arazi && python toplayici/arazi_yap.py cikti/arazi/tarihce-arazi.jpg && ls -la cikti/arazi
+      - run: |
+          cd cikti && git init -q -b gorsel && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Arazi zemini"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:gorsel
