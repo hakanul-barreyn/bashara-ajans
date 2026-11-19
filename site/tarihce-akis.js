@@ -280,7 +280,9 @@
     var gk = H.gazze_kutu, IX = 68, IY = 50, IW = 150, IH = Math.round(150 * (gk[3] - gk[1]) / (gk[2] - gk[0]));
     var ins = svg("g", { "class": "h-kat h-yakin", "data-kat": "yakin" });
     ins.appendChild(svg("line", { x1: IX + IW, y1: IY + IH, x2: gk[0] + 4, y2: gk[1] + 6, "class": "h-yakin-cizgi" }));
-    var iv = svg("svg", { x: IX, y: IY, width: IW, height: IH, viewBox: gk[0] + " " + gk[1] + " " + (gk[2] - gk[0]) + " " + (gk[3] - gk[1]), "class": "h-yakin-ic" });
+    var sk = IW / (gk[2] - gk[0]);
+    var kc = svg("clipPath", { id: "taYakin" }); kc.appendChild(svg("rect", { x: gk[0], y: gk[1], width: gk[2] - gk[0], height: gk[3] - gk[1] })); defs.appendChild(kc);
+    var iv = svg("g", { transform: "translate(" + IX + " " + IY + ") scale(" + sk.toFixed(4) + ") translate(" + (-gk[0]) + " " + (-gk[1]) + ")", "clip-path": "url(#taYakin)", "class": "h-yakin-ic" });
     iv.appendChild(svg("rect", { x: gk[0], y: gk[1], width: gk[2] - gk[0], height: gk[3] - gk[1], "class": "h-deniz" }));
     var ar2 = svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none" }); iv.appendChild(ar2);
     function ikat(ad, yollar, sinif, kirp) {
