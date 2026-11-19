@@ -46,17 +46,17 @@
     var ic = el("div", "ta-giris-ic");
     ic.appendChild(tatriz(46, "ta-tatriz ust"));
     var h = el("h1", "ta-baslik");
-    harfle(h, "Bir yüzyılın akışları");
-    ic.append(el("p", "ta-ust", "Filistin · 1914–2026"), h, el("p", "ta-ar", "تيارات قرن"),
-      el("p", "ta-dek", "Osmanlı yıkıldı, toprak parsellendi. Ardından her kuşak kendi akışıyla sahneye çıktı: Kassam’ın köylüleri, Baas’ın ve Nasır’ın milliyetçiliği, fedailer ve sol, sonra İslami hareketler. Aşağı kaydırdıkça akışlar birer birer kurulur; harita her değiştiğinde yanda yeniden çizilir."));
+    harfle(h, EN ? "Currents of a century" : "Bir yüzyılın akışları");
+    ic.append(el("p", "ta-ust", EN ? "Palestine · 1914–2026" : "Filistin · 1914–2026"), h, el("p", "ta-ar", "تيارات قرن"),
+      el("p", "ta-dek", EN ? "The Ottoman state collapsed and the land was carved up. Then each generation took the stage with its own current: Qassam’s peasants, the nationalism of the Ba’ath and Nasser, the fedayeen and the left, then the Islamic movements. As you scroll, the currents assemble one by one; each time the map changes it is redrawn alongside." : "Osmanlı yıkıldı, toprak parsellendi. Ardından her kuşak kendi akışıyla sahneye çıktı: Kassam’ın köylüleri, Baas’ın ve Nasır’ın milliyetçiliği, fedailer ve sol, sonra İslami hareketler. Aşağı kaydırdıkça akışlar birer birer kurulur; harita her değiştiğinde yanda yeniden çizilir."));
     ic.appendChild(tatriz(46, "ta-tatriz alt"));
-    var ipucu = el("p", "ta-ipucu", "Kaydır ↓"); ic.appendChild(ipucu);
+    var ipucu = el("p", "ta-ipucu", EN ? "Scroll ↓" : "Kaydır ↓"); ic.appendChild(ipucu);
     giris.appendChild(ic);
     kok.appendChild(giris);
 
     // --- sahne: nehir + harita + akışlar ---
     var sahne = el("div", "ta-sahne");
-    var nehir = el("nav", "ta-nehir"); nehir.setAttribute("aria-label", "Akışlar");
+    var nehir = el("nav", "ta-nehir"); nehir.setAttribute("aria-label", EN ? "Currents" : "Akışlar");
     var hk = el("aside", "ta-harita"); hk.setAttribute("aria-label", "Harita");
     var akis = el("div", "ta-akis");
     sahne.append(nehir, hk, akis);
@@ -72,11 +72,11 @@
       var ac = el("header", "ta-acilis izle"); ac.dataset.harita = a.harita || ""; ac.dataset.yil = a.yillar[0];
       var no = el("p", "ta-no", String(ai + 1).padStart(2, "0") + " / " + String(A.akislar.length).padStart(2, "0"));
       var yy = el("p", "ta-yillar"); harfle(yy, a.yillar[0] + "–" + (a.yillar[1] >= 2026 ? "" : a.yillar[1]));
-      var ad = el("h2", "ta-ad"); harfle(ad, a.ad);
+      var ad = el("h2", "ta-ad"); harfle(ad, EN && a.ad_en ? a.ad_en : a.ad);
       ac.append(no, yy, ad);
-      if (a.alt) ac.appendChild(el("p", "ta-alt", a.alt));
+      if (a.alt) ac.appendChild(el("p", "ta-alt", EN && a.alt_en ? a.alt_en : a.alt));
       ac.appendChild(el("p", "ta-ar", a.ar));
-      var tz = el("p", "ta-tez", a.tez);
+      var tz = el("p", "ta-tez", EN && a.tez_en ? a.tez_en : a.tez);
       if (a.tez_kaynak) { var tk = el("a", "ta-kaynak", " " + a.tez_kaynak.ad + " ↗"); tk.href = a.tez_kaynak.url; tk.target = "_blank"; tk.rel = "noopener"; tz.appendChild(tk); }
       ac.appendChild(tz);
       ac.appendChild(tatriz(24, "ta-tatriz kucuk"));
@@ -102,14 +102,15 @@
       if (a.gecis) {
         var g = el("div", "ta-gecis izle");
         g.appendChild(el("span", "ta-gecis-ok", "→"));
-        g.appendChild(el("p", null, a.gecis));
+        g.appendChild(el("p", null, EN && a.gecis_en ? a.gecis_en : a.gecis));
         s.appendChild(g);
       }
       akis.appendChild(s);
     });
 
     var son = el("footer", "ta-son");
-    son.appendChild(el("p", null, "Taslak. Haritalar Natural Earth (kamu malı) verisinden çizildi; 1947 planı, Oslo bölgeleri ve 2025 hattı şematiktir. Görseller Wikimedia Commons’tan, açık lisanslı ya da kamu malı."));
+    son.appendChild(el("p", null, EN ? "Relief from AWS Terrain Tiles, borders from Natural Earth (public domain); the 1947 plan, the Oslo areas and the 2025 line are schematic. Images from Wikimedia Commons, openly licensed or public domain. Older list view: " : "Arazi AWS Terrain Tiles’tan, sınırlar Natural Earth’ten (kamu malı); 1947 planı, Oslo bölgeleri ve 2025 hattı şematiktir. Görseller Wikimedia Commons’tan, açık lisanslı ya da kamu malı. Eski liste görünümü: "));
+    var lg = el("a", null, EN ? "all entries by date" : "bütün olaylar tarih sırasıyla"); lg.href = "tarihce-liste.html"; son.lastChild.appendChild(lg);
     var kl = el("p", "ta-kunyeler"); kl.id = "taKunye"; son.appendChild(kl);
     kok.appendChild(son);
     kunyeYaz(kl);
@@ -127,10 +128,10 @@
         var im = new Image(); im.src = gy; im.alt = ""; im.loading = "lazy"; im.decoding = "async";
         im.onerror = function () { f.remove(); };
         f.appendChild(im);
-        var ku = kunye[o.gorsel]; if (ku) f.appendChild(el("figcaption", null, ku.tr));
+        var ku = kunye[o.gorsel]; if (ku) f.appendChild(el("figcaption", null, EN ? ku.en : ku.tr));
         k.appendChild(f);
       }
-      if (yanMi) k.appendChild(el("span", "ta-yan-et", "Yan olay"));
+      if (yanMi) k.appendChild(el("span", "ta-yan-et", EN ? "Side event" : "Yan olay"));
       k.appendChild(el("time", "ta-tarih", tarihAd(v.tarih)));
       k.appendChild(el("h3", null, N(EN && v.baslik_en ? v.baslik_en : v.baslik)));
       k.appendChild(el("p", null, N(EN && v.metin_en ? v.metin_en : v.metin)));
@@ -147,9 +148,10 @@
       var gy = gorselYol(o);
       if (gy) { var im = new Image(); im.src = gy; im.alt = ""; im.className = "ta-alinti-yuz"; im.onerror = function () { im.remove(); }; b.appendChild(im); }
       b.appendChild(el("span", "ta-tirnak", "“"));
-      b.appendChild(el("p", "ta-yer", o.yer_tutucu));
-      b.appendChild(el("p", "ta-alinti-ozet", o.metin));
-      b.appendChild(el("cite", null, o.kisi + " · " + o.eser));
+      var Q = function (k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; };
+      if (o.alinti) b.appendChild(el("p", "ta-yer dolu", o.alinti)); else b.appendChild(el("p", "ta-yer", Q("yer_tutucu")));
+      b.appendChild(el("p", "ta-alinti-ozet", Q("metin")));
+      b.appendChild(el("cite", null, Q("kisi") + " · " + Q("eser")));
       return b;
     }
     function biyografi(o) {
@@ -158,10 +160,10 @@
       var gy = gorselYol(o);
       if (gy) { var im = new Image(); im.src = gy; im.alt = o.kisi; im.loading = "lazy"; im.onerror = function () { im.remove(); }; ust.appendChild(im); }
       var b1 = el("div");
-      b1.append(el("span", "ta-yan-et", "Biyografi"), el("h3", null, o.kisi), el("p", "ta-bio-yil", o.yillar), el("p", null, o.ozet));
+      b1.append(el("span", "ta-yan-et", EN ? "Biography" : "Biyografi"), el("h3", null, EN ? o.kisi_en : o.kisi), el("p", "ta-bio-yil", o.yillar), el("p", null, EN ? o.ozet_en : o.ozet));
       ust.appendChild(b1); b.appendChild(ust);
       var ol = el("ol", "ta-bio-serit");
-      o.satirlar.forEach(function (s, i) { var li = el("li"); li.style.setProperty("--i", i); li.append(el("b", null, s[0]), el("span", null, N(s[1]))); ol.appendChild(li); });
+      (EN && o.satirlar_en ? o.satirlar_en : o.satirlar).forEach(function (s, i) { var li = el("li"); li.style.setProperty("--i", i); li.append(el("b", null, s[0]), el("span", null, N(s[1]))); ol.appendChild(li); });
       b.appendChild(ol);
       (o.kaynaklar || []).forEach(function (x) { var p = el("p", "ta-kaynaklar"); var a = el("a", null, x.ad + " ↗"); a.href = x.url; a.target = "_blank"; a.rel = "noopener"; p.appendChild(a); b.appendChild(p); });
       return b;
@@ -171,10 +173,10 @@
       document.querySelectorAll(".ta-gorsel img, .ta-alinti-yuz, .ta-bio-ust img").forEach(function (im) { var m = (im.getAttribute("src") || "").match(/\/([^/]+)\.(jpg|png|webp)$/); if (m) kul[m[1]] = 1; });
       var L = K.filter(function (k) { return kul[k.ad]; });
       if (!L.length) return;
-      kl.appendChild(document.createTextNode("Görseller: "));
+      kl.appendChild(document.createTextNode(EN ? "Images: " : "Görseller: "));
       L.forEach(function (x, i) {
         if (i) kl.appendChild(document.createTextNode(" · "));
-        var a = el("a", null, x.tr + ", " + String(x.yazar || "").replace(/^Unknown author.*/, "fotoğrafçısı bilinmiyor") + ", " + x.lisans);
+        var a = el("a", null, (EN ? x.en : x.tr) + ", " + String(x.yazar || "").replace(/^Unknown author.*/, EN ? "unknown photographer" : "fotoğrafçısı bilinmiyor") + ", " + x.lisans);
         a.href = x.sayfa; a.target = "_blank"; a.rel = "noopener"; kl.appendChild(a);
       });
     }
@@ -217,7 +219,7 @@
   // --- harita ---
   var HR = {};
   function haritaKur(hk, H, M) {
-    var s = svg("svg", { viewBox: "0 0 " + H.w + " " + H.h, "class": "ta-hsvg", role: "img", "aria-label": EN ? "Map of historic Palestine" : "Tarihî Filistin haritası" });
+    var s = svg("svg", { viewBox: "0 0 " + H.w + " " + H.h, preserveAspectRatio: "xMidYMid slice", "class": "ta-hsvg", role: "img", "aria-label": EN ? "Map of historic Palestine" : "Tarihî Filistin haritası" });
     var defs = svg("defs");
     var cl = svg("clipPath", { id: "taFil" }); H.filistin.forEach(function (d) { cl.appendChild(svg("path", { d: d })); }); defs.appendChild(cl);
     var clg = svg("clipPath", { id: "taGz" }); H.gazze.forEach(function (d) { clg.appendChild(svg("path", { d: d })); }); defs.appendChild(clg);
@@ -263,7 +265,7 @@
       var t = svg("text", { x: e[2], y: e[3], "class": "bolge" + (ulke ? " h-kat" : "") }); if (ulke) t.setAttribute("data-kat", "ulkeT");
       t.textContent = EN ? e[1] : e[0]; et.appendChild(t);
     });
-    var osmT = svg("text", { x: 404, y: 150, "class": "h-kat buyuk", "data-kat": "osmT" }); osmT.textContent = EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ"; et.appendChild(osmT);
+    var osmT = svg("text", { x: 330, y: 470, "class": "h-kat buyuk", "data-kat": "osmT" }); osmT.textContent = EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ"; et.appendChild(osmT);
     var bs = svg("text", { x: 268, y: 262, "class": "h-kat orta", "data-kat": "bsT" }); bs.textContent = EN ? "WEST BANK" : "BATI ŞERİA"; et.appendChild(bs);
     var gzT = svg("text", { x: 118, y: 372, "class": "h-kat orta sag", "data-kat": "gzT" }); gzT.textContent = EN ? "GAZA" : "GAZZE"; et.appendChild(gzT);
     H.sehir.forEach(function (c) {
@@ -284,6 +286,7 @@
       "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]), oslo: SON.concat(["bati", "gazze", "isgalB", "oslo", "bsT", "gzT"]),
       abluka: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "bsT", "gzT"]), sari: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari", "bsT", "gzT"])
     };
+    window.__taHarita = function (ad) { HR.su = null; HR.goster(ad); };   // deneme ve paylaşım görüntüsü için
     HR.goster = function (ad) {
       if (!ad || HR.su === ad || !KATLAR[ad]) return;
       HR.su = ad;
@@ -315,7 +318,7 @@
     n.appendChild(s);
     var ol = el("ol", "ta-n-liste");
     L.forEach(function (a, i) {
-      var li = el("li"); var b = el("a", null, a.ad); b.href = "#akis-" + a.anahtar; b.style.setProperty("--renk", a.renk); b.dataset.akis = a.anahtar;
+      var li = el("li"); var b = el("a", null, EN && a.ad_en ? a.ad_en : a.ad); b.href = "#akis-" + a.anahtar; b.style.setProperty("--renk", a.renk); b.dataset.akis = a.anahtar;
       li.appendChild(b); ol.appendChild(li);
     });
     n.appendChild(ol);

@@ -18,16 +18,16 @@
   "plan1947": {
    "yil": "1947",
    "ad": "BM taksim planı",
-   "not": "Yeşil: plana göre Arap devleti (şematik). Kudüs uluslararası yönetim.",
+   "not": "Kızıl: plana göre Arap devleti (şematik). Kudüs uluslararası yönetim.",
    "ad_en": "UN Partition Plan",
-   "not_en": "Green: the Arab state under the plan (schematic). Jerusalem under international rule."
+   "not_en": "Red-brown: the Arab state under the plan (schematic). Jerusalem under international rule."
   },
   "1949": {
    "yil": "1949",
    "ad": "Rodos Mütarekesi’nden sonra",
-   "not": "Yeşil: Batı Şeria ve Gazze. Gri: 1948’de kaybedilen toprak.",
+   "not": "Kızıl: Batı Şeria ve Gazze. Koyu: 1948’de kaybedilen toprak.",
    "ad_en": "After the Rhodes Armistice",
-   "not_en": "Green: the West Bank and Gaza. Grey: land lost in 1948."
+   "not_en": "Red-brown: the West Bank and Gaza. Dark: land lost in 1948."
   },
   "1967": {
    "yil": "1967",
@@ -39,9 +39,9 @@
   "oslo": {
    "yil": "1995",
    "ad": "Oslo II",
-   "not": "Yeşil: A ve B bölgeleri (şematik). Taralı: C bölgesi, İsrail denetiminde.",
+   "not": "Açık kızıl: A ve B bölgeleri (şematik). Taralı: C bölgesi, İsrail denetiminde.",
    "ad_en": "Oslo II",
-   "not_en": "Green: Areas A and B (schematic). Hatched: Area C, under Israeli control."
+   "not_en": "Light red-brown: Areas A and B (schematic). Hatched: Area C, under Israeli control."
   },
   "abluka": {
    "yil": "2007",

@@ -47,7 +47,7 @@
 .ta-harita{position:sticky;top:56px;height:calc(100vh - 56px);align-self:start;box-sizing:border-box;padding:18px 20px 14px;display:flex;flex-direction:column;
   background:linear-gradient(180deg,var(--ta-zemin2),var(--ta-zemin));border-right:1px solid var(--ta-cizgi)}
 .ta-h-bas{display:flex;align-items:baseline;gap:12px;min-height:3.2rem}
-.ta-h-yil{font:900 clamp(2rem,4vw,3.2rem)/1 "Source Serif 4",serif;color:var(--su);transition:color .4s}
+.ta-h-yil{font:900 clamp(2rem,4vw,3.2rem)/1 "Source Serif 4",serif;color:color-mix(in srgb,var(--su) 65%,#f1ead8);transition:color .4s}
 .ta-h-ad{font:700 .9rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ta-kagit)}
 .ta-hsvg{flex:1;min-height:0;width:100%}
 .ta-h-not{margin:6px 0 0;font:500 .82rem/1.45 "Plus Jakarta Sans",sans-serif;color:var(--ta-soluk);min-height:2.4em}
