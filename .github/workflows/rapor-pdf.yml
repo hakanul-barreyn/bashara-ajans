@@ -1,0 +1,28 @@
+# Raporların PDF sürümleri: haftada bir, güncel veriyle basılır; "gorsel" dalının pdf/ klasörüne yazılır (sitede data/gorsel/pdf/).
+name: rapor-pdf
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+permissions:
+  contents: write
+concurrency:
+  group: gunluk-gorsel
+  cancel-in-progress: false
+jobs:
+  bas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          (git fetch -q --depth 1 origin veri && git archive FETCH_HEAD data | tar -x) || true
+          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
+      - run: pip install -q playwright && python -m playwright install --with-deps chromium
+      - run: |
+          mkdir cikti && cp -r data/gorsel/. cikti/ && rm -rf cikti/pdf
+          python toplayici/rapor_pdf.py . "$PWD/cikti/pdf" && ls -la cikti/pdf
+      - run: |
+          cd cikti && git init -q -b gorsel && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Rapor PDF'leri"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:gorsel

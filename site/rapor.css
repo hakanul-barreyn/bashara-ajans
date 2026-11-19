@@ -358,3 +358,6 @@ body.baski .gp-dugme{display:none}
 .tk-iz i.art{left:50%;background:#c9544e}.tk-iz i.eks{right:50%;background:#1f7a52}
 .tk-deger{font-variant-numeric:tabular-nums;color:var(--soluk);white-space:nowrap;font-size:.78rem;text-align:right}
 @media (max-width:600px){.tk-cubuk li{grid-template-columns:minmax(0,1fr) 8.5rem;row-gap:2px}.tk-iz{grid-column:1/-1;grid-row:2}}
+.rp-pdf{margin:8px 0 0;font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;color:var(--soluk)}
+.rp-pdf a{color:inherit;font-weight:700}
+@media print{.ust,.rp-pdf,.rp-geri,.rp-guncel{display:none!important}}

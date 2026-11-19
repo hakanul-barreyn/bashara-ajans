@@ -244,7 +244,9 @@
       el("p", null, tt("Bir karta dokun: yayınların başlıkları yan yana açılır, aşağı kaydırdıkça sıradaki hikâyeye geçersin.",
         "Tap a card: the outlets’ headlines open side by side; scroll down for the next story.")));
     const raf = el("div", "hb-raf"); raf.setAttribute("role", "list");
-    hik.slice(0, 16).forEach((b, i) => {
+    // önce en az üç yayının yazdığı hikâyeler; yeterince yoksa ikişer yayınlılar da
+    const ucler = hik.filter((b) => b.yayinSayisi >= 3);
+    (ucler.length >= 6 ? ucler : hik).slice(0, 16).forEach((b, i) => {
       const k = el("button", "hb-kisa"); k.type = "button"; k.setAttribute("role", "listitem");
       const og = b.olay && b.olay.gorsel ? b.olay : null;
       const g = og ? c.AK(og.gorsel, 420) : ((onizleme(b, c) || {}).gorsel ? c.AK(onizleme(b, c).gorsel, 420) : "");

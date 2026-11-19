@@ -253,6 +253,10 @@
     return haberler.filter((h) => {
       const k = kaynaklar[h.kaynak]; if (!k || h.atla) return false;
       if (bolge !== "Tümü" && (k.kamp || k.bolge) !== bolge) return false;
+      // Türk yayınlarının Türkçe haberleri yalnızca Türkiye seçilince (AA'nın İngilizce ve Arapça masaları gibi yabancı dildekiler kalır)
+      if (bolge === "Tümü" && (h.dil || k.dil) === "tr" && (k.bolge === "Anadolu-Türkiye" || k.grup === "Türkiye")) return false;
+      // Çevrilmemiş haber 2 saat çeviriyi bekler; sonra "çevrilmedi" etiketiyle görünür
+      if (!BT(h) && (h.dil || k.dil) !== DL && Date.now() - Date.parse(h.eklendi || h.tarih) < 2 * 3600e3) return false;
       if (ilgili && !h.ilgili) return false;
       if (ozetli && !OZ(h)) return false;
       if (sadeceAnaliz && h.nitelik !== "analiz") return false;
@@ -607,6 +611,37 @@
 
   // ---------------------------------------------------- manşet slaytları
   let slaytZaman = null, slaytNo = 0;
+  // Enine kartlar: en az üç yayının yazdığı, çevrilmiş ve kendi haber metnimiz olan olaylar, yan yana dikey kartlar (masaüstü)
+  function enineCiz(liste) {
+    const kutu = $("enine"); if (!kutu) return;
+    kutu.innerHTML = "";
+    const en = window.DIL === "en";
+    const uygun = liste.filter((o) => {
+      const kp = o.arsiv ? kapsamaK(o.kaynaklar) : kapsama(o);
+      if ((kp.toplam || 0) < 3 || !yaziVar.has(o.id)) return false;
+      const hs = (o.haberler || []).map((i) => haberIdx[i]).filter(Boolean);
+      return hs.every((h) => BT(h) || (h.dil || (kaynaklar[h.kaynak] || {}).dil) === DL);
+    }).slice(0, 12);
+    kutu.hidden = uygun.length < 3;
+    if (kutu.hidden) return;
+    const bh = el("h2", "bolum", en ? "Compared stories" : "Karşılaştırmalı haberler");
+    bh.appendChild(el("span", "bolum-ek", en ? " · three or more outlets, translated, with our own report" : " · en az üç yayın, çevrilmiş, kendi haber metnimizle"));
+    kutu.appendChild(bh);
+    const raf = el("div", "enine-raf"); raf.setAttribute("role", "list");
+    uygun.forEach((o) => {
+      const kp = o.arsiv ? kapsamaK(o.kaynaklar) : kapsama(o);
+      const a = el("a", "enine-kart"); a.href = "haber.html?o=" + encodeURIComponent(o.id); a.setAttribute("role", "listitem");
+      const gd = o.arsiv ? o : (gundemArsiv || []).find((x) => x.id === o.id);
+      if (gd && gd.gorsel && gd.gorsel_atif) { const im = document.createElement("img"); im.src = (window.AKTAR || ((u) => u))(gd.gorsel, 480); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; if (gd.odak) im.style.objectPosition = gd.odak; im.onerror = () => { im.remove(); a.classList.add("gorselsiz"); }; a.appendChild(im); }
+      else a.classList.add("gorselsiz");
+      if (gd && gd.yer_ad) a.appendChild(el("span", "enine-yer", gd.yer_ad));
+      a.appendChild(el("span", "enine-say", kp.toplam + (en ? " outlets" : " yayın")));
+      const alt = el("span", "enine-alt"); alt.appendChild(el("b", null, OB(o))); alt.appendChild(el("span", "enine-zaman", once(o.son)));
+      a.appendChild(alt);
+      raf.appendChild(a);
+    });
+    kutu.appendChild(raf);
+  }
   function gundemCiz() {
     const kutu = $("gundem"); kutu.innerHTML = "";
     clearInterval(slaytZaman);
@@ -615,6 +650,7 @@
     const gorulen = new Set(liste.flatMap((o) => o.haberler));
     (gundemArsiv || []).forEach((a) => { if (liste.length < 20 && !liste.some((o) => o.id === a.id) && !a.haberler.some((i) => gorulen.has(i))) { liste.push(Object.assign({ arsiv: true }, a)); a.haberler.forEach((i) => gorulen.add(i)); } });
     liste.splice(20);
+    try { enineCiz(olaySec ? [] : liste); } catch (e) { /* enine şerit isteğe bağlı */ }
     kutu.hidden = !liste.length || !!olaySec;
     if (!liste.length || olaySec) return;
     const ust = el("div", "slayt-ust");
@@ -952,7 +988,7 @@
       }
     } else {
       const b = el("h2", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; g.appendChild(b);
-      g.appendChild(el("span", "cevirisiz", (DIL[k.dil] || k.dil) + " · Türkçe özet " + (h.ilgili ? "sırada" : "yazılmadı")));
+      g.appendChild(el("span", "cevirisiz", (DIL[k.dil] || k.dil) + " · " + (DL === "en" ? "not translated" : "çevrilmedi")));
     }
     if (h.etiket && h.etiket.length) {
       const et = el("div", "etiketler");

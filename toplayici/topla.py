@@ -854,6 +854,37 @@ def oku(yol, varsayilan):
         return varsayilan
 
 
+def cevirisiz_bildir(durum, olaylar, hidx, kaynaklar, log=print):
+    """Önemli (en az üç yayının yazdığı) bir olayın haberi 2 saattir çevrilemediyse yöneticiye Telegram'dan haber verir; olay başına bir kez.
+    Sitede çevrilmemiş haber 2 saat akışa girmez, sonra "çevrilmedi" etiketiyle görünür (site/uygulama.js)."""
+    tok, yon = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_YONETICI")
+    if not (tok and yon):
+        return
+    km = {k["id"]: k for k in kaynaklar}
+    gitti = durum.setdefault("_cevirisiz_bildirim", {})
+    sinir = (SIMDI - dt.timedelta(hours=2)).isoformat()
+    for o in olaylar:
+        ks = {x.get("k") for x in o.get("haberler", [])}
+        if len(ks) < 3 or o.get("id") in gitti:
+            continue
+        bek = [hidx[x["id"]] for x in o.get("haberler", []) if x.get("id") in hidx and not hidx[x["id"]].get("baslik_tr")
+               and (km.get(hidx[x["id"]].get("kaynak")) or {}).get("dil") != "tr" and (hidx[x["id"]].get("eklendi") or "") < sinir]
+        if not bek:
+            continue
+        satir = "\n".join(f"• {(km.get(h.get('kaynak')) or {}).get('ad', '?')}: {h.get('baslik_orj', '')[:140]}" for h in bek[:5])
+        metin = f"Alboroto: önemli bir olayda {len(bek)} haber 2 saattir çevrilemedi.\nOlay: {o.get('baslik') or ''}\n{satir}"
+        istek = urllib.request.Request(f"https://api.telegram.org/bot{tok}/sendMessage",
+                                       data=json.dumps({"chat_id": yon, "text": metin[:3900]}).encode(), headers={"Content-Type": "application/json"})
+        urllib.request.urlopen(istek, timeout=20).read()
+        gitti[o["id"]] = SIMDI.isoformat()
+        log(f"Çevrilmemiş haber bildirimi: {o.get('baslik')}")
+        break   # çalıştırma başına en çok bir bildirim
+    # bir haftadan eski kayıtları sil
+    eski = (SIMDI - dt.timedelta(days=7)).isoformat()
+    for k in [k for k, v in gitti.items() if v < eski]:
+        gitti.pop(k)
+
+
 def yz_kapanis(log=print):
     """Ara katman defterini yazar; Claude anahtarı reddedilmeye başladıysa yöneticiye günde bir Telegram uyarısı yollar."""
     try:
@@ -1360,6 +1391,10 @@ def main():
                           gemini=ig_gemini, log=log)
     except Exception as e:
         log(f"Instagram hatası: {e}")
+    try:
+        cevirisiz_bildir(durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, log=log)
+    except Exception as e:
+        log(f"Çevrilmemiş haber bildirimi hatası: {e}")
     durum["_son_calisma"] = SIMDI.isoformat()
     yz_kapanis(log)
     yaz(DURUM, durum)
