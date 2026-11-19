@@ -1,7 +1,7 @@
 """Tarihçe haritasının gölgeli arazi zemini. AWS Terrain Tiles (Terrarium; SRTM, GMTED, ETOPO1 gibi açık kaynaklardan derlenmiş)
 karolarını indirir, site/tarihce-harita.json'daki pencereye ve izdüşüme göre yeniden örnekler, tepe gölgesi ve yükseltiye göre
 renk verir. Kara ve göller aynı dosyadaki SVG yollarından maskelenir. Çıktı: JPEG (ilk argüman)."""
-import io, json, math, re, sys, time, urllib.request
+import io, json, math, os, re, sys, time, urllib.request
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
@@ -31,7 +31,7 @@ for ty in range(y0, y1 + 1):
     for tx in range(x0, x1 + 1):
         u = f"https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{Z}/{tx}/{ty}.png"
         b = None
-        for d in range(4):
+        for d in range(0 if os.environ.get("ARAZI_DENEME") else 4):
             try:
                 b = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "alboroto-harita/1.0"}), timeout=60).read()
                 break
@@ -50,7 +50,12 @@ lat = LAT1 - ys / s
 px = np.array([mx(v) for v in lon]) - x0 * 256
 py = np.array([my(v) for v in lat]) - y0 * 256
 E = mos[np.clip(py.astype(int), 0, mos.shape[0] - 1)[:, None], np.clip(px.astype(int), 0, mos.shape[1] - 1)[None, :]]
-E = np.asarray(Image.fromarray(E).filter(ImageFilter.GaussianBlur(0.8)), dtype=np.float32)
+def yumusat(a):
+    p = np.pad(a, 1, mode="edge")
+    return sum(p[1 + dy:1 + dy + a.shape[0], 1 + dx:1 + dx + a.shape[1]] for dy in (-1, 0, 1) for dx in (-1, 0, 1)) / 9
+
+
+E = yumusat(E.astype(np.float32))
 
 # tepe gölgesi
 m_px = (LON1 - LON0) * K * 111320 / OW

@@ -55,20 +55,32 @@
 .ta-h-buyut{display:none}
 .ta-harita.degisti .ta-h-bas,.ta-harita.degisti .ta-h-not{animation:ta-h-gel .6s ease both}
 @keyframes ta-h-gel{from{opacity:0;transform:translateY(8px)}}
-/* harita katmanları */
-.h-komsu path{fill:#1a201d;stroke:#26302b;stroke-width:.6}
-.h-kayip path{fill:#3a3f3c;stroke:none}
-.h-kat{opacity:0;transition:opacity .7s ease, transform .7s ease;transform-origin:50% 50%;transform:scale(.985)}
-.h-kat.acik{opacity:1;transform:none}
-.h-kat.yesil path{fill:#2f8a5f;stroke:#2f8a5f;stroke-width:.4}
-.h-kat.parlak path{fill:#4fc488;stroke:#4fc488}
+/* harita katmanları: gölgeli arazi zemin, üstünde yarı saydam bölgeler (Al Jazeera haritaları gibi) */
+.h-deniz{fill:#2c5f8f}
+.h-kara path{fill:#3d4636;stroke:none}
+.h-arazi{opacity:1}
+.h-kat{opacity:0;transition:opacity .7s ease}
+.h-kat.acik{opacity:1}
+.h-kat.osmanli path{fill:#c9a25a;fill-opacity:.42;stroke:none;mix-blend-mode:multiply}
+.h-kat.misir path{fill:#0b0d0c;fill-opacity:.35;stroke:none}
+.h-kat.sinir path{fill:none;stroke:rgba(255,255,255,.7);stroke-width:.9}
+.h-kat.kayip path{fill:#0b0d0c;fill-opacity:.5;stroke:none}
+.h-kat.fil path{fill:#b8643f;fill-opacity:.8;stroke:#e9b48f;stroke-width:.6;stroke-opacity:.8;mix-blend-mode:normal}
+.h-kat.fil.parlak path{fill:#d9834e;fill-opacity:.95;stroke:none}
 .h-kat.tarali path{fill:url(#taTarali);stroke:none}
-.tar-zemin{fill:rgba(0,0,0,0)}.tar-cizgi{stroke:rgba(241,234,216,.55);stroke-width:2.2}
-.h-kat.abluka path{fill:none;stroke:var(--ta-kirmizi);stroke-width:2.4;stroke-dasharray:4 3}
-.h-kat.kudus{fill:none;stroke:var(--ta-kagit);stroke-width:1.6;stroke-dasharray:2 2}
-.h-sehir circle{fill:var(--ta-kagit)}
-.h-sehir text{fill:#cfd6d1;font:600 9.5px "Plus Jakarta Sans",sans-serif;paint-order:stroke;stroke:var(--ta-zemin);stroke-width:2.4px}
-
+.tar-cizgi{stroke:rgba(255,255,255,.55);stroke-width:1.6}
+.h-kat.tarali.koyu path{fill:#0b0d0c;fill-opacity:.55}
+.h-kat.abluka path{fill:none;stroke:#e0402f;stroke-width:2.4;stroke-dasharray:4 3}
+.h-kat.kudus{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:2 2}
+.h-nehir path{fill:none;stroke:#8cc6dc;stroke-width:1.1;opacity:.9}
+.h-etiket text{fill:#fff;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:1px}
+.h-etiket .bolge{font-size:13px;letter-spacing:.08em;fill:rgba(255,255,255,.78);text-anchor:middle}
+.h-etiket .buyuk{font-size:20px;letter-spacing:.06em;text-anchor:middle}
+.h-etiket .orta{font-size:13px;letter-spacing:.04em;text-anchor:middle}
+.h-etiket .orta.sag{text-anchor:end}
+.h-etiket .sehir{font-size:9.5px;font-weight:700}
+.h-etiket .kare{fill:#f0a77a;stroke:#fff;stroke-width:.6}
+.ta-hsvg{border-radius:6px;overflow:hidden}
 /* ---------- akışlar ---------- */
 .ta-akis{min-width:0;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 clamp(20px,4vw,64px)}
 .ta-bolum{position:relative;padding:0 0 40px}

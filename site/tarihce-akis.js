@@ -217,42 +217,72 @@
   // --- harita ---
   var HR = {};
   function haritaKur(hk, H, M) {
-    var s = svg("svg", { viewBox: "0 0 " + H.w + " " + H.h, "class": "ta-hsvg", role: "img", "aria-label": "Tarihî Filistin haritası" });
+    var s = svg("svg", { viewBox: "0 0 " + H.w + " " + H.h, "class": "ta-hsvg", role: "img", "aria-label": EN ? "Map of historic Palestine" : "Tarihî Filistin haritası" });
     var defs = svg("defs");
     var cl = svg("clipPath", { id: "taFil" }); H.filistin.forEach(function (d) { cl.appendChild(svg("path", { d: d })); }); defs.appendChild(cl);
-    var tar = svg("pattern", { id: "taTarali", width: 7, height: 7, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
-    tar.appendChild(svg("rect", { width: 7, height: 7, "class": "tar-zemin" })); tar.appendChild(svg("line", { x1: 0, y1: 0, x2: 0, y2: 7, "class": "tar-cizgi" }));
-    defs.appendChild(tar); s.appendChild(defs);
-    var g0 = svg("g", { "class": "h-komsu" }); H.komsu.forEach(function (d) { g0.appendChild(svg("path", { d: d })); }); s.appendChild(g0);
-    var kayip = svg("g", { "class": "h-kayip" }); H.filistin.forEach(function (d) { kayip.appendChild(svg("path", { d: d })); }); s.appendChild(kayip);
+    var clg = svg("clipPath", { id: "taGz" }); H.gazze.forEach(function (d) { clg.appendChild(svg("path", { d: d })); }); defs.appendChild(clg);
+    var tar = svg("pattern", { id: "taTarali", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
+    tar.appendChild(svg("line", { x1: 0, y1: 0, x2: 0, y2: 6, "class": "tar-cizgi" }));
+    defs.appendChild(tar);
+    var sg_ = svg("filter", { id: "taGolge", x: "-10%", y: "-10%", width: "120%", height: "120%" });
+    sg_.appendChild(svg("feDropShadow", { dx: 0, dy: 0, stdDeviation: 2.2, "flood-color": "#000", "flood-opacity": .85 })); defs.appendChild(sg_);
+    s.appendChild(defs);
+    // zemin: deniz ve kara (vektör, arazi görseli yüklenemezse görünür), üstünde gölgeli arazi
+    s.appendChild(svg("rect", { width: H.w, height: H.h, "class": "h-deniz" }));
+    var g0 = svg("g", { "class": "h-kara" }); H.komsu.concat(H.filistin).forEach(function (d) { g0.appendChild(svg("path", { d: d })); }); s.appendChild(g0);
+    var ar = svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none", "class": "h-arazi" });
+    ar.addEventListener("error", function () { ar.remove(); });
+    s.appendChild(ar);
     function kat(ad, yollar, sinif, kirp) {
-      var g = svg("g", { "class": "h-kat " + sinif, "data-kat": ad }); if (kirp) g.setAttribute("clip-path", "url(#taFil)");
+      var g = svg("g", { "class": "h-kat " + sinif, "data-kat": ad }); if (kirp) g.setAttribute("clip-path", "url(#" + kirp + ")");
       yollar.forEach(function (d) { g.appendChild(svg("path", { d: d })); }); s.appendChild(g); return g;
     }
-    kat("tam", H.filistin, "yesil");
+    // Osmanlı: kuzeyde, doğuda ve güneydoğuda sınır yok; Filistin, Suriye, Lübnan, Ürdün ve Hicaz tek renk
+    kat("osm", H.osmanli.concat(H.filistin), "osmanli");
+    kat("misir", H.misir, "misir");
+    // mandadan sonra çizilen sınırlar: komşuların ve tarihî Filistin'in dış çizgisi (iç ateşkes hattı çizilmez)
+    kat("sinir", H.komsu, "sinir");
+    kat("kayip", H.filistin, "kayip");
+    kat("tam", H.filistin, "fil");
     kat("manda", H.filistin, "tarali");
-    kat("plan1947", H.plan1947, "yesil", true);
-    kat("bati", H.bati, "yesil");
-    kat("gazze", H.gazze, "yesil");
+    kat("plan1947", H.plan1947, "fil", "taFil");
+    kat("bati", H.bati, "fil");
+    kat("gazze", H.gazze, "fil");
     kat("isgal", H.bati.concat(H.gazze), "tarali");
     kat("isgalB", H.bati, "tarali");
-    kat("oslo", H.oslo_ab, "yesil parlak", true);
-    var gz = svg("g", { "class": "h-kat abluka", "data-kat": "ablukaH" });
-    H.gazze.forEach(function (d) { gz.appendChild(svg("path", { d: d })); }); s.appendChild(gz);
-    var sh = svg("g", { "class": "h-kat tarali", "data-kat": "sari" }); sh.appendChild(svg("path", { d: H.sari_hat, "clip-path": "url(#taGz)" })); s.appendChild(sh);
-    var clg = svg("clipPath", { id: "taGz" }); H.gazze.forEach(function (d) { clg.appendChild(svg("path", { d: d })); }); defs.appendChild(clg);
-    var kd = svg("circle", { cx: H.kudus[0], cy: H.kudus[1], r: 9, "class": "h-kat kudus", "data-kat": "kudus" }); s.appendChild(kd);
-    var sg = svg("g", { "class": "h-sehir" });
-    H.sehir.forEach(function (c) { sg.appendChild(svg("circle", { cx: c[1], cy: c[2], r: 2.2 })); var t = svg("text", { x: c[1] + 5, y: c[2] + 3 }); t.textContent = c[0]; sg.appendChild(t); });
-    s.appendChild(sg);
+    kat("oslo", H.oslo_ab, "fil parlak", "taFil");
+    kat("ablukaH", H.gazze, "abluka");
+    var sh = kat("sari", [H.sari_hat], "tarali koyu", "taGz");
+    var nh = svg("g", { "class": "h-nehir" }); H.nehir.forEach(function (d) { nh.appendChild(svg("path", { d: d })); }); s.appendChild(nh);
+    var kd = svg("circle", { cx: H.kudus[0], cy: H.kudus[1], r: 10, "class": "h-kat kudus", "data-kat": "kudus" }); s.appendChild(kd);
+    // etiketler: bölge adları (Al Jazeera haritalarındaki gibi büyük, beyaz, gölgeli), şehirler kare imle
+    var et = svg("g", { "class": "h-etiket", filter: "url(#taGolge)" });
+    H.etiket.forEach(function (e, i) {
+      // modern ülke adları (Ürdün, Suriye, Lübnan) Osmanlı haritasında görünmez
+      var ulke = ["ÜRDÜN", "SURİYE", "LÜBNAN"].indexOf(e[0]) >= 0;
+      var t = svg("text", { x: e[2], y: e[3], "class": "bolge" + (ulke ? " h-kat" : "") }); if (ulke) t.setAttribute("data-kat", "ulkeT");
+      t.textContent = EN ? e[1] : e[0]; et.appendChild(t);
+    });
+    var osmT = svg("text", { x: 404, y: 150, "class": "h-kat buyuk", "data-kat": "osmT" }); osmT.textContent = EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ"; et.appendChild(osmT);
+    var bs = svg("text", { x: 268, y: 262, "class": "h-kat orta", "data-kat": "bsT" }); bs.textContent = EN ? "WEST BANK" : "BATI ŞERİA"; et.appendChild(bs);
+    var gzT = svg("text", { x: 118, y: 372, "class": "h-kat orta sag", "data-kat": "gzT" }); gzT.textContent = EN ? "GAZA" : "GAZZE"; et.appendChild(gzT);
+    H.sehir.forEach(function (c) {
+      et.appendChild(svg("rect", { x: c[1] - 2.6, y: c[2] - 2.6, width: 5.2, height: 5.2, "class": "kare" }));
+      var t = svg("text", { x: c[1] + 6, y: c[2] + 3.4, "class": "sehir" }); t.textContent = EN ? ({ "Kudüs": "Jerusalem", "Yafa": "Jaffa", "Hayfa": "Haifa", "Gazze": "Gaza", "El-Halil": "Hebron", "Birüssebi": "Beersheba", "Akka": "Acre", "Cenin": "Jenin" }[c[0]] || c[0]) : c[0];
+      et.appendChild(t);
+    });
+    s.appendChild(et);
     var bas = el("div", "ta-h-bas"); var hy = el("b", "ta-h-yil"); var ha = el("span", "ta-h-ad"); bas.append(hy, ha);
     var hn = el("p", "ta-h-not");
-    var buyut = el("button", "ta-h-buyut", "Haritayı büyüt"); buyut.type = "button";
-    buyut.onclick = function () { document.documentElement.classList.toggle("ta-h-acik"); buyut.textContent = document.documentElement.classList.contains("ta-h-acik") ? "Kapat" : "Haritayı büyüt"; };
-    hk.append(bas, s, hn, buyut, el("p", "ta-h-kaynak", "Natural Earth · şematik bölümler"));
+    var B1 = EN ? "Enlarge map" : "Haritayı büyüt", B2 = EN ? "Close" : "Kapat";
+    var buyut = el("button", "ta-h-buyut", B1); buyut.type = "button";
+    buyut.onclick = function () { document.documentElement.classList.toggle("ta-h-acik"); buyut.textContent = document.documentElement.classList.contains("ta-h-acik") ? B2 : B1; };
+    hk.append(bas, s, hn, buyut, el("p", "ta-h-kaynak", EN ? "Relief: AWS Terrain Tiles · borders: Natural Earth · some areas schematic" : "Arazi: AWS Terrain Tiles · sınırlar: Natural Earth · bazı bölümler şematik"));
+    var SON = ["sinir", "kayip", "ulkeT"];
     var KATLAR = {
-      tam: ["tam"], manda: ["tam", "manda"], plan1947: ["plan1947", "kudus"], "1949": ["bati", "gazze"], "1967": ["bati", "gazze", "isgal"],
-      oslo: ["bati", "gazze", "isgalB", "oslo"], abluka: ["bati", "gazze", "isgalB", "oslo", "ablukaH"], sari: ["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari"]
+      tam: ["osm", "misir", "osmT"], manda: ["sinir", "tam", "manda", "ulkeT"], plan1947: SON.concat(["plan1947", "kudus"]), "1949": SON.concat(["bati", "gazze", "bsT", "gzT"]),
+      "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]), oslo: SON.concat(["bati", "gazze", "isgalB", "oslo", "bsT", "gzT"]),
+      abluka: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "bsT", "gzT"]), sari: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari", "bsT", "gzT"])
     };
     HR.goster = function (ad) {
       if (!ad || HR.su === ad || !KATLAR[ad]) return;
@@ -260,7 +290,7 @@
       s.querySelectorAll(".h-kat").forEach(function (g) { g.classList.toggle("acik", KATLAR[ad].indexOf(g.getAttribute("data-kat")) >= 0); });
       var m = M[ad] || {};
       hk.classList.remove("degisti"); void hk.offsetWidth; hk.classList.add("degisti");
-      hy.textContent = m.yil || ""; ha.textContent = m.ad || ""; hn.textContent = m.not || "";
+      hy.textContent = m.yil || ""; ha.textContent = (EN && m.ad_en) || m.ad || ""; hn.textContent = (EN && m.not_en) || m.not || "";
     };
   }
 

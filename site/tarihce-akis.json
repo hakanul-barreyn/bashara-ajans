@@ -1,91 +1,863 @@
 {
  "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli.",
  "haritalar": {
-  "tam": {"yil": "1914", "ad": "Osmanlı Filistini", "not": "Kudüs Sancağı ve Beyrut Vilayeti’nin güneyi"},
-  "manda": {"yil": "1922", "ad": "İngiliz Mandası", "not": "Toprağın tamamı manda yönetiminde"},
-  "plan1947": {"yil": "1947", "ad": "BM taksim planı", "not": "Yeşil: plana göre Arap devleti (şematik). Kudüs uluslararası yönetim."},
-  "1949": {"yil": "1949", "ad": "Rodos Mütarekesi’nden sonra", "not": "Yeşil: Batı Şeria ve Gazze. Gri: 1948’de kaybedilen toprak."},
-  "1967": {"yil": "1967", "ad": "Nekse", "not": "Batı Şeria ve Gazze de işgal altında"},
-  "oslo": {"yil": "1995", "ad": "Oslo II", "not": "Yeşil: A ve B bölgeleri (şematik). Taralı: C bölgesi, İsrail denetiminde."},
-  "abluka": {"yil": "2007", "ad": "Gazze ablukası", "not": "Gazze karadan, denizden ve havadan kuşatıldı"},
-  "sari": {"yil": "2025", "ad": "Ekim 2025 ateşkesi", "not": "Taralı: “sarı hat”ın doğusu, Gazze’nin yaklaşık yarısı İsrail ordusunun denetiminde (şematik)"}
+  "tam": {
+   "yil": "1914",
+   "ad": "Osmanlı Filistini",
+   "not": "Sınırsız Osmanlı toprağı: Filistin, Suriye, Lübnan ve Ürdün tek devlet",
+   "ad_en": "Ottoman Palestine",
+   "not_en": "Ottoman lands without borders: Palestine, Syria, Lebanon and Transjordan in one state"
+  },
+  "manda": {
+   "yil": "1922",
+   "ad": "İngiliz Mandası",
+   "not": "İngiltere ve Fransa’nın çizdiği sınırlar; toprağın tamamı manda yönetiminde",
+   "ad_en": "British Mandate",
+   "not_en": "Borders drawn by Britain and France; the whole land under the Mandate"
+  },
+  "plan1947": {
+   "yil": "1947",
+   "ad": "BM taksim planı",
+   "not": "Yeşil: plana göre Arap devleti (şematik). Kudüs uluslararası yönetim.",
+   "ad_en": "UN Partition Plan",
+   "not_en": "Green: the Arab state under the plan (schematic). Jerusalem under international rule."
+  },
+  "1949": {
+   "yil": "1949",
+   "ad": "Rodos Mütarekesi’nden sonra",
+   "not": "Yeşil: Batı Şeria ve Gazze. Gri: 1948’de kaybedilen toprak.",
+   "ad_en": "After the Rhodes Armistice",
+   "not_en": "Green: the West Bank and Gaza. Grey: land lost in 1948."
+  },
+  "1967": {
+   "yil": "1967",
+   "ad": "Nekse",
+   "not": "Batı Şeria ve Gazze de işgal altında",
+   "ad_en": "The Naksa",
+   "not_en": "The West Bank and Gaza also under occupation"
+  },
+  "oslo": {
+   "yil": "1995",
+   "ad": "Oslo II",
+   "not": "Yeşil: A ve B bölgeleri (şematik). Taralı: C bölgesi, İsrail denetiminde.",
+   "ad_en": "Oslo II",
+   "not_en": "Green: Areas A and B (schematic). Hatched: Area C, under Israeli control."
+  },
+  "abluka": {
+   "yil": "2007",
+   "ad": "Gazze ablukası",
+   "not": "Gazze karadan, denizden ve havadan kuşatıldı",
+   "ad_en": "The siege of Gaza",
+   "not_en": "Gaza besieged by land, sea and air"
+  },
+  "sari": {
+   "yil": "2025",
+   "ad": "Ekim 2025 ateşkesi",
+   "not": "Taralı: “sarı hat”ın doğusu, Gazze’nin yaklaşık yarısı İsrail ordusunun denetiminde (şematik)",
+   "ad_en": "October 2025 ceasefire",
+   "not_en": "Hatched: east of the “yellow line”, about half of Gaza under Israeli army control (schematic)"
+  }
  },
  "akislar": [
-  {"anahtar": "osmanli", "ad": "Osmanlı ve yıkılış", "ar": "العهد العثماني", "yillar": [1914, 1918], "renk": "#a0803f", "harita": "tam",
+  {
+   "anahtar": "osmanli",
+   "ad": "Osmanlı ve yıkılış",
+   "ar": "العهد العثماني",
+   "yillar": [
+    1914,
+    1918
+   ],
+   "renk": "#a0803f",
+   "harita": "tam",
    "tez": "Filistin dört yüz yıl Osmanlı’nın bir parçasıydı: Kudüs ayrı bir sancaktı, kuzey Beyrut Vilayeti’ne bağlıydı. Birinci Dünya Savaşı’nda ülke cepheye döndü; Gazze üç kez muharebe gördü, kıtlık ve sürgün yaşandı. Kudüs 9 Aralık 1917’de düştü, Megiddo’dan sonra bölgede Osmanlı yönetimi sona erdi.",
    "gecis": "İmparatorluk yıkıldı; toprağı masa başında paylaşılacaktı.",
-   "olaylar": [{"ref": "1914-10-29"}, {"ref": "1917-03-26"}, {"ref": "1917-10-31"}, {"ref": "1917-12-09"}, {"ref": "1918-09-19"}, {"ref": "1918-10-30"}, {"ref": "1922-11-01", "yan": true}]},
-  {"anahtar": "parsel", "ad": "Parselleme ve sömürge", "ar": "التقسيم والانتداب", "yillar": [1916, 1935], "renk": "#5d6b75", "harita": "manda",
+   "olaylar": [
+    {
+     "ref": "1914-10-29"
+    },
+    {
+     "ref": "1917-03-26"
+    },
+    {
+     "ref": "1917-10-31"
+    },
+    {
+     "ref": "1917-12-09"
+    },
+    {
+     "ref": "1918-09-19"
+    },
+    {
+     "ref": "1918-10-30"
+    },
+    {
+     "ref": "1922-11-01",
+     "yan": true
+    }
+   ],
+   "ad_en": "Ottoman rule and collapse",
+   "tez_en": "Palestine was part of the Ottoman state for four hundred years: Jerusalem was a separate district, the north belonged to the province of Beirut. In the First World War the country became a front; Gaza saw three battles, famine and deportation followed. Jerusalem fell on 9 December 1917, and after Megiddo Ottoman rule in the region came to an end.",
+   "gecis_en": "The empire collapsed; its land would be divided at the negotiating table."
+  },
+  {
+   "anahtar": "parsel",
+   "ad": "Parselleme ve sömürge",
+   "ar": "التقسيم والانتداب",
+   "yillar": [
+    1916,
+    1935
+   ],
+   "renk": "#5d6b75",
+   "harita": "manda",
    "tez": "Savaş sürerken bölge gizlice paylaşıldı. Sykes–Picot Arap topraklarını İngiltere ile Fransa arasında böldü, Balfour Deklarasyonu nüfusun küçük bir azınlığına “ulusal yurt” sözü verdi. 1922’de Filistin, Balfour taahhüdünü de içeren bir metinle İngiliz mandasına bırakıldı.",
    "gecis": "Topraksızlaşan köylü, mandaya karşı silaha sarılacaktı.",
-   "olaylar": [{"ref": "1916-05"}, {"ref": "1916-06", "yan": true}, {"ref": "1917-11-02", "gorsel": "balfour-times"}, {"ref": "1919-08-28"},
-    {"yeni": true, "tarih": "1920-04-25", "baslik": "San Remo: manda paylaşımı kesinleşti", "metin": "İtilaf devletleri San Remo’da Suriye ve Lübnan’ı Fransa’ya, Filistin ve Irak’ı İngiltere’ye manda olarak bıraktı. Konferans, Balfour Deklarasyonu’nu da Filistin mandasının şartları arasına aldı.", "kaynaklar": []},
-    {"ref": "1922-07-24"}]},
-  {"anahtar": "isyan", "ad": "Kassam ve Büyük İsyan", "ar": "ثورة ١٩٣٦", "alt": "Direnişin kökleri", "yillar": [1921, 1939], "renk": "#b3261e", "harita": "manda",
+   "olaylar": [
+    {
+     "ref": "1916-05"
+    },
+    {
+     "ref": "1916-06",
+     "yan": true
+    },
+    {
+     "ref": "1917-11-02",
+     "gorsel": "balfour-times"
+    },
+    {
+     "ref": "1919-08-28"
+    },
+    {
+     "yeni": true,
+     "tarih": "1920-04-25",
+     "baslik": "San Remo: manda paylaşımı kesinleşti",
+     "metin": "İtilaf devletleri San Remo’da Suriye ve Lübnan’ı Fransa’ya, Filistin ve Irak’ı İngiltere’ye manda olarak bıraktı. Konferans, Balfour Deklarasyonu’nu da Filistin mandasının şartları arasına aldı.",
+     "kaynaklar": [],
+     "baslik_en": "San Remo settles the mandates",
+     "metin_en": "At San Remo the Allied powers gave Syria and Lebanon to France and Palestine and Iraq to Britain as mandates. The conference also wrote the Balfour Declaration into the terms of the Palestine Mandate."
+    },
+    {
+     "ref": "1922-07-24"
+    }
+   ],
+   "ad_en": "Partition and colonial rule",
+   "tez_en": "While the war was still on, the region was divided in secret. Sykes–Picot split the Arab lands between Britain and France, and the Balfour Declaration promised a small minority of the population a “national home”. In 1922 Palestine was handed to a British Mandate whose text included the Balfour pledge.",
+   "gecis_en": "Peasants pushed off their land would take up arms against the Mandate."
+  },
+  {
+   "anahtar": "isyan",
+   "ad": "Kassam ve Büyük İsyan",
+   "ar": "ثورة ١٩٣٦",
+   "alt": "Direnişin kökleri",
+   "yillar": [
+    1921,
+    1939
+   ],
+   "renk": "#b3261e",
+   "harita": "manda",
    "tez": "Mandanın ilk on beş yılında toprak satışları köylüyü topraksız bıraktı, Yahudi göçü hızlandı. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam, bu köylüler ve işçiler arasında gizli bir örgüt kurdu. 1935’te Yabed’de öldürülmesi, ertesi bahar başlayan Büyük İsyan’ın kıvılcımı oldu.",
    "gecis": "İsyan bastırıldı; on yıl sonra toprak BM’de paylaşılacaktı.",
-   "olaylar": [{"ref": "1921", "gorsel": "kassam"}, {"ref": "1935-11-20"},
-    {"yeni": true, "tarih": "1936-04-25", "baslik": "Arap Yüksek Komitesi ve altı aylık genel grev", "gorsel": "yuksek-komite", "metin": "15 Nisan 1936’da Tulkerim yakınlarında başlayan çatışmaların ardından Filistin partileri 25 Nisan’da Hacı Emin el-Hüseyni başkanlığında Arap Yüksek Komitesi’ni kurdu. Komite Yahudi göçünün ve toprak satışının durdurulmasını, bağımsız bir ulusal hükümet kurulmasını istedi. Çağırdığı genel grev yaklaşık altı ay sürdü.", "kaynaklar": [{"ad": "Origins (Ohio State Üniversitesi)", "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"}]},
-    {"yeni": true, "tarih": "1937-07", "baslik": "Peel Komisyonu ilk kez taksimi önerdi", "gorsel": "peel", "metin": "İngiliz kraliyet komisyonu mandanın yürümediğine karar verdi ve ülkenin bölünmesini önerdi: toprağın yaklaşık yüzde 17’si Yahudi devletine verilecek, kalanı Ürdün’e bağlanacaktı. Plan yaklaşık 200 bin Arabın yerinden edilmesini öngörüyordu. Filistin önderliği planı tümüyle reddetti.", "kaynaklar": [{"ad": "Origins (Ohio State Üniversitesi)", "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"}]},
-    {"tur": "alinti", "kisi": "Gassan Kanafani", "eser": "1936–39 Filistin İsyanı (1972)", "gorsel": "kanafani", "metin": "Kanafani, öldürülmeden kısa süre önce yazdığı incelemede isyanı sınıflar üzerinden okur: isyanın asıl gücü topraksızlaşan köylüler ve kentin yoksullarıydı, önderliği ise İngiltere ile pazarlığa açık eşraf aileleri elinde tutuyordu. Ona göre bu çelişki, isyanın bastırılmasını kolaylaştıran zaaflardan biriydi.", "yer_tutucu": "Editör: Kanafani’nin kitabının Türkçe baskısından kısa bir alıntı ve sayfa numarası buraya."},
-    {"yeni": true, "tarih": "1938", "baslik": "İsyanın doruğu ve İngiliz baskısı", "gorsel": "lokomotif-1936", "metin": "İsyan 1938 sonbaharında doruğa ulaştı; isyancılar bazı kentleri ve kırsalın büyük kısmını denetliyordu. İngiltere yaklaşık 20 bin asker getirdi; ev yıkımları, idamlar, örgütlerin yasaklanması ve sürgünlerle isyan 1939 yazında bastırıldı. Yaklaşık 5 bin Filistinli öldü.", "kaynaklar": [{"ad": "Origins (Ohio State Üniversitesi)", "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"}]},
-    {"yeni": true, "tarih": "1939-05", "baslik": "Beyaz Kitap", "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak satışlarını kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı.", "kaynaklar": [{"ad": "Origins (Ohio State Üniversitesi)", "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"}]},
-    {"ref": "1936-04", "yan": true}]},
-  {"anahtar": "nekbe", "ad": "Taksim ve Nekbe", "ar": "النكبة", "yillar": [1947, 1949], "renk": "#3a4640", "harita": "plan1947",
+   "olaylar": [
+    {
+     "ref": "1921",
+     "gorsel": "kassam"
+    },
+    {
+     "ref": "1935-11-20"
+    },
+    {
+     "yeni": true,
+     "tarih": "1936-04-25",
+     "baslik": "Arap Yüksek Komitesi ve altı aylık genel grev",
+     "gorsel": "yuksek-komite",
+     "metin": "15 Nisan 1936’da Tulkerim yakınlarında başlayan çatışmaların ardından Filistin partileri 25 Nisan’da Hacı Emin el-Hüseyni başkanlığında Arap Yüksek Komitesi’ni kurdu. Komite Yahudi göçünün ve toprak satışının durdurulmasını, bağımsız bir ulusal hükümet kurulmasını istedi. Çağırdığı genel grev yaklaşık altı ay sürdü.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "The Arab Higher Committee and the six-month general strike",
+     "metin_en": "After clashes that began near Tulkarm on 15 April 1936, the Palestinian parties formed the Arab Higher Committee under Hajj Amin al-Husseini on 25 April. The committee demanded an end to Jewish immigration and land sales and an independent national government. The general strike it called lasted about six months."
+    },
+    {
+     "yeni": true,
+     "tarih": "1937-07",
+     "baslik": "Peel Komisyonu ilk kez taksimi önerdi",
+     "gorsel": "peel",
+     "metin": "İngiliz kraliyet komisyonu mandanın yürümediğine karar verdi ve ülkenin bölünmesini önerdi: toprağın yaklaşık yüzde 17’si Yahudi devletine verilecek, kalanı Ürdün’e bağlanacaktı. Plan yaklaşık 200 bin Arabın yerinden edilmesini öngörüyordu. Filistin önderliği planı tümüyle reddetti.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "The Peel Commission proposes partition for the first time",
+     "metin_en": "The British royal commission concluded that the Mandate was unworkable and proposed dividing the country: about 17 per cent of the land would go to a Jewish state and the rest would be joined to Transjordan. The plan envisaged moving about 200,000 Arabs. The Palestinian leadership rejected it outright."
+    },
+    {
+     "tur": "alinti",
+     "kisi": "Gassan Kanafani",
+     "eser": "1936–39 Filistin İsyanı (1972)",
+     "gorsel": "kanafani",
+     "metin": "Kanafani, öldürülmeden kısa süre önce yazdığı incelemede isyanı sınıflar üzerinden okur: isyanın asıl gücü topraksızlaşan köylüler ve kentin yoksullarıydı, önderliği ise İngiltere ile pazarlığa açık eşraf aileleri elinde tutuyordu. Ona göre bu çelişki, isyanın bastırılmasını kolaylaştıran zaaflardan biriydi.",
+     "yer_tutucu": "Editör: Kanafani’nin kitabının Türkçe baskısından kısa bir alıntı ve sayfa numarası buraya.",
+     "metin_en": "In the study he wrote shortly before he was killed, Kanafani reads the revolt through class: its real force was the peasants pushed off their land and the urban poor, while its leadership stayed with notable families open to bargaining with Britain. In his view this contradiction was one of the weaknesses that made the revolt easier to crush.",
+     "eser_en": "The 1936–39 Revolt in Palestine (1972)",
+     "kisi_en": "Ghassan Kanafani",
+     "yer_tutucu_en": "Editor: a short quotation from the book, with page number, goes here."
+    },
+    {
+     "yeni": true,
+     "tarih": "1938",
+     "baslik": "İsyanın doruğu ve İngiliz baskısı",
+     "gorsel": "lokomotif-1936",
+     "metin": "İsyan 1938 sonbaharında doruğa ulaştı; isyancılar bazı kentleri ve kırsalın büyük kısmını denetliyordu. İngiltere yaklaşık 20 bin asker getirdi; ev yıkımları, idamlar, örgütlerin yasaklanması ve sürgünlerle isyan 1939 yazında bastırıldı. Yaklaşık 5 bin Filistinli öldü.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "The revolt at its height, and British repression",
+     "metin_en": "The revolt peaked in autumn 1938, when rebels controlled some towns and much of the countryside. Britain brought in about 20,000 troops; with house demolitions, executions, bans on organisations and deportations, the revolt was crushed by summer 1939. About 5,000 Palestinians were killed."
+    },
+    {
+     "yeni": true,
+     "tarih": "1939-05",
+     "baslik": "Beyaz Kitap",
+     "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak satışlarını kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "The White Paper",
+     "metin_en": "In its White Paper of May 1939 Britain limited Jewish immigration to 75,000 over five years, restricted land sales and announced that an independent Palestine would be established within ten years."
+    },
+    {
+     "ref": "1936-04",
+     "yan": true
+    }
+   ],
+   "ad_en": "Qassam and the Great Revolt",
+   "alt_en": "The roots of resistance",
+   "tez_en": "In the Mandate’s first fifteen years land sales left peasants landless and Jewish immigration accelerated. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among these peasants and workers. His killing at Ya‘bad in 1935 sparked the Great Revolt that began the following spring.",
+   "gecis_en": "The revolt was crushed; ten years later the land would be divided at the UN."
+  },
+  {
+   "anahtar": "nekbe",
+   "ad": "Taksim ve Nekbe",
+   "ar": "النكبة",
+   "yillar": [
+    1947,
+    1949
+   ],
+   "renk": "#3a4640",
+   "harita": "plan1947",
    "tez": "İngiltere meseleyi BM’ye bıraktı. 29 Kasım 1947’de kabul edilen taksim planı, nüfusun yaklaşık üçte birini oluşturan ve toprağın yaklaşık yüzde 7’sine sahip olan Yahudilere ülkenin yaklaşık yüzde 55’ini verdi. Ardından gelen savaşta yaklaşık 750 bin Filistinli yurdundan sürüldü.",
-   "tez_kaynak": {"ad": "IMEU", "url": "https://imeu.org/resources/the-nakba/the-un-partition-plan-for-palestine/148"},
+   "tez_kaynak": {
+    "ad": "IMEU",
+    "url": "https://imeu.org/resources/the-nakba/the-un-partition-plan-for-palestine/148"
+   },
    "gecis": "Yenilgi eski rejimleri yıktı; sahneye Arap milliyetçiliği çıktı.",
-   "olaylar": [{"ref": "1947-11-29", "harita": "plan1947", "gorsel": "gonulluler-1947"}, {"ref": "1948-04-09"}, {"ref": "1948-05-15", "gorsel": "hayfa-1948-surgun"},
-    {"yeni": true, "tarih": "1948-10", "baslik": "Mısır ordusu ve “bozuk silahlar”", "metin": "Mısır, Osmanlı kökenli Kavalalı hanedanından Kral Faruk’un yönetimindeydi. Savaşa giren Mısır ordusu Faluce’de kuşatıldı. Sonradan yayılan “bozuk silahlar” iddiasına göre saray çevresi işe yaramaz silahlar alıp kâr etmişti. 1950’deki bir denetim, silah bütçesinin yalnızca dörtte birinin gerçekten silaha harcandığını buldu; davalar ise küçük para cezalarıyla kapandı. Tarihçiler yenilgiyi daha çok kötü komutaya ve hazırlıksızlığa bağlıyor; skandal yine de 1952’de monarşinin devrilmesine zemin hazırladı.", "kaynaklar": [{"ad": "New Lines Magazine", "url": "https://newlinesmag.com/essays/in-egypt-a-rumor-sparked-an-overthrow/"}]},
-    {"ref": "1948-12-11"}, {"ref": "1949-02-24", "harita": "1949", "gorsel": "dheisheh-1952", "gorsel_klasor": "kapak"}, {"ref": "1948-09-22", "yan": true}, {"ref": "1948-10", "yan": true}]},
-  {"anahtar": "baas", "ad": "Baas ve Arap milliyetçiliği", "ar": "البعث والقومية العربية", "yillar": [1947, 1991], "renk": "#c58b2a", "harita": "1949",
+   "olaylar": [
+    {
+     "ref": "1947-11-29",
+     "harita": "plan1947",
+     "gorsel": "gonulluler-1947"
+    },
+    {
+     "ref": "1948-04-09"
+    },
+    {
+     "ref": "1948-05-15",
+     "gorsel": "hayfa-1948-surgun"
+    },
+    {
+     "yeni": true,
+     "tarih": "1948-10",
+     "baslik": "Mısır ordusu ve “bozuk silahlar”",
+     "metin": "Mısır, Osmanlı kökenli Kavalalı hanedanından Kral Faruk’un yönetimindeydi. Savaşa giren Mısır ordusu Faluce’de kuşatıldı. Sonradan yayılan “bozuk silahlar” iddiasına göre saray çevresi işe yaramaz silahlar alıp kâr etmişti. 1950’deki bir denetim, silah bütçesinin yalnızca dörtte birinin gerçekten silaha harcandığını buldu; davalar ise küçük para cezalarıyla kapandı. Tarihçiler yenilgiyi daha çok kötü komutaya ve hazırlıksızlığa bağlıyor; skandal yine de 1952’de monarşinin devrilmesine zemin hazırladı.",
+     "kaynaklar": [
+      {
+       "ad": "New Lines Magazine",
+       "url": "https://newlinesmag.com/essays/in-egypt-a-rumor-sparked-an-overthrow/"
+      }
+     ],
+     "baslik_en": "The Egyptian army and the “defective arms”",
+     "metin_en": "Egypt was ruled by King Farouk of the Muhammad Ali dynasty, of Ottoman origin. The Egyptian army that entered the war was besieged at Faluja. According to the later “defective arms” story, palace circles had bought useless weapons and profited. A 1950 audit found that only a quarter of the arms budget had actually been spent on weapons, but the trials ended with small fines. Historians attribute the defeat more to poor command and lack of preparation; the scandal still helped prepare the monarchy’s overthrow in 1952."
+    },
+    {
+     "ref": "1948-12-11"
+    },
+    {
+     "ref": "1949-02-24",
+     "harita": "1949",
+     "gorsel": "dheisheh-1952",
+     "gorsel_klasor": "kapak"
+    },
+    {
+     "ref": "1948-09-22",
+     "yan": true
+    },
+    {
+     "ref": "1948-10",
+     "yan": true
+    }
+   ],
+   "ad_en": "Partition and the Nakba",
+   "tez_en": "Britain handed the question to the UN. The partition plan adopted on 29 November 1947 gave about 55 per cent of the country to Jews, who made up about a third of the population and owned about 7 per cent of the land. In the war that followed, some 750,000 Palestinians were driven from their homes.",
+   "gecis_en": "Defeat brought down the old regimes; Arab nationalism took the stage."
+  },
+  {
+   "anahtar": "baas",
+   "ad": "Baas ve Arap milliyetçiliği",
+   "ar": "البعث والقومية العربية",
+   "yillar": [
+    1947,
+    1991
+   ],
+   "renk": "#c58b2a",
+   "harita": "1949",
    "tez": "Şam’da 1947’de kurulan Baas Partisi “tek Arap ulusu” fikrini, Kahire’de Nasır da aynı hayali taşıdı; Filistin’in kurtuluşu Arap birliğinin sonucu olarak görüldü. Bu umut 1967’de Nekse ile kırıldı, Mısır 1979’da İsrail’le barış yaparak cepheden çekildi. 1991’de Saddam’ın İsrail’e attığı füzeler bu kuşağın son hamlesi oldu.",
    "gecis": "Rejimlere güvenmeyen yeni kuşak silahı kendi eline alacaktı.",
-   "olaylar": [{"yeni": true, "tarih": "1947-04-07", "baslik": "Baas Partisi Şam’da kuruldu", "gorsel": "baas-anayasa", "metin": "Mişel Eflak ve Selahaddin Bitar’ın önderliğinde Arap Baas Partisi Şam’da ilk kongresini topladı. Parti “birlik, özgürlük, sosyalizm” şiarıyla bütün Arap ülkelerini tek bir ulus olarak gördü.", "kaynaklar": []},
-    {"ref": "1952-07-23", "gorsel": "nasir"}, {"ref": "1956-11-03", "gorsel": "suveys-1956"},
-    {"yeni": true, "tarih": "1958-02-01", "baslik": "Birleşik Arap Cumhuriyeti", "metin": "Mısır ve Suriye, Nasır’ın başkanlığında tek bir devlette birleşti. Birlik, Suriye’deki darbeyle 1961’de dağıldı.", "kaynaklar": []},
-    {"yeni": true, "tarih": "1963-03-08", "baslik": "Baas Irak’ta ve Suriye’de iktidarda", "metin": "Baas, Şubat 1963’te Irak’ta, Mart 1963’te Suriye’de darbeyle iktidara geldi. İki kanat zamanla birbirine düşman iki rejime dönüştü.", "kaynaklar": []},
-    {"ref": "1967-06-05", "harita": "1967"}, {"ref": "1973-10-06"},
-    {"yeni": true, "tarih": "1979-03-26", "baslik": "Mısır İsrail’le barış antlaşması imzaladı", "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı ve Sina’yı geri aldı. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.", "kaynaklar": []},
-    {"ref": "1991-01-18"}, {"ref": "1969-03-09", "yan": true}, {"ref": "1973-10-17", "yan": true}]},
-  {"anahtar": "fedai", "ad": "Fedailer ve devrimci sol", "ar": "الفدائيون", "yillar": [1959, 2000], "renk": "#d9542b", "harita": "1967",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "1947-04-07",
+     "baslik": "Baas Partisi Şam’da kuruldu",
+     "gorsel": "baas-anayasa",
+     "metin": "Mişel Eflak ve Selahaddin Bitar’ın önderliğinde Arap Baas Partisi Şam’da ilk kongresini topladı. Parti “birlik, özgürlük, sosyalizm” şiarıyla bütün Arap ülkelerini tek bir ulus olarak gördü.",
+     "kaynaklar": [],
+     "baslik_en": "The Ba’ath Party is founded in Damascus",
+     "metin_en": "Led by Michel Aflaq and Salah al-Din al-Bitar, the Arab Ba’ath Party held its first congress in Damascus. Under the slogan “unity, freedom, socialism”, the party saw all Arab countries as a single nation."
+    },
+    {
+     "ref": "1952-07-23",
+     "gorsel": "nasir"
+    },
+    {
+     "ref": "1956-11-03",
+     "gorsel": "suveys-1956"
+    },
+    {
+     "yeni": true,
+     "tarih": "1958-02-01",
+     "baslik": "Birleşik Arap Cumhuriyeti",
+     "metin": "Mısır ve Suriye, Nasır’ın başkanlığında tek bir devlette birleşti. Birlik, Suriye’deki darbeyle 1961’de dağıldı.",
+     "kaynaklar": [],
+     "baslik_en": "The United Arab Republic",
+     "metin_en": "Egypt and Syria merged into a single state under Nasser. The union broke up after a coup in Syria in 1961."
+    },
+    {
+     "yeni": true,
+     "tarih": "1963-03-08",
+     "baslik": "Baas Irak’ta ve Suriye’de iktidarda",
+     "metin": "Baas, Şubat 1963’te Irak’ta, Mart 1963’te Suriye’de darbeyle iktidara geldi. İki kanat zamanla birbirine düşman iki rejime dönüştü.",
+     "kaynaklar": [],
+     "baslik_en": "The Ba’ath in power in Iraq and Syria",
+     "metin_en": "The Ba’ath came to power by coup in Iraq in February 1963 and in Syria in March 1963. The two wings later turned into two hostile regimes."
+    },
+    {
+     "ref": "1967-06-05",
+     "harita": "1967"
+    },
+    {
+     "ref": "1973-10-06"
+    },
+    {
+     "yeni": true,
+     "tarih": "1979-03-26",
+     "baslik": "Mısır İsrail’le barış antlaşması imzaladı",
+     "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı ve Sina’yı geri aldı. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.",
+     "kaynaklar": [],
+     "baslik_en": "Egypt signs a peace treaty with Israel",
+     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel and regained Sinai. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League."
+    },
+    {
+     "ref": "1991-01-18"
+    },
+    {
+     "ref": "1969-03-09",
+     "yan": true
+    },
+    {
+     "ref": "1973-10-17",
+     "yan": true
+    }
+   ],
+   "ad_en": "The Ba’ath and Arab nationalism",
+   "tez_en": "The Ba’ath Party, founded in Damascus in 1947, carried the idea of “one Arab nation”, and Nasser in Cairo the same dream; the liberation of Palestine was seen as the outcome of Arab unity. That hope broke with the Naksa in 1967, and Egypt left the front by making peace with Israel in 1979. Saddam’s missiles on Israel in 1991 were this generation’s last move.",
+   "gecis_en": "A new generation, distrustful of the regimes, would take up arms itself."
+  },
+  {
+   "anahtar": "fedai",
+   "ad": "Fedailer ve devrimci sol",
+   "ar": "الفدائيون",
+   "yillar": [
+    1959,
+    2000
+   ],
+   "renk": "#d9542b",
+   "harita": "1967",
    "tez": "Arap rejimlerine güveni sarsılan yeni kuşak, Filistinlilerin kendi silahlı örgütlerini kurdu. Cezayir’in silahlı mücadeleyle kazandığı bağımsızlık bu kuşağa model oldu. Fetih, FKÖ ve Marksist FHKC ile direniş Filistinlilerin kendi eline geçti; uçak kaçırmalarla dünyanın gündemine girdi. Oslo süreci bu kuşağı bir yönetime dönüştürdü; 2000’de Camp David’in çöküşüyle o yol da tıkandı.",
    "gecis": "Solun ve milliyetçiliğin tıkandığı yerde camiden yeni bir kuşak çıkacaktı.",
-   "olaylar": [{"yeni": true, "tarih": "1959", "baslik": "Fetih kuruldu", "gorsel": "fetih-1969", "metin": "Yaser Arafat ve Halil el-Vezir’in (Ebu Cihad) önderliğinde, Kuveyt’te çalışan genç Filistinliler Filistin Ulusal Kurtuluş Hareketi’ni (Fetih) kurdu. Hareket, kurtuluşu Arap rejimlerinden beklemek yerine Filistinlilerin kendi silahlı mücadelesini savundu.", "kaynaklar": [{"ad": "Britannica", "url": "https://www.britannica.com/topic/Fatah"}]},
-    {"yeni": true, "tarih": "1962-07-05", "baslik": "Cezayir bağımsız oldu", "gorsel": "cezayir-1959", "metin": "Cezayir, Fransa’ya karşı yedi yıl süren savaşın sonunda bağımsızlığını kazandı. Fedai örgütleri için bir model oldu: Fetih’in ilk resmî bürosu 1963’te Cezayir’de açıldı, Cezayir fedailere eğitim ve silah sağladı. 1988’de Filistin’in bağımsızlığı da Cezayir’de ilan edilecekti.", "kaynaklar": []},
-    {"ref": "1964-05-28"},
-    {"yeni": true, "tarih": "1965-01-01", "baslik": "Fetih’in ilk eylemi", "metin": "Fetih’in silahlı kanadı el-Asıfa, 1964’ün son gecesinde İsrail’in su taşıma tesislerine yönelik ilk eylemini duyurdu. Fetih 1 Ocak’ı kuruluş yıl dönümü olarak anıyor.", "kaynaklar": [{"ad": "Britannica", "url": "https://www.britannica.com/topic/Fatah"}]},
-    {"ref": "1967-12-11", "gorsel": "habas-1951"}, {"ref": "1968-03-21", "gorsel": "kerame"},
-    {"yeni": true, "tarih": "1969-02", "baslik": "Arafat FKÖ’nün başına geçti", "gorsel": "arafat-urdun", "metin": "Kerame’den sonra fedai örgütleri FKÖ’nün yönetimini devraldı. Kahire’de toplanan Filistin Ulusal Konseyi, Fetih lideri Yaser Arafat’ı Şubat 1969’da Yürütme Komitesi başkanlığına seçti.", "kaynaklar": [{"ad": "Filistin Meselesi Ansiklopedisi", "url": "https://palquest.org/en/node/162"}]},
-    {"yeni": true, "tarih": "1969-08-29", "baslik": "Leyla Halid ve TWA 840", "gorsel": "leyla-halid", "metin": "Hayfa’da doğup Nekbe’de ailesiyle Lübnan’a sığınan FHKC üyesi Leyla Halid, Roma’dan kalkan TWA’nın 840 sefer sayılı uçağını kaçırarak Şam’a indirdi. Yolcular tahliye edildikten sonra uçağın burnu patlatıldı. Halid, uçak kaçıran ilk kadın olarak dünyanın gündemine girdi.", "kaynaklar": []},
-    {"yeni": true, "tarih": "1970-09-06", "baslik": "Eylül 1970: dört uçak, bir çöl pisti", "gorsel": "devson-1970", "metin": "FHKC aynı gün dört uçağı hedef aldı. TWA ve Swissair uçakları Ürdün çölündeki eski bir piste indirildi, Pan Am uçağı Kahire’de boşaltılıp havaya uçuruldu. Leyla Halid’in de içinde olduğu El Al kaçırma girişimi başarısız oldu, Halid Londra’da tutuklandı. Üç gün sonra bir BOAC uçağı da piste getirildi. Yolcular indirildikten sonra uçaklar patlatıldı; Halid ve altı FHKC üyesi rehinelerle takas edildi.", "kaynaklar": [{"ad": "PBS American Experience", "url": "https://www.pbs.org/wgbh/amex/hijacked"}]},
-    {"yeni": true, "tarih": "1970-09-16", "baslik": "Kara Eylül", "gorsel": "amman-1970", "metin": "Ürdün ordusu Eylül 1970’te fedai örgütlerine ve kamplara saldırdı; binlerce kişi öldü. Çatışmaların sonunda FKÖ ve örgütler Ürdün’den çıkarılarak Lübnan’a taşındı.", "kaynaklar": []},
-    {"ref": "1972-07-08", "gorsel": "kanafani"},
-    {"yeni": true, "tarih": "1974-11-13", "baslik": "Arafat BM kürsüsünde", "metin": "Yaser Arafat BM Genel Kurulu’na hitap eden ilk Filistinli lider oldu. Aynı ay Genel Kurul FKÖ’ye gözlemci statüsü verdi.", "kaynaklar": []},
-    {"yeni": true, "tarih": "1982-08", "baslik": "FKÖ Beyrut’tan çıktı", "metin": "İsrail’in Lübnan’ı işgali ve Beyrut kuşatmasının ardından FKÖ savaşçıları ve yönetimi Ağustos 1982’de Beyrut’tan ayrıldı; merkez Tunus’a taşındı.", "kaynaklar": []},
-    {"ref": "1982-09-16"}, {"ref": "1987-12-09", "gorsel": "intifada-1987"}, {"ref": "1988-11-15"}, {"ref": "1993-09-13", "harita": "oslo"},
-    {"yeni": true, "tarih": "2000-07-25", "baslik": "Camp David sonuçsuz bitti", "metin": "Arafat, İsrail Başbakanı Barak ve ABD Başkanı Clinton arasında iki hafta süren zirve Kudüs, sınırlar ve geri dönüş hakkında anlaşma olmadan dağıldı. Oslo’nun öngördüğü nihai çözüm yolu fiilen kapandı; iki ay sonra İkinci İntifada başladı.", "kaynaklar": []},
-    {"ref": "1976-03-30", "yan": true}, {"ref": "1987-07-22", "yan": true, "gorsel": "naci-ali"}, {"ref": "1988-04-16", "yan": true}]},
-  {"anahtar": "islami", "ad": "İslami hareketler ve direniş ekseni", "ar": "المقاومة الإسلامية", "yillar": [1973, 2023], "renk": "#1f6e4b", "harita": "oslo",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "1959",
+     "baslik": "Fetih kuruldu",
+     "gorsel": "fetih-1969",
+     "metin": "Yaser Arafat ve Halil el-Vezir’in (Ebu Cihad) önderliğinde, Kuveyt’te çalışan genç Filistinliler Filistin Ulusal Kurtuluş Hareketi’ni (Fetih) kurdu. Hareket, kurtuluşu Arap rejimlerinden beklemek yerine Filistinlilerin kendi silahlı mücadelesini savundu.",
+     "kaynaklar": [
+      {
+       "ad": "Britannica",
+       "url": "https://www.britannica.com/topic/Fatah"
+      }
+     ],
+     "baslik_en": "Fatah is founded",
+     "metin_en": "Led by Yasser Arafat and Khalil al-Wazir (Abu Jihad), young Palestinians working in Kuwait founded the Palestinian National Liberation Movement (Fatah). Rather than waiting for the Arab regimes, the movement argued for the Palestinians’ own armed struggle."
+    },
+    {
+     "yeni": true,
+     "tarih": "1962-07-05",
+     "baslik": "Cezayir bağımsız oldu",
+     "gorsel": "cezayir-1959",
+     "metin": "Cezayir, Fransa’ya karşı yedi yıl süren savaşın sonunda bağımsızlığını kazandı. Fedai örgütleri için bir model oldu: Fetih’in ilk resmî bürosu 1963’te Cezayir’de açıldı, Cezayir fedailere eğitim ve silah sağladı. 1988’de Filistin’in bağımsızlığı da Cezayir’de ilan edilecekti.",
+     "kaynaklar": [],
+     "baslik_en": "Algeria wins independence",
+     "metin_en": "Algeria won its independence at the end of a seven-year war against France. It became a model for the fedayeen: Fatah’s first official office opened in Algiers in 1963, and Algeria provided training and weapons. In 1988 Palestinian independence would also be declared in Algiers."
+    },
+    {
+     "ref": "1964-05-28"
+    },
+    {
+     "yeni": true,
+     "tarih": "1965-01-01",
+     "baslik": "Fetih’in ilk eylemi",
+     "metin": "Fetih’in silahlı kanadı el-Asıfa, 1964’ün son gecesinde İsrail’in su taşıma tesislerine yönelik ilk eylemini duyurdu. Fetih 1 Ocak’ı kuruluş yıl dönümü olarak anıyor.",
+     "kaynaklar": [
+      {
+       "ad": "Britannica",
+       "url": "https://www.britannica.com/topic/Fatah"
+      }
+     ],
+     "baslik_en": "Fatah’s first operation",
+     "metin_en": "On the last night of 1964 Fatah’s armed wing, al-Asifa, announced its first operation, against Israel’s water-carrier installations. Fatah marks 1 January as its founding anniversary."
+    },
+    {
+     "ref": "1967-12-11",
+     "gorsel": "habas-1951"
+    },
+    {
+     "ref": "1968-03-21",
+     "gorsel": "kerame"
+    },
+    {
+     "yeni": true,
+     "tarih": "1969-02",
+     "baslik": "Arafat FKÖ’nün başına geçti",
+     "gorsel": "arafat-urdun",
+     "metin": "Kerame’den sonra fedai örgütleri FKÖ’nün yönetimini devraldı. Kahire’de toplanan Filistin Ulusal Konseyi, Fetih lideri Yaser Arafat’ı Şubat 1969’da Yürütme Komitesi başkanlığına seçti.",
+     "kaynaklar": [
+      {
+       "ad": "Filistin Meselesi Ansiklopedisi",
+       "url": "https://palquest.org/en/node/162"
+      }
+     ],
+     "baslik_en": "Arafat takes over the PLO",
+     "metin_en": "After Karameh the fedayeen organisations took over the PLO’s leadership. The Palestine National Council, meeting in Cairo, elected Fatah leader Yasser Arafat chairman of the Executive Committee in February 1969."
+    },
+    {
+     "yeni": true,
+     "tarih": "1969-08-29",
+     "baslik": "Leyla Halid ve TWA 840",
+     "gorsel": "leyla-halid",
+     "metin": "Hayfa’da doğup Nekbe’de ailesiyle Lübnan’a sığınan FHKC üyesi Leyla Halid, Roma’dan kalkan TWA’nın 840 sefer sayılı uçağını kaçırarak Şam’a indirdi. Yolcular tahliye edildikten sonra uçağın burnu patlatıldı. Halid, uçak kaçıran ilk kadın olarak dünyanın gündemine girdi.",
+     "kaynaklar": [],
+     "baslik_en": "Leila Khaled and TWA 840",
+     "metin_en": "PFLP member Leila Khaled, born in Haifa and a refugee in Lebanon with her family since the Nakba, hijacked TWA flight 840 from Rome and landed it in Damascus. After the passengers were evacuated, the plane’s nose was blown up. Khaled entered the world’s agenda as the first woman to hijack a plane."
+    },
+    {
+     "yeni": true,
+     "tarih": "1970-09-06",
+     "baslik": "Eylül 1970: dört uçak, bir çöl pisti",
+     "gorsel": "devson-1970",
+     "metin": "FHKC aynı gün dört uçağı hedef aldı. TWA ve Swissair uçakları Ürdün çölündeki eski bir piste indirildi, Pan Am uçağı Kahire’de boşaltılıp havaya uçuruldu. Leyla Halid’in de içinde olduğu El Al kaçırma girişimi başarısız oldu, Halid Londra’da tutuklandı. Üç gün sonra bir BOAC uçağı da piste getirildi. Yolcular indirildikten sonra uçaklar patlatıldı; Halid ve altı FHKC üyesi rehinelerle takas edildi.",
+     "kaynaklar": [
+      {
+       "ad": "PBS American Experience",
+       "url": "https://www.pbs.org/wgbh/amex/hijacked"
+      }
+     ],
+     "baslik_en": "September 1970: four planes, one desert airstrip",
+     "metin_en": "The PFLP targeted four planes on the same day. TWA and Swissair aircraft were landed on an old airstrip in the Jordanian desert, and a Pan Am plane was emptied and blown up in Cairo. The El Al hijacking attempt involving Leila Khaled failed, and Khaled was arrested in London. Three days later a BOAC plane was also brought to the strip. After the passengers were taken off, the planes were blown up; Khaled and six PFLP members were exchanged for the hostages."
+    },
+    {
+     "yeni": true,
+     "tarih": "1970-09-16",
+     "baslik": "Kara Eylül",
+     "gorsel": "amman-1970",
+     "metin": "Ürdün ordusu Eylül 1970’te fedai örgütlerine ve kamplara saldırdı; binlerce kişi öldü. Çatışmaların sonunda FKÖ ve örgütler Ürdün’den çıkarılarak Lübnan’a taşındı.",
+     "kaynaklar": [],
+     "baslik_en": "Black September",
+     "metin_en": "In September 1970 the Jordanian army attacked the fedayeen organisations and the camps; thousands were killed. At the end of the fighting the PLO and the organisations were driven out of Jordan and moved to Lebanon."
+    },
+    {
+     "ref": "1972-07-08",
+     "gorsel": "kanafani"
+    },
+    {
+     "yeni": true,
+     "tarih": "1974-11-13",
+     "baslik": "Arafat BM kürsüsünde",
+     "metin": "Yaser Arafat BM Genel Kurulu’na hitap eden ilk Filistinli lider oldu. Aynı ay Genel Kurul FKÖ’ye gözlemci statüsü verdi.",
+     "kaynaklar": [],
+     "baslik_en": "Arafat at the UN rostrum",
+     "metin_en": "Yasser Arafat became the first Palestinian leader to address the UN General Assembly. The same month the Assembly granted the PLO observer status."
+    },
+    {
+     "yeni": true,
+     "tarih": "1982-08",
+     "baslik": "FKÖ Beyrut’tan çıktı",
+     "metin": "İsrail’in Lübnan’ı işgali ve Beyrut kuşatmasının ardından FKÖ savaşçıları ve yönetimi Ağustos 1982’de Beyrut’tan ayrıldı; merkez Tunus’a taşındı.",
+     "kaynaklar": [],
+     "baslik_en": "The PLO leaves Beirut",
+     "metin_en": "After Israel’s invasion of Lebanon and the siege of Beirut, PLO fighters and leadership left Beirut in August 1982; the headquarters moved to Tunis."
+    },
+    {
+     "ref": "1982-09-16"
+    },
+    {
+     "ref": "1987-12-09",
+     "gorsel": "intifada-1987"
+    },
+    {
+     "ref": "1988-11-15"
+    },
+    {
+     "ref": "1993-09-13",
+     "harita": "oslo"
+    },
+    {
+     "yeni": true,
+     "tarih": "2000-07-25",
+     "baslik": "Camp David sonuçsuz bitti",
+     "metin": "Arafat, İsrail Başbakanı Barak ve ABD Başkanı Clinton arasında iki hafta süren zirve Kudüs, sınırlar ve geri dönüş hakkında anlaşma olmadan dağıldı. Oslo’nun öngördüğü nihai çözüm yolu fiilen kapandı; iki ay sonra İkinci İntifada başladı.",
+     "kaynaklar": [],
+     "baslik_en": "Camp David ends without agreement",
+     "metin_en": "The two-week summit between Arafat, Israeli Prime Minister Barak and US President Clinton broke up without agreement on Jerusalem, borders or the right of return. The final-status road foreseen at Oslo was effectively closed; two months later the Second Intifada began."
+    },
+    {
+     "ref": "1976-03-30",
+     "yan": true
+    },
+    {
+     "ref": "1987-07-22",
+     "yan": true,
+     "gorsel": "naci-ali"
+    },
+    {
+     "ref": "1988-04-16",
+     "yan": true
+    }
+   ],
+   "ad_en": "The fedayeen and the revolutionary left",
+   "tez_en": "A new generation that had lost faith in the Arab regimes built the Palestinians’ own armed organisations. Algeria’s independence, won through armed struggle, became their model. With Fatah, the PLO and the Marxist PFLP, the resistance passed into Palestinian hands and entered the world’s agenda through hijackings. The Oslo process turned this generation into an administration; with the collapse of Camp David in 2000, that road was closed too.",
+   "gecis_en": "Where the left and nationalism stalled, a new generation would come out of the mosque."
+  },
+  {
+   "anahtar": "islami",
+   "ad": "İslami hareketler ve direniş ekseni",
+   "ar": "المقاومة الإسلامية",
+   "yillar": [
+    1973,
+    2023
+   ],
+   "renk": "#1f6e4b",
+   "harita": "oslo",
    "tez": "Solun ve milliyetçiliğin tıkandığı yerde camiden, hayır kurumlarından ve üniversitelerden yeni bir kuşak çıktı. Gazze’de Şeyh Ahmed Yasin’in kurduğu Mücemma, İntifada’yla Hamas’a dönüştü; İslami Cihad İran devriminden etkilenen bir çizgide örgütlendi. Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran ile birlikte zamanla “direniş ekseni” denen bir cephe oluştu.",
    "gecis": "7 Ekim’de bu cephe sahneye bütün olarak çıktı.",
-   "olaylar": [{"ref": "1973"}, {"tur": "biyografi", "kisi": "Şeyh Ahmed Yasin", "yillar": "1936–2004", "gorsel": "yasin-1998",
+   "olaylar": [
+    {
+     "ref": "1973"
+    },
+    {
+     "tur": "biyografi",
+     "kisi": "Şeyh Ahmed Yasin",
+     "yillar": "1936–2004",
+     "gorsel": "yasin-1998",
      "ozet": "Gazze’nin tekerlekli sandalyedeki imamı. Sosyal hizmet ağını bir harekete, hareketi bir direniş örgütüne dönüştürdü.",
-     "satirlar": [["1936", "Mecdel yakınlarındaki el-Cura köyünde doğdu."], ["1948", "Köyü Nekbe’de yıkıldı; ailesi Gazze’ye sığındı."], ["12 yaşında", "Bir spor kazasında felç kaldı; ömrü boyunca tekerlekli sandalye kullandı."], ["1959", "Kahire’de Ayn Şems Üniversitesi’nde bir yıl okudu, parasızlıktan Gazze’ye döndü; Arapça ve din dersleri veren bir öğretmen, sevilen bir vaiz oldu. Mısır’daki Müslüman Kardeşler’den etkilendi."], ["1973", "Gazze’de İslami Merkez’i (Mücemma) kurdu."], ["1983", "Silah bulundurmak ve gizli örgüt kurmak suçlamasıyla 13 yıl hapse çarptırıldı; iki yıl sonra bir esir takasıyla serbest kaldı."], ["1987", "Hamas’ı kuranların başındaydı."], ["1989", "Yeniden tutuklandı, 40 yıl hapse mahkûm edildi; sekiz yıl yattı."], ["1997", "Ürdün Kralı Hüseyin ile İsrail arasındaki bir anlaşmayla serbest bırakıldı; cezaevinde bir gözünü ve işitmesinin bir kısmını kaybetmişti."], ["6 Eylül 2003", "İsrail’in Gazze’de bir eve düzenlediği hava saldırısından hafif yaralı kurtuldu."], ["22 Mart 2004", "Sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü."]],
-     "kaynaklar": [{"ad": "Al Jazeera", "url": "https://www.aljazeera.com/news/2004/3/24/the-life-and-death-of-shaikh-yasin"}]},
-    {"yeni": true, "tarih": "1979-02-11", "baslik": "İran’da devrim", "metin": "Şah rejimi devrildi, İran İslam Cumhuriyeti kuruldu. Yeni yönetim İsrail’le ilişkileri kesti, Tahran’daki İsrail temsilciliğini FKÖ’ye verdi.", "kaynaklar": []},
-    {"yeni": true, "tarih": "1981", "baslik": "İslami Cihad kuruldu", "metin": "Fethi Şikaki ve Abdülaziz Avde’nin önderliğinde, Mısır’da okuyan Gazzeli öğrenciler arasından Filistin İslami Cihad Hareketi doğdu. Hareket, Filistin’in kurtuluşunu İslami mücadelenin merkezine koydu.", "kaynaklar": []},
-    {"yeni": true, "tarih": "1982", "baslik": "Hizbullah doğdu", "metin": "İsrail’in Lübnan’ı işgaline karşı Lübnanlı Şii gruplardan Hizbullah doğdu; varlığını 1985’te yayımladığı açık mektupla duyurdu.", "kaynaklar": []},
-    {"ref": "1987-12-14"}, {"ref": "1995-10-26"},
-    {"yeni": true, "tarih": "2000-05-24", "baslik": "İsrail Güney Lübnan’dan çekildi", "metin": "İsrail, 18 yıllık işgalin ardından Güney Lübnan’dan çekildi. Hizbullah bunu silahlı direnişin bir zaferi olarak duyurdu.", "kaynaklar": []},
-    {"ref": "2000-09-28"},
-    {"yeni": true, "tarih": "2004-03-22", "baslik": "Şeyh Ahmed Yasin öldürüldü", "metin": "Hamas’ın kurucusu Şeyh Ahmed Yasin, Gazze’de sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü.", "kaynaklar": [{"ad": "Al Jazeera", "url": "https://www.aljazeera.com/news/2004/3/24/the-life-and-death-of-shaikh-yasin"}]},
-    {"ref": "2005-09-12"}, {"ref": "2006-01-25"}, {"ref": "2006-07-12"}, {"ref": "2007-06", "harita": "abluka"}, {"ref": "2021-05-10"},
-    {"ref": "2010-05-31", "yan": true}, {"yeni": true, "yan": true, "tarih": "2014-09-21", "baslik": "Ensarullah Sana’da", "metin": "Yemen’deki Ensarullah (Husiler) başkent Sana’nın denetimini ele geçirdi.", "kaynaklar": []}, {"ref": "2017-12-06", "yan": true}, {"ref": "2022-05-11", "yan": true, "gorsel": "sirin-nasira"}]},
-  {"anahtar": "tufan", "ad": "7 Ekim ve sonrası", "ar": "طوفان الأقصى", "yillar": [2023, 2026], "renk": "#0d5a3c", "harita": "abluka",
+     "satirlar": [
+      [
+       "1936",
+       "Mecdel yakınlarındaki el-Cura köyünde doğdu."
+      ],
+      [
+       "1948",
+       "Köyü Nekbe’de yıkıldı; ailesi Gazze’ye sığındı."
+      ],
+      [
+       "12 yaşında",
+       "Bir spor kazasında felç kaldı; ömrü boyunca tekerlekli sandalye kullandı."
+      ],
+      [
+       "1959",
+       "Kahire’de Ayn Şems Üniversitesi’nde bir yıl okudu, parasızlıktan Gazze’ye döndü; Arapça ve din dersleri veren bir öğretmen, sevilen bir vaiz oldu. Mısır’daki Müslüman Kardeşler’den etkilendi."
+      ],
+      [
+       "1973",
+       "Gazze’de İslami Merkez’i (Mücemma) kurdu."
+      ],
+      [
+       "1983",
+       "Silah bulundurmak ve gizli örgüt kurmak suçlamasıyla 13 yıl hapse çarptırıldı; iki yıl sonra bir esir takasıyla serbest kaldı."
+      ],
+      [
+       "1987",
+       "Hamas’ı kuranların başındaydı."
+      ],
+      [
+       "1989",
+       "Yeniden tutuklandı, 40 yıl hapse mahkûm edildi; sekiz yıl yattı."
+      ],
+      [
+       "1997",
+       "Ürdün Kralı Hüseyin ile İsrail arasındaki bir anlaşmayla serbest bırakıldı; cezaevinde bir gözünü ve işitmesinin bir kısmını kaybetmişti."
+      ],
+      [
+       "6 Eylül 2003",
+       "İsrail’in Gazze’de bir eve düzenlediği hava saldırısından hafif yaralı kurtuldu."
+      ],
+      [
+       "22 Mart 2004",
+       "Sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü."
+      ]
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera",
+       "url": "https://www.aljazeera.com/news/2004/3/24/the-life-and-death-of-shaikh-yasin"
+      }
+     ],
+     "kisi_en": "Sheikh Ahmed Yassin",
+     "ozet_en": "Gaza’s imam in a wheelchair. He turned a social-service network into a movement, and the movement into a resistance organisation.",
+     "satirlar_en": [
+      [
+       "1936",
+       "Born in the village of al-Jura near Majdal."
+      ],
+      [
+       "1948",
+       "His village was destroyed in the Nakba; the family took refuge in Gaza."
+      ],
+      [
+       "Aged 12",
+       "Paralysed in a sports accident; he used a wheelchair for the rest of his life."
+      ],
+      [
+       "1959",
+       "Studied for a year at Ain Shams University in Cairo and returned to Gaza for lack of money; he became a teacher of Arabic and religion and a popular preacher. He was influenced by Egypt’s Muslim Brotherhood."
+      ],
+      [
+       "1973",
+       "Founded the Islamic Centre (Mujamma) in Gaza."
+      ],
+      [
+       "1983",
+       "Sentenced to 13 years on charges of possessing weapons and forming an underground organisation; released two years later in a prisoner exchange."
+      ],
+      [
+       "1987",
+       "Among the founders of Hamas."
+      ],
+      [
+       "1989",
+       "Arrested again and sentenced to 40 years; he served eight."
+      ],
+      [
+       "1997",
+       "Released under an agreement between King Hussein of Jordan and Israel; in prison he had lost sight in one eye and part of his hearing."
+      ],
+      [
+       "6 September 2003",
+       "Survived with light injuries an Israeli air strike on a house in Gaza."
+      ],
+      [
+       "22 March 2004",
+       "Killed by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike."
+      ]
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1979-02-11",
+     "baslik": "İran’da devrim",
+     "metin": "Şah rejimi devrildi, İran İslam Cumhuriyeti kuruldu. Yeni yönetim İsrail’le ilişkileri kesti, Tahran’daki İsrail temsilciliğini FKÖ’ye verdi.",
+     "kaynaklar": [],
+     "baslik_en": "Revolution in Iran",
+     "metin_en": "The Shah’s regime fell and the Islamic Republic of Iran was founded. The new government cut ties with Israel and handed the Israeli mission in Tehran to the PLO."
+    },
+    {
+     "yeni": true,
+     "tarih": "1981",
+     "baslik": "İslami Cihad kuruldu",
+     "metin": "Fethi Şikaki ve Abdülaziz Avde’nin önderliğinde, Mısır’da okuyan Gazzeli öğrenciler arasından Filistin İslami Cihad Hareketi doğdu. Hareket, Filistin’in kurtuluşunu İslami mücadelenin merkezine koydu.",
+     "kaynaklar": [],
+     "baslik_en": "Islamic Jihad is founded",
+     "metin_en": "Led by Fathi Shaqaqi and Abd al-Aziz Awda, the Palestinian Islamic Jihad Movement emerged among Gazan students in Egypt. The movement put the liberation of Palestine at the centre of the Islamic struggle."
+    },
+    {
+     "yeni": true,
+     "tarih": "1982",
+     "baslik": "Hizbullah doğdu",
+     "metin": "İsrail’in Lübnan’ı işgaline karşı Lübnanlı Şii gruplardan Hizbullah doğdu; varlığını 1985’te yayımladığı açık mektupla duyurdu.",
+     "kaynaklar": [],
+     "baslik_en": "Hezbollah emerges",
+     "metin_en": "Hezbollah emerged from Lebanese Shia groups against Israel’s invasion of Lebanon; it announced itself with an open letter in 1985."
+    },
+    {
+     "ref": "1987-12-14"
+    },
+    {
+     "ref": "1995-10-26"
+    },
+    {
+     "yeni": true,
+     "tarih": "2000-05-24",
+     "baslik": "İsrail Güney Lübnan’dan çekildi",
+     "metin": "İsrail, 18 yıllık işgalin ardından Güney Lübnan’dan çekildi. Hizbullah bunu silahlı direnişin bir zaferi olarak duyurdu.",
+     "kaynaklar": [],
+     "baslik_en": "Israel withdraws from South Lebanon",
+     "metin_en": "Israel withdrew from South Lebanon after an 18-year occupation. Hezbollah announced it as a victory for armed resistance."
+    },
+    {
+     "ref": "2000-09-28"
+    },
+    {
+     "yeni": true,
+     "tarih": "2004-03-22",
+     "baslik": "Şeyh Ahmed Yasin öldürüldü",
+     "metin": "Hamas’ın kurucusu Şeyh Ahmed Yasin, Gazze’de sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü.",
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera",
+       "url": "https://www.aljazeera.com/news/2004/3/24/the-life-and-death-of-shaikh-yasin"
+      }
+     ],
+     "baslik_en": "Sheikh Ahmed Yassin is killed",
+     "metin_en": "Hamas founder Sheikh Ahmed Yassin was killed in Gaza by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike."
+    },
+    {
+     "ref": "2005-09-12"
+    },
+    {
+     "ref": "2006-01-25"
+    },
+    {
+     "ref": "2006-07-12"
+    },
+    {
+     "ref": "2007-06",
+     "harita": "abluka"
+    },
+    {
+     "ref": "2021-05-10"
+    },
+    {
+     "ref": "2010-05-31",
+     "yan": true
+    },
+    {
+     "yeni": true,
+     "yan": true,
+     "tarih": "2014-09-21",
+     "baslik": "Ensarullah Sana’da",
+     "metin": "Yemen’deki Ensarullah (Husiler) başkent Sana’nın denetimini ele geçirdi.",
+     "kaynaklar": [],
+     "baslik_en": "Ansarullah in Sanaa",
+     "metin_en": "Yemen’s Ansarullah (the Houthis) took control of the capital, Sanaa."
+    },
+    {
+     "ref": "2017-12-06",
+     "yan": true
+    },
+    {
+     "ref": "2022-05-11",
+     "yan": true,
+     "gorsel": "sirin-nasira"
+    }
+   ],
+   "ad_en": "Islamic movements and the axis of resistance",
+   "tez_en": "Where the left and nationalism stalled, a new generation emerged from mosques, charities and universities. The Mujamma founded by Sheikh Ahmed Yassin in Gaza became Hamas with the Intifada; Islamic Jihad organised along a line influenced by the Iranian revolution. Together with Hezbollah in Lebanon, Ansarullah in Yemen and Iran, a front later called the “axis of resistance” took shape.",
+   "gecis_en": "On 7 October this front took the stage as a whole."
+  },
+  {
+   "anahtar": "tufan",
+   "ad": "7 Ekim ve sonrası",
+   "ar": "طوفان الأقصى",
+   "yillar": [
+    2023,
+    2026
+   ],
+   "renk": "#0d5a3c",
+   "harita": "abluka",
    "tez": "Aksa Tufanı ile Filistin direnişinin İslami kanadı ve bölgedeki müttefikleri, Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran, aynı savaşın cephelerine dönüştü. Hareketin taraftarlarına göre 7 Ekim, İsrail’in kuruluşundan beri dayandığı caydırıcılık iddiasına yönelmiş bir darbe ve dünya düzenini değiştirecek ilk domino taşıydı. Ardından gelen Gazze soykırımı, Adalet Divanı davaları ve İran savaşı bölge düzenini sarstı.",
-   "olaylar": [{"ref": "2023-10-07"}, {"ref": "2023-10-19"}, {"ref": "2023-11-19"}, {"ref": "2024-01-26"}, {"ref": "2024-04-13"}, {"ref": "2024-07-31"}, {"ref": "2024-10-16"}, {"ref": "2024-11-21"},
-    {"ref": "2025-10-10", "harita": "sari", "gorsel": "gazze-duvar"}, {"ref": "2026-02-28"}, {"ref": "2026-06-17"}, {"ref": "2026-11-07"},
-    {"ref": "2024-05-19", "yan": true}, {"ref": "2024-12-08", "yan": true}, {"ref": "2024-12-27", "yan": true}]}
+   "olaylar": [
+    {
+     "ref": "2023-10-07"
+    },
+    {
+     "ref": "2023-10-19"
+    },
+    {
+     "ref": "2023-11-19"
+    },
+    {
+     "ref": "2024-01-26"
+    },
+    {
+     "ref": "2024-04-13"
+    },
+    {
+     "ref": "2024-07-31"
+    },
+    {
+     "ref": "2024-10-16"
+    },
+    {
+     "ref": "2024-11-21"
+    },
+    {
+     "ref": "2025-10-10",
+     "harita": "sari",
+     "gorsel": "gazze-duvar"
+    },
+    {
+     "ref": "2026-02-28"
+    },
+    {
+     "ref": "2026-06-17"
+    },
+    {
+     "ref": "2026-11-07"
+    },
+    {
+     "ref": "2024-05-19",
+     "yan": true
+    },
+    {
+     "ref": "2024-12-08",
+     "yan": true
+    },
+    {
+     "ref": "2024-12-27",
+     "yan": true
+    }
+   ],
+   "ad_en": "7 October and after",
+   "tez_en": "With Al-Aqsa Flood, the Islamic wing of the Palestinian resistance and its allies in the region – Hezbollah in Lebanon, Ansarullah in Yemen and Iran – became fronts of the same war. To the movement’s supporters, 7 October was a blow to the deterrence Israel had relied on since its founding, and the first domino that would change the world order. The Gaza genocide, the World Court cases and the Iran war that followed shook the regional order."
+  }
  ]
 }
