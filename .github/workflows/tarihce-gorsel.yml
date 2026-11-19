@@ -1,0 +1,26 @@
+# Tarihçe görselleri: seçilmiş Commons dosyalarını "gorsel" dalının tarihce/ klasörüne yazar.
+name: tarihce-gorsel
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/tarihce-gorsel.yml", "toplayici/tarihce_gorsel.json"]
+permissions:
+  contents: write
+concurrency:
+  group: gunluk-gorsel
+  cancel-in-progress: false
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir cikti
+          if git fetch -q --depth 1 origin gorsel 2>/dev/null; then git archive FETCH_HEAD | tar -x -C cikti; fi
+          rm -rf cikti/tarihce && python toplayici/kapak_indir.py cikti/tarihce toplayici/tarihce_gorsel.json
+          ls -la cikti/tarihce
+      - run: |
+          cd cikti && git init -q -b gorsel && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Tarihçe görselleri"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:gorsel

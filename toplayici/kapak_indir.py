@@ -13,6 +13,8 @@ SECIM = [
     ("ayn-hilve", "File:Palestinian refugees in Ein El Hilweh refugee camp in Lebanon.jpg", "Ayn el-Hilve kampı, Lübnan", "Ein el-Hilweh camp, Lebanon"),
 ]
 cik = sys.argv[1] if len(sys.argv) > 1 else "kapak"
+if len(sys.argv) > 2:  # ikinci argüman: seçim listesi (JSON: [ad, dosya, tr, en])
+    SECIM = [tuple(x) for x in json.load(open(sys.argv[2], encoding="utf-8"))]
 os.makedirs(cik, exist_ok=True)
 q = {"action": "query", "format": "json", "titles": "|".join(t for _, t, _, _ in SECIM), "prop": "imageinfo",
      "iiprop": "url|extmetadata|mime", "iiurlwidth": 1600}
