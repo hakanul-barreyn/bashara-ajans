@@ -70,6 +70,12 @@
 .h-kat.tarali path{fill:url(#taTarali);stroke:none}
 .tar-cizgi{stroke:rgba(255,255,255,.55);stroke-width:1.6}
 .h-kat.tarali.koyu path{fill:#0b0d0c;fill-opacity:.55}
+.h-kat.bos path{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:.7;stroke-dasharray:1.6 1.2}
+.h-yakin-cerceve{fill:none;stroke:#fff;stroke-width:1.2}
+.h-yakin-cizgi{stroke:rgba(255,255,255,.75);stroke-width:.8;stroke-dasharray:3 2}
+.h-yakin-ad{fill:#fff;font:800 8px "Plus Jakarta Sans",sans-serif;letter-spacing:.08em;paint-order:stroke;stroke:rgba(0,0,0,.5);stroke-width:2px}
+.h-yakin-ic .h-kat.abluka path{stroke-width:.9}
+.h-yakin-ic .tar-cizgi{stroke-width:.6}
 .h-kat.abluka path{fill:none;stroke:#e0402f;stroke-width:2.4;stroke-dasharray:4 3}
 .h-kat.kudus{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:2 2}
 .h-nehir path{fill:none;stroke:#8cc6dc;stroke-width:1.1;opacity:.9}

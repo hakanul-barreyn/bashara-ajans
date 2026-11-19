@@ -79,11 +79,16 @@ def maske(yollar):
 
 kara = maske(H_["komsu"] + H_["filistin"])
 gl = maske(H_["gol"])
-# renk: yükseltiye göre zeytin-toprak tonları, gölgeyle çarpılır
+# renk: kuzeybatı (Celile, kıyı ovası, Lübnan) zeytin yeşili; güney ve doğu (Nakab, Sina, Ürdün çölü) kum ve altın tonları
 dur = np.array([-450, 0, 300, 700, 1100, 1600, 2400], dtype=np.float32)
-renk = np.array([[52, 62, 46], [58, 68, 48], [74, 80, 56], [104, 104, 74], [138, 130, 96], [164, 152, 116], [190, 182, 150]], dtype=np.float32)
-r = np.stack([np.interp(E, dur, renk[:, i]) for i in range(3)], -1)
-kr = np.clip(r * (0.42 + 0.95 * gol)[..., None], 0, 255)
+yesil = np.array([[60, 70, 50], [66, 78, 54], [80, 90, 60], [104, 108, 76], [132, 128, 94], [160, 150, 116], [190, 182, 150]], dtype=np.float32)
+kum = np.array([[150, 126, 88], [204, 178, 128], [214, 190, 138], [204, 176, 124], [188, 160, 114], [176, 152, 114], [210, 200, 178]], dtype=np.float32)
+ry = np.stack([np.interp(E, dur, yesil[:, i]) for i in range(3)], -1)
+rk = np.stack([np.interp(E, dur, kum[:, i]) for i in range(3)], -1)
+LO, LA = np.meshgrid(lon, lat)
+nem = (np.clip((LA - 31.35) / 0.9, 0, 1) * np.clip((35.85 - LO) / 0.45, 0, 1)) ** 0.8   # 1: nemli kuzeybatı, 0: çöl
+r = rk * (1 - nem[..., None]) + ry * nem[..., None]
+kr = np.clip(r * (0.5 + 0.72 * gol)[..., None], 0, 255)
 # deniz: kıyıya yakın açık, derinde koyu mavi
 der = np.clip(-E / 2200, 0, 1)[..., None]
 deniz = np.array([86, 150, 200]) * (1 - der) + np.array([22, 60, 104]) * der

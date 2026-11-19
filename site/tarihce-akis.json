@@ -39,9 +39,9 @@
   "oslo": {
    "yil": "1995",
    "ad": "Oslo II",
-   "not": "Açık kızıl: A ve B bölgeleri (şematik). Taralı: C bölgesi, İsrail denetiminde.",
+   "not": "Açık kızıl: A ve B bölgeleri (şematik). Taralı: C bölgesi ve Gazze’deki yerleşimler, İsrail denetiminde.",
    "ad_en": "Oslo II",
-   "not_en": "Light red-brown: Areas A and B (schematic). Hatched: Area C, under Israeli control."
+   "not_en": "Light red-brown: Areas A and B (schematic). Hatched: Area C and the settlements in Gaza, under Israeli control."
   },
   "abluka": {
    "yil": "2007",
@@ -56,6 +56,13 @@
    "not": "Taralı: “sarı hat”ın doğusu, Gazze’nin yaklaşık yarısı İsrail ordusunun denetiminde (şematik)",
    "ad_en": "October 2025 ceasefire",
    "not_en": "Hatched: east of the “yellow line”, about half of Gaza under Israeli army control (schematic)"
+  },
+  "cekilme": {
+   "yil": "2005",
+   "ad": "Gazze’den çekilme",
+   "not": "Kesik çizgi: boşaltılan yerleşimler (Guş Katif bloğu, kuzeydeki üç yerleşim, Netzarim, Kfar Darom; şematik). İsrail Gazze’nin sınırlarını, havasını ve denizini denetlemeyi sürdürdü.",
+   "ad_en": "Withdrawal from Gaza",
+   "not_en": "Dashed: the evacuated settlements (the Gush Katif bloc, three northern settlements, Netzarim, Kfar Darom; schematic). Israel kept control of Gaza’s borders, airspace and sea."
   }
  },
  "akislar": [
@@ -750,7 +757,8 @@
      "metin_en": "Hamas founder Sheikh Ahmed Yassin was killed in Gaza by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike."
     },
     {
-     "ref": "2005-09-12"
+     "ref": "2005-09-12",
+     "harita": "cekilme"
     },
     {
      "ref": "2006-01-25"

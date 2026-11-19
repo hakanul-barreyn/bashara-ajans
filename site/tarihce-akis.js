@@ -18,9 +18,9 @@
   function yil(t) { return parseInt(String(t).slice(0, 4), 10); }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=1").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=2").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=20").then(function (r) { return r.json(); }),
-    fetch("site/tarihce-harita.json?v=1").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-harita.json?v=2").then(function (r) { return r.json(); }),
     fetch("data/gorsel/tarihce/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/gorsel/kapak/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     BG ? BG.hazir : null
@@ -253,6 +253,8 @@
     kat("isgal", H.bati.concat(H.gazze), "tarali");
     kat("isgalB", H.bati, "tarali");
     kat("oslo", H.oslo_ab, "fil parlak", "taFil");
+    kat("yerlesim", H.gazze_yerlesim, "tarali koyu", "taGz");
+    kat("yerlesimBos", H.gazze_yerlesim, "bos", "taGz");
     kat("ablukaH", H.gazze, "abluka");
     var sh = kat("sari", [H.sari_hat], "tarali koyu", "taGz");
     var nh = svg("g", { "class": "h-nehir" }); H.nehir.forEach(function (d) { nh.appendChild(svg("path", { d: d })); }); s.appendChild(nh);
@@ -274,6 +276,23 @@
       et.appendChild(t);
     });
     s.appendChild(et);
+    // Gazze yakın planı: yerleşimler, çekilme, abluka ve sarı hat ana haritada çok küçük kaldığı için
+    var gk = H.gazze_kutu, IX = 68, IY = 50, IW = 150, IH = Math.round(150 * (gk[3] - gk[1]) / (gk[2] - gk[0]));
+    var ins = svg("g", { "class": "h-kat h-yakin", "data-kat": "yakin" });
+    ins.appendChild(svg("line", { x1: IX + IW, y1: IY + IH, x2: gk[0] + 4, y2: gk[1] + 6, "class": "h-yakin-cizgi" }));
+    var iv = svg("svg", { x: IX, y: IY, width: IW, height: IH, viewBox: gk[0] + " " + gk[1] + " " + (gk[2] - gk[0]) + " " + (gk[3] - gk[1]), "class": "h-yakin-ic" });
+    iv.appendChild(svg("rect", { x: gk[0], y: gk[1], width: gk[2] - gk[0], height: gk[3] - gk[1], "class": "h-deniz" }));
+    var ar2 = svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none" }); iv.appendChild(ar2);
+    function ikat(ad, yollar, sinif, kirp) {
+      var g = svg("g", { "class": "h-kat " + sinif, "data-kat": ad }); if (kirp) g.setAttribute("clip-path", "url(#" + kirp + ")");
+      yollar.forEach(function (d) { g.appendChild(svg("path", { d: d })); }); iv.appendChild(g);
+    }
+    ikat("gazze", H.gazze, "fil"); ikat("yerlesim", H.gazze_yerlesim, "tarali koyu", "taGz"); ikat("yerlesimBos", H.gazze_yerlesim, "bos", "taGz");
+    ikat("ablukaH", H.gazze, "abluka"); ikat("sari", [H.sari_hat], "tarali koyu", "taGz");
+    ins.appendChild(iv);
+    ins.appendChild(svg("rect", { x: IX, y: IY, width: IW, height: IH, "class": "h-yakin-cerceve" }));
+    var yt = svg("text", { x: IX + 6, y: IY + 14, "class": "h-yakin-ad" }); yt.textContent = EN ? "GAZA · CLOSE-UP" : "GAZZE · YAKIN PLAN"; ins.appendChild(yt);
+    s.insertBefore(ins, et);
     var bas = el("div", "ta-h-bas"); var hy = el("b", "ta-h-yil"); var ha = el("span", "ta-h-ad"); bas.append(hy, ha);
     var hn = el("p", "ta-h-not");
     var B1 = EN ? "Enlarge map" : "Haritayı büyüt", B2 = EN ? "Close" : "Kapat";
@@ -283,8 +302,9 @@
     var SON = ["sinir", "kayip", "ulkeT"];
     var KATLAR = {
       tam: ["osm", "misir", "osmT"], manda: ["sinir", "tam", "manda", "ulkeT"], plan1947: SON.concat(["plan1947", "kudus"]), "1949": SON.concat(["bati", "gazze", "bsT", "gzT"]),
-      "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]), oslo: SON.concat(["bati", "gazze", "isgalB", "oslo", "bsT", "gzT"]),
-      abluka: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "bsT", "gzT"]), sari: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari", "bsT", "gzT"])
+      "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]), oslo: SON.concat(["bati", "gazze", "isgalB", "oslo", "yerlesim", "yakin", "bsT", "gzT"]),
+      cekilme: SON.concat(["bati", "gazze", "isgalB", "oslo", "yerlesimBos", "yakin", "bsT", "gzT"]),
+      abluka: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "yakin", "bsT", "gzT"]), sari: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari", "yakin", "bsT", "gzT"])
     };
     window.__taHarita = function (ad) { HR.su = null; HR.goster(ad); };   // deneme ve paylaşım görüntüsü için
     HR.goster = function (ad) {
