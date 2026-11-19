@@ -299,9 +299,8 @@
   // --- kaydırma: her izlenen öğeye --p; ortadaki öğeye göre harita, nehir ---
   function ilerlemeKur() {
     var izle = Array.prototype.slice.call(document.querySelectorAll(".izle"));
-    var gorunen = new Set();
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) gorunen.add(e.target); else gorunen.delete(e.target); }); iste(); }, { rootMargin: "20% 0px 20% 0px" });
-    izle.forEach(function (e) { io.observe(e); });
+    // Görünürlüğü her karede doğrudan ölçüyoruz: kayan (yandan gelen) öğeler dönüşüm yüzünden ekran dışında sayılmasın.
+    var gorunen = { forEach: function (f) { izle.forEach(function (e) { var r = e.getBoundingClientRect(); if (r.bottom > -innerHeight * .3 && r.top < innerHeight * 1.3) f(e); }); } };
     var bekliyor = false;
     function iste() { if (!bekliyor) { bekliyor = true; requestAnimationFrame(guncelle); } }
     function guncelle() {
@@ -317,17 +316,20 @@
         e.style.setProperty("--p", p.toFixed(3));
         if (e.classList.contains("ta-giris")) e.style.setProperty("--c", Math.max(0, Math.min(1, -r.top / (vh * .6))).toFixed(3));
         var m = Math.abs(r.top + Math.min(r.height, vh * .5) / 2 - orta);
-        if (r.top < vh * .8 && r.bottom > vh * .15 && m < enUzak && (e.dataset.yil || e.dataset.harita)) { en = e; enUzak = m; }
+        if (r.top < vh * .8 && r.bottom > vh * .15 && m < enUzak && e.closest(".ta-bolum")) { en = e; enUzak = m; }
       });
       if (en) {
         var b = en.closest(".ta-bolum");
         if (b) { NH.akis(b.dataset.akis); document.documentElement.style.setProperty("--su", getComputedStyle(b).getPropertyValue("--renk")); }
-        if (en.dataset.yil) NH.yil(+en.dataset.yil);
+        // yıl: bu öğenin ya da bölümde ondan önceki son yıl
+        var yl = en.dataset.yil;
+        if (!yl && b) b.querySelectorAll("[data-yil]").forEach(function (x) { if (x.compareDocumentPosition(en) & Node.DOCUMENT_POSITION_FOLLOWING) yl = x.dataset.yil; });
+        if (yl) NH.yil(+yl);
         // harita: bu öğenin ya da bölümde ondan önceki son harita değişikliği
         var h = en.dataset.harita;
         if (!h && b) {
           h = b.dataset.harita;
-          var onceki = b.querySelectorAll("[data-harita]");
+          var onceki = b.querySelectorAll("[data-harita]:not([data-harita=''])");
           for (var i = 0; i < onceki.length; i++) {
             if (!(onceki[i].compareDocumentPosition(en) & Node.DOCUMENT_POSITION_FOLLOWING)) break;
             if (onceki[i].dataset.harita) h = onceki[i].dataset.harita;

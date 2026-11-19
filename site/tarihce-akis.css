@@ -4,7 +4,7 @@
   --ta-cizgi:rgba(241,234,216,.14);--su:#a0803f;color-scheme:dark}
 .ta-govde{background:var(--ta-zemin);color:var(--ta-kagit);margin:0}
 .ta-govde .ust{position:sticky;top:0;z-index:40}
-.ta{font-family:"Source Serif 4",Georgia,serif}
+.ta{font-family:"Source Serif 4",Georgia,serif;overflow-x:clip}
 .ta-bekle{padding:40px max(16px,env(safe-area-inset-left,0px))}
 .izle{--p:0}
 
@@ -85,7 +85,7 @@
 .ta-kaynak{color:var(--ta-soluk);font:600 .78rem "Plus Jakarta Sans",sans-serif;text-decoration:none}
 
 /* olay kartları: alttan gelip hafif dönerek yerine oturur; görsel soldan açılır */
-.ta-liste{display:block;max-width:640px;padding-right:0;position:relative}
+.ta-liste{display:block;max-width:640px;position:relative}
 .ta-liste::before{content:"";position:absolute;left:-22px;top:0;bottom:0;width:2px;background:linear-gradient(var(--renk),transparent)}
 .ta-kart{position:relative;margin:0 0 26px;padding:20px 22px 18px;border-radius:4px;background:var(--ta-kagit);color:var(--ta-murekkep);
   box-shadow:0 1px 0 rgba(0,0,0,.4),0 18px 40px -22px rgba(0,0,0,.9);
@@ -146,7 +146,11 @@
 .ta-son a{color:var(--ta-soluk)}
 
 /* geniş ekran: yan olaylar sağ boşlukta */
-@media (min-width:1280px){.ta-liste{margin-right:300px}}
+@media (min-width:1280px){
+  .ta-sahne{grid-template-columns:96px minmax(300px,30vw) minmax(0,1fr)}
+  .ta-liste{max-width:900px;padding-right:262px;box-sizing:border-box}
+  .ta-kart.yan{width:220px;margin-right:-252px}
+}
 @media (max-width:1279px){
   .ta-kart.yan{float:none;width:auto;margin:0 0 22px 0;max-width:520px;margin-left:auto}
 }
