@@ -16,16 +16,20 @@ cik = sys.argv[1] if len(sys.argv) > 1 else "kapak"
 if len(sys.argv) > 2:  # ikinci argüman: seçim listesi (JSON: [ad, dosya, tr, en])
     SECIM = [tuple(x) for x in json.load(open(sys.argv[2], encoding="utf-8"))]
 os.makedirs(cik, exist_ok=True)
-q = {"action": "query", "format": "json", "titles": "|".join(t for _, t, _, _ in SECIM), "prop": "imageinfo",
-     "iiprop": "url|extmetadata|mime", "iiurlwidth": 1600}
-with urllib.request.urlopen(urllib.request.Request("https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(q), headers={"User-Agent": UA}), timeout=40) as r:
-    v = json.loads(r.read())
 sayfa = {}
-for p in v["query"]["pages"].values():
-    sayfa[p["title"]] = p
-for n in v["query"].get("normalized", []):
-    if n["to"] in sayfa:
-        sayfa[n["from"]] = sayfa[n["to"]]
+basliklar = [t for _, t, _, _ in SECIM]
+for i in range(0, len(basliklar), 50):   # API bir sorguda en çok 50 başlık kabul eder
+    q = {"action": "query", "format": "json", "titles": "|".join(basliklar[i:i + 50]), "prop": "imageinfo",
+         "iiprop": "url|extmetadata|mime", "iiurlwidth": 1600}
+    with urllib.request.urlopen(urllib.request.Request("https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(q), headers={"User-Agent": UA}), timeout=40) as r:
+        v = json.loads(r.read())
+    if "query" not in v:
+        raise SystemExit("Commons API hatası: " + json.dumps(v.get("error", v))[:300])
+    for p in v["query"]["pages"].values():
+        sayfa[p["title"]] = p
+    for n in v["query"].get("normalized", []):
+        if n["to"] in sayfa:
+            sayfa[n["from"]] = sayfa[n["to"]]
 temiz = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s or "")).strip()   # noqa: E731
 kunye = []
 for ad, t, tr, en in SECIM:
