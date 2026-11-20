@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q pymupdf
+      - run: pip install -q pymupdf pillow
       - run: python toplayici/tarama4.py
       - run: |
           git init -q d && cd d && git checkout -q -b yz-tarama && cp -r ../tarama . && git add tarama

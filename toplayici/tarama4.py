@@ -1,33 +1,43 @@
-# Tek seferlik: OCHA'nın Gazze erişim haritasını indirir; sayfayı PNG'ye çevirir ve vektör çizimleri (dolgu rengi, yol) JSON'a döker.
-import gzip, json, os, urllib.request
-import fitz
-os.makedirs("tarama", exist_ok=True)
+# Tek seferlik: Commons'ta Gazze'nin eski hava fotoğrafları ve 1940'lar Survey of Palestine paftaları; künye + 1600 px kopya + temas sayfası.
+import json, os, re, time, urllib.parse, urllib.request
+from PIL import Image, ImageDraw
+os.makedirs("tarama/g", exist_ok=True)
 UA = "alboroto-tarama/1.0 (+https://alborotonews.com)"
-for ad, url in [("gb-pse-adm1", "https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/gbOpen/PSE/ADM1/geoBoundaries-PSE-ADM1.geojson")]:
-    open(f"tarama/{ad}.geojson", "wb").write(urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=90).read())
-    print(ad, os.path.getsize(f"tarama/{ad}.geojson"))
-for ad, url in [] and [("ocha-2026-11-16", "https://www.ochaopt.org/sites/default/files/Gaza_2026_Nov_16_2026.pdf")]:
-    veri = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=90).read()
-    open(f"tarama/{ad}.pdf", "wb").write(veri)
-    doc = fitz.open(f"tarama/{ad}.pdf")
-    for i, s in enumerate(doc):
-        s.get_pixmap(dpi=200).save(f"tarama/{ad}-s{i}.png")
-        cizim = []; renk = {}
-        alan = s.rect.width * s.rect.height
-        for d in s.get_drawings():
-            anah = str(d.get("fill")) + "|" + str(d.get("color"))
-            renk[anah] = renk.get(anah, 0) + 1
-            r = d["rect"]
-            if r.width * r.height < alan * 0.002:   # küçük işaretler (yıkılmış yapılar vb.) atlanır
-                continue
-            yollar = []
-            for it in d["items"]:
-                if it[0] == "l": yollar.append(["l", [round(it[1].x, 2), round(it[1].y, 2), round(it[2].x, 2), round(it[2].y, 2)]])
-                elif it[0] == "c": yollar.append(["c", [round(it[1].x, 2), round(it[1].y, 2), round(it[4].x, 2), round(it[4].y, 2)]])
-                elif it[0] == "re": r = it[1]; yollar.append(["re", [round(r.x0, 2), round(r.y0, 2), round(r.x1, 2), round(r.y1, 2)]])
-                elif it[0] == "qu": q = it[1]; yollar.append(["qu", [round(q.ul.x, 2), round(q.ul.y, 2), round(q.lr.x, 2), round(q.lr.y, 2)]])
-            cizim.append({"fill": d.get("fill"), "color": d.get("color"), "w": d.get("width"), "op": d.get("fill_opacity"), "rect": [round(v, 1) for v in d["rect"]], "y": yollar})
-        with gzip.open(f"tarama/{ad}-s{i}.json.gz", "wt") as f:
-            json.dump({"boyut": [s.rect.width, s.rect.height], "renk": renk, "cizim": cizim}, f)
-        open(f"tarama/{ad}-s{i}.txt", "w").write(s.get_text())
-        print(ad, i, len(cizim))
+def api(q):
+    u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode({**q, "format": "json"})
+    return json.loads(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=60).read())
+basliklar = []
+for s in ["Survey of Palestine, Gaza", "Gaza aerial 1917", "Gaza aerial 1918", "Air views of Palestine Gaza", "Gaza from the air 1918",
+          "Gaza aerial photograph Royal Flying Corps", "Southern Palestine Gaza air view Matson", "Bavarian aerial Gaza", "Gaza 1945 aerial"]:
+    v = api({"action": "query", "list": "search", "srsearch": s, "srnamespace": 6, "srlimit": 25})
+    for x in v["query"]["search"]:
+        if x["title"] not in basliklar: basliklar.append(x["title"])
+temiz = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s or "")).strip()
+liste = []
+for i in range(0, len(basliklar), 40):
+    v = api({"action": "query", "titles": "|".join(basliklar[i:i + 40]), "prop": "imageinfo", "iiprop": "url|extmetadata|size|mime", "iiurlwidth": 1600})
+    for p in v["query"]["pages"].values():
+        ii = (p.get("imageinfo") or [{}])[0]; md = ii.get("extmetadata") or {}
+        g = lambda k: temiz((md.get(k) or {}).get("value"))[:300]
+        liste.append({"t": p["title"], "w": ii.get("width"), "h": ii.get("height"), "thumb": ii.get("thumburl"), "lisans": g("LicenseShortName"),
+                      "yazar": g("Artist"), "tarih": g("DateTimeOriginal"), "aciklama": g("ImageDescription"), "kaynak": g("Credit"), "sayfa": ii.get("descriptionurl")})
+liste = [x for x in liste if x["thumb"]]
+print(len(liste))
+ims = []
+for n, x in enumerate(liste):
+    time.sleep(1.5)
+    try:
+        veri = urllib.request.urlopen(urllib.request.Request(x["thumb"], headers={"User-Agent": UA}), timeout=60).read()
+    except Exception as e:
+        print("indirilemedi", x["t"], e); continue
+    yol = f"tarama/g/{n:02d}.jpg"; open(yol, "wb").write(veri); x["dosya"] = yol
+    try:
+        im = Image.open(yol).convert("RGB"); im.thumbnail((300, 300)); ims.append((n, im))
+    except Exception:
+        pass
+json.dump(liste, open("tarama/g/liste.json", "w"), ensure_ascii=False, indent=1)
+for s in range(0, len(ims), 20):
+    kt = Image.new("RGB", (5 * 310, 4 * 330), "white"); d = ImageDraw.Draw(kt)
+    for k, (n, im) in enumerate(ims[s:s + 20]):
+        x, y = (k % 5) * 310, (k // 5) * 330; kt.paste(im, (x, y)); d.text((x + 4, y + 304), f"{n:02d}", fill=(200, 0, 0))
+    kt.save(f"tarama/g/temas-{s // 20}.jpg", quality=80)
