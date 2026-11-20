@@ -1,0 +1,6 @@
+# Düzeltme formu ucu. Yalnızca alborotonews.com/api/duzeltme adresine bağlanır; workers.dev adresi kapalı.
+name = "alboroto-duzeltme"
+main = "duzeltme.js"
+compatibility_date = "2025-06-01"
+workers_dev = false
+routes = [{ pattern = "alborotonews.com/api/duzeltme", zone_name = "alborotonews.com" }]

@@ -666,22 +666,33 @@
   async function git() {
     if (yazdiriliyor) return;
     const h = location.hash || "#kapak";
-    masa.innerHTML = "";
+    // Önceden çizilmiş sayfa (almanak/....html): içerik HTML'de hazır; ilk çizimde boşaltıp "Yükleniyor" gösterme,
+    // yeni çizim hazır olunca yerine koy.
+    const hazir = masa.dataset.onceden === h; delete masa.dataset.onceden;
+    if (!hazir) masa.innerHTML = "";
     if (h === "#kapak" || h === "#bu-kitap" || h === "#icindekiler") {
       yanCiz(h);
+      masa.innerHTML = "";
       masa.append(kapak(), buKitap(), icindekiler());
       if (h !== "#kapak") { const hedef = h === "#bu-kitap" ? masa.children[1] : masa.children[2]; hedef.scrollIntoView(); } else window.scrollTo(0, 0);
       return;
     }
-    if (h === "#sessizlik") { yanCiz(h); masa.appendChild(sessizlikSayfa()); window.scrollTo(0, 0); return; }
-    if (h === "#sonuc" || /^#sonuc-\d{4}$/.test(h)) { yanCiz(h); masa.appendChild(sonucSayfa()); const y = document.getElementById(h.slice(1)); if (y && h !== "#sonuc") y.scrollIntoView(); else window.scrollTo(0, 0); return; }
+    if (h === "#sessizlik") { yanCiz(h); masa.innerHTML = ""; masa.appendChild(sessizlikSayfa()); window.scrollTo(0, 0); return; }
+    if (h === "#sonuc" || /^#sonuc-\d{4}$/.test(h)) { yanCiz(h); masa.innerHTML = ""; masa.appendChild(sonucSayfa()); const y = document.getElementById(h.slice(1)); if (y && h !== "#sonuc") y.scrollIntoView(); else window.scrollTo(0, 0); return; }
     const m = /^#(haftalik|aylik|yillik)-(.+)$/.exec(h);
     const x = m && SIRA.find((y) => y.tur === m[1] && y.anahtar === m[2]);
     if (!x) { location.hash = "#kapak"; return; }
     yanCiz(h);
-    masa.appendChild(el("p", "bos2", T("Yükleniyor…", "Loading…")));
-    try { const b = await getir(x); if (location.hash !== h) return; masa.innerHTML = ""; masa.appendChild(bolumCiz(x, b)); window.scrollTo(0, 0); document.title = "Alboroto Almanak · " + T("Bölüm ", "Chapter ") + x.no; }
-    catch (e) { masa.innerHTML = ""; masa.appendChild(el("p", "bos2", T("Bölüm okunamadı.", "Could not load the chapter."))); }
+    if (!hazir) masa.appendChild(el("p", "bos2", T("Yükleniyor…", "Loading…")));
+    try { const b = await getir(x); if (location.hash !== h) return; masa.innerHTML = ""; masa.appendChild(bolumCiz(x, b)); if (!hazir) window.scrollTo(0, 0); document.title = "Alboroto Almanak · " + T("Bölüm ", "Chapter ") + x.no; }
+    catch (e) { if (!hazir) { masa.innerHTML = ""; masa.appendChild(hataKutu(T("Bölüm şu an okunamadı.", "The chapter could not be loaded right now."), git)); } }
+  }
+  // Veri gelmezse: ne olduğunu söyle ve yeniden denemeye izin ver (sonsuz "Yükleniyor" yerine)
+  function hataKutu(metin, tekrar) {
+    const d = el("div", "bos2 hata-kutu"); d.setAttribute("role", "alert");
+    d.appendChild(el("p", null, metin + " " + T("Bağlantınızı kontrol edip yeniden deneyin; sorun sürerse birkaç dakika sonra tekrar bakın.", "Check your connection and try again; if it persists, come back in a few minutes.")));
+    const b = el("button", "hata-tekrar", T("Yeniden dene", "Try again")); b.type = "button"; b.onclick = () => tekrar(); d.appendChild(b);
+    return d;
   }
   window.addEventListener("hashchange", git);
   document.addEventListener("keydown", (e) => {
@@ -694,11 +705,18 @@
   document.addEventListener("click", (e) => { const p = $("kanitPanel"); if (!p.hidden && !p.contains(e.target) && !e.target.closest(".kod,.sh-yer")) p.hidden = true; });
 
   const al = (u) => fetch(u + "?t=" + Date.now()).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-  Promise.all([al("data/bulten/dizin.json"), al("data/bulten/alisma.json"), al("data/karne.json")]).then(([d, a, k]) => {
-    dizin = d || []; ALISMA = a; KARNE = k;
-    ((a && a.turler) || []).forEach((t) => { TUR_ADLARI[t.anahtar] = t.ad; });
-    kur(dizin);
-    if (!dizin.length) { masa.innerHTML = ""; masa.appendChild(el("p", "bos2", T("İlk bölüm toplayıcının bir sonraki çalışmasında yazılacak.", "The first chapter will be written on the collector’s next run."))); return; }
-    git();
-  });
+  function yukle() {
+    Promise.all([al("data/bulten/dizin.json"), al("data/bulten/alisma.json"), al("data/karne.json")]).then(([d, a, k]) => {
+      if (d === null) {   // ağ ya da sunucu hatası: önceden çizilmiş içerik varsa onu bırak, yoksa söyle
+        if (masa.dataset.onceden) return;
+        masa.innerHTML = ""; masa.appendChild(hataKutu(T("Almanak verisi şu an alınamadı.", "The almanac data could not be loaded right now."), yukle)); return;
+      }
+      dizin = d; ALISMA = a; KARNE = k;
+      ((a && a.turler) || []).forEach((t) => { TUR_ADLARI[t.anahtar] = t.ad; });
+      kur(dizin);
+      if (!dizin.length) { masa.innerHTML = ""; masa.appendChild(el("p", "bos2", T("İlk bölüm toplayıcının bir sonraki çalışmasında yazılacak.", "The first chapter will be written on the collector’s next run."))); return; }
+      git();
+    });
+  }
+  yukle();
 })();

@@ -6,7 +6,9 @@
   "use strict";
   var DILLER = { tr: { kisa: "TR", ad: "Türkçe", yon: "ltr", yerel: "tr-TR" }, en: { kisa: "EN", ad: "English", yon: "ltr", yerel: "en-GB" } };
   var dil = null;
-  try { var q = new URLSearchParams(location.search).get("lang"); if (q && DILLER[q]) dil = q; } catch (e) {}
+  // Önceden çizilmiş sayfanın dili sabittir (/en/... adresleri): <html data-sabit-dil="en">
+  try { var sd = document.documentElement.getAttribute("data-sabit-dil"); if (sd && DILLER[sd]) dil = sd; } catch (e) {}
+  if (!dil) { try { var q = new URLSearchParams(location.search).get("lang"); if (q && DILLER[q]) dil = q; } catch (e) {} }
   if (!dil) { try { var s = localStorage.getItem("zbs-dil"); if (s && DILLER[s]) dil = s; } catch (e) {} }
   if (!dil) { var n = (navigator.language || "tr").toLowerCase(); dil = n.indexOf("tr") === 0 ? "tr" : "en"; }
   try { localStorage.setItem("zbs-dil", dil); } catch (e) {}
@@ -196,13 +198,39 @@
       b.setAttribute("aria-pressed", d === dil ? "true" : "false"); b.lang = d;
       b.onclick = function () {
         try { localStorage.setItem("zbs-dil", d); } catch (e) {}
+        // önceden çizilmiş sayfanın öbür dildeki eşi varsa oraya git (/almanak/... ↔ /en/almanak/...)
+        var es = document.querySelector('link[rel="alternate"][hreflang="' + d + '"]');
+        if (es) { var eu = new URL(es.href, location.href); location.href = eu.pathname + location.hash; return; }
         var u = new URL(location.href); u.searchParams.set("lang", d); location.href = u.toString();
       };
       k.appendChild(b);
     });
     var menu = ust.querySelector(".menu"); ust.insertBefore(k, menu || null);
   }
+  // Bekçi: veri gelmediği için sonsuza dek "Yükleniyor…" duran yerlere açıklama ve "Yeniden dene" koy.
+  // Veri geç gelirse sayfanın kendi betiği bu kutuyu silip içeriği yazar.
+  function bekci() {
+    var tr = dil === "tr";
+    var kalan = [];
+    document.querySelectorAll("main p, main div, main li, main span, #masa *, #ta *").forEach(function (e) {
+      if (e.children.length) return;
+      var x = (e.textContent || "").trim();
+      if (x === "Yükleniyor…" || x === "Loading…" || x === "Yükleniyor..." || x === "Loading...") kalan.push(e);
+    });
+    kalan.forEach(function (e) {
+      var d = document.createElement("div"); d.className = "hata-kutu"; d.setAttribute("role", "alert");
+      var p = document.createElement("p");
+      p.textContent = navigator.onLine === false
+        ? (tr ? "İnternet bağlantınız yok gibi görünüyor. Bağlantı gelince yeniden deneyin." : "You seem to be offline. Try again once you are connected.")
+        : (tr ? "Veri şu an alınamadı. Yeniden deneyin; sorun sürerse birkaç dakika sonra tekrar bakın." : "The data could not be loaded right now. Try again; if it persists, come back in a few minutes.");
+      var b = document.createElement("button"); b.type = "button"; b.className = "hata-tekrar"; b.textContent = tr ? "Yeniden dene" : "Try again";
+      b.onclick = function () { location.reload(); };
+      d.appendChild(p); d.appendChild(b);
+      e.textContent = ""; e.appendChild(d);
+    });
+  }
   function basla() {
+    setTimeout(bekci, 20000);
     secici(); bloklar();
     if (dil === "tr") return;
     dugum(document.body);

@@ -1,0 +1,35 @@
+# Düzeltme formunun Cloudflare Worker'ını yayına alır (worker/). Gereken GitHub sırları:
+#   CLOUDFLARE_API_TOKEN  (Cloudflare → My Profile → API Tokens → "Edit Cloudflare Workers" şablonu, alborotonews.com bölgesiyle)
+#   CLOUDFLARE_ACCOUNT_ID (Cloudflare panelinde, alan adının Overview sayfasının sağ altında)
+#   TELEGRAM_BOT_TOKEN, TELEGRAM_YONETICI (zaten var; Worker'a sır olarak aktarılır, koda yazılmaz)
+# Sırlar eklenmemişse iş akışı bir uyarı bırakıp başarıyla biter.
+name: duzeltme-worker
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["worker/**", ".github/workflows/duzeltme-worker.yml"]
+jobs:
+  yayinla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - id: kontrol
+        env:
+          TOK: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          HES: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOK" ] && [ -n "$HES" ]; then echo "var=1" >> "$GITHUB_OUTPUT"; else echo "::warning::CLOUDFLARE_API_TOKEN ya da CLOUDFLARE_ACCOUNT_ID sırrı yok; Worker yayına alınmadı."; fi
+      - if: steps.kontrol.outputs.var == '1'
+        uses: cloudflare/wrangler-action@v3
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          secrets: |
+            TELEGRAM_BOT_TOKEN
+            TELEGRAM_YONETICI

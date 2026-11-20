@@ -15,9 +15,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611200400">
+<link rel="stylesheet" href="site/stil.css?v=202611200700">
 <link rel="stylesheet" href="site/rapor.css?v=202611161640">
-<script src="site/dil.js?v=202611150910"></script>
+<script src="site/dil.js?v=202611200700"></script>
 <script src="site/marka.js?v=202611150800"></script>
 </head>
 <body class="rapor-govde">
@@ -40,8 +40,8 @@
     <p class="rp-kunye"><span data-dil="tr">Alboroto veri masası</span><span data-dil="en">Alboroto data desk</span><span data-v="surum"></span></p>
   </header>
   <nav class="rp-icindekiler" aria-label="Bölümler">
-    <span data-dil="tr"><a href="#veri">1 · Veri</a><a href="#tanimlar">2 · Tanımlar</a><a href="#esikler">3 · Eşikler</a><a href="#dogrulama">4 · Doğrulama</a><a href="#sinirlar">5 · Sınırlar</a><a href="#kapsama">6 · Kapsama</a></span>
-    <span data-dil="en"><a href="#veri">1 · Data</a><a href="#tanimlar">2 · Definitions</a><a href="#esikler">3 · Thresholds</a><a href="#dogrulama">4 · Validation</a><a href="#sinirlar">5 · Limits</a><a href="#kapsama">6 · Coverage</a></span>
+    <span data-dil="tr"><a href="#veri">1 · Veri</a><a href="#tanimlar">2 · Tanımlar</a><a href="#esikler">3 · Eşikler</a><a href="#dogrulama">4 · Doğrulama</a><a href="#sinirlar">5 · Sınırlar</a><a href="#kapsama">6 · Kapsama</a><a href="#siniflandirma">7 · Sınıflandırma</a><a href="#yapay-zeka">8 · Yapay zekâ</a></span>
+    <span data-dil="en"><a href="#veri">1 · Data</a><a href="#tanimlar">2 · Definitions</a><a href="#esikler">3 · Thresholds</a><a href="#dogrulama">4 · Validation</a><a href="#sinirlar">5 · Limits</a><a href="#kapsama">6 · Coverage</a><a href="#siniflandirma">7 · Classification</a><a href="#yapay-zeka">8 · AI</a></span>
   </nav>
   <article class="rp-metin" id="veri"><h2 data-dil="tr">1 · Veri</h2><h2 data-dil="en">1 · Data</h2><div data-v="veri"></div></article>
   <article class="rp-metin" id="tanimlar"><h2 data-dil="tr">2 · Tanımlar</h2><h2 data-dil="en">2 · Definitions</h2><div id="g-tanimlar"></div></article>
@@ -49,6 +49,36 @@
   <article class="rp-metin" id="dogrulama"><h2 data-dil="tr">4 · Doğrulama</h2><h2 data-dil="en">4 · Validation</h2><div id="g-dogrulama"></div></article>
   <article class="rp-metin" id="sinirlar"><h2 data-dil="tr">5 · Bilinen sınırlar</h2><h2 data-dil="en">5 · Known limits</h2><div id="g-sinirlar"></div></article>
   <article class="rp-metin" id="kapsama"><h2 data-dil="tr">6 · Yayın yayın kapsama</h2><h2 data-dil="en">6 · Coverage by outlet</h2><div id="g-kapsama"></div></article>
+  <article class="rp-metin" id="siniflandirma"><h2 data-dil="tr">7 · Yayınları nasıl sınıflandırıyoruz</h2><h2 data-dil="en">7 · How we classify outlets</h2>
+    <div data-dil="tr">
+      <p>Her yayının iki ayrı etiketi var. <b>Ülke grubu</b>, yayının nereden yayın yaptığıdır: bölge basını (Türkiye hariç), Türkiye basını, İsrail basını, Batı ana akım basını ve Batı’da muhalif basın. <b>Siyasi çizgi</b> ise yayının kendi ülkesindeki yeridir: sol, merkez, sağ, ulusalcı, İslami düşünce, devlet ya da kamu yayını, parti ya da hareket yayını. Her yayının etiketi ve gerekçesi Kaynaklar sayfasındadır.</p>
+      <p>Raporlardaki “ülke ve siyasi çizgiye göre” bölümleri bu iki etiketin kesişimini kullanır. Ölçüler tek tek yayınlarda hesaplanır, grup sonucu yayınların sonuçlarından çıkar. Tek bir yayınla temsil edilen gruplar gösterilmez; çünkü o durumda grup değil, o yayın ölçülmüş olur. Siyasi çizgisi belirsiz ya da tartışmalı yayınlar bu bölümlerin dışında tutulur.</p>
+      <p>Karşılaştırmanın sıfır noktası <b>tanık basın</b>dır: olayın yaşandığı bölgenin aynı dildeki basını. Bir grubun sonucu tanık basından farkıyla verilir; “%74 sustu” gibi tek başına bir sayı, olayın bölgede ne kadar yer bulduğu bilinmeden okunamaz.</p>
+      <p>Silahlı grupların resmî kanalları ölçümlere ve sıralamalara girmez; açıklamaları yalnızca kendi haber metinlerimizde, atfedilerek ve bağlantı verilmeden aktarılır. Ayda ya da haftada bir çıkan dergiler “olay günlerinde yazmadı” ölçüsüne katılmaz.</p>
+      <p>Eski sınıflandırma (antiemperyalist / dekolonyal, ara / ana akım, İsrail ve Batı ana akımı) raporların eski grafiklerinde ve Almanak’ın önceki ciltlerinde kalıyor; yeni bölümler bu sayfadaki ayrımı kullanır.</p>
+    </div>
+    <div data-dil="en">
+      <p>Every outlet carries two separate labels. Its <b>country group</b> is where it publishes from: regional press (excluding Turkey), Turkish press, Israeli press, Western mainstream press and Western dissident press. Its <b>political line</b> is its place in its own country: left, centre, right, nationalist, Islamic thought, state or public broadcaster, party or movement outlet. Each outlet’s labels and the reasoning behind them are on the Sources page.</p>
+      <p>The “by country and political line” sections of the reports use the intersection of the two labels. Measures are computed outlet by outlet, and a group’s result comes from its outlets’ results. Groups represented by a single outlet are not shown, because what is measured then is that outlet, not a group. Outlets whose political line is unclear or contested are left out of these sections.</p>
+      <p>The baseline for comparison is the <b>witness press</b>: the press of the region where the event happened, in the same language. A group’s result is given as its difference from the witness press; a bare figure such as “74% stayed silent” cannot be read without knowing how much space the event found in the region.</p>
+      <p>Official channels of armed groups are excluded from measurements and rankings; their statements are quoted only in our own news texts, attributed and without links. Monthly and weekly magazines are not counted in the “did not write on event days” measure.</p>
+      <p>The earlier classification (anti-imperialist / decolonial, intermediate / mainstream, Israeli and Western mainstream) remains in the reports’ earlier charts and in the Almanac’s earlier volumes; new sections use the classification on this page.</p>
+    </div>
+  </article>
+  <article class="rp-metin" id="yapay-zeka"><h2 data-dil="tr">8 · Yapay zekâ nerede, nerede değil</h2><h2 data-dil="en">8 · Where AI is used, and where it is not</h2>
+    <div data-dil="tr">
+      <p><b>Yapay zekânın yaptığı işler:</b> başlıkların Türkçe ve İngilizce çevirisi, haber özetleri, aynı olayı anlatan haberlerin gruplanması, başlıkların bakış ölçeğine yerleştirilmesi, görsellerin uygunluk denetimi ve Almanak bültenlerindeki yorum paragrafları. Bu işlerde Google Gemini ve Anthropic Claude Haiku modellerini kullanıyoruz. Yapay zekânın yazdığı yorum metinleri sayfada ayrıca işaretlidir.</p>
+      <p><b>Yapay zekânın yapmadığı işler:</b> raporlardaki ve Almanak’taki bütün sayılar. Kim ne kadar yazdı, faili gizleme, olay günlerinde yazmama, ölü başına başlık, terimlerin sıklığı ve olay günlerinin tespiti, başlıklarda Türkçe, Arapça, İbranice, İngilizce ve başlıca Avrupa dillerinde kalıplarla aranır ve programla hesaplanır. Aynı veriyle her seferinde aynı sonuç çıkar.</p>
+      <p>Yapay zekâ hata yapabilir. Bu yüzden her çeviri ve özetin yanında yayının özgün başlığını ve bağlantısını gösteriyoruz; bakış etiketi okur tarafından denetlenebilir. Bir hata görürseniz <a href="duzeltmeler.html#form">düzeltme formu</a> ile bildirebilirsiniz.</p>
+      <p><b>Veri kaynakları:</b> yayınların kendi site haritaları, RSS beslemeleri ve Telegram kanalları (her 15 dakikada bir). Toplayıcının çalışmaya başlamasından önceki dönemler İnternet Arşivi’nden ve yayınların kendi arşivlerinden geriye dönük toplanan başlıklardan gelir. Arşiv bir sayfanın günün yalnızca bazı anlarını sakladığı için o dönemin kaydı eksiktir; bu dönemde “yazmadı” sonuçları ve saat farkları ihtiyatla okunmalıdır. Media Cloud’dan yalnızca sayılar alınır; başlık ve bağlantılar yayımlanmaz. Kaynakların metnini saklamıyoruz.</p>
+    </div>
+    <div data-dil="en">
+      <p><b>What AI does:</b> translating headlines into Turkish and English, writing story summaries, grouping stories about the same event, placing headlines on the perspective scale, checking images for suitability, and the commentary paragraphs in the Almanac’s bulletins. For these tasks we use Google Gemini and Anthropic Claude Haiku. Commentary written by AI is marked as such on the page.</p>
+      <p><b>What AI does not do:</b> any of the figures in the reports and the Almanac. Who wrote how much, hiding the killer, not writing on event days, headlines per death, how often terms are used, and the detection of event days are found with patterns in headlines in Turkish, Arabic, Hebrew, English and the main European languages, and computed by program. The same data gives the same result every time.</p>
+      <p>AI makes mistakes. That is why every translation and summary is shown next to the outlet’s original headline and link, so the perspective label can be checked by readers. If you spot an error, report it with the <a href="duzeltmeler.html#form-en">correction form</a>.</p>
+      <p><b>Data sources:</b> outlets’ own sitemaps, RSS feeds and Telegram channels (every 15 minutes). Periods before the collector started come from headlines gathered retrospectively from the Internet Archive and outlets’ own archives. Because the archive keeps only some moments of a page’s day, the record for that period is incomplete; “did not write” results and time gaps for it should be read with caution. From Media Cloud we take counts only; headlines and links are not published. We do not store the sources’ article text.</p>
+    </div>
+  </article>
 </main>
 <script src="site/rapor-ortak.js?v=202611111700"></script>
 <script src="site/sayfa-yontem.js?v=202611150600"></script>

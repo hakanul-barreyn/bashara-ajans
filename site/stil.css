@@ -1135,3 +1135,20 @@ html.deste-modu #haritaBolum{display:none!important}
 .enine-alt b{font:700 1rem/1.25 "Source Serif 4",Georgia,serif;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 6px rgba(0,0,0,.6)}
 .enine-zaman{font:600 .7rem "Plus Jakarta Sans",sans-serif;color:#cfd8d3}
 @media (max-width:900px){.enine{display:none}}
+/* veri gelmeyince: açıklama ve yeniden dene */
+.hata-kutu p{margin:0 0 10px}
+.hata-tekrar{font:700 .85rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 14px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.hata-tekrar:hover{background:rgba(127,127,127,.12)}
+/* düzeltme formu */
+.dz-form{display:flex;flex-direction:column;gap:14px;max-width:640px}
+.dz-form label{display:flex;flex-direction:column;gap:6px;font:600 .9rem "Plus Jakarta Sans",system-ui,sans-serif}
+.dz-form input,.dz-form select,.dz-form textarea{font:400 1rem/1.45 "Plus Jakarta Sans",system-ui,sans-serif;padding:10px 12px;border:1px solid rgba(127,127,127,.45);border-radius:8px;background:transparent;color:inherit;width:100%;box-sizing:border-box}
+.dz-form textarea{resize:vertical;min-height:130px}
+.dz-form input:focus,.dz-form select:focus,.dz-form textarea:focus{outline:2px solid #149954;outline-offset:1px}
+.dz-form button[type=submit]{align-self:flex-start;font:700 .95rem "Plus Jakarta Sans",system-ui,sans-serif;padding:10px 20px;border:0;border-radius:8px;background:#149954;color:#fff;cursor:pointer}
+.dz-form button[disabled]{opacity:.6;cursor:wait}
+.dz-zorunlu{font-weight:500;opacity:.7}
+.dz-tuzak{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.dz-durum{margin:0;font:600 .9rem "Plus Jakarta Sans",system-ui,sans-serif}
+.dz-durum.tamam{color:#149954}.dz-durum.hata{color:#b8262b}
+.dz-not{margin:0;font-size:.82rem;opacity:.75}

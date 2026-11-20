@@ -1,0 +1,33 @@
+# Almanak'ın önceden çizilmiş sayfaları (arama motorları için): günde bir, yalnızca değişen bölümler yeniden çizilir.
+# Çıktı "gorsel" dalının sayfa/ klasörüne yazılır; topla.yml yayın adımı onları almanak/ ve en/almanak/ altına koyar.
+name: almanak-sayfa
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 4 * * *"
+  push:
+    branches: [main]
+    paths: [".github/workflows/almanak-sayfa.yml", "toplayici/almanak_sayfa.py", "almanak.html", "site/sayfa-almanak.js", "site/kitap.css", "site/statik.js"]
+permissions:
+  contents: write
+concurrency:
+  group: gunluk-gorsel
+  cancel-in-progress: false
+jobs:
+  ciz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          (git fetch -q --depth 1 origin veri && git archive FETCH_HEAD data | tar -x) || true
+          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
+      - run: pip install -q playwright && python -m playwright install --with-deps chromium
+      - run: |
+          mkdir cikti && cp -r data/gorsel/. cikti/
+          python toplayici/almanak_sayfa.py . "$PWD/cikti/sayfa"
+          ls cikti/sayfa cikti/sayfa/tr/almanak | head -20
+      - run: |
+          cd cikti && git init -q -b gorsel && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Almanak sayfaları"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:gorsel

@@ -12,8 +12,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611200400">
-<script src="site/dil.js?v=202611150910"></script>
+<link rel="stylesheet" href="site/stil.css?v=202611200700">
+<script src="site/dil.js?v=202611200700"></script>
 <script src="site/marka.js?v=202611150800"></script>
 <style>
 /* Hakkımızda: okunur tek sütun metin, bakış ölçeği görseli, bölüm kartları */
@@ -69,10 +69,23 @@
     <h2>Nasıl bildirilir</h2>
     <p>E-posta: <span class="dz-adres" data-iletisim>iletisim@alborotonews.com</span></p>
     <ul>
-      <li>Her haberin altındaki <b>Hata bildir</b> bağlantısı, haberin bağlantısını ve kimliğini içeren hazır bir e-posta açar.</li>
+      <li>Her haberin altındaki <b>Hata bildir</b> bağlantısı aşağıdaki formu o haberin bağlantısıyla doldurulmuş olarak açar.</li>
       <li>Ne yanlış ve doğrusu ne? Bir bağlantı ya da belge eklemek incelemeyi hızlandırır.</li>
       <li>Kimliğinizi yazmanız gerekmez; e-posta adresiniz yalnızca yanıt vermek için kullanılır, yayımlanmaz.</li>
     </ul>
+  </section>
+  <section class="bolumk dz-form-kutu" id="form">
+    <h2>Formla bildirin</h2>
+    <form class="dz-form" novalidate>
+      <label>Ne tür bir yanlış?<select name="tur"><option value="ceviri">Çeviri ya da özet hatası</option><option value="atif">Yanlış atıf (yayın, kişi, tarih)</option><option value="olcum">Ölçüm hatası</option><option value="tarihce">Tarihçe ya da kaynak</option><option value="cevap">Cevap hakkı</option><option value="diger">Diğer</option></select></label>
+      <label>İlgili sayfa ya da haber bağlantısı<input name="sayfa" type="text" maxlength="300" autocomplete="off" placeholder="https://alborotonews.com/…"></label>
+      <label>Ne yanlış, doğrusu ne? <span class="dz-zorunlu">(zorunlu)</span><textarea name="metin" rows="6" maxlength="3000" required placeholder="Bir bağlantı ya da belge eklemek incelemeyi hızlandırır."></textarea></label>
+      <label>Yanıt isterseniz iletişim (isteğe bağlı)<input name="iletisim" type="text" maxlength="200" autocomplete="off" placeholder="e-posta ya da Telegram kullanıcı adı"></label>
+      <label class="dz-tuzak" aria-hidden="true">Web<input name="web" type="text" tabindex="-1" autocomplete="off"></label>
+      <button type="submit">Gönder</button>
+      <p class="dz-durum" role="status" aria-live="polite"></p>
+      <p class="dz-not">Bildiriminiz yalnızca editöre iletilir ve yayımlanmaz; IP adresinizi saklamıyoruz. İletişim bilgisi yazmazsanız size yanıt veremeyiz ama düzeltmeyi bu sayfada kayda geçiririz.</p>
+    </form>
   </section>
   <section class="bolumk">
     <h2>Neleri düzeltiyoruz</h2>
@@ -104,10 +117,23 @@
     <h2>How to report</h2>
     <p>Email: <span class="dz-adres" data-iletisim>iletisim@alborotonews.com</span></p>
     <ul>
-      <li>The <b>Report an error</b> link under every story opens a ready email with the story's link and ID.</li>
+      <li>The <b>Report an error</b> link under every story opens the form below, pre-filled with that story's link.</li>
       <li>What is wrong and what is correct? A link or document speeds up the review.</li>
       <li>You do not need to identify yourself; your email address is used only to reply and is never published.</li>
     </ul>
+  </section>
+  <section class="bolumk dz-form-kutu" id="form-en">
+    <h2>Report with the form</h2>
+    <form class="dz-form" novalidate>
+      <label>What kind of error?<select name="tur"><option value="ceviri">Translation or summary error</option><option value="atif">Wrong attribution (outlet, person, date)</option><option value="olcum">Measurement error</option><option value="tarihce">History or sources</option><option value="cevap">Right of reply</option><option value="diger">Other</option></select></label>
+      <label>Related page or story link<input name="sayfa" type="text" maxlength="300" autocomplete="off" placeholder="https://alborotonews.com/…"></label>
+      <label>What is wrong, and what is correct? <span class="dz-zorunlu">(required)</span><textarea name="metin" rows="6" maxlength="3000" required placeholder="A link or document speeds up the review."></textarea></label>
+      <label>Contact if you want a reply (optional)<input name="iletisim" type="text" maxlength="200" autocomplete="off" placeholder="email or Telegram username"></label>
+      <label class="dz-tuzak" aria-hidden="true">Web<input name="web" type="text" tabindex="-1" autocomplete="off"></label>
+      <button type="submit">Send</button>
+      <p class="dz-durum" role="status" aria-live="polite"></p>
+      <p class="dz-not">Your report goes only to the editor and is not published; we do not store your IP address. If you leave no contact we cannot reply, but we log the correction on this page.</p>
+    </form>
   </section>
   <section class="bolumk">
     <h2>What we correct</h2>
@@ -134,5 +160,6 @@
 </div>
 </main>
 <script src="site/sayfa-duzeltme.js?v=202611150430"></script>
+<script src="site/duzeltme-form.js?v=1"></script>
 </body>
 </html>

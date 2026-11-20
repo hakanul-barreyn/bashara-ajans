@@ -105,6 +105,16 @@ jobs:
           rm -rf h && (cp -r data/h h || true)
           # günlük görseller (uydu, Gazze fotoğrafları): "gorsel" dalından; veri dalına yazılmaz
           mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
+          # Almanak'ın önceden çizilmiş sayfaları (almanak-sayfa.yml): almanak/, en/almanak/; kapak almanak.html'nin yerine
+          if [ -d data/gorsel/sayfa/tr/almanak ]; then
+            mkdir -p almanak en/almanak
+            cp data/gorsel/sayfa/tr/almanak/*.html almanak/ 2>/dev/null || true
+            cp data/gorsel/sayfa/en/almanak/*.html en/almanak/ 2>/dev/null || true
+            [ -f almanak/kapak.html ] && mv almanak/kapak.html almanak.html
+            [ -f en/almanak/kapak.html ] && mv en/almanak/kapak.html en/almanak.html
+            cp data/gorsel/sayfa/sitemap-almanak.xml almanak/ 2>/dev/null || true
+          fi
+          rm -rf data/gorsel/sayfa
           (git fetch -q --depth 1 origin metin-sayim && git show FETCH_HEAD:metin-ozet.json > data/metin-ozet.json) || true
 
       - uses: actions/configure-pages@v5
