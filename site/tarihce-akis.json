@@ -1,5 +1,5 @@
 {
- "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür.",
+ "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür. 'karsilastir': olayın yanında önce/sonra haritası (once, sonra, kesit). 'uydu': önce/sonra uydu görüntüsü. 'buyuk': ilk görsel geniş. 'kaynakca': akademik ve birincil kaynaklar (bağlantısız).",
  "haritalar": {
   "tam": {
    "yil": "1914",
@@ -31,10 +31,10 @@
   },
   "1967": {
    "yil": "1967",
-   "ad": "Nekse",
-   "not": "Batı Şeria ve Gazze de işgal altında",
-   "ad_en": "The Naksa",
-   "not_en": "The West Bank and Gaza also under occupation"
+   "ad": "Haziran 1967",
+   "not": "Taralı: işgal altındaki Batı Şeria ve Gazze.",
+   "ad_en": "June 1967",
+   "not_en": "Hatched: the occupied West Bank and Gaza."
   },
   "oslo": {
    "yil": "1995",
@@ -87,52 +87,158 @@
    "pencere": "genis",
    "not": "1914’te Osmanlı Devleti: Anadolu, Suriye, Lübnan, Filistin, Ürdün, Irak ve Hicaz. Kesik çizgi: Şam’dan Medine’ye Hicaz Demiryolu (1908). Hicaz’ın iç sınırı şematik.",
    "not_en": "The Ottoman state in 1914: Anatolia, Syria, Lebanon, Palestine, Transjordan, Iraq and the Hejaz. Dashed line: the Hejaz Railway from Damascus to Medina (1908). The Hejaz’s inland edge is schematic."
+  },
+  "g1949": {
+   "yil": "1949",
+   "pencere": "genis",
+   "ad": "Mütarekelerden sonra",
+   "ad_en": "After the armistices",
+   "not": "Kızıl: Filistinlilerin elinde kalan Batı Şeria (Ürdün yönetiminde) ve Gazze Şeridi (Mısır yönetiminde). Koyu: 1948’de kaybedilen toprak. Sina Mısır’ın.",
+   "not_en": "Red-brown: what remained to the Palestinians, the West Bank (under Jordan) and the Gaza Strip (under Egypt). Dark: land lost in 1948. Sinai is Egyptian."
+  },
+  "g1956": {
+   "yil": "1956",
+   "pencere": "genis",
+   "ad": "Süveyş Savaşı",
+   "ad_en": "The Suez War",
+   "not": "Taralı: İsrail’in Ekim–Kasım 1956’da işgal ettiği Sina ve Gazze. İngiliz ve Fransız birlikleri Port Said’e indi. İsrail Mart 1957’de çekildi.",
+   "not_en": "Hatched: Sinai and Gaza, occupied by Israel in October–November 1956. British and French troops landed at Port Said. Israel withdrew in March 1957."
+  },
+  "g1967": {
+   "yil": "1967",
+   "pencere": "genis",
+   "ad": "Haziran 1967",
+   "ad_en": "June 1967",
+   "not": "Taralı: altı günde işgal edilen Sina, Gazze, Batı Şeria ve Doğu Kudüs, Golan. Cephe Süveyş Kanalı’na dayandı.",
+   "not_en": "Hatched: Sinai, Gaza, the West Bank and East Jerusalem, and the Golan, occupied in six days. The front reached the Suez Canal."
+  },
+  "g1973": {
+   "yil": "1973",
+   "pencere": "genis",
+   "ad": "Ekim 1973",
+   "ad_en": "October 1973",
+   "not": "Yeşil: Mısır ordusunun kanalı geçip tuttuğu doğu kıyı şeridi. Kesik çizgili: İsrail’in Deversuar’dan geçip batı kıyıda açtığı cep (şematik). Golan’da cephe yeniden işgal hattına döndü.",
+   "not_en": "Green: the east-bank strip the Egyptian army took after crossing the canal. Dashed: the pocket Israel opened on the west bank after crossing at Deversoir (schematic). On the Golan the front returned to the occupation line."
+  },
+  "g1982": {
+   "yil": "1982",
+   "pencere": "genis",
+   "ad": "Sina geri verildi",
+   "ad_en": "Sinai returned",
+   "not": "1979 barış antlaşmasıyla Sina Nisan 1982’ye kadar aşama aşama Mısır’a döndü. Gazze, Batı Şeria ve Golan işgal altında kaldı.",
+   "not_en": "Under the 1979 peace treaty Sinai was returned to Egypt in stages by April 1982. Gaza, the West Bank and the Golan remained occupied."
+  },
+  "osloABC": {
+   "yil": "1995",
+   "ad": "Oslo II: A, B, C",
+   "ad_en": "Oslo II: A, B, C",
+   "not": "Parlak: A bölgesi, Filistin Yönetimi’nin denetiminde. Açık: B bölgesi, ortak denetim. Taralı: C bölgesi, Batı Şeria’nın yaklaşık yüzde 60’ı, İsrail denetiminde. Siyah: yerleşimler. Sınırlar 2005 tarihli kamu malı bir haritadan izlendi, yaklaşık.",
+   "not_en": "Bright: Area A, under Palestinian Authority control. Light: Area B, joint control. Hatched: Area C, about 60 per cent of the West Bank, under Israeli control. Black: settlements. Boundaries traced from a public-domain 2005 map, approximate."
   }
  },
  "akislar": [
   {
    "anahtar": "osmanli",
-   "ad": "Osmanlı ve yıkılış",
+   "ad": "Osmanlı’nın yıkılışı",
    "ar": "العهد العثماني",
    "yillar": [
     1914,
     1918
    ],
    "renk": "#a0803f",
-   "harita": "osm1914",
    "tez": "Filistin dört yüz yıl Osmanlı’nın bir parçasıydı: Kudüs ayrı bir sancaktı, kuzey Beyrut Vilayeti’ne bağlıydı. Birinci Dünya Savaşı’nda ülke cepheye döndü; Gazze üç kez muharebe gördü, kıtlık ve sürgün yaşandı. Kudüs 9 Aralık 1917’de düştü, Megiddo’dan sonra bölgede Osmanlı yönetimi sona erdi.",
-   "gecis": "İmparatorluk yıkıldı; toprağı masa başında paylaşılacaktı.",
+   "gecis": "İmparatorluk savaştan çekildi; toprağı masa başında paylaşılacaktı.",
    "olaylar": [
     {
      "ref": "1914-10-29",
-     "harita": "tam"
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1917-03-26"
+     "ref": "1917-03-26",
+     "gorseller": [
+      "gazze-1917-subaylar",
+      "gazze-1917-esirler"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1917-10-31"
+     "ref": "1917-10-31",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1917-12-09",
      "gorseller": [
       "kudus-1917-teslim"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "David Fromkin, A Peace to End All Peace (Henry Holt, 1989)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "1918-09-19"
+     "ref": "1918-09-19",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1918-10-30"
-    },
-    {
-     "ref": "1922-11-01",
-     "yan": true
+     "ref": "1918-10-30",
+     "kaynakca": [
+      {
+       "ad": "David Fromkin, A Peace to End All Peace (Henry Holt, 1989)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
-   "ad_en": "Ottoman rule and collapse",
+   "ad_en": "The fall of the Ottoman state",
    "tez_en": "Palestine was part of the Ottoman state for four hundred years: Jerusalem was a separate district, the north belonged to the province of Beirut. In the First World War the country became a front; Gaza saw three battles, famine and deportation followed. Jerusalem fell on 9 December 1917, and after Megiddo Ottoman rule in the region came to an end.",
-   "gecis_en": "The empire collapsed; its land would be divided at the negotiating table."
+   "gecis_en": "The empire was out of the war; its land would be divided at the negotiating table.",
+   "gorsel": "osmanli-aksa-1917"
   },
   {
    "anahtar": "parsel",
@@ -143,13 +249,11 @@
     1935
    ],
    "renk": "#5d6b75",
-   "harita": "sykes",
    "tez": "Savaş sürerken İtilaf devletleri Osmanlı’nın Arap vilayetlerini masa başında paylaştı. Sykes–Picot gizli anlaşmasıyla kıyı Suriye’si ve Kilikya Fransa’ya, Bağdat ve Basra İngiltere’ye ayrıldı; iç bölgeler iki devletin nüfuz alanına bırakıldı, Filistin için “uluslararası yönetim” öngörüldü. Balfour Deklarasyonu nüfusun küçük bir azınlığına “ulusal yurt” sözü verdi. San Remo’da ve Milletler Cemiyeti’nde bu paylaşım manda adıyla meşrulaştırıldı; 1922’de Filistin, Balfour taahhüdünü de içeren bir metinle İngiliz mandasına bırakıldı.",
-   "gecis": "Topraksızlaşan köylü, mandaya karşı silaha sarılacaktı.",
+   "gecis": "Manda kuruldu; ona karşı ilk örgütlü cevap Hayfa’nın yoksul mahallelerinden gelecekti.",
    "olaylar": [
     {
      "ref": "1916-05",
-     "harita": "sykes",
      "gazete": true,
      "vurgu": [
       "Osmanlı’nın Arap topraklarını aralarında paylaştı"
@@ -159,11 +263,35 @@
      ],
      "gorseller": [
       "sykes-picot-harita"
+     ],
+     "karsilastir": {
+      "once": "osm1914",
+      "sonra": "sykes"
+     },
+     "kaynakca": [
+      {
+       "ad": "James Barr, A Line in the Sand: Britain, France and the Struggle that Shaped the Middle East (Simon & Schuster, 2011)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "David Fromkin, A Peace to End All Peace (Henry Holt, 1989)",
+       "tur": "akademik"
+      }
      ]
     },
     {
      "ref": "1916-06",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "David Fromkin, A Peace to End All Peace (Henry Holt, 1989)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1917-11-02",
@@ -175,10 +303,26 @@
      ],
      "vurgu_en": [
       "“a national home for the Jewish people”"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Jonathan Schneer, The Balfour Declaration: The Origins of the Arab-Israeli Conflict (Random House, 2010)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Rashid Khalidi, The Hundred Years’ War on Palestine (Metropolitan Books, 2020)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "1919-08-28"
+     "ref": "1919-08-28",
+     "kaynakca": [
+      {
+       "ad": "Andrew Patrick, America’s Forgotten Middle East Initiative: The King-Crane Commission of 1919 (I.B. Tauris, 2015)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -188,29 +332,62 @@
      "kaynaklar": [],
      "baslik_en": "San Remo settles the mandates",
      "metin_en": "At San Remo the Allied powers gave Syria and Lebanon to France and Palestine and Iraq to Britain as mandates. The conference also wrote the Balfour Declaration into the terms of the Palestine Mandate.",
-     "harita": "mandalar",
      "gorseller": [
       "san-remo-1920"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Susan Pedersen, The Guardians: The League of Nations and the Crisis of Empire (Oxford University Press, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "David Fromkin, A Peace to End All Peace (Henry Holt, 1989)",
+       "tur": "akademik"
+      }
      ]
     },
     {
      "ref": "1922-07-24",
-     "harita": "manda",
      "vurgu": [
       "Balfour Deklarasyonu manda metnine girdi"
      ],
      "vurgu_en": [
       "the Balfour Declaration was written into the mandate"
+     ],
+     "karsilastir": {
+      "once": "sykes",
+      "sonra": "mandalar"
+     },
+     "kaynakca": [
+      {
+       "ad": "Susan Pedersen, The Guardians: The League of Nations and the Crisis of Empire (Oxford University Press, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Rashid Khalidi, The Iron Cage: The Story of the Palestinian Struggle for Statehood (Beacon Press, 2006)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1922-11-01",
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Erik-Jan Zürcher, Turkey: A Modern History (I.B. Tauris, 2004)",
+       "tur": "akademik"
+      }
      ]
     }
    ],
    "ad_en": "The colonisation of the Ottoman lands",
    "tez_en": "While the war was still on, the Entente powers carved up the Ottoman Arab provinces at the negotiating table. Under the secret Sykes–Picot agreement coastal Syria and Cilicia went to France, Baghdad and Basra to Britain; the interior was left as the two powers’ spheres of influence, and an “international administration” was planned for Palestine. The Balfour Declaration promised a small minority of the population a “national home”. At San Remo and in the League of Nations the division was legitimised under the name of mandates; in 1922 Palestine was handed to a British Mandate whose text included the Balfour pledge.",
-   "gecis_en": "Peasants pushed off their land would take up arms against the Mandate."
+   "gecis_en": "The Mandate was in place; the first organised answer to it would come from the poor quarters of Haifa.",
+   "gorsel": "allenby-yafa-kapisi"
   },
   {
    "anahtar": "isyan",
-   "ad": "Kassam ve Büyük İsyan",
+   "ad": "Kassam ve 1936 İsyanı",
    "ar": "ثورة ١٩٣٦",
    "alt": "Direnişin kökleri",
    "yillar": [
@@ -218,79 +395,136 @@
     1939
    ],
    "renk": "#b3261e",
-   "harita": "manda",
-   "tez": "Mandanın ilk on beş yılında toprak satışları köylüyü topraksız bıraktı, Yahudi göçü hızlandı. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam, bu köylüler ve işçiler arasında gizli bir örgüt kurdu. 1935’te Yabed’de öldürülmesi, ertesi bahar başlayan Büyük İsyan’ın kıvılcımı oldu.",
+   "tez": "Manda yönetimi Balfour taahhüdünü uygularken Filistinlilere seçimle kurulan bir meclis bile tanımadı. 1930’larda Avrupa’dan gelen göç hızlandı; Yahudi nüfusunun payı 1931’de yüzde 17 iken 1936 sonunda yüzde 28’e çıktı. Vergi ve borç altındaki köylüler Hayfa ile Yafa’nın kenar mahallelerine göç ediyordu. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam bu insanlar arasında gizli bir örgüt kurdu. Kasım 1935’te öldürülmesi, ertesi bahar genel grevle başlayıp üç yıl süren isyanın kıvılcımı oldu.",
    "gecis": "İsyan bastırıldı; on yıl sonra toprak BM’de paylaşılacaktı.",
    "olaylar": [
     {
      "ref": "1921",
-     "gorsel": "kassam"
-    },
-    {
-     "ref": "1935-11-20"
-    },
-    {
-     "yeni": true,
-     "tarih": "1936-04-25",
-     "baslik": "Arap Yüksek Komitesi ve altı aylık genel grev",
-     "gorsel": "yuksek-komite",
-     "metin": "15 Nisan 1936’da Tulkerim yakınlarında başlayan çatışmaların ardından Filistin partileri 25 Nisan’da Hacı Emin el-Hüseyni başkanlığında Arap Yüksek Komitesi’ni kurdu. Komite Yahudi göçünün ve toprak satışının durdurulmasını, bağımsız bir ulusal hükümet kurulmasını istedi. Çağırdığı genel grev yaklaşık altı ay sürdü.",
-     "kaynaklar": [
+     "gorsel": "kassam",
+     "baslik": "Kassam Hayfa’da",
+     "baslik_en": "Qassam in Haifa",
+     "metin": "1882’de Suriye’nin Cebele kasabasında doğan İzzeddin el-Kassam, Fransızlara karşı direnişe katıldığı için gıyabında idama mahkûm edilince 1921’de Hayfa’ya geçti. İstiklal Camii’nde imam ve hatip oldu, gece okulunda okuma yazma öğretti. Kentin kenarındaki gecekondulara yerleşen, toprağından kopmuş köylüler ve demiryolu işçileri arasında çalıştı; 1930’ların başında bu çevreden hücrelere dayalı gizli bir örgüt kurdu.",
+     "metin_en": "Born in Jableh, Syria, in 1882, Izz ad-Din al-Qassam was sentenced to death in absentia for joining the resistance to the French and moved to Haifa in 1921. He became imam and preacher at the Istiqlal Mosque and taught reading and writing at a night school. He worked among the uprooted peasants and railway workers who had settled in shacks on the edge of the city; in the early 1930s he built a secret, cell-based organisation from among them.",
+     "kaynakca": [
       {
-       "ad": "Origins (Ohio State Üniversitesi)",
-       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+       "ad": "Abdullah Schleifer, “The Life and Thought of ʿIzz-id-Din al-Qassam”, Islamic Quarterly 23 (1979)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ted Swedenburg, Memories of Revolt: The 1936–1939 Rebellion and the Palestinian National Past (University of Minnesota Press, 1995)",
+       "tur": "akademik"
       }
-     ],
-     "baslik_en": "The Arab Higher Committee and the six-month general strike",
-     "metin_en": "After clashes that began near Tulkarm on 15 April 1936, the Palestinian parties formed the Arab Higher Committee under Hajj Amin al-Husseini on 25 April. The committee demanded an end to Jewish immigration and land sales and an independent national government. The general strike it called lasted about six months."
+     ]
     },
     {
-     "yeni": true,
-     "tarih": "1937-07",
-     "baslik": "Peel Komisyonu ilk kez taksimi önerdi",
-     "gorsel": "peel",
-     "metin": "İngiliz kraliyet komisyonu mandanın yürümediğine karar verdi ve ülkenin bölünmesini önerdi: toprağın yaklaşık yüzde 17’si Yahudi devletine verilecek, kalanı Ürdün’e bağlanacaktı. Plan yaklaşık 200 bin Arabın yerinden edilmesini öngörüyordu. Filistin önderliği planı tümüyle reddetti.",
-     "kaynaklar": [
+     "ref": "1935-11-20",
+     "baslik": "Yabed tepelerinde son çatışma",
+     "baslik_en": "The last stand in the Ya‘bad hills",
+     "metin": "Kassam yirmi beş kişilik grubuyla 12 Kasım 1935’te Hayfa’dan ayrılıp Cenin yakınlarındaki Yabed tepelerine çekildi. İngiliz polisi grubun izini sürdü ve 20 Kasım’da kuşattı; çatışmada Kassam birkaç arkadaşıyla birlikte öldürüldü. Hayfa’daki cenazesi bir gösteriye dönüştü. İzinden gidenler, “Kassamcılar”, birkaç ay sonra isyanın ilk silahlı gruplarını oluşturdu.",
+     "metin_en": "On 12 November 1935 Qassam left Haifa with a band of twenty-five men for the Ya‘bad hills near Jenin. British police tracked the group down and surrounded it on 20 November; Qassam was killed in the firefight along with several of his men. His funeral in Haifa turned into a demonstration. His followers, the “Qassamites”, formed the revolt’s first armed bands a few months later.",
+     "kaynaklar": [],
+     "kaynakca": [
       {
-       "ad": "Origins (Ohio State Üniversitesi)",
-       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+       "ad": "Abdullah Schleifer, “The Life and Thought of ʿIzz-id-Din al-Qassam”, Islamic Quarterly 23 (1979)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ghassan Kanafani, The 1936–39 Revolt in Palestine (Committee for a Democratic Palestine, 1972)",
+       "tur": "akademik"
       }
-     ],
-     "baslik_en": "The Peel Commission proposes partition for the first time",
-     "metin_en": "The British royal commission concluded that the Mandate was unworkable and proposed dividing the country: about 17 per cent of the land would go to a Jewish state and the rest would be joined to Transjordan. The plan envisaged moving about 200,000 Arabs. The Palestinian leadership rejected it outright."
+     ]
     },
     {
      "tur": "alinti",
      "kisi": "Gassan Kanafani",
-     "eser": "1936–39 Filistin İsyanı (1972)",
+     "eser": "1936–39 Filistin İsyanı (1972), s. 37–38",
      "gorsel": "kanafani",
-     "metin": "Kanafani, öldürülmeden kısa süre önce yazdığı incelemede isyanı sınıflar üzerinden okur: isyanın asıl gücü topraksızlaşan köylüler ve kentin yoksullarıydı, önderliği ise İngiltere ile pazarlığa açık eşraf aileleri elinde tutuyordu. Ona göre bu çelişki, isyanın bastırılmasını kolaylaştıran zaaflardan biriydi.",
-     "yer_tutucu": "Editör: Kanafani’nin kitabının Türkçe baskısından kısa bir alıntı ve sayfa numarası buraya.",
-     "metin_en": "In the study he wrote shortly before he was killed, Kanafani reads the revolt through class: its real force was the peasants pushed off their land and the urban poor, while its leadership stayed with notable families open to bargaining with Britain. In his view this contradiction was one of the weaknesses that made the revolt easier to crush.",
-     "eser_en": "The 1936–39 Revolt in Palestine (1972)",
+     "metin": "Kanafani, öldürülmeden kısa süre önce yazdığı incelemede isyanı sınıflar üzerinden okur: asıl gücü köylüler ve kentin yoksullarıydı, önderliği ise İngiltere’yle pazarlığa açık eşraf aileleri elinde tutuyordu.",
+     "metin_en": "In the study he wrote shortly before he was killed, Kanafani reads the revolt through class: its real force was the peasants and the urban poor, while its leadership stayed with notable families open to bargaining with Britain.",
+     "eser_en": "The 1936–39 Revolt in Palestine (1972), pp. 37–38",
      "kisi_en": "Ghassan Kanafani",
-     "yer_tutucu_en": "Editor: a short quotation from the book, with page number, goes here."
+     "alinti": "1936-1939 Ayaklanmasından söz ederken, Şeyh İzzeddin el-Kassam’a özel bir parantez açmak gerekir... İngiliz Manda yönetimi altındaki Filistin yıllar boyu Yahudi yerleşimciliğine maruz kalmıştır. İngiliz baskısını sürekli ensesinde hisseden Filistin halkı, bu duruma artık bir son verilmesi kanaatindeydi. Arap işçiler işlerinden olmakta, köylüler arazilerinden kovulmakta ve Filistinliler sürekli toprak kaybetmekteydi. Bunun üzerine köylüler, yazarlar, şairler, gazeteciler ve dinî önderler bir komutandan emir almışçasına topyekûn direniş göstermeye başlamıştır. Çare yalnızca silahlı bir ayaklanmaydı. Ayaklanmayı başlatan hamle ise Şeyh İzzeddin el-Kassam ve komutasındaki yirmi beş kişiden gelmiştir. Sonrasında ise birbirini takip eden olaylar çığ gibi büyüyerek devrim ateşini harlamıştır. Ayaklanma, tüm halk nezdinde kabul görmüş ve büyümeye devam etmiştir…"
     },
     {
      "yeni": true,
-     "tarih": "1938",
-     "baslik": "İsyanın doruğu ve İngiliz baskısı",
-     "gorsel": "lokomotif-1936",
-     "metin": "İsyan 1938 sonbaharında doruğa ulaştı; isyancılar bazı kentleri ve kırsalın büyük kısmını denetliyordu. İngiltere yaklaşık 20 bin asker getirdi; ev yıkımları, idamlar, örgütlerin yasaklanması ve sürgünlerle isyan 1939 yazında bastırıldı. Yaklaşık 5 bin Filistinli öldü.",
+     "tarih": "1936-04-25",
+     "baslik": "Altı ay kapalı kalan dükkânlar",
+     "gorsel": "yuksek-komite-1936",
+     "metin": "15 Nisan 1936’da Kassam’ın izinden giden bir grubun Tulkerim yolunda iki Yahudi yolcuyu öldürmesi ve ertesi gece iki Arabın misilleme olarak öldürülmesi ülkeyi gerdi. Yafa ve Nablus’ta kurulan ulusal komiteler genel grev ilan etti; partiler 25 Nisan’da Hacı Emin el-Hüseyni başkanlığında Arap Yüksek Komitesi’nde birleşti. Komitenin üç talebi vardı: Yahudi göçünün durdurulması, toprağın Yahudilere devrinin yasaklanması ve seçimle kurulacak ulusal bir hükümet. Grev Ekim’de Arap hükümdarlarının çağrısıyla bitti.",
      "kaynaklar": [
       {
        "ad": "Origins (Ohio State Üniversitesi)",
        "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
       }
      ],
-     "baslik_en": "The revolt at its height, and British repression",
-     "metin_en": "The revolt peaked in autumn 1938, when rebels controlled some towns and much of the countryside. Britain brought in about 20,000 troops; with house demolitions, executions, bans on organisations and deportations, the revolt was crushed by summer 1939. About 5,000 Palestinians were killed."
+     "baslik_en": "Six months of shuttered shops",
+     "metin_en": "On 15 April 1936 a band following Qassam’s path killed two Jewish travellers on the Tulkarm road, and the next night two Arabs were killed in reprisal. National committees in Jaffa and Nablus declared a general strike; on 25 April the parties united in the Arab Higher Committee under Hajj Amin al-Husseini. The committee had three demands: an end to Jewish immigration, a ban on the transfer of land to Jews, and a national government chosen by election. The strike ended in October at the call of the Arab kings.",
+     "kaynakca": [
+      {
+       "ad": "Ted Swedenburg, Memories of Revolt: The 1936–1939 Rebellion and the Palestinian National Past (University of Minnesota Press, 1995)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Matthew Hughes, Britain’s Pacification of Palestine: The British Army, the Colonial State, and the Arab Revolt, 1936–1939 (Cambridge University Press, 2019)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1937-07",
+     "baslik": "Peel Komisyonu: ilk taksim planı",
+     "gorsel": "peel",
+     "metin": "İngiliz kraliyet komisyonu 7 Temmuz 1937’de mandanın sürdürülemeyeceğini açıkladı ve ilk kez taksimi önerdi. Celile’yi ve kıyı ovasını kapsayan, ülkenin yaklaşık beşte biri büyüklüğünde bir Yahudi devleti öngörülüyordu; Kudüs’ten Yafa’ya uzanan bir koridor İngiliz yönetiminde kalacak, kalan bölge Ürdün Emirliği’ne bağlanacaktı. Rapor, Yahudi devletine düşen bölgelerden yaklaşık 225 bin Arabın “nakledilmesini” de öneriyordu. Arap Yüksek Komitesi planı reddetti; isyan Eylül’de yeniden alevlendi.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "The Peel Commission: the first partition plan",
+     "metin_en": "On 7 July 1937 the British royal commission declared the Mandate unworkable and proposed partition for the first time. A Jewish state covering Galilee and the coastal plain, about a fifth of the country, was envisaged; a corridor from Jerusalem to Jaffa would stay under British rule and the rest would be joined to the Emirate of Transjordan. The report also proposed the “transfer” of some 225,000 Arabs from the areas given to the Jewish state. The Arab Higher Committee rejected the plan; the revolt flared up again in September.",
+     "kaynakca": [
+      {
+       "ad": "Matthew Hughes, Britain’s Pacification of Palestine: The British Army, the Colonial State, and the Arab Revolt, 1936–1939 (Cambridge University Press, 2019)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ilan Pappé, A History of Modern Palestine (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1938",
+     "baslik": "1938: kırsal isyancıların elinde",
+     "gorsel": "lokomotif-1936",
+     "metin": "İsyan 1938 yazında ve sonbaharında en geniş hâline ulaştı: isyancılar dağlık iç bölgelerin büyük kısmını, Ekim’de birkaç gün Kudüs’ün Eski Şehri’ni de denetledi. İngiltere Münih’ten sonra serbest kalan birlikleri getirerek asker sayısını 20 bine çıkardı. Toplu cezalar, köy baskınları, ev yıkımları, idamlar ve sürgünlerle isyan 1939 yazında bastırıldı. Yaklaşık 5 bin Filistinli öldü, binlercesi tutuklandı ya da sürüldü.",
+     "kaynaklar": [
+      {
+       "ad": "Origins (Ohio State Üniversitesi)",
+       "url": "https://origins.osu.edu/read/1936-1939-arab-revolt-palestine"
+      }
+     ],
+     "baslik_en": "1938: the countryside in rebel hands",
+     "metin_en": "The revolt reached its widest extent in the summer and autumn of 1938: rebels held most of the hill country and, for a few days in October, Jerusalem’s Old City. After Munich Britain brought in freed-up units and raised its troops to 20,000. With collective punishment, village raids, house demolitions, executions and deportations the revolt was crushed by summer 1939. About 5,000 Palestinians were killed and thousands were detained or deported.",
+     "kaynakca": [
+      {
+       "ad": "Matthew Hughes, Britain’s Pacification of Palestine: The British Army, the Colonial State, and the Arab Revolt, 1936–1939 (Cambridge University Press, 2019)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ted Swedenburg, Memories of Revolt: The 1936–1939 Rebellion and the Palestinian National Past (University of Minnesota Press, 1995)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
      "tarih": "1939-05",
      "baslik": "Beyaz Kitap",
-     "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak satışlarını kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı.",
+     "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak devrini kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı. İsyanın önderleri o sırada sürgündeydi; Siyonist hareket belgeyi reddetti. Toprak meselesi isyanın asıl nedeni değildi: Yahudi kurumlarının elindeki toprak 1947’de bile ülkenin yaklaşık yüzde 7’siydi ve bunun büyük kısmı köylülerden değil, Beyrut’ta ve Şam’da oturan Sursuk gibi büyük toprak sahibi ailelerden satın alınmıştı. Satılan topraklarda çalışan kiracı köylüler ise çıkarıldı.",
      "kaynaklar": [
       {
        "ad": "Origins (Ohio State Üniversitesi)",
@@ -298,17 +532,30 @@
       }
      ],
      "baslik_en": "The White Paper",
-     "metin_en": "In its White Paper of May 1939 Britain limited Jewish immigration to 75,000 over five years, restricted land sales and announced that an independent Palestine would be established within ten years."
-    },
-    {
-     "ref": "1936-04",
-     "yan": true
+     "metin_en": "In the White Paper of May 1939 Britain limited Jewish immigration to 75,000 over five years, restricted land transfers and announced that an independent Palestine would be established within ten years. The revolt’s leaders were in exile by then; the Zionist movement rejected the document. Land was not the revolt’s main cause: even in 1947 Jewish institutions held about 7 per cent of the country, and most of it had been bought not from peasants but from large landowning families living in Beirut and Damascus, such as the Sursuqs. The tenant peasants who worked the sold land were evicted.",
+     "vurgu": [
+      "büyük kısmı köylülerden değil"
+     ],
+     "vurgu_en": [
+      "not from peasants"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Rashid Khalidi, The Iron Cage: The Story of the Palestinian Struggle for Statehood (Beacon Press, 2006)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ilan Pappé, A History of Modern Palestine (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
-   "ad_en": "Qassam and the Great Revolt",
+   "ad_en": "Qassam and the 1936 Revolt",
    "alt_en": "The roots of resistance",
-   "tez_en": "In the Mandate’s first fifteen years land sales left peasants landless and Jewish immigration accelerated. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among these peasants and workers. His killing at Ya‘bad in 1935 sparked the Great Revolt that began the following spring.",
-   "gecis_en": "The revolt was crushed; ten years later the land would be divided at the UN."
+   "tez_en": "While implementing the Balfour pledge, the Mandate denied Palestinians even an elected assembly. Immigration from Europe accelerated in the 1930s; the Jewish share of the population rose from 17 per cent in 1931 to 28 per cent by the end of 1936. Peasants burdened with taxes and debt were drifting to the outskirts of Haifa and Jaffa. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among them. His killing in November 1935 sparked the revolt that began with a general strike the following spring and lasted three years.",
+   "gecis_en": "The revolt was crushed; ten years later the land would be divided at the UN.",
+   "gorsel": "isyan-1938"
   },
   {
    "anahtar": "nekbe",
@@ -319,7 +566,6 @@
     1949
    ],
    "renk": "#3a4640",
-   "harita": "plan1947",
    "tez": "İngiltere meseleyi BM’ye bıraktı. 29 Kasım 1947’de kabul edilen taksim planı, nüfusun yaklaşık üçte birini oluşturan ve toprağın yaklaşık yüzde 7’sine sahip olan Yahudilere ülkenin yaklaşık yüzde 55’ini verdi. Ardından gelen savaşta yaklaşık 750 bin Filistinli yurdundan sürüldü.",
    "tez_kaynak": {
     "ad": "IMEU",
@@ -329,14 +575,42 @@
    "olaylar": [
     {
      "ref": "1947-11-29",
-     "harita": "plan1947",
-     "gorsel": "gonulluler-1947",
-     "gazete": true
+     "gorsel": "kahire-1947",
+     "gazete": true,
+     "karsilastir": {
+      "once": "manda",
+      "sonra": "plan1947"
+     },
+     "buyuk": true,
+     "gorseller": [
+      "gonulluler-1947"
+     ],
+     "kaynakca": [
+      {
+       "ad": "BM Genel Kurulu, 181 (II) sayılı karar, 29 Kasım 1947",
+       "tur": "birincil",
+       "ad_en": "UN General Assembly Resolution 181 (II), 29 November 1947"
+      },
+      {
+       "ad": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1948-04-09",
      "gorseller": [
       "deir-yasin-kalinti"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Walid Khalidi (ed.), All That Remains: The Palestinian Villages Occupied and Depopulated by Israel in 1948 (Institute for Palestine Studies, 1992)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -348,10 +622,23 @@
       "some 750,000 Palestinians were expelled or fled"
      ],
      "gorseller": [
-      "hayfa-1948-surgun",
       "yafa-1948",
       "gazze-tekne-1948",
       "aynulhilve-1948"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Walid Khalidi (ed.), All That Remains: The Palestinian Villages Occupied and Depopulated by Israel in 1948 (Institute for Palestine Studies, 1992)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -366,14 +653,34 @@
       }
      ],
      "baslik_en": "The Egyptian army and the “defective arms”",
-     "metin_en": "Egypt was ruled by King Farouk of the Muhammad Ali dynasty, of Ottoman origin. The Egyptian army that entered the war was besieged at Faluja. According to the later “defective arms” story, palace circles had bought useless weapons and profited. A 1950 audit found that only a quarter of the arms budget had actually been spent on weapons, but the trials ended with small fines. Historians attribute the defeat more to poor command and lack of preparation; the scandal still helped prepare the monarchy’s overthrow in 1952."
+     "metin_en": "Egypt was ruled by King Farouk of the Muhammad Ali dynasty, of Ottoman origin. The Egyptian army that entered the war was besieged at Faluja. According to the later “defective arms” story, palace circles had bought useless weapons and profited. A 1950 audit found that only a quarter of the arms budget had actually been spent on weapons, but the trials ended with small fines. Historians attribute the defeat more to poor command and lack of preparation; the scandal still helped prepare the monarchy’s overthrow in 1952.",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan & Avi Shlaim (eds.), The War for Palestine: Rewriting the History of 1948 (Cambridge University Press, 2001)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1948-12-11"
+     "ref": "1948-12-11",
+     "kaynakca": [
+      {
+       "ad": "BM Genel Kurulu, 194 (III) sayılı karar, 11 Aralık 1948",
+       "tur": "birincil",
+       "ad_en": "UN General Assembly Resolution 194 (III), 11 December 1948"
+      },
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1949-02-24",
-     "harita": "1949",
      "gorsel": "dheisheh-1952",
      "gorsel_klasor": "kapak",
      "gazete": true,
@@ -387,20 +694,51 @@
      ],
      "gorseller": [
       "hanyunus-1948"
+     ],
+     "karsilastir": {
+      "once": "plan1947",
+      "sonra": "1949"
+     },
+     "kaynakca": [
+      {
+       "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "tur": "akademik"
+      }
      ]
     },
     {
      "ref": "1948-09-22",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Avi Shlaim, “The Rise and Fall of the All-Palestine Government in Gaza”, Journal of Palestine Studies 20:1 (1990)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1948-10",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Benny Morris, 1948: A History of the First Arab-Israeli War (Yale University Press, 2008)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
    "ad_en": "Partition and the Nakba",
    "tez_en": "Britain handed the question to the UN. The partition plan adopted on 29 November 1947 gave about 55 per cent of the country to Jews, who made up about a third of the population and owned about 7 per cent of the land. In the war that followed, some 750,000 Palestinians were driven from their homes.",
-   "gecis_en": "Defeat brought down the old regimes; Arab nationalism took the stage."
+   "gecis_en": "Defeat brought down the old regimes; Arab nationalism took the stage.",
+   "gorsel": "hayfa-1948-surgun"
   },
   {
    "anahtar": "baas",
@@ -411,9 +749,8 @@
     1991
    ],
    "renk": "#c58b2a",
-   "harita": "1949",
    "tez": "Şam’da 1947’de kurulan Baas Partisi “tek Arap ulusu” fikrini, Kahire’de Nasır da aynı hayali taşıdı; Filistin’in kurtuluşu Arap birliğinin sonucu olarak görüldü. Bu umut 1967’de Nekse ile kırıldı, Mısır 1979’da İsrail’le barış yaparak cepheden çekildi. 1991’de Saddam’ın İsrail’e attığı füzeler bu kuşağın son hamlesi oldu.",
-   "gecis": "Rejimlere güvenmeyen yeni kuşak silahı kendi eline alacaktı.",
+   "gecis": "Arap ordularıyla Filistin’i kurtarma fikri Körfez Savaşı’nda son kez denendi.",
    "olaylar": [
     {
      "yeni": true,
@@ -423,7 +760,17 @@
      "metin": "Mişel Eflak ve Selahaddin Bitar’ın önderliğinde Arap Baas Partisi Şam’da ilk kongresini topladı. Parti “birlik, özgürlük, sosyalizm” şiarıyla bütün Arap ülkelerini tek bir ulus olarak gördü.",
      "kaynaklar": [],
      "baslik_en": "The Ba’ath Party is founded in Damascus",
-     "metin_en": "Led by Michel Aflaq and Salah al-Din al-Bitar, the Arab Ba’ath Party held its first congress in Damascus. Under the slogan “unity, freedom, socialism”, the party saw all Arab countries as a single nation."
+     "metin_en": "Led by Michel Aflaq and Salah al-Din al-Bitar, the Arab Ba’ath Party held its first congress in Damascus. Under the slogan “unity, freedom, socialism”, the party saw all Arab countries as a single nation.",
+     "kaynakca": [
+      {
+       "ad": "John F. Devlin, The Ba‘th Party: A History from Its Origins to 1966 (Hoover Institution Press, 1976)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Patrick Seale, The Struggle for Syria: A Study of Post-War Arab Politics, 1945–1958 (Oxford University Press, 1965)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1952-07-23",
@@ -432,6 +779,12 @@
       "nasir",
       "hur-subaylar",
       "devrim-1953"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -439,12 +792,12 @@
      "tarih": "1952-07-26",
      "kunye": "TIME · 4 Ağustos 1952",
      "kunye_en": "TIME · 4 August 1952",
-     "baslik": "Faruk’un “beş kral” sözü",
-     "baslik_en": "Farouk’s “five kings”",
+     "baslik": "Faruk: “Krallar bitti”",
+     "baslik_en": "Farouk: “Kings are finished”",
      "alinti": "Dünyada yalnızca beş kral kalacak: İngiltere kralı ve iskambil destesindeki dört kral.",
      "alinti_en": "There will be only five kings in the world: the King of England and the four kings in a pack of cards.",
-     "metin": "Kral Faruk’un tahtını kaybetmeden önce söylediği aktarılan bu söz, İngiliz gücüne yaslanan Arap monarşilerinin o güç çekildikçe sarsılacağını anlatıyordu. TIME, Hür Subaylar Faruk’u tahttan indirdiğinde bölge yazısını bu sözle açtı; Foreign Policy sözü 1948’e tarihler. Faruk 26 Temmuz 1952’de İtalya’ya sürgüne gitti ve 1965’te Roma’da öldü.",
-     "metin_en": "This remark, attributed to King Farouk before he lost his throne, captured how the Arab monarchies leaning on British power would shake as that power receded. TIME opened its regional story with it when the Free Officers deposed Farouk; Foreign Policy dates the remark to 1948. Farouk sailed into exile in Italy on 26 July 1952 and died in Rome in 1965.",
+     "metin": "Kral Faruk’un tahtını kaybetmeden önce söylediği aktarılan bu söz, monarşi düzeninin bittiğine inandığını gösteriyordu: ona göre çok geçmeden ayakta kalan tek gerçek taç İngiltere’ninki olacaktı. TIME, Hür Subaylar Faruk’u tahttan indirdiğinde bölge yazısını bu sözle açtı; Foreign Policy sözü 1948’e tarihler. Faruk 26 Temmuz 1952’de İtalya’ya sürgüne gitti; Irak (1958), Yemen (1962) ve Libya (1969) monarşileri de birkaç yıl arayla devrildi. Faruk 1965’te Roma’da öldü.",
+     "metin_en": "This remark, attributed to King Farouk before he lost his throne, showed that he believed the age of monarchy was over: soon, he thought, the only real crown left standing would be Britain’s. TIME opened its regional story with it when the Free Officers deposed Farouk; Foreign Policy dates the remark to 1948. Farouk sailed into exile in Italy on 26 July 1952; the monarchies of Iraq (1958), Yemen (1962) and Libya (1969) fell within a few years of one another. Farouk died in Rome in 1965.",
      "kaynaklar": [
       {
        "ad": "TIME (1952)",
@@ -457,33 +810,88 @@
      ],
      "gorseller": [
       "faruk-churchill"
+     ],
+     "vurgu": [
+      "monarşi düzeninin bittiğine inandığını"
+     ],
+     "vurgu_en": [
+      "he believed the age of monarchy was over"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Hugh McLeave, The Last Pharaoh: Farouk of Egypt (McCall, 1970)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
      ]
     },
     {
      "tur": "gazete",
      "tarih": "1954-01-04",
-     "kunye": "Akşam · 5 Ocak 1954",
-     "kunye_en": "Akşam (Istanbul) · 5 January 1954",
-     "baslik": "Büyükelçi Fuat Tugay ve Hür Subaylar",
-     "baslik_en": "Ambassador Fuat Tugay and the Free Officers",
-     "alinti": "Hareketleriniz bir centilmene yakışmayacak hareketlerdir. Onun için aramızda hiçbir zaman dostluk olmayacaktır.",
-     "alinti_en": "Your conduct is not the conduct of a gentleman. That is why there will never be friendship between us.",
-     "metin": "Türkiye’nin Kahire Büyükelçisi Hulusi Fuat Tugay’ın eşi Emine Tugay, Kavalalı hanedanındandı. Hür Subaylar hanedanın mallarına el koyunca onun mülkleri de müsadere edildi; Tugay yeni yönetime açıkça cephe aldı. Akşam gazetesine göre bu sözleri Kahire Operası’nda kendisini karşılayan Abdünnasır’a söyledi. Mısır hükümeti 4 Ocak 1954’te Tugay’ı istenmeyen kişi ilan edip 24 saat içinde ülkeyi terk etmesini istedi; Tugay bu muameleyi gören ilk Türk diplomattı. Kahire, Türkiye’nin politikasını “Arap karşıtı” diye niteledi.",
-     "metin_en": "Emine Tugay, the wife of Turkey’s ambassador in Cairo, Hulusi Fuat Tugay, belonged to the Muhammad Ali dynasty. When the Free Officers seized the dynasty’s property her estates were confiscated too, and Tugay openly turned against the new government. According to the Istanbul daily Akşam he said these words to Nasser, who had come to greet him at the Cairo Opera. On 4 January 1954 the Egyptian government declared Tugay persona non grata and gave him 24 hours to leave; he was the first Turkish diplomat to be treated so. Cairo called Turkey’s policy “anti-Arab”.",
+     "kunye": "Queensland Times · 6 Ocak 1954",
+     "kunye_en": "Queensland Times · 6 January 1954 · back-translated from Turkish",
+     "baslik": "Fuat Tugay: “Napolyon’a bakın”",
+     "baslik_en": "Fuat Tugay: “Look at Napoleon”",
+     "alinti": "Gururlanmayın. Napolyon’a ve onun karşılaştığı kadere bakın. Ülkenizi mahvedeceksiniz.",
+     "alinti_en": "Do not be proud. Look at Napoleon and the fate he met. You will ruin your country.",
+     "metin": "Türkiye’nin Kahire Büyükelçisi Hulusi Fuat Tugay’ın eşi Emine Tugay, Kavalalı hanedanındandı; Hür Subaylar hanedanın mallarına el koyunca onun mülkleri de müsadere edildi. Avustralya basını Tugay’ın Devrim Komuta Konseyi’nin başındaki subaya bu sözleri söylediğini yazdı. Tugay, devrimden doğup tek adam yönetimine varan Napolyon’u örnek gösteriyordu. Akşam gazetesine göre Kahire Operası’nda kendisini karşılayan Abdünnasır’a da “Hareketleriniz bir centilmene yakışmayacak hareketlerdir” dedi. Mısır 4 Ocak 1954’te Tugay’ı istenmeyen kişi ilan edip 24 saat içinde ülkeyi terk etmesini istedi. Birkaç ay sonra Abdünnasır, Necib’i saf dışı bırakıp yönetimi tek başına üstlendi; 1967 yenilgisi ise uyarının ikinci cümlesini hatırlatacaktı.",
+     "metin_en": "Emine Tugay, the wife of Turkey’s ambassador in Cairo, Hulusi Fuat Tugay, belonged to the Muhammad Ali dynasty; when the Free Officers seized the dynasty’s property her estates were confiscated too. The Australian press reported that Tugay said these words to the officer heading the Revolutionary Command Council. He was pointing to Napoleon, who rose from a revolution to one-man rule. According to the Istanbul daily Akşam he also told Nasser, who had come to greet him at the Cairo Opera, that “your conduct is not the conduct of a gentleman”. On 4 January 1954 Egypt declared Tugay persona non grata and gave him 24 hours to leave. Within months Nasser sidelined Naguib and took power alone; the defeat of 1967 would recall the warning’s last sentence.",
      "kaynaklar": [
       {
-       "ad": "Afyon Kocatepe Üniversitesi Sosyal Bilimler Dergisi",
-       "url": "https://dergipark.org.tr/en/pub/akusosbil/issue/48890/464945"
+       "ad": "Aydın 2019 (DergiPark)",
+       "url": "https://doi.org/10.32709/akusosbil.472857"
       },
       {
        "ad": "Wikipedia: Hulusi Fuat Tugay",
        "url": "https://en.wikipedia.org/wiki/Hulusi_Fuat_Tugay"
       }
+     ],
+     "vurgu": [
+      "Napolyon’u örnek gösteriyordu"
+     ],
+     "vurgu_en": [
+      "He was pointing to Napoleon"
+     ],
+     "kaynakca": [
+      {
+       "ad": "N. Z. Aydın, “Yerli ve Yabancı Gazetelerde Büyükelçi Krizi”, Afyon Kocatepe Üniversitesi Sosyal Bilimler Dergisi 21:3 (2019), 753–763",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
      ]
     },
     {
      "ref": "1956-11-03",
-     "gorsel": "suveys-1956"
+     "gorsel": "suveys-1956",
+     "karsilastir": {
+      "once": "g1949",
+      "sonra": "g1956",
+      "kesit": "misir"
+     },
+     "gorseller": [
+      "portsait-1956"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Wm. Roger Louis & Roger Owen (eds.), Suez 1956: The Crisis and Its Consequences (Oxford University Press, 1989)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "UNRWA Direktörünün özel raporu, 1 Kasım – 14 Aralık 1956 (BM belgesi A/3212/Add.1)",
+       "tur": "birincil",
+       "ad_en": "Special report of the Director of UNRWA, 1 November – 14 December 1956 (UN doc. A/3212/Add.1)"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -492,7 +900,17 @@
      "metin": "Mısır ve Suriye, Nasır’ın başkanlığında tek bir devlette birleşti. Birlik, Suriye’deki darbeyle 1961’de dağıldı.",
      "kaynaklar": [],
      "baslik_en": "The United Arab Republic",
-     "metin_en": "Egypt and Syria merged into a single state under Nasser. The union broke up after a coup in Syria in 1961."
+     "metin_en": "Egypt and Syria merged into a single state under Nasser. The union broke up after a coup in Syria in 1961.",
+     "kaynakca": [
+      {
+       "ad": "Malcolm H. Kerr, The Arab Cold War: Gamal ʿAbd al-Nasir and His Rivals, 1958–1970 (Oxford University Press, 1971)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Patrick Seale, The Struggle for Syria: A Study of Post-War Arab Politics, 1945–1958 (Oxford University Press, 1965)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -501,20 +919,60 @@
      "metin": "Baas, Şubat 1963’te Irak’ta, Mart 1963’te Suriye’de darbeyle iktidara geldi. İki kanat zamanla birbirine düşman iki rejime dönüştü.",
      "kaynaklar": [],
      "baslik_en": "The Ba’ath in power in Iraq and Syria",
-     "metin_en": "The Ba’ath came to power by coup in Iraq in February 1963 and in Syria in March 1963. The two wings later turned into two hostile regimes."
+     "metin_en": "The Ba’ath came to power by coup in Iraq in February 1963 and in Syria in March 1963. The two wings later turned into two hostile regimes.",
+     "kaynakca": [
+      {
+       "ad": "Hanna Batatu, The Old Social Classes and the Revolutionary Movements of Iraq (Princeton University Press, 1978)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "John F. Devlin, The Ba‘th Party: A History from Its Origins to 1966 (Hoover Institution Press, 1976)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1967-06-05",
-     "harita": "1967",
      "vurgu": [
       "yaklaşık 300 bin Filistinli daha yerinden edildi"
      ],
      "vurgu_en": [
       "some 300,000 more Palestinians were displaced"
+     ],
+     "karsilastir": {
+      "once": "g1949",
+      "sonra": "g1967",
+      "kesit": "misir"
+     },
+     "kaynakca": [
+      {
+       "ad": "Wm. Roger Louis & Avi Shlaim (eds.), The 1967 Arab-Israeli War: Origins and Consequences (Cambridge University Press, 2012)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "1973-10-06"
+     "ref": "1973-10-06",
+     "karsilastir": {
+      "once": "g1967",
+      "sonra": "g1973",
+      "kesit": "misir"
+     },
+     "gorsel": "barlev-1973",
+     "kaynakca": [
+      {
+       "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Eugene Rogan, The Arabs: A History (Basic Books, 2009)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -527,23 +985,53 @@
      "gorseller": [
       "camp-david-1978",
       "baris-1979"
+     ],
+     "karsilastir": {
+      "once": "g1967",
+      "sonra": "g1982",
+      "kesit": "misir"
+     },
+     "kaynakca": [
+      {
+       "ad": "William B. Quandt, Camp David: Peacemaking and Politics (Brookings Institution, 1986)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "1991-01-18"
+     "ref": "1991-01-18",
+     "kaynakca": [
+      {
+       "ad": "Lawrence Freedman & Efraim Karsh, The Gulf Conflict, 1990–1991 (Princeton University Press, 1993)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1969-03-09",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Yaacov Bar-Siman-Tov, The Israeli-Egyptian War of Attrition, 1969–1970 (Columbia University Press, 1980)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1973-10-17",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Daniel Yergin, The Prize: The Epic Quest for Oil, Money, and Power (Simon & Schuster, 1991)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
    "ad_en": "The Ba’ath and Arab nationalism",
    "tez_en": "The Ba’ath Party, founded in Damascus in 1947, carried the idea of “one Arab nation”, and Nasser in Cairo the same dream; the liberation of Palestine was seen as the outcome of Arab unity. That hope broke with the Naksa in 1967, and Egypt left the front by making peace with Israel in 1979. Saddam’s missiles on Israel in 1991 were this generation’s last move.",
-   "gecis_en": "A new generation, distrustful of the regimes, would take up arms itself."
+   "gecis_en": "The idea of liberating Palestine with Arab armies was tried for the last time in the Gulf War.",
+   "gorsel": "halep-1958"
   },
   {
    "anahtar": "fedai",
@@ -554,9 +1042,8 @@
     2000
    ],
    "renk": "#d9542b",
-   "harita": "1967",
    "tez": "Arap rejimlerine güveni sarsılan yeni kuşak, Filistinlilerin kendi silahlı örgütlerini kurdu. Cezayir’in silahlı mücadeleyle kazandığı bağımsızlık bu kuşağa model oldu. Fetih, FKÖ ve Marksist FHKC ile direniş Filistinlilerin kendi eline geçti; uçak kaçırmalarla dünyanın gündemine girdi. Oslo süreci bu kuşağı bir yönetime dönüştürdü; 2000’de Camp David’in çöküşüyle o yol da tıkandı.",
-   "gecis": "Solun ve milliyetçiliğin tıkandığı yerde camiden yeni bir kuşak çıkacaktı.",
+   "gecis": "Müzakere yolu tıkandı; iki ay sonra İkinci İntifada başladı.",
    "olaylar": [
     {
      "yeni": true,
@@ -571,7 +1058,17 @@
       }
      ],
      "baslik_en": "Fatah is founded",
-     "metin_en": "Led by Yasser Arafat and Khalil al-Wazir (Abu Jihad), young Palestinians working in Kuwait founded the Palestinian National Liberation Movement (Fatah). Rather than waiting for the Arab regimes, the movement argued for the Palestinians’ own armed struggle."
+     "metin_en": "Led by Yasser Arafat and Khalil al-Wazir (Abu Jihad), young Palestinians working in Kuwait founded the Palestinian National Liberation Movement (Fatah). Rather than waiting for the Arab regimes, the movement argued for the Palestinians’ own armed struggle.",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Helena Cobban, The Palestinian Liberation Organisation: People, Power and Politics (Cambridge University Press, 1984)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -581,10 +1078,22 @@
      "metin": "Cezayir, Fransa’ya karşı yedi yıl süren savaşın sonunda bağımsızlığını kazandı. Fedai örgütleri için bir model oldu: Fetih’in ilk resmî bürosu 1963’te Cezayir’de açıldı, Cezayir fedailere eğitim ve silah sağladı. 1988’de Filistin’in bağımsızlığı da Cezayir’de ilan edilecekti.",
      "kaynaklar": [],
      "baslik_en": "Algeria wins independence",
-     "metin_en": "Algeria won its independence at the end of a seven-year war against France. It became a model for the fedayeen: Fatah’s first official office opened in Algiers in 1963, and Algeria provided training and weapons. In 1988 Palestinian independence would also be declared in Algiers."
+     "metin_en": "Algeria won its independence at the end of a seven-year war against France. It became a model for the fedayeen: Fatah’s first official office opened in Algiers in 1963, and Algeria provided training and weapons. In 1988 Palestinian independence would also be declared in Algiers.",
+     "kaynakca": [
+      {
+       "ad": "Alistair Horne, A Savage War of Peace: Algeria 1954–1962 (Macmillan, 1977)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1964-05-28"
+     "ref": "1964-05-28",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -598,15 +1107,33 @@
       }
      ],
      "baslik_en": "Fatah’s first operation",
-     "metin_en": "On the last night of 1964 Fatah’s armed wing, al-Asifa, announced its first operation, against Israel’s water-carrier installations. Fatah marks 1 January as its founding anniversary."
+     "metin_en": "On the last night of 1964 Fatah’s armed wing, al-Asifa, announced its first operation, against Israel’s water-carrier installations. Fatah marks 1 January as its founding anniversary.",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1967-12-11",
-     "gorsel": "habas-1951"
+     "gorsel": "habas-1951",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1968-03-21",
-     "gorsel": "kerame"
+     "gorsel": "kerame",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -621,7 +1148,17 @@
       }
      ],
      "baslik_en": "Arafat takes over the PLO",
-     "metin_en": "After Karameh the fedayeen organisations took over the PLO’s leadership. The Palestine National Council, meeting in Cairo, elected Fatah leader Yasser Arafat chairman of the Executive Committee in February 1969."
+     "metin_en": "After Karameh the fedayeen organisations took over the PLO’s leadership. The Palestine National Council, meeting in Cairo, elected Fatah leader Yasser Arafat chairman of the Executive Committee in February 1969.",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Helena Cobban, The Palestinian Liberation Organisation: People, Power and Politics (Cambridge University Press, 1984)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -631,7 +1168,13 @@
      "metin": "Hayfa’da doğup Nekbe’de ailesiyle Lübnan’a sığınan FHKC üyesi Leyla Halid, Roma’dan kalkan TWA’nın 840 sefer sayılı uçağını kaçırarak Şam’a indirdi. Yolcular tahliye edildikten sonra uçağın burnu patlatıldı. Halid, uçak kaçıran ilk kadın olarak dünyanın gündemine girdi.",
      "kaynaklar": [],
      "baslik_en": "Leila Khaled and TWA 840",
-     "metin_en": "PFLP member Leila Khaled, born in Haifa and a refugee in Lebanon with her family since the Nakba, hijacked TWA flight 840 from Rome and landed it in Damascus. After the passengers were evacuated, the plane’s nose was blown up. Khaled entered the world’s agenda as the first woman to hijack a plane."
+     "metin_en": "PFLP member Leila Khaled, born in Haifa and a refugee in Lebanon with her family since the Nakba, hijacked TWA flight 840 from Rome and landed it in Damascus. After the passengers were evacuated, the plane’s nose was blown up. Khaled entered the world’s agenda as the first woman to hijack a plane.",
+     "kaynakca": [
+      {
+       "ad": "Sarah Irving, Leila Khaled: Icon of Palestinian Liberation (Pluto Press, 2012)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -646,7 +1189,17 @@
       }
      ],
      "baslik_en": "September 1970: four planes, one desert airstrip",
-     "metin_en": "The PFLP targeted four planes on the same day. TWA and Swissair aircraft were landed on an old airstrip in the Jordanian desert, and a Pan Am plane was emptied and blown up in Cairo. The El Al hijacking attempt involving Leila Khaled failed, and Khaled was arrested in London. Three days later a BOAC plane was also brought to the strip. After the passengers were taken off, the planes were blown up; Khaled and six PFLP members were exchanged for the hostages."
+     "metin_en": "The PFLP targeted four planes on the same day. TWA and Swissair aircraft were landed on an old airstrip in the Jordanian desert, and a Pan Am plane was emptied and blown up in Cairo. The El Al hijacking attempt involving Leila Khaled failed, and Khaled was arrested in London. Three days later a BOAC plane was also brought to the strip. After the passengers were taken off, the planes were blown up; Khaled and six PFLP members were exchanged for the hostages.",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Sarah Irving, Leila Khaled: Icon of Palestinian Liberation (Pluto Press, 2012)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -656,11 +1209,27 @@
      "metin": "Ürdün ordusu Eylül 1970’te fedai örgütlerine ve kamplara saldırdı; binlerce kişi öldü. Çatışmaların sonunda FKÖ ve örgütler Ürdün’den çıkarılarak Lübnan’a taşındı.",
      "kaynaklar": [],
      "baslik_en": "Black September",
-     "metin_en": "In September 1970 the Jordanian army attacked the fedayeen organisations and the camps; thousands were killed. At the end of the fighting the PLO and the organisations were driven out of Jordan and moved to Lebanon."
+     "metin_en": "In September 1970 the Jordanian army attacked the fedayeen organisations and the camps; thousands were killed. At the end of the fighting the PLO and the organisations were driven out of Jordan and moved to Lebanon.",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Avi Shlaim, Lion of Jordan: The Life of King Hussein in War and Peace (Allen Lane, 2007)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1972-07-08",
-     "gorsel": "kanafani"
+     "gorsel": "kanafani",
+     "kaynakca": [
+      {
+       "ad": "Bashir Abu-Manneh, The Palestinian Novel: From 1948 to the Present (Cambridge University Press, 2016)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -670,7 +1239,18 @@
      "kaynaklar": [],
      "baslik_en": "Arafat at the UN rostrum",
      "metin_en": "Yasser Arafat became the first Palestinian leader to address the UN General Assembly. The same month the Assembly granted the PLO observer status.",
-     "gazete": true
+     "gazete": true,
+     "kaynakca": [
+      {
+       "ad": "BM Genel Kurulu, 2282. oturum tutanağı, 13 Kasım 1974 (A/PV.2282)",
+       "tur": "birincil",
+       "ad_en": "UN General Assembly, 2282nd plenary meeting, 13 November 1974 (A/PV.2282)"
+      },
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -679,10 +1259,31 @@
      "metin": "İsrail’in Lübnan’ı işgali ve Beyrut kuşatmasının ardından FKÖ savaşçıları ve yönetimi Ağustos 1982’de Beyrut’tan ayrıldı; merkez Tunus’a taşındı.",
      "kaynaklar": [],
      "baslik_en": "The PLO leaves Beirut",
-     "metin_en": "After Israel’s invasion of Lebanon and the siege of Beirut, PLO fighters and leadership left Beirut in August 1982; the headquarters moved to Tunis."
+     "metin_en": "After Israel’s invasion of Lebanon and the siege of Beirut, PLO fighters and leadership left Beirut in August 1982; the headquarters moved to Tunis.",
+     "kaynakca": [
+      {
+       "ad": "Rashid Khalidi, Under Siege: P.L.O. Decisionmaking During the 1982 War (Columbia University Press, 1986)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1982-09-16"
+     "ref": "1982-09-16",
+     "kaynakca": [
+      {
+       "ad": "Bayan Nuwayhed al-Hout, Sabra and Shatila: September 1982 (Pluto Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Kahan Komisyonu raporu (Beyrut kamplarındaki olayları soruşturma komisyonu), 1983",
+       "tur": "birincil",
+       "ad_en": "Report of the Kahan Commission of Inquiry into the events at the refugee camps in Beirut, 1983"
+      }
+     ]
     },
     {
      "ref": "1987-12-09",
@@ -691,14 +1292,29 @@
       "intifada-1987-gosteri",
       "intifada-1987-sokak",
       "nuseyrat-okul"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Zachary Lockman & Joel Beinin (eds.), Intifada: The Palestinian Uprising Against Israeli Occupation (South End Press, 1989)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "F. Robert Hunter, The Palestinian Uprising: A War by Other Means (University of California Press, 1991)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "1988-11-15"
+     "ref": "1988-11-15",
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1993-09-13",
-     "harita": "oslo",
      "gazete": true,
      "vurgu": [
       "Nihai statü konuları (Kudüs, mülteciler, yerleşimler, sınırlar) ertelendi"
@@ -709,6 +1325,21 @@
      "gorseller": [
       "oslo-tokalasma",
       "oslo-imza"
+     ],
+     "karsilastir": {
+      "once": "1967",
+      "sonra": "osloABC",
+      "kesit": "bs"
+     },
+     "kaynakca": [
+      {
+       "ad": "Edward W. Said, Peace and Its Discontents: Essays on Palestine in the Middle East Peace Process (Vintage, 1996)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Raja Shehadeh, From Occupation to Interim Accords: Israel and the Palestinian Territories (Kluwer Law International, 1997)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -718,25 +1349,55 @@
      "metin": "Arafat, İsrail Başbakanı Barak ve ABD Başkanı Clinton arasında iki hafta süren zirve Kudüs, sınırlar ve geri dönüş hakkında anlaşma olmadan dağıldı. Oslo’nun öngördüğü nihai çözüm yolu fiilen kapandı; iki ay sonra İkinci İntifada başladı.",
      "kaynaklar": [],
      "baslik_en": "Camp David ends without agreement",
-     "metin_en": "The two-week summit between Arafat, Israeli Prime Minister Barak and US President Clinton broke up without agreement on Jerusalem, borders or the right of return. The final-status road foreseen at Oslo was effectively closed; two months later the Second Intifada began."
+     "metin_en": "The two-week summit between Arafat, Israeli Prime Minister Barak and US President Clinton broke up without agreement on Jerusalem, borders or the right of return. The final-status road foreseen at Oslo was effectively closed; two months later the Second Intifada began.",
+     "kaynakca": [
+      {
+       "ad": "Jeremy Pressman, “Visions in Collision: What Happened at Camp David and Taba?”, International Security 28:2 (2003)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Clayton E. Swisher, The Truth About Camp David (Nation Books, 2004)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1976-03-30",
-     "yan": true
+     "yan": true,
+     "gorsel": "toprak-gunu-afis",
+     "kaynakca": [
+      {
+       "ad": "Tamir Sorek, Palestinian Commemoration in Israel: Calendars, Monuments, and Martyrs (Stanford University Press, 2015)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1987-07-22",
      "yan": true,
-     "gorsel": "naci-ali"
+     "gorsel": "naci-ali",
+     "kaynakca": [
+      {
+       "ad": "Naji al-Ali, A Child in Palestine: The Cartoons of Naji al-Ali (Verso, 2009)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "1988-04-16",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
    "ad_en": "The fedayeen and the revolutionary left",
    "tez_en": "A new generation that had lost faith in the Arab regimes built the Palestinians’ own armed organisations. Algeria’s independence, won through armed struggle, became their model. With Fatah, the PLO and the Marxist PFLP, the resistance passed into Palestinian hands and entered the world’s agenda through hijackings. The Oslo process turned this generation into an administration; with the collapse of Camp David in 2000, that road was closed too.",
-   "gecis_en": "Where the left and nationalism stalled, a new generation would come out of the mosque."
+   "gecis_en": "The negotiating track stalled; two months later the Second Intifada began.",
+   "gorsel": "arafat-gotfryd"
   },
   {
    "anahtar": "islami",
@@ -747,12 +1408,21 @@
     2023
    ],
    "renk": "#1f6e4b",
-   "harita": "oslo",
    "tez": "Solun ve milliyetçiliğin tıkandığı yerde camiden, hayır kurumlarından ve üniversitelerden yeni bir kuşak çıktı. Gazze’de Şeyh Ahmed Yasin’in kurduğu Mücemma, İntifada’yla Hamas’a dönüştü; İslami Cihad İran devriminden etkilenen bir çizgide örgütlendi. Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran ile birlikte zamanla “direniş ekseni” denen bir cephe oluştu.",
    "gecis": "7 Ekim’de bu cephe sahneye bütün olarak çıktı.",
    "olaylar": [
     {
-     "ref": "1973"
+     "ref": "1973",
+     "kaynakca": [
+      {
+       "ad": "Ziad Abu-Amr, Islamic Fundamentalism in the West Bank and Gaza: Muslim Brotherhood and Islamic Jihad (Indiana University Press, 1994)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Beverley Milton-Edwards, Islamic Politics in Palestine (I.B. Tauris, 1996)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "tur": "biyografi",
@@ -859,6 +1529,16 @@
        "22 March 2004",
        "Killed by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike."
       ]
+     ],
+     "kaynakca": [
+      {
+       "ad": "Beverley Milton-Edwards, Islamic Politics in Palestine (I.B. Tauris, 1996)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Khaled Hroub, Hamas: Political Thought and Practice (Institute for Palestine Studies, 2000)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -868,7 +1548,13 @@
      "metin": "Şah rejimi devrildi, İran İslam Cumhuriyeti kuruldu. Yeni yönetim İsrail’le ilişkileri kesti, Tahran’daki İsrail temsilciliğini FKÖ’ye verdi.",
      "kaynaklar": [],
      "baslik_en": "Revolution in Iran",
-     "metin_en": "The Shah’s regime fell and the Islamic Republic of Iran was founded. The new government cut ties with Israel and handed the Israeli mission in Tehran to the PLO."
+     "metin_en": "The Shah’s regime fell and the Islamic Republic of Iran was founded. The new government cut ties with Israel and handed the Israeli mission in Tehran to the PLO.",
+     "kaynakca": [
+      {
+       "ad": "Ervand Abrahamian, A History of Modern Iran (Cambridge University Press, 2008)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -877,7 +1563,17 @@
      "metin": "Fethi Şikaki ve Abdülaziz Avde’nin önderliğinde, Mısır’da okuyan Gazzeli öğrenciler arasından Filistin İslami Cihad Hareketi doğdu. Hareket, Filistin’in kurtuluşunu İslami mücadelenin merkezine koydu.",
      "kaynaklar": [],
      "baslik_en": "Islamic Jihad is founded",
-     "metin_en": "Led by Fathi Shaqaqi and Abd al-Aziz Awda, the Palestinian Islamic Jihad Movement emerged among Gazan students in Egypt. The movement put the liberation of Palestine at the centre of the Islamic struggle."
+     "metin_en": "Led by Fathi Shaqaqi and Abd al-Aziz Awda, the Palestinian Islamic Jihad Movement emerged among Gazan students in Egypt. The movement put the liberation of Palestine at the centre of the Islamic struggle.",
+     "kaynakca": [
+      {
+       "ad": "Ziad Abu-Amr, Islamic Fundamentalism in the West Bank and Gaza: Muslim Brotherhood and Islamic Jihad (Indiana University Press, 1994)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Meir Hatina, Islam and Salvation in Palestine: The Islamic Jihad Movement (Moshe Dayan Center, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -886,13 +1582,35 @@
      "metin": "İsrail’in Lübnan’ı işgaline karşı Lübnanlı Şii gruplardan Hizbullah doğdu; varlığını 1985’te yayımladığı açık mektupla duyurdu.",
      "kaynaklar": [],
      "baslik_en": "Hezbollah emerges",
-     "metin_en": "Hezbollah emerged from Lebanese Shia groups against Israel’s invasion of Lebanon; it announced itself with an open letter in 1985."
+     "metin_en": "Hezbollah emerged from Lebanese Shia groups against Israel’s invasion of Lebanon; it announced itself with an open letter in 1985.",
+     "kaynakca": [
+      {
+       "ad": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1987-12-14"
+     "ref": "1987-12-14",
+     "kaynakca": [
+      {
+       "ad": "Khaled Hroub, Hamas: Political Thought and Practice (Institute for Palestine Studies, 2000)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "1995-10-26"
+     "ref": "1995-10-26",
+     "kaynakca": [
+      {
+       "ad": "Meir Hatina, Islam and Salvation in Palestine: The Islamic Jihad Movement (Moshe Dayan Center, 2001)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -901,7 +1619,13 @@
      "metin": "İsrail, 18 yıllık işgalin ardından Güney Lübnan’dan çekildi. Hizbullah bunu silahlı direnişin bir zaferi olarak duyurdu.",
      "kaynaklar": [],
      "baslik_en": "Israel withdraws from South Lebanon",
-     "metin_en": "Israel withdrew from South Lebanon after an 18-year occupation. Hezbollah announced it as a victory for armed resistance."
+     "metin_en": "Israel withdrew from South Lebanon after an 18-year occupation. Hezbollah announced it as a victory for armed resistance.",
+     "kaynakca": [
+      {
+       "ad": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "2000-09-28",
@@ -909,6 +1633,16 @@
       "durre-bamako",
       "sahnin-2000",
       "aida-duvar"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Jeremy Pressman, “The Second Intifada: Background and Causes of the Israeli-Palestinian Conflict”, Journal of Conflict Studies 23:2 (2003)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
      ]
     },
     {
@@ -923,40 +1657,115 @@
       }
      ],
      "baslik_en": "Sheikh Ahmed Yassin is killed",
-     "metin_en": "Hamas founder Sheikh Ahmed Yassin was killed in Gaza by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike."
+     "metin_en": "Hamas founder Sheikh Ahmed Yassin was killed in Gaza by missiles fired from Israeli helicopters as he left the dawn prayer; nine other people were killed in the strike.",
+     "kaynakca": [
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "2005-09-12",
-     "harita": "cekilme",
      "vurgu": [
       "İsrail Gazze’nin sınırlarını, hava sahasını ve denizini denetlemeyi sürdürdü"
      ],
      "vurgu_en": [
       "Israel kept control of Gaza’s borders, airspace and sea"
+     ],
+     "uydu": {
+      "tarih_once": "2005-01-26",
+      "tarih_sonra": "2007-06-02",
+      "bolgeler": [
+       {
+        "ad": "Guş Katif",
+        "ad_en": "Gush Katif",
+        "dosya": "gushkatif"
+       },
+       {
+        "ad": "Netzarim",
+        "ad_en": "Netzarim",
+        "dosya": "netzarim"
+       }
+      ],
+      "not": "Guş Katif bloğunun seraları ve evleri Ocak 2005’te Han Yunus ile Refah’ın batısındaki kumullarda; Haziran 2007’de yerlerinde boş arazi var. Netzarim, Gazze kentinin güneyinde.",
+      "not_en": "In January 2005 the greenhouses and houses of the Gush Katif bloc stand on the dunes west of Khan Yunis and Rafah; by June 2007 there is empty ground in their place. Netzarim lies south of Gaza City.",
+      "kaynak": "Landsat 5 (USGS/NASA), Microsoft Planetary Computer üzerinden; 30 m çözünürlük",
+      "kaynak_en": "Landsat 5 (USGS/NASA) via Microsoft Planetary Computer; 30 m resolution"
+     },
+     "kaynakca": [
+      {
+       "ad": "Sara Roy, The Gaza Strip: The Political Economy of De-development (Institute for Palestine Studies, 3rd ed. 2016)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "2006-01-25"
+     "ref": "2006-01-25",
+     "kaynakca": [
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
-     "ref": "2006-07-12"
+     "ref": "2006-07-12",
+     "kaynakca": [
+      {
+       "ad": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "2007-06",
-     "harita": "abluka",
      "vurgu": [
       "Abluka o günden beri sürüyor."
      ],
      "vurgu_en": [
       "in place ever since"
+     ],
+     "karsilastir": {
+      "once": "cekilme",
+      "sonra": "abluka",
+      "kesit": "gz"
+     },
+     "kaynakca": [
+      {
+       "ad": "Sara Roy, Hamas and Civil Society in Gaza: Engaging the Islamist Social Sector (Princeton University Press, 2011)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "tur": "akademik"
+      }
      ]
     },
     {
-     "ref": "2021-05-10"
+     "ref": "2021-05-10",
+     "kaynakca": [
+      {
+       "ad": "BM Bağımsız Uluslararası Soruşturma Komisyonu, ilk rapor (A/HRC/50/21, 2022)",
+       "tur": "birincil",
+       "ad_en": "UN Independent International Commission of Inquiry, first report (A/HRC/50/21, 2022)"
+      }
+     ]
     },
     {
      "ref": "2010-05-31",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "BM İnsan Hakları Konseyi, filoya yapılan saldırıyla ilgili uluslararası olgu bulma heyeti raporu (A/HRC/15/21, 2010)",
+       "tur": "birincil",
+       "ad_en": "UN Human Rights Council, report of the international fact-finding mission on the flotilla attack (A/HRC/15/21, 2010)"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -966,21 +1775,47 @@
      "metin": "Yemen’deki Ensarullah (Husiler) başkent Sana’nın denetimini ele geçirdi.",
      "kaynaklar": [],
      "baslik_en": "Ansarullah in Sanaa",
-     "metin_en": "Yemen’s Ansarullah (the Houthis) took control of the capital, Sanaa."
+     "metin_en": "Yemen’s Ansarullah (the Houthis) took control of the capital, Sanaa.",
+     "kaynakca": [
+      {
+       "ad": "Marieke Brandt, Tribes and Politics in Yemen: A History of the Houthi Conflict (Hurst, 2017)",
+       "tur": "akademik"
+      }
+     ]
     },
     {
      "ref": "2017-12-06",
-     "yan": true
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "BM Genel Kurulu, ES-10/19 sayılı karar, 21 Aralık 2017",
+       "tur": "birincil",
+       "ad_en": "UN General Assembly Resolution ES-10/19, 21 December 2017"
+      }
+     ]
     },
     {
      "ref": "2022-05-11",
      "yan": true,
-     "gorsel": "sirin-nasira"
+     "gorsel": "sirin-nasira",
+     "kaynakca": [
+      {
+       "ad": "BM İnsan Hakları Yüksek Komiserliği, Şirin Ebu Akile’nin öldürülmesine ilişkin bulgular (24 Haziran 2022)",
+       "tur": "birincil",
+       "ad_en": "UN Human Rights Office, findings on the killing of Shireen Abu Akleh (24 June 2022)"
+      },
+      {
+       "ad": "Forensic Architecture ve Al-Haq, Şirin Ebu Akile’nin öldürülmesi soruşturması (2022)",
+       "tur": "birincil",
+       "ad_en": "Forensic Architecture and Al-Haq, investigation into the killing of Shireen Abu Akleh (2022)"
+      }
+     ]
     }
    ],
    "ad_en": "Islamic movements and the axis of resistance",
    "tez_en": "Where the left and nationalism stalled, a new generation emerged from mosques, charities and universities. The Mujamma founded by Sheikh Ahmed Yassin in Gaza became Hamas with the Intifada; Islamic Jihad organised along a line influenced by the Iranian revolution. Together with Hezbollah in Lebanon, Ansarullah in Yemen and Iran, a front later called the “axis of resistance” took shape.",
-   "gecis_en": "On 7 October this front took the stage as a whole."
+   "gecis_en": "On 7 October this front took the stage as a whole.",
+   "gorsel": "kubbetussahra"
   },
   {
    "anahtar": "tufan",
@@ -991,26 +1826,50 @@
     2026
    ],
    "renk": "#0d5a3c",
-   "harita": "abluka",
    "tez": "Aksa Tufanı ile Filistin direnişinin İslami kanadı ve bölgedeki müttefikleri, Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran, aynı savaşın cephelerine dönüştü. Hareketin taraftarlarına göre 7 Ekim, İsrail’in kuruluşundan beri dayandığı caydırıcılık iddiasına yönelmiş bir darbe ve dünya düzenini değiştirecek ilk domino taşıydı. Ardından gelen Gazze soykırımı, Adalet Divanı davaları ve İran savaşı bölge düzenini sarstı.",
    "olaylar": [
     {
      "ref": "2023-10-07",
      "gorseller": [
-      "gazze-rimal-2023",
       "nuseyrat-2023",
       "newyork-2023",
       "lizbon-2023"
+     ],
+     "kaynakca": [
+      {
+       "ad": "Uluslararası Adalet Divanı, Güney Afrika – İsrail davası, geçici tedbirler kararı (26 Ocak 2024)",
+       "tur": "birincil",
+       "ad_en": "International Court of Justice, South Africa v. Israel, order on provisional measures (26 January 2024)"
+      },
+      {
+       "ad": "BM Özel Raportörü Francesca Albanese, “Anatomy of a Genocide” raporu (A/HRC/55/73, 2024)",
+       "tur": "birincil",
+       "ad_en": "UN Special Rapporteur Francesca Albanese, “Anatomy of a Genocide” (A/HRC/55/73, 2024)"
+      }
      ]
     },
     {
      "ref": "2023-10-19"
     },
     {
-     "ref": "2023-11-19"
+     "ref": "2023-11-19",
+     "kaynakca": [
+      {
+       "ad": "BM Güvenlik Konseyi, 2722 sayılı karar (10 Ocak 2024)",
+       "tur": "birincil",
+       "ad_en": "UN Security Council Resolution 2722 (10 January 2024)"
+      }
+     ]
     },
     {
-     "ref": "2024-01-26"
+     "ref": "2024-01-26",
+     "kaynakca": [
+      {
+       "ad": "Uluslararası Adalet Divanı, Güney Afrika – İsrail davası, geçici tedbirler kararı (26 Ocak 2024)",
+       "tur": "birincil",
+       "ad_en": "International Court of Justice, South Africa v. Israel, order on provisional measures (26 January 2024)"
+      }
+     ]
     },
     {
      "ref": "2024-04-13"
@@ -1022,12 +1881,23 @@
      "ref": "2024-10-16"
     },
     {
-     "ref": "2024-11-21"
+     "ref": "2024-11-21",
+     "kaynakca": [
+      {
+       "ad": "Uluslararası Ceza Mahkemesi, Ön Dava Dairesi I, Filistin Durumu’nda tutuklama müzekkereleri (21 Kasım 2024)",
+       "tur": "birincil",
+       "ad_en": "International Criminal Court, Pre-Trial Chamber I, arrest warrants in the Situation in the State of Palestine (21 November 2024)"
+      }
+     ]
     },
     {
      "ref": "2025-10-10",
-     "harita": "sari",
-     "gorsel": "gazze-duvar"
+     "gorsel": "gazze-duvar",
+     "karsilastir": {
+      "once": "abluka",
+      "sonra": "sari",
+      "kesit": "gz"
+     }
     },
     {
      "ref": "2026-02-28"
@@ -1052,7 +1922,8 @@
     }
    ],
    "ad_en": "7 October and after",
-   "tez_en": "With Al-Aqsa Flood, the Islamic wing of the Palestinian resistance and its allies in the region – Hezbollah in Lebanon, Ansarullah in Yemen and Iran – became fronts of the same war. To the movement’s supporters, 7 October was a blow to the deterrence Israel had relied on since its founding, and the first domino that would change the world order. The Gaza genocide, the World Court cases and the Iran war that followed shook the regional order."
+   "tez_en": "With Al-Aqsa Flood, the Islamic wing of the Palestinian resistance and its allies in the region – Hezbollah in Lebanon, Ansarullah in Yemen and Iran – became fronts of the same war. To the movement’s supporters, 7 October was a blow to the deterrence Israel had relied on since its founding, and the first domino that would change the world order. The Gaza genocide, the World Court cases and the Iran war that followed shook the regional order.",
+   "gorsel": "gazze-rimal-2023"
   }
  ]
 }

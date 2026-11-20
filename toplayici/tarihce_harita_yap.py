@@ -1,6 +1,6 @@
 """Tarihçe haritaları: Natural Earth 10m (kamu malı) kara ve ülke poligonlarından tarihî Filistin (Golan hariç),
 Batı Şeria ve Gazze; 1947 planı ve Oslo bölgeleri şematik. Çıktı: SVG yol dizeleri (JSON)."""
-import json, math, sys
+import json, math, os, sys
 ne = sys.argv[1]; cik = sys.argv[2]
 LON0, LON1, LAT0, LAT1 = 33.4, 37.2, 29.3, 33.75
 W = 500
@@ -72,6 +72,17 @@ v["plan1947"] = [
     poly([(34.55, 31.86), (34.8, 31.58), (34.66, 31.25), (34.54, 30.96), (34.44, 30.7), (34.3, 30.8), (34.24, 31.25), (34.0, 31.4), (34.3, 31.75)]),
     poly([(34.73, 32.08), (34.79, 32.07), (34.79, 32.02), (34.73, 32.02)])]
 v["kudus"] = list(P(35.225, 31.775))
+
+# Oslo II bölgeleri (A, B; kalanı C) ve İsrail yerleşimleri: izlenmiş (toplayici/oslo_abc.json, OCHA verisinden uyarlanan kamu malı harita, 2005)
+_oj = os.path.join(os.path.dirname(os.path.abspath(__file__)), "oslo_abc.json")
+if os.path.exists(_oj):
+    _o = json.load(open(_oj))
+    v["oslo_A"] = [poly(q) for q in _o["A"]]
+    v["oslo_B"] = [poly(q) for q in _o["B"]]
+    v["oslo_yer"] = [poly(q) for q in _o["yerlesim"]]
+    # Batı Şeria yakın görünümü için çerçeve (x, y, genişlik, yükseklik)
+    _x0, _y1 = P(34.80, 32.62); _x1, _y0 = P(35.65, 31.30)
+    v["bs_kutu"] = [round(_x0, 1), round(_y1, 1), round(_x1 - _x0, 1), round(_y0 - _y1, 1)]
 
 # 1947 BM planı: izlenmiş sınırlar (toplayici/plan1947.json); Yahudi devleti tarihî Filistin'in kalanı, Kudüs ve Beytüllahim BM yönetiminde
 import os

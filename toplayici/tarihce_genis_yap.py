@@ -75,6 +75,10 @@ def yollar(halkalar, en_az=6):
     return out
 
 
+def nokta(lon, lat):
+    x, y = P(lon, lat); return [round(x, 1), round(y, 1)]
+
+
 v = {"w": W, "h": H, "pencere": [LON0, LON1, LAT0, LAT1], "kaynak": "Natural Earth 1:10m (kamu malı); Sykes–Picot bölgeleri ve Hicaz şematik"}
 
 # kara
@@ -123,6 +127,23 @@ v["sykes"] = {
                 (44.5, 31.6), (45.6, 30.6), (47.0, 29.7), (47.6, 29.1), (46.5, 29.1), (44.0, 29.4), (41.0, 29.9), (38.2, 29.9), (36.6, 29.9), (35.0, 29.45), (34.9, 29.5)])],
     "kahve": [poly([(34.0, 31.35), (34.2, 31.31), (34.9, 31.36), (35.4, 31.55), (35.55, 31.8), (35.6, 32.65), (35.62, 32.88), (35.45, 33.0), (35.1, 33.06), (34.6, 33.1)])],
 }
+# Mısır cephesi ve 1967 işgali (şematik çizgiler; kara ile kırpılır)
+v["psx"] = ulke("PSX")   # Batı Şeria ve Gazze (1967'de işgal edildi)
+v["sina"] = [poly([(32.30, 31.32), (32.55, 31.25), (34.22, 31.32), (34.90, 29.50), (34.62, 28.50), (34.30, 27.95), (33.95, 27.70),
+                   (33.55, 28.20), (32.95, 29.20), (32.55, 29.90), (32.35, 30.30), (32.32, 30.80)])]
+v["golan"] = [poly([(35.62, 32.68), (35.85, 32.70), (35.95, 32.85), (35.90, 33.10), (35.82, 33.30), (35.70, 33.27), (35.62, 33.05), (35.65, 32.85)])]
+# 1973: Mısır'ın Süveyş Kanalı'nın doğu kıyısındaki köprübaşı ve İsrail'in batı kıyıdaki cebi (Deversoir'dan Süveyş'e)
+v["kopru73"] = [poly([(32.30, 31.15), (32.48, 31.12), (32.62, 30.60), (32.58, 30.30), (32.62, 30.05), (32.66, 29.95), (32.57, 29.92), (32.50, 30.10),
+                      (32.40, 30.40), (32.36, 30.80)])]
+v["cep73"] = [poly([(32.33, 30.43), (32.15, 30.42), (31.95, 30.30), (32.05, 30.10), (32.30, 29.85), (32.50, 29.92), (32.40, 30.15), (32.36, 30.35)])]
+v["kanal"] = yol([(32.30, 31.27), (32.32, 30.90), (32.30, 30.70), (32.33, 30.45), (32.40, 30.30), (32.58, 30.00), (32.55, 29.93)], kapali=False, tol=0.1)
+def kesit(lo0, lo1, la0, la1):
+    x0, y0 = P(lo0, la1); x1, y1 = P(lo1, la0); return [round(x0, 1), round(y0, 1), round(x1 - x0, 1), round(y1 - y0, 1)]
+
+
+v["kesit"] = {"misir": kesit(30.6, 36.9, 27.4, 33.7)}   # Mısır cephesi, Sina, Filistin, Golan
+v["nokta"] = {k: nokta(*ll) for k, ll in {"portsait": (32.30, 31.26), "suveys": (32.55, 29.97), "ismailiye": (32.27, 30.60), "kantara": (32.32, 30.85)}.items()}
+
 # Mandalar (1922)
 v["manda"] = {"fransa": ulke("SYR", "LBN"), "ingiltere": ulke("IRQ", "JOR", "ISR", "PSX")}
 
@@ -144,8 +165,6 @@ for f in json.load(open(ne + "/ne_10m_rivers_lake_centerlines.geojson"))["featur
             nehir.append(dd)
 v["nehir"] = nehir
 
-def nokta(lon, lat):
-    x, y = P(lon, lat); return [round(x, 1), round(y, 1)]
 v["sehir"] = [[ad, *nokta(lo, la)] for ad, lo, la in [
     ("İstanbul", 28.97, 41.01), ("Ankara", 32.85, 39.93), ("Adana", 35.32, 37.0), ("Halep", 37.16, 36.2), ("Şam", 36.29, 33.51), ("Beyrut", 35.5, 33.89),
     ("Kudüs", 35.22, 31.78), ("Hayfa", 34.99, 32.82), ("Amman", 35.93, 31.95), ("Bağdat", 44.36, 33.31), ("Musul", 43.13, 36.34), ("Kerkük", 44.39, 35.47),
@@ -154,6 +173,7 @@ v["etiket"] = {k: nokta(*ll) for k, ll in {
     "akdeniz": (30.2, 34.0), "kizildeniz": (37.4, 23.2), "korfez": (49.6, 27.4), "karadeniz": (33.5, 41.35),
     "osmanli": (38.6, 35.2), "anadolu": (33.5, 38.8), "misir": (29.2, 27.6), "iran": (48.2, 34.6), "hicaz": (38.6, 26.2), "necd": (44.0, 25.4),
     "mavi": (36.0, 38.6), "a": (40.5, 36.2), "b": (40.0, 31.4), "kirmizi": (45.9, 31.9), "kahve": (32.9, 31.25),
+    "sina": (33.8, 29.4), "golan": (36.6, 33.0), "kanal": (31.2, 30.6),
     "fransa": (38.4, 35.4), "irak": (43.6, 33.0), "urdun": (37.4, 30.9), "filistin": (33.4, 31.75), "turkiye": (35.0, 39.1), "hicazK": (38.6, 26.2)}.items()}
 v["demiryolu_et"] = nokta(37.55, 27.95)
 json.dump(v, open(cik, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))

@@ -1,12 +1,14 @@
-/* Tarihçe akışları. Sitenin açık kâğıt zemini; tatriz kırmızısı ve zeytin yeşili vurgular. Yazı ve görsel önde; harita yalnızca
-   toprak değiştiğinde büyür ("harita anı"), sonra köşeye küçülür ve bir süre sonra çekilir.
+/* Tarihçe akışları. Sitenin açık kâğıt zemini; tatriz kırmızısı ve zeytin yeşili vurgular. Bütün akışlar tek zaman çizgisinde akar;
+   her öğe kendi akışının rengini (--renk) taşır. Toprak değiştiğinde olayın altında önce/sonra haritası durur.
    Kaydırdıkça parçalar yerine oturur: her .izle öğesi JS'den 0→1 arası --p alır. */
-:root{--ta-zemin:#f3f0e8;--ta-zemin2:#ebe6da;--ta-kagit:#fffdf8;--ta-murekkep:#1d2421;--ta-ink2:#46514b;--ta-soluk:#77817b;--ta-kirmizi:#b8362c;
+:root{--ta-zemin:#f3f0e8;--ta-zemin2:#ebe6da;--ta-kagit:#fffdf8;--ta-murekkep:#1d2421;--ta-ink2:#46514b;--ta-soluk:#6f7a73;--ta-kirmizi:#b8362c;
   --ta-yesil:#2b7a57;--ta-cizgi:rgba(29,36,33,.13);--ta-gazete:#ece5d3;--ta-gazete-ink:#25231e;--ta-isaret:255,214,10;--su:#a0803f;
-  --ta-golge:0 1px 2px rgba(29,36,33,.06),0 12px 30px -12px rgba(29,36,33,.22);--ta-ust:60px}
+  --ta-golge:0 1px 2px rgba(29,36,33,.06),0 12px 30px -12px rgba(29,36,33,.22);--ta-ust:60px;--ta-nw:132px;
+  --ta-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;--ta-sans:"Plus Jakarta Sans",system-ui,sans-serif;--ta-serif:"Source Serif 4",Georgia,serif}
+@property --uk{syntax:"<percentage>";inherits:true;initial-value:50%}
 .ta-govde{background:var(--ta-zemin);color:var(--ta-murekkep);margin:0}
 .ta-govde .ust{position:sticky;top:0;z-index:40}
-.ta{font-family:"Source Serif 4",Georgia,serif;overflow-x:clip}
+.ta{font-family:var(--ta-serif);overflow-x:clip}
 .ta-bekle{padding:40px max(16px,env(safe-area-inset-left,0px))}
 .izle{--p:0}
 
@@ -16,11 +18,11 @@
 .ta-giris::before{content:"";position:absolute;inset:0;background:url(kefiye.png) 0 0/220px 220px repeat;opacity:calc(.07 + var(--c,0) * .05);pointer-events:none}
 .ta-giris-ic{position:relative;max-width:900px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;
   transform:translateY(calc(var(--c,0) * -60px));opacity:calc(1 - var(--c,0) * .9)}
-.ta-ust{margin:0;font:800 .78rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--ta-kirmizi)}
-.ta-baslik{margin:0;font:900 clamp(2.6rem,9vw,6.6rem)/.95 "Source Serif 4",Georgia,serif;letter-spacing:-.02em;text-wrap:balance}
+.ta-ust{margin:0;font:800 .78rem var(--ta-sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ta-kirmizi)}
+.ta-baslik{margin:0;font:900 clamp(2.6rem,9vw,6.6rem)/.95 var(--ta-serif);letter-spacing:-.02em;text-wrap:balance}
 .ta-ar{margin:0;font:500 clamp(1.1rem,2.6vw,1.6rem) "Reem Kufi Fun",sans-serif;color:var(--ta-soluk);direction:rtl}
 .ta-dek{margin:6px 0 0;max-width:62ch;font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.62;color:var(--ta-ink2)}
-.ta-ipucu{margin:10px 0 0;font:700 .8rem "Plus Jakarta Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ta-soluk);animation:ta-zip 2.4s ease-in-out infinite}
+.ta-ipucu{margin:10px 0 0;font:700 .8rem var(--ta-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ta-soluk);animation:ta-zip 2.4s ease-in-out infinite}
 @keyframes ta-zip{50%{transform:translateY(6px)}}
 .ta-kelime{display:inline-block;white-space:nowrap}
 .ta-harf{display:inline-block;transform:translate(calc(var(--dx) * (1 - var(--p))),calc(var(--dy) * (1 - var(--p)))) rotate(calc(var(--r) * (1 - var(--p))));
@@ -34,47 +36,82 @@
 .ta-tatriz.kucuk{width:min(100%,300px);margin-top:4px}
 .ta-tatriz.kucuk path{stroke:var(--renk)}
 
-/* ---------- sahne: nehir solda, yazı ve görsel ortada ---------- */
-.ta-sahne{position:relative;display:grid;grid-template-columns:96px minmax(0,1fr)}
-.ta-nehir{position:sticky;top:var(--ta-ust);height:calc(100vh - var(--ta-ust));align-self:start;border-right:1px solid var(--ta-cizgi);padding:10px 0;box-sizing:border-box}
-.ta-nsvg{width:100%;height:100%;display:block}
-.ta-dere{opacity:.35;transition:opacity .3s,filter .3s}
-.ta-dere.su{opacity:1;filter:drop-shadow(0 0 5px currentColor)}
-.ta-n-yil{fill:var(--ta-soluk);font:600 22px "Plus Jakarta Sans",sans-serif;text-anchor:end;letter-spacing:-.02em}
-.ta-n-simdi{stroke:var(--ta-murekkep);stroke-width:2;transition:all .35s ease}
-.ta-n-cubuk{display:none}
-.ta-akis{min-width:0;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 clamp(28px,5vw,80px)}
-.ta-bolum{position:relative;padding:0 0 40px;max-width:820px;margin:0 auto 0 clamp(0px,6vw,120px)}
-.ta-acilis{min-height:88vh;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:90px 0 60px;max-width:760px;position:relative}
-.ta-acilis::before{content:"";position:absolute;left:calc(-1 * clamp(28px,5vw,80px) + 8px);top:0;bottom:0;width:6px;background:var(--renk);transform-origin:top;transform:scaleY(var(--p))}
-.ta-no{margin:0;font:800 .78rem "Plus Jakarta Sans",sans-serif;letter-spacing:.2em;color:var(--renk)}
-.ta-yillar{margin:0;font:900 clamp(3rem,9vw,7rem)/.9 "Source Serif 4",serif;color:transparent;-webkit-text-stroke:1.5px var(--renk);letter-spacing:-.03em}
-.ta-ad{margin:0;font:900 clamp(2rem,5vw,3.6rem)/1.02 "Source Serif 4",serif;text-wrap:balance}
-.ta-alt{margin:0;font:700 .9rem "Plus Jakarta Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ta-kirmizi)}
+/* ---------- sahne: zaman şeridi solda, tek akış ortada ---------- */
+.ta-sahne{position:relative;display:grid;grid-template-columns:var(--ta-nw) minmax(0,1fr)}
+.ta-akis{min-width:0;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 clamp(36px,5vw,84px)}
+.ta-serit{position:relative;max-width:1160px;margin:0 auto 0 0;padding-bottom:40px}
+/* akışın omurgası: bütün kartların solundan geçen ince çizgi */
+.ta-serit::before{content:"";position:absolute;left:-22px;top:0;bottom:0;width:1px;background:var(--ta-cizgi)}
+.ta-serit>*{max-width:800px;margin-left:clamp(0px,4vw,72px)}
+
+/* ---------- zaman şeridi ---------- */
+.ta-nehir{position:sticky;top:var(--ta-ust);height:calc(100vh - var(--ta-ust));height:calc(100svh - var(--ta-ust));align-self:start;box-sizing:border-box;
+  display:flex;flex-direction:column;gap:14px;padding:18px 12px 18px 16px;border-right:1px solid var(--ta-cizgi);background:linear-gradient(90deg,var(--ta-zemin2),var(--ta-zemin) 70%);
+  font-family:var(--ta-mono)}
+.tn-ust{display:flex;flex-direction:column;gap:3px;min-height:92px}
+.tn-no{font:600 .62rem var(--ta-mono);letter-spacing:.12em;color:var(--su);transition:color .4s}
+.tn-yil{font:700 1.85rem/1 var(--ta-mono);letter-spacing:-.04em;color:var(--ta-murekkep);font-variant-numeric:tabular-nums}
+.tn-ad{font:700 .66rem/1.3 var(--ta-sans);letter-spacing:.04em;color:var(--su);text-wrap:balance;transition:color .4s}
+.tn-cetvel{position:relative;flex:1 1 auto;min-height:0;margin:4px 0 6px}
+.tn-tik{position:absolute;right:0;width:6px;height:1px;background:rgba(29,36,33,.22)}
+.tn-tik.uzun{width:12px;background:rgba(29,36,33,.4)}
+.tn-etk{position:absolute;right:16px;transform:translateY(-50%);font:500 .6rem var(--ta-mono);color:var(--ta-soluk);letter-spacing:-.02em}
+.tn-dere{position:absolute;left:calc(var(--k) * 13px);width:7px;padding:0;border:0;border-radius:4px;background:var(--renk);opacity:.28;cursor:pointer;
+  transition:opacity .35s,width .35s,box-shadow .35s}
+.tn-dere:hover,.tn-dere:focus-visible{opacity:.7}
+.tn-dere.su{opacity:1;width:9px;box-shadow:0 0 0 3px color-mix(in srgb,var(--renk) 22%,transparent)}
+.tn-imlec{position:absolute;left:-6px;right:-2px;height:0;border-top:1.5px solid var(--ta-murekkep);transition:top .45s cubic-bezier(.3,.7,.2,1)}
+.tn-imlec::before{content:"";position:absolute;left:-3px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--su);box-shadow:0 0 0 2px var(--ta-zemin)}
+.tn-mobil{display:none}
+
+/* ---------- akış açılışı ---------- */
+.ta-serit>.ta-acilis,.ta-serit>.ta-gecis{max-width:none;margin-left:0}
+.ta-acilis{position:relative;min-height:86vh;display:grid;align-content:center;gap:28px;padding:96px 0 64px}
+.ta-acilis.gorselli{grid-template-columns:minmax(0,1fr)}
+.ta-acilis-metin{display:flex;flex-direction:column;gap:12px;max-width:760px}
+.ta-acilis::before{content:"";position:absolute;left:-25px;top:0;bottom:0;width:7px;border-radius:4px;background:var(--renk);transform-origin:top;transform:scaleY(var(--p))}
+.ta-no{margin:0;font:600 .74rem var(--ta-mono);letter-spacing:.16em;color:var(--renk)}
+.ta-yillar{margin:0;font:900 clamp(3rem,9vw,7rem)/.9 var(--ta-serif);color:transparent;-webkit-text-stroke:1.5px var(--renk);letter-spacing:-.03em}
+.ta-ad{margin:0;font:900 clamp(2rem,5vw,3.6rem)/1.02 var(--ta-serif);text-wrap:balance}
+.ta-alt{margin:0;font:700 .9rem var(--ta-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ta-kirmizi)}
 .ta-acilis .ta-ar{color:var(--renk);text-align:left;align-self:flex-start}
 .ta-tez{margin:10px 0 0;max-width:62ch;font-size:clamp(1.05rem,1.5vw,1.22rem);line-height:1.64;color:var(--ta-ink2);
   opacity:clamp(0,calc(var(--p) * 2 - .8),1);transform:translateY(calc((1 - var(--p)) * 30px))}
-.ta-kaynak{color:var(--ta-soluk);font:600 .78rem "Plus Jakarta Sans",sans-serif;text-decoration:none}
-
-/* harita anı: haritanın büyüdüğü boş sahne (içerik sabit panelde) */
-.ta-an{height:135vh;height:135svh;pointer-events:none}
+.ta-kaynak{color:var(--ta-soluk);font:600 .78rem var(--ta-sans);text-decoration:none}
+/* açılış görseli: kırpılmadan, akışın renginde bir gölge çerçeveyle */
+.ta-acilis-gorsel{margin:0;display:flex;flex-direction:column;gap:8px;align-items:flex-start;
+  opacity:clamp(0,calc(var(--p) * 1.8 - .5),1);transform:translateY(calc((1 - var(--p)) * 40px))}
+.ta-acilis-gorsel .ta-g-dugme{width:auto;max-width:100%;border-radius:3px;box-shadow:14px 14px 0 color-mix(in srgb,var(--renk) 30%,transparent)}
+.ta-acilis-gorsel img{display:block;width:auto;max-width:100%;height:auto;max-height:min(70vh,680px);filter:grayscale(.25) contrast(1.04)}
+.ta-acilis-gorsel figcaption{margin-top:8px;font:500 .74rem/1.45 var(--ta-sans);color:var(--ta-soluk);max-width:70ch}
+.ta-acilis-gorsel figcaption span{color:var(--ta-ink2);margin-right:5px}
+@media (min-width:1200px){
+  .ta-acilis.gorselli{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+  .ta-acilis.gorselli .ta-ad{font-size:clamp(2rem,3.6vw,3.2rem)}
+  .ta-acilis.gorselli .ta-yillar{font-size:clamp(3rem,6.4vw,6rem)}
+}
 
 /* ---------- olay kartları ---------- */
-.ta-liste{position:relative}
-.ta-liste::before{content:"";position:absolute;left:-22px;top:0;bottom:0;width:2px;background:linear-gradient(var(--renk),color-mix(in srgb,var(--renk) 20%,transparent))}
-.ta-kart{position:relative;margin:0 0 30px;padding:22px 24px 20px;border-radius:6px;background:var(--ta-kagit);color:var(--ta-murekkep);box-shadow:var(--ta-golge);
+.ta-akis-et{display:inline-flex;align-items:center;gap:6px;margin:0 0 8px;font:700 .64rem var(--ta-sans);letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--renk) 82%,#1d2421)}
+.ta-akis-et::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--renk)}
+.ta-kart{position:relative;margin-bottom:30px;padding:20px 24px 20px;border-radius:6px;background:var(--ta-kagit);color:var(--ta-murekkep);box-shadow:var(--ta-golge);
   border:1px solid var(--ta-cizgi);transform:translateY(calc((1 - var(--p)) * 60px)) rotate(calc((1 - var(--p)) * -2deg));opacity:clamp(0,calc(var(--p) * 1.6),1);transform-origin:0 100%}
-.ta-kart::before{content:"";position:absolute;left:-29px;top:26px;width:14px;height:14px;border-radius:50%;background:var(--ta-zemin);border:3px solid var(--renk)}
-.ta-kart::after{content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:6px 6px 0 0;background:repeating-linear-gradient(90deg,var(--renk) 0 10px,transparent 10px 14px);opacity:.9}
-/* asli olayın yanında akan olaylar: yalnızca sağa yaslı */
-.ta-kart.sag{width:min(100%,640px);margin-left:auto;transform:translateX(calc((1 - var(--p)) * 80px));transform-origin:100% 100%}
+.ta-kart::before{content:"";position:absolute;left:calc(-1 * clamp(0px,4vw,72px) - 31px);top:26px;width:12px;height:12px;border-radius:50%;background:var(--ta-zemin);border:3px solid var(--renk)}
+.ta-kart::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:6px 6px 0 0;background:var(--renk);opacity:.85}
+/* asıl olayın yanında akan olaylar: sağa yaslı */
+.ta-kart.sag{width:min(100%,620px);margin-left:auto;margin-right:0;transform:translateX(calc((1 - var(--p)) * 80px));transform-origin:100% 100%}
+.ta-serit>.ta-kart.sag{margin-left:max(clamp(0px,4vw,72px),calc(800px + clamp(0px,4vw,72px) - 620px))}
 .ta-kart.sag::before{display:none}
-.ta-tarih{display:block;font:800 .74rem "Plus Jakarta Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ta-kirmizi);margin:4px 0 6px}
-.ta-kart h3{margin:0 0 10px;font:800 1.36rem/1.22 "Source Serif 4",serif;text-wrap:balance}
+.ta-serit>.ta-kart.buyuk{max-width:1040px}
+.ta-tarih{display:block;font:600 .72rem var(--ta-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ta-kirmizi);margin:0 0 6px}
+.ta-kart h3{margin:0 0 10px;font:800 1.36rem/1.22 var(--ta-serif);text-wrap:balance}
 .ta-metin{margin:0;font-size:1.03rem;line-height:1.62;color:#2f3a35}
-.ta-kaynaklar{margin:12px 0 0 !important;font:600 .74rem "Plus Jakarta Sans",sans-serif !important}
+.ta-kaynaklar{margin:12px 0 0 !important;font:600 .74rem var(--ta-sans) !important}
 .ta-kaynaklar a{color:var(--ta-ink2);text-decoration:none;border-bottom:1px solid var(--ta-cizgi)}
-.ta-et{display:inline-block;font:800 .62rem "Plus Jakarta Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ta-yesil);padding:2px 7px;border-radius:3px}
+.ta-kaynakca{margin:12px 0 0;padding-top:10px;border-top:1px dashed var(--ta-cizgi);display:flex;flex-direction:column;gap:4px;font:500 .72rem/1.5 var(--ta-sans);color:var(--ta-soluk)}
+.ta-kaynakca p{margin:0}
+.ta-kaynakca b{font:600 .6rem var(--ta-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ta-ink2);margin-right:4px}
+.ta-et{display:inline-block;font:800 .62rem var(--ta-sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ta-yesil);padding:2px 7px;border-radius:3px}
 
 /* fosforlu kalem: kart yerine oturunca soldan sağa çekilir */
 .ta-isaret{color:inherit;padding:.02em .18em;margin:0 -.1em;border-radius:.3em .5em .35em .55em;-webkit-box-decoration-break:clone;box-decoration-break:clone;
@@ -83,17 +120,18 @@
 /* galeri: görseller kırpılmaz; tek görsel kendi oranında, çoklu görselde satırlar oranlara göre paylaşılır */
 .ta-galeri{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 16px}
 .ta-galeri figure{margin:0;flex:var(--ar,1.5) 1 calc(var(--ar,1.5) * 150px);min-width:0;display:flex;flex-direction:column;gap:5px}
-.ta-galeri.cok figure{max-width:calc(var(--ar,1.5) * 340px)}
-.ta-galeri:not(.cok) figure{flex:1 1 100%;align-items:center}
+.ta-galeri.cok figure{max-width:calc(var(--ar,1.5) * 360px)}
+.ta-galeri:not(.cok) figure,.ta-galeri.buyuk figure.ilk{flex:1 1 100%;max-width:none;align-items:center}
 .ta-g-dugme{position:relative;display:block;padding:0;border:0;background:var(--ta-zemin2);border-radius:4px;overflow:hidden;cursor:zoom-in;width:100%}
-.ta-galeri:not(.cok) .ta-g-dugme{width:auto;max-width:100%}
+.ta-galeri:not(.cok) .ta-g-dugme,.ta-galeri.buyuk .ilk .ta-g-dugme{width:auto;max-width:100%}
 .ta-g-dugme img{display:block;width:100%;height:auto;aspect-ratio:var(--ar,auto);clip-path:inset(0 calc((1 - var(--p,1)) * 100%) 0 0);transition:filter .3s}
-.ta-galeri:not(.cok) .ta-g-dugme img{width:auto;max-width:100%;max-height:min(68vh,620px);aspect-ratio:auto}
+.ta-galeri:not(.cok) .ta-g-dugme img{width:auto;max-width:100%;max-height:min(76vh,720px);aspect-ratio:auto}
+.ta-galeri.buyuk .ilk .ta-g-dugme img{width:auto;max-width:100%;max-height:88vh;aspect-ratio:auto}
 .ta-g-dugme:hover img,.ta-g-dugme:focus-visible img{filter:brightness(1.05)}
-.ta-g-buyut{position:absolute;right:8px;top:8px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:rgba(20,24,22,.62);color:#fff;font:700 16px/1 "Plus Jakarta Sans",sans-serif;opacity:0;transition:opacity .2s}
+.ta-g-buyut{position:absolute;right:8px;top:8px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:rgba(20,24,22,.62);color:#fff;font:700 16px/1 var(--ta-sans);opacity:0;transition:opacity .2s}
 .ta-g-dugme:hover .ta-g-buyut,.ta-g-dugme:focus-visible .ta-g-buyut{opacity:1}
 @media (hover:none){.ta-g-buyut{opacity:.85}}
-.ta-galeri figcaption{font:500 .72rem/1.4 "Plus Jakarta Sans",sans-serif;color:var(--ta-soluk);align-self:stretch}
+.ta-galeri figcaption{font:500 .72rem/1.4 var(--ta-sans);color:var(--ta-soluk);align-self:stretch}
 .ta-galeri figcaption span{color:var(--ta-ink2);margin-right:4px}
 .ta-g-kredi{color:var(--ta-soluk);text-decoration:none;white-space:normal}
 .ta-g-kredi[href]:hover{text-decoration:underline}
@@ -104,8 +142,8 @@
     radial-gradient(120% 90% at 30% 20%,rgba(255,255,255,.35),transparent 60%),linear-gradient(180deg,rgba(120,95,40,.06),rgba(120,95,40,.14));
   border:0;box-shadow:0 1px 1px rgba(60,45,20,.18),0 14px 28px -16px rgba(60,45,20,.45)}
 .ta-kart.gazete::after{display:none}
-.ta-kart.gazete h3,.ta-kupur h3{font-family:"Old Standard TT","Source Serif 4",Georgia,serif;font-weight:700;font-size:clamp(1.4rem,2.4vw,1.75rem);line-height:1.12;letter-spacing:-.005em}
-.ta-kart.gazete .ta-metin,.ta-kupur .ta-metin{font-family:"Old Standard TT","Source Serif 4",Georgia,serif;font-size:1.04rem;line-height:1.55;color:var(--ta-gazete-ink);text-align:justify;hyphens:auto}
+.ta-kart.gazete h3,.ta-kupur h3{font-family:"Old Standard TT",var(--ta-serif);font-weight:700;font-size:clamp(1.4rem,2.4vw,1.75rem);line-height:1.12;letter-spacing:-.005em}
+.ta-kart.gazete .ta-metin,.ta-kupur .ta-metin{font-family:"Old Standard TT",var(--ta-serif);font-size:1.04rem;line-height:1.55;color:var(--ta-gazete-ink);text-align:justify;hyphens:auto}
 .ta-kart.gazete .ta-metin::first-letter{float:left;font:700 3.1em/.82 "Old Standard TT",serif;padding:.06em .08em 0 0}
 .ta-metin.iki{column-count:2;column-gap:26px;column-rule:1px solid rgba(37,35,30,.22)}
 .ta-kart.gazete .ta-tarih{color:var(--ta-gazete-ink);font:700 .7rem "Old Standard TT",serif;letter-spacing:.18em;border-bottom:1px solid rgba(37,35,30,.35);padding-bottom:6px}
@@ -113,107 +151,125 @@
   font:700 .82rem "Old Standard TT",serif;letter-spacing:.24em;text-transform:uppercase;text-align:center;color:var(--ta-gazete-ink)}
 .ta-kart.gazete .ta-g-dugme img,.ta-kupur .ta-g-dugme img{filter:grayscale(1) contrast(1.12) sepia(.18)}
 .ta-kart.gazete .ta-kaynaklar a,.ta-kupur .ta-kaynaklar a{color:#4d473a;border-color:rgba(37,35,30,.25)}
+.ta-kart.gazete .ta-kaynakca,.ta-kupur .ta-kaynakca{border-color:rgba(37,35,30,.25);color:#5d5748}
 /* kupür: yırtık kenarlı, hafif eğik */
-.ta-kupur{position:relative;margin:4px 0 34px;padding:26px 26px 22px;max-width:700px;
+.ta-kupur{position:relative;margin-bottom:34px;padding:26px 26px 22px;max-width:700px;
   clip-path:polygon(0 1.6%,3% 0,7% 1.2%,12% .2%,18% 1.4%,25% .3%,31% 1.5%,38% .4%,45% 1.3%,52% .2%,59% 1.2%,66% .5%,73% 1.6%,80% .3%,87% 1.2%,93% .2%,100% 1.4%,
     99.4% 20%,100% 45%,99.3% 70%,100% 98.4%,95% 100%,89% 98.8%,82% 99.8%,75% 98.6%,68% 99.7%,61% 98.7%,54% 99.9%,47% 98.6%,40% 99.6%,33% 98.5%,26% 99.8%,19% 98.7%,12% 99.7%,6% 98.6%,0 99.5%,.6% 70%,0 44%,.7% 20%);
   transform:translateY(calc((1 - var(--p)) * 50px)) rotate(calc(-.8deg + (1 - var(--p)) * -3deg));opacity:clamp(0,calc(var(--p) * 1.5),1)}
+.ta-serit>.ta-kupur{max-width:700px}
 .ta-kupur h3{margin:0 0 12px;text-align:center}
+.ta-kupur .ta-akis-et{display:flex;justify-content:center}
 .ta-kupur-gov{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin:0 0 12px}
 .ta-kupur-gov:has(.ta-galeri){grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center}
 .ta-kupur .ta-galeri{margin:0}
 .ta-kupur-soz{margin:0;font:italic 400 clamp(1.25rem,2.3vw,1.6rem)/1.36 "Old Standard TT",serif;color:var(--ta-gazete-ink);padding:6px 0 6px 16px;border-left:3px solid rgba(37,35,30,.6)}
 
 /* alıntı */
-.ta-alinti{position:relative;margin:10px 0 34px;padding:28px 26px 22px;border-left:6px solid var(--ta-kirmizi);background:linear-gradient(90deg,rgba(184,54,44,.09),transparent);
+.ta-alinti{position:relative;margin-block:10px 34px;padding:30px 28px 24px;border-left:6px solid var(--ta-kirmizi);background:linear-gradient(90deg,rgba(184,54,44,.09),transparent);
   transform:translateX(calc((1 - var(--p)) * -40px));opacity:clamp(0,calc(var(--p) * 1.5),1)}
-.ta-tirnak{position:absolute;top:-30px;left:14px;font:900 7rem/1 "Source Serif 4",serif;color:var(--ta-kirmizi);opacity:.85}
+.ta-tirnak{position:absolute;top:-30px;left:14px;font:900 7rem/1 var(--ta-serif);color:var(--ta-kirmizi);opacity:.85}
 .ta-alinti-yuz{float:right;width:96px;height:96px;object-fit:cover;object-position:50% 30%;border-radius:50%;margin:0 0 10px 16px;filter:grayscale(1)}
-.ta-yer{margin:8px 0 12px;font:italic 400 1.3rem/1.45 "Source Serif 4",serif;color:var(--ta-murekkep);padding:10px 12px;border:1.5px dashed rgba(29,36,33,.3);border-radius:4px}
+.ta-yer{margin:8px 0 14px;font:italic 400 1.3rem/1.45 var(--ta-serif);color:var(--ta-murekkep);padding:10px 12px;border:1.5px dashed rgba(29,36,33,.3);border-radius:4px}
 .ta-yer.dolu{border:0;padding:0}
-.ta-alinti-ozet{margin:0 0 10px;font-size:1rem;line-height:1.6;color:var(--ta-ink2)}
-.ta-alinti cite{font:700 .78rem "Plus Jakarta Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ta-soluk);font-style:normal}
+.ta-yer.uzun{font-size:1.14rem;line-height:1.6}
+.ta-alinti cite{display:block;margin:0 0 12px;font:700 .76rem var(--ta-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ta-soluk);font-style:normal}
+.ta-alinti-ozet{margin:0;padding-top:12px;border-top:1px solid rgba(184,54,44,.25);font-size:.98rem;line-height:1.6;color:var(--ta-ink2)}
 /* biyografi: hayat şeridi satır satır dikilir */
-.ta-bio{margin:6px 0 34px;padding:22px;border-radius:6px;background:#eef3ec;border:1px solid rgba(43,122,87,.35);
+.ta-bio{margin-bottom:34px;padding:22px;border-radius:6px;background:#eef3ec;border:1px solid rgba(43,122,87,.35);
   transform:translateY(calc((1 - var(--p)) * 50px));opacity:clamp(0,calc(var(--p) * 1.5),1)}
 .ta-bio-ust{display:flex;gap:18px;align-items:flex-start}
 .ta-bio-foto{width:128px;flex:0 0 auto}
 .ta-bio-foto img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(1.05)}
-.ta-bio h3{margin:8px 0 2px;font:900 1.7rem/1.1 "Source Serif 4",serif}
-.ta-bio-yil{margin:0 0 8px;font:700 .82rem "Plus Jakarta Sans",sans-serif;color:var(--ta-yesil);letter-spacing:.1em}
+.ta-bio h3{margin:8px 0 2px;font:900 1.7rem/1.1 var(--ta-serif)}
+.ta-bio-yil{margin:0 0 8px;font:700 .82rem var(--ta-sans);color:var(--ta-yesil);letter-spacing:.1em}
 .ta-bio p{line-height:1.58;color:var(--ta-ink2);margin:0}
 .ta-bio-serit{list-style:none;margin:18px 0 6px;padding:0 0 0 18px;border-left:2px solid var(--ta-yesil);display:flex;flex-direction:column;gap:10px}
 .ta-bio-serit li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:10px;font-size:.96rem;line-height:1.5;position:relative;
   opacity:clamp(0,calc(var(--p) * 3 - var(--i) * .18),1);transform:translateX(calc(clamp(0,1 - (var(--p) * 3 - var(--i) * .18),1) * 30px))}
 .ta-bio-serit li::before{content:"";position:absolute;left:-24px;top:.45em;width:10px;height:10px;transform:rotate(45deg);background:var(--ta-yesil)}
-.ta-bio-serit b{font:800 .8rem "Plus Jakarta Sans",sans-serif;color:var(--ta-murekkep);padding-top:2px}
+.ta-bio-serit b{font:800 .8rem var(--ta-sans);color:var(--ta-murekkep);padding-top:2px}
 .ta-bio-serit span{color:var(--ta-ink2)}
-/* geçiş: akıştan akışa yırtık şerit */
-.ta-gecis{position:relative;margin:30px 0 0;padding:26px 26px 26px 70px;max-width:700px;background:var(--renk);color:#fff;
-  clip-path:polygon(0 8%,4% 0,12% 6%,22% 1%,33% 7%,45% 0,57% 6%,68% 2%,80% 7%,91% 1%,100% 6%,100% 92%,95% 100%,84% 94%,72% 99%,60% 93%,48% 100%,36% 94%,24% 99%,12% 93%,0 100%);
-  transform:translateX(calc((1 - var(--p)) * 30%));opacity:clamp(0,calc(var(--p) * 1.4),1)}
-.ta-gecis p{margin:0;font:800 clamp(1.2rem,2.4vw,1.7rem)/1.25 "Source Serif 4",serif;text-wrap:balance}
-.ta-gecis-ok{position:absolute;left:24px;top:50%;transform:translateY(-50%);font:900 2rem "Plus Jakarta Sans",sans-serif}
-.ta-son{padding:60px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px));max-width:900px;margin:0 auto;color:var(--ta-soluk);font:500 .78rem/1.6 "Plus Jakarta Sans",sans-serif;border-top:1px solid var(--ta-cizgi)}
-.ta-son a{color:var(--ta-ink2)}
 
-/* ---------- harita paneli: büyük (harita anı), küçük (köşede), gizli; elle açılınca büyük ---------- */
-.ta-harita{position:fixed;z-index:35;box-sizing:border-box;background:var(--ta-kagit);border:1px solid var(--ta-cizgi);border-radius:12px;box-shadow:0 18px 50px -18px rgba(29,36,33,.45);
-  overflow:hidden;display:grid;transition:top .6s cubic-bezier(.3,.7,.2,1),left .6s cubic-bezier(.3,.7,.2,1),width .6s cubic-bezier(.3,.7,.2,1),height .6s cubic-bezier(.3,.7,.2,1),opacity .4s,transform .5s}
-.ta-h-cerceve{position:relative;min-width:0;min-height:0;background:#20303a}
-.ta-hsvg{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .5s}
-.ta-harita[data-pencere="yakin"] .ta-hsvg.genis,.ta-harita[data-pencere="genis"] .ta-hsvg.yakin{opacity:0;visibility:hidden}
-.ta-h-bilgi{display:flex;flex-direction:column;gap:8px;padding:22px 22px 18px;min-width:0;overflow:auto}
-.ta-h-yil{font:900 clamp(2.6rem,5vw,4.6rem)/.95 "Source Serif 4",serif;color:color-mix(in srgb,var(--su) 70%,#1d2421);letter-spacing:-.02em}
-.ta-h-ad{margin:0;font:800 1rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ta-murekkep)}
-.ta-h-not{margin:4px 0 0;font:500 .92rem/1.55 "Plus Jakarta Sans",sans-serif;color:var(--ta-ink2)}
-.ta-h-kaynak{margin:auto 0 0;font:500 .68rem/1.4 "Plus Jakarta Sans",sans-serif;color:var(--ta-soluk)}
-.ta-h-kapat{display:none;align-self:flex-start;border:1px solid var(--ta-cizgi);background:var(--ta-zemin);color:var(--ta-murekkep);font:700 .82rem "Plus Jakarta Sans",sans-serif;padding:7px 12px;border-radius:8px;cursor:pointer}
-.ta-h-mini{display:none}
-.ta-harita.degisti .ta-h-bilgi>*{animation:ta-h-gel .6s ease both}
-@keyframes ta-h-gel{from{opacity:0;transform:translateY(8px)}}
-/* büyük: yazı sütununun üstünde, nehrin sağında */
-.ta-harita.m-buyuk,.ta-harita.m-acik{top:calc(var(--ta-ust) + 14px);left:calc(96px + 16px);width:calc(100vw - 96px - 32px);height:calc(100vh - var(--ta-ust) - 28px);
-  grid-template-columns:minmax(0,1fr) minmax(240px,320px)}
-.ta-harita.m-acik .ta-h-kapat{display:inline-block}
-/* küçük: sağ alt köşede, dokununca büyür */
-.ta-harita.m-kucuk,.ta-harita.m-gizli,.ta-harita.m-yok{top:calc(100vh - 16px - 250px);left:calc(100vw - 16px - 184px);width:184px;height:250px;grid-template-columns:minmax(0,1fr)}
-.ta-harita.m-kucuk .ta-h-bilgi,.ta-harita.m-gizli .ta-h-bilgi,.ta-harita.m-yok .ta-h-bilgi{display:none}
-.ta-harita.m-kucuk .ta-h-mini,.ta-harita.m-gizli .ta-h-mini{display:block;position:absolute;inset:0;border:0;padding:0;background:transparent;cursor:zoom-in}
-.ta-h-mini-yil{position:absolute;left:8px;top:8px;font:800 .85rem "Plus Jakarta Sans",sans-serif;color:#fff;background:rgba(20,24,22,.66);padding:3px 8px;border-radius:6px}
-.ta-harita.m-gizli,.ta-harita.m-yok{opacity:0;transform:translateX(calc(100% + 40px));pointer-events:none}
-.ta-h-dugme{position:fixed;z-index:34;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));border:1px solid var(--ta-cizgi);background:var(--ta-kagit);color:var(--ta-murekkep);
-  font:800 .78rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;padding:9px 14px;border-radius:999px;box-shadow:var(--ta-golge);cursor:pointer;opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
-.ta-h-dugme::before{content:"";display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:2px;background:var(--su)}
-.ta-h-dugme.gorunur{opacity:1;transform:none;pointer-events:auto}
-html.ta-h-acik .ta-harita.m-acik{z-index:60}
-/* harita katmanları: gölgeli arazi zemin, üstünde yarı saydam bölgeler */
+/* geçiş: akışın kapanış cümlesi. Arka plansız; akışın renginde ince bir çizgi soldan sağa çekilir, cümle onunla açılır */
+.ta-gecis{position:relative;margin-block:56px 80px;padding:0 0 22px;display:flex;flex-direction:column;gap:14px}
+.ta-gecis-et{margin:0;display:flex;align-items:center;gap:10px;font:600 .68rem var(--ta-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ta-soluk)}
+.ta-gecis-no{display:inline-grid;place-items:center;min-width:30px;height:22px;padding:0 6px;border-radius:999px;background:var(--renk);color:#fff;font-weight:700;letter-spacing:.04em}
+.ta-gecis-soz{margin:0;max-width:30ch;font:italic 400 clamp(1.55rem,3.2vw,2.35rem)/1.22 var(--ta-serif);color:var(--ta-murekkep);text-wrap:balance;
+  clip-path:inset(0 calc((1 - clamp(0,var(--p) * 1.6 - .2,1)) * 100%) 0 0)}
+.ta-gecis-cizgi{display:block;height:3px;width:100%;max-width:560px;border-radius:3px;background:linear-gradient(90deg,var(--renk),color-mix(in srgb,var(--renk) 0%,transparent));
+  transform-origin:left;transform:scaleX(var(--p))}
+.ta-gecis::before{content:"";position:absolute;left:-27px;top:2px;width:9px;height:9px;transform:rotate(45deg);background:var(--renk)}
+
+/* ---------- önce/sonra: harita ve uydu ---------- */
+.ta-serit>.ta-kars{max-width:880px}
+.ta-kars{margin-block:-8px 38px;padding:16px 18px 14px;border-radius:8px;background:#1b2420;color:#e8ece9;box-shadow:0 18px 40px -22px rgba(0,0,0,.6);
+  transform:translateY(calc((1 - var(--p)) * 40px));opacity:clamp(0,calc(var(--p) * 1.6),1)}
+.ta-kars .ta-akis-et{color:color-mix(in srgb,var(--renk) 60%,#fff)}
+.ta-kars-ust{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px}
+.ta-kars-et{font:700 .64rem var(--ta-mono);letter-spacing:.14em;text-transform:uppercase;color:#a9b7af}
+.ta-kars-baslik{margin:0;font:700 1.15rem var(--ta-mono);letter-spacing:-.02em;color:#fff}
+.ta-kk-sahne{display:flex;justify-content:center}
+.ta-kk{position:relative;width:min(100%,calc(74vh * var(--oran)));width:min(100%,calc(74svh * var(--oran)));aspect-ratio:var(--oran);border-radius:5px;overflow:hidden;
+  background:#20303a;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;outline-offset:3px}
+.ta-kk:focus-visible{outline:2px solid #fff}
+.kk-katman{position:absolute;inset:0}
+.kk-katman>svg,.kk-katman>img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.kk-katman>img{object-fit:cover;pointer-events:none}
+.kk-once{clip-path:inset(0 calc(100% - var(--uk,50%)) 0 0)}
+.kk-cizgi{position:absolute;top:0;bottom:0;left:var(--uk,50%);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);pointer-events:none}
+.kk-tutamak{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.kk-tutamak::before,.kk-tutamak::after{content:"";position:absolute;top:50%;margin-top:-5px;border:5px solid transparent}
+.kk-tutamak::before{left:7px;border-right:7px solid #1b2420}
+.kk-tutamak::after{right:7px;border-left:7px solid #1b2420}
+.kk-et{position:absolute;top:10px;padding:4px 9px;border-radius:5px;background:rgba(16,20,18,.72);color:#fff;font:700 .78rem var(--ta-mono);pointer-events:none;transition:opacity .25s}
+.kk-et.sol{left:10px}.kk-et.sag{right:10px}
+.ta-kk.kk-kenar .kk-et{opacity:.45}
+.ta-kk.kk-yumusak .kk-once,.ta-kk.kk-yumusak .kk-cizgi{transition:clip-path .45s cubic-bezier(.3,.7,.2,1),left .45s cubic-bezier(.3,.7,.2,1)}
+.ta-kk.kk-surukle{cursor:grabbing}
+.ta-kk.kk-demo{animation:kk-demo 2.4s cubic-bezier(.45,0,.3,1)}
+@keyframes kk-demo{0%{--uk:50%}30%{--uk:76%}65%{--uk:24%}100%{--uk:50%}}
+.ta-kk-dugmeler{display:flex;justify-content:center;gap:8px;margin:12px 0 4px}
+.ta-kk-dugmeler button,.ta-kars-sekme-d{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#e8ece9;font:700 .76rem var(--ta-mono);padding:7px 13px;border-radius:999px;cursor:pointer}
+.ta-kk-dugmeler button[aria-pressed="true"],.ta-kars-sekme-d[aria-selected="true"]{background:#fff;color:#1b2420;border-color:#fff}
+.ta-kars-sekme{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ta-kars-not{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin:12px 0 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)}
+.ta-kars-not.tek{display:block;font:500 .84rem/1.55 var(--ta-sans);color:#c9d2cc}
+.ta-kars-not p{margin:0;font:500 .82rem/1.55 var(--ta-sans);color:#c9d2cc}
+.ta-kars-not .ta-kars-ad{margin:0 0 4px;font:700 .78rem var(--ta-sans);color:#fff;letter-spacing:.02em}
+.ta-kars-ad b{font:700 .78rem var(--ta-mono);padding:2px 6px;margin-right:4px;border-radius:4px;background:rgba(255,255,255,.12)}
+.ta-kars-not .sonra .ta-kars-ad b{background:color-mix(in srgb,var(--renk) 70%,#000);color:#fff}
+.ta-kars-kaynak{margin:10px 0 0;font:500 .66rem/1.4 var(--ta-sans);color:#8e9b94}
+
+/* harita katmanları: gölgeli arazi zemin, üstünde yarı saydam bölgeler. Çizgiler ekranda sabit kalınlıkta (non-scaling-stroke);
+   yazı boyları --o ile kesitlere göre ölçeklenir */
+.ta-hsvg path,.ta-hsvg rect{vector-effect:non-scaling-stroke}
 .h-deniz{fill:#2c5f8f}
 .h-kara path{fill:#3d4636;stroke:none}
 .h-gol path{fill:#8ccbe0;stroke:none}
-.h-kat{opacity:0;transition:opacity .7s ease}
-.h-kat.acik{opacity:1}
 .h-kat.osmanli path{fill:#c9a25a;fill-opacity:.42;stroke:none;mix-blend-mode:multiply}
 .h-kat.osmanli.genis path{fill:#b3863a;fill-opacity:.5}
 .h-kat.misir path{fill:#0b0d0c;fill-opacity:.35;stroke:none}
 .h-kat.sinir path{fill:none;stroke:rgba(255,255,255,.7);stroke-width:.9}
 .h-kat.sinir.genis path{stroke:rgba(255,255,255,.75);stroke-width:1}
 .h-kat.kayip path{fill:#0b0d0c;fill-opacity:.5;stroke:none}
-.h-kat.fil path{fill:#b8643f;fill-opacity:.8;stroke:#e9b48f;stroke-width:.6;stroke-opacity:.8}
-.h-kat.fil.parlak path{fill:#d9834e;fill-opacity:.95;stroke:none}
+.h-kat.fil path{fill:#b8643f;fill-opacity:.82;stroke:#e9b48f;stroke-width:.8;stroke-opacity:.85}
 .h-kat.plan-yahudi path{fill:#0b0d0c;fill-opacity:.42;stroke:none}
 .h-kat.plan-kudus path{fill:#f2f2f2;fill-opacity:.75;stroke:#fff;stroke-width:1;stroke-dasharray:2 1.5}
-.h-kat.tarali path{fill:url(#taTarali);stroke:none}
-.tar-cizgi{stroke:rgba(255,255,255,.55);stroke-width:1.6}
-.h-kat.tarali.koyu path{fill:#0b0d0c;fill-opacity:.55}
-.h-kat.bos path{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:.7;stroke-dasharray:1.6 1.2}
-.h-yakin-cerceve{fill:none;stroke:#fff;stroke-width:1.2}
-.h-yakin-cizgi{stroke:rgba(255,255,255,.75);stroke-width:.8;stroke-dasharray:3 2}
-.h-yakin-ad{fill:#fff;font:800 8px "Plus Jakarta Sans",sans-serif;letter-spacing:.08em;paint-order:stroke;stroke:rgba(0,0,0,.5);stroke-width:2px}
-.h-yakin-ic .h-kat.abluka path{stroke-width:.9}
-.h-yakin-ic .tar-cizgi{stroke-width:.6}
-.h-kat.abluka path{fill:none;stroke:#e0402f;stroke-width:2.4;stroke-dasharray:4 3}
-.h-kat.kudus{fill:none;stroke:#fff;stroke-width:1.6;stroke-dasharray:2 2}
+.h-kat.desen path{stroke:none}
+.tar-cizgi{stroke:rgba(255,255,255,.6)}
+.h-kat.bos-desen path{fill:none;stroke:none}
+.h-kat.koyu path{fill:#0b0d0c;fill-opacity:.6;stroke:none}
+.h-kat.isgal path{fill:#0b0d0c;fill-opacity:.28;stroke:rgba(255,255,255,.8);stroke-width:1}
+.h-kat.oslo-c path{fill:#0b0d0c;fill-opacity:.55;stroke:#e9b48f;stroke-width:.8}
+.h-kat.oslo-b path{fill:#e3a27a;fill-opacity:.92;stroke:none}
+.h-kat.oslo-a path{fill:#c24f22;fill-opacity:1;stroke:#ffd9bd;stroke-width:.6}
+.h-kat.oslo-y path{fill:#050605;fill-opacity:.95;stroke:none}
+.h-kat.bos path{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:1;stroke-dasharray:3 2}
+.h-kat.abluka path{fill:none;stroke:#e0402f;stroke-width:3;stroke-dasharray:6 4}
+.h-kat.misir-k path{fill:#4f9a62;fill-opacity:.85;stroke:#d9f2df;stroke-width:1}
+.h-kat.cep path{fill:#0b0d0c;fill-opacity:.4;stroke:#fff;stroke-width:1.2;stroke-dasharray:4 3}
+.h-kanal{fill:none;stroke:#7fd0ee;stroke-width:2.2}
 .h-nehir path{fill:none;stroke:#8cc6dc;stroke-width:1.1;opacity:.9}
 .h-nehir.genis path{stroke-width:1.2;opacity:.85}
 .h-demiryolu{fill:none;stroke:#1d1a14;stroke-width:2.2;stroke-dasharray:6 3}
@@ -224,32 +280,38 @@ html.ta-h-acik .ta-harita.m-acik{z-index:60}
 .sykes .z-kirmizi path,.mandalar .z-kirmizi path{fill:#c23a2c;fill-opacity:.62}
 .sykes .z-kahve path{fill:#7a4b25;fill-opacity:.7}
 .sykes path,.mandalar path{stroke:rgba(255,255,255,.8);stroke-width:1}
-.h-etiket text{fill:#fff;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:1px}
-.h-etiket .bolge{font-size:13px;letter-spacing:.08em;fill:rgba(255,255,255,.78);text-anchor:middle}
-.h-etiket .buyuk{font-size:20px;letter-spacing:.06em;text-anchor:middle}
-.h-etiket.genis .buyuk{font-size:26px}
-.h-etiket .orta{font-size:13px;letter-spacing:.04em;text-anchor:middle}
-.h-etiket.genis .orta{font-size:15px}
+.h-etiket text{fill:#fff;font-family:var(--ta-sans);font-weight:800;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:1px}
+.h-etiket .bolge{font-size:calc(13px * var(--o,1));letter-spacing:.08em;fill:rgba(255,255,255,.78);text-anchor:middle}
+.h-etiket .buyuk{font-size:calc(20px * var(--o,1));letter-spacing:.06em;text-anchor:middle}
+.h-etiket.genis .buyuk{font-size:calc(26px * var(--o,1))}
+.h-etiket .orta{font-size:calc(13px * var(--o,1));letter-spacing:.04em;text-anchor:middle}
+.h-etiket.genis .orta{font-size:calc(15px * var(--o,1))}
 .h-etiket .orta.sag{text-anchor:end}
 .h-etiket .soluk{fill:rgba(255,255,255,.72)}
-.h-etiket .kucuk{font-size:11px;font-weight:700;font-style:italic;text-anchor:middle}
-.h-etiket .deniz{font-size:15px;font-weight:600;font-style:italic;letter-spacing:.18em;fill:rgba(225,240,250,.85);text-anchor:middle}
-.h-etiket .bolgeZ{font-size:14px;letter-spacing:.04em;text-anchor:middle}
-.h-etiket .bolgeZ tspan+tspan{font-size:12px;font-weight:600}
-.h-etiket .plan-et{font-size:11px;letter-spacing:.06em;text-anchor:middle}
-.h-etiket .sehir{font-size:9.5px;font-weight:700}
+.h-etiket .kucuk{font-size:calc(11px * var(--o,1));font-weight:700;font-style:italic;text-anchor:middle}
+.h-etiket .kucuk.sag{text-anchor:end}
+.h-etiket .kucuk.sol-bas{text-anchor:start}
+.h-etiket .deniz{font-size:calc(15px * var(--o,1));font-weight:600;font-style:italic;letter-spacing:.18em;fill:rgba(225,240,250,.85);text-anchor:middle}
+.h-etiket .deniz.kucuk{font-size:calc(11px * var(--o,1));letter-spacing:.12em}
+.h-etiket .bolgeZ{font-size:calc(14px * var(--o,1));letter-spacing:.04em;text-anchor:middle}
+.h-etiket .bolgeZ tspan+tspan{font-size:calc(12px * var(--o,1));font-weight:600}
+.h-etiket .plan-et{font-size:calc(11px * var(--o,1));letter-spacing:.06em;text-anchor:middle}
+.h-etiket .sehir{font-size:calc(9.5px * var(--o,1));font-weight:700}
 .h-etiket .sehir.sol{text-anchor:end}
-.h-etiket.genis .sehir{font-size:12px}
+.h-etiket.genis .sehir{font-size:calc(12px * var(--o,1))}
+.h-etiket .not{font-size:calc(10.5px * var(--o,1));font-weight:700;fill:#ffe7a8;text-anchor:middle}
+.h-etiket .not.sag{text-anchor:end}
+.h-etiket .not tspan+tspan{font-weight:500;fill:#fff}
 .h-etiket .kare{fill:#f0a77a;stroke:#fff;stroke-width:.6}
 
 /* ---------- fotoğraf büyütme ---------- */
 .ta-lb{position:fixed;inset:0;z-index:80;background:rgba(14,17,15,.94);display:grid;grid-template-rows:minmax(0,1fr) auto;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));color:#e9ece8}
 .ta-lb-sahne{position:relative;min-height:0}
 .ta-lb-sahne img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;width:auto;height:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.ta-lb-yazi{margin:12px auto 0;max-width:900px;text-align:center;font:500 .88rem/1.5 "Plus Jakarta Sans",sans-serif}
+.ta-lb-yazi{margin:12px auto 0;max-width:900px;text-align:center;font:500 .88rem/1.5 var(--ta-sans)}
 .ta-lb-yazi a{color:#b9c4bd}
-.ta-lb-say{position:absolute;left:max(18px,env(safe-area-inset-left,0px));top:max(16px,env(safe-area-inset-top,0px));font:700 .8rem "Plus Jakarta Sans",sans-serif;color:#b9c4bd}
-.ta-lb-kapat,.ta-lb-ok{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:50%;width:46px;height:46px;font:400 1.8rem/1 "Plus Jakarta Sans",sans-serif;cursor:pointer;display:grid;place-items:center}
+.ta-lb-say{position:absolute;left:max(18px,env(safe-area-inset-left,0px));top:max(16px,env(safe-area-inset-top,0px));font:700 .8rem var(--ta-sans);color:#b9c4bd}
+.ta-lb-kapat,.ta-lb-ok{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:50%;width:46px;height:46px;font:400 1.8rem/1 var(--ta-sans);cursor:pointer;display:grid;place-items:center}
 .ta-lb-kapat{right:max(14px,env(safe-area-inset-right,0px));top:max(12px,env(safe-area-inset-top,0px))}
 .ta-lb-ok{top:50%;transform:translateY(-50%)}
 .ta-lb-ok.geri{left:max(10px,env(safe-area-inset-left,0px))}.ta-lb-ok.ileri{right:max(10px,env(safe-area-inset-right,0px))}
@@ -257,33 +319,38 @@ html.ta-h-acik .ta-harita.m-acik{z-index:60}
 html.ta-lb-acik{overflow:hidden}
 .ta-lb[hidden],.ta-lb-ok[hidden]{display:none}
 
-/* tablet ve telefon: nehir üstte ince çubuk, harita tam ekran ya da köşede */
+.ta-son{padding:60px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px));max-width:900px;margin:0 auto;color:var(--ta-soluk);font:500 .78rem/1.6 var(--ta-sans);border-top:1px solid var(--ta-cizgi)}
+.ta-son a{color:var(--ta-ink2)}
+
+/* tablet ve telefon: zaman şeridi üstte ince bir çubuk */
 @media (max-width:900px){
   :root{--ta-ust:52px}
   .ta-sahne{display:block}
-  .ta-nehir{position:sticky;top:var(--ta-ust);z-index:30;height:auto;border:0;padding:0;background:var(--ta-zemin)}
-  .ta-nsvg{display:none}
-  .ta-n-cubuk{display:flex;height:6px}
-  .ta-n-cubuk i{flex:1;opacity:.3;transition:opacity .3s}
-  .ta-n-cubuk i.su{opacity:1}
+  .ta-nehir{position:sticky;top:var(--ta-ust);z-index:30;height:auto;display:block;padding:0;border:0;background:color-mix(in srgb,var(--ta-zemin) 94%,transparent);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--ta-cizgi)}
+  .tn-ust,.tn-cetvel{display:none}
+  .tn-mobil{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 10px;padding:6px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .tn-myil{font:700 .95rem var(--ta-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .tn-mad{font:700 .64rem var(--ta-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--su);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tn-parca{grid-column:1/-1;display:flex;gap:3px;height:4px;margin:6px calc(-1 * max(16px,env(safe-area-inset-right,0px))) 0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+  .tn-parca i{flex:1;opacity:.25;transition:opacity .3s}
+  .tn-parca i.su{opacity:1}
   .ta-akis{padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(30px,env(safe-area-inset-left,0px))}
-  .ta-bolum{margin:0}
-  .ta-acilis{min-height:78vh;padding:60px 0 40px}
-  .ta-acilis::before{left:-22px;width:4px}
-  .ta-liste::before{left:-16px}
-  .ta-kart::before{left:-22px;width:10px;height:10px;top:24px}
+  .ta-serit::before{left:-16px}
+  .ta-serit>*{margin-left:0}
+  .ta-serit>.ta-kart.sag{margin-left:18px}
+  .ta-kart::before{left:-22px;width:9px;height:9px;top:24px}
+  .ta-gecis::before{left:-20.5px}
+  .ta-acilis{min-height:76vh;padding:56px 0 40px}
+  .ta-acilis::before{left:-18px;width:4px}
   .ta-kart{padding:18px 16px 16px}
   .ta-kart.sag{width:calc(100% - 18px)}
   .ta-metin.iki{column-count:1}
   .ta-kupur{padding:22px 18px 18px}
   .ta-kupur-gov:has(.ta-galeri){grid-template-columns:minmax(0,1fr)}
   .ta-bio-ust{flex-direction:column}.ta-bio-serit li{grid-template-columns:minmax(0,1fr)}
-  .ta-gecis{padding-left:56px}
-  .ta-an{height:115vh;height:115svh}
-  .ta-harita.m-buyuk,.ta-harita.m-acik{top:calc(var(--ta-ust) + 14px);left:8px;width:calc(100vw - 16px);height:calc(100vh - var(--ta-ust) - 22px);height:calc(100svh - var(--ta-ust) - 22px);
-    grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}
-  .ta-h-bilgi{padding:12px 14px 12px;gap:4px;max-height:34vh}
-  .ta-h-yil{font-size:2rem}.ta-h-not{font-size:.82rem}
-  .ta-harita.m-kucuk,.ta-harita.m-gizli,.ta-harita.m-yok{top:calc(100vh - 12px - 168px);top:calc(100svh - 12px - 168px);left:calc(100vw - 12px - 120px);width:120px;height:168px}
+  .ta-kars{margin-left:-14px;margin-right:-6px;padding:14px 12px 12px}
+  .ta-kars-not{grid-template-columns:minmax(0,1fr)}
+  .ta-alinti{padding:28px 18px 20px}
 }
-@media (prefers-reduced-motion:reduce){.ta-giris .ta-harf,.ta-ipucu{animation:none}.ta-harita{transition:none}}
+@media (prefers-reduced-motion:reduce){.ta-giris .ta-harf,.ta-ipucu{animation:none}.tn-imlec,.tn-dere{transition:none}}

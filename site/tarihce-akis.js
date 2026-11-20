@@ -1,7 +1,8 @@
 // Tarihçe: bir yüzyılın akışları. Veri: site/tarihce-akis.json (akışlar), site/donum.json (olay metinleri ve eski görseller),
 // site/tarihce-harita.json ve site/tarihce-harita-genis.json (Natural Earth'ten üretilmiş harita yolları).
-// Sayfa yazı ve görsel odaklı: harita yalnızca toprak değiştiğinde öne çıkar ("harita anı"), sonra köşeye küçülür ve bir süre
-// sonra tamamen çekilir. Her .izle öğesi görünüme girdikçe 0'dan 1'e giden bir --p değeri alır; CSS geri kalanını yapar.
+// Bütün akışların olayları tek bir zaman çizgisinde, tarih sırasıyla akar; her akış ilk olayından önce açılır, son olayından
+// sonra bir geçiş cümlesiyle kapanır. Toprak el değiştirdiğinde olayın altında önce/sonra haritası durur: çizgiyi sürükleyerek
+// iki hâl karşılaştırılır (2005 çekilmesi için uydu görüntüsü). Her .izle öğesi görünüme girdikçe 0'dan 1'e giden bir --p alır.
 (function () {
   "use strict";
   var EN = window.DIL === "en", YER = EN ? "en-GB" : "tr-TR";
@@ -18,17 +19,18 @@
   }
   function yil(t) { return parseInt(String(t).slice(0, 4), 10); }
   function dis(a, href) { a.href = href; a.target = "_blank"; a.rel = "noopener"; return a; }
+  function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=4").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=5").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
-    fetch("site/tarihce-harita.json?v=2").then(function (r) { return r.json(); }),
-    fetch("site/tarihce-harita-genis.json?v=2").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
     fetch("data/gorsel/tarihce/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/gorsel/kapak/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     BG ? BG.hazir : null
   ]).then(function (x) { kur(x[0], x[1], x[2], x[3], (x[4] || []).concat(x[5] || [])); })
-    .catch(function (e) { kok.textContent = "Tarihçe yüklenemedi."; console.error(e); });
+    .catch(function (e) { kok.textContent = EN ? "The history page could not be loaded." : "Tarihçe yüklenemedi."; console.error(e); });
 
   // Metni yazar; "vurgu" listesindeki parçaları fosforlu kalemle işaretler
   function vurgula(e, metin, liste) {
@@ -47,23 +49,21 @@
     kok.textContent = "";
     var kunye = {}; K.forEach(function (k) { kunye[k.ad] = k; });
     var KUL = {};   // sayfada kullanılan künyeler (sonda listelenir)
-    // donum.json dizini: "tarih" ve "tarih|kelime"
     function bul(ref) {
       var p = String(ref).split("|");
       return D.olaylar.find(function (o) { return o.tarih === p[0] && (!p[1] || o.baslik.indexOf(p[1]) >= 0); });
     }
     function kredi(yazar) { return String(yazar || "").replace(/^Unknown author.*/, EN ? "unknown photographer" : "fotoğrafçısı bilinmiyor").replace(/\s+/g, " ").trim(); }
-    // bir öğenin bütün görselleri: kendi görselleri (tarihce/ ya da kapak/ klasörü) + donum.json'daki eski görseller
+    function gorsel(ad, klasor) {
+      var k = kunye[ad];
+      return { src: "data/gorsel/" + (klasor || "tarihce") + "/" + (k && k.dosya ? k.dosya : ad + ".jpg"), ad: ad,
+        yazi: k ? (EN ? k.en : k.tr) : "", kredi: k ? kredi(k.yazar) + (k.lisans ? ", " + k.lisans : "") : "", sayfa: k && k.sayfa };
+    }
+    // bir öğenin bütün görselleri: kendi görselleri + donum.json'daki eski görseller
     function gorseller(o, v) {
       var L = [];
-      function ekle(ad, klasor) {
-        if (!ad) return;
-        var k = kunye[ad];
-        L.push({ src: "data/gorsel/" + (klasor || "tarihce") + "/" + (k && k.dosya ? k.dosya : ad + ".jpg"), ad: ad,
-          yazi: k ? (EN ? k.en : k.tr) : "", kredi: k ? kredi(k.yazar) + (k.lisans ? ", " + k.lisans : "") : "", sayfa: k && k.sayfa });
-      }
-      if (o.gorsel) ekle(o.gorsel, o.gorsel_klasor);
-      (o.gorseller || []).forEach(function (g) { ekle(g, "tarihce"); });
+      if (o.gorsel) L.push(gorsel(o.gorsel, o.gorsel_klasor));
+      (o.gorseller || []).forEach(function (g) { L.push(gorsel(g)); });
       ((v && v.gorseller) || (v && v.gorsel ? [v.gorsel] : [])).forEach(function (g) {
         if (!g || !g.url) return;
         L.push({ src: g.url, yazi: (EN ? g.aciklama_en : g.aciklama) || "", kredi: g.atif || "", sayfa: g.sayfa });
@@ -79,85 +79,116 @@
     harfle(h, EN ? "Currents of a century" : "Bir yüzyılın akışları");
     ic.append(el("p", "ta-ust", EN ? "Palestine · 1914–2026" : "Filistin · 1914–2026"), h, el("p", "ta-ar", "تيارات قرن"),
       el("p", "ta-dek", EN
-        ? "The Ottoman era was over. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. Scroll down and the currents assemble one by one; whenever the land changes hands, the map steps forward."
-        : "Osmanlı artık geride kalmıştı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Aşağı kaydırdıkça akışlar birer birer kurulur; toprak her el değiştirdiğinde harita öne çıkar."));
+        ? "The Ottoman era was over. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. The currents flow on a single timeline and overlap where history did; whenever the land changed hands, a before-and-after map lets you compare the two."
+        : "Osmanlı artık geride kalmıştı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Akışlar tek bir zaman çizgisinde ilerler, tarihin iç içe geçtiği yerde birbirine karışır. Toprak her el değiştirdiğinde önce ve sonra haritası gelir; çizgiyi sürükleyip iki hâli karşılaştırabilirsiniz."));
     ic.appendChild(tatriz(46, "ta-tatriz son"));
     ic.appendChild(el("p", "ta-ipucu", EN ? "Scroll ↓" : "Kaydır ↓"));
     giris.appendChild(ic);
     kok.appendChild(giris);
 
-    // --- sahne: nehir + akışlar; harita sabit bir panel ---
+    // --- sahne: solda zaman şeridi, ortada tek akış ---
     var sahne = el("div", "ta-sahne");
-    var nehir = el("nav", "ta-nehir"); nehir.setAttribute("aria-label", EN ? "Currents" : "Akışlar");
+    var nehir = el("nav", "ta-nehir"); nehir.setAttribute("aria-label", EN ? "Timeline" : "Zaman şeridi");
     var akis = el("div", "ta-akis");
     sahne.append(nehir, akis);
     kok.appendChild(sahne);
-    var hk = el("aside", "ta-harita m-gizli"); hk.setAttribute("aria-label", EN ? "Map" : "Harita");
-    kok.appendChild(hk);
-    haritaKur(hk, H, H2, A.haritalar);
-    nehirKur(nehir, A.akislar);
     var lb = isikKutusu();
+    var HR = haritaci(H, H2);
+    nehirKur(nehir, A.akislar, function (k) { var e = document.getElementById("akis-" + k); if (e) e.scrollIntoView({ behavior: AZALT ? "auto" : "smooth", block: "start" }); });
 
-    var sonDurum = null;
-    function an(durum, yilD) {   // harita anı: toprak değiştiğinde haritanın büyüdüğü boşluk
-      if (!durum || durum === sonDurum || !A.haritalar[durum]) return null;
-      sonDurum = durum;
-      var a = el("div", "ta-an"); a.dataset.an = durum; a.setAttribute("aria-hidden", "true");
-      if (yilD) a.dataset.yil = yilD;
-      return a;
-    }
-
+    // bütün olaylar tek sırada: tarih, eşitse akış sırası, o da eşitse akıştaki sıra.
+    // Tarihsiz öğeler (alıntı, biyografi) kendi akışındaki bir önceki öğenin hemen ardında kalır.
+    var sira = [];
     A.akislar.forEach(function (a, ai) {
-      var s = el("section", "ta-bolum"); s.id = "akis-" + a.anahtar; s.dataset.akis = a.anahtar;
-      s.style.setProperty("--renk", a.renk);
-      var ac = el("header", "ta-acilis izle"); ac.dataset.yil = a.yillar[0];
-      var no = el("p", "ta-no", String(ai + 1).padStart(2, "0") + " / " + String(A.akislar.length).padStart(2, "0"));
-      var yy = el("p", "ta-yillar"); harfle(yy, a.yillar[0] + "–" + (a.yillar[1] >= 2026 ? "" : a.yillar[1]));
-      var ad = el("h2", "ta-ad"); harfle(ad, EN && a.ad_en ? a.ad_en : a.ad);
-      ac.append(no, yy, ad);
-      if (a.alt) ac.appendChild(el("p", "ta-alt", EN && a.alt_en ? a.alt_en : a.alt));
-      ac.appendChild(el("p", "ta-ar", a.ar));
-      var tz = el("p", "ta-tez", EN && a.tez_en ? a.tez_en : a.tez);
-      if (a.tez_kaynak) tz.appendChild(dis(el("a", "ta-kaynak", " " + a.tez_kaynak.ad + " ↗"), a.tez_kaynak.url));
-      ac.appendChild(tz);
-      ac.appendChild(tatriz(24, "ta-tatriz kucuk"));
-      s.appendChild(ac);
-      var a0 = an(a.harita, a.yillar[0]); if (a0) s.appendChild(a0);
-
-      // öğeler tarih sırasıyla; tarihsiz öğeler (alıntı, biyografi) kendinden önceki öğenin hemen ardında kalır
-      var son = "", sira = a.olaylar.map(function (o, i) {
+      var son = "";
+      a.olaylar.forEach(function (o, i) {
         var t = o.tur === "alinti" || o.tur === "biyografi" ? null : (o.ref ? (bul(o.ref) || {}).tarih : o.tarih);
-        if (t) son = String(t); return { o: o, t: t ? String(t) : son + "~", i: i };
+        if (t) son = String(t);
+        sira.push({ a: a, ai: ai, o: o, t: t ? String(t) : son + "~", i: i });
       });
-      sira.sort(function (x, y) { return x.t < y.t ? -1 : x.t > y.t ? 1 : x.i - y.i; });
-      var liste = el("div", "ta-liste");
-      sira.forEach(function (x) {
-        liste.appendChild(oge(x.o));
-        var m = an(x.o.harita, x.t && yil(x.t)); if (m) liste.appendChild(m);
-      });
-      s.appendChild(liste);
+    });
+    sira.sort(function (x, y) { return x.t < y.t ? -1 : x.t > y.t ? 1 : x.ai - y.ai || x.i - y.i; });
+    var ilk = {}, son = {};
+    sira.forEach(function (x, n) { if (!(x.a.anahtar in ilk)) ilk[x.a.anahtar] = n; son[x.a.anahtar] = n; });
 
-      if (a.gecis) {
-        var g = el("div", "ta-gecis izle");
-        g.appendChild(el("span", "ta-gecis-ok", "→"));
-        g.appendChild(el("p", null, EN && a.gecis_en ? a.gecis_en : a.gecis));
-        s.appendChild(g);
-      }
-      akis.appendChild(s);
+    var serit = el("div", "ta-serit");
+    akis.appendChild(serit);
+    sira.forEach(function (x, n) {
+      var a = x.a;
+      if (ilk[a.anahtar] === n) serit.appendChild(acilis(a, x.ai));
+      var e = oge(x.o, a);
+      boya(e, a, x.t);
+      serit.appendChild(e);
+      if (x.o.karsilastir) serit.appendChild(boya(haritaKars(x.o.karsilastir), a, x.t));
+      if (x.o.uydu) serit.appendChild(boya(uyduKars(x.o.uydu), a, x.t));
+      if (son[a.anahtar] === n && a.gecis) serit.appendChild(boya(gecis(a, x.ai), a, x.t));
     });
 
     var sonu = el("footer", "ta-son");
-    sonu.appendChild(el("p", null, EN ? "Relief from AWS Terrain Tiles, coastlines and borders from Natural Earth (public domain); the Sykes–Picot zones, the 1947 plan, the Oslo areas and the 2025 line are schematic. Images from Wikimedia Commons, openly licensed or public domain. Older list view: " : "Arazi AWS Terrain Tiles’tan, kıyılar ve sınırlar Natural Earth’ten (kamu malı); Sykes–Picot bölgeleri, 1947 planı, Oslo bölgeleri ve 2025 hattı şematiktir. Görseller Wikimedia Commons’tan, açık lisanslı ya da kamu malı. Eski liste görünümü: "));
+    sonu.appendChild(el("p", null, EN
+      ? "Relief from AWS Terrain Tiles, coastlines and borders from Natural Earth (public domain). The 1947 plan and the Oslo areas are traced from public-domain maps and are approximate; the Sykes–Picot zones, the 1956 and 1973 fronts and the 2025 line are schematic. Satellite images: Landsat 5 (USGS/NASA). Photographs from Wikimedia Commons, openly licensed or public domain. Older list view: "
+      : "Arazi AWS Terrain Tiles’tan, kıyılar ve sınırlar Natural Earth’ten (kamu malı). 1947 planı ve Oslo bölgeleri kamu malı haritalardan izlendi, yaklaşıktır; Sykes–Picot bölgeleri, 1956 ve 1973 cepheleri ve 2025 hattı şematiktir. Uydu görüntüleri: Landsat 5 (USGS/NASA). Fotoğraflar Wikimedia Commons’tan, açık lisanslı ya da kamu malı. Eski liste görünümü: "));
     sonu.lastChild.appendChild(Object.assign(el("a", null, EN ? "all entries by date" : "bütün olaylar tarih sırasıyla"), { href: "tarihce-liste.html" }));
     var kl = el("p", "ta-kunyeler"); kl.id = "taKunye"; sonu.appendChild(kl);
     kok.appendChild(sonu);
     kunyeYaz(kl);
 
-    function oge(o) {
-      if (o.tur === "alinti") return alinti(o);
-      if (o.tur === "biyografi") return biyografi(o);
-      if (o.tur === "gazete") return kupur(o);
-      return kart(o);
+    function boya(e, a, t) {
+      if (e.nodeType !== 1) return e;
+      e.style.setProperty("--renk", a.renk);
+      e.dataset.akis = a.anahtar;
+      if (!e.dataset.yil && t) { var y = yil(t); if (y) e.dataset.yil = y; }
+      return e;
+    }
+    function akisEt(a) {
+      var s = el("span", "ta-akis-et", D2(a, "ad"));
+      return s;
+    }
+
+    // --- akış açılışı: numara, yıllar, ad, tez ve bir görsel ---
+    function acilis(a, ai) {
+      var ac = el("header", "ta-acilis izle"); ac.id = "akis-" + a.anahtar;
+      boya(ac, a, a.yillar[0]); ac.dataset.yil = a.yillar[0];
+      var m = el("div", "ta-acilis-metin");
+      m.appendChild(el("p", "ta-no", String(ai + 1).padStart(2, "0") + " / " + String(A.akislar.length).padStart(2, "0")));
+      var yy = el("p", "ta-yillar"); harfle(yy, a.yillar[0] + "–" + (a.yillar[1] >= 2026 ? "" : a.yillar[1])); m.appendChild(yy);
+      var ad = el("h2", "ta-ad"); harfle(ad, D2(a, "ad")); m.appendChild(ad);
+      if (a.alt) m.appendChild(el("p", "ta-alt", D2(a, "alt")));
+      m.appendChild(el("p", "ta-ar", a.ar));
+      var tz = el("p", "ta-tez", D2(a, "tez"));
+      if (a.tez_kaynak) tz.appendChild(dis(el("a", "ta-kaynak", " " + a.tez_kaynak.ad + " ↗"), a.tez_kaynak.url));
+      m.appendChild(tz);
+      m.appendChild(tatriz(24, "ta-tatriz kucuk"));
+      ac.appendChild(m);
+      if (a.gorsel) {
+        var g = gorsel(a.gorsel), f = el("figure", "ta-acilis-gorsel");
+        var b = el("button", "ta-g-dugme"); b.type = "button"; b.setAttribute("aria-label", (EN ? "Enlarge: " : "Büyüt: ") + g.yazi);
+        var im = new Image(); im.src = g.src; im.alt = g.yazi; im.loading = "lazy"; im.decoding = "async";
+        im.onerror = function () { f.remove(); ac.classList.remove("gorselli"); };
+        b.appendChild(im); b.onclick = function () { lb.ac([g], 0); };
+        f.appendChild(b);
+        var fc = el("figcaption");
+        if (g.yazi) fc.appendChild(el("span", null, g.yazi));
+        if (g.kredi) { var k = el("a", "ta-g-kredi", (EN ? "Image: " : "Görsel: ") + g.kredi); if (g.sayfa) dis(k, g.sayfa); fc.appendChild(k); }
+        f.appendChild(fc);
+        ac.appendChild(f); ac.classList.add("gorselli");
+        KUL[a.gorsel] = 1;
+      }
+      return ac;
+    }
+    // --- akış kapanışı ---
+    function gecis(a, ai) {
+      var g = el("div", "ta-gecis izle");
+      var et = el("p", "ta-gecis-et");
+      et.append(el("span", "ta-gecis-no", String(ai + 1).padStart(2, "0")), document.createTextNode(D2(a, "ad") + " · " + a.yillar[0] + "–" + (a.yillar[1] >= 2026 ? "" : a.yillar[1])));
+      g.append(et, el("p", "ta-gecis-soz", D2(a, "gecis")), el("i", "ta-gecis-cizgi"));
+      return g;
+    }
+
+    function oge(o, a) {
+      var e = o.tur === "alinti" ? alinti(o) : o.tur === "biyografi" ? biyografi(o) : o.tur === "gazete" ? kupur(o) : kart(o);
+      if (e.nodeType === 1) e.insertBefore(akisEt(a), e.firstChild);
+      return e;
     }
     function kaynakSatiri(ks) {
       ks = (ks || []).filter(function (x) { return x && x.url; });
@@ -166,26 +197,41 @@
       ks.slice(0, 3).forEach(function (x, i) { if (i) kk.append(" · "); kk.appendChild(dis(el("a", null, (x.ad || "kaynak") + " ↗"), x.url)); });
       return kk;
     }
+    // akademik kaynakça ve birincil belgeler (bağlantısız)
+    function kaynakca(L) {
+      if (!L || !L.length) return null;
+      var d = el("div", "ta-kaynakca");
+      var ak = L.filter(function (x) { return x.tur !== "birincil"; }), bi = L.filter(function (x) { return x.tur === "birincil"; });
+      [[ak, EN ? "Reading" : "Kaynakça"], [bi, EN ? "Documents" : "Belgeler"]].forEach(function (g) {
+        if (!g[0].length) return;
+        var p = el("p"); p.appendChild(el("b", null, g[1]));
+        g[0].forEach(function (x, i) { p.appendChild(el("span", null, (i ? " · " : " ") + (EN && x.ad_en ? x.ad_en : x.ad))); });
+        d.appendChild(p);
+      });
+      return d;
+    }
     function kart(o) {
       var v = o.ref ? bul(o.ref) : o;
       if (!v) { console.warn("yok", o.ref); return document.createComment("yok " + o.ref); }
+      var Q = function (k) { return (EN && (o[k + "_en"] || v[k + "_en"])) || o[k] || v[k]; };
       var gz = o.gazete;
-      var k = el("article", "ta-kart izle" + (o.yan ? " sag" : "") + (gz ? " gazete" : ""));
+      var k = el("article", "ta-kart izle" + (o.yan ? " sag" : "") + (gz ? " gazete" : "") + (o.buyuk ? " buyuk" : ""));
       k.dataset.yil = yil(v.tarih);
       if (typeof gz === "string") k.appendChild(el("p", "ta-manset", EN && o.gazete_en ? o.gazete_en : gz));
       k.appendChild(el("time", "ta-tarih", tarihAd(v.tarih)));
-      k.appendChild(vurgula(el("h3"), N(EN && v.baslik_en ? v.baslik_en : v.baslik), EN ? o.vurgu_en : o.vurgu));
+      k.appendChild(vurgula(el("h3"), N(Q("baslik")), EN ? o.vurgu_en : o.vurgu));
       var gs = gorseller(o, o.ref ? v : null);
-      var metin = N(EN && v.metin_en ? v.metin_en : v.metin) || "";
-      var p = vurgula(el("p", "ta-metin" + (gz && metin.length > 420 ? " iki" : "")), metin, EN ? o.vurgu_en : o.vurgu);
-      if (gs.length) k.appendChild(galeri(gs));
+      var metin = N(Q("metin")) || "";
+      var p = vurgula(el("p", "ta-metin" + (gz && metin.length > 420 && !o.buyuk ? " iki" : "")), metin, EN ? o.vurgu_en : o.vurgu);
+      if (gs.length) k.appendChild(galeri(gs, o.buyuk));
       k.appendChild(p);
-      var kk = kaynakSatiri(v.kaynaklar); if (kk) k.appendChild(kk);
+      var kk = kaynakSatiri(o.kaynaklar || v.kaynaklar); if (kk) k.appendChild(kk);
+      var kc = kaynakca(o.kaynakca); if (kc) k.appendChild(kc);
       return k;
     }
     // gazete kupürü: künye, başlık, büyük alıntı, açıklama
     function kupur(o) {
-      var Q = function (x) { return EN && o[x + "_en"] ? o[x + "_en"] : o[x]; };
+      var Q = function (x) { return D2(o, x); };
       var k = el("article", "ta-kupur izle"); k.dataset.yil = yil(o.tarih);
       k.appendChild(el("p", "ta-manset", Q("kunye")));
       k.appendChild(el("h3", null, Q("baslik")));
@@ -194,15 +240,16 @@
       if (gs.length) gov.appendChild(galeri(gs));
       var bq = el("blockquote", "ta-kupur-soz"); bq.textContent = "“" + Q("alinti") + "”"; gov.appendChild(bq);
       k.appendChild(gov);
-      k.appendChild(el("p", "ta-metin", Q("metin")));
+      k.appendChild(vurgula(el("p", "ta-metin"), Q("metin"), EN ? o.vurgu_en : o.vurgu));
       var kk = kaynakSatiri(o.kaynaklar); if (kk) k.appendChild(kk);
+      var kc = kaynakca(o.kaynakca); if (kc) k.appendChild(kc);
       return k;
     }
-    // görseller kırpılmadan: tek görsel kendi oranında, birden çoksa satırlar oranlara göre paylaşılır (yüzler ve odak kesilmez)
-    function galeri(gs) {
-      var g = el("div", "ta-galeri" + (gs.length > 1 ? " cok" : ""));
+    // görseller kırpılmadan: tek görsel kendi oranında, birden çoksa satırlar oranlara göre paylaşılır; "buyuk" ise ilki tam genişlikte
+    function galeri(gs, buyuk) {
+      var g = el("div", "ta-galeri" + (gs.length > 1 ? " cok" : "") + (buyuk ? " buyuk" : ""));
       gs.forEach(function (x, i) {
-        var f = el("figure");
+        var f = el("figure", buyuk && i === 0 ? "ilk" : null);
         var b = el("button", "ta-g-dugme"); b.type = "button"; b.setAttribute("aria-label", (EN ? "Enlarge: " : "Büyüt: ") + (x.yazi || ""));
         var im = new Image(); im.src = x.src; im.alt = x.yazi || ""; im.loading = "lazy"; im.decoding = "async";
         im.onload = function () { if (im.naturalWidth) f.style.setProperty("--ar", (im.naturalWidth / im.naturalHeight).toFixed(3)); };
@@ -224,10 +271,10 @@
       var gs = gorseller(o, null);
       if (gs.length) { var im = new Image(); im.src = gs[0].src; im.alt = ""; im.className = "ta-alinti-yuz"; im.onerror = function () { im.remove(); }; b.appendChild(im); KUL[o.gorsel] = 1; }
       b.appendChild(el("span", "ta-tirnak", "“"));
-      var Q = function (k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; };
-      if (o.alinti) b.appendChild(el("p", "ta-yer dolu", o.alinti)); else b.appendChild(el("p", "ta-yer", Q("yer_tutucu")));
-      b.appendChild(el("p", "ta-alinti-ozet", Q("metin")));
-      b.appendChild(el("cite", null, Q("kisi") + " · " + Q("eser")));
+      if (o.alinti) b.appendChild(el("p", "ta-yer dolu" + (o.alinti.length > 400 ? " uzun" : ""), o.alinti));
+      else b.appendChild(el("p", "ta-yer", D2(o, "yer_tutucu")));
+      b.appendChild(el("cite", null, D2(o, "kisi") + " · " + D2(o, "eser")));
+      if (o.metin) b.appendChild(el("p", "ta-alinti-ozet", D2(o, "metin")));
       return b;
     }
     function biyografi(o) {
@@ -246,6 +293,7 @@
       (EN && o.satirlar_en ? o.satirlar_en : o.satirlar).forEach(function (s, i) { var li = el("li"); li.style.setProperty("--i", i); li.append(el("b", null, s[0]), el("span", null, N(s[1]))); ol.appendChild(li); });
       b.appendChild(ol);
       var kk = kaynakSatiri(o.kaynaklar); if (kk) b.appendChild(kk);
+      var kc = kaynakca(o.kaynakca); if (kc) b.appendChild(kc);
       return b;
     }
     function kunyeYaz(kl) {
@@ -258,7 +306,131 @@
       });
     }
 
+    // --- önce/sonra haritası ---
+    function haritaKars(k) {
+      var m1 = A.haritalar[k.once], m2 = A.haritalar[k.sonra];
+      var pen = m2.pencere === "genis" ? "genis" : "yakin";
+      var vb = HR.kutu(pen, k.kesit);
+      var f = el("figure", "ta-kars izle");
+      var ust = el("div", "ta-kars-ust");
+      ust.append(el("span", "ta-kars-et", EN ? "Map · before and after" : "Harita · önce ve sonra"),
+        el("p", "ta-kars-baslik", m1.yil + " → " + m2.yil));
+      f.appendChild(ust);
+      var kutu = el("div", "ta-kk");
+      kutu.style.setProperty("--oran", (vb[2] / vb[3]).toFixed(4));
+      kutu.yap = function () {
+        kutu.insertBefore(katman(HR.ciz(pen, k.sonra, k.kesit), "kk-sonra"), kutu.firstChild);
+        kutu.insertBefore(katman(HR.ciz(pen, k.once, k.kesit), "kk-once"), kutu.children[1]);
+      };
+      var dg = kaydirici(kutu, m1.yil, m2.yil, (EN ? "Compare " : "Karşılaştır: ") + m1.yil + " / " + m2.yil);
+      var sahne = el("div", "ta-kk-sahne"); sahne.appendChild(kutu);
+      f.append(sahne, dg);
+      var notlar = el("div", "ta-kars-not");
+      [m1, m2].forEach(function (m, i) {
+        var d = el("div", i ? "sonra" : "once");
+        var b = el("p", "ta-kars-ad"); b.append(el("b", null, m.yil), document.createTextNode(" " + D2(m, "ad")));
+        d.append(b, el("p", null, D2(m, "not") || ""));
+        notlar.appendChild(d);
+      });
+      f.appendChild(notlar);
+      f.appendChild(el("p", "ta-kars-kaynak", pen === "genis"
+        ? (EN ? "Relief: AWS Terrain Tiles · coastlines and borders: Natural Earth · zones and fronts schematic" : "Arazi: AWS Terrain Tiles · kıyılar ve sınırlar: Natural Earth · bölgeler ve cepheler şematik")
+        : (EN ? "Relief: AWS Terrain Tiles · borders: Natural Earth · 1947 plan and Oslo areas traced from public-domain maps, approximate" : "Arazi: AWS Terrain Tiles · sınırlar: Natural Earth · 1947 planı ve Oslo bölgeleri kamu malı haritalardan izlendi, yaklaşık")));
+      tembel(kutu);
+      return f;
+    }
+    function katman(icerik, sinif) { var d = el("div", "kk-katman " + sinif); d.appendChild(icerik); return d; }
+
+    // --- önce/sonra uydu görüntüsü ---
+    function uyduKars(u) {
+      var f = el("figure", "ta-kars uydu izle");
+      var t1 = tarihAd(u.tarih_once), t2 = tarihAd(u.tarih_sonra);
+      var ust = el("div", "ta-kars-ust");
+      ust.append(el("span", "ta-kars-et", EN ? "Satellite · before and after" : "Uydu · önce ve sonra"), el("p", "ta-kars-baslik", yil(u.tarih_once) + " → " + yil(u.tarih_sonra)));
+      f.appendChild(ust);
+      var sekme = el("div", "ta-kars-sekme"); sekme.setAttribute("role", "tablist");
+      f.appendChild(sekme);
+      var kutu = el("div", "ta-kk"); kutu.style.setProperty("--oran", "1.3333");
+      var sahne = el("div", "ta-kk-sahne"); sahne.appendChild(kutu);
+      var dg = kaydirici(kutu, t1, t2, (EN ? "Compare " : "Karşılaştır: ") + t1 + " / " + t2);
+      var secili = 0;
+      function goster(i) {
+        secili = i;
+        Array.prototype.forEach.call(sekme.children, function (b, j) { b.setAttribute("aria-selected", String(i === j)); });
+        Array.prototype.slice.call(kutu.querySelectorAll(".kk-katman")).forEach(function (x) { x.remove(); });
+        var B = u.bolgeler[i], ad = D2(B, "ad");
+        var y = function (s, alt) { var im = new Image(); im.src = "site/tarihce-uydu/" + B.dosya + "-" + s + ".jpg"; im.alt = ad + ", " + alt; im.decoding = "async"; im.draggable = false; return im; };
+        var i2 = y("sonra", t2), i1 = y("once", t1);
+        i2.onload = function () { if (i2.naturalWidth) kutu.style.setProperty("--oran", (i2.naturalWidth / i2.naturalHeight).toFixed(4)); };
+        kutu.insertBefore(katman(i2, "kk-sonra"), kutu.firstChild);
+        kutu.insertBefore(katman(i1, "kk-once"), kutu.children[1]);
+      }
+      u.bolgeler.forEach(function (B, i) {
+        var b = el("button", "ta-kars-sekme-d", D2(B, "ad")); b.type = "button"; b.setAttribute("role", "tab");
+        b.onclick = function () { goster(i); };
+        sekme.appendChild(b);
+      });
+      kutu.yap = function () { goster(secili); };
+      f.append(sahne, dg);
+      f.appendChild(el("p", "ta-kars-not tek", D2(u, "not")));
+      f.appendChild(el("p", "ta-kars-kaynak", D2(u, "kaynak")));
+      Array.prototype.forEach.call(sekme.children, function (b, j) { b.setAttribute("aria-selected", String(j === 0)); });
+      tembel(kutu);
+      return f;
+    }
+
+    // görünüme yaklaşınca çiz; ilk kez iyice görününce perdeyi bir kez oynat (nasıl kullanılacağını göstermek için)
+    var tembelIO = "IntersectionObserver" in window ? new IntersectionObserver(function (xs) {
+      xs.forEach(function (x) {
+        var k = x.target;
+        if (x.isIntersecting && !k.yapildi) { k.yapildi = true; k.yap(); }
+        if (x.isIntersecting && x.intersectionRatio > 0.55 && !k.oynadi && !AZALT) {
+          k.oynadi = true; k.classList.add("kk-demo"); setTimeout(function () { k.classList.remove("kk-demo"); }, 2600);
+        }
+      });
+    }, { rootMargin: "700px 0px", threshold: [0, 0.6] }) : null;
+    function tembel(k) { if (tembelIO) tembelIO.observe(k); else { k.yapildi = true; k.yap(); } }
+
     ilerlemeKur();
+  }
+
+  // --- önce/sonra perdesi: sürükle, dokun, ok tuşları, iki düğme ---
+  function kaydirici(kutu, solAd, sagAd, aria) {
+    var cizgi = el("span", "kk-cizgi"); cizgi.appendChild(el("span", "kk-tutamak"));
+    kutu.append(cizgi, el("span", "kk-et sol", solAd), el("span", "kk-et sag", sagAd));
+    var deger = 50, bas = null;
+    var dugmeler = el("div", "ta-kk-dugmeler");
+    function ayar(v, yumusak) {
+      deger = Math.max(0, Math.min(100, v));
+      kutu.classList.toggle("kk-yumusak", !!yumusak);
+      kutu.style.setProperty("--uk", deger + "%");
+      kutu.setAttribute("aria-valuenow", String(Math.round(deger)));
+      kutu.classList.toggle("kk-kenar", deger < 12 || deger > 88);
+      Array.prototype.forEach.call(dugmeler.children, function (b) { b.setAttribute("aria-pressed", String((b.dataset.v === "100" && deger > 97) || (b.dataset.v === "0" && deger < 3))); });
+    }
+    function oran(x) { var r = kutu.getBoundingClientRect(); return ((x - r.left) / Math.max(1, r.width)) * 100; }
+    // yalnızca yatay hareket perdeyi taşır; dikey hareket sayfaya kalır (touch-action: pan-y)
+    kutu.addEventListener("pointerdown", function (e) { bas = { x: e.clientX, id: e.pointerId, surukle: false }; });
+    kutu.addEventListener("pointermove", function (e) {
+      if (!bas || e.pointerId !== bas.id) return;
+      if (!bas.surukle) { if (Math.abs(e.clientX - bas.x) < 6) return; bas.surukle = true; kutu.classList.add("kk-surukle"); try { kutu.setPointerCapture(e.pointerId); } catch (x) {} }
+      e.preventDefault(); ayar(oran(e.clientX));
+    });
+    function bit(e) { if (bas && !bas.surukle && e && e.type === "pointerup") ayar(oran(e.clientX), true); bas = null; kutu.classList.remove("kk-surukle"); }
+    kutu.addEventListener("pointerup", bit); kutu.addEventListener("pointercancel", function () { bas = null; kutu.classList.remove("kk-surukle"); });
+    kutu.tabIndex = 0; kutu.setAttribute("role", "slider"); kutu.setAttribute("aria-valuemin", "0"); kutu.setAttribute("aria-valuemax", "100");
+    kutu.setAttribute("aria-label", aria);
+    kutu.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); ayar(deger + (e.key === "ArrowRight" ? 5 : -5)); }
+      else if (e.key === "Home" || e.key === "End") { e.preventDefault(); ayar(e.key === "End" ? 100 : 0, true); }
+    });
+    [["100", "◂ " + solAd], ["0", sagAd + " ▸"]].forEach(function (x) {
+      var b = el("button", null, x[1]); b.type = "button"; b.dataset.v = x[0];
+      b.onclick = function () { var v = +x[0]; ayar((v === 100 && deger > 97) || (v === 0 && deger < 3) ? 50 : v, true); };
+      dugmeler.appendChild(b);
+    });
+    ayar(50);
+    return dugmeler;
   }
 
   // --- fotoğraf büyütme: tam ekran, künyeyle; oklar ve Esc ---
@@ -326,239 +498,263 @@
     return s;
   }
 
-  // --- harita: yakın (tarihî Filistin) ve geniş (Anadolu'dan Hicaz'a) iki çizim, tek panel ---
-  var HR = {};
-  function haritaKur(hk, H, H2, M) {
-    var KATLAR = {}, SVG = {};
-    function katci(s) {
-      return function (ad, yollar, sinif, kirp, ana) {
-        var g = svg("g", { "class": "h-kat " + sinif, "data-kat": ad }); if (kirp) g.setAttribute("clip-path", "url(#" + kirp + ")");
-        yollar.forEach(function (d) { g.appendChild(svg("path", { d: d })); }); (ana || s).appendChild(g); return g;
-      };
-    }
-    function yazi(ust, x, y, sinif, metin, kat) {
-      var t = svg("text", { x: x, y: y, "class": sinif + (kat ? " h-kat" : "") }); if (kat) t.setAttribute("data-kat", kat);
-      String(metin).split("\n").forEach(function (sat, i) { var ts = svg("tspan", { x: x, dy: i ? "1.1em" : 0 }); ts.textContent = sat; t.appendChild(ts); });
-      ust.appendChild(t); return t;
-    }
-
-    // çizim yalnızca viewBox içinde görünsün (büyük hâlde harita "meet" ile ortalanır, kenarda vektör taşmasın)
-    function cerceveKirp(s, defs, w, h, id) {
-      var c = svg("clipPath", { id: id }); c.appendChild(svg("rect", { width: w, height: h })); defs.appendChild(c);
-      var g = svg("g", { "clip-path": "url(#" + id + ")" });
-      Array.prototype.slice.call(s.childNodes).forEach(function (n) { if (n !== defs) g.appendChild(n); });
-      s.appendChild(g);
-    }
-    // yakın harita
-    (function () {
-      var s = svg("svg", { viewBox: "0 0 " + H.w + " " + H.h, preserveAspectRatio: "xMidYMid meet", "class": "ta-hsvg yakin", role: "img", "aria-label": EN ? "Map of historic Palestine" : "Tarihî Filistin haritası" });
-      var defs = svg("defs");
-      var cl = svg("clipPath", { id: "taFil" }); H.filistin.forEach(function (d) { cl.appendChild(svg("path", { d: d })); }); defs.appendChild(cl);
-      var clg = svg("clipPath", { id: "taGz" }); H.gazze.forEach(function (d) { clg.appendChild(svg("path", { d: d })); }); defs.appendChild(clg);
-      var tar = svg("pattern", { id: "taTarali", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
-      tar.appendChild(svg("line", { x1: 0, y1: 0, x2: 0, y2: 6, "class": "tar-cizgi" })); defs.appendChild(tar);
-      var sg_ = svg("filter", { id: "taGolge", x: "-10%", y: "-10%", width: "120%", height: "120%" });
-      sg_.appendChild(svg("feDropShadow", { dx: 0, dy: 0, stdDeviation: 2.2, "flood-color": "#000", "flood-opacity": .85 })); defs.appendChild(sg_);
-      s.appendChild(defs);
-      s.appendChild(svg("rect", { width: H.w, height: H.h, "class": "h-deniz" }));
-      var g0 = svg("g", { "class": "h-kara" }); H.komsu.concat(H.filistin).forEach(function (d) { g0.appendChild(svg("path", { d: d })); }); s.appendChild(g0);
-      var ar = svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none", "class": "h-arazi" });
-      ar.addEventListener("error", function () { ar.remove(); }); s.appendChild(ar);
-      var kat = katci(s);
-      kat("osm", H.osmanli.concat(H.filistin), "osmanli");
-      kat("misir", H.misir, "misir");
-      kat("sinir", H.komsu, "sinir");
-      kat("kayip", H.filistin, "kayip");
-      kat("tam", H.filistin, "fil");
-      kat("manda", H.filistin, "tarali");
-      if (H.plan1947_yahudi) kat("plan1947Y", H.plan1947_yahudi, "plan-yahudi", "taFil");
-      kat("plan1947", H.plan1947, "fil", "taFil");
-      if (H.plan1947_kudus) kat("plan1947K", H.plan1947_kudus, "plan-kudus", "taFil");
-      kat("bati", H.bati, "fil");
-      kat("gazze", H.gazze, "fil");
-      kat("isgal", H.bati.concat(H.gazze), "tarali");
-      kat("isgalB", H.bati, "tarali");
-      kat("oslo", H.oslo_ab, "fil parlak", "taFil");
-      kat("yerlesim", H.gazze_yerlesim, "tarali koyu", "taGz");
-      kat("yerlesimBos", H.gazze_yerlesim, "bos", "taGz");
-      kat("ablukaH", H.gazze, "abluka");
-      kat("sari", [H.sari_hat], "tarali koyu", "taGz");
-      var nh = svg("g", { "class": "h-nehir" }); H.nehir.forEach(function (d) { nh.appendChild(svg("path", { d: d })); }); s.appendChild(nh);
-      s.appendChild(svg("circle", { cx: H.kudus[0], cy: H.kudus[1], r: 10, "class": "h-kat kudus", "data-kat": "kudus" }));
-      var et = svg("g", { "class": "h-etiket", filter: "url(#taGolge)" });
-      H.etiket.forEach(function (e) {
-        var ulke = ["ÜRDÜN", "SURİYE", "LÜBNAN"].indexOf(e[0]) >= 0;   // modern ülke adları Osmanlı haritasında görünmez
-        yazi(et, e[2], e[3], "bolge", EN ? e[1] : e[0], ulke ? "ulkeT" : null);
-      });
-      yazi(et, 330, 470, "buyuk", EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ", "osmT");
-      yazi(et, 268, 262, "orta", EN ? "WEST BANK" : "BATI ŞERİA", "bsT");
-      yazi(et, 118, 372, "orta sag", EN ? "GAZA" : "GAZZE", "gzT");
-      if (H.plan1947_etiket) H.plan1947_etiket.forEach(function (e) { yazi(et, e[2], e[3], "plan-et", EN ? e[1] : e[0], "planT"); });
-      H.sehir.forEach(function (c) {
-        et.appendChild(svg("rect", { x: c[1] - 2.6, y: c[2] - 2.6, width: 5.2, height: 5.2, "class": "kare" }));
-        yazi(et, c[1] + 6, c[2] + 3.4, "sehir", EN ? ({ "Kudüs": "Jerusalem", "Yafa": "Jaffa", "Hayfa": "Haifa", "Gazze": "Gaza", "El-Halil": "Hebron", "Birüssebi": "Beersheba", "Akka": "Acre", "Cenin": "Jenin" }[c[0]] || c[0]) : c[0]);
-      });
-      s.appendChild(et);
-      // Gazze yakın planı: yerleşimler, çekilme, abluka ve sarı hat ana haritada çok küçük kaldığı için
-      var gk = H.gazze_kutu, IX = 68, IY = 50, IW = 150, IH = Math.round(150 * (gk[3] - gk[1]) / (gk[2] - gk[0]));
-      var ins = svg("g", { "class": "h-kat h-yakin", "data-kat": "yakin" });
-      ins.appendChild(svg("line", { x1: IX + IW, y1: IY + IH, x2: gk[0] + 4, y2: gk[1] + 6, "class": "h-yakin-cizgi" }));
-      var sk = IW / (gk[2] - gk[0]);
-      var kc = svg("clipPath", { id: "taYakin" }); kc.appendChild(svg("rect", { x: gk[0], y: gk[1], width: gk[2] - gk[0], height: gk[3] - gk[1] })); defs.appendChild(kc);
-      var iv = svg("g", { transform: "translate(" + IX + " " + IY + ") scale(" + sk.toFixed(4) + ") translate(" + (-gk[0]) + " " + (-gk[1]) + ")", "clip-path": "url(#taYakin)", "class": "h-yakin-ic" });
-      iv.appendChild(svg("rect", { x: gk[0], y: gk[1], width: gk[2] - gk[0], height: gk[3] - gk[1], "class": "h-deniz" }));
-      iv.appendChild(svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none" }));
-      var ikat = function (ad, yollar, sinif, kirp) { return kat(ad, yollar, sinif, kirp, iv); };
-      ikat("gazze", H.gazze, "fil"); ikat("yerlesim", H.gazze_yerlesim, "tarali koyu", "taGz"); ikat("yerlesimBos", H.gazze_yerlesim, "bos", "taGz");
-      ikat("ablukaH", H.gazze, "abluka"); ikat("sari", [H.sari_hat], "tarali koyu", "taGz");
-      ins.appendChild(iv);
-      ins.appendChild(svg("rect", { x: IX, y: IY, width: IW, height: IH, "class": "h-yakin-cerceve" }));
-      var yt = svg("text", { x: IX + 6, y: IY + 14, "class": "h-yakin-ad" }); yt.textContent = EN ? "GAZA · CLOSE-UP" : "GAZZE · YAKIN PLAN"; ins.appendChild(yt);
-      s.insertBefore(ins, et);
-      cerceveKirp(s, defs, H.w, H.h, "taVbY");
-      SVG.yakin = s;
-      var SON = ["sinir", "kayip", "ulkeT"];
-      var P47 = H.plan1947_yahudi ? ["plan1947Y", "plan1947K", "planT"] : [];
-      Object.assign(KATLAR, {
-        tam: ["osm", "misir", "osmT"], manda: ["sinir", "tam", "manda", "ulkeT"], plan1947: SON.concat(["plan1947"], P47.length ? P47 : ["kudus"]), "1949": SON.concat(["bati", "gazze", "bsT", "gzT"]),
-        "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]), oslo: SON.concat(["bati", "gazze", "isgalB", "oslo", "yerlesim", "yakin", "bsT", "gzT"]),
-        cekilme: SON.concat(["bati", "gazze", "isgalB", "oslo", "yerlesimBos", "yakin", "bsT", "gzT"]),
-        abluka: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "yakin", "bsT", "gzT"]), sari: SON.concat(["bati", "gazze", "isgalB", "oslo", "ablukaH", "sari", "yakin", "bsT", "gzT"])
-      });
-    })();
-
-    // geniş harita: 1914 Osmanlı, Sykes–Picot, mandalar
-    (function () {
-      var s = svg("svg", { viewBox: "0 0 " + H2.w + " " + H2.h, preserveAspectRatio: "xMidYMid meet", "class": "ta-hsvg genis", role: "img", "aria-label": EN ? "Map of the region from Anatolia to the Hejaz" : "Anadolu’dan Hicaz’a bölge haritası" });
-      var defs = svg("defs");
-      var cl = svg("clipPath", { id: "taGKara" }); H2.kara.forEach(function (d) { cl.appendChild(svg("path", { d: d })); }); defs.appendChild(cl);
-      var tar = svg("pattern", { id: "taGTarali", width: 7, height: 7, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
-      tar.appendChild(svg("line", { x1: 0, y1: 0, x2: 0, y2: 7, "class": "tar-cizgi" })); defs.appendChild(tar);
-      var sg_ = svg("filter", { id: "taGGolge", x: "-10%", y: "-10%", width: "120%", height: "120%" });
-      sg_.appendChild(svg("feDropShadow", { dx: 0, dy: 0, stdDeviation: 2, "flood-color": "#000", "flood-opacity": .8 })); defs.appendChild(sg_);
-      s.appendChild(defs);
-      s.appendChild(svg("rect", { width: H2.w, height: H2.h, "class": "h-deniz" }));
-      var g0 = svg("g", { "class": "h-kara" }); H2.kara.forEach(function (d) { g0.appendChild(svg("path", { d: d })); }); s.appendChild(g0);
-      var ar = svg("image", { href: "data/gorsel/arazi/tarihce-arazi-genis.jpg", x: 0, y: 0, width: H2.w, height: H2.h, preserveAspectRatio: "none", "class": "h-arazi" });
-      ar.addEventListener("error", function () { ar.remove(); }); s.appendChild(ar);
-      var gl = svg("g", { "class": "h-gol" }); H2.gol.forEach(function (d) { gl.appendChild(svg("path", { d: d })); }); s.appendChild(gl);
-      var kat = katci(s);
-      kat("osm1914", H2.osmanli1914, "osmanli genis", "taGKara");
-      var sy = svg("g", { "class": "h-kat sykes", "data-kat": "sykes", "clip-path": "url(#taGKara)" });
-      ["b", "a", "kahve", "mavi", "kirmizi"].forEach(function (z) { var g = svg("g", { "class": "z-" + z }); H2.sykes[z].forEach(function (d) { g.appendChild(svg("path", { d: d })); }); sy.appendChild(g); });
-      s.appendChild(sy);
-      var md = svg("g", { "class": "h-kat mandalar", "data-kat": "mandalar", "clip-path": "url(#taGKara)" });
-      [["fransa", "z-mavi"], ["ingiltere", "z-kirmizi"]].forEach(function (z) { var g = svg("g", { "class": z[1] }); H2.manda[z[0]].forEach(function (d) { g.appendChild(svg("path", { d: d })); }); md.appendChild(g); });
-      s.appendChild(md);
-      var sn = []; Object.keys(H2.ulke).forEach(function (k) { sn = sn.concat(H2.ulke[k]); });
-      kat("sinirG", sn.concat(H2.filistin), "sinir genis");
-      var nh = svg("g", { "class": "h-nehir genis" }); H2.nehir.forEach(function (d) { nh.appendChild(svg("path", { d: d })); }); s.appendChild(nh);
-      var dy = svg("path", { d: H2.demiryolu, "class": "h-kat h-demiryolu", "data-kat": "demiryolu" }); s.appendChild(dy);
-      var et = svg("g", { "class": "h-etiket genis", filter: "url(#taGGolge)" }), E = H2.etiket;
-      [["akdeniz", "AKDENİZ", "MEDITERRANEAN"], ["kizildeniz", "KIZILDENİZ", "RED SEA"], ["korfez", "BASRA\nKÖRFEZİ", "THE\nGULF"], ["karadeniz", "KARADENİZ", "BLACK SEA"]].forEach(function (x) {
-        yazi(et, E[x[0]][0], E[x[0]][1], "deniz", EN ? x[2] : x[1]);
-      });
-      yazi(et, E.osmanli[0], E.osmanli[1], "buyuk", EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ", "osmG");
-      yazi(et, E.hicaz[0], E.hicaz[1], "orta", EN ? "HEJAZ" : "HİCAZ", "osmG");
-      yazi(et, H2.demiryolu_et[0], H2.demiryolu_et[1], "kucuk", EN ? "Hejaz Railway" : "Hicaz Demiryolu", "osmG");
-      yazi(et, E.misir[0], E.misir[1], "orta soluk", EN ? "EGYPT\n(British occupation)" : "MISIR\n(İngiliz işgali)", "osmG");
-      yazi(et, E.iran[0], E.iran[1], "orta soluk", EN ? "PERSIA" : "İRAN");
-      yazi(et, E.necd[0], E.necd[1], "orta soluk", EN ? "NAJD" : "NECİD", "osmG");
-      [["mavi", "MAVİ BÖLGE\nFransız yönetimi", "BLUE ZONE\nFrench rule"], ["a", "A\nFransız nüfuzu", "A\nFrench influence"], ["b", "B\nİngiliz nüfuzu", "B\nBritish influence"],
-        ["kirmizi", "KIRMIZI BÖLGE\nİngiliz yönetimi", "RED ZONE\nBritish rule"], ["kahve", "KAHVERENGİ\nuluslararası", "BROWN\ninternational"]].forEach(function (z) {
-        yazi(et, E[z[0]][0], E[z[0]][1], "bolgeZ", EN ? z[2] : z[1], "sykesT");
-      });
-      yazi(et, E.fransa[0], E.fransa[1], "bolgeZ", EN ? "FRENCH MANDATE\nSyria and Lebanon" : "FRANSIZ MANDASI\nSuriye ve Lübnan", "mandaT");
-      yazi(et, E.irak[0], E.irak[1], "bolgeZ", EN ? "BRITISH MANDATE\nIraq" : "İNGİLİZ MANDASI\nIrak", "mandaT");
-      yazi(et, E.urdun[0], E.urdun[1], "orta", EN ? "TRANSJORDAN" : "ÜRDÜN", "mandaT");
-      yazi(et, E.filistin[0], E.filistin[1], "orta sag", EN ? "PALESTINE" : "FİLİSTİN", "mandaT");
-      yazi(et, E.turkiye[0], E.turkiye[1], "orta soluk", EN ? "TURKEY" : "TÜRKİYE", "mandaT");
-      yazi(et, E.hicazK[0], E.hicazK[1], "orta soluk", EN ? "KINGDOM\nOF HEJAZ" : "HİCAZ\nKRALLIĞI", "mandaT");
-      var AD = { "İstanbul": "Istanbul", "Halep": "Aleppo", "Şam": "Damascus", "Beyrut": "Beirut", "Kudüs": "Jerusalem", "Hayfa": "Haifa", "Bağdat": "Baghdad", "Musul": "Mosul", "Kerkük": "Kirkuk", "Kahire": "Cairo", "Medine": "Medina", "Akabe": "Aqaba" };
-      H2.sehir.forEach(function (c) {
-        et.appendChild(svg("rect", { x: c[1] - 2.8, y: c[2] - 2.8, width: 5.6, height: 5.6, "class": "kare" }));
-        var sol = ["Kudüs", "Hayfa", "Beyrut"].indexOf(c[0]) >= 0;   // kalabalık kıyıda ad noktanın soluna
-        yazi(et, c[1] + (sol ? -6.5 : 6.5), c[2] + 3.6, "sehir" + (sol ? " sol" : ""), EN ? (AD[c[0]] || c[0]) : c[0]);
-      });
-      s.appendChild(et);
-      cerceveKirp(s, defs, H2.w, H2.h, "taVbG");
-      SVG.genis = s;
-      Object.assign(KATLAR, { osm1914: ["osm1914", "demiryolu", "osmG"], sykes: ["sykes", "sykesT"], mandalar: ["mandalar", "sinirG", "mandaT"] });
-    })();
-
-    var cerceve = el("div", "ta-h-cerceve"); cerceve.append(SVG.yakin, SVG.genis);
-    var bilgi = el("div", "ta-h-bilgi");
-    var hy = el("b", "ta-h-yil"), ha = el("p", "ta-h-ad"), hn = el("p", "ta-h-not"), hkay = el("p", "ta-h-kaynak");
-    var kapat = el("button", "ta-h-kapat", EN ? "Close ×" : "Kapat ×"); kapat.type = "button";
-    bilgi.append(hy, ha, hn, hkay, kapat);
-    var mini = el("button", "ta-h-mini"); mini.type = "button"; mini.setAttribute("aria-label", EN ? "Enlarge map" : "Haritayı büyüt");
-    var miniYil = el("span", "ta-h-mini-yil"); mini.appendChild(miniYil);
-    hk.append(cerceve, bilgi, mini);
-    var dugme = el("button", "ta-h-dugme"); dugme.type = "button";
-    document.body.appendChild(dugme);
-
-    var mod = "", elle = false;
-    HR.elle = function (v, sessiz) { elle = v; if (!sessiz && HR.iste) { mod = ""; HR.iste(); } };
-    mini.onclick = function () { HR.elle(true); };
-    dugme.onclick = function () { HR.elle(true); };
-    kapat.onclick = function () { HR.elle(false); };
-    addEventListener("keydown", function (e) { if (e.key === "Escape" && elle) HR.elle(false); });
-    HR.mod = function (m) {
-      if (elle) m = "acik";
-      if (m === mod) return;
-      mod = m;
-      hk.className = "ta-harita m-" + m + (hk.classList.contains("degisti") ? " degisti" : "");
-      var kucuk = m !== "buyuk" && m !== "acik";
-      [SVG.yakin, SVG.genis].forEach(function (s) { s.setAttribute("preserveAspectRatio", kucuk ? "xMidYMid slice" : "xMidYMid meet"); });
-      dugme.classList.toggle("gorunur", m === "gizli");
-      document.documentElement.classList.toggle("ta-h-acik", m === "acik");
+  // --- haritalar: yakın (tarihî Filistin) ve geniş (Anadolu'dan Hicaz'a) iki çizim. ciz(pencere, hâl, kesit) yeni bir SVG döndürür;
+  // her SVG kendi kimlikleriyle (clipPath, desen) çizilir, böylece aynı sayfada çok sayıda harita yan yana durabilir.
+  function haritaci(H, H2) {
+    var sayac = 0;
+    // projeksiyon: iki pencere de doğrusal (enlem-boylam dikdörtgeni)
+    function P(M, lon, lat) { var p = M.pencere; return [(lon - p[0]) / (p[1] - p[0]) * M.w, (p[3] - lat) / (p[3] - p[2]) * M.h]; }
+    var gk = H.gazze_kutu;
+    var KES = {
+      misir: H2.kesit && H2.kesit.misir,
+      bs: H.bs_kutu,
+      gz: [Math.round(((gk[0] + gk[2]) / 2 - 41) * 10) / 10, Math.round(((gk[1] + gk[3]) / 2 - 47) * 10) / 10, 82, 94]
     };
-    window.__taHarita = function (ad, m) { HR.su = null; HR.goster(ad); if (m) { elle = m === "acik"; mod = ""; HR.mod(m); } };   // deneme ve paylaşım görüntüsü için
-    HR.goster = function (ad) {
-      if (!ad || HR.su === ad || !KATLAR[ad]) return;
-      HR.su = ad;
-      var m = M[ad] || {}, pen = m.pencere === "genis" ? "genis" : "yakin";
-      hk.dataset.pencere = pen;
-      SVG[pen].querySelectorAll(".h-kat").forEach(function (g) { g.classList.toggle("acik", KATLAR[ad].indexOf(g.getAttribute("data-kat")) >= 0); });
-      hk.classList.remove("degisti"); void hk.offsetWidth; hk.classList.add("degisti");
-      hy.textContent = m.yil || ""; miniYil.textContent = m.yil || "";
-      ha.textContent = (EN && m.ad_en) || m.ad || ""; hn.textContent = (EN && m.not_en) || m.not || "";
-      hkay.textContent = pen === "genis"
-        ? (EN ? "Relief: AWS Terrain Tiles · coastlines and borders: Natural Earth · zones schematic" : "Arazi: AWS Terrain Tiles · kıyılar ve sınırlar: Natural Earth · bölgeler şematik")
-        : (EN ? "Relief: AWS Terrain Tiles · borders: Natural Earth · some areas schematic" : "Arazi: AWS Terrain Tiles · sınırlar: Natural Earth · bazı bölümler şematik");
-      dugme.textContent = (EN ? "Map" : "Harita") + (m.yil ? " · " + m.yil : "");
+    var SON = ["sinir", "kayip", "ulkeT"];
+    var KATLAR = {
+      tam: ["osm", "misir", "osmT"],
+      manda: ["sinir", "tam", "manda", "ulkeT"],
+      plan1947: SON.concat(["plan1947Y", "plan1947", "plan1947K", "planT"]),
+      "1949": SON.concat(["bati", "gazze", "bsT", "gzT"]),
+      "1967": SON.concat(["bati", "gazze", "isgal", "bsT", "gzT"]),
+      osloABC: SON.concat(["osloC", "osloB", "osloA", "osloY", "gazze", "bsT"]),
+      oslo: SON.concat(["osloC", "osloB", "osloA", "gazze", "yerlesim", "bsT", "gzT"]),
+      cekilme: SON.concat(["osloC", "osloB", "osloA", "gazze", "yerlesimBos", "gzT"]),
+      abluka: SON.concat(["osloC", "osloB", "osloA", "gazze", "ablukaH", "gzT"]),
+      sari: SON.concat(["osloC", "osloB", "osloA", "gazze", "ablukaH", "sari", "gzT"]),
+      osm1914: ["osm1914", "demiryolu", "osmG"],
+      sykes: ["sykes", "sykesT"],
+      mandalar: ["mandalar", "sinirG", "mandaT"]
     };
+    var G49 = ["filK", "psxF", "sinirG", "kanal", "gT", "noktaT"];
+    KATLAR.g1949 = G49;
+    KATLAR.g1956 = G49.concat(["sinaI", "gazaI", "t56"]);
+    KATLAR.g1967 = G49.concat(["sinaI", "psxI", "golanI"]);
+    KATLAR.g1973 = G49.concat(["sinaI", "psxI", "golanI", "kopru73", "cep73", "t73"]);
+    KATLAR.g1982 = G49.concat(["psxI", "golanI", "t82"]);
+
+    function kutu(pen, kesit) { var M = pen === "genis" ? H2 : H; return kesit && KES[kesit] ? KES[kesit] : [0, 0, M.w, M.h]; }
+
+    function ciz(pen, durum, kesit) {
+      var genis = pen === "genis", M = genis ? H2 : H, u = "th" + (++sayac);
+      var vb = kutu(pen, kesit), L = KATLAR[durum] || [];
+      var var_ = function (n) { return L.indexOf(n) >= 0; };
+      var o = kesit ? Math.max(vb[2] / M.w, vb[3] / M.h) : 1;   // yazı ve işaret ölçeği: kesitte yazılar ekranda aynı boyda kalsın
+      var s = svg("svg", { viewBox: vb.join(" "), preserveAspectRatio: "xMidYMid meet", "class": "ta-hsvg " + pen, role: "img",
+        "aria-label": (genis ? (EN ? "Map of the region" : "Bölge haritası") : (EN ? "Map of historic Palestine" : "Tarihî Filistin haritası")) });
+      s.style.setProperty("--o", o.toFixed(3));
+      var defs = svg("defs"); s.appendChild(defs);
+      function klip(ad, yollar) { var c = svg("clipPath", { id: u + ad }); yollar.forEach(function (d) { c.appendChild(svg("path", { d: d })); }); defs.appendChild(c); }
+      var ds = (genis ? 7 : 6) * o;
+      var tar = svg("pattern", { id: u + "tar", width: ds, height: ds, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
+      tar.appendChild(svg("line", { x1: 0, y1: 0, x2: 0, y2: ds, "class": "tar-cizgi", "stroke-width": (1.6 * o).toFixed(2) })); defs.appendChild(tar);
+      var gol = svg("filter", { id: u + "gol", x: "-10%", y: "-10%", width: "120%", height: "120%" });
+      gol.appendChild(svg("feDropShadow", { dx: 0, dy: 0, stdDeviation: (2 * o).toFixed(2), "flood-color": "#000", "flood-opacity": .8 })); defs.appendChild(gol);
+      // yol grubu: sinif CSS'ten boyanır; desen: üstüne çizgili desen; kirp: clipPath adı
+      function yol(yollar, sinif, kirp, desen) {
+        var g = svg("g", { "class": "h-kat " + sinif }); if (kirp) g.setAttribute("clip-path", "url(#" + u + kirp + ")");
+        yollar.forEach(function (d) { g.appendChild(svg("path", { d: d })); }); s.appendChild(g);
+        if (desen) { var g2 = svg("g", { "class": "h-kat desen", fill: "url(#" + u + "tar)" }); if (kirp) g2.setAttribute("clip-path", "url(#" + u + kirp + ")"); yollar.forEach(function (d) { g2.appendChild(svg("path", { d: d })); }); s.appendChild(g2); }
+        return g;
+      }
+      function yazi(ust, x, y, sinif, metin) {
+        var t = svg("text", { x: x, y: y, "class": sinif });
+        String(metin).split("\n").forEach(function (sat, i) { var ts = svg("tspan", { x: x, dy: i ? "1.1em" : 0 }); ts.textContent = sat; t.appendChild(ts); });
+        ust.appendChild(t); return t;
+      }
+      function kare(ust, x, y, r) { ust.appendChild(svg("rect", { x: x - r * o, y: y - r * o, width: 2 * r * o, height: 2 * r * o, "class": "kare" })); }
+      s.appendChild(svg("rect", { x: vb[0], y: vb[1], width: vb[2], height: vb[3], "class": "h-deniz" }));
+
+      if (!genis) {
+        klip("fil", H.filistin); klip("gz", H.gazze);
+        var g0 = svg("g", { "class": "h-kara" }); H.komsu.concat(H.filistin).forEach(function (d) { g0.appendChild(svg("path", { d: d })); }); s.appendChild(g0);
+        var ar = svg("image", { href: "data/gorsel/arazi/tarihce-arazi.jpg", x: 0, y: 0, width: H.w, height: H.h, preserveAspectRatio: "none", "class": "h-arazi" });
+        ar.addEventListener("error", function () { ar.remove(); }); s.appendChild(ar);
+        if (var_("osm")) yol(H.osmanli.concat(H.filistin), "osmanli");
+        if (var_("misir")) yol(H.misir, "misir");
+        if (var_("sinir")) yol(H.komsu, "sinir");
+        if (var_("kayip")) yol(H.filistin, "kayip");
+        if (var_("tam")) yol(H.filistin, "fil");
+        if (var_("manda")) yol(H.filistin, "bos-desen", null, true);
+        if (var_("plan1947Y") && H.plan1947_yahudi) yol(H.plan1947_yahudi, "plan-yahudi", "fil");
+        if (var_("plan1947")) yol(H.plan1947, "fil", "fil");
+        if (var_("plan1947K") && H.plan1947_kudus) yol(H.plan1947_kudus, "plan-kudus", "fil");
+        if (var_("bati")) yol(H.bati, "fil");
+        if (var_("osloC")) yol(H.bati, "oslo-c", null, true);
+        if (var_("osloB")) yol(H.oslo_B, "oslo-b");
+        if (var_("osloA")) yol(H.oslo_A, "oslo-a");
+        if (var_("osloY")) yol(H.oslo_yer, "oslo-y");
+        if (var_("gazze")) yol(H.gazze, "fil");
+        if (var_("isgal")) yol(H.bati.concat(H.gazze), "bos-desen", null, true);
+        if (var_("yerlesim")) yol(H.gazze_yerlesim, "koyu", "gz", true);
+        if (var_("yerlesimBos")) yol(H.gazze_yerlesim, "bos", "gz");
+        if (var_("ablukaH")) yol(H.gazze, "abluka");
+        if (var_("sari")) yol([H.sari_hat], "koyu", "gz", true);
+        var nh = svg("g", { "class": "h-nehir" }); H.nehir.forEach(function (d) { nh.appendChild(svg("path", { d: d })); }); s.appendChild(nh);
+        var et = svg("g", { "class": "h-etiket", filter: "url(#" + u + "gol)" });
+        H.etiket.forEach(function (e) {
+          var ulke = ["ÜRDÜN", "SURİYE", "LÜBNAN"].indexOf(e[0]) >= 0;   // modern ülke adları Osmanlı haritasında görünmez
+          if (!ulke || var_("ulkeT")) yazi(et, e[2], e[3], "bolge", EN ? e[1] : e[0]);
+        });
+        if (var_("osmT")) yazi(et, 330, 470, "buyuk", EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ");
+        if (var_("bsT")) { var bp = kesit === "bs" ? P(H, 35.42, 32.47) : [268, 262]; yazi(et, bp[0], bp[1], "orta", EN ? "WEST BANK" : "BATI ŞERİA"); }
+        if (var_("gzT")) { var gp = kesit === "gz" ? P(H, 34.30, 31.56) : [118, 372]; yazi(et, gp[0], gp[1], "orta sag", EN ? "GAZA" : "GAZZE"); }
+        if (var_("planT") && H.plan1947_etiket) H.plan1947_etiket.forEach(function (e) { yazi(et, e[2], e[3], "plan-et", EN ? e[1] : e[0]); });
+        var AD = { "Kudüs": "Jerusalem", "Yafa": "Jaffa", "Hayfa": "Haifa", "Gazze": "Gaza", "El-Halil": "Hebron", "Birüssebi": "Beersheba", "Akka": "Acre", "Cenin": "Jenin",
+          "Eriha": "Jericho", "Beytüllahim": "Bethlehem", "Tulkerim": "Tulkarm", "Han Yunus": "Khan Yunis", "Refah": "Rafah", "Deyr el-Belah": "Deir al-Balah" };
+        var sehir = H.sehir.slice();
+        if (kesit === "bs") sehir = sehir.concat([["Eriha"].concat(P(H, 35.45, 31.86)), ["Beytüllahim"].concat(P(H, 35.20, 31.705)), ["Tulkerim"].concat(P(H, 35.03, 32.31))]);
+        if (kesit === "gz") sehir = sehir.concat([["Han Yunus"].concat(P(H, 34.306, 31.346)), ["Refah"].concat(P(H, 34.25, 31.29)), ["Deyr el-Belah"].concat(P(H, 34.35, 31.418))]);
+        sehir.forEach(function (c) {
+          kare(et, c[1], c[2], 2.6);
+          yazi(et, c[1] + 6 * o, c[2] + 3.4 * o, "sehir", EN ? (AD[c[0]] || c[0]) : c[0]);
+        });
+        s.appendChild(et);
+      } else {
+        klip("kara", H2.kara);
+        var k0 = svg("g", { "class": "h-kara" }); H2.kara.forEach(function (d) { k0.appendChild(svg("path", { d: d })); }); s.appendChild(k0);
+        var ar2 = svg("image", { href: "data/gorsel/arazi/tarihce-arazi-genis.jpg", x: 0, y: 0, width: H2.w, height: H2.h, preserveAspectRatio: "none", "class": "h-arazi" });
+        ar2.addEventListener("error", function () { ar2.remove(); }); s.appendChild(ar2);
+        var gl = svg("g", { "class": "h-gol" }); H2.gol.forEach(function (d) { gl.appendChild(svg("path", { d: d })); }); s.appendChild(gl);
+        if (var_("osm1914")) yol(H2.osmanli1914, "osmanli genis", "kara");
+        if (var_("sykes")) {
+          var sy = svg("g", { "class": "h-kat sykes", "clip-path": "url(#" + u + "kara)" });
+          ["b", "a", "kahve", "mavi", "kirmizi"].forEach(function (z) { var g = svg("g", { "class": "z-" + z }); H2.sykes[z].forEach(function (d) { g.appendChild(svg("path", { d: d })); }); sy.appendChild(g); });
+          s.appendChild(sy);
+        }
+        if (var_("mandalar")) {
+          var md = svg("g", { "class": "h-kat mandalar", "clip-path": "url(#" + u + "kara)" });
+          [["fransa", "z-mavi"], ["ingiltere", "z-kirmizi"]].forEach(function (z) { var g = svg("g", { "class": z[1] }); H2.manda[z[0]].forEach(function (d) { g.appendChild(svg("path", { d: d })); }); md.appendChild(g); });
+          s.appendChild(md);
+        }
+        // Gazze, 1967 öncesi Filistin parçalarının (psx) en batıdakidir
+        var bx = function (d) { var m = /M\s*(-?[\d.]+)/.exec(d); return m ? +m[1] : 0; };
+        var psx = (H2.psx || []).slice().sort(function (a, b) { return bx(a) - bx(b); });
+        if (var_("filK")) yol(H2.filistin, "kayip");
+        if (var_("psxF")) yol(psx, "fil");
+        if (var_("sinaI")) yol(H2.sina, "isgal", "kara", true);
+        if (var_("gazaI")) yol(psx.slice(0, 1), "isgal", null, true);
+        if (var_("psxI")) yol(psx, "isgal", null, true);
+        if (var_("golanI")) yol(H2.golan, "isgal", "kara", true);
+        if (var_("kopru73")) yol(H2.kopru73, "misir-k", "kara");
+        if (var_("cep73")) yol(H2.cep73, "cep", "kara", true);
+        if (var_("sinirG")) { var sn = []; Object.keys(H2.ulke).forEach(function (k) { sn = sn.concat(H2.ulke[k]); }); yol(sn.concat(H2.filistin), "sinir genis"); }
+        if (var_("kanal") && H2.kanal) s.appendChild(svg("path", { d: H2.kanal, "class": "h-kanal" }));
+        var nh2 = svg("g", { "class": "h-nehir genis" }); H2.nehir.forEach(function (d) { nh2.appendChild(svg("path", { d: d })); }); s.appendChild(nh2);
+        if (var_("demiryolu")) s.appendChild(svg("path", { d: H2.demiryolu, "class": "h-demiryolu" }));
+        var et2 = svg("g", { "class": "h-etiket genis", filter: "url(#" + u + "gol)" }), E = H2.etiket;
+        if (!kesit) [["akdeniz", "AKDENİZ", "MEDITERRANEAN"], ["kizildeniz", "KIZILDENİZ", "RED SEA"], ["korfez", "BASRA\nKÖRFEZİ", "THE\nGULF"], ["karadeniz", "KARADENİZ", "BLACK SEA"]].forEach(function (x) {
+          yazi(et2, E[x[0]][0], E[x[0]][1], "deniz", EN ? x[2] : x[1]);
+        });
+        if (kesit === "misir") { var ak = P(H2, 32.3, 32.6); yazi(et2, ak[0], ak[1], "deniz", EN ? "MEDITERRANEAN" : "AKDENİZ"); var kz = P(H2, 34.55, 27.85); yazi(et2, kz[0], kz[1], "deniz kucuk", EN ? "RED SEA" : "KIZILDENİZ"); }
+        if (var_("osmG")) {
+          yazi(et2, E.osmanli[0], E.osmanli[1], "buyuk", EN ? "OTTOMAN STATE" : "OSMANLI DEVLETİ");
+          yazi(et2, E.hicaz[0], E.hicaz[1], "orta", EN ? "HEJAZ" : "HİCAZ");
+          yazi(et2, H2.demiryolu_et[0], H2.demiryolu_et[1], "kucuk", EN ? "Hejaz Railway" : "Hicaz Demiryolu");
+          yazi(et2, E.misir[0], E.misir[1], "orta soluk", EN ? "EGYPT\n(British occupation)" : "MISIR\n(İngiliz işgali)");
+          yazi(et2, E.necd[0], E.necd[1], "orta soluk", EN ? "NAJD" : "NECİD");
+        }
+        if (!kesit) yazi(et2, E.iran[0], E.iran[1], "orta soluk", EN ? "PERSIA" : "İRAN");
+        if (var_("sykesT")) [["mavi", "MAVİ BÖLGE\nFransız yönetimi", "BLUE ZONE\nFrench rule"], ["a", "A\nFransız nüfuzu", "A\nFrench influence"], ["b", "B\nİngiliz nüfuzu", "B\nBritish influence"],
+          ["kirmizi", "KIRMIZI BÖLGE\nİngiliz yönetimi", "RED ZONE\nBritish rule"], ["kahve", "KAHVERENGİ\nuluslararası", "BROWN\ninternational"]].forEach(function (z) {
+          yazi(et2, E[z[0]][0], E[z[0]][1], "bolgeZ", EN ? z[2] : z[1]);
+        });
+        if (var_("mandaT")) {
+          yazi(et2, E.fransa[0], E.fransa[1], "bolgeZ", EN ? "FRENCH MANDATE\nSyria and Lebanon" : "FRANSIZ MANDASI\nSuriye ve Lübnan");
+          yazi(et2, E.irak[0], E.irak[1], "bolgeZ", EN ? "BRITISH MANDATE\nIraq" : "İNGİLİZ MANDASI\nIrak");
+          yazi(et2, E.urdun[0], E.urdun[1], "orta", EN ? "TRANSJORDAN" : "ÜRDÜN");
+          yazi(et2, E.filistin[0], E.filistin[1], "orta sag", EN ? "PALESTINE" : "FİLİSTİN");
+          yazi(et2, E.turkiye[0], E.turkiye[1], "orta soluk", EN ? "TURKEY" : "TÜRKİYE");
+          yazi(et2, E.hicazK[0], E.hicazK[1], "orta soluk", EN ? "KINGDOM\nOF HEJAZ" : "HİCAZ\nKRALLIĞI");
+        }
+        if (var_("gT")) {
+          var q = function (lon, lat, sinif, tr, en) { var p = P(H2, lon, lat); yazi(et2, p[0], p[1], sinif, EN ? en : tr); };
+          q(33.85, 29.55, "orta", "SİNA", "SINAI");
+          q(31.25, 29.0, "orta soluk", "MISIR", "EGYPT");
+          q(36.15, 32.95, "kucuk sol-bas", "Golan", "Golan");
+          q(32.05, 31.02, "kucuk sag", "Süveyş\nKanalı", "Suez\nCanal");
+          q(36.55, 31.2, "orta soluk", "ÜRDÜN", "JORDAN");
+          q(36.7, 33.45, "orta soluk", "SURİYE", "SYRIA");
+          q(35.75, 31.62, "kucuk sol-bas", "Batı Şeria", "West Bank");
+          q(34.05, 31.62, "kucuk sag", "Gazze", "Gaza");
+        }
+        if (var_("noktaT") && H2.nokta) {
+          var NAD = { portsait: ["Port Said", "Port Said"], suveys: ["Süveyş", "Suez"], ismailiye: ["İsmailiye", "Ismailia"] };
+          Object.keys(NAD).forEach(function (k) { var p = H2.nokta[k]; if (!p) return; kare(et2, p[0], p[1], 2.4); yazi(et2, p[0] - 5 * o, p[1] + 3.4 * o, "sehir sol", EN ? NAD[k][1] : NAD[k][0]); });
+        }
+        var ek = function (lon, lat, sinif, tr, en) { var p = P(H2, lon, lat); yazi(et2, p[0], p[1], "not " + sinif, EN ? en : tr); };
+        if (var_("t56")) { ek(32.45, 31.55, "", "İngiliz-Fransız çıkarması\n5–6 Kasım", "Anglo-French landing\n5–6 November"); ek(33.6, 30.35, "", "İsrail işgali\n29 Ekim – Mart 1957", "Israeli occupation\n29 Oct – Mar 1957"); }
+        if (var_("t73")) { ek(33.0, 30.55, "", "Mısır köprübaşı\n6 Ekim", "Egyptian bridgehead\n6 October"); ek(31.55, 30.05, "sag", "İsrail cebi\n16 Ekim sonrası", "Israeli pocket\nafter 16 October"); }
+        if (var_("t82")) ek(33.85, 29.2, "", "Mısır’a döndü\nNisan 1982", "returned to Egypt\nApril 1982");
+        var AD2 = { "İstanbul": "Istanbul", "Halep": "Aleppo", "Şam": "Damascus", "Beyrut": "Beirut", "Kudüs": "Jerusalem", "Hayfa": "Haifa", "Bağdat": "Baghdad", "Musul": "Mosul", "Kerkük": "Kirkuk", "Kahire": "Cairo", "Medine": "Medina", "Akabe": "Aqaba" };
+        H2.sehir.forEach(function (c) {
+          if (kesit === "misir" && ["Hayfa", "Beyrut", "Amman"].indexOf(c[0]) >= 0) return;
+          kare(et2, c[1], c[2], 2.8);
+          var sol = ["Kudüs", "Hayfa", "Beyrut"].indexOf(c[0]) >= 0;   // kalabalık kıyıda ad noktanın soluna
+          yazi(et2, c[1] + (sol ? -6.5 : 6.5) * o, c[2] + 3.6 * o, "sehir" + (sol ? " sol" : ""), EN ? (AD2[c[0]] || c[0]) : c[0]);
+        });
+        s.appendChild(et2);
+      }
+      return s;
+    }
+    return { ciz: ciz, kutu: kutu };
   }
 
-  // --- akış nehri: her akış bir dere; yan yana akabilir ---
+  // --- zaman şeridi: solda 1910–2030 cetveli, her akış kendi renginde bir dere; o an okunan yıl ve akış üstte ---
   var NH = {};
-  function nehirKur(n, L) {
-    var Y0 = 1914, Y1 = 2026, W = 92, HH = 1000;
-    var s = svg("svg", { viewBox: "0 0 " + W + " " + HH, preserveAspectRatio: "none", "class": "ta-nsvg", "aria-hidden": "true" });
-    var serit = [];
-    var y = function (t) { return 20 + (t - Y0) / (Y1 - Y0) * (HH - 40); };
-    L.forEach(function (a) { var i = 0; while (serit[i] != null && serit[i] > a.yillar[0]) i++; serit[i] = a.yillar[1]; a._s = i; });
-    L.forEach(function (a) {
-      s.appendChild(svg("rect", { x: 14 + a._s * 22, y: y(a.yillar[0]), width: 12, height: Math.max(8, y(a.yillar[1]) - y(a.yillar[0])), rx: 6, fill: a.renk, "class": "ta-dere", "data-akis": a.anahtar }));
+  function nehirKur(n, L, git) {
+    var Y0 = 1910, Y1 = 2030;
+    function yuzde(t) { return ((t - Y0) / (Y1 - Y0) * 100).toFixed(3) + "%"; }
+    var ust = el("div", "tn-ust");
+    var yilE = el("b", "tn-yil", "1914"), adE = el("span", "tn-ad", ""), noE = el("span", "tn-no", "");
+    ust.append(noE, yilE, adE);
+    var cetvel = el("div", "tn-cetvel");
+    for (var t = Y0; t <= Y1; t += 10) {
+      var c = el("i", "tn-tik" + (t % 20 === 0 ? " uzun" : "")); c.style.top = yuzde(t); cetvel.appendChild(c);
+      if (t % 20 === 0) { var y = el("span", "tn-etk", String(t)); y.style.top = yuzde(t); cetvel.appendChild(y); }
+    }
+    var kulvar = [];
+    L.forEach(function (a) { var i = 0; while (kulvar[i] != null && kulvar[i] > a.yillar[0]) i++; kulvar[i] = a.yillar[1]; a._k = i; });
+    L.forEach(function (a, ai) {
+      var b = el("button", "tn-dere"); b.type = "button";
+      b.style.top = yuzde(a.yillar[0]); b.style.height = "calc(" + yuzde(Math.max(a.yillar[1], a.yillar[0] + 1.2)) + " - " + yuzde(a.yillar[0]) + ")";
+      b.style.setProperty("--k", a._k); b.style.setProperty("--renk", a.renk); b.dataset.akis = a.anahtar;
+      b.title = D2(a, "ad") + " · " + a.yillar[0] + "–" + a.yillar[1];
+      b.setAttribute("aria-label", String(ai + 1).padStart(2, "0") + " " + b.title);
+      b.onclick = function () { git(a.anahtar); };
+      cetvel.appendChild(b);
     });
-    [1914, 1948, 1967, 1987, 2023].forEach(function (t) { var tx = svg("text", { x: W - 2, y: y(t) + 4, "class": "ta-n-yil" }); tx.textContent = t; s.appendChild(tx); });
-    var cz = svg("line", { x1: 4, x2: W - 30, y1: 0, y2: 0, "class": "ta-n-simdi" }); s.appendChild(cz);
-    n.appendChild(s);
-    var cubuk = el("div", "ta-n-cubuk"); L.forEach(function (a) { var i = el("i"); i.style.background = a.renk; i.dataset.akis = a.anahtar; cubuk.appendChild(i); }); n.appendChild(cubuk);
-    NH.yil = function (t) { var yy = y(t); cz.setAttribute("y1", yy); cz.setAttribute("y2", yy); };
-    NH.akis = function (k) { n.querySelectorAll("[data-akis]").forEach(function (e) { e.classList.toggle("su", e.dataset.akis === k); }); };
+    var imlec = el("i", "tn-imlec"); cetvel.appendChild(imlec);
+    // dar ekranda: üstte ince bir şerit; akış parçaları ve yıl
+    var mobil = el("div", "tn-mobil");
+    var parcalar = el("div", "tn-parca");
+    L.forEach(function (a) { var i = el("i"); i.style.background = a.renk; i.dataset.akis = a.anahtar; parcalar.appendChild(i); });
+    var myil = el("b", "tn-myil", "1914"), mad = el("span", "tn-mad", "");
+    mobil.append(myil, mad, parcalar);
+    n.append(ust, cetvel, mobil);
+    var simdiYil = null, simdiAkis = null;
+    NH.guncelle = function (t, k) {
+      if (t && t !== simdiYil) { simdiYil = t; yilE.textContent = myil.textContent = t; imlec.style.top = yuzde(t); }
+      if (k && k !== simdiAkis) {
+        simdiAkis = k;
+        var ai = L.findIndex(function (a) { return a.anahtar === k; }), a = L[ai];
+        n.style.setProperty("--su", a.renk);
+        noE.textContent = String(ai + 1).padStart(2, "0") + " / " + String(L.length).padStart(2, "0");
+        adE.textContent = mad.textContent = D2(a, "ad");
+        n.querySelectorAll("[data-akis]").forEach(function (e) { e.classList.toggle("su", e.dataset.akis === k); });
+      }
+    };
   }
 
-  // --- kaydırma: her izlenen öğeye --p; ortadaki öğeye göre nehir; harita anlarına göre haritanın hâli ---
+  // --- kaydırma: her izlenen öğeye --p; ekranın ortasındaki öğeye göre zaman şeridi ---
   function ilerlemeKur() {
     var izle = Array.prototype.slice.call(document.querySelectorAll(".izle"));
-    var anlar = Array.prototype.slice.call(document.querySelectorAll(".ta-an"));
+    var serit = Array.prototype.slice.call(document.querySelectorAll(".ta-serit > [data-akis]"));
     var bekliyor = false;
     function iste() { if (!bekliyor) { bekliyor = true; requestAnimationFrame(guncelle); } }
-    HR.iste = iste;
     function guncelle() {
       bekliyor = false;
-      var vh = innerHeight, orta = vh * .45, en = null, enUzak = 1e9;
+      var vh = innerHeight;
       izle.forEach(function (e) {
         var r = e.getBoundingClientRect();
         if (r.bottom < -vh * .3 || r.top > vh * 1.3) return;
@@ -566,31 +762,15 @@
         p = Math.max(0, Math.min(1, p));
         e.style.setProperty("--p", p.toFixed(3));
         if (e.classList.contains("ta-giris")) e.style.setProperty("--c", Math.max(0, Math.min(1, -r.top / (vh * .6))).toFixed(3));
-        var m = Math.abs(r.top + Math.min(r.height, vh * .5) / 2 - orta);
-        if (r.top < vh * .8 && r.bottom > vh * .15 && m < enUzak && e.closest(".ta-bolum")) { en = e; enUzak = m; }
       });
-      if (en) {
-        var b = en.closest(".ta-bolum");
-        if (b) { NH.akis(b.dataset.akis); document.documentElement.style.setProperty("--su", getComputedStyle(b).getPropertyValue("--renk")); }
-        var yl = en.dataset.yil;
-        if (!yl && b) b.querySelectorAll("[data-yil]").forEach(function (x) { if (x.compareDocumentPosition(en) & Node.DOCUMENT_POSITION_FOLLOWING) yl = x.dataset.yil; });
-        if (yl) NH.yil(+yl);
-      }
-      // harita: ekrandaki harita anında büyük; anı geçince köşede küçük; epey ilerleyince tamamen çekilir
-      var aktif = null, onceki = null, gecen = 0;
-      for (var i = 0; i < anlar.length; i++) {
-        var r = anlar[i].getBoundingClientRect();
-        if (r.top < vh * .62 && r.bottom > vh * .38) { aktif = anlar[i]; break; }
-        if (r.bottom <= vh * .38) { onceki = anlar[i]; gecen = vh * .38 - r.bottom; }
-        else break;
-      }
-      if (aktif) { HR.elle(false, true); HR.goster(aktif.dataset.an); HR.mod("buyuk"); }
-      else if (onceki) { HR.goster(onceki.dataset.an); HR.mod(gecen < vh * 1.3 ? "kucuk" : "gizli"); }
-      else HR.mod("yok");   // ilk harita anından önce harita da düğmesi de görünmez
+      // ekranın %40'ını geçen son öğe "şu an okunan" öğedir (ikili arama; öğeler sırayla dizili)
+      var cizgi = vh * .4, lo = 0, hi = serit.length - 1, en = null;
+      while (lo <= hi) { var m = (lo + hi) >> 1; if (serit[m].getBoundingClientRect().top <= cizgi) { en = serit[m]; lo = m + 1; } else hi = m - 1; }
+      if (!en && serit.length) en = serit[0];
+      if (en) NH.guncelle(+en.dataset.yil || null, en.dataset.akis);
     }
     addEventListener("scroll", iste, { passive: true });
     addEventListener("resize", iste);
-    HR.goster("osm1914");
     iste();
   }
 })();
