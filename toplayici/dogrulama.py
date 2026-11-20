@@ -91,10 +91,23 @@ _KIMLIK = re.compile(r"(?:/h/|#h-|#o-)?\b([0-9a-f]{12})\b")
 _URL = re.compile(r"https?://\S+")
 
 
+_OKUNUR = re.compile(r"/h/([a-z0-9-]{8,140})\.html")
+
+
 def _haber_kimligi(metin, haberler):
     for m in _KIMLIK.finditer(metin or ""):
         if m.group(1) in haberler:
             return m.group(1)
+    # okunur adres (h/<başlıktan-ad>.html): ad → kimlik
+    for m in _OKUNUR.finditer(metin or ""):
+        try:
+            import sayfalar
+            A = sayfalar.adlar(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            for hid, v in A.items():
+                if (v[0] if isinstance(v, list) else v) == m.group(1) and hid in haberler:
+                    return hid
+        except Exception:
+            pass
     return None
 
 

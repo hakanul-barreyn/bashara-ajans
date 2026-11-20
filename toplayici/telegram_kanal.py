@@ -102,13 +102,22 @@ def olay_metni(o, haberler, kaynaklar, site):
     if denge:
         satir += ["", f"⚖️ {denge}"]
     satir += [f"🗞 {_e(', '.join(adlar))}{' …' if len(ks) > len(adlar) else ''}",
-              "", f'<a href="{site}h/{ilk}.html#kim-tr">Kim nasıl yazdı →</a>']
+              "", f'<a href="{site}h/{_sayfa(ilk)}#kim-tr">Kim nasıl yazdı →</a>']
     return "\n".join(satir)
+
+
+def _sayfa(hid):
+    """Haber sayfasının okunur adı (sayfalar.adlari_ata); yoksa kimlik."""
+    try:
+        import sayfalar
+        return sayfalar.dosya_adi(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), hid)
+    except Exception:
+        return f"{hid}.html"
 
 
 def analiz_metni(h, k, site):
     satir = [f"📝 <b>Analiz · {_e(k.get('ad'))}</b>", "", f"<b>{_e(h['baslik_tr'])}</b>", "", _e(h.get("ozet_tr")),
-             "", f'<a href="{_e(h["url"])}">Yazıyı oku ↗</a> · <a href="{site}h/{h["id"]}.html">{_e(marka.oku()["ad"])}’de</a>']
+             "", f'<a href="{_e(h["url"])}">Yazıyı oku ↗</a> · <a href="{site}h/{_sayfa(h["id"])}">{_e(marka.oku()["ad"])}’de</a>']
     return "\n".join(satir)
 
 

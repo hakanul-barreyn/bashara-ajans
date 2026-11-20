@@ -311,12 +311,14 @@
   }
 
   // Her haberin kendi sayfası (h/<id>.html): paylaşıldığında önizlemede başlık, özet ve yayın adı görünür
-  function kalici(id) { return location.origin + location.pathname.replace(/[^/]*$/, "") + "h/" + id + ".html"; }
+  // okunur ad (h/<başlıktan-ad>.html) verildiyse o; yoksa kimlik (kimlikli adres okunur adrese yönlendirir)
+  function sayfaYolu(h) { return "h/" + encodeURIComponent(h.sayfa || h.id) + ".html"; }
+  function kalici(h) { return location.origin + location.pathname.replace(/[^/]*$/, "") + sayfaYolu(h); }
   function paylasDugme(h) {
     const kutu = el("span", "paylas");
     const b = el("button", "eylem", "Paylaş"); b.type = "button"; b.setAttribute("aria-expanded", "false");
     const menu = el("span", "paylas-menu"); menu.hidden = true;
-    const url = kalici(h.id), metin = (BT(h) || h.baslik_orj) + " · " + kaynaklar[h.kaynak].ad;
+    const url = kalici(h), metin = (BT(h) || h.baslik_orj) + " · " + kaynaklar[h.kaynak].ad;
     const bag = (l, u) => { const a = el("a", null, l); a.href = u; a.target = "_blank"; a.rel = "noopener"; menu.appendChild(a); };
     const kop = el("button", null, "Bağlantıyı kopyala"); kop.type = "button";
     kop.onclick = async () => { try { await navigator.clipboard.writeText(url); kop.textContent = "Kopyalandı"; } catch (e) { prompt("Bağlantı", url); } setTimeout(() => (kop.textContent = "Bağlantıyı kopyala"), 2000); };
@@ -1014,7 +1016,7 @@
     if (window.ZBSHesap) { const hb = el("a", "eylem hata-bildir", "Hata bildir"); hb.href = window.ZBSHesap.hataBildir(h, k.ad); hb.title = "Bu haberde bir yanlış mı var? Bize yaz"; ey.appendChild(hb); }
     g.appendChild(ey);
     // Kartın en altında kendi haber sayfamıza giden geniş düğme (kim nasıl yazdı, karşılaştırma, grafikler)
-    const sb = el("a", "kart-sayfa"); sb.href = "h/" + encodeURIComponent(h.id) + ".html";
+    const sb = el("a", "kart-sayfa"); sb.href = sayfaYolu(h);
     if (o && o.kaynak_sayisi > 1) {
       sb.classList.add("olayli");
       sb.appendChild(el("b", null, "Kim nasıl yazdı"));

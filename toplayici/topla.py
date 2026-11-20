@@ -1325,6 +1325,11 @@ def main():
             h["giris"] = ""  # özeti yazılanların ham metnini saklamıyoruz
         else:
             h["giris"] = h.get("giris", "")[:300]
+    # haber sayfalarının okunur adları (h/<başlıktan-ad>.html): veri dosyalarına "sayfa" alanı olarak girer
+    try:
+        sayfalar.adlari_ata(KOK, tut, kaynaklar, SIMDI, log=log)
+    except Exception as e:
+        log(f"Sayfa adları verilemedi: {e}")
     yaz(HABERLER, {"guncellendi": SIMDI.isoformat(), "haberler": tut})
     # ana sayfanın ilk açılışı için küçük dosya: en yeni 150 bölgeyle ilgili haber (tam liste arkadan gelir)
     try:

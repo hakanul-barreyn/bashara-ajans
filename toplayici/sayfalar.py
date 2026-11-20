@@ -27,6 +27,96 @@ def _e(s):
     return html.escape(str(s or ""), quote=True)
 
 
+# ---------------------------------------------------------------- okunur adresler
+# Haber sayfası adresi rakamlı kimlik yerine başlıktan: h/gazzede-yuzlerce-cocuk-han-yunus-sahilinde.html
+# Ad bir kez verilir ve data/sayfa-adlari.json'da saklanır; başlık sonradan değişse de adres değişmez.
+# Eski kimlikli adres (h/<id>.html) okunur adrese yönlendiren küçük bir sayfa olarak kalır.
+ADLAR_DOSYA = os.path.join("data", "sayfa-adlari.json")
+_TR = str.maketrans({"ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "â": "a", "î": "i", "û": "u",
+                     "Ç": "c", "Ğ": "g", "I": "i", "İ": "i", "Ö": "o", "Ş": "s", "Ü": "u", "Â": "a", "Î": "i", "Û": "u"})
+_ADLAR = None
+
+
+def kisa_ad(metin, sinir=72):
+    """Başlıktan adres parçası: Türkçe harfler sadeleşir, kesme işareti düşer ("Gazze'de" → "gazzede"), sözcük sınırında kısalır."""
+    t = re.sub(r"^\s*son dakika\s*[|:!-]?\s*", "", str(metin or ""), flags=re.I)
+    t = t.translate(_TR).lower()
+    t = re.sub(r"['’‘`´]", "", t)
+    import unicodedata
+    t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
+    t = re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+    if len(t) > sinir:
+        t = t[:sinir + 1].rsplit("-", 1)[0]
+    return t.strip("-")
+
+
+def adlar(kok):
+    global _ADLAR
+    if _ADLAR is None:
+        try:
+            _ADLAR = json.load(open(os.path.join(kok, ADLAR_DOSYA), encoding="utf-8"))
+        except Exception:
+            _ADLAR = {}
+    return _ADLAR
+
+
+def dosya_adi(kok, hid):
+    """Haber sayfasının dosya adı: okunur ad verildiyse o, yoksa kimlik."""
+    a = adlar(kok).get(hid)
+    return (a[0] if isinstance(a, list) else a or hid) + ".html"
+
+
+def adlari_ata(kok, haberler, kaynaklar, simdi, log=print):
+    """Sayfası çıkacak haberlere okunur ad verir (h["sayfa"]); verilmiş adı korur. Yeni ad için Türkçe başlık gerekir."""
+    A = adlar(kok)
+    kmap = {k["id"]: k for k in kaynaklar}
+    kullanilan = {(v[0] if isinstance(v, list) else v) for v in A.values()}
+    sinir = (simdi - dt.timedelta(days=SAKLA_GUN)).isoformat()
+    yeni = 0
+    for h in sorted(haberler, key=lambda h: h.get("tarih") or ""):
+        k = kmap.get(h.get("kaynak"))
+        if not k or k.get("silahli") or h.get("atla") or (h.get("tarih") or "") < sinir:
+            continue
+        if h["id"] not in A:
+            bas = h.get("baslik_tr") if (h.get("baslik_tr") and not (h.get("dil") != "tr" and h.get("baslik_kaba"))) else None
+            # Türkçe başlık yoksa: konu dışı haber hiç çevrilmez, ilgili haber üç saat bekler; sonra özgün başlık (Latin harfliyse)
+            if not bas and (not h.get("ilgili") or (h.get("eklendi") or h.get("tarih") or "") < (simdi - dt.timedelta(hours=3)).isoformat()):
+                bas = h.get("baslik_orj")
+            ad = kisa_ad(bas) if bas else ""
+            if len(ad) < 12 or not re.search(r"[a-z]", ad):
+                continue   # başlık henüz çevrilmedi ya da çok kısa: sayfa şimdilik kimlikle
+            if ad in kullanilan:   # aynı başlık başka yayında: yayının adı eklenir, o da varsa sıra numarası
+                ad2 = ad + "-" + kisa_ad(k.get("ad"), 30)
+                n = 2
+                while ad2 in kullanilan:
+                    ad2 = f"{ad}-{kisa_ad(k.get('ad'), 30)}-{n}"
+                    n += 1
+                ad = ad2
+            A[h["id"]] = [ad, (h.get("tarih") or "")[:10]]
+            kullanilan.add(ad)
+            yeni += 1
+        h["sayfa"] = A[h["id"]][0] if isinstance(A[h["id"]], list) else A[h["id"]]
+    # 30 günden eski adlar düşer (sayfaları SAKLA_GUN sonra zaten siliniyor)
+    esik = (simdi - dt.timedelta(days=30)).date().isoformat()
+    for hid in [i for i, v in A.items() if isinstance(v, list) and v[1] and v[1] < esik]:
+        del A[hid]
+    os.makedirs(os.path.join(kok, "data"), exist_ok=True)
+    with open(os.path.join(kok, ADLAR_DOSYA), "w", encoding="utf-8") as f:
+        json.dump(A, f, ensure_ascii=False, separators=(",", ":"))
+    if yeni:
+        log(f"Okunur sayfa adı: {yeni} yeni")
+    return yeni
+
+
+def yonlendirme(hedef, site, baslik):
+    """Eski kimlikli adres için küçük sayfa: okunur adrese gider; arama motoru asıl sayfayı görür."""
+    u = f"{site}h/{hedef}"
+    return (f'<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>{_e(baslik)}</title>'
+            f'<meta name="robots" content="noindex"><link rel="canonical" href="{_e(u)}">'
+            f'<meta http-equiv="refresh" content="0;url={_e(hedef)}"></head>'
+            f'<body><p><a href="{_e(hedef)}">{_e(baslik)}</a></p></body></html>\n')
+
+
 def _kisa(s, n):
     s = re.sub(r"\s+", " ", str(s or "")).strip()
     return s if len(s) <= n else s[:n - 1].rsplit(" ", 1)[0] + "…"
@@ -821,9 +911,9 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
     kmap = kmap or {}
     bas_tr = h.get("baslik_tr") or h.get("baslik_orj") or ""
     yayin = k.get("ad", "")
-    adres = f"{site}h/{h['id']}.html"
+    adres = f"{site}h/{dosya_adi(_KOK, h['id'])}"
     # Aynı olayın her haberi ayrı sayfa; arama motoruna olayın tek sayfası gösterilir (yinelenen içerik sayılmasın)
-    kanon = f"{site}h/{(sayfa_hedef or {}).get((olay or {}).get('id'), h['id'] + '.html')}"
+    kanon = f"{site}h/{(sayfa_hedef or {}).get((olay or {}).get('id'), dosya_adi(_KOK, h['id']))}"
     hs = (olay or {}).get("haberler", [])
     n = len({x.get("k") for x in hs}) if len(hs) >= 2 else 0
     baslik_ol = (olay or {}).get("baslik") if n else None
@@ -856,7 +946,7 @@ def sayfa(h, k, M, site, surum, dg=None, olay=None, kmap=None, sayfa_var=(), fot
 <meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c0e0d">
+<meta name="theme-color" content="#faf8f4">
 <title>{_e(baslik_sekme)} | {_e(M["ad"])}</title>
 <meta name="description" content="{_e(aciklama)}">
 <link rel="canonical" href="{_e(kanon)}">
@@ -1001,14 +1091,14 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
     for o in sorted(tum.values(), key=lambda o: (o.get("son") or "", len(o.get("haberler", []))), reverse=True):
         if len({x.get("k") for x in o.get("haberler", [])}) < 3:
             continue
-        hedef = next((f'{x["id"]}.html' for x in o["haberler"] if x["id"] in sayfa_var), None)
+        hedef = next((dosya_adi(kok, x["id"]) for x in o["haberler"] if x["id"] in sayfa_var), None)
         if hedef:
             digerler.append((o, hedef))
         if len(digerler) >= 12:
             break
     sayfa_hedef = {}
     for o in tum.values():
-        h0 = next((f'{x["id"]}.html' for x in o.get("haberler", []) if x["id"] in sayfa_var), None)
+        h0 = next((dosya_adi(kok, x["id"]) for x in o.get("haberler", []) if x["id"] in sayfa_var), None)
         if h0:
             sayfa_hedef[o["id"]] = h0
     # Ana sayfadaki Gündem slaytı için son 20 karşılaştırma (canlı olaylar bittikten sonra da görünsün)
@@ -1052,8 +1142,19 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             continue
         if (h.get("tarih") or "") < sinir or h.get("atla"):
             continue
-        ad = f"{h['id']}.html"
+        ad = dosya_adi(kok, h["id"])
         tut.add(ad)
+        if ad != f"{h['id']}.html":   # eski kimlikli adres: okunur adrese yönlendirir
+            tut.add(f"{h['id']}.html")
+            yy = os.path.join(d, f"{h['id']}.html")
+            ym = yonlendirme(ad, site, h.get("baslik_tr") or h.get("baslik_orj") or "")
+            try:
+                eskiy = open(yy, encoding="utf-8").read()
+            except OSError:
+                eskiy = None
+            if eskiy != ym:
+                with open(yy, "w", encoding="utf-8") as f:
+                    f.write(ym)
         olay = olay_of.get(h["id"])
         yer = (olay or {}).get("yer") if isinstance((olay or {}).get("yer"), dict) else None
         foto = _foto_sec(kok, yer.get("ad"), int(h["id"][-4:], 16) if re.fullmatch(r"[0-9a-f]{4}", h["id"][-4:]) else 0) if yer else None
