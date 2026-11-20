@@ -501,7 +501,9 @@
     }
 
     // görünüme yaklaşınca çiz; ilk kez iyice görününce perdeyi bir kez oynat (nasıl kullanılacağını göstermek için)
-    var tembelIO = "IntersectionObserver" in window ? new IntersectionObserver(function (xs) {
+    // Not: gözlemci ilk çağrıda kurulur; tembel() akış çizilirken, bu satırlardan önce çağrılıyor
+    var tembelIO;
+    function gozlemci() { return tembelIO || (tembelIO = "IntersectionObserver" in window ? new IntersectionObserver(function (xs) {
       xs.forEach(function (x) {
         var k = x.target;
         if (x.isIntersecting && !k.yapildi) { k.yapildi = true; k.yap(); }
@@ -509,8 +511,8 @@
           k.oynadi = true; k.classList.add("kk-demo"); setTimeout(function () { k.classList.remove("kk-demo"); }, 2600);
         }
       });
-    }, { rootMargin: "700px 0px", threshold: [0, 0.6] }) : null;
-    function tembel(k) { if (tembelIO) tembelIO.observe(k); else { k.yapildi = true; k.yap(); } }
+    }, { rootMargin: "700px 0px", threshold: [0, 0.6] }) : false); }
+    function tembel(k) { var g = gozlemci(); if (g) g.observe(k); else { k.yapildi = true; k.yap(); } }
 
     terimKur(A.sozluk || []);
     ilerlemeKur();
