@@ -259,6 +259,8 @@
 .kk-sari{fill:none;stroke:#ffd60a;stroke-width:3;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
 .ta-kk.kk-cizgisiz .kk-ust{opacity:0}
 .kk-gizle{margin-left:8px}
+.kk-katman>img.kk-gri{filter:grayscale(1) contrast(1.05)}
+.ta-kars-kaynak a{color:#c9d2cc}
 .ta-kars-lej{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin:6px 0 0;font:600 .72rem var(--ta-sans);color:#c9d2cc}
 .ta-kars-lej span{display:inline-flex;align-items:center;gap:6px}
 .ta-kars-lej i{display:inline-block;width:18px;height:0;border-top:3px solid #ffd60a}

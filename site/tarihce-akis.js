@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=7").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=8").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -122,6 +122,7 @@
       serit.appendChild(e);
       if (x.o.karsilastir) serit.appendChild(boya(haritaKars(x.o.karsilastir), a, x.t));
       if (x.o.uydu) serit.appendChild(boya(uyduKars(x.o.uydu), a, x.t));
+      if (x.o.hava) serit.appendChild(boya(havaKars(x.o.hava), a, x.t));
       if (x.o.uydu_gazze && U && U.gazze_once && U.sari) serit.appendChild(boya(uyduGazze(U, x.o.uydu_gazze), a, x.t));
       if (son[a.anahtar] === n && a.gecis) serit.appendChild(boya(gecis(a, x.ai), a, x.t));
     });
@@ -398,6 +399,57 @@
       f.appendChild(lej);
       f.appendChild(el("p", "ta-kars-not tek", D2(m, "not")));
       f.appendChild(el("p", "ta-kars-kaynak", (EN ? "Images: Copernicus Sentinel-2 (ESA), " : "Görüntüler: Copernicus Sentinel-2 (ESA), ") + t1 + ", " + t2 + (EN ? ". Lines: " : ". Çizgiler: ") + "OCHA oPt, " + tarihAd(S.tarih) + (EN ? ", approximate." : ", yaklaşık.")));
+      tembel(kutu);
+      return f;
+    }
+
+    // eski hava fotoğrafı mozaiği ile uydu: birkaç çift arasında sekmeler; "bugün" günlük uydu karesinden kesilir
+    function havaKars(h) {
+      var gun = new Date().toISOString().slice(0, 10), K = h.katmanlar;
+      var ad = function (k) { return k === "bugun" ? (EN ? "Today" : "Bugün") : K[k].tarih.length === 7 ? tarihAd(K[k].tarih) : tarihAd(K[k].tarih); };
+      var f = el("figure", "ta-kars uydu izle");
+      var ust = el("div", "ta-kars-ust"), bas = el("p", "ta-kars-baslik");
+      ust.append(el("span", "ta-kars-et", EN ? "Aerial photograph and satellite · before and after" : "Hava fotoğrafı ve uydu · önce ve sonra"), bas);
+      f.appendChild(ust);
+      var sekme = el("div", "ta-kars-sekme"); sekme.setAttribute("role", "tablist"); f.appendChild(sekme);
+      var kutu = el("div", "ta-kk"); kutu.style.setProperty("--oran", (h.oran || 1).toFixed(4));
+      var sahne = el("div", "ta-kk-sahne"); sahne.appendChild(kutu);
+      var dg = kaydirici(kutu, ad(h.ciftler[0][0]), ad(h.ciftler[0][1]), EN ? "Compare before and after" : "Önce ve sonrayı karşılaştır");
+      var secili = 0;
+      function resim(k) {
+        var L = K[k], im = new Image(); im.decoding = "async"; im.draggable = false;
+        im.src = L.src + (L.gunluk ? "?t=" + gun : ""); im.alt = (EN ? "Gaza City, " : "Gazze kenti, ") + ad(k);
+        if (L.gri) im.className = "kk-gri";
+        if (L.kesit) {   // kare içinden kesit: [x, y, genişlik, yükseklik] oran olarak
+          var c = L.kesit;
+          im.style.cssText = "inset:auto;object-fit:fill;width:" + (100 / c[2]).toFixed(3) + "%;height:" + (100 / c[3]).toFixed(3) + "%;left:" + (-100 * c[0] / c[2]).toFixed(3) + "%;top:" + (-100 * c[1] / c[3]).toFixed(3) + "%";
+        }
+        return im;
+      }
+      function goster(i) {
+        secili = i;
+        var c = h.ciftler[i];
+        Array.prototype.forEach.call(sekme.children, function (b, j) { b.setAttribute("aria-selected", String(i === j)); });
+        Array.prototype.slice.call(kutu.querySelectorAll(".kk-katman")).forEach(function (x) { x.remove(); });
+        kutu.insertBefore(katman(resim(c[1]), "kk-sonra"), kutu.firstChild);
+        kutu.insertBefore(katman(resim(c[0]), "kk-once"), kutu.children[1]);
+        kutu.querySelector(".kk-et.sol").textContent = ad(c[0]); kutu.querySelector(".kk-et.sag").textContent = ad(c[1]);
+        dg.children[0].textContent = "◂ " + ad(c[0]); dg.children[1].textContent = ad(c[1]) + " ▸";
+        bas.textContent = c.map(function (k) { return k === "bugun" ? String(new Date().getFullYear()) : k; }).join(" → ");
+      }
+      h.ciftler.forEach(function (c, i) {
+        var b = el("button", "ta-kars-sekme-d", c.map(function (k) { return k === "bugun" ? (EN ? "today" : "bugün") : k; }).join(" · ")); b.type = "button"; b.setAttribute("role", "tab");
+        b.onclick = function () { goster(i); };
+        sekme.appendChild(b);
+      });
+      kutu.yap = function () { goster(secili); };
+      bas.textContent = h.ciftler[0].join(" → ");
+      f.append(sahne, dg);
+      f.appendChild(el("p", "ta-kars-not tek", D2(h, "not")));
+      var kay = el("p", "ta-kars-kaynak", D2(h, "kaynak") + " ");
+      if (h.sayfa) kay.appendChild(dis(el("a", null, EN ? "Source ↗" : "Kaynak ↗"), h.sayfa));
+      f.appendChild(kay);
+      Array.prototype.forEach.call(sekme.children, function (b, j) { b.setAttribute("aria-selected", String(j === 0)); });
       tembel(kutu);
       return f;
     }

@@ -684,7 +684,9 @@
      "gorseller": [
       "yafa-1948",
       "gazze-tekne-1948",
-      "aynulhilve-1948"
+      "aynulhilve-1948",
+      "deyr-suneyd-1918",
+      "deyr-suneyd-1945"
      ],
      "kaynakca": [
       {
@@ -767,8 +769,56 @@
       {
        "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
        "tur": "akademik"
+      },
+      {
+       "ad": "512 Field Survey Coy., R.E., Gaza: 1:10,000 Mosaic (War Office, Ocak 1946)",
+       "ad_en": "512 Field Survey Coy., R.E., Gaza: 1:10,000 Mosaic (War Office, January 1946)",
+       "tur": "birincil"
       }
-     ]
+     ],
+     "hava": {
+      "katmanlar": {
+       "1945": {
+        "src": "site/tarihce-uydu/gazze-1945.jpg",
+        "tarih": "1945-01",
+        "gri": true
+       },
+       "2023": {
+        "src": "site/tarihce-uydu/gazze-2023.jpg",
+        "tarih": "2023-09-27"
+       },
+       "bugun": {
+        "src": "data/gorsel/uydu/gazze-kenti-simdi.jpg",
+        "kesit": [
+         0.44429,
+         0.31374,
+         0.46857,
+         0.58626
+        ],
+        "gunluk": true
+       }
+      },
+      "ciftler": [
+       [
+        "1945",
+        "2023"
+       ],
+       [
+        "1945",
+        "bugun"
+       ],
+       [
+        "2023",
+        "bugun"
+       ]
+      ],
+      "oran": 0.8540372670807453,
+      "not": "Ocak 1945’te Gazze, bahçe ve bağlarla çevrili bir kasabaydı. 1948’de 200 binden fazla mülteci Şerit’e sığındı; kent ve kamplar o bahçelerin üstüne büyüdü. Mozaik, Filistin Grid koordinatlarıyla basılmış bir İngiliz ordusu haritasıdır; koordinatlardan bugünkü haritaya çevrilerek uydu görüntüsüne oturtuldu. Kenarlarda birkaç on metrelik kayma olabilir. Uydu görüntüsü 10 metre çözünürlüklüdür.",
+      "not_en": "In January 1945 Gaza was a town ringed by gardens and orchards. In 1948 more than 200,000 refugees fled into the Strip; the city and the camps grew over those gardens. The mosaic is a British army map printed with Palestine Grid coordinates; it was converted to today’s coordinates and fitted to the satellite image. There may be a shift of a few tens of metres near the edges. The satellite image has a 10-metre resolution.",
+      "kaynak": "Hava fotoğrafları: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, Ocak 1946 (fotoğraflar Ocak 1945), İsrail Milli Kütüphanesi Eran Laor koleksiyonu, Wikimedia Commons üzerinden, kamu malı. Uydu: Copernicus Sentinel-2 (ESA).",
+      "kaynak_en": "Aerial photographs: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, January 1946 (photographs January 1945), National Library of Israel, Eran Laor collection, via Wikimedia Commons, public domain. Satellite: Copernicus Sentinel-2 (ESA).",
+      "sayfa": "https://commons.wikimedia.org/wiki/File:Great_Britain_army_517_Field_Survey_Company,_Gaza_(FL53910466_2714141).jpg"
+     }
     },
     {
      "ref": "1948-09-22",
