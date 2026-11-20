@@ -801,6 +801,54 @@ def gemini_ozetle(anahtar, model, parti):
         return 200, []
 
 
+# Türkçe yayınların spotu: haberin ilk paragrafı zaten bir özet. Yapay zekâ yerine o kullanılır (yayının
+# kendi sözü olarak işaretlenir, "ozet_spot"); bütçe öteki dillere kalır. Gündemdeki ve öncelikli haberlerin
+# özetini yine yapay zekâ yazar.
+SPOT_COP = re.compile(r"\s*(?:devamı için tıklayın.*|haberin devamı.*|devamını oku.*|devamı\s*(?:\.{3}|…).*|"
+                      r"tıklayın\s*$|\[(?:\.{3}|…)\]\s*$|the post .{0,200} appeared first on .*|kaynak\s*:\s*\S+\s*$)", re.I)
+
+
+def spot_ozet(h):
+    """Türkçe haberin girişinden 1-2 cümlelik spot. Uygun değilse boş döner."""
+    g = SPOT_COP.sub("", (h.get("giris") or "").strip()).strip(" -–|")
+    b = (h.get("baslik_orj") or "").strip()
+    nrm = lambda t: re.sub(r"\W+", "", t.casefold())
+    if b and nrm(g).startswith(nrm(b)) and len(nrm(g)) > len(nrm(b)) + 40:   # başlıkla başlayan beslemeler
+        g = g[len(b):].lstrip(" .:-–|")
+    if re.search(r"(?:\.{3}|…)$", g):   # besleme yarıda kesmiş ("…İsra..."): yarım kalan son parçayı at
+        g = re.sub(r"\s*(?:\.{3}|…)$", "", g)
+        tam = re.match(r"(.*[.!?])\s+\S", g, re.S)
+        g = tam.group(1) if tam and len(tam.group(1)) >= 60 else g.rsplit(" ", 1)[0] + "…"
+    if len(g) < 60 or nrm(g) == nrm(b) or g.isupper():
+        return ""
+    cumleler, oz = re.split(r"(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9\"“‘'])", g), ""
+    for c in cumleler:
+        if oz and len(oz) + len(c) > 320:
+            break
+        oz = (oz + " " + c).strip()
+    if len(oz) > 400 or not re.search(r"[.!?…\"”’]$", oz):   # yarıda kalmış: sözcük sınırından kes
+        oz = oz[:min(len(oz), 320)].rsplit(" ", 1)[0].rstrip(",;:–-") + "…"
+    return ekler.guvenli(oz)
+
+
+# Spotlu Türkçe haberlere bölge etiketi: yapay zekâ etiketlemediği için anahtar sözcükle (ana sayfadaki bölge sekmeleri)
+BOLGE_SOZCUK = {
+    "Gazze": r"gazze|han yunus|cibaliye|deyr el[- ]?belah|nusayrat|nuseyrat|beyt lahiya|beyt hanun|refah kenti|refah sınır",
+    "Batı Şeria": r"batı şeria|cenin|nablus|tulkerim|ramallah|el[- ]halil|kalkilya|tubas|beytüllahim|beytüllahm",
+    "Kudüs": r"kudüs|mescid-?i aksa|aksa",
+    "Lübnan": r"lübnan|hizbullah|beyrut",
+    "Suriye": r"suriye|şam|halep|idlib|dera|kuneytra|golan",
+    "Yemen ve Kızıldeniz": r"yemen|husi|ensarullah|kızıldeniz|hudeyde|babülmendep",
+    "İran": r"iran|tahran",
+}
+BOLGE_RE = {e: re.compile(r"(?<!\w)(?:%s)(?!\w)" % d) for e, d in BOLGE_SOZCUK.items()}
+
+
+def bolge_etiketi(metin):
+    m = (metin or "").replace("I", "ı").replace("İ", "i").lower()
+    return [e for e, r in BOLGE_RE.items() if r.search(m)][:3]
+
+
 def malzeme_hazirla(h):
     m = h.get("giris") or ""
     # ayrıntılı özet için kısa beslemelerde haberin kendi sayfasından paragraflar da alınır
@@ -1027,6 +1075,22 @@ def main():
             yeni += 1
     log(f"{yeni} yeni haber; {sum(1 for _, d, _ in sonuclar if d.get('yontem'))}/{len(kaynaklar)} kaynakta yol bulundu")
 
+    # Türkçe yayınlar: ilk paragraf (spot) Türkçe özet olarak
+    spotlu = 0
+    for h in eski.values():
+        if (h.get("dil") == "tr" and h.get("ilgili") and not h.get("ozet_tr") and not h.get("atla")
+                and not h.get("telegram") and not h.get("resmi_grup")):
+            oz = spot_ozet(h)
+            if oz:
+                h["ozet_tr"], h["ozet_spot"] = oz, True
+                if not h.get("etiket"):
+                    et = bolge_etiketi((h.get("baslik_orj") or "") + " " + oz)
+                    if et:
+                        h["etiket"] = et
+                spotlu += 1
+    if spotlu:
+        log(f"{spotlu} Türkçe haberde spot özet olarak kullanıldı")
+
     # Özetler
     anahtar = os.environ.get("GEMINI_API_KEY", "").strip()
     bekle = tarih_coz(durum.get("_gemini_bekle"))
@@ -1054,16 +1118,16 @@ def main():
                 log(f"Başlık çevirisi hatası: {e}")
 
         # Öncelikli yayınlar (Al-Akhbar gibi) ve analizler sıranın başına; geri kalanı en yeniden eskiye
-        sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("ozet_tr") and not h.get("atla")
-                       and h.get("deneme", 0) < 3),
-                      key=lambda h: (h.get("eklendi") or h["tarih"]) if h["tarih"][11:19] == "00:00:00" else h["tarih"], reverse=True)
-        kmap_ = {k["id"]: k for k in kaynaklar}
-        sd = lambda h: bool((kmap_.get(h["kaynak"]) or {}).get("son_dakika") or h.get("resmi_grup"))
         # sitede hikâye olarak gösterilen haberler önce: gündem olaylarındaki haberlerin özeti, haber sayfasında haberin kendisini anlatır
         try:
             gundemde = {i for o in oku(os.path.join(KOK, "data", "gundem.json"), {}).get("olaylar", [])[:20] for i in o.get("haberler", [])}
         except Exception:
             gundemde = set()
+        sira = sorted((h for h in eski.values() if h["ilgili"] and not h.get("atla") and h.get("deneme", 0) < 3
+                       and (not h.get("ozet_tr") or (h.get("ozet_spot") and (h.get("oncelik") or h["id"] in gundemde)))),
+                      key=lambda h: (h.get("eklendi") or h["tarih"]) if h["tarih"][11:19] == "00:00:00" else h["tarih"], reverse=True)
+        kmap_ = {k["id"]: k for k in kaynaklar}
+        sd = lambda h: bool((kmap_.get(h["kaynak"]) or {}).get("son_dakika") or h.get("resmi_grup"))
         sira = sorted(sira, key=lambda h: (h["id"] not in gundemde, not sd(h), not h.get("oncelik"), h.get("nitelik") != "analiz"))[:OZET_SINIRI]
         if model and sira:
             with ThreadPoolExecutor(max_workers=8) as ex:
@@ -1111,7 +1175,10 @@ def main():
                         h["deneme"] = h.get("deneme", 0) + 1
                     elif (c.get("ozet") or "").strip().upper() == "ATLA":
                         h["atla"] = True
+                        if h.pop("ozet_spot", None):
+                            h.pop("ozet_tr", None)
                     else:
+                        h.pop("ozet_spot", None)
                         h["baslik_tr"] = ekler.guvenli(temiz(c.get("baslik"), 200))
                         h.pop("baslik_kaba", None)
                         h["ozet_tr"] = ekler.guvenli(temiz(c.get("ozet"), 1000 if h.get("nitelik") == "analiz" or str(c.get("nitelik")).lower() == "analiz" else 700))

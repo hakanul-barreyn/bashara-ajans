@@ -645,7 +645,7 @@ def _makale(h, k, olay, kmap, dil, foto, dg, harita, sayfa_var, tum, sayfa_hedef
     hs = (olay or {}).get("haberler", []) if len((olay or {}).get("haberler", [])) >= 2 else []
     bas = ((olay or {}).get("baslik_en" if dil == "en" else "baslik") or (olay or {}).get("baslik")) if hs else None
     bas = bas or (h.get("baslik_en") if dil == "en" else None) or h.get("baslik_tr") or h.get("baslik_orj") or ""
-    oz = (h.get("ozet_en") if dil == "en" else None) or h.get("ozet_tr") or ""
+    oz = (h.get("ozet_en") if dil == "en" else None) or ("" if h.get("ozet_spot") else h.get("ozet_tr")) or ""   # spot masanın sözü değil
     yer = (olay or {}).get("yer", {}).get("ad") if isinstance((olay or {}).get("yer"), dict) else None
     n = len({x.get("k") for x in hs})
     kategori = (t["analiz"] if h.get("nitelik") == "analiz" else t["haber"]) + (f" · {yer}" if yer else "")

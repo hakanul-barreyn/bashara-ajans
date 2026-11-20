@@ -1163,3 +1163,5 @@ html.deste-modu #haritaBolum{display:none!important}
 .dz-durum{margin:0;font:600 .9rem "Plus Jakarta Sans",system-ui,sans-serif}
 .dz-durum.tamam{color:#149954}.dz-durum.hata{color:#b8262b}
 .dz-not{margin:0;font-size:.82rem;opacity:.75}
+/* Türkçe yayının kendi spotu (yapay zekâ özeti değil): tırnak içinde, eğik */
+.oz-spot{font-style:italic}

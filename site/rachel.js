@@ -12,6 +12,7 @@
     if (!g || !k) return;
     if (g.dosya) im.src = "data/gorsel/tarihce/" + g.dosya;
     var yazar = (new DOMParser().parseFromString(g.yazar || "", "text/html").body.textContent || "").trim();
+    if (yazar.indexOf("@") >= 0) yazar = yazar.split(/[.,;(]\s|\s\S+@/)[0].trim();   // künyede e-posta görünmesin
     k.textContent = (EN ? g.en : g.tr) + (yazar ? " · " + (EN ? "Photo: " : "Fotoğraf: ") + yazar : "") + " · ";
     var a = document.createElement("a"); a.href = g.sayfa || g.lisans_url || "#"; a.target = "_blank"; a.rel = "noopener";
     a.textContent = (g.lisans || "Wikimedia Commons"); k.appendChild(a);

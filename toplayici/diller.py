@@ -27,7 +27,7 @@ def cevir(anahtar, model, haberler, butce_var, sayac, log=print):
     """haberler: {id: haber}. Eksik çevirileri doldurur. Döndürür: (çevrilen sayısı, 429 alındı mı)"""
     toplam, kota = 0, False
     for kod, ad in DILLER.items():
-        sira = [h for h in haberler.values() if h.get("ozet_tr") and not h.get("ozet_" + kod) and h.get("ceviri_deneme_" + kod, 0) < 3]
+        sira = [h for h in haberler.values() if h.get("ozet_tr") and not h.get("ozet_spot") and not h.get("ozet_" + kod) and h.get("ceviri_deneme_" + kod, 0) < 3]
         sira.sort(key=lambda h: h["tarih"], reverse=True)                 # en yeni önce
         sira = sorted(sira, key=lambda h: not h.get("oncelik"))[:TUR_BASINA]  # öncelikli yayınlar en başta
         for i in range(0, len(sira), PARTI):

@@ -54,7 +54,7 @@
       var p = String(ref).split("|");
       return D.olaylar.find(function (o) { return o.tarih === p[0] && (!p[1] || o.baslik.indexOf(p[1]) >= 0); });
     }
-    function kredi(yazar) { return String(yazar || "").replace(/^Unknown author.*/, EN ? "unknown photographer" : "fotoğrafçısı bilinmiyor").replace(/\s+/g, " ").trim(); }
+    function kredi(yazar) { var y = String(yazar || ""); if (y.indexOf("@") >= 0) y = y.split(/[.,;(]\s|\s\S+@/)[0]; return y.replace(/^Unknown author.*/, EN ? "unknown photographer" : "fotoğrafçısı bilinmiyor").replace(/\s+/g, " ").trim(); }
     function gorsel(ad, klasor) {
       var k = kunye[ad];
       return { src: "data/gorsel/" + (klasor || "tarihce") + "/" + (k && k.dosya ? k.dosya : ad + ".jpg"), ad: ad,
@@ -508,7 +508,7 @@
         var k = x.target;
         if (x.isIntersecting && !k.yapildi) { k.yapildi = true; k.yap(); }
         if (x.isIntersecting && x.intersectionRatio > 0.55 && !k.oynadi && !AZALT) {
-          k.oynadi = true; k.classList.add("kk-demo"); setTimeout(function () { k.classList.remove("kk-demo"); }, 2600);
+          k.oynadi = true; if (k.gosteri) k.gosteri();
         }
       });
     }, { rootMargin: "700px 0px", threshold: [0, 0.6] }) : false); }
@@ -605,7 +605,27 @@
       b.onclick = function () { var v = +x[0]; ayar((v === 100 && deger > 97) || (v === 0 && deger < 3) ? 50 : v, true); };
       dugmeler.appendChild(b);
     });
-    ayar(50);
+    // Açılış gösterisi: önce eski harita; yeni harita sağdan gelir, geri çekilir, eski bir an kalır,
+    // yeni harita yeniden gelir ve kalır. Kullanıcı dokunursa ya da tuşa basarsa gösteri o an durur.
+    var gosteriNo = 0;
+    function dur() { gosteriNo++; }
+    kutu.addEventListener("pointerdown", dur); kutu.addEventListener("keydown", dur); dugmeler.addEventListener("click", dur);
+    kutu.gosteri = function () {
+      var no = ++gosteriNo, adimlar = [[100, 100, 700], [100, 0, 1400], [0, 0, 450], [0, 100, 1400], [100, 100, 650], [100, 0, 1400]];
+      var i = 0, t0 = null;
+      function yumusat(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+      function kare(t) {
+        if (no !== gosteriNo) return;
+        if (t0 === null) t0 = t;
+        var a = adimlar[i], g = Math.min(1, (t - t0) / a[2]);
+        ayar(a[0] + (a[1] - a[0]) * yumusat(g));
+        if (g >= 1) { i++; t0 = t; if (i >= adimlar.length) return; }
+        requestAnimationFrame(kare);
+      }
+      requestAnimationFrame(kare);
+    };
+    // gösteri oynayacaksa perde eski haritada başlar; hareket azaltılmışsa ortada durur
+    ayar(AZALT || !("IntersectionObserver" in window) ? 50 : 100);
     return dugmeler;
   }
 

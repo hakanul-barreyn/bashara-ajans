@@ -253,8 +253,6 @@
 .ta-kk.kk-kenar .kk-et{opacity:.45}
 .ta-kk.kk-yumusak .kk-once,.ta-kk.kk-yumusak .kk-cizgi{transition:clip-path .45s cubic-bezier(.3,.7,.2,1),left .45s cubic-bezier(.3,.7,.2,1)}
 .ta-kk.kk-surukle{cursor:grabbing}
-.ta-kk.kk-demo{animation:kk-demo 2.4s cubic-bezier(.45,0,.3,1)}
-@keyframes kk-demo{0%{--uk:50%}30%{--uk:76%}65%{--uk:24%}100%{--uk:50%}}
 .ta-kk-dugmeler{display:flex;justify-content:center;gap:8px;margin:12px 0 4px}
 .ta-kk-dugmeler button,.ta-kars-sekme-d{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#e8ece9;font:700 .76rem var(--ta-mono);padding:7px 13px;border-radius:999px;cursor:pointer}
 .ta-kk-dugmeler button[aria-pressed="true"],.ta-kars-sekme-d[aria-selected="true"]{background:#fff;color:#1b2420;border-color:#fff}

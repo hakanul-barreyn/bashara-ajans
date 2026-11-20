@@ -51,7 +51,7 @@
     const t = b.haberler.find((h) => c.BT(h)); return c.baslikSec(t || b.haberler[0]);
   }
   function spot(b, c) {
-    const xs = b.haberler.filter((h) => (EN() ? h.ozet_en : h.ozet_tr));
+    const xs = b.haberler.filter((h) => (EN() ? h.ozet_en : h.ozet_tr && !h.ozet_spot));   // olay spotu masanın özetinden
     const kamp = (h) => H().kampAd(c.kaynaklar[h.kaynak] || {});
     xs.sort((a, z) => (["Filistin", "Arap dünyası"].includes(kamp(z)) - ["Filistin", "Arap dünyası"].includes(kamp(a))));
     const t = xs[0] && (EN() ? xs[0].ozet_en : xs[0].ozet_tr);
@@ -213,7 +213,7 @@
         m.appendChild(u);
         m.appendChild(el("span", "hb-oge-b", EN() ? h.baslik_en : h.baslik_tr.replace(/^son dakika\s*[|:]\s*/i, "")));
         const oz = EN() ? h.ozet_en : h.ozet_tr;
-        if (oz) m.appendChild(el("span", "hb-oge-spot", oz.split(/(?<=[.!?])\s+/).slice(0, 2).join(" ")));
+        if (oz) { const ks = oz.split(/(?<=[.!?])\s+/).slice(0, 2).join(" "); m.appendChild(el("span", "hb-oge-spot", h.ozet_spot && !EN() ? "“" + ks + "”" : ks)); }
         a.appendChild(m); sb.appendChild(a);
       });
       kok.appendChild(sb);

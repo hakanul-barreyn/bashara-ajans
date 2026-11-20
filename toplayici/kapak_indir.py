@@ -12,6 +12,15 @@ SECIM = [
     ("hayfa-1948", "File:Destruction of Haifa Old Town 1948.png", "Hayfa eski şehri, 1948", "Haifa old town, 1948"),
     ("ayn-hilve", "File:Palestinian refugees in Ein El Hilweh refugee camp in Lebanon.jpg", "Ayn el-Hilve kampı, Lübnan", "Ein el-Hilweh camp, Lebanon"),
 ]
+def yazar_temiz(t):
+    """Künyede e-posta ve adres görünmesin: "Joe Carr. joecarr@… is the email…" → "Joe Carr"."""
+    t = (t or "").strip()
+    if "@" in t:
+        t = re.split(r"[.,;(]\s|\s\S+@", t)[0]
+    t = re.sub(r"\S+@\S+|https?://\S+", "", t)
+    return re.sub(r"\s+", " ", t).strip(" .,;:-")[:120]
+
+
 cik = sys.argv[1] if len(sys.argv) > 1 else "kapak"
 if len(sys.argv) > 2:  # ikinci argüman: seçim listesi (JSON: [ad, dosya, tr, en])
     SECIM = [tuple(x) for x in json.load(open(sys.argv[2], encoding="utf-8"))]
@@ -55,7 +64,7 @@ for ad, t, tr, en in SECIM:
     if not veri:
         print("indirilemedi:", ad); continue
     open(os.path.join(cik, ad + uz), "wb").write(veri)
-    kunye.append({"ad": ad, "dosya": ad + uz, "tr": tr, "en": en, "yazar": g("Artist")[:120] or "Bilinmiyor", "lisans": g("LicenseShortName"),
+    kunye.append({"ad": ad, "dosya": ad + uz, "tr": tr, "en": en, "yazar": yazar_temiz(g("Artist")) or "Bilinmiyor", "lisans": g("LicenseShortName"),
                   "lisans_url": g("LicenseUrl"), "sayfa": ii.get("descriptionurl")})
     print("indi:", ad, uz)
 json.dump(kunye, open(os.path.join(cik, "kapak.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

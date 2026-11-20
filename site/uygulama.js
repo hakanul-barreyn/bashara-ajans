@@ -16,6 +16,9 @@
   const DL = window.DIL || "tr", YR = window.YEREL || "tr-TR";
   const BT = (h) => (DL === "tr" ? h.baslik_tr : h["baslik_" + DL]);
   const OZ = (h) => (DL === "tr" ? h.ozet_tr : h["ozet_" + DL]);
+  // Türkçe yayınlarda özet yerine yayının kendi spotu (ilk paragrafı) olabilir: tırnak içinde, yayının sözü olarak gösterilir
+  const OZP = (h, sinif) => (h.ozet_spot && DL === "tr" ? el("p", ((sinif || "") + " oz-spot").trim(), "“" + OZ(h) + "”") : el("p", sinif || null, OZ(h)));
+  const OZY = (xs) => xs.map((h) => !h.ozet_spot && OZ(h)).find(Boolean);   // olay özeti yalnızca masanın özetinden (gündemdeki spotlu haberleri yapay zekâ yeniden özetler)
   const OB = (o) => (DL !== "tr" && o["baslik_" + DL]) || o.baslik;
   const ON = (o) => (DL !== "tr" && o["not_" + DL]) || o.not;
   const OY = (o, id) => (DL !== "tr" && (o["yorumlar_" + DL] || {})[id]) || (o.yorumlar || {})[id];
@@ -771,7 +774,7 @@
       a.appendChild(u);
       if (BT(h)) a.appendChild(el("h3", null, BT(h)));
       else { const b = el("h3", "orj", h.baslik_orj); b.dir = "auto"; b.lang = k.dil; a.appendChild(b); }
-      if (OZ(h)) a.appendChild(el("p", null, OZ(h)));
+      if (OZ(h)) a.appendChild(OZP(h));
       else a.appendChild(el("p", "cevirisiz", "Türkçe özet sırada"));
       const e = el("div", "eylemler");
       const git = el("a", "eylem ana", "Yazıyı oku ↗"); git.href = h.url; git.target = "_blank"; git.rel = "noopener"; e.appendChild(git);
@@ -962,7 +965,7 @@
     }
     if (BT(h)) {
       g.appendChild(el("h2", null, BT(h)));
-      if (OZ(h)) g.appendChild(el("p", null, OZ(h)));
+      if (OZ(h)) g.appendChild(OZP(h));
       if (h.ceviri_tr && DL === "tr") {
         const d = document.createElement("details"); d.className = "ceviri";
         d.appendChild(el("summary", null, "Açıklamanın tam çevirisi"));
@@ -1193,7 +1196,7 @@
       const ic = el("div", "kp-ic");
       ic.appendChild(el("span", "kp-no", (i + 1) + " / " + n + " · " + x.yayinSayisi + (EN ? " outlets · " : " yayın · ") + once(new Date(x.son).toISOString())));
       ic.appendChild(el("h2", "kp-slayt-baslik", x.olay ? OB(x.olay) : baslikSec(xs.find((h) => BT(h)) || xs[0])));
-      const oz = (x.olay && ON(x.olay)) || xs.map((h) => OZ(h)).find(Boolean);
+      const oz = (x.olay && ON(x.olay)) || OZY(xs);
       if (oz) ic.appendChild(el("p", "kp-oz", oz));
       const ks = kampSay(xs), sat = el("p", "kp-kim");
       sat.append(el("b", null, (EN ? "Regional press " : "Bölge basını ") + ks.bolge), document.createTextNode(" · "), el("b", null, (EN ? "Israeli & Western " : "İsrail ve Batı ") + ks.dis));
@@ -1264,7 +1267,7 @@
       p1.appendChild(y);
     }
     p1.appendChild(el("h2", "hk-baslik", bas));
-    const oz = xs.map((h) => OZ(h)).find(Boolean); if (oz) p1.appendChild(el("p", "hk-ozet-metin", oz));
+    const oz = OZY(xs); if (oz) p1.appendChild(el("p", "hk-ozet-metin", oz));
     p1.appendChild(kampSeridi(xs));
     p1.appendChild(el("p", "hk-ipucu", EN ? "Swipe to read how each outlet put it →" : "Her yayının nasıl yazdığı için sola kaydır →"));
     // 2) yayın yayın: kamplara göre sıralı, sayfa başına 3 haber
@@ -1599,10 +1602,10 @@
     pl.appendChild(cap);
     // açılınca: özet, özgün başlık, habere git
     const ek = el("div", "rl-ek");
-    if (gorselli && OZ(h)) ek.appendChild(el("p", null, OZ(h)));
+    if (gorselli && OZ(h)) ek.appendChild(OZP(h));
     if (farkli && h.baslik_orj !== ana) { const o = el("p", "rl-orj", h.baslik_orj); o.dir = "auto"; ek.appendChild(o); }
     const a = el("a", "rl-git", EN ? "Read on " + k.ad + " ↗" : k.ad + " sitesinde oku ↗"); a.href = h.url; a.target = "_blank"; a.rel = "noopener"; ek.appendChild(a);
-    if (OZ(h)) ek.appendChild(el("span", "rl-yz", EN ? "Translation and summary: AI" : "Çeviri ve özet: yapay zekâ"));
+    if (OZ(h)) ek.appendChild(el("span", "rl-yz", h.ozet_spot && !EN ? "Spot: yayının kendi metni" : EN ? "Translation and summary: AI" : "Çeviri ve özet: yapay zekâ"));
     ek.appendChild(el("span", "rl-yz", EN ? "Not an official account: Alboroto collects " + k.ad + "’s stories." : "Resmî hesap değil: bu yayının haberlerini Alboroto derler."));
     const hb = el("a", "rl-hata", EN ? "Report an error" : "Hata bildir"); hb.href = HS.hataBildir(h, k.ad); ek.appendChild(hb);
     pl.appendChild(ek);

@@ -215,7 +215,7 @@ def olaylari_kumele(anahtar, model, haberler, simdi):
 
 # ---------------------------------------------------------------- arşiv
 ARSIV_ALANLAR = ("id", "kaynak", "kaynak_ad", "url", "tarih", "baslik_tr", "ozet_tr", "etiket", "gorsel", "arsiv", "telegram",
-                 "nitelik", "baslik_orj", "dil", "kayip", "ceviri_tr", "resmi_grup", "baslik_en", "ozet_en")
+                 "nitelik", "baslik_orj", "dil", "kayip", "ceviri_tr", "resmi_grup", "baslik_en", "ozet_en", "ozet_spot")
 
 
 def arsive_yaz(kok, haberler):
@@ -252,7 +252,7 @@ def arsive_yaz(kok, haberler):
 
 
 # ---------------------------------------------------------------- hesaplar (profil sayfaları)
-HESAP_ALANLAR = ("id", "url", "tarih", "baslik_tr", "baslik_en", "baslik_orj", "ozet_tr", "ozet_en", "dil", "nitelik", "telegram")
+HESAP_ALANLAR = ("id", "url", "tarih", "baslik_tr", "baslik_en", "baslik_orj", "ozet_tr", "ozet_en", "dil", "nitelik", "telegram", "ozet_spot")
 HESAP_GUN, HESAP_EN_COK = 14, 120
 
 
@@ -304,7 +304,7 @@ def hesap_yaz(kok, haberler, simdi):
 def rss_yaz(kok, haberler, simdi):
     depo = os.environ.get("GITHUB_REPOSITORY", "")
     site = __import__("marka").site()
-    ozetli = [h for h in haberler if h.get("ozet_tr")][:100]
+    ozetli = [h for h in haberler if h.get("ozet_tr") and not h.get("ozet_spot")][:100]   # spot yayının sözü: akışa koyma
     e = lambda s: html.escape(s or "", quote=True)
     ogeler = []
     for h in ozetli:
