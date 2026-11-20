@@ -28,6 +28,7 @@ GUNLUK_USD = float(os.environ.get("YZ_GUNLUK_USD") or 0.66)
 FIYAT = {"claude-haiku-5-5": ((0.10, 0.50), (0.50, 2.50))}
 UZUN_ISTEK = 100_000
 # Görevin günlük tavanın en fazla ne kadarını kullanabileceği: tavan dolarken önce görsel, en son haber metni durur
+GEMINI_ONCE = {"ceviri", "olay", "gorsel", "diger"}
 PAY = {"haber_yaz": 1.0, "ceviri": 0.85, "olay": 0.8, "ozet": 0.65, "almanak": 0.6, "diger": 0.6, "gorsel": 0.5}
 GORSEL_TUR = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 UA = "alboroto-yz/1.0"
@@ -184,6 +185,14 @@ def cagir(metin, gorev="diger", gemini=None, sistem=None, gorsel=None, sicaklik=
     """Bir görev çağrısı. gemini=(anahtar, model) yedek sağlayıcıdır. gorsel=(bayt, mime türü).
     yalniz="claude" ya da "gemini" yalnızca o sağlayıcıyı dener (karşılaştırma denemesi için)."""
     g = _oku()
+    # Kısa işlerde (başlık çevirisi, olay gruplama, görsel denetimi) önce Gemini'nin ücretsiz katmanı; Haiku yalnızca yedek.
+    # Kendi haber metnimiz, özet ve almanak Haiku'da kalır (hukuken hassas, kalite önemli).
+    if gorev in GEMINI_ONCE and yalniz is None and gemini and gemini[0] and gemini[1]:
+        k1, v1 = _gemini(gemini[0], gemini[1], metin, sistem, gorsel, sicaklik, zaman, en_cok_cikti)
+        if k1 == 200 and v1 is not None:
+            return k1, v1
+        g["gemini_hata"] = g.get("gemini_hata", 0) + 1
+        gemini = None   # aşağıda Haiku denenir; Gemini ikinci kez denenmez
     claude_olur = (etkin() or yalniz == "claude") and os.environ.get("ANTHROPIC_API_KEY") and yalniz != "gemini" \
         and (not gorsel or gorsel[1] in GORSEL_TUR) and (not g.get("anahtar_hata") or yalniz == "claude")
     kod = None
