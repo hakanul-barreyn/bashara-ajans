@@ -63,7 +63,8 @@ body.odak-modu .harita-bolum{display:none}
 .ust-ic{max-width:1240px;margin:0 auto;height:var(--ust);display:flex;align-items:center;gap:14px;padding:0 max(var(--kanat),env(safe-area-inset-right,0px)) 0 max(var(--kanat),env(safe-area-inset-left,0px))}
 .marka{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .logo{width:32px;height:32px;display:block;flex:none;border:0;border-radius:0;background:none}
-.marka-ad{font-family:"Reem Kufi Fun","Plus Jakarta Sans",system-ui,sans-serif;font-weight:700;font-size:1.45rem;line-height:1;letter-spacing:.01em}
+/* logo yazısı: telefon ana sayfasındakiyle aynı, her yerde büyük harf */
+.marka-ad{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:1.22rem;line-height:1;letter-spacing:.05em;text-transform:uppercase}
 .slogan{margin:0;flex:1 1 auto;color:var(--soluk);font-size:.86rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .canli{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.74rem;color:var(--soluk);padding:5px 11px;border:1px solid var(--cizgi);border-radius:999px;background:var(--yuzey);white-space:nowrap}
 .nabiz{width:8px;height:8px;border-radius:50%;background:var(--yesil);box-shadow:0 0 0 0 color-mix(in srgb,var(--yesil) 60%,transparent);animation:nabiz 2s infinite}
@@ -343,7 +344,7 @@ button.eylem{border:1px solid transparent;cursor:pointer;font-family:var(--f)}
   .ust-ic{gap:8px}
   .canli{display:none}
   .marka{flex:none}
-  .marka-ad{font-size:1.25rem}
+  .marka-ad{font-size:1.12rem}
   .menu{margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;gap:4px}
   .menu::-webkit-scrollbar{display:none}
   .menu{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);padding-right:22px}

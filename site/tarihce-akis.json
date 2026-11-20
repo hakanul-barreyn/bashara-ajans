@@ -455,7 +455,7 @@
     1939
    ],
    "renk": "#b3261e",
-   "tez": "Manda yönetimi Balfour taahhüdünü uygularken Filistinlilere seçimle kurulan bir meclis bile tanımadı. 1930’larda Avrupa’dan gelen göç hızlandı; Yahudi nüfusunun payı 1931’de yüzde 17 iken 1936 sonunda yüzde 28’e çıktı. Vergi ve borç altındaki köylüler Hayfa ile Yafa’nın kenar mahallelerine göç ediyordu. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam bu insanlar arasında gizli bir örgüt kurdu. Kasım 1935’te öldürülmesi, ertesi bahar genel grevle başlayıp üç yıl süren isyanın kıvılcımı oldu.",
+   "tez": "Manda yönetimi Balfour taahhüdünü uygularken Filistinlilere seçimle kurulan bir meclis bile tanımadı. 1930’larda Avrupa’dan gelen göç hızlandı; Yahudi nüfusunun payı 1931’de yüzde 17 iken 1936 sonunda yüzde 28’e çıktı. Vergi ve borç altındaki köylüler Hayfa ile Yafa’nın kenar mahallelerine göç ediyordu. Histadrut’un “İbrani emeği” kampanyası Arap işçileri Yahudi işletmelerinden dışlıyordu. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam bu insanlar arasında gizli bir örgüt kurdu. Kasım 1935’te öldürülmesi, ertesi bahar genel grevle başlayıp üç yıl süren isyanın kıvılcımı oldu.",
    "gecis": "İsyan bastırıldı; on yıl sonra toprak BM’de paylaşılacaktı.",
    "olaylar": [
     {
@@ -584,7 +584,7 @@
      "yeni": true,
      "tarih": "1939-05",
      "baslik": "Beyaz Kitap",
-     "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak devrini kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı. İsyanın önderleri o sırada sürgündeydi; Siyonist hareket belgeyi reddetti. Toprak meselesi isyanın asıl nedeni değildi: Yahudi kurumlarının elindeki toprak 1947’de bile ülkenin yaklaşık yüzde 7’siydi ve bunun büyük kısmı köylülerden değil, Beyrut’ta ve Şam’da oturan Sursuk gibi büyük toprak sahibi ailelerden satın alınmıştı. Satılan topraklarda çalışan kiracı köylüler ise çıkarıldı.",
+     "metin": "İngiltere Mayıs 1939’da yayımladığı Beyaz Kitap’la Yahudi göçünü beş yılda 75 bin kişiyle sınırladı, toprak devrini kısıtladı ve on yıl içinde bağımsız bir Filistin kurulacağını açıkladı. İsyanın önderleri o sırada sürgündeydi; Siyonist hareket belgeyi reddetti. Toprak meselesi isyanın asıl nedeni değildi: Yahudi Ulusal Fonu gibi Yahudi kurumlarının elindeki toprak 1947’de bile ülkenin yaklaşık yüzde 7’siydi ve bunun büyük kısmı köylülerden değil, Beyrut’ta ve Şam’da oturan Sursuk gibi büyük toprak sahibi ailelerden satın alınmıştı. Satılan topraklarda çalışan kiracı köylüler ise çıkarıldı.",
      "kaynaklar": [
       {
        "ad": "Origins (Ohio State Üniversitesi)",
@@ -592,7 +592,7 @@
       }
      ],
      "baslik_en": "The White Paper",
-     "metin_en": "In the White Paper of May 1939 Britain limited Jewish immigration to 75,000 over five years, restricted land transfers and announced that an independent Palestine would be established within ten years. The revolt’s leaders were in exile by then; the Zionist movement rejected the document. Land was not the revolt’s main cause: even in 1947 Jewish institutions held about 7 per cent of the country, and most of it had been bought not from peasants but from large landowning families living in Beirut and Damascus, such as the Sursuqs. The tenant peasants who worked the sold land were evicted.",
+     "metin_en": "In the White Paper of May 1939 Britain limited Jewish immigration to 75,000 over five years, restricted land transfers and announced that an independent Palestine would be established within ten years. The revolt’s leaders were in exile by then; the Zionist movement rejected the document. Land was not the revolt’s main cause: even in 1947 Jewish institutions such as the Jewish National Fund held about 7 per cent of the country, and most of it had been bought not from peasants but from large landowning families living in Beirut and Damascus, such as the Sursuqs. The tenant peasants who worked the sold land were evicted.",
      "vurgu": [
       "büyük kısmı köylülerden değil"
      ],
@@ -613,7 +613,7 @@
    ],
    "ad_en": "Qassam and the 1936 Revolt",
    "alt_en": "The roots of resistance",
-   "tez_en": "While implementing the Balfour pledge, the Mandate denied Palestinians even an elected assembly. Immigration from Europe accelerated in the 1930s; the Jewish share of the population rose from 17 per cent in 1931 to 28 per cent by the end of 1936. Peasants burdened with taxes and debt were drifting to the outskirts of Haifa and Jaffa. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among them. His killing in November 1935 sparked the revolt that began with a general strike the following spring and lasted three years.",
+   "tez_en": "While implementing the Balfour pledge, the Mandate denied Palestinians even an elected assembly. Immigration from Europe accelerated in the 1930s; the Jewish share of the population rose from 17 per cent in 1931 to 28 per cent by the end of 1936. Peasants burdened with taxes and debt were drifting to the outskirts of Haifa and Jaffa. The Histadrut’s “Hebrew labour” campaign was pushing Arab workers out of Jewish enterprises. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among them. His killing in November 1935 sparked the revolt that began with a general strike the following spring and lasted three years.",
    "gecis_en": "The revolt was crushed; ten years later the land would be divided at the UN.",
    "gorsel": "isyan-1938"
   },
@@ -846,6 +846,91 @@
       },
       {
        "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1948-03-10",
+     "baslik": "Plan Dalet",
+     "baslik_en": "Plan Dalet",
+     "metin": "Yahudi Ajansı’na bağlı Hagana’nın komutanlığı 10 Mart 1948’de Plan Dalet’i (D Planı) kabul etti. Plan, İngilizlerin çekilmesiyle Yahudi devletine ayrılan toprakların ve onların dışındaki Yahudi yerleşimlerinin denetimini almayı hedefliyordu; direnen ya da düşman sayılan köylerin kuşatılmasını, yıkılmasını ve halkının sınırların dışına çıkarılmasını öngörüyordu. Nisan’dan itibaren Hayfa, Yafa ve yüzlerce köy bu plan çerçevesindeki harekâtlarda boşaltıldı. Tarihçiler planın niteliğini tartışıyor: Pappé onu etnik temizliğin planı sayar; Morris ise askerî bir plan olduğunu, sürgünün yerel komutanların kararına bırakıldığını savunur.",
+     "metin_en": "On 10 March 1948 the command of the Haganah, which answered to the Jewish Agency, adopted Plan Dalet (Plan D). The plan aimed to take control, as the British withdrew, of the land allotted to the Jewish state and of Jewish settlements beyond it; it provided for surrounding and destroying villages that resisted or were deemed hostile and expelling their populations beyond the borders. From April onward Haifa, Jaffa and hundreds of villages were emptied in operations carried out under the plan. Historians dispute its nature: Pappé regards it as a blueprint for ethnic cleansing; Morris argues it was a military plan that left expulsion to the decisions of local commanders.",
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
+       "ad_en": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "ad_en": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Walid Khalidi, “Plan Dalet: Master Plan for the Conquest of Palestine”, Journal of Palestine Studies 18:1 (1988)",
+       "ad_en": "Walid Khalidi, “Plan Dalet: Master Plan for the Conquest of Palestine”, Journal of Palestine Studies 18:1 (1988)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "yan": true,
+     "tarih": "1948-05-17",
+     "baslik": "Akka’nın düşüşü",
+     "baslik_en": "The fall of Acre",
+     "metin": "Taksim planında Arap devletine ayrılan Akka, Hayfa’dan kaçanlarla kalabalıklaşmıştı. Mayıs başında kentte tifo salgını çıktı; İngiliz, Arap ve Kızılhaç belgeleri salgının, Hagana’nın kentin su kaynaklarına mikrop katmasıyla başladığını kaydetti. Hagana’nın Ben-Ami Harekâtı’nda kent 16-17 Mayıs gecesi havan topuyla dövüldü ve ertesi gece teslim oldu. Kentte 5-6 bin Filistinli kaldı.",
+     "metin_en": "Acre, allotted to the Arab state under the partition plan, was crowded with people who had fled Haifa. In early May a typhoid epidemic broke out; British, Arab and Red Cross documents record that it began when the Haganah introduced germs into the town’s water supply. In the Haganah’s Operation Ben-Ami the town was shelled with mortars on the night of 16-17 May and surrendered the following night. Some 5,000 to 6,000 Palestinians remained.",
+     "vurgu": [
+      "Arap devletine ayrılan Akka"
+     ],
+     "vurgu_en": [
+      "allotted to the Arab state"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Journal of Palestine Studies",
+       "url": "https://digitalprojects.palestine-studies.org/jps/abstract/42335"
+      },
+      {
+       "ad": "Wikipedia: Operation Ben-Ami",
+       "url": "https://en.wikipedia.org/wiki/Operation_Ben-Ami"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Benny Morris & Benjamin Z. Kedar, “‘Cast thy bread’: Israeli biological warfare during the 1948 War”, Middle Eastern Studies 59:5 (2023)",
+       "ad_en": "Benny Morris & Benjamin Z. Kedar, “‘Cast thy bread’: Israeli biological warfare during the 1948 War”, Middle Eastern Studies 59:5 (2023)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1948-07-12",
+     "baslik": "Lidda ve Ramle sürgünü",
+     "baslik_en": "The expulsion from Lydda and Ramle",
+     "metin": "Palmah’ın Yiftah Tugayı ve öteki birlikler Danny Harekâtı’nda 11-12 Temmuz 1948’de, taksim planında Arap devletine ayrılan Lidda ve Ramle’yi aldı. Lidda’daki çatışmalarda ve Dahmaş Camii’nde yüzlerce kişi öldürüldü. Ardından iki kentin 50-70 bin kişilik halkı sürüldü; Temmuz sıcağında Ürdün hatlarına yürümek zorunda bırakılanların bir kısmı yolda öldü. Sürgün emrini harekâtın operasyon subayı İzhak Rabin imzaladı; Rabin’in anılarındaki bu bölüm İsrail’de sansürlendi, 1979’da New York Times’ta yayımlandı.",
+     "metin_en": "In Operation Danny on 11-12 July 1948, the Palmach’s Yiftach Brigade and other units took Lydda and Ramle, both allotted to the Arab state under the partition plan. Hundreds were killed in the fighting in Lydda and at the Dahmash Mosque. The 50,000 to 70,000 people of the two towns were then expelled; some of those forced to march to the Jordanian lines in the July heat died on the way. The expulsion order was signed by the operation’s operations officer, Yitzhak Rabin; the passage in Rabin’s memoirs was censored in Israel and published by the New York Times in 1979.",
+     "vurgu": [
+      "iki kentin 50-70 bin kişilik halkı sürüldü"
+     ],
+     "vurgu_en": [
+      "The 50,000 to 70,000 people of the two towns were then expelled"
+     ],
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "ad_en": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
+       "ad_en": "Ilan Pappé, The Ethnic Cleansing of Palestine (Oneworld, 2006)",
        "tur": "akademik"
       }
      ]
@@ -2519,6 +2604,85 @@
    "ad_en": "7 October and after",
    "tez_en": "With Al-Aqsa Flood, the Islamic wing of the Palestinian resistance and its allies in the region – Hezbollah in Lebanon, Ansarullah in Yemen and Iran – became fronts of the same war. To the movement’s supporters, 7 October was a blow to the deterrence Israel had relied on since its founding, and the first domino that would change the world order. The Gaza genocide, the World Court cases and the Iran war that followed shook the regional order.",
    "gorsel": "gazze-rimal-2023"
+  }
+ ],
+ "sozluk": [
+  {
+   "ad": "Siyonizm",
+   "ad_en": "Zionism",
+   "esler": [
+    "Siyonist",
+    "Zionist"
+   ],
+   "not": "Theodor Herzl’in 1897’de Basel’de topladığı Birinci Siyonist Kongresi’yle örgütlenen siyasi hareket. Filistin’de Yahudiler için önce bir “yurt”, ardından bir devlet kurmayı hedefledi. Dünya Siyonist Teşkilatı, Yahudi Ulusal Fonu ve Yahudi Ajansı bu hareketin kurumlarıydı.",
+   "not_en": "The political movement organised at the First Zionist Congress, convened by Theodor Herzl in Basel in 1897. It aimed at a Jewish “home” and then a state in Palestine. The World Zionist Organisation, the Jewish National Fund and the Jewish Agency were its institutions."
+  },
+  {
+   "ad": "Yahudi Ajansı",
+   "ad_en": "Jewish Agency",
+   "esler": [
+    "Yahudi Ajansı",
+    "Jewish Agency"
+   ],
+   "not": "Manda metninin tanıdığı, Filistin’deki Yahudi topluluğunu İngiliz yönetimi karşısında temsil eden kurum (1929’dan itibaren bu adla). Göçü, toprak alımını ve Hagana’yı yönetti. Başkanı Ben-Gurion 14 Mayıs 1948’de İsrail’in kuruluşunu ilan etti.",
+   "not_en": "The body recognised by the Mandate text to represent the Jewish community in Palestine before the British administration (under this name from 1929). It ran immigration, land purchase and the Haganah. Its chairman, Ben-Gurion, proclaimed the establishment of Israel on 14 May 1948."
+  },
+  {
+   "ad": "Yahudi Ulusal Fonu",
+   "ad_en": "Jewish National Fund",
+   "esler": [
+    "Yahudi Ulusal Fonu",
+    "Jewish National Fund"
+   ],
+   "not": "Siyonist Kongre’nin 1901’de kurduğu fon (İbranice kısaltmasıyla KKL). Satın aldığı toprağı devredilemez “Yahudi halkının mülkü” sayıp yalnızca Yahudilere kiraladı. 1948’den sonra boşaltılan köylerin topraklarının bir kısmını devraldı, bazılarının üzerine orman dikti.",
+   "not_en": "The fund founded by the Zionist Congress in 1901 (KKL in Hebrew). It treated the land it bought as the inalienable “property of the Jewish people” and leased it only to Jews. After 1948 it took over part of the land of the emptied villages and planted forests over some of them."
+  },
+  {
+   "ad": "Histadrut",
+   "ad_en": "Histadrut",
+   "esler": [
+    "Histadrut"
+   ],
+   "not": "1920’de kurulan Yahudi işçi federasyonu. “İbrani emeği” kampanyasıyla Yahudi işletmelerinde Arap işçi çalıştırılmamasını savundu; yerleşim ekonomisinin ve Hagana’nın da arkasındaydı. Genel sekreteri Ben-Gurion’du.",
+   "not_en": "The Jewish labour federation founded in 1920. Through its “Hebrew labour” campaign it pushed for Jewish enterprises not to employ Arab workers; it also stood behind the settler economy and the Haganah. Ben-Gurion was its general secretary."
+  },
+  {
+   "ad": "Hagana",
+   "ad_en": "Haganah",
+   "esler": [
+    "Haganah",
+    "Hagana"
+   ],
+   "not": "Filistin’deki Yahudi topluluğunun (Yişuv) 1920’de kurulan ana silahlı örgütü; Yahudi Ajansı’na bağlıydı. 1948’de Plan Dalet’i uyguladı ve İsrail ordusunun çekirdeği oldu.",
+   "not_en": "The main armed organisation of the Jewish community in Palestine (the Yishuv), founded in 1920 and answering to the Jewish Agency. In 1948 it carried out Plan Dalet and became the core of the Israeli army."
+  },
+  {
+   "ad": "Palmah",
+   "ad_en": "Palmach",
+   "esler": [
+    "Palmach",
+    "Palmah"
+   ],
+   "not": "Hagana’nın 1941’de kurulan seçkin vurucu birlikleri. 1948’de Lidda ve Ramle’nin alınmasında ve pek çok köyün boşaltılmasında yer aldı; Kasım 1948’de İsrail ordusuna katıldı.",
+   "not_en": "The Haganah’s elite strike force, founded in 1941. In 1948 it took part in the capture of Lydda and Ramle and the emptying of many villages; it was merged into the Israeli army in November 1948."
+  },
+  {
+   "ad": "Irgun",
+   "ad_en": "Irgun",
+   "esler": [
+    "Irgun"
+   ],
+   "not": "Revizyonist Siyonizme bağlı, 1931’de Hagana’dan ayrılan silahlı örgüt (İbranice kısaltmasıyla Etzel). Menahem Begin komutasında 1946’da Kudüs’teki King David Oteli’ni bombaladı; Nisan 1948’de Lehi’yle birlikte Deir Yasin katliamını gerçekleştirdi. 1948’de İsrail ordusuna katıldı; Begin 1977’de başbakan oldu.",
+   "not_en": "An armed organisation of Revisionist Zionism that split from the Haganah in 1931 (Etzel in Hebrew). Under Menachem Begin it bombed the King David Hotel in Jerusalem in 1946; in April 1948, together with Lehi, it carried out the Deir Yassin massacre. It joined the Israeli army in 1948; Begin became prime minister in 1977."
+  },
+  {
+   "ad": "Lehi",
+   "ad_en": "Lehi",
+   "esler": [
+    "Lehi"
+   ],
+   "not": "1940’ta Irgun’dan ayrılan örgüt; İngilizler “Stern Çetesi” diyordu. 1944’te İngiliz bakan Lord Moyne’u, Eylül 1948’de BM arabulucusu Folke Bernadotte’yi öldürdü. Liderlerinden İzhak Şamir 1983’te başbakan oldu.",
+   "not_en": "An organisation that split from the Irgun in 1940; the British called it the “Stern Gang”. It killed the British minister Lord Moyne in 1944 and the UN mediator Folke Bernadotte in September 1948. One of its leaders, Yitzhak Shamir, became prime minister in 1983."
   }
  ]
 }

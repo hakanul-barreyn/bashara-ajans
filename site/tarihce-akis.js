@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=11").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=12").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -512,7 +512,60 @@
     }, { rootMargin: "700px 0px", threshold: [0, 0.6] }) : null;
     function tembel(k) { if (tembelIO) tembelIO.observe(k); else { k.yapildi = true; k.yap(); } }
 
+    terimKur(A.sozluk || []);
     ilerlemeKur();
+  }
+
+  // --- bilgi notları: sözlükteki örgüt ve kavram adları her kartta ilk geçtiği yerde işaretlenir; dokununca kısa not açılır ---
+  function terimKur(S) {
+    if (!S.length) return;
+    var esle = [];
+    S.forEach(function (t) { t.esler.forEach(function (e) { esle.push({ e: e, t: t }); }); });
+    esle.sort(function (a, b) { return b.e.length - a.e.length; });
+    var re = new RegExp("(" + esle.map(function (x) { return x.e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("|") + ")");
+    var bul = function (s) { for (var i = 0; i < esle.length; i++) if (esle[i].e === s) return esle[i].t; return null; };
+    var kutu = el("div", "ta-terim-kutu"); kutu.hidden = true; kutu.setAttribute("role", "dialog");
+    var kb = el("b"), kp = el("p"), ke = el("span", "ta-terim-et", EN ? "Note" : "Bilgi notu");
+    kutu.append(ke, kb, kp); document.body.appendChild(kutu);
+    var acik = null;
+    function kapa() { kutu.hidden = true; if (acik) acik.setAttribute("aria-expanded", "false"); acik = null; }
+    function ac(d, t) {
+      if (acik === d) { kapa(); return; }
+      kapa(); acik = d; d.setAttribute("aria-expanded", "true");
+      kb.textContent = D2(t, "ad"); kp.textContent = D2(t, "not");
+      kutu.hidden = false;
+      var r = d.getBoundingClientRect(), w = Math.min(340, innerWidth - 24);
+      kutu.style.width = w + "px";
+      kutu.style.left = Math.max(12, Math.min(innerWidth - w - 12, r.left)) + scrollX + "px";
+      kutu.style.top = r.bottom + scrollY + 8 + "px";
+    }
+    document.addEventListener("click", function (e) { if (acik && !kutu.contains(e.target) && !e.target.closest(".ta-terim")) kapa(); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && acik) { var d = acik; kapa(); d.focus(); } });
+    addEventListener("resize", kapa);
+    document.querySelectorAll(".ta-kart, .ta-kupur, .ta-acilis, .ta-alinti, .ta-bio").forEach(function (kart) {
+      var gorulen = {};
+      var y = document.createTreeWalker(kart, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
+        var u = n.parentNode;
+        if (!u || u.closest("a, button, h2, h3, figcaption, .ta-kaynaklar, .ta-kaynakca, .ta-akis-et, .ta-tarih, .ta-manset, time, cite")) return NodeFilter.FILTER_REJECT;
+        return re.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      } });
+      var dugumler = []; while (y.nextNode()) dugumler.push(y.currentNode);
+      dugumler.forEach(function (n) {
+        var parcalar = n.nodeValue.split(re); if (parcalar.length < 2) return;
+        var frag = document.createDocumentFragment(), degisti = false;
+        parcalar.forEach(function (p, i) {
+          var t = i % 2 ? bul(p) : null;
+          if (t && !gorulen[t.ad]) {
+            gorulen[t.ad] = 1; degisti = true;
+            var d = el("button", "ta-terim", p); d.type = "button"; d.setAttribute("aria-expanded", "false");
+            d.setAttribute("aria-label", p + (EN ? ": note" : ": bilgi notu"));
+            d.onclick = function (e) { e.stopPropagation(); ac(d, t); };
+            frag.appendChild(d);
+          } else if (p) frag.appendChild(document.createTextNode(p));
+        });
+        if (degisti) n.parentNode.replaceChild(frag, n);
+      });
+    });
   }
 
   // --- önce/sonra perdesi: sürükle, dokun, ok tuşları, iki düğme ---
