@@ -2103,6 +2103,41 @@
     {
      "ref": "2024-12-27",
      "yan": true
+    },
+    {
+     "yeni": true,
+     "tarih": "2026-11-16",
+     "baslik": "Sarı hat bugün: Gazze’nin üçte ikisi kısıtlı",
+     "baslik_en": "The yellow line today: two thirds of Gaza restricted",
+     "metin": "Ekim 2025 ateşkesinde İsrail ordusunun çekildiği “sarı hat”ın doğusu Gazze’nin yaklaşık yarısıydı. Hat o günden beri batıya kaydı. İsrail ordusu Mart 2026’da yardım kuruluşlarına, sarı hattın ötesinde insani hareketin orduyla koordinasyona bağlandığı “turuncu” bir bölgenin haritasını gönderdi; beton bloklar yer yer kentlerin içine doğru taşındı. OCHA’nın Kasım 2026 haritasına göre Gazze’nin yaklaşık yüzde 65’i kısıtlı. 2,1 milyon kişi kalan yaklaşık 128 kilometrekarede yaşıyor.",
+     "metin_en": "Under the October 2025 ceasefire the area east of the “yellow line”, to which the Israeli army pulled back, covered about half of Gaza. The line has moved west since. In March 2026 the Israeli army sent aid agencies maps of an “orange” zone beyond the yellow line where humanitarian movement must be coordinated with the army; in places the concrete blocks were moved further into the towns. According to OCHA’s November 2026 map, about 65 per cent of Gaza is restricted. 2.1 million people live in the remaining 128 square kilometres or so.",
+     "vurgu": [
+      "Gazze’nin yaklaşık yüzde 65’i kısıtlı"
+     ],
+     "vurgu_en": [
+      "about 65 per cent of Gaza is restricted"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "OCHA, Gazze erişim haritası (Kasım 2026)",
+       "url": "https://www.ochaopt.org/sites/default/files/Gaza_2026_Nov_16_2026.pdf"
+      },
+      {
+       "ad": "Al Jazeera (12 Ekim 2026)",
+       "url": "https://aljazeera.com/news/2026/10/12/maps-show-how-israels-yellow-line-keeps-squeezing-palestinians-in-gaza"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "BM İnsani İşler Koordinasyon Ofisi (OCHA), Gaza Strip: Access and Movement, Kasım 2026",
+       "ad_en": "UN OCHA oPt, Gaza Strip: Access and Movement, November 2026",
+       "tur": "birincil"
+      }
+     ],
+     "uydu_gazze": {
+      "not": "Sarı çizgi 10 Ekim 2025 anlaşmasındaki hattır. Turuncu kesik çizgi ve gölgeli alan, Kasım 2026’da insani hareketin İsrail ordusuyla koordinasyona bağlı olduğu bölgeyi gösterir. Çizgiler OCHA haritasından çıkarıldı ve Gazze sınırına oturtuldu; yaklaşıktır. 10 metre çözünürlükte beton bloklar görünmez; görünen, hattın doğusundaki yıkılıp düzlenmiş kuşaktır. Sağdaki görüntü her gün güncellenir.",
+      "not_en": "The yellow line is the line of the 10 October 2025 agreement. The dashed orange line and shaded area show where, in November 2026, humanitarian movement must be coordinated with the Israeli army. The lines were extracted from the OCHA map and fitted to Gaza’s boundary; they are approximate. At 10-metre resolution the concrete blocks are not visible; what you see is the razed belt east of the line. The right-hand image is updated daily."
+     }
     }
    ],
    "ad_en": "7 October and after",

@@ -145,6 +145,23 @@ def _stac(gun=60, bulut=8, aralik=None):
         return json.loads(r.read()).get("features", [])
 
 
+GEO = {}   # kesilen her bbox'ın UTM sınırları: üstüne lon/lat çizgi koymak için
+
+
+def _sari_hat(geo):
+    """toplayici/sari_hat.json'daki (lon/lat) katmanları Gazze görüntüsünün piksel oranlarına çevirir (0-1)."""
+    yol = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sari_hat.json")
+    if not geo or not os.path.exists(yol):
+        return None
+    from rasterio.warp import transform
+    v = json.load(open(yol, encoding="utf-8"))
+    b, g, d, k = geo["sinir"]
+    def cevir(h):
+        xs, ys = transform("EPSG:4326", geo["crs"], [p[0] for p in h], [p[1] for p in h])
+        return [[round((x - b) / (d - b), 5), round((k - y) / (k - g), 5)] for x, y in zip(xs, ys)]
+    return {**{a: v[a] for a in v if a != "katmanlar"}, "katmanlar": {ad: [cevir(h) for h in hs] for ad, hs in v["katmanlar"].items()}}
+
+
 def _kes(fs, bbox):
     """Aynı güne ait Sentinel-2 karelerinden bbox'ı keser (10 m). Döndürür: RGB dizisi ya da None (kare eksikse)."""
     import numpy as np
@@ -154,8 +171,10 @@ def _kes(fs, bbox):
     kaynaklar = [rasterio.open(f["assets"]["visual"]["href"]) for f in fs]
     crs = kaynaklar[0].crs
     kaynaklar = [k for k in kaynaklar if k.crs == crs]
-    dizi, _ = merge(kaynaklar, bounds=transform_bounds("EPSG:4326", crs, *bbox), res=10, nodata=0)
+    dizi, tr = merge(kaynaklar, bounds=transform_bounds("EPSG:4326", crs, *bbox), res=10, nodata=0)
     rgb = np.moveaxis(dizi[:3], 0, -1)
+    h, w = rgb.shape[:2]
+    GEO[tuple(bbox)] = {"crs": str(crs), "sinir": [tr.c, tr.f + tr.e * h, tr.c + tr.a * w, tr.f]}   # batı, güney, doğu, kuzey (UTM)
     return None if float((rgb.sum(axis=2) == 0).mean()) > 0.03 else rgb
 
 
@@ -200,18 +219,21 @@ def uydu(cikti):
     for (k, *_), r in zip(BOLGELER, kesitler[1:]):
         _kaydet(r, os.path.join(klasor, f"{k}-simdi.jpg"), en=1400)
     # savaş öncesi: bir kez üretilir, sonra saklanır
+    geo = GEO.get(tuple(GAZZE_BBOX))
     once = eski.get("once")
-    if not once or not all(os.path.exists(os.path.join(klasor, f"{k}-once.jpg")) for k, *_ in BOLGELER):
-        ogun, _, okes = _gun_sec(_stac(bulut=5, aralik=ONCE_ARALIK), [b for *_, b in BOLGELER])
+    if not once or not os.path.exists(os.path.join(klasor, "gazze-once.jpg")) or not all(os.path.exists(os.path.join(klasor, f"{k}-once.jpg")) for k, *_ in BOLGELER):
+        ogun, _, okes = _gun_sec(_stac(bulut=5, aralik=ONCE_ARALIK), [GAZZE_BBOX] + [b for *_, b in BOLGELER])
         if ogun:
-            for (k, *_), r in zip(BOLGELER, okes):
+            _kaydet(okes[0], os.path.join(klasor, "gazze-once.jpg"))
+            for (k, *_), r in zip(BOLGELER, okes[1:]):
                 _kaydet(r, os.path.join(klasor, f"{k}-once.jpg"), en=1400)
             once = ogun
             print("Savaş öncesi görüntü:", ogun)
     galeri = [{"id": k, "ad": ad, "ad_en": en, "bbox": b, "simdi": f"{k}-simdi.jpg", "once": f"{k}-once.jpg" if once else None}
               for k, ad, en, b in BOLGELER]
     json.dump({"tarih": gun, "once": once, "bulut": max(f["properties"].get("eo:cloud_cover", 0) for f in fs), "uydu": "Sentinel-2",
-               "kare": [f["id"] for f in fs], "galeri": galeri,
+               "kare": [f["id"] for f in fs], "galeri": galeri, "gazze_once": "gazze-once.jpg" if os.path.exists(os.path.join(klasor, "gazze-once.jpg")) else None,
+               "sari": _sari_hat(geo),
                "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}{', ' + once[:4] if once and once[:4] != gun[:4] else ''}), ESA; işleme: Alboroto",
                "lisans": "https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice",
                "guncellendi": dt.datetime.now(dt.timezone.utc).isoformat()},

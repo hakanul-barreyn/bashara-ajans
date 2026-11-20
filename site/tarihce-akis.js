@@ -22,14 +22,15 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=6").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=7").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
     fetch("data/gorsel/tarihce/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/gorsel/kapak/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/gorsel/uydu/uydu.json").then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
     BG ? BG.hazir : null
-  ]).then(function (x) { kur(x[0], x[1], x[2], x[3], (x[4] || []).concat(x[5] || [])); })
+  ]).then(function (x) { kur(x[0], x[1], x[2], x[3], (x[4] || []).concat(x[5] || []), x[6]); })
     .catch(function (e) { kok.textContent = EN ? "The history page could not be loaded." : "Tarihçe yüklenemedi."; console.error(e); });
 
   // Metni yazar; "vurgu" listesindeki parçaları fosforlu kalemle işaretler
@@ -45,7 +46,7 @@
     return e;
   }
 
-  function kur(A, D, H, H2, K) {
+  function kur(A, D, H, H2, K, U) {
     kok.textContent = "";
     var kunye = {}; K.forEach(function (k) { kunye[k.ad] = k; });
     var KUL = {};   // sayfada kullanılan künyeler (sonda listelenir)
@@ -121,6 +122,7 @@
       serit.appendChild(e);
       if (x.o.karsilastir) serit.appendChild(boya(haritaKars(x.o.karsilastir), a, x.t));
       if (x.o.uydu) serit.appendChild(boya(uyduKars(x.o.uydu), a, x.t));
+      if (x.o.uydu_gazze && U && U.gazze_once && U.sari) serit.appendChild(boya(uyduGazze(U, x.o.uydu_gazze), a, x.t));
       if (son[a.anahtar] === n && a.gecis) serit.appendChild(boya(gecis(a, x.ai), a, x.t));
     });
 
@@ -360,6 +362,46 @@
     function katman(icerik, sinif) { var d = el("div", "kk-katman " + sinif); d.appendChild(icerik); return d; }
 
     // --- önce/sonra uydu görüntüsü ---
+    // bugünkü Gazze (Sentinel-2) ile savaş öncesi; üstte OCHA haritasından çıkarılmış sarı hat ve kısıtlı alan
+    function uyduGazze(U, m) {
+      var K = "data/gorsel/uydu/", gun = new Date().toISOString().slice(0, 10);
+      var t1 = tarihAd(U.once), t2 = tarihAd(U.tarih), S = U.sari;
+      var f = el("figure", "ta-kars uydu izle");
+      var ust = el("div", "ta-kars-ust");
+      ust.append(el("span", "ta-kars-et", EN ? "Satellite · before and today" : "Uydu · önce ve bugün"), el("p", "ta-kars-baslik", yil(U.once) + " → " + yil(U.tarih)));
+      f.appendChild(ust);
+      var kutu = el("div", "ta-kk"); kutu.style.setProperty("--oran", "0.84");
+      var sahne = el("div", "ta-kk-sahne"); sahne.appendChild(kutu);
+      var dg = kaydirici(kutu, t1, t2, (EN ? "Compare " : "Karşılaştır: ") + t1 + " / " + t2);
+      var ust2 = svg("svg", { viewBox: "0 0 1 1", preserveAspectRatio: "none", "class": "kk-ust", "aria-hidden": "true" });
+      var d = function (hs) { return hs.map(function (h) { return "M" + h.map(function (p) { return p[0] + " " + p[1]; }).join("L") + "Z"; }).join(""); };
+      var L = S.katmanlar;
+      if (L.kisitli) ust2.appendChild(svg("path", { d: d(L.kisitli), "class": "kk-kisitli", "fill-rule": "evenodd" }));
+      if (L.turuncu) ust2.appendChild(svg("path", { d: d(L.turuncu).replace(/Z/g, ""), "class": "kk-turuncu" }));
+      if (L.sari) ust2.appendChild(svg("path", { d: d(L.sari).replace(/Z/g, ""), "class": "kk-sari" }));
+      var gizle = el("button", "kk-gizle", EN ? "Hide lines" : "Çizgileri gizle"); gizle.type = "button";
+      gizle.onclick = function () { var g = kutu.classList.toggle("kk-cizgisiz"); gizle.textContent = g ? (EN ? "Show lines" : "Çizgileri göster") : (EN ? "Hide lines" : "Çizgileri gizle"); };
+      kutu.yap = function () {
+        var y = function (src, alt) { var im = new Image(); im.src = K + src + "?t=" + gun; im.alt = alt; im.decoding = "async"; im.draggable = false; return im; };
+        var i2 = y("gazze.jpg", (EN ? "The Gaza Strip from space, " : "Uydudan Gazze Şeridi, ") + t2), i1 = y(U.gazze_once, (EN ? "The Gaza Strip from space, " : "Uydudan Gazze Şeridi, ") + t1);
+        i2.onload = function () { if (i2.naturalWidth) kutu.style.setProperty("--oran", (i2.naturalWidth / i2.naturalHeight).toFixed(4)); };
+        kutu.insertBefore(katman(i2, "kk-sonra"), kutu.firstChild);
+        kutu.insertBefore(katman(i1, "kk-once"), kutu.children[1]);
+        kutu.insertBefore(ust2, kutu.children[2]);
+      };
+      f.append(sahne, dg);
+      dg.appendChild(gizle);
+      var lej = el("div", "ta-kars-lej");
+      [["sari", EN ? "Yellow line, 10 October 2025 agreement" : "Sarı hat, 10 Ekim 2025 anlaşması"],
+       ["turuncu", EN ? "Edge of the restricted area, November 2026" : "Kısıtlı alanın sınırı, Kasım 2026"],
+       ["kisitli", EN ? "Restricted: about 65% of Gaza" : "Kısıtlı: Gazze’nin yaklaşık %65’i"]].forEach(function (x) { var s = el("span", "lej-" + x[0]); s.appendChild(el("i")); s.appendChild(document.createTextNode(x[1])); lej.appendChild(s); });
+      f.appendChild(lej);
+      f.appendChild(el("p", "ta-kars-not tek", D2(m, "not")));
+      f.appendChild(el("p", "ta-kars-kaynak", (EN ? "Images: Copernicus Sentinel-2 (ESA), " : "Görüntüler: Copernicus Sentinel-2 (ESA), ") + t1 + ", " + t2 + (EN ? ". Lines: " : ". Çizgiler: ") + "OCHA oPt, " + tarihAd(S.tarih) + (EN ? ", approximate." : ", yaklaşık.")));
+      tembel(kutu);
+      return f;
+    }
+
     function uyduKars(u) {
       var f = el("figure", "ta-kars uydu izle");
       var t1 = tarihAd(u.tarih_once), t2 = tarihAd(u.tarih_sonra);

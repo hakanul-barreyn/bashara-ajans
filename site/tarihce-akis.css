@@ -251,6 +251,20 @@
 .ta-kars-not .sonra .ta-kars-ad b{background:color-mix(in srgb,var(--renk) 70%,#000);color:#fff}
 .ta-kars-kaynak{margin:10px 0 0;font:500 .66rem/1.4 var(--ta-sans);color:#8e9b94}
 
+/* uydu üstünde sarı hat */
+.kk-ust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .3s}
+.kk-ust path{vector-effect:non-scaling-stroke}
+.kk-kisitli{fill:rgba(240,120,30,.22);stroke:none}
+.kk-turuncu{fill:none;stroke:#ff8a1f;stroke-width:2;stroke-dasharray:6 4}
+.kk-sari{fill:none;stroke:#ffd60a;stroke-width:3;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
+.ta-kk.kk-cizgisiz .kk-ust{opacity:0}
+.kk-gizle{margin-left:8px}
+.ta-kars-lej{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin:6px 0 0;font:600 .72rem var(--ta-sans);color:#c9d2cc}
+.ta-kars-lej span{display:inline-flex;align-items:center;gap:6px}
+.ta-kars-lej i{display:inline-block;width:18px;height:0;border-top:3px solid #ffd60a}
+.ta-kars-lej .lej-turuncu i{border-top:2px dashed #ff8a1f}
+.ta-kars-lej .lej-kisitli i{height:10px;border:0;border-radius:2px;background:rgba(240,120,30,.45)}
+
 /* harita katmanları: gölgeli arazi zemin, üstünde yarı saydam bölgeler. Çizgiler ekranda sabit kalınlıkta (non-scaling-stroke);
    yazı boyları --o ile kesitlere göre ölçeklenir */
 .ta-hsvg path,.ta-hsvg rect{vector-effect:non-scaling-stroke}
