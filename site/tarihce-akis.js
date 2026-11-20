@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=8").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=9").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -190,7 +190,15 @@
 
     function oge(o, a) {
       var e = o.tur === "alinti" ? alinti(o) : o.tur === "biyografi" ? biyografi(o) : o.tur === "gazete" ? kupur(o) : kart(o);
-      if (e.nodeType === 1) e.insertBefore(akisEt(a), e.firstChild);
+      if (e.nodeType === 1) {
+        var et = akisEt(a);
+        if (o.ortak && o.ortak.length) {   // öğe birden çok akışa ait: her biri kendi renginde etiket
+          var kap = el("div", "ta-akis-etler"); kap.appendChild(et);
+          o.ortak.forEach(function (k) { var b = A.akislar.find(function (x) { return x.anahtar === k; }); if (b) { var e2 = akisEt(b); e2.style.setProperty("--renk", b.renk); kap.appendChild(e2); } });
+          et = kap;
+        }
+        e.insertBefore(et, e.firstChild);
+      }
       return e;
     }
     function kaynakSatiri(ks) {
@@ -228,6 +236,7 @@
       var p = vurgula(el("p", "ta-metin" + (gz && metin.length > 420 && !o.buyuk ? " iki" : "")), metin, EN ? o.vurgu_en : o.vurgu);
       if (gs.length) k.appendChild(galeri(gs, o.buyuk));
       k.appendChild(p);
+      if (o.sonuc) { var sn = el("div", "ta-sonuc"); sn.append(el("b", null, EN ? "Outcome" : "Sonuç"), el("p", null, D2(o, "sonuc"))); k.appendChild(sn); }
       if (o.sina) k.appendChild(sinaSerit(o.sina));
       var kk = kaynakSatiri(o.kaynaklar || v.kaynaklar); if (kk) k.appendChild(kk);
       var kc = kaynakca(o.kaynakca); if (kc) k.appendChild(kc);

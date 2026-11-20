@@ -1,5 +1,5 @@
 {
- "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür. 'karsilastir': olayın yanında önce/sonra haritası (once, sonra, kesit). 'uydu': önce/sonra uydu görüntüsü. 'buyuk': ilk görsel geniş. 'kaynakca': akademik ve birincil kaynaklar (bağlantısız). 'sina': Sina'nın iki işgalini gösteren şerit (1 ya da 2 vurgulanır).",
+ "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür. 'karsilastir': olayın yanında önce/sonra haritası (once, sonra, kesit). 'uydu': önce/sonra uydu görüntüsü. 'buyuk': ilk görsel geniş. 'kaynakca': akademik ve birincil kaynaklar (bağlantısız). 'sina': Sina'nın iki işgalini gösteren şerit (1 ya da 2 vurgulanır). 'ortak': öğe başka akışlara da aittir (ek etiket). 'sonuc': olayın sonucu kutusu.",
  "haritalar": {
   "tam": {
    "yil": "1914",
@@ -701,7 +701,9 @@
        "ad": "Walid Khalidi (ed.), All That Remains: The Palestinian Villages Occupied and Depopulated by Israel in 1948 (Institute for Palestine Studies, 1992)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "İsrail, tarihî Filistin’in yaklaşık yüzde 78’ini ele geçirdi; Batı Şeria Ürdün’ün, Gazze Şeridi Mısır’ın yönetimine geçti. Filistinliler devlet kuramadı; mülteciler o günden beri geri dönemiyor.",
+     "sonuc_en": "Israel took about 78 per cent of historic Palestine; the West Bank came under Jordan and the Gaza Strip under Egypt. The Palestinians did not get a state; the refugees have not been able to return since."
     },
     {
      "yeni": true,
@@ -725,7 +727,9 @@
        "ad": "Joel Gordon, Nasser’s Blessed Movement: Egypt’s Free Officers and the July Revolution (Oxford University Press, 1992)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "Mısır ordusu Necef’ten çıkarıldı ve bugünkü Gazze Şeridi’ne sıkıştı. Faluce’deki tugay teslim olmadı, Şubat 1949 mütarekesiyle silahlarıyla çekildi. Yenilginin öfkesi Kahire’de Hür Subaylar’ı örgütledi.",
+     "sonuc_en": "The Egyptian army was driven out of the Negev and pressed into today’s Gaza Strip. The brigade at Faluja did not surrender and withdrew with its arms under the February 1949 armistice. Anger over the defeat organised the Free Officers in Cairo."
     },
     {
      "ref": "1948-12-11",
@@ -1012,7 +1016,9 @@
       "once": "g1949",
       "sonra": "g1956",
       "kesit": "misir"
-     }
+     },
+     "sonuc": "Savaş alanında İsrail Sina’yı, İngiltere ve Fransa kanalın girişini aldı; ama ABD ile Sovyetler Birliği’nin baskısıyla üçü de geri çekildi. Kanal Mısır’da kaldı ve Abdünnasır siyasi zaferle çıktı. İngiltere ve Fransa bölgedeki ağırlıklarını kaybetti, İngiltere Başbakanı Eden Ocak 1957’de istifa etti. İsrail, Tiran Boğazı’ndan geçiş hakkını ve sınırda BM gücünü kazandı.",
+     "sonuc_en": "On the battlefield Israel took Sinai and Britain and France the mouth of the canal; but under US and Soviet pressure all three withdrew. The canal stayed Egyptian and Nasser emerged with a political victory. Britain and France lost their weight in the region, and Prime Minister Eden resigned in January 1957. Israel gained passage through the Straits of Tiran and a UN force on the border."
     },
     {
      "yeni": true,
@@ -1080,7 +1086,9 @@
      "baslik_en": "The Six-Day War and the Naksa: Sinai occupied a second time",
      "metin": "Mısır’ın UNEF’in çekilmesini istemesi ve Tiran Boğazı’nı kapatmasının ardından İsrail 5 Haziran 1967 sabahı Mısır hava kuvvetlerini yerde vurdu. Altı günde Sina’yı ikinci kez, Gazze’yi, Batı Şeria’yı, Doğu Kudüs’ü ve Golan’ı işgal etti; cephe Süveyş Kanalı’na dayandı ve kanal sekiz yıl kapalı kaldı. Yaklaşık 300 bin Filistinli daha yerinden edildi.",
      "metin_en": "After Egypt asked UNEF to leave and closed the Straits of Tiran, Israel destroyed the Egyptian air force on the ground on the morning of 5 June 1967. In six days it occupied Sinai for the second time, along with Gaza, the West Bank, East Jerusalem and the Golan; the front reached the Suez Canal, which stayed closed for eight years. Some 300,000 more Palestinians were displaced.",
-     "sina": 2
+     "sina": 2,
+     "sonuc": "Arap orduları ağır bir yenilgi aldı: Mısır Sina’yı ve Gazze’yi, Ürdün Batı Şeria’yı ve Doğu Kudüs’ü, Suriye Golan’ı kaybetti. Abdünnasır istifasını açıkladı, halk sokağa dökülünce görevde kaldı. Hartum Zirvesi “barış yok, tanıma yok, müzakere yok” dedi. Arap ordularına güveni kalmayan Filistinliler mücadeleyi kendi örgütleriyle sürdürdü.",
+     "sonuc_en": "The Arab armies suffered a crushing defeat: Egypt lost Sinai and Gaza, Jordan the West Bank and East Jerusalem, Syria the Golan. Nasser announced his resignation and stayed in office when crowds filled the streets. The Khartoum summit said “no peace, no recognition, no negotiation”. Palestinians who had lost faith in the Arab armies carried on the struggle through their own organisations."
     },
     {
      "ref": "1973-10-06",
@@ -1100,7 +1108,9 @@
        "tur": "akademik"
       }
      ],
-     "sina": 2
+     "sina": 2,
+     "sonuc": "Askerî sonuç karışıktı. Mısır kanalı geçip doğu kıyıda bir şerit tuttu ve Bar-Lev hattını düşürdü; İsrail ise karşı saldırıyla kanalın batısına geçip Mısır Üçüncü Ordusu’nu kuşattı, Golan’da Şam’a yaklaştı. Siyasi olarak Mısır kazançlı çıktı: İsrail’in yenilmezlik algısı kırıldı, Sedat masaya güçlü oturdu; kanalın doğu kıyısı 1974’te, Sina’nın tamamı 1982’de geri alındı. Suriye Golan’ı geri alamadı, yalnızca Kuneytra kenti 1974’te iade edildi.",
+     "sonuc_en": "The military outcome was mixed. Egypt crossed the canal, held a strip on the east bank and broke the Bar-Lev line; Israel counter-attacked across the canal, encircled Egypt’s Third Army and advanced towards Damascus on the Golan. Politically Egypt came out ahead: the image of Israeli invincibility was broken and Sadat sat at the table from strength; the east bank of the canal was regained in 1974 and all of Sinai by 1982. Syria did not recover the Golan; only the town of Quneitra was returned in 1974."
     },
     {
      "yeni": true,
@@ -1119,7 +1129,9 @@
        "ad": "William B. Quandt, Camp David: Peacemaking and Politics (Brookings Institution, 1986)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "Mısır Sina’yı geri aldı ama Arap cephesinden koptu: Arap Birliği’nden uzaklaştırıldı, Sedat 1981’de bir askerî geçit töreninde öldürüldü. Antlaşmadaki Filistin özerkliği maddeleri hiç uygulanmadı.",
+     "sonuc_en": "Egypt regained Sinai but broke away from the Arab front: it was suspended from the Arab League, and Sadat was killed at a military parade in 1981. The treaty’s clauses on Palestinian autonomy were never implemented."
     },
     {
      "ref": "1991-01-18",
@@ -1138,7 +1150,9 @@
        "ad": "Yaacov Bar-Siman-Tov, The Israeli-Egyptian War of Attrition, 1969–1970 (Columbia University Press, 1980)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "Açık bir galibi olmadı. Ağustos 1970’teki ABD arabuluculuğundaki ateşkesle bitti. Mısır bu sürede Sovyet yardımıyla kanal boyunca bir hava savunma kalkanı kurdu; 1973’teki geçişi bu kalkan mümkün kıldı.",
+     "sonuc_en": "There was no clear victor. It ended with the US-brokered ceasefire of August 1970. In the meantime Egypt built an air-defence shield along the canal with Soviet help; that shield made the 1973 crossing possible."
     },
     {
      "ref": "1973-10-17",
@@ -1148,7 +1162,23 @@
        "ad": "Daniel Yergin, The Prize: The Epic Quest for Oil, Money, and Power (Simon & Schuster, 1991)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "baslik": "Melik Faysal önderliğinde petrol ambargosu",
+     "baslik_en": "The oil embargo under King Faisal’s leadership",
+     "metin": "Ekim Savaşı sürerken Kuveyt’te toplanan Arap petrol üreticileri 17 Ekim 1973’te İsrail’e yakın ülkelere sevkiyatı yüzde 5 kısmaya, BM’nin 242 sayılı kararı uygulanana dek her ay yüzde 5 daha azaltmaya karar verdi. Suudi Arabistan Meliki Faysal, İsrail’e verilecek yardımın petrol piyasasında karşılık bulacağını Washington’a defalarca bildirmişti. Nixon İsrail’e 2,2 milyar dolarlık askerî yardım açıklayınca Suudi Arabistan 20 Ekim’de ABD’ye, Hollanda’ya ve İsrail’i destekleyen öteki ülkelere bütün petrol sevkiyatını durdurdu. Varil fiyatı yaklaşık 2,5 dolardan 12 dolara çıktı; ABD İkinci Dünya Savaşı’ndan bu yana ilk yakıt kıtlığını yaşadı. Faysal, Nasır’ın Arap milliyetçiliğine karşı İslami dayanışmayı savunan bir çizginin temsilcisiydi: 1969’da Mescid-i Aksa’nın kundaklanmasının ardından Rabat’ta İslam Konferansı Örgütü’nün kuruluşuna öncülük etmişti. Ambargo Mart 1974’te kaldırıldı. Faysal 25 Mart 1975’te Riyad’da yeğeni tarafından öldürüldü.",
+     "metin_en": "While the October War was under way, Arab oil producers meeting in Kuwait decided on 17 October 1973 to cut deliveries to countries friendly to Israel by 5 percent, and by a further 5 percent each month until UN Resolution 242 was implemented. Saudi Arabia’s King Faisal had repeatedly warned Washington that aid to Israel would meet a response in the oil market. When Nixon announced $2.2 billion in military aid to Israel, Saudi Arabia on 20 October halted all oil shipments to the United States, the Netherlands and other states backing Israel. The price of a barrel rose from about $2.50 to nearly $12; the United States faced its first fuel shortage since the Second World War. Faisal stood for a line of Islamic solidarity against Nasser’s Arab nationalism: after the arson at al-Aqsa Mosque in 1969 he led the founding of the Organisation of the Islamic Conference in Rabat. The embargo was lifted in March 1974. Faisal was killed by his nephew in Riyadh on 25 March 1975.",
+     "vurgu": [
+      "İslami dayanışmayı savunan bir çizginin temsilcisiydi"
+     ],
+     "vurgu_en": [
+      "a line of Islamic solidarity"
+     ],
+     "gorsel": "faysal-1973",
+     "ortak": [
+      "islami"
+     ],
+     "sonuc": "Ambargo savaşın gidişatını değiştirmedi ama Batı’yı ilk kez Arap petrolüne bağımlılığıyla yüz yüze getirdi; ABD Mısır ve İsrail arasında arabuluculuğa girişti, 1974 ayrılma anlaşmaları geldi. Petrol gelirleri Körfez monarşilerini bölgenin yeni güç merkezi yaptı.",
+     "sonuc_en": "The embargo did not change the course of the war, but it confronted the West for the first time with its dependence on Arab oil; the US turned to mediating between Egypt and Israel, leading to the 1974 disengagement agreements. Oil revenue made the Gulf monarchies the region’s new centre of power."
     },
     {
      "yeni": true,
@@ -1276,7 +1306,7 @@
     2000
    ],
    "renk": "#d9542b",
-   "tez": "Arap rejimlerine güveni sarsılan yeni kuşak, Filistinlilerin kendi silahlı örgütlerini kurdu. Cezayir’in silahlı mücadeleyle kazandığı bağımsızlık bu kuşağa model oldu. Fetih, FKÖ ve Marksist FHKC ile direniş Filistinlilerin kendi eline geçti; uçak kaçırmalarla dünyanın gündemine girdi. Oslo süreci bu kuşağı bir yönetime dönüştürdü; 2000’de Camp David’in çöküşüyle o yol da tıkandı.",
+   "tez": "Arap rejimlerine güveni sarsılan yeni kuşak, Filistinlilerin kendi silahlı örgütlerini kurdu. Cezayir’in silahlı mücadeleyle kazandığı bağımsızlık bu kuşağa model oldu. Fetih, FKÖ ve Marksist FHKC ile direniş Filistinlilerin kendi eline geçti; uçak kaçırmalarla dünyanın gündemine girdi. Oslo süreci Fetih’i bir yönetime dönüştürdü; o yönetim İsrail’le güvenlik koordinasyonuna bağlandı. Sol örgütler ise silahlı mücadeleyi bırakmadı ve bugün Gazze’de Hamas’la aynı ortak odada yer alıyor.",
    "gecis": "Müzakere yolu tıkandı; iki ay sonra İkinci İntifada başladı.",
    "olaylar": [
     {
@@ -1453,7 +1483,9 @@
        "ad": "Avi Shlaim, Lion of Jordan: The Life of King Hussein in War and Peace (Allen Lane, 2007)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "Ürdün ordusu kazandı. FKÖ ve fedai örgütleri 1971’e kadar Ürdün’den tamamen çıkarıldı ve merkezlerini Lübnan’a taşıdı. Kahire’de çatışmayı durdurmak için toplanan Arap zirvesinin ertesi günü, 28 Eylül’de Abdünnasır öldü.",
+     "sonuc_en": "The Jordanian army won. The PLO and the fedayeen groups were driven out of Jordan entirely by 1971 and moved their headquarters to Lebanon. On 28 September, the day after the Arab summit in Cairo that stopped the fighting, Nasser died."
     },
     {
      "ref": "1972-07-08",
@@ -1503,7 +1535,9 @@
        "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "İsrail FKÖ’yü Lübnan’dan çıkardı ama Güney Lübnan’da on sekiz yıl süren bir işgale saplandı; bu işgale karşı Hizbullah doğdu. FKÖ merkezini Tunus’a taşıdı ve işgal altındaki topraklardan iyice uzaklaştı.",
+     "sonuc_en": "Israel drove the PLO out of Lebanon but became mired in an eighteen-year occupation of South Lebanon, against which Hezbollah was born. The PLO moved its headquarters to Tunis, further than ever from the occupied territories."
     },
     {
      "ref": "1982-09-16",
@@ -1536,7 +1570,9 @@
        "ad": "F. Robert Hunter, The Palestinian Uprising: A War by Other Means (University of California Press, 1991)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "İntifada işgalin maliyetini İsrail’e ve dünyaya gösterdi. FKÖ 1988’de Filistin Devleti’ni ilan edip iki devletli çözümü kabul etti; yol Madrid’e ve Oslo’ya çıktı. Aynı intifadada Hamas doğdu.",
+     "sonuc_en": "The intifada showed Israel and the world the cost of the occupation. In 1988 the PLO declared the State of Palestine and accepted a two-state solution; the road led to Madrid and Oslo. Hamas was born in the same intifada."
     },
     {
      "ref": "1988-11-15",
@@ -1574,7 +1610,9 @@
        "ad": "Raja Shehadeh, From Occupation to Interim Accords: Israel and the Palestinian Territories (Kluwer Law International, 1997)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "FKÖ İsrail’i tanıdı, İsrail FKÖ’yü muhatap kabul etti ve Filistin Yönetimi kuruldu. Filistin devleti kurulmadı: Batı Şeria’daki yerleşimci sayısı 1993’te yaklaşık 110 binken bugün Doğu Kudüs hariç yarım milyonu aştı.",
+     "sonuc_en": "The PLO recognised Israel, Israel accepted the PLO as a counterpart, and the Palestinian Authority was set up. No Palestinian state came into being: the number of settlers in the West Bank, about 110,000 in 1993, today exceeds half a million, not counting East Jerusalem."
     },
     {
      "yeni": true,
@@ -1629,13 +1667,13 @@
     }
    ],
    "ad_en": "The fedayeen and the revolutionary left",
-   "tez_en": "A new generation that had lost faith in the Arab regimes built the Palestinians’ own armed organisations. Algeria’s independence, won through armed struggle, became their model. With Fatah, the PLO and the Marxist PFLP, the resistance passed into Palestinian hands and entered the world’s agenda through hijackings. The Oslo process turned this generation into an administration; with the collapse of Camp David in 2000, that road was closed too.",
+   "tez_en": "A new generation that had lost faith in the Arab regimes built the Palestinians’ own armed organisations. Algeria’s independence, won through armed struggle, became their model. With Fatah, the PLO and the Marxist PFLP, the resistance passed into Palestinian hands and entered the world’s agenda through hijackings. The Oslo process turned Fatah into an administration, and that administration became bound to security coordination with Israel. The left-wing groups, however, did not give up armed struggle and today sit in the same joint room as Hamas in Gaza.",
    "gecis_en": "The negotiating track stalled; two months later the Second Intifada began.",
    "gorsel": "arafat-gotfryd"
   },
   {
    "anahtar": "islami",
-   "ad": "İslami hareketler ve direniş ekseni",
+   "ad": "İslami hareketlerin yeniden doğuşu",
    "ar": "المقاومة الإسلامية",
    "yillar": [
     1973,
@@ -1864,8 +1902,7 @@
     {
      "ref": "2000-09-28",
      "gorseller": [
-      "durre-bamako",
-      "sahnin-2000",
+      "intifada2-gazze-2001",
       "aida-duvar"
      ],
      "kaynakca": [
@@ -1877,7 +1914,9 @@
        "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "İsrail 2002’de Batı Şeria kentlerini yeniden işgal etti ve ayırma duvarını örmeye başladı; Arafat Ramallah’ta kuşatıldı, Kasım 2004’te öldü. İntifada 2005 başında Şarm el-Şeyh’te ilan edilen ateşkesle fiilen sona erdi. Aynı yıl İsrail Gazze’den çekildi; silahlı direniş Hamas ve İslami Cihad’ın ağırlığına geçti.",
+     "sonuc_en": "In 2002 Israel reoccupied the West Bank cities and began building the separation wall; Arafat was besieged in Ramallah and died in November 2004. The intifada effectively ended with the ceasefire announced at Sharm el-Sheikh in early 2005. The same year Israel withdrew from Gaza; armed resistance shifted towards Hamas and Islamic Jihad."
     },
     {
      "yeni": true,
@@ -1945,6 +1984,16 @@
        "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
        "tur": "akademik"
       }
+     ],
+     "baslik": "Hamas seçimleri kazandı, Fetih sonucu tanımadı",
+     "baslik_en": "Hamas wins the election; Fatah does not accept the result",
+     "metin": "Hamas 25 Ocak 2006 Filistin Yasama Konseyi seçimlerinde 132 sandalyenin 74’ünü kazandı, Fetih 45’te kaldı. İsrail, ABD ve AB Hamas’ın kurduğu hükümeti boykot etti; vergi gelirleri ve yardımlar kesildi. Fetih seçim sonucunu fiilen tanımadı: güvenlik güçlerinin ve kurumların denetimini Hamas hükümetine bırakmadı. Mart 2007’de kurulan ulusal birlik hükümeti de iki hareket arasındaki çatışmaları durduramadı.",
+     "metin_en": "Hamas won 74 of the 132 seats in the Palestinian Legislative Council election of 25 January 2006; Fatah took 45. Israel, the US and the EU boycotted the government Hamas formed; tax revenues and aid were cut off. Fatah did not accept the result in practice: it did not hand control of the security forces and institutions to the Hamas government. The national unity government formed in March 2007 could not stop the clashes between the two movements either.",
+     "vurgu": [
+      "Fetih seçim sonucunu fiilen tanımadı"
+     ],
+     "vurgu_en": [
+      "Fatah did not accept the result in practice"
      ]
     },
     {
@@ -1954,7 +2003,9 @@
        "ad": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sonuc": "Savaş 34 gün sürdü ve BM Güvenlik Konseyi’nin 1701 sayılı kararıyla bitti. İsrail esir askerlerini geri alamadı, Hizbullah’ı silahsızlandıramadı; kendi soruşturma komisyonu (Winograd) hükümeti ve orduyu ağır biçimde eleştirdi. Hizbullah sonucu zafer olarak ilan etti.",
+     "sonuc_en": "The war lasted 34 days and ended with UN Security Council Resolution 1701. Israel neither recovered its captured soldiers nor disarmed Hezbollah; its own commission of inquiry (Winograd) severely criticised the government and the army. Hezbollah declared the outcome a victory."
     },
     {
      "ref": "2007-06",
@@ -1988,7 +2039,9 @@
        "tur": "birincil",
        "ad_en": "UN Independent International Commission of Inquiry, first report (A/HRC/50/21, 2022)"
       }
-     ]
+     ],
+     "sonuc": "Çatışma on bir gün sürdü ve 21 Mayıs’ta Mısır’ın arabuluculuğuyla ateşkesle bitti. Hamas, Kudüs için ateş açan güç olarak Filistin’de ve bölgede siyasi ağırlık kazandı; İsrail içindeki Filistinli kentlerde de büyük gösteriler oldu.",
+     "sonuc_en": "The fighting lasted eleven days and ended with an Egyptian-brokered ceasefire on 21 May. Hamas gained political weight in Palestine and the region as the force that had opened fire for Jerusalem; there were also mass protests in Palestinian towns inside Israel."
     },
     {
      "ref": "2010-05-31",
@@ -2044,12 +2097,220 @@
        "ad_en": "Forensic Architecture and Al-Haq, investigation into the killing of Shireen Abu Akleh (2022)"
       }
      ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2007-06-14",
+     "baslik": "Filistin ikiye bölündü",
+     "baslik_en": "Palestine is split in two",
+     "metin": "Haziran 2007’deki çatışmalarda Hamas, Fetih’e bağlı güvenlik güçlerini yendi ve 14 Haziran’da Gazze’nin denetimini aldı. Abbas aynı gün Hamas’ın yönettiği hükümeti görevden aldı, Ramallah’ta olağanüstü bir hükümet kurdu; Batı Şeria’da Hamas’ın kurumları kapatıldı, üyeleri tutuklandı ve hareket orada fiilen çekilmek zorunda kaldı. O günden beri Gazze’yi Hamas, Batı Şeria’daki özerk bölgeleri Fetih’in yönettiği Filistin Yönetimi yönetiyor.",
+     "metin_en": "In the fighting of June 2007 Hamas defeated the Fatah-aligned security forces and took control of Gaza on 14 June. The same day Abbas dismissed the Hamas-led government and set up an emergency government in Ramallah; in the West Bank Hamas institutions were closed, its members arrested, and the movement was in effect forced to withdraw there. Since then Hamas has governed Gaza and the Fatah-led Palestinian Authority the autonomous areas of the West Bank.",
+     "vurgu": [
+      "Filistin Yönetimi yönetiyor"
+     ],
+     "ortak": [
+      "fedai"
+     ],
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "ad_en": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2018-07-23",
+     "baslik": "Ortak Operasyon Odası: sol örgütler Hamas’la aynı komutada",
+     "baslik_en": "The Joint Operations Room: left-wing groups under one command with Hamas",
+     "metin": "Gazze’deki silahlı grupların ilk kez 2006’da kurduğu ortak oda, 23 Temmuz 2018’de on iki grupla yeniden örgütlendi. Hamas ve İslami Cihad’ın silahlı kanatlarının yanında FHKC’nin Ebu Ali Mustafa Tugayları, Demokratik Cephe’nin Ulusal Direniş Tugayları ve Fetih’ten kopmuş Aksa Şehitleri Tugayları da aynı komuta altına girdi. Sol örgütler silahlı mücadeleden çekilmedi: oda 7 Ekim saldırısını ve sonraki savaştaki operasyonları da koordine etti.",
+     "metin_en": "The joint room that Gaza’s armed groups first set up in 2006 was reorganised with twelve groups on 23 July 2018. Alongside the armed wings of Hamas and Islamic Jihad, the PFLP’s Abu Ali Mustafa Brigades, the DFLP’s National Resistance Brigades and the Al-Aqsa Martyrs’ Brigades, which had broken away from Fatah, came under the same command. The left-wing groups did not give up armed struggle: the room also coordinated the 7 October attack and operations in the war that followed.",
+     "vurgu": [
+      "Sol örgütler silahlı mücadeleden çekilmedi"
+     ],
+     "vurgu_en": [
+      "The left-wing groups did not give up armed struggle"
+     ],
+     "ortak": [
+      "fedai"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Palestinian Joint Operations Room",
+       "url": "https://en.wikipedia.org/wiki/Palestinian_Joint_Operations_Room"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "ad_en": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
+       "tur": "akademik"
+      }
+     ]
     }
    ],
-   "ad_en": "Islamic movements and the axis of resistance",
+   "ad_en": "The rebirth of the Islamic movements",
    "tez_en": "Where the left and nationalism stalled, a new generation emerged from mosques, charities and universities. The Mujamma founded by Sheikh Ahmed Yassin in Gaza became Hamas with the Intifada; Islamic Jihad organised along a line influenced by the Iranian revolution. Together with Hezbollah in Lebanon, Ansarullah in Yemen and Iran, a front later called the “axis of resistance” took shape.",
    "gecis_en": "On 7 October this front took the stage as a whole.",
    "gorsel": "kubbetussahra"
+  },
+  {
+   "anahtar": "enerji",
+   "ad": "Gaz ve normalleşme",
+   "ad_en": "Gas and normalisation",
+   "ar": "الغاز والتطبيع",
+   "yillar": [
+    2000,
+    2025
+   ],
+   "renk": "#2f6f8f",
+   "gorsel": "leviathan-2019",
+   "tez": "Oslo’dan sonra bölgede Filistin meselesini atlayan yeni bir ilişki ağı kuruldu. Doğu Akdeniz’de bulunan gaz sahaları İsrail’i Mısır’a ve Ürdün’e boru hatlarıyla bağladı; Abraham Anlaşmaları Körfez monarşileriyle normalleşmeyi Filistin devleti kurulmadan başlattı. Gazze açıklarındaki Filistin gaz sahası ise yirmi beş yıldır işletilemiyor.",
+   "tez_en": "After Oslo a new network of relations took shape in the region that bypassed the Palestinian question. Gas fields found in the Eastern Mediterranean tied Israel to Egypt and Jordan by pipeline; the Abraham Accords began normalisation with the Gulf monarchies before any Palestinian state existed. Meanwhile the Palestinian gas field off Gaza has gone undeveloped for twenty-five years.",
+   "gecis": "Savaş sürerken de gaz akmaya, anlaşmalar yürürlükte kalmaya devam etti.",
+   "gecis_en": "Even as the war went on, the gas kept flowing and the agreements stayed in force.",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "2000-09",
+     "baslik": "Gazze Marin: Filistin’in tek gaz sahası",
+     "baslik_en": "Gaza Marine: Palestine’s only gas field",
+     "metin": "British Gas, Filistin Yönetimi’nin verdiği ruhsatla Eylül 2000’de Gazze kıyısının yaklaşık 36 kilometre açığında bir doğal gaz sahası buldu; rezervin 1 trilyon fit küpü aştığı tahmin edildi. Başbakan Şaron 2001’de Filistin gazını içeren her anlaşmayı engelledi; 2003’te gelirin Filistin Yönetimi’ne gidebileceği gerekçesiyle anlaşmaları yeniden durdurdu. İsrail ancak Haziran 2023’te ön onay verdi; saha bugün de işletilmiyor.",
+     "metin_en": "In September 2000 British Gas, under a licence from the Palestinian Authority, found a natural gas field about 36 kilometres off the Gaza coast, with reserves estimated at over a trillion cubic feet. Prime Minister Sharon blocked any deal involving Palestinian gas in 2001 and, in 2003, halted deals again on the grounds that revenue might reach the Palestinian Authority. Israel gave only preliminary approval in June 2023; the field is still not in production.",
+     "vurgu": [
+      "saha bugün de işletilmiyor"
+     ],
+     "vurgu_en": [
+      "the field is still not in production"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Brookings",
+       "url": "https://www.brookings.edu/articles/gaza-marine-natural-gas-extraction-in-tumultuous-times/"
+      },
+      {
+       "ad": "Wikipedia: Natural gas in the Gaza Strip",
+       "url": "https://en.wikipedia.org/wiki/Natural_gas_in_the_Gaza_Strip"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Sara Roy, The Gaza Strip: The Political Economy of De-development (Institute for Palestine Studies, 3. bs. 2016)",
+       "ad_en": "Sara Roy, The Gaza Strip: The Political Economy of De-development (Institute for Palestine Studies, 3rd ed. 2016)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2010-12-30",
+     "baslik": "Leviathan bulundu",
+     "baslik_en": "Leviathan is found",
+     "metin": "Hayfa açıklarında, 2009’daki Tamar keşfinin ardından, Doğu Akdeniz’in o güne dek bulunan en büyük gaz sahası Leviathan’ın keşfi 30 Aralık 2010’da açıklandı. İsrail gaz ithal eden bir ülkeden ihracatçıya dönüşecekti.",
+     "metin_en": "Off Haifa, after the Tamar find of 2009, the discovery of Leviathan, the largest gas field found in the Eastern Mediterranean up to then, was announced on 30 December 2010. Israel would turn from a gas importer into an exporter.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Leviathan gas field",
+       "url": "https://en.wikipedia.org/wiki/Leviathan_gas_field"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2019-01-14",
+     "baslik": "Doğu Akdeniz Gaz Forumu",
+     "baslik_en": "The East Mediterranean Gas Forum",
+     "metin": "Mısır, İsrail, Yunanistan, Güney Kıbrıs, İtalya, Ürdün ve Filistin Yönetimi’nin enerji bakanları 14 Ocak 2019’da Kahire’de Doğu Akdeniz Gaz Forumu’nu kurdu. Forum, gazı Mısır’daki sıvılaştırma tesisleri üzerinden Avrupa’ya ulaştırmayı hedefliyordu; Türkiye ve Lübnan dışarıda kaldı.",
+     "metin_en": "On 14 January 2019 the energy ministers of Egypt, Israel, Greece, Cyprus, Italy, Jordan and the Palestinian Authority founded the East Mediterranean Gas Forum in Cairo. The forum aimed to carry gas to Europe through Egypt’s liquefaction plants; Turkey and Lebanon were left out.",
+     "kaynaklar": [
+      {
+       "ad": "Ahram Online",
+       "url": "https://english.ahram.org.eg/News/321727.aspx"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2019-12-31",
+     "baslik": "Leviathan gazı Mısır’a ve Ürdün’e akmaya başladı",
+     "baslik_en": "Leviathan gas starts flowing to Egypt and Jordan",
+     "metin": "Leviathan 31 Aralık 2019’da üretime başladı; Ocak 2020’de Mısır’a ihracat başladı. Kahire’de “tarihî gün” diye karşılanan anlaşma, 2030’ların başına kadar 60 milyar metreküp gaz öngörüyordu. 2024’e gelindiğinde sahanın üretiminin yüzde 90’ı Mısır’a ve Ürdün’e gidiyordu.",
+     "metin_en": "Leviathan began production on 31 December 2019, and exports to Egypt began in January 2020. The contract, hailed in Cairo as a historic day, covered 60 billion cubic metres of gas through the early 2030s. By 2024, 90 per cent of the field’s output was going to Egypt and Jordan.",
+     "kaynaklar": [
+      {
+       "ad": "S&P Global",
+       "url": "https://www.spglobal.com/commodity-insights/en/news-research/latest-news/natural-gas/011520-israel-begins-gas-exports-to-egypt-from-giant-leviathan-field"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2020-09-15",
+     "baslik": "Abraham Anlaşmaları",
+     "baslik_en": "The Abraham Accords",
+     "gorsel": "abraham-2020",
+     "metin": "Birleşik Arap Emirlikleri ve Bahreyn 15 Eylül 2020’de Beyaz Saray’da İsrail’le normalleşme anlaşmaları imzaladı; Sudan ve Fas aynı yıl katıldı. 1979’da Mısır’ın, 1994’te Ürdün’ün yaptığının aksine, bu ülkelerin İsrail’le savaş hâli yoktu: normalleşme işgal sona ermeden ve Filistin devleti kurulmadan geldi. Filistin Yönetimi anlaşmaları “sırttan bıçaklama” diye kınadı.",
+     "metin_en": "The United Arab Emirates and Bahrain signed normalisation agreements with Israel at the White House on 15 September 2020; Sudan and Morocco joined the same year. Unlike Egypt in 1979 or Jordan in 1994, these countries had never been at war with Israel: normalisation came before the occupation ended and before a Palestinian state existed. The Palestinian Authority condemned the accords as a “stab in the back”.",
+     "vurgu": [
+      "normalleşme işgal sona ermeden ve Filistin devleti kurulmadan geldi"
+     ],
+     "vurgu_en": [
+      "normalisation came before the occupation ended"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Abraham Accords",
+       "url": "https://en.wikipedia.org/wiki/Abraham_Accords"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2023-09-22",
+     "baslik": "BM kürsüsünde Filistin’siz “Yeni Orta Doğu” haritası",
+     "baslik_en": "A “New Middle East” map without Palestine at the UN",
+     "metin": "İsrail Başbakanı Netanyahu 22 Eylül 2023’te BM Genel Kurulu’nda “Yeni Orta Doğu” başlıklı bir harita gösterdi: haritada İsrail, Batı Şeria ve Gazze’yi de içeren tek bir renkle çizilmişti, Filistin yoktu. Netanyahu Suudi Arabistan’la normalleşmenin eşiğinde olduklarını söyledi ve Filistinlilerin bu anlaşmalarda veto hakkı olmaması gerektiğini savundu. İki hafta sonra 7 Ekim geldi.",
+     "metin_en": "On 22 September 2023 Israeli Prime Minister Netanyahu showed the UN General Assembly a map titled “The New Middle East”: Israel was drawn in a single colour that included the West Bank and Gaza, and Palestine did not appear. Netanyahu said they were on the cusp of normalisation with Saudi Arabia and argued that Palestinians should have no veto over such deals. Two weeks later came 7 October.",
+     "vurgu": [
+      "Filistin yoktu"
+     ],
+     "vurgu_en": [
+      "Palestine did not appear"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera (22 Eylül 2023)",
+       "url": "https://www.aljazeera.com/news/2023/9/22/palestinians-must-not-have-veto-over-arab-israel-deals-netanyahu-tells-un"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2025-08-07",
+     "baslik": "Savaşın ortasında 35 milyar dolarlık gaz anlaşması",
+     "baslik_en": "A $35 billion gas deal in the middle of the war",
+     "metin": "Gazze’ye saldırılar sürerken Leviathan ortakları 7 Ağustos 2025’te Mısır’la İsrail tarihinin en büyük ihracat anlaşmasını imzaladı: 2040’a kadar yaklaşık 130 milyar metreküp gaz, yaklaşık 35 milyar dolar. İsrail hükümeti anlaşmayı Aralık 2025’te onayladı.",
+     "metin_en": "While the attacks on Gaza continued, the Leviathan partners signed the largest export deal in Israel’s history with Egypt on 7 August 2025: about 130 billion cubic metres of gas through 2040, worth some $35 billion. The Israeli government approved the deal in December 2025.",
+     "vurgu": [
+      "Gazze’ye saldırılar sürerken"
+     ],
+     "vurgu_en": [
+      "While the attacks on Gaza continued"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Al Arabiya (7 Ağustos 2025)",
+       "url": "https://english.alarabiya.net/News/middle-east/2025/08/07/israel-s-leviathan-signs-35-billion-natural-gas-supply-deal-with-egypt"
+      },
+      {
+       "ad": "S&P Global (Aralık 2025)",
+       "url": "https://www.spglobal.com/energy/en/news-research/latest-news/natural-gas/121825-israel-approves-35-bil-egypt-gas-export-deal"
+      }
+     ]
+    }
+   ]
   },
   {
    "anahtar": "tufan",
@@ -2126,12 +2387,28 @@
     },
     {
      "ref": "2025-10-10",
-     "gorsel": "gazze-duvar",
-     "karsilastir": {
-      "once": "abluka",
-      "sonra": "sari",
-      "kesit": "gz"
-     }
+     "baslik": "Ekim 2025 ateşkesi ve Şarm el-Şeyh gösterisi",
+     "baslik_en": "The October 2025 ceasefire and the Sharm el-Sheikh show",
+     "metin": "ABD Başkanı Trump’ın 20 maddelik planına dayanan ateşkes 10 Ekim öğlen yürürlüğe girdi ve İsrail ordusu “sarı hat”a çekildi. 13 Ekim’de esirler ve tutuklular takas edilirken Trump önce Knesset’te konuştu, ardından Mısır’ın Şarm el-Şeyh kentinde bir “Barış Zirvesi” düzenledi. Yirmiden fazla liderin katıldığı törende ABD, Mısır, Katar ve Türkiye bir destek belgesi imzaladı; savaşın tarafları İsrail ve Hamas salonda yoktu. Sahnede dev harflerle “PEACE 2025” yazıyordu. İsrail saldırıları sonraki aylarda da sürdü.",
+     "metin_en": "The ceasefire based on President Trump’s 20-point plan took effect at noon on 10 October and the Israeli army pulled back to the “yellow line”. On 13 October, as captives and prisoners were exchanged, Trump first addressed the Knesset and then staged a “Peace Summit” in the Egyptian resort of Sharm el-Sheikh. At a ceremony attended by more than twenty leaders, the US, Egypt, Qatar and Turkey signed a supporting document; the parties to the war, Israel and Hamas, were not in the room. Giant letters on the stage read “PEACE 2025”. Israeli strikes continued in the months that followed.",
+     "vurgu": [
+      "savaşın tarafları İsrail ve Hamas salonda yoktu"
+     ],
+     "vurgu_en": [
+      "the parties to the war, Israel and Hamas, were not in the room"
+     ],
+     "gorseller": [
+      "serm-2025-aile",
+      "serm-2025-imza",
+      "gazze-duvar"
+     ],
+     "sonuc": "Savaş resmen durdu ama bitmedi: İsrail ordusu Gazze’nin yarısından fazlasında kaldı, hat sonraki aylarda batıya kaydı ve Kasım 2026’ya gelindiğinde Gazze’nin yaklaşık üçte ikisi kısıtlı bölgeydi.",
+     "sonuc_en": "The war officially stopped but did not end: the Israeli army stayed in more than half of Gaza, the line moved west in the following months, and by November 2026 about two thirds of Gaza was a restricted zone.",
+     "uydu_gazze": {
+      "not": "Sarı çizgi 10 Ekim 2025 anlaşmasındaki hattır. Turuncu kesik çizgi ve gölgeli alan, Kasım 2026’da insani hareketin İsrail ordusuyla koordinasyona bağlı olduğu bölgeyi gösterir. Çizgiler OCHA haritasından çıkarıldı ve Gazze sınırına oturtuldu; yaklaşıktır. 10 metre çözünürlükte beton bloklar görünmez; görünen, hattın doğusundaki yıkılıp düzlenmiş kuşaktır. Sağdaki görüntü her gün güncellenir.",
+      "not_en": "The yellow line is the line of the 10 October 2025 agreement. The dashed orange line and shaded area show where, in November 2026, humanitarian movement must be coordinated with the Israeli army. The lines were extracted from the OCHA map and fitted to Gaza’s boundary; they are approximate. At 10-metre resolution the concrete blocks are not visible; what you see is the razed belt east of the line. The right-hand image is updated daily."
+     },
+     "kaynaklar": []
     },
     {
      "ref": "2026-02-28"
@@ -2183,11 +2460,58 @@
        "ad_en": "UN OCHA oPt, Gaza Strip: Access and Movement, November 2026",
        "tur": "birincil"
       }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2023-10-08",
+     "baslik": "Hizbullah 8 Ekim’de cepheye girdi",
+     "baslik_en": "Hezbollah joins the war on 8 October",
+     "metin": "Hizbullah 8 Ekim sabahı işgal altındaki Şeba Çiftlikleri’ndeki İsrail mevzilerini topçu ve roketlerle vurdu ve saldırının Gazze’deki direnişle dayanışma için yapıldığını açıkladı. Lübnan sınırı boyunca karşılıklı saldırılar on bir ay sürdü; Eylül 2024’te İsrail’in çağrı cihazı saldırıları ve Hasan Nasrallah’ın 27 Eylül’de öldürülmesiyle topyekûn savaşa dönüştü. 27 Kasım 2024’te ateşkes ilan edildi.",
+     "metin_en": "On the morning of 8 October Hezbollah shelled Israeli positions in the occupied Shebaa Farms with artillery and rockets, saying the attack was in solidarity with the resistance in Gaza. Cross-border attacks along the Lebanese front went on for eleven months; in September 2024 they turned into all-out war with Israel’s pager attacks and the killing of Hassan Nasrallah on 27 September. A ceasefire was declared on 27 November 2024.",
+     "vurgu": [
+      "Gazze’deki direnişle dayanışma için"
      ],
-     "uydu_gazze": {
-      "not": "Sarı çizgi 10 Ekim 2025 anlaşmasındaki hattır. Turuncu kesik çizgi ve gölgeli alan, Kasım 2026’da insani hareketin İsrail ordusuyla koordinasyona bağlı olduğu bölgeyi gösterir. Çizgiler OCHA haritasından çıkarıldı ve Gazze sınırına oturtuldu; yaklaşıktır. 10 metre çözünürlükte beton bloklar görünmez; görünen, hattın doğusundaki yıkılıp düzlenmiş kuşaktır. Sağdaki görüntü her gün güncellenir.",
-      "not_en": "The yellow line is the line of the 10 October 2025 agreement. The dashed orange line and shaded area show where, in November 2026, humanitarian movement must be coordinated with the Israeli army. The lines were extracted from the OCHA map and fitted to Gaza’s boundary; they are approximate. At 10-metre resolution the concrete blocks are not visible; what you see is the razed belt east of the line. The right-hand image is updated daily."
-     }
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera (8 Ekim 2023)",
+       "url": "https://www.aljazeera.com/news/2023/10/8/israel-hezbollah-exchange-fire-raising-regional-tensions"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
+       "ad_en": "Augustus Richard Norton, Hezbollah: A Short History (Princeton University Press, 2007)",
+       "tur": "akademik"
+      }
+     ],
+     "ortak": [
+      "islami"
+     ]
+    },
+    {
+     "yeni": true,
+     "yan": true,
+     "tarih": "2024-12-14",
+     "baslik": "Filistin Yönetimi Cenin kampında",
+     "baslik_en": "The Palestinian Authority in Jenin camp",
+     "metin": "Fetih’in yönettiği Filistin Yönetimi’nin güvenlik güçleri Aralık 2024’te “Vatanı Koru” adını verdikleri operasyonla Cenin kampını kuşattı ve kamptaki silahlı gruplarla çatıştı. Yönetimin sözcüsü operasyonu “fitne ve kaosu kökünden kazımak” diye tanımladı. Oslo’dan bu yana İsrail’le güvenlik koordinasyonunu sürdüren Yönetim’in operasyonu, 21 Ocak 2025’te İsrail ordusunun kampa girmesiyle devam etti; kamp boşaltıldı.",
+     "metin_en": "In December 2024 the security forces of the Fatah-led Palestinian Authority besieged Jenin camp in an operation they called “Protect the Homeland” and fought the armed groups in the camp. The Authority’s spokesman described it as an effort to “eradicate sedition and chaos”. The operation by the Authority, which has maintained security coordination with Israel since Oslo, was followed on 21 January 2025 by the Israeli army entering the camp; the camp was emptied.",
+     "vurgu": [
+      "İsrail’le güvenlik koordinasyonunu sürdüren"
+     ],
+     "vurgu_en": [
+      "maintained security coordination with Israel"
+     ],
+     "ortak": [
+      "fedai"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera (14 Aralık 2024)",
+       "url": "https://www.aljazeera.com/news/2024/12/14/jenin-brigades-commander-killed-as-pa-forces-raid-occupied-west-bank-camp"
+      }
+     ]
     }
    ],
    "ad_en": "7 October and after",

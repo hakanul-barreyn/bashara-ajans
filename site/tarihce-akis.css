@@ -111,6 +111,14 @@
 .ta-kaynakca{margin:12px 0 0;padding-top:10px;border-top:1px dashed var(--ta-cizgi);display:flex;flex-direction:column;gap:4px;font:500 .72rem/1.5 var(--ta-sans);color:var(--ta-soluk)}
 .ta-kaynakca p{margin:0}
 .ta-kaynakca b{font:600 .6rem var(--ta-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ta-ink2);margin-right:4px}
+.ta-akis-etler{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 8px}
+.ta-akis-etler .ta-akis-et{margin:0}
+.ta-kupur .ta-akis-etler{justify-content:center}
+/* sonuç kutusu: olayın kim kazandı, kim ne kaybetti */
+.ta-sonuc{margin:14px 0 2px;padding:10px 14px 11px;border-left:4px solid var(--renk);background:color-mix(in srgb,var(--renk) 9%,transparent);border-radius:0 4px 4px 0}
+.ta-sonuc b{display:block;margin:0 0 3px;font:700 .64rem var(--ta-mono);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--renk) 80%,#1d2421)}
+.ta-sonuc p{margin:0;font-size:.98rem;line-height:1.58;color:var(--ta-murekkep)}
+.ta-kart.gazete .ta-sonuc p{font-family:"Old Standard TT",var(--ta-serif)}
 /* Sina'nın iki işgali */
 .ta-sina{margin:16px 0 4px;padding:12px 14px 12px;border-radius:6px;background:var(--ta-zemin)}
 .ta-sina-et{margin:0 0 12px;font:700 .64rem var(--ta-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ta-ink2)}
