@@ -1,0 +1,18 @@
+name: tarama3
+on:
+  push:
+    branches: [tarama-3]
+permissions:
+  contents: write
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q pillow numpy rasterio
+      - run: python toplayici/tarama3.py
+      - run: |
+          git init -q d && cd d && git checkout -q -b yz-tarama && cp -r ../tarama . && git add tarama
+          git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "tarama3"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-tarama
