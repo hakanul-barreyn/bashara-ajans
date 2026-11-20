@@ -251,3 +251,35 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
     kay["olay"] = [x for x in kay["olay"] if x[0] >= sinir]
     kay["haber"] = {i: t for i, t in kay["haber"].items() if t >= sinir}
     return gonderilen
+
+
+def dosya_bildir(durum, liste, simdi, log=print):
+    """Dosyalar: bir dal beş günden uzun sessizlikten sonra yeniden haber alınca kanala kısa ileti. Günde en çok iki."""
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    m = re.search(r"\d{6,12}:[A-Za-z0-9_-]{30,}", token)
+    token = m.group(0) if m else ""
+    kanal = os.environ.get("TELEGRAM_KANAL", "").strip().replace("https://", "").replace("http://", "").replace("t.me/", "").strip("/")
+    if kanal and not kanal.startswith(("@", "-")) and not kanal.lstrip("-").isdigit():
+        kanal = "@" + kanal
+    if not token or not kanal:
+        return 0
+    kay = durum.setdefault("_telegram", {}).setdefault("dosya", {})
+    bugun = simdi.date().isoformat()
+    if kay.get("gun") != bugun:
+        kay["gun"], kay["n"] = bugun, 0
+    site = site_adresi()
+    n = 0
+    for ds, dal, gun, son in liste:
+        if kay["n"] >= 2:
+            break
+        metin = (f"<b>Yeniden gündemde</b> · {_e(ds['ad'])} › {_e(dal['ad'])}\n"
+                 f"{gun} gün sessizlikten sonra: {_e(son['b'])}\n")
+        if dal.get("onceki"):
+            metin += f"\n<i>Önceki bölümlerde:</i> {_e(dal['onceki'])}\n"
+        metin += f'\n<a href="{site}d/{ds["id"]}.html#dal-{dal["id"]}">Dosyanın tamamı →</a>'
+        ok, _ = gonder(token, kanal, metin)
+        if ok:
+            kay["n"] += 1
+            n += 1
+            log(f"Telegram: yeniden gündem bildirimi ({ds['ad']} › {dal['ad']})")
+    return n

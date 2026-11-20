@@ -1,0 +1,10 @@
+# Alboroto dosya paneli: panel.alborotonews.com
+# Dağıtım: .github/workflows/panel.yml (CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID ve PANEL_* gizlileri gerekir).
+name = "alboroto-panel"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+workers_dev = false
+routes = [{ pattern = "panel.alborotonews.com", custom_domain = true }]
+
+[vars]
+GH_REPO = "hakanul-barreyn/bashara-ajans"

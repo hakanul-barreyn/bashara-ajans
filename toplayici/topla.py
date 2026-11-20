@@ -49,6 +49,7 @@ import konusmalar  # noqa: E402
 import dogrulama  # noqa: E402
 import tg_hesap  # noqa: E402
 import diller  # noqa: E402
+import dosyalar  # noqa: E402
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAYNAKLAR = os.path.join(KOK, "kaynaklar.json")
@@ -1277,6 +1278,24 @@ def main():
     except Exception as e:
         log(f"Olay arşivi hatası: {e}")
 
+    # Dosyalar: süren olayların ağacı (toplayici/dosyalar.py); panel işlemleri "panel" dalından (PANEL_ISLEMLER)
+    dosya_d = None
+    try:
+        _db = tarih_coz(durum.get("_gemini_bekle"))
+        _yz = bool(anahtar and model and not (_db and _db > SIMDI))
+
+        def _dc(gorev, zaman):
+            def c(metin):
+                gunluk_istek(durum, 1)
+                return ekler.gemini_cagir(anahtar, model, metin, zaman=zaman, gorev=gorev)
+            return c
+        dosya_d = dosyalar.calistir(KOK, olay_veri.get("olaylar", []), eski, _dc("dosya", 150) if _yz else None,
+                                    _dc("dosya_ozet", 120) if _yz else None, SIMDI, panel_yolu=os.environ.get("PANEL_ISLEMLER"),
+                                    butce=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 40,
+                                    log=log)
+    except Exception as e:
+        log(f"Dosyalar hatası: {e}")
+
     # Birden fazla kaynağın yazdığı olayların haberlerini Wayback Machine'e kaydet
     wb = durum.setdefault("_wayback", {})
     for hid, kayit in wb.items():
@@ -1330,6 +1349,29 @@ def main():
         sayfalar.adlari_ata(KOK, tut, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Sayfa adları verilemedi: {e}")
+    # dosya verisi (data/dosyalar-site.json) ve haberlere "dosya": [dosya, dal]
+    dosya_veri, dosya_geri = None, []
+    if dosya_d:
+        try:
+            _kmap = {k["id"]: k for k in kaynaklar}
+            _tut = {h["id"]: h for h in tut}
+
+            def _sayfa_adi(hid):
+                h = _tut.get(hid)
+                if not h or (_kmap.get(h.get("kaynak")) or {}).get("silahli") or not str(h.get("url", "")).startswith("http"):
+                    return None
+                return (h.get("sayfa") or hid) + ".html"
+            dosya_veri = dosyalar.site_verisi(KOK, dosya_d, SIMDI, _sayfa_adi)
+            for h in tut:
+                h.pop("dosya", None)
+                if h["id"] in dosya_veri["haber"]:
+                    h["dosya"] = dosya_veri["haber"][h["id"]]
+            dosya_geri = dosyalar.yeniden_gundem(dosya_d, dosya_veri, SIMDI)
+            dosyalar.kaydet(KOK, dosya_d)
+            log(f"Dosyalar: {len(dosya_veri['dosyalar'])} açık dosya, {len(dosya_veri['haber'])} haber işaretli"
+                + (f", {len(dosya_geri)} dal yeniden gündemde" if dosya_geri else ""))
+        except Exception as e:
+            log(f"Dosya verisi hatası: {e}")
     yaz(HABERLER, {"guncellendi": SIMDI.isoformat(), "haberler": tut})
     # ana sayfanın ilk açılışı için küçük dosya: en yeni 150 bölgeyle ilgili haber (tam liste arkadan gelir)
     try:
@@ -1365,6 +1407,11 @@ def main():
         except Exception as e:
             log(f"Hesap profilleri yazılamadı: {e}")
         sayfalar.yaz(KOK, tut, kaynaklar, SIMDI, log=log)
+        if dosya_veri:
+            try:
+                log(f"Dosya sayfaları: {dosyalar.sayfalar_yaz(KOK, dosya_veri, marka.site(), sayfalar.surum(KOK))}")
+            except Exception as e:
+                log(f"Dosya sayfaları yazılamadı: {e}")
         try:
             import gorsel_denetim
             _gm = gemini_model(os.environ.get("GEMINI_API_KEY", "")) if os.environ.get("GEMINI_API_KEY") and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI) else None
@@ -1443,6 +1490,11 @@ def main():
         telegram_kanal.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)
     except Exception as e:
         log(f"Telegram hatası: {e}")
+    try:
+        if dosya_geri:
+            telegram_kanal.dosya_bildir(durum, dosya_geri, SIMDI, log=log)
+    except Exception as e:
+        log(f"Telegram dosya bildirimi hatası: {e}")
     # Doğrulama: yöneticinin Telegram komutları ve onayları; olaylardaki çelişkiler öneri olarak yöneticiye gider (otomatik etiket yok)
     try:
         dogrulama.calistir(KOK, durum, olay_veri.get("olaylar", []), {h["id"]: h for h in tut}, kaynaklar, SIMDI, log=log)

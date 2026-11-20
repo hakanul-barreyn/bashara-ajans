@@ -28,8 +28,8 @@ GUNLUK_USD = float(os.environ.get("YZ_GUNLUK_USD") or 0.66)
 FIYAT = {"claude-haiku-5-5": ((0.10, 0.50), (0.50, 2.50))}
 UZUN_ISTEK = 100_000
 # Görevin günlük tavanın en fazla ne kadarını kullanabileceği: tavan dolarken önce görsel, en son haber metni durur
-GEMINI_ONCE = {"ceviri", "olay", "gorsel", "diger"}
-PAY = {"haber_yaz": 1.0, "ceviri": 0.85, "olay": 0.8, "ozet": 0.65, "almanak": 0.6, "diger": 0.6, "gorsel": 0.5}
+GEMINI_ONCE = {"ceviri", "olay", "gorsel", "diger", "dosya"}
+PAY = {"haber_yaz": 1.0, "ceviri": 0.85, "olay": 0.8, "dosya": 0.75, "dosya_ozet": 0.7, "ozet": 0.65, "almanak": 0.6, "diger": 0.6, "gorsel": 0.5}
 GORSEL_TUR = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 UA = "alboroto-yz/1.0"
 

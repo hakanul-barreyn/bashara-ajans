@@ -1,0 +1,47 @@
+name: Dosya paneli
+
+# panel/ değişince Cloudflare Worker'ı (panel.alborotonews.com) yeniden dağıtır.
+# Gerekli gizliler: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, PANEL_GH_TOKEN (yalnızca bu depoya içerik yazma yetkili
+# ince ayarlı GitHub anahtarı), PANEL_ACCESS_TEAM (xxx.cloudflareaccess.com), PANEL_ACCESS_AUD (Access uygulamasının AUD etiketi).
+# Gizliler eksikse iş hata vermeden durur.
+
+on:
+  push:
+    branches: [main]
+    paths: ["panel/**", ".github/workflows/panel.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: panel
+  cancel-in-progress: true
+
+jobs:
+  dagit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CF_VAR: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.PANEL_GH_TOKEN != '' && secrets.PANEL_ACCESS_TEAM != '' && secrets.PANEL_ACCESS_AUD != '' }}
+    steps:
+      - name: Gizliler
+        if: env.CF_VAR != 'true'
+        run: echo "::notice::Panel dağıtılmadı; CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, PANEL_GH_TOKEN, PANEL_ACCESS_TEAM ve PANEL_ACCESS_AUD gizlilerinin hepsi gerekli."
+      - uses: actions/checkout@v4
+        if: env.CF_VAR == 'true'
+      - name: Dağıt
+        if: env.CF_VAR == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: panel
+          secrets: |
+            GH_TOKEN
+            ACCESS_TEAM
+            ACCESS_AUD
+        env:
+          GH_TOKEN: ${{ secrets.PANEL_GH_TOKEN }}
+          ACCESS_TEAM: ${{ secrets.PANEL_ACCESS_TEAM }}
+          ACCESS_AUD: ${{ secrets.PANEL_ACCESS_AUD }}

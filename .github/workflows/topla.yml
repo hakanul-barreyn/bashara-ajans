@@ -53,6 +53,10 @@ jobs:
             echo '{}' > data/durum.json
           fi
 
+      - name: Panel işlemleri
+        # panel.alborotonews.com (Cloudflare Worker) düzeltmeleri "panel" dalındaki islemler.json'a yazar
+        run: (git fetch -q --depth 1 origin panel && git show FETCH_HEAD:islemler.json > "$RUNNER_TEMP/panel-islemler.json") || echo "[]" > "$RUNNER_TEMP/panel-islemler.json"
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -83,6 +87,7 @@ jobs:
           IG_SIMDI: ${{ inputs.ig_simdi }}
           IG_OGE: ${{ inputs.ig_oge }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PANEL_ISLEMLER: ${{ runner.temp }}/panel-islemler.json
         run: python toplayici/topla.py
 
       - name: Veriyi kaydet
@@ -103,6 +108,7 @@ jobs:
       - name: Haber sayfaları
         run: |
           rm -rf h && (cp -r data/h h || true)
+          rm -rf d && (cp -r data/d d || true)
           # günlük görseller (uydu, Gazze fotoğrafları): "gorsel" dalından; veri dalına yazılmaz
           mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD | tar -x -C data/gorsel) || true
           # Almanak'ın önceden çizilmiş sayfaları (almanak-sayfa.yml): almanak/, en/almanak/; kapak almanak.html'nin yerine

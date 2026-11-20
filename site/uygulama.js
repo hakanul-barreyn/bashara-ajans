@@ -1015,6 +1015,8 @@
     ey.appendChild(paylasDugme(h));
     if (window.ZBSHesap) { const hb = el("a", "eylem hata-bildir", "Hata bildir"); hb.href = window.ZBSHesap.hataBildir(h, k.ad); hb.title = "Bu haberde bir yanlış mı var? Bize yaz"; ey.appendChild(hb); }
     g.appendChild(ey);
+    // süren bir dosyanın parçasıysa: "Dosya: İran-ABD savaşı › Hürmüz" (site/dosya-serit.js)
+    const dsat = window.DosyaSatir && window.DosyaSatir.satir([h]); if (dsat) g.appendChild(dsat);
     // Kartın en altında kendi haber sayfamıza giden geniş düğme (kim nasıl yazdı, karşılaştırma, grafikler)
     const sb = el("a", "kart-sayfa"); sb.href = sayfaYolu(h);
     if (o && o.kaynak_sayisi > 1) {
@@ -1200,6 +1202,7 @@
       ic.appendChild(el("h2", "kp-slayt-baslik", x.olay ? OB(x.olay) : baslikSec(xs.find((h) => BT(h)) || xs[0])));
       const oz = (x.olay && ON(x.olay)) || OZY(xs);
       if (oz) ic.appendChild(el("p", "kp-oz", oz));
+      const kds = window.DosyaSatir && window.DosyaSatir.satir(xs); if (kds) ic.appendChild(kds);
       const ks = kampSay(xs), sat = el("p", "kp-kim");
       sat.append(el("b", null, (EN ? "Regional press " : "Bölge basını ") + ks.bolge), document.createTextNode(" · "), el("b", null, (EN ? "Israeli & Western " : "İsrail ve Batı ") + ks.dis));
       if (!ks.dis && ks.bolge >= 3) sat.appendChild(el("span", "kp-sessiz", EN ? "Not in the Israeli and Western outlets we can read" : "İzlediğimiz İsrail ve Batı yayınlarında yok"));
@@ -1270,6 +1273,7 @@
     }
     p1.appendChild(el("h2", "hk-baslik", bas));
     const oz = OZY(xs); if (oz) p1.appendChild(el("p", "hk-ozet-metin", oz));
+    const hds = window.DosyaSatir && window.DosyaSatir.satir(xs); if (hds) p1.appendChild(hds);
     p1.appendChild(kampSeridi(xs));
     p1.appendChild(el("p", "hk-ipucu", EN ? "Swipe to read how each outlet put it →" : "Her yayının nasıl yazdığı için sola kaydır →"));
     // 2) yayın yayın: kamplara göre sıralı, sayfa başına 3 haber

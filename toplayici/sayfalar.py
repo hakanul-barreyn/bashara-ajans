@@ -108,6 +108,18 @@ def adlari_ata(kok, haberler, kaynaklar, simdi, log=print):
     return yeni
 
 
+def surum(kok, dosyalar=("haber.css", "dosya.css", "dosya.js")):
+    """CSS/JS içeriğinden kısa sürüm (dosya sayfaları için)."""
+    import hashlib
+    hs = hashlib.md5()
+    for f in dosyalar:
+        try:
+            hs.update(open(os.path.join(kok, "site", f), "rb").read())
+        except OSError:
+            pass
+    return hs.hexdigest()[:10]
+
+
 def yonlendirme(hedef, site, baslik):
     """Eski kimlikli adres için küçük sayfa: okunur adrese gider; arama motoru asıl sayfayı görür."""
     u = f"{site}h/{hedef}"
