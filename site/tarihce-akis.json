@@ -2007,6 +2007,28 @@
     },
     {
      "yeni": true,
+     "yan": true,
+     "tarih": "2003-03-16",
+     "gorsel": "rachel-corrie-2003",
+     "baslik": "Rachel Corrie Refah’ta öldürüldü",
+     "baslik_en": "Rachel Corrie is killed in Rafah",
+     "metin": "Uluslararası Dayanışma Hareketi (ISM) gönüllüsü 23 yaşındaki Amerikalı Rachel Corrie, Refah’ta bir Filistinli ailenin evinin yıkılmasını önlemeye çalışırken İsrail ordusuna ait zırhlı bir buldozerin altında kalarak öldürüldü. Sonraki haftalarda aynı kampta İngiliz Tom Hurndall ve James Miller da İsrail askerlerinin ateşiyle vuruldu.",
+     "metin_en": "Rachel Corrie, a 23-year-old American volunteer with the International Solidarity Movement (ISM), was killed in Rafah when an Israeli army armoured bulldozer crushed her as she tried to stop the demolition of a Palestinian family’s home. In the following weeks, the Britons Tom Hurndall and James Miller were shot by Israeli soldiers in the same camp.",
+     "sonuc": "Ailesinin açtığı tazminat davası 2012’de Hayfa’da reddedildi; Yüksek Mahkeme 12 Şubat 2015’te kararı onadı ve devleti “savaş faaliyeti” gerekçesiyle sorumlu tutmadı. Kimse yargılanmadı.",
+     "sonuc_en": "The family’s civil suit was rejected in Haifa in 2012; on 12 February 2015 the Supreme Court upheld the ruling, exempting the state on grounds of “wartime activity”. No one was prosecuted.",
+     "kaynaklar": [
+      {
+       "ad": "Human Rights Watch",
+       "url": "https://www.hrw.org/news/2015/02/17/israel-dangerous-ruling-rachel-corrie-case"
+      },
+      {
+       "ad": "Rapor: Rachel Corrie ve ötekiler",
+       "url": "rachel-corrie.html"
+      }
+     ]
+    },
+    {
+     "yeni": true,
      "tarih": "2004-03-22",
      "baslik": "Şeyh Ahmed Yasin öldürüldü",
      "metin": "Hamas’ın kurucusu Şeyh Ahmed Yasin, Gazze’de sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü.",
