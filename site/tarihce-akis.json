@@ -1,5 +1,5 @@
 {
- "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli.",
+ "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür.",
  "haritalar": {
   "tam": {
    "yil": "1914",
@@ -18,9 +18,9 @@
   "plan1947": {
    "yil": "1947",
    "ad": "BM taksim planı",
-   "not": "Kızıl: plana göre Arap devleti (şematik). Kudüs uluslararası yönetim.",
+   "not": "Kızıl: plana göre Arap devleti (Yafa dahil). Koyu: Yahudi devletine ayrılan toprak. Beyaz: Kudüs ve Beytüllahim, BM yönetiminde. Sınırlar BM 181 sayılı kararın haritasından izlendi, yaklaşık.",
    "ad_en": "UN Partition Plan",
-   "not_en": "Red-brown: the Arab state under the plan (schematic). Jerusalem under international rule."
+   "not_en": "Red: the Arab state under the plan (including Jaffa). Dark: land allotted to the Jewish state. White: Jerusalem and Bethlehem under UN rule. Borders traced from the Resolution 181 map, approximate."
   },
   "1949": {
    "yil": "1949",
@@ -63,6 +63,30 @@
    "not": "Kesik çizgi: boşaltılan yerleşimler (Guş Katif bloğu, kuzeydeki üç yerleşim, Netzarim, Kfar Darom; şematik). İsrail Gazze’nin sınırlarını, havasını ve denizini denetlemeyi sürdürdü.",
    "ad_en": "Withdrawal from Gaza",
    "not_en": "Dashed: the evacuated settlements (the Gush Katif bloc, three northern settlements, Netzarim, Kfar Darom; schematic). Israel kept control of Gaza’s borders, airspace and sea."
+  },
+  "sykes": {
+   "yil": "1916",
+   "ad": "Sykes–Picot",
+   "ad_en": "Sykes–Picot",
+   "pencere": "genis",
+   "not": "Mavi: Fransa’nın doğrudan yönetimi. Kırmızı: İngiltere’nin. A: Fransız, B: İngiliz nüfuz alanı. Kahverengi: uluslararası yönetim (Filistin). Hayfa ve Akka İngiltere’ye.",
+   "not_en": "Blue: direct French rule. Red: direct British rule. A: French, B: British sphere of influence. Brown: international administration (Palestine). Haifa and Acre to Britain."
+  },
+  "mandalar": {
+   "yil": "1920",
+   "ad": "San Remo ve mandalar",
+   "ad_en": "San Remo and the mandates",
+   "pencere": "genis",
+   "not": "Mavi: Fransız mandası (Suriye ve Lübnan). Kırmızı: İngiliz mandası (Irak, Ürdün, Filistin). Bugünkü kıyı ve sınır çizgileri üzerine şematik.",
+   "not_en": "Blue: French Mandate (Syria and Lebanon). Red: British Mandate (Iraq, Transjordan, Palestine). Schematic, drawn on today’s coastlines and borders."
+  },
+  "osm1914": {
+   "yil": "1914",
+   "ad": "Osmanlı toprakları",
+   "ad_en": "The Ottoman lands",
+   "pencere": "genis",
+   "not": "1914’te Osmanlı Devleti: Anadolu, Suriye, Lübnan, Filistin, Ürdün, Irak ve Hicaz. Kesik çizgi: Şam’dan Medine’ye Hicaz Demiryolu (1908). Hicaz’ın iç sınırı şematik.",
+   "not_en": "The Ottoman state in 1914: Anatolia, Syria, Lebanon, Palestine, Transjordan, Iraq and the Hejaz. Dashed line: the Hejaz Railway from Damascus to Medina (1908). The Hejaz’s inland edge is schematic."
   }
  },
  "akislar": [
@@ -75,12 +99,13 @@
     1918
    ],
    "renk": "#a0803f",
-   "harita": "tam",
+   "harita": "osm1914",
    "tez": "Filistin dört yüz yıl Osmanlı’nın bir parçasıydı: Kudüs ayrı bir sancaktı, kuzey Beyrut Vilayeti’ne bağlıydı. Birinci Dünya Savaşı’nda ülke cepheye döndü; Gazze üç kez muharebe gördü, kıtlık ve sürgün yaşandı. Kudüs 9 Aralık 1917’de düştü, Megiddo’dan sonra bölgede Osmanlı yönetimi sona erdi.",
    "gecis": "İmparatorluk yıkıldı; toprağı masa başında paylaşılacaktı.",
    "olaylar": [
     {
-     "ref": "1914-10-29"
+     "ref": "1914-10-29",
+     "harita": "tam"
     },
     {
      "ref": "1917-03-26"
@@ -89,7 +114,10 @@
      "ref": "1917-10-31"
     },
     {
-     "ref": "1917-12-09"
+     "ref": "1917-12-09",
+     "gorseller": [
+      "kudus-1917-teslim"
+     ]
     },
     {
      "ref": "1918-09-19"
@@ -108,19 +136,30 @@
   },
   {
    "anahtar": "parsel",
-   "ad": "Parselleme ve sömürge",
-   "ar": "التقسيم والانتداب",
+   "ad": "Osmanlı’nın sömürgeleştirilmesi",
+   "ar": "استعمار الولايات العثمانية",
    "yillar": [
     1916,
     1935
    ],
    "renk": "#5d6b75",
-   "harita": "manda",
-   "tez": "Savaş sürerken bölge gizlice paylaşıldı. Sykes–Picot Arap topraklarını İngiltere ile Fransa arasında böldü, Balfour Deklarasyonu nüfusun küçük bir azınlığına “ulusal yurt” sözü verdi. 1922’de Filistin, Balfour taahhüdünü de içeren bir metinle İngiliz mandasına bırakıldı.",
+   "harita": "sykes",
+   "tez": "Savaş sürerken İtilaf devletleri Osmanlı’nın Arap vilayetlerini masa başında paylaştı. Sykes–Picot gizli anlaşmasıyla kıyı Suriye’si ve Kilikya Fransa’ya, Bağdat ve Basra İngiltere’ye ayrıldı; iç bölgeler iki devletin nüfuz alanına bırakıldı, Filistin için “uluslararası yönetim” öngörüldü. Balfour Deklarasyonu nüfusun küçük bir azınlığına “ulusal yurt” sözü verdi. San Remo’da ve Milletler Cemiyeti’nde bu paylaşım manda adıyla meşrulaştırıldı; 1922’de Filistin, Balfour taahhüdünü de içeren bir metinle İngiliz mandasına bırakıldı.",
    "gecis": "Topraksızlaşan köylü, mandaya karşı silaha sarılacaktı.",
    "olaylar": [
     {
-     "ref": "1916-05"
+     "ref": "1916-05",
+     "harita": "sykes",
+     "gazete": true,
+     "vurgu": [
+      "Osmanlı’nın Arap topraklarını aralarında paylaştı"
+     ],
+     "vurgu_en": [
+      "divided the Ottoman Arab lands between them"
+     ],
+     "gorseller": [
+      "sykes-picot-harita"
+     ]
     },
     {
      "ref": "1916-06",
@@ -128,7 +167,15 @@
     },
     {
      "ref": "1917-11-02",
-     "gorsel": "balfour-times"
+     "gorsel": "balfour-times",
+     "gazete": "The Times · 9 Kasım 1917",
+     "gazete_en": "The Times · 9 November 1917",
+     "vurgu": [
+      "“Yahudi halkı için bir ulusal yurt”"
+     ],
+     "vurgu_en": [
+      "“a national home for the Jewish people”"
+     ]
     },
     {
      "ref": "1919-08-28"
@@ -140,14 +187,25 @@
      "metin": "İtilaf devletleri San Remo’da Suriye ve Lübnan’ı Fransa’ya, Filistin ve Irak’ı İngiltere’ye manda olarak bıraktı. Konferans, Balfour Deklarasyonu’nu da Filistin mandasının şartları arasına aldı.",
      "kaynaklar": [],
      "baslik_en": "San Remo settles the mandates",
-     "metin_en": "At San Remo the Allied powers gave Syria and Lebanon to France and Palestine and Iraq to Britain as mandates. The conference also wrote the Balfour Declaration into the terms of the Palestine Mandate."
+     "metin_en": "At San Remo the Allied powers gave Syria and Lebanon to France and Palestine and Iraq to Britain as mandates. The conference also wrote the Balfour Declaration into the terms of the Palestine Mandate.",
+     "harita": "mandalar",
+     "gorseller": [
+      "san-remo-1920"
+     ]
     },
     {
-     "ref": "1922-07-24"
+     "ref": "1922-07-24",
+     "harita": "manda",
+     "vurgu": [
+      "Balfour Deklarasyonu manda metnine girdi"
+     ],
+     "vurgu_en": [
+      "the Balfour Declaration was written into the mandate"
+     ]
     }
    ],
-   "ad_en": "Partition and colonial rule",
-   "tez_en": "While the war was still on, the region was divided in secret. Sykes–Picot split the Arab lands between Britain and France, and the Balfour Declaration promised a small minority of the population a “national home”. In 1922 Palestine was handed to a British Mandate whose text included the Balfour pledge.",
+   "ad_en": "The colonisation of the Ottoman lands",
+   "tez_en": "While the war was still on, the Entente powers carved up the Ottoman Arab provinces at the negotiating table. Under the secret Sykes–Picot agreement coastal Syria and Cilicia went to France, Baghdad and Basra to Britain; the interior was left as the two powers’ spheres of influence, and an “international administration” was planned for Palestine. The Balfour Declaration promised a small minority of the population a “national home”. At San Remo and in the League of Nations the division was legitimised under the name of mandates; in 1922 Palestine was handed to a British Mandate whose text included the Balfour pledge.",
    "gecis_en": "Peasants pushed off their land would take up arms against the Mandate."
   },
   {
@@ -272,14 +330,29 @@
     {
      "ref": "1947-11-29",
      "harita": "plan1947",
-     "gorsel": "gonulluler-1947"
+     "gorsel": "gonulluler-1947",
+     "gazete": true
     },
     {
-     "ref": "1948-04-09"
+     "ref": "1948-04-09",
+     "gorseller": [
+      "deir-yasin-kalinti"
+     ]
     },
     {
      "ref": "1948-05-15",
-     "gorsel": "hayfa-1948-surgun"
+     "vurgu": [
+      "yaklaşık 750 bin Filistinli yurdundan sürüldü ya da kaçtı"
+     ],
+     "vurgu_en": [
+      "some 750,000 Palestinians were expelled or fled"
+     ],
+     "gorseller": [
+      "hayfa-1948-surgun",
+      "yafa-1948",
+      "gazze-tekne-1948",
+      "aynulhilve-1948"
+     ]
     },
     {
      "yeni": true,
@@ -302,7 +375,19 @@
      "ref": "1949-02-24",
      "harita": "1949",
      "gorsel": "dheisheh-1952",
-     "gorsel_klasor": "kapak"
+     "gorsel_klasor": "kapak",
+     "gazete": true,
+     "vurgu": [
+      "Gazze Şeridi’nin doğuşu",
+      "Mısır’ın elinde kalan kıyı şeridi bugünkü Gazze Şeridi oldu"
+     ],
+     "vurgu_en": [
+      "the Gaza Strip is born",
+      "the coastal strip left to Egypt became today's Gaza Strip"
+     ],
+     "gorseller": [
+      "hanyunus-1948"
+     ]
     },
     {
      "ref": "1948-09-22",
@@ -342,7 +427,59 @@
     },
     {
      "ref": "1952-07-23",
-     "gorsel": "nasir"
+     "gazete": true,
+     "gorseller": [
+      "nasir",
+      "hur-subaylar",
+      "devrim-1953"
+     ]
+    },
+    {
+     "tur": "gazete",
+     "tarih": "1952-07-26",
+     "kunye": "TIME · 4 Ağustos 1952",
+     "kunye_en": "TIME · 4 August 1952",
+     "baslik": "Faruk’un “beş kral” sözü",
+     "baslik_en": "Farouk’s “five kings”",
+     "alinti": "Dünyada yalnızca beş kral kalacak: İngiltere kralı ve iskambil destesindeki dört kral.",
+     "alinti_en": "There will be only five kings in the world: the King of England and the four kings in a pack of cards.",
+     "metin": "Kral Faruk’un tahtını kaybetmeden önce söylediği aktarılan bu söz, İngiliz gücüne yaslanan Arap monarşilerinin o güç çekildikçe sarsılacağını anlatıyordu. TIME, Hür Subaylar Faruk’u tahttan indirdiğinde bölge yazısını bu sözle açtı; Foreign Policy sözü 1948’e tarihler. Faruk 26 Temmuz 1952’de İtalya’ya sürgüne gitti ve 1965’te Roma’da öldü.",
+     "metin_en": "This remark, attributed to King Farouk before he lost his throne, captured how the Arab monarchies leaning on British power would shake as that power receded. TIME opened its regional story with it when the Free Officers deposed Farouk; Foreign Policy dates the remark to 1948. Farouk sailed into exile in Italy on 26 July 1952 and died in Rome in 1965.",
+     "kaynaklar": [
+      {
+       "ad": "TIME (1952)",
+       "url": "https://time.com/archive/6887075/middle-east-of-mobs-monarchs"
+      },
+      {
+       "ad": "Foreign Policy",
+       "url": "https://foreignpolicy.com/2009/10/20/the-king-of-england/"
+      }
+     ],
+     "gorseller": [
+      "faruk-churchill"
+     ]
+    },
+    {
+     "tur": "gazete",
+     "tarih": "1954-01-04",
+     "kunye": "Akşam · 5 Ocak 1954",
+     "kunye_en": "Akşam (Istanbul) · 5 January 1954",
+     "baslik": "Büyükelçi Fuat Tugay ve Hür Subaylar",
+     "baslik_en": "Ambassador Fuat Tugay and the Free Officers",
+     "alinti": "Hareketleriniz bir centilmene yakışmayacak hareketlerdir. Onun için aramızda hiçbir zaman dostluk olmayacaktır.",
+     "alinti_en": "Your conduct is not the conduct of a gentleman. That is why there will never be friendship between us.",
+     "metin": "Türkiye’nin Kahire Büyükelçisi Hulusi Fuat Tugay’ın eşi Emine Tugay, Kavalalı hanedanındandı. Hür Subaylar hanedanın mallarına el koyunca onun mülkleri de müsadere edildi; Tugay yeni yönetime açıkça cephe aldı. Akşam gazetesine göre bu sözleri Kahire Operası’nda kendisini karşılayan Abdünnasır’a söyledi. Mısır hükümeti 4 Ocak 1954’te Tugay’ı istenmeyen kişi ilan edip 24 saat içinde ülkeyi terk etmesini istedi; Tugay bu muameleyi gören ilk Türk diplomattı. Kahire, Türkiye’nin politikasını “Arap karşıtı” diye niteledi.",
+     "metin_en": "Emine Tugay, the wife of Turkey’s ambassador in Cairo, Hulusi Fuat Tugay, belonged to the Muhammad Ali dynasty. When the Free Officers seized the dynasty’s property her estates were confiscated too, and Tugay openly turned against the new government. According to the Istanbul daily Akşam he said these words to Nasser, who had come to greet him at the Cairo Opera. On 4 January 1954 the Egyptian government declared Tugay persona non grata and gave him 24 hours to leave; he was the first Turkish diplomat to be treated so. Cairo called Turkey’s policy “anti-Arab”.",
+     "kaynaklar": [
+      {
+       "ad": "Afyon Kocatepe Üniversitesi Sosyal Bilimler Dergisi",
+       "url": "https://dergipark.org.tr/en/pub/akusosbil/issue/48890/464945"
+      },
+      {
+       "ad": "Wikipedia: Hulusi Fuat Tugay",
+       "url": "https://en.wikipedia.org/wiki/Hulusi_Fuat_Tugay"
+      }
+     ]
     },
     {
      "ref": "1956-11-03",
@@ -368,7 +505,13 @@
     },
     {
      "ref": "1967-06-05",
-     "harita": "1967"
+     "harita": "1967",
+     "vurgu": [
+      "yaklaşık 300 bin Filistinli daha yerinden edildi"
+     ],
+     "vurgu_en": [
+      "some 300,000 more Palestinians were displaced"
+     ]
     },
     {
      "ref": "1973-10-06"
@@ -380,7 +523,11 @@
      "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı ve Sina’yı geri aldı. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.",
      "kaynaklar": [],
      "baslik_en": "Egypt signs a peace treaty with Israel",
-     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel and regained Sinai. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League."
+     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel and regained Sinai. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League.",
+     "gorseller": [
+      "camp-david-1978",
+      "baris-1979"
+     ]
     },
     {
      "ref": "1991-01-18"
@@ -522,7 +669,8 @@
      "metin": "Yaser Arafat BM Genel Kurulu’na hitap eden ilk Filistinli lider oldu. Aynı ay Genel Kurul FKÖ’ye gözlemci statüsü verdi.",
      "kaynaklar": [],
      "baslik_en": "Arafat at the UN rostrum",
-     "metin_en": "Yasser Arafat became the first Palestinian leader to address the UN General Assembly. The same month the Assembly granted the PLO observer status."
+     "metin_en": "Yasser Arafat became the first Palestinian leader to address the UN General Assembly. The same month the Assembly granted the PLO observer status.",
+     "gazete": true
     },
     {
      "yeni": true,
@@ -538,14 +686,30 @@
     },
     {
      "ref": "1987-12-09",
-     "gorsel": "intifada-1987"
+     "gorseller": [
+      "intifada-1987",
+      "intifada-1987-gosteri",
+      "intifada-1987-sokak",
+      "nuseyrat-okul"
+     ]
     },
     {
      "ref": "1988-11-15"
     },
     {
      "ref": "1993-09-13",
-     "harita": "oslo"
+     "harita": "oslo",
+     "gazete": true,
+     "vurgu": [
+      "Nihai statü konuları (Kudüs, mülteciler, yerleşimler, sınırlar) ertelendi"
+     ],
+     "vurgu_en": [
+      "Final-status issues (Jerusalem, refugees, settlements, borders) were deferred"
+     ],
+     "gorseller": [
+      "oslo-tokalasma",
+      "oslo-imza"
+     ]
     },
     {
      "yeni": true,
@@ -740,7 +904,12 @@
      "metin_en": "Israel withdrew from South Lebanon after an 18-year occupation. Hezbollah announced it as a victory for armed resistance."
     },
     {
-     "ref": "2000-09-28"
+     "ref": "2000-09-28",
+     "gorseller": [
+      "durre-bamako",
+      "sahnin-2000",
+      "aida-duvar"
+     ]
     },
     {
      "yeni": true,
@@ -758,7 +927,13 @@
     },
     {
      "ref": "2005-09-12",
-     "harita": "cekilme"
+     "harita": "cekilme",
+     "vurgu": [
+      "İsrail Gazze’nin sınırlarını, hava sahasını ve denizini denetlemeyi sürdürdü"
+     ],
+     "vurgu_en": [
+      "Israel kept control of Gaza’s borders, airspace and sea"
+     ]
     },
     {
      "ref": "2006-01-25"
@@ -768,7 +943,13 @@
     },
     {
      "ref": "2007-06",
-     "harita": "abluka"
+     "harita": "abluka",
+     "vurgu": [
+      "Abluka o günden beri sürüyor."
+     ],
+     "vurgu_en": [
+      "in place ever since"
+     ]
     },
     {
      "ref": "2021-05-10"
@@ -814,7 +995,13 @@
    "tez": "Aksa Tufanı ile Filistin direnişinin İslami kanadı ve bölgedeki müttefikleri, Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran, aynı savaşın cephelerine dönüştü. Hareketin taraftarlarına göre 7 Ekim, İsrail’in kuruluşundan beri dayandığı caydırıcılık iddiasına yönelmiş bir darbe ve dünya düzenini değiştirecek ilk domino taşıydı. Ardından gelen Gazze soykırımı, Adalet Divanı davaları ve İran savaşı bölge düzenini sarstı.",
    "olaylar": [
     {
-     "ref": "2023-10-07"
+     "ref": "2023-10-07",
+     "gorseller": [
+      "gazze-rimal-2023",
+      "nuseyrat-2023",
+      "newyork-2023",
+      "endonezya-2023"
+     ]
     },
     {
      "ref": "2023-10-19"

@@ -72,6 +72,17 @@ v["plan1947"] = [
     poly([(34.55, 31.86), (34.8, 31.58), (34.66, 31.25), (34.54, 30.96), (34.44, 30.7), (34.3, 30.8), (34.24, 31.25), (34.0, 31.4), (34.3, 31.75)]),
     poly([(34.73, 32.08), (34.79, 32.07), (34.79, 32.02), (34.73, 32.02)])]
 v["kudus"] = list(P(35.225, 31.775))
+
+# 1947 BM planı: izlenmiş sınırlar (toplayici/plan1947.json); Yahudi devleti tarihî Filistin'in kalanı, Kudüs ve Beytüllahim BM yönetiminde
+import os
+_pj = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plan1947.json")
+if os.path.exists(_pj):
+    _p = json.load(open(_pj))
+    v["plan1947"] = [poly(q) for q in _p["arap"]]
+    v["plan1947_kudus"] = [poly(q) for q in _p["kudus"]]
+    v["plan1947_yahudi"] = v["filistin"]
+    v["plan1947_etiket"] = [[a, b, *map(lambda q: round(q, 1), P(c, d_))] for a, b, c, d_ in [
+        ("ARAP\nDEVLETİ", "ARAB\nSTATE", 35.27, 32.36), ("YAHUDİ\nDEVLETİ", "JEWISH\nSTATE", 34.98, 30.55), ("BM", "UN", 35.25, 31.66)]]
 # Oslo II: A ve B bölgeleri (şematik)
 def elips(lon, lat, rx, ry):
     return poly([(lon + rx * math.cos(t / 14 * 2 * math.pi), lat + ry * math.sin(t / 14 * 2 * math.pi)) for t in range(14)])

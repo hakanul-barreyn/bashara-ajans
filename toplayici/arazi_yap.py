@@ -5,14 +5,17 @@ import io, json, math, os, re, sys, time, urllib.request
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
-H_ = json.load(open("site/tarihce-harita.json"))
+# Kullanım: arazi_yap.py <çıktı.jpg> [harita.json] [yakınlık Z] [ölçek] — geniş harita için: site/tarihce-harita-genis.json 7 2
+KAYNAK = sys.argv[2] if len(sys.argv) > 2 else "site/tarihce-harita.json"
+GENIS = "genis" in KAYNAK
+H_ = json.load(open(KAYNAK))
 LON0, LON1, LAT0, LAT1 = H_["pencere"]
 W, H = H_["w"], H_["h"]
-OLC = 3                      # çıktı = SVG ölçeğinin 3 katı
+OLC = int(sys.argv[4]) if len(sys.argv) > 4 else 3   # çıktı = SVG ölçeğinin OLC katı
 OW, OH = W * OLC, H * OLC
-K = math.cos(math.radians(31.5))
+K = math.cos(math.radians(32 if GENIS else 31.5))
 s = W / ((LON1 - LON0) * K)
-Z = 10
+Z = int(sys.argv[3]) if len(sys.argv) > 3 else 10
 
 
 def mx(lon):
@@ -59,7 +62,8 @@ E = yumusat(E.astype(np.float32))
 
 # tepe gölgesi
 m_px = (LON1 - LON0) * K * 111320 / OW
-gy, gx = np.gradient(E * 2.2, m_px)
+ABAR = 1.0 if GENIS else 2.2   # geniş haritada dağlar abartısız, yoksa gölge çok koyulaşır
+gy, gx = np.gradient(E * ABAR, m_px)
 az, alt = math.radians(315), math.radians(42)
 egim = np.arctan(np.hypot(gx, gy))
 yon = np.arctan2(-gx, gy)
@@ -77,7 +81,7 @@ def maske(yollar):
     return np.asarray(im.filter(ImageFilter.GaussianBlur(1)), dtype=np.float32) / 255
 
 
-kara = maske(H_["komsu"] + H_["filistin"])
+kara = maske(H_.get("kara") or (H_["komsu"] + H_["filistin"]))
 gl = maske(H_["gol"])
 # renk: kuzeybatı (Celile, kıyı ovası, Lübnan) zeytin yeşili; güney ve doğu (Nakab, Sina, Ürdün çölü) kum ve altın tonları
 dur = np.array([-450, 0, 300, 700, 1100, 1600, 2400], dtype=np.float32)
@@ -86,7 +90,11 @@ kum = np.array([[150, 126, 88], [204, 178, 128], [214, 190, 138], [204, 176, 124
 ry = np.stack([np.interp(E, dur, yesil[:, i]) for i in range(3)], -1)
 rk = np.stack([np.interp(E, dur, kum[:, i]) for i in range(3)], -1)
 LO, LA = np.meshgrid(lon, lat)
-nem = (np.clip((LA - 31.35) / 0.9, 0, 1) * np.clip((35.85 - LO) / 0.45, 0, 1)) ** 0.8   # 1: nemli kuzeybatı, 0: çöl
+if GENIS:   # Anadolu ve Doğu Akdeniz kıyısı yeşil; Suriye çölü, Arabistan, Sina ve Mısır kum
+    nem = np.maximum(np.clip((LA - 36.4) / 2.2, 0, 1) * 0.85,
+                     np.clip((36.7 - LO) / 0.7, 0, 1) * np.clip((LA - 31.6) / 1.0, 0, 1) * np.clip((37.4 - LA) / 0.8, 0, 1) * np.clip((LO - 34.4) / 0.4, 0, 1) * 0.9)
+else:
+    nem = (np.clip((LA - 31.35) / 0.9, 0, 1) * np.clip((35.85 - LO) / 0.45, 0, 1)) ** 0.8   # 1: nemli kuzeybatı, 0: çöl
 r = rk * (1 - nem[..., None]) + ry * nem[..., None]
 kr = np.clip(r * (0.5 + 0.72 * gol)[..., None], 0, 255)
 # deniz: kıyıya yakın açık, derinde koyu mavi

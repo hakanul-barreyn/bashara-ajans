@@ -3,7 +3,7 @@ name: arazi
 on:
   workflow_dispatch:
   push:
-    paths: [".github/workflows/arazi.yml", "toplayici/arazi_yap.py", "site/tarihce-harita.json"]
+    paths: [".github/workflows/arazi.yml", "toplayici/arazi_yap.py", "site/tarihce-harita.json", "site/tarihce-harita-genis.json"]
 permissions:
   contents: write
 concurrency:
@@ -19,7 +19,8 @@ jobs:
       - run: |
           mkdir cikti
           if git fetch -q --depth 1 origin gorsel 2>/dev/null; then git archive FETCH_HEAD | tar -x -C cikti; fi
-          mkdir -p cikti/arazi && python toplayici/arazi_yap.py cikti/arazi/tarihce-arazi.jpg && ls -la cikti/arazi
+          mkdir -p cikti/arazi && python toplayici/arazi_yap.py cikti/arazi/tarihce-arazi.jpg
+          python toplayici/arazi_yap.py cikti/arazi/tarihce-arazi-genis.jpg site/tarihce-harita-genis.json 7 2 && ls -la cikti/arazi
       - run: |
           cd cikti && git init -q -b gorsel && git add -A
           git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Arazi zemini"
