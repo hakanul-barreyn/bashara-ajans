@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=5").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=6").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -225,9 +225,27 @@
       var p = vurgula(el("p", "ta-metin" + (gz && metin.length > 420 && !o.buyuk ? " iki" : "")), metin, EN ? o.vurgu_en : o.vurgu);
       if (gs.length) k.appendChild(galeri(gs, o.buyuk));
       k.appendChild(p);
+      if (o.sina) k.appendChild(sinaSerit(o.sina));
       var kk = kaynakSatiri(o.kaynaklar || v.kaynaklar); if (kk) k.appendChild(kk);
       var kc = kaynakca(o.kaynakca); if (kc) k.appendChild(kc);
       return k;
+    }
+    // Sina'nın iki işgali: 1948–1990 arasında iki taralı dilim; bu olayın ait olduğu işgal öne çıkar
+    function sinaSerit(n) {
+      var Y0 = 1948, Y1 = 1990, y = function (t) { return ((t - Y0) / (Y1 - Y0) * 100).toFixed(2) + "%"; };
+      var d = el("div", "ta-sina"); d.setAttribute("role", "img");
+      d.setAttribute("aria-label", EN ? "Israeli occupation of Sinai: first 1956–57, second 1967–82" : "Sina’da İsrail işgali: birincisi 1956–57, ikincisi 1967–82");
+      d.appendChild(el("p", "ta-sina-et", EN ? "Sinai: occupied twice, returned twice" : "Sina: iki kez işgal, iki kez iade"));
+      var c = el("div", "ta-sina-cubuk"), lej = el("div", "ta-sina-lej");
+      [1950, 1960, 1970, 1980, 1990].forEach(function (t) { var i = el("span", "ta-sina-yil", String(t)); i.style.left = y(t); c.appendChild(i); });
+      [[1956.83, 1957.18, 1, EN ? "1st · 29 Oct 1956 – 8 Mar 1957" : "1. işgal · 29 Ekim 1956 – 8 Mart 1957"],
+       [1967.43, 1982.31, 2, EN ? "2nd · 5 Jun 1967 – 25 Apr 1982" : "2. işgal · 5 Haziran 1967 – 25 Nisan 1982"]].forEach(function (x) {
+        var b = el("span", "ta-sina-dilim" + (x[2] === n ? " su" : "")); b.style.left = y(x[0]); b.style.width = "calc(" + y(x[1]) + " - " + y(x[0]) + ")";
+        c.appendChild(b);
+        var e = el("p", "ta-sina-ad" + (x[2] === n ? " su" : ""), x[3]); lej.appendChild(e);
+      });
+      d.append(c, lej);
+      return d;
     }
     // gazete kupürü: künye, başlık, büyük alıntı, açıklama
     function kupur(o) {
@@ -528,6 +546,7 @@
     };
     var G49 = ["filK", "psxF", "sinirG", "kanal", "gT", "noktaT"];
     KATLAR.g1949 = G49;
+    KATLAR.g1957 = G49.concat(["t57"]);
     KATLAR.g1956 = G49.concat(["sinaI", "gazaI", "t56"]);
     KATLAR.g1967 = G49.concat(["sinaI", "psxI", "golanI"]);
     KATLAR.g1973 = G49.concat(["sinaI", "psxI", "golanI", "kopru73", "cep73", "t73"]);
@@ -685,6 +704,7 @@
         var ek = function (lon, lat, sinif, tr, en) { var p = P(H2, lon, lat); yazi(et2, p[0], p[1], "not " + sinif, EN ? en : tr); };
         if (var_("t56")) { ek(32.45, 31.55, "", "İngiliz-Fransız çıkarması\n5–6 Kasım", "Anglo-French landing\n5–6 November"); ek(33.6, 30.35, "", "İsrail işgali\n29 Ekim – Mart 1957", "Israeli occupation\n29 Oct – Mar 1957"); }
         if (var_("t73")) { ek(33.0, 30.55, "", "Mısır köprübaşı\n6 Ekim", "Egyptian bridgehead\n6 October"); ek(31.55, 30.05, "sag", "İsrail cebi\n16 Ekim sonrası", "Israeli pocket\nafter 16 October"); }
+        if (var_("t57")) ek(33.85, 29.2, "", "Mısır’a döndü\nMart 1957", "returned to Egypt\nMarch 1957");
         if (var_("t82")) ek(33.85, 29.2, "", "Mısır’a döndü\nNisan 1982", "returned to Egypt\nApril 1982");
         var AD2 = { "İstanbul": "Istanbul", "Halep": "Aleppo", "Şam": "Damascus", "Beyrut": "Beirut", "Kudüs": "Jerusalem", "Hayfa": "Haifa", "Bağdat": "Baghdad", "Musul": "Mosul", "Kerkük": "Kirkuk", "Kahire": "Cairo", "Medine": "Medina", "Akabe": "Aqaba" };
         H2.sehir.forEach(function (c) {

@@ -111,6 +111,16 @@
 .ta-kaynakca{margin:12px 0 0;padding-top:10px;border-top:1px dashed var(--ta-cizgi);display:flex;flex-direction:column;gap:4px;font:500 .72rem/1.5 var(--ta-sans);color:var(--ta-soluk)}
 .ta-kaynakca p{margin:0}
 .ta-kaynakca b{font:600 .6rem var(--ta-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ta-ink2);margin-right:4px}
+/* Sina'nın iki işgali */
+.ta-sina{margin:16px 0 4px;padding:12px 14px 12px;border-radius:6px;background:var(--ta-zemin)}
+.ta-sina-et{margin:0 0 12px;font:700 .64rem var(--ta-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ta-ink2)}
+.ta-sina-cubuk{position:relative;margin-top:14px;height:16px;border-radius:3px;background:rgba(29,36,33,.08)}
+.ta-sina-yil{position:absolute;top:-1px;transform:translate(-50%,-100%);font:500 .58rem var(--ta-mono);color:var(--ta-soluk)}
+.ta-sina-dilim{position:absolute;top:0;bottom:0;min-width:6px;border-radius:2px;background:repeating-linear-gradient(45deg,#7a6a52 0 3px,#b8a98f 3px 6px);opacity:.55}
+.ta-sina-dilim.su{opacity:1;background:repeating-linear-gradient(45deg,var(--renk) 0 3px,color-mix(in srgb,var(--renk) 45%,#fff) 3px 6px);box-shadow:0 0 0 2px color-mix(in srgb,var(--renk) 30%,transparent)}
+.ta-sina-lej{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:9px}
+.ta-sina .ta-sina-ad{margin:0;font:600 .64rem/1.4 var(--ta-mono);color:var(--ta-soluk)}
+.ta-sina .ta-sina-ad.su{color:var(--ta-murekkep);font-weight:700}
 .ta-et{display:inline-block;font:800 .62rem var(--ta-sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ta-yesil);padding:2px 7px;border-radius:3px}
 
 /* fosforlu kalem: kart yerine oturunca soldan sağa çekilir */

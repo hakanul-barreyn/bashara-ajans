@@ -1,5 +1,5 @@
 {
- "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür. 'karsilastir': olayın yanında önce/sonra haritası (once, sonra, kesit). 'uydu': önce/sonra uydu görüntüsü. 'buyuk': ilk görsel geniş. 'kaynakca': akademik ve birincil kaynaklar (bağlantısız).",
+ "not": "Tarihçe akışları (taslak). 'ref' site/donum.json'daki olayın tarihi (aynı tarihte iki olay varsa 'tarih|başlıktan bir kelime'); 'yeni' olaylar burada yazılı. 'yan': yandan gelen yan olay. 'harita': o olay görünürken haritanın hâli. 'gazete': olay gazete kâğıdı görünümünde (metin varsa künye). 'vurgu': metinde fosforlu kalemle işaretlenecek parçalar. 'gorseller': birden çok görsel. tur 'gazete': kupür. 'karsilastir': olayın yanında önce/sonra haritası (once, sonra, kesit). 'uydu': önce/sonra uydu görüntüsü. 'buyuk': ilk görsel geniş. 'kaynakca': akademik ve birincil kaynaklar (bağlantısız). 'sina': Sina'nın iki işgalini gösteren şerit (1 ya da 2 vurgulanır).",
  "haritalar": {
   "tam": {
    "yil": "1914",
@@ -99,16 +99,16 @@
   "g1956": {
    "yil": "1956",
    "pencere": "genis",
-   "ad": "Süveyş Savaşı",
-   "ad_en": "The Suez War",
-   "not": "Taralı: İsrail’in Ekim–Kasım 1956’da işgal ettiği Sina ve Gazze. İngiliz ve Fransız birlikleri Port Said’e indi. İsrail Mart 1957’de çekildi.",
-   "not_en": "Hatched: Sinai and Gaza, occupied by Israel in October–November 1956. British and French troops landed at Port Said. Israel withdrew in March 1957."
+   "ad": "Sina’nın ilk işgali",
+   "ad_en": "Sinai’s first occupation",
+   "not": "Taralı: İsrail’in 29 Ekim 1956’da başlayan saldırıyla işgal ettiği Sina ve Gazze. İngiliz ve Fransız birlikleri Port Said’e indi. İsrail Mart 1957’ye kadar çekildi.",
+   "not_en": "Hatched: Sinai and Gaza, occupied by Israel in the attack that began on 29 October 1956. British and French troops landed at Port Said. Israel withdrew by March 1957."
   },
   "g1967": {
    "yil": "1967",
    "pencere": "genis",
-   "ad": "Haziran 1967",
-   "ad_en": "June 1967",
+   "ad": "Sina’nın ikinci işgali",
+   "ad_en": "Sinai’s second occupation",
    "not": "Taralı: altı günde işgal edilen Sina, Gazze, Batı Şeria ve Doğu Kudüs, Golan. Cephe Süveyş Kanalı’na dayandı.",
    "not_en": "Hatched: Sinai, Gaza, the West Bank and East Jerusalem, and the Golan, occupied in six days. The front reached the Suez Canal."
   },
@@ -123,10 +123,10 @@
   "g1982": {
    "yil": "1982",
    "pencere": "genis",
-   "ad": "Sina geri verildi",
-   "ad_en": "Sinai returned",
-   "not": "1979 barış antlaşmasıyla Sina Nisan 1982’ye kadar aşama aşama Mısır’a döndü. Gazze, Batı Şeria ve Golan işgal altında kaldı.",
-   "not_en": "Under the 1979 peace treaty Sinai was returned to Egypt in stages by April 1982. Gaza, the West Bank and the Golan remained occupied."
+   "ad": "İkinci çekilme",
+   "ad_en": "The second withdrawal",
+   "not": "1979 barış antlaşmasıyla Sina 25 Nisan 1982’de tamamen Mısır’a döndü. Gazze, Batı Şeria ve Golan işgal altında kaldı.",
+   "not_en": "Under the 1979 peace treaty Sinai was fully returned to Egypt on 25 April 1982. Gaza, the West Bank and the Golan remained occupied."
   },
   "osloABC": {
    "yil": "1995",
@@ -134,6 +134,14 @@
    "ad_en": "Oslo II: A, B, C",
    "not": "Parlak: A bölgesi, Filistin Yönetimi’nin denetiminde. Açık: B bölgesi, ortak denetim. Taralı: C bölgesi, Batı Şeria’nın yaklaşık yüzde 60’ı, İsrail denetiminde. Siyah: yerleşimler. Sınırlar 2005 tarihli kamu malı bir haritadan izlendi, yaklaşık.",
    "not_en": "Bright: Area A, under Palestinian Authority control. Light: Area B, joint control. Hatched: Area C, about 60 per cent of the West Bank, under Israeli control. Black: settlements. Boundaries traced from a public-domain 2005 map, approximate."
+  },
+  "g1957": {
+   "yil": "1957",
+   "pencere": "genis",
+   "ad": "İlk çekilme",
+   "ad_en": "The first withdrawal",
+   "not": "Sina ve Gazze yeniden Mısır yönetiminde. Sınırda BM Acil Durum Gücü (UNEF) var. Kızıl: Batı Şeria (Ürdün) ve Gazze (Mısır).",
+   "not_en": "Sinai and Gaza back under Egyptian rule, with the UN Emergency Force (UNEF) on the border. Red-brown: the West Bank (Jordan) and Gaza (Egypt)."
   }
  },
  "akislar": [
@@ -230,6 +238,58 @@
       },
       {
        "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1915",
+     "kaynakca": [
+      {
+       "ad": "Ronald Florence, Lawrence and Aaronsohn: T. E. Lawrence, Aaron Aaronsohn, and the Seeds of the Arab-Israeli Conflict (Viking, 2007)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1915-02-03",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1917-04-19",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1918-03",
+     "kaynakca": [
+      {
+       "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Edward J. Erickson, Ordered to Die: A History of the Ottoman Army in the First World War (Greenwood, 2001)",
        "tur": "akademik"
       }
      ]
@@ -869,11 +929,6 @@
     {
      "ref": "1956-11-03",
      "gorsel": "suveys-1956",
-     "karsilastir": {
-      "once": "g1949",
-      "sonra": "g1956",
-      "kesit": "misir"
-     },
      "gorseller": [
       "portsait-1956"
      ],
@@ -883,7 +938,7 @@
        "tur": "akademik"
       },
       {
-       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "ad": "Keith Kyle, Suez: Britain’s End of Empire in the Middle East (I.B. Tauris, 2003)",
        "tur": "akademik"
       },
       {
@@ -891,7 +946,23 @@
        "tur": "birincil",
        "ad_en": "Special report of the Director of UNRWA, 1 November – 14 December 1956 (UN doc. A/3212/Add.1)"
       }
-     ]
+     ],
+     "baslik": "Süveyş Savaşı: Sina’nın ilk işgali, Han Yunus ve Refah katliamları",
+     "baslik_en": "The Suez War: the first occupation of Sinai, the Khan Yunis and Rafah massacres",
+     "metin": "İngiltere ve Fransa’yla gizlice anlaşan İsrail 29 Ekim 1956’da Sina’ya girdi ve bir haftada yarımadanın tamamını ve Gazze Şeridi’ni işgal etti. İngiliz ve Fransız birlikleri, “kanalı korumak” gerekçesiyle 5–6 Kasım’da Port Said’e indi. BM Yardım Ajansı’nın (UNRWA) soruşturmasına göre 3 Kasım’da Han Yunus ve kampında İsrail askerleri 275 Filistinliyi şehit etti; bir hafta kadar sonra Refah kampında, 12’si UNRWA çalışanı 111 kişi daha şehit edildi. ABD ve Sovyetler Birliği’nin baskısıyla savaş 7 Kasım’da durdu.",
+     "metin_en": "Having secretly agreed with Britain and France, Israel entered Sinai on 29 October 1956 and within a week occupied the whole peninsula and the Gaza Strip. British and French troops landed at Port Said on 5–6 November, claiming to “protect the canal”. According to an UNRWA investigation, Israeli troops martyred 275 Palestinians in Khan Yunis and its camp on 3 November; about a week later 111 more, including 12 UNRWA staff, were martyred in Rafah camp. Under pressure from the United States and the Soviet Union the war stopped on 7 November.",
+     "vurgu": [
+      "Sina’ya girdi"
+     ],
+     "vurgu_en": [
+      "entered Sinai"
+     ],
+     "sina": 1,
+     "karsilastir": {
+      "once": "g1949",
+      "sonra": "g1956",
+      "kesit": "misir"
+     }
     },
     {
      "yeni": true,
@@ -934,13 +1005,14 @@
     {
      "ref": "1967-06-05",
      "vurgu": [
-      "yaklaşık 300 bin Filistinli daha yerinden edildi"
+      "Sina’yı ikinci kez",
+      "Yaklaşık 300 bin Filistinli daha yerinden edildi"
      ],
      "vurgu_en": [
-      "some 300,000 more Palestinians were displaced"
+      "occupied Sinai for the second time"
      ],
      "karsilastir": {
-      "once": "g1949",
+      "once": "g1957",
       "sonra": "g1967",
       "kesit": "misir"
      },
@@ -953,7 +1025,12 @@
        "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "baslik": "Altı Gün Savaşı ve Nekse: Sina ikinci kez işgal edildi",
+     "baslik_en": "The Six-Day War and the Naksa: Sinai occupied a second time",
+     "metin": "Mısır’ın UNEF’in çekilmesini istemesi ve Tiran Boğazı’nı kapatmasının ardından İsrail 5 Haziran 1967 sabahı Mısır hava kuvvetlerini yerde vurdu. Altı günde Sina’yı ikinci kez, Gazze’yi, Batı Şeria’yı, Doğu Kudüs’ü ve Golan’ı işgal etti; cephe Süveyş Kanalı’na dayandı ve kanal sekiz yıl kapalı kaldı. Yaklaşık 300 bin Filistinli daha yerinden edildi.",
+     "metin_en": "After Egypt asked UNEF to leave and closed the Straits of Tiran, Israel destroyed the Egyptian air force on the ground on the morning of 5 June 1967. In six days it occupied Sinai for the second time, along with Gaza, the West Bank, East Jerusalem and the Golan; the front reached the Suez Canal, which stayed closed for eight years. Some 300,000 more Palestinians were displaced.",
+     "sina": 2
     },
     {
      "ref": "1973-10-06",
@@ -972,25 +1049,21 @@
        "ad": "Eugene Rogan, The Arabs: A History (Basic Books, 2009)",
        "tur": "akademik"
       }
-     ]
+     ],
+     "sina": 2
     },
     {
      "yeni": true,
      "tarih": "1979-03-26",
      "baslik": "Mısır İsrail’le barış antlaşması imzaladı",
-     "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı ve Sina’yı geri aldı. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.",
+     "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı. Antlaşmaya göre İsrail Sina’dan üç yıl içinde çekilecekti. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.",
      "kaynaklar": [],
      "baslik_en": "Egypt signs a peace treaty with Israel",
-     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel and regained Sinai. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League.",
+     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel, under which Israel would withdraw from Sinai within three years. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League.",
      "gorseller": [
       "camp-david-1978",
       "baris-1979"
      ],
-     "karsilastir": {
-      "once": "g1967",
-      "sonra": "g1982",
-      "kesit": "misir"
-     },
      "kaynakca": [
       {
        "ad": "William B. Quandt, Camp David: Peacemaking and Politics (Brookings Institution, 1986)",
@@ -1023,6 +1096,117 @@
      "kaynakca": [
       {
        "ad": "Daniel Yergin, The Prize: The Epic Quest for Oil, Money, and Power (Simon & Schuster, 1991)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1956-07-26",
+     "baslik": "Abdünnasır Süveyş Kanalı’nı millileştirdi",
+     "baslik_en": "Nasser nationalises the Suez Canal",
+     "metin": "ABD ve İngiltere, Asvan Barajı için verdikleri kredi sözünü Temmuz 1956’da geri çekti. Abdünnasır 26 Temmuz’da İskenderiye’de on binlere yaptığı konuşmada, 1869’dan beri yabancı bir şirketin işlettiği Süveyş Kanalı Şirketi’ni millileştirdiğini açıkladı: kanalın gelirleri barajı finanse edecekti. Şirketin en büyük hissedarı yüzde 44 ile İngiliz hükümetiydi, yönetimi Paris’teydi. Londra ve Paris, Ekim’de Sevr’de İsrail’le gizlice anlaşarak savaşa hazırlandı.",
+     "metin_en": "In July 1956 the United States and Britain withdrew their offer to fund the Aswan High Dam. On 26 July, speaking to a crowd of tens of thousands in Alexandria, Nasser announced the nationalisation of the Suez Canal Company, which a foreign company had run since 1869: the canal’s revenue would pay for the dam. The British government was the largest shareholder with 44 per cent, and the company was run from Paris. In October London and Paris secretly agreed with Israel at Sèvres and prepared for war.",
+     "vurgu": [
+      "Süveyş Kanalı Şirketi’ni millileştirdiğini açıkladı"
+     ],
+     "vurgu_en": [
+      "the nationalisation of the Suez Canal Company"
+     ],
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "Keith Kyle, Suez: Britain’s End of Empire in the Middle East (I.B. Tauris, 2003)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Wm. Roger Louis & Roger Owen (eds.), Suez 1956: The Crisis and Its Consequences (Oxford University Press, 1989)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1955-02-28",
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "ref": "1956-10-29",
+     "yan": true,
+     "kaynakca": [
+      {
+       "ad": "Shira Robinson, “Local Struggle, National Struggle: Palestinian Responses to the Kafr Qasim Massacre and Its Aftermath, 1956–66”, International Journal of Middle East Studies 35:3 (2003)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1957-03-08",
+     "baslik": "İlk çekilme: İsrail Sina’dan ve Gazze’den çıktı",
+     "baslik_en": "The first withdrawal: Israel leaves Sinai and Gaza",
+     "metin": "ABD’nin ve BM Genel Kurulu’nun baskısıyla İsrail, Kasım 1956’dan itibaren Sina’dan aşama aşama çekildi; Mart 1957’de Gazze’den ve Şarm el-Şeyh’ten de çıktı. Sınıra ve Tiran Boğazı’na BM Acil Durum Gücü (UNEF) yerleşti. Bu, Sina’nın ilk işgali ve ilk iadesiydi; on yıl sonra yarımada yeniden işgal edilecekti.",
+     "metin_en": "Under pressure from the United States and the UN General Assembly, Israel withdrew from Sinai in stages from November 1956, leaving Gaza and Sharm el-Sheikh in March 1957. The UN Emergency Force (UNEF) deployed along the border and at the Straits of Tiran. This was Sinai’s first occupation and first return; ten years later the peninsula would be occupied again.",
+     "vurgu": [
+      "Sina’nın ilk işgali ve ilk iadesiydi"
+     ],
+     "vurgu_en": [
+      "Sinai’s first occupation and first return"
+     ],
+     "sina": 1,
+     "karsilastir": {
+      "once": "g1956",
+      "sonra": "g1957",
+      "kesit": "misir"
+     },
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "Wm. Roger Louis & Roger Owen (eds.), Suez 1956: The Crisis and Its Consequences (Oxford University Press, 1989)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1982-04-25",
+     "baslik": "İkinci çekilme: Sina Mısır’a döndü",
+     "baslik_en": "The second withdrawal: Sinai returns to Egypt",
+     "metin": "İsrail 25 Nisan 1982’de Sina’nın son bölümünden de çekildi; yarımadadaki yerleşimler, en büyüğü Yamit, boşaltılıp yıkıldı. Böylece Sina, 1956–57’den sonra ikinci kez işgal edilip ikinci kez geri verilmiş oldu. Gazze, Batı Şeria ve Golan ise işgal altında kaldı. Taba’daki küçük bir şerit üzerindeki anlaşmazlık 1989’da uluslararası tahkimle Mısır lehine çözüldü.",
+     "metin_en": "On 25 April 1982 Israel left the last part of Sinai; the settlements on the peninsula, the largest of them Yamit, were evacuated and demolished. Sinai had now been occupied and returned twice, the first time in 1956–57. Gaza, the West Bank and the Golan remained under occupation. A dispute over a small strip at Taba was settled in Egypt’s favour by international arbitration in 1989.",
+     "vurgu": [
+      "ikinci kez işgal edilip ikinci kez geri verilmiş"
+     ],
+     "vurgu_en": [
+      "occupied and returned twice"
+     ],
+     "sina": 2,
+     "karsilastir": {
+      "once": "g1967",
+      "sonra": "g1982",
+      "kesit": "misir"
+     },
+     "kaynaklar": [],
+     "kaynakca": [
+      {
+       "ad": "William B. Quandt, Camp David: Peacemaking and Politics (Brookings Institution, 1986)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Avi Shlaim, The Iron Wall: Israel and the Arab World (W. W. Norton, 2000)",
        "tur": "akademik"
       }
      ]
