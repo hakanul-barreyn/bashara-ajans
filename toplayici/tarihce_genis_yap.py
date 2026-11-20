@@ -153,7 +153,7 @@ v["sehir"] = [[ad, *nokta(lo, la)] for ad, lo, la in [
 v["etiket"] = {k: nokta(*ll) for k, ll in {
     "akdeniz": (30.2, 34.0), "kizildeniz": (37.4, 23.2), "korfez": (49.6, 27.4), "karadeniz": (33.5, 41.35),
     "osmanli": (38.6, 35.2), "anadolu": (33.5, 38.8), "misir": (29.2, 27.6), "iran": (48.2, 34.6), "hicaz": (38.6, 26.2), "necd": (44.0, 25.4),
-    "mavi": (36.0, 38.6), "a": (40.5, 36.2), "b": (40.0, 31.4), "kirmizi": (45.9, 31.9), "kahve": (33.3, 31.95),
+    "mavi": (36.0, 38.6), "a": (40.5, 36.2), "b": (40.0, 31.4), "kirmizi": (45.9, 31.9), "kahve": (32.9, 31.25),
     "fransa": (38.4, 35.4), "irak": (43.6, 33.0), "urdun": (37.4, 30.9), "filistin": (33.4, 31.75), "turkiye": (35.0, 39.1), "hicazK": (38.6, 26.2)}.items()}
 v["demiryolu_et"] = nokta(37.55, 27.95)
 json.dump(v, open(cik, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))

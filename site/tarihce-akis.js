@@ -20,10 +20,10 @@
   function dis(a, href) { a.href = href; a.target = "_blank"; a.rel = "noopener"; return a; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=3").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=4").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=2").then(function (r) { return r.json(); }),
-    fetch("site/tarihce-harita-genis.json?v=1").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-harita-genis.json?v=2").then(function (r) { return r.json(); }),
     fetch("data/gorsel/tarihce/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/gorsel/kapak/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     BG ? BG.hazir : null

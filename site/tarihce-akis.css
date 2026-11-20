@@ -83,6 +83,7 @@
 /* galeri: görseller kırpılmaz; tek görsel kendi oranında, çoklu görselde satırlar oranlara göre paylaşılır */
 .ta-galeri{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 16px}
 .ta-galeri figure{margin:0;flex:var(--ar,1.5) 1 calc(var(--ar,1.5) * 150px);min-width:0;display:flex;flex-direction:column;gap:5px}
+.ta-galeri.cok figure{max-width:calc(var(--ar,1.5) * 340px)}
 .ta-galeri:not(.cok) figure{flex:1 1 100%;align-items:center}
 .ta-g-dugme{position:relative;display:block;padding:0;border:0;background:var(--ta-zemin2);border-radius:4px;overflow:hidden;cursor:zoom-in;width:100%}
 .ta-galeri:not(.cok) .ta-g-dugme{width:auto;max-width:100%}
