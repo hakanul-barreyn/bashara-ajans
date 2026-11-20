@@ -1,53 +1,43 @@
-# Tek seferlik: Commons'ta görsel adayları; künye + 900 px kopya + temas sayfası
-import json, os, re, time, urllib.parse, urllib.request
-from PIL import Image, ImageDraw
-os.makedirs("tarama/c", exist_ok=True)
-UA = "alboroto-tarama/1.0 (+https://alborotonews.com)"
-def api(q):
-    u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode({**q, "format": "json"})
-    return json.loads(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=60).read())
-ARA = {"intifada": ["Second Intifada 2000 protest", "Al-Aqsa Intifada 2000", "Second Intifada Ramallah 2002", "intifada 2001 Palestinian demonstration", "Jenin 2002 camp"],
-       "leyla": ["Leila Khaled 1970", "Leila Khaled young", "Leila Khaled"],
-       "serm": ["Sharm el-Sheikh Peace Summit 2025", "Trump Sharm el-Sheikh October 2025", "Trump Knesset October 2025", "Gaza peace summit 2025 signing"],
-       "faysal": ["King Faisal of Saudi Arabia", "Faisal bin Abdulaziz 1973"],
-       "enerji": ["Leviathan gas field platform", "Leviathan platform Israel", "Abraham Accords signing", "Abraham Accords White House 2020", "Gaza Marine gas", "East Mediterranean Gas Forum"]}
-liste = []
-for grup, sorgular in ARA.items():
-    gor = set()
-    for s in sorgular:
-        v = api({"action": "query", "list": "search", "srsearch": s, "srnamespace": 6, "srlimit": 12})
-        for x in v["query"]["search"]:
-            if x["title"] not in gor and not re.search(r"\.(pdf|djvu|svg|webm|ogv)$", x["title"], re.I):
-                gor.add(x["title"]); liste.append({"grup": grup, "t": x["title"]})
-temiz = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s or "")).strip()
-for i in range(0, len(liste), 40):
-    parca = liste[i:i + 40]
-    v = api({"action": "query", "titles": "|".join(x["t"] for x in parca), "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": 900})
-    sayfa = {p["title"]: p for p in v["query"]["pages"].values()}
-    for n in v["query"].get("normalized", []):
-        if n["to"] in sayfa: sayfa[n["from"]] = sayfa[n["to"]]
-    for x in parca:
-        p = sayfa.get(x["t"]) or {}; ii = (p.get("imageinfo") or [{}])[0]; md = ii.get("extmetadata") or {}
-        g = lambda k: temiz((md.get(k) or {}).get("value"))[:260]
-        x.update({"thumb": ii.get("thumburl"), "w": ii.get("width"), "h": ii.get("height"), "lisans": g("LicenseShortName"), "yazar": g("Artist"),
-                  "tarih": g("DateTimeOriginal"), "aciklama": g("ImageDescription"), "kaynak": g("Credit")})
-liste = [x for x in liste if x.get("thumb")]
-for n, x in enumerate(liste):
-    time.sleep(1.2)
-    try:
-        open(f"tarama/c/{n:03d}.jpg", "wb").write(urllib.request.urlopen(urllib.request.Request(x["thumb"], headers={"User-Agent": UA}), timeout=60).read()); x["n"] = n
-    except Exception as e:
-        print("indirilemedi", x["t"], e)
-json.dump(liste, open("tarama/c/liste.json", "w"), ensure_ascii=False, indent=1)
-for grup in ARA:
-    ims = [x for x in liste if x["grup"] == grup and "n" in x]
-    for s in range(0, len(ims), 20):
-        kt = Image.new("RGB", (5 * 260, 4 * 280), "white"); d = ImageDraw.Draw(kt)
-        for k, x in enumerate(ims[s:s + 20]):
-            try:
-                im = Image.open(f"tarama/c/{x['n']:03d}.jpg").convert("RGB"); im.thumbnail((250, 250))
-            except Exception:
-                continue
-            X, Y = (k % 5) * 260, (k // 5) * 280; kt.paste(im, (X, Y)); d.text((X + 4, Y + 254), f"{x['n']:03d}", fill=(200, 0, 0))
-        kt.save(f"tarama/c/temas-{grup}-{s // 20}.jpg", quality=80)
-print(len(liste))
+# Tek seferlik: canlı siteyi Android telefon öykünmesiyle açar; konsol hatalarını, başarısız istekleri ve ekran görüntüsünü kaydeder
+import json, os, time
+from playwright.sync_api import sync_playwright
+os.makedirs("tarama/a", exist_ok=True)
+SAYFALAR = ["tarihce.html", "", "raporlar.html", "almanak.html", "en/tarihce.html"]
+rapor = []
+with sync_playwright() as pw:
+    b = pw.chromium.launch()
+    for cihaz in ["Pixel 7", "Galaxy S9+"]:
+        for s in SAYFALAR:
+            for tur in ("ilk", "ikinci"):
+                c = b.new_context(**pw.devices[cihaz]) if tur == "ilk" or s == SAYFALAR[0] else None
+                if c is None: continue
+                p = c.new_page(); kayit = {"cihaz": cihaz, "sayfa": s, "tur": tur, "konsol": [], "hata": [], "istek": [], "yavas": []}
+                p.on("console", lambda m, k=kayit: k["konsol"].append(m.type + ": " + m.text[:300]) if m.type in ("error", "warning") else None)
+                p.on("pageerror", lambda e, k=kayit: k["hata"].append(str(e)[:400]))
+                p.on("requestfailed", lambda r, k=kayit: k["istek"].append(r.url[:160] + " " + str(r.failure)))
+                p.on("response", lambda r, k=kayit: k["istek"].append(str(r.status) + " " + r.url[:160]) if r.status >= 400 else None)
+                t0 = time.time()
+                try:
+                    p.goto("https://alborotonews.com/" + s, wait_until="domcontentloaded", timeout=60000)
+                except Exception as e:
+                    kayit["hata"].append("goto: " + str(e)[:200])
+                for sn in (3, 8, 20):
+                    p.wait_for_timeout((sn - (time.time() - t0)) * 1000 if sn > time.time() - t0 else 0)
+                    kayit[f"yukleniyor_{sn}s"] = p.evaluate("() => [...document.querySelectorAll('body *')].filter(e => e.children.length===0 && /Yükleniyor|Loading/.test(e.textContent) && e.offsetParent).length")
+                kayit["sw"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null")
+                ad = f"{cihaz.replace(' ', '')}-{(s or 'ana').replace('/', '_')}-{tur}"
+                p.screenshot(path=f"tarama/a/{ad}.png")
+                if tur == "ilk" and s == SAYFALAR[0]:
+                    # ikinci açılış: aynı bağlamda (service worker devrede) yeniden yükle
+                    t0 = time.time(); k2 = {"cihaz": cihaz, "sayfa": s, "tur": "yeniden", "konsol": [], "hata": [], "istek": []}
+                    p.on("pageerror", lambda e, k=k2: k["hata"].append(str(e)[:400]))
+                    try: p.reload(wait_until="domcontentloaded", timeout=60000)
+                    except Exception as e: k2["hata"].append("reload: " + str(e)[:200])
+                    p.wait_for_timeout(12000)
+                    k2["yukleniyor_12s"] = p.evaluate("() => [...document.querySelectorAll('body *')].filter(e => e.children.length===0 && /Yükleniyor|Loading/.test(e.textContent) && e.offsetParent).length")
+                    k2["sw"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null")
+                    p.screenshot(path=f"tarama/a/{ad}-yeniden.png"); rapor.append(k2)
+                rapor.append(kayit); c.close()
+    b.close()
+json.dump(rapor, open("tarama/a/rapor.json", "w"), ensure_ascii=False, indent=1)
+for r in rapor: print(r["cihaz"], r["sayfa"], r["tur"], {k: v for k, v in r.items() if k.startswith("yukleniyor")}, len(r["hata"]), r["hata"][:2])

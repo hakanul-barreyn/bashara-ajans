@@ -10,8 +10,9 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q pymupdf pillow
+      - run: pip install -q pymupdf pillow playwright && python -m playwright install --with-deps chromium
       - run: python toplayici/tarama4.py
+        continue-on-error: true
       - run: |
           git init -q d && cd d && git checkout -q -b yz-tarama && cp -r ../tarama . && git add tarama
           git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "tarama4"
