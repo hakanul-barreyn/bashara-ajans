@@ -1,0 +1,20 @@
+# Tek seferlik: tarihçe için Commons aday görsel taraması ve 1947 sınır verisi araması. Çıktı yz-tarama dalına yazılır, siteye bir şey yazmaz.
+name: commons-tarama
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/commons-tarama.yml", "toplayici/commons_tarama.py"]
+permissions:
+  contents: write
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q pillow
+      - run: python toplayici/commons_tarama.py
+      - run: |
+          git init -q d && cd d && git checkout -q -b yz-tarama && cp -r ../tarama . && git add tarama
+          git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "tarama"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-tarama
