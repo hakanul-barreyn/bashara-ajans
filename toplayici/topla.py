@@ -1291,7 +1291,8 @@ def main():
             return c
         dosya_d = dosyalar.calistir(KOK, olay_veri.get("olaylar", []), eski, _dc("dosya", 150) if _yz else None,
                                     _dc("dosya_ozet", 120) if _yz else None, SIMDI, panel_yolu=os.environ.get("PANEL_ISLEMLER"),
-                                    butce=lambda: time.time() - BASLANGIC < CALISMA_SURESI and gunluk_istek(durum) < GEMINI_GUNLUK - 40,
+                                    # dosyalar turun sonuna yakın çalışır; birkaç kısa çağrı için ayrı pay (iş 25 dakikada kesilir)
+                                    butce=lambda: time.time() - BASLANGIC < CALISMA_SURESI + 240 and gunluk_istek(durum) < GEMINI_GUNLUK - 40,
                                     log=log)
     except Exception as e:
         log(f"Dosyalar hatası: {e}")

@@ -441,9 +441,9 @@ def panel_uygula(d, islemler, simdi, log=print):
 # ---------------------------------------------------------------- budama ve site verisi
 
 def buda(d, simdi):
-    """Dosyasız ve önerisiz olayları 10 gün sonra unutur; dosyadaki olaylar kalır (haber kimlik listesi kısalır)."""
+    """Yerleştirilmiş ama dosyasız ve önerisiz kalan olayları 10 gün sonra unutur; dosyadaki ve henüz sorulmamış olaylar kalır."""
     esik = (simdi - dt.timedelta(days=10)).date().isoformat()
-    for k in [k for k, o in d["olaylar"].items() if not o.get("yer") and not o.get("oneride") and (o.get("g") or "") < esik]:
+    for k in [k for k, o in d["olaylar"].items() if o.get("bakildi") and not o.get("yer") and not o.get("oneride") and (o.get("g") or "") < esik]:
         del d["olaylar"][k]
     d["oneriler"] = [p for p in d["oneriler"] if p["durum"] == "bekliyor" or (p.get("tarih") or "") >= esik]
 
@@ -637,16 +637,18 @@ def calistir(kok, olaylar, haberler, cagir_yer, cagir_ozet, simdi, panel_yolu=No
     if not d.get("dolduruldu"):
         yeni = arsivden(kok, d) + yeni
     sorulacak = [k for k, o in d["olaylar"].items() if not o.get("bakildi")]
+    if sorulacak and not (cagir_yer and butce()):
+        log(f"Dosyalar: {len(sorulacak)} olay sırada; " + ("yapay zekâ şu an kapalı" if not cagir_yer else "süre ya da istek sınırı") + ", sonraki tura kaldı")
     if sorulacak and cagir_yer and butce():
         # ilk doldurmada bütün arşiv tek turda (en çok 8 çağrı); sonra turda en çok bir parti
-        sinir = PARTI * (4 if not d.get("dolduruldu") else 2)
+        sinir = PARTI * 2
         n, kod = yerlestir(kok, d, sorulacak[-sinir:] if d.get("dolduruldu") else sorulacak[:sinir], cagir_yer, simdi, log=log, butce=butce)
         log(f"Dosyalar: {len(sorulacak[:sinir])} olaya bakıldı, {n} olay dosyaya girdi")
         if kod == 200 and not any(not o.get("bakildi") for o in d["olaylar"].values()):
             d["dolduruldu"] = True
     if cagir_ozet and butce():
         try:
-            n = ozetle(d, cagir_ozet, simdi, log=log)
+            n = ozetle(d, cagir_ozet, simdi, en_cok=2, log=log)
             if n:
                 log(f"Dosyalar: {n} dosyanın özeti yazıldı")
         except Exception as e:
