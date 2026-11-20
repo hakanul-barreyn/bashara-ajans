@@ -3,7 +3,10 @@ import gzip, json, os, urllib.request
 import fitz
 os.makedirs("tarama", exist_ok=True)
 UA = "alboroto-tarama/1.0 (+https://alborotonews.com)"
-for ad, url in [("ocha-2026-11-16", "https://www.ochaopt.org/sites/default/files/Gaza_2026_Nov_16_2026.pdf")]:
+for ad, url in [("gb-pse-adm1", "https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/gbOpen/PSE/ADM1/geoBoundaries-PSE-ADM1.geojson")]:
+    open(f"tarama/{ad}.geojson", "wb").write(urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=90).read())
+    print(ad, os.path.getsize(f"tarama/{ad}.geojson"))
+for ad, url in [] and [("ocha-2026-11-16", "https://www.ochaopt.org/sites/default/files/Gaza_2026_Nov_16_2026.pdf")]:
     veri = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=90).read()
     open(f"tarama/{ad}.pdf", "wb").write(veri)
     doc = fitz.open(f"tarama/{ad}.pdf")
