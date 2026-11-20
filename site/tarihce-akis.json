@@ -24,10 +24,10 @@
   },
   "1949": {
    "yil": "1949",
-   "ad": "Rodos Mütarekesi’nden sonra",
-   "not": "Kızıl: Batı Şeria ve Gazze. Koyu: 1948’de kaybedilen toprak.",
-   "ad_en": "After the Rhodes Armistice",
-   "not_en": "Red-brown: the West Bank and Gaza. Dark: land lost in 1948."
+   "ad": "1949 mütarekelerinden sonra",
+   "not": "Kızıl: Batı Şeria ve Gazze. Koyu: 1948’de kaybedilen toprak. Hayfa, Yafa, Lidda ve Ramle mütarekelerden önce, 1948 baharında ve yazında düşmüştü; mütarekeler savaşta oluşan cepheyi sınıra çevirdi.",
+   "ad_en": "After the 1949 armistices",
+   "not_en": "Red-brown: the West Bank and Gaza. Dark: land lost in 1948. Haifa, Jaffa, Lydda and Ramle had fallen before the armistices, in the spring and summer of 1948; the armistices turned the front lines of the war into borders."
   },
   "1967": {
    "yil": "1967",
@@ -822,7 +822,9 @@
       "kaynak": "Hava fotoğrafları: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, Ocak 1946 (fotoğraflar Ocak 1945), İsrail Milli Kütüphanesi Eran Laor koleksiyonu, Wikimedia Commons üzerinden, kamu malı. Uydu: Copernicus Sentinel-2 (ESA).",
       "kaynak_en": "Aerial photographs: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, January 1946 (photographs January 1945), National Library of Israel, Eran Laor collection, via Wikimedia Commons, public domain. Satellite: Copernicus Sentinel-2 (ESA).",
       "sayfa": "https://commons.wikimedia.org/wiki/File:Great_Britain_army_517_Field_Survey_Company,_Gaza_(FL53910466_2714141).jpg"
-     }
+     },
+     "sonuc": "Mütareke büyük ölçüde savaşın sonucunu kayda geçirdi: Hayfa 22 Nisan, Yafa 13 Mayıs, Lidda ve Ramle Temmuz 1948’de düşmüş, halkları sürülmüştü. Rodos yalnızca güney cephesini, Necef ile Gazze’yi belirledi; Mısır Faluce cebini bırakıp Gazze Şeridi’ni elinde tuttu. Lübnan (23 Mart), Ürdün (3 Nisan) ve Suriye (20 Temmuz 1949) mütarekeleri bunu izledi. Bir istisna vardı: Ürdün’le yapılan mütarekeyle, savaşta hiç el değiştirmemiş Vadi Ara bölgesi ve köyleri İsrail’e bırakıldı.",
+     "sonuc_en": "The armistice largely recorded the outcome of the war: Haifa had fallen on 22 April, Jaffa on 13 May, Lydda and Ramle in July 1948, and their people had been driven out. Rhodes settled only the southern front, the Negev and Gaza; Egypt gave up the Faluja pocket and kept the Gaza Strip. The armistices with Lebanon (23 March), Jordan (3 April) and Syria (20 July 1949) followed. There was one exception: under the armistice with Jordan, the Wadi Ara area and its villages, which had not changed hands in the fighting, were handed to Israel."
     },
     {
      "ref": "1948-09-22",
