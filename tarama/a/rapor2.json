@@ -1,0 +1,47 @@
+[
+ {
+  "ag": "normal",
+  "hata": [],
+  "konsol": [],
+  "olay": [
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp",
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp",
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp"
+  ],
+  "ana_icerik_s": 0.8,
+  "sw_ana": "var",
+  "tarihce-1_dom_s": 0.2,
+  "tarihce-1_icerik_s": 11.8,
+  "tarihce-1_sw": "var",
+  "tarihce-1_yukleniyor": [],
+  "tarihce-2_dom_s": 0.1,
+  "tarihce-2_icerik_s": 12.3,
+  "tarihce-2_sw": "var",
+  "tarihce-2_yukleniyor": [],
+  "kaydirma_sonu_hata": 0
+ },
+ {
+  "ag": "yavas",
+  "hata": [],
+  "konsol": [],
+  "olay": [
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp",
+   "FAIL https://upload.wikimedia.org/wikipedia/commons/5/52/Israeli_airstrike_on_Gaza_Strip_during_Gaza_War_23-25.png?utm_source=commons.wikimedia.o net::ERR_ABORTED",
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp",
+   "FAIL https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/T%C3%BCrkische_Flugzeuge_auf_einer_Erkundungsfahrt_am_Suezkanal_Hans_R._Schulze_Ill net::ERR_ABORTED",
+   "FAIL https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/The_camel_corps_at_Beersheba2.jpg/1280px-The_camel_corps_at_Beersheba2.jpg net::ERR_ABORTED",
+   "FAIL https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092 csp"
+  ],
+  "ana_icerik_s": 24.3,
+  "sw_ana": "var",
+  "tarihce-1_dom_s": 0.6,
+  "tarihce-1_icerik_s": 11.8,
+  "tarihce-1_sw": "var",
+  "tarihce-1_yukleniyor": [],
+  "tarihce-2_dom_s": 0.1,
+  "tarihce-2_icerik_s": 12.2,
+  "tarihce-2_sw": "var",
+  "tarihce-2_yukleniyor": [],
+  "kaydirma_sonu_hata": 0
+ }
+]
