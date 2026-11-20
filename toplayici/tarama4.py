@@ -1,43 +1,47 @@
-# Tek seferlik: canlı siteyi Android telefon öykünmesiyle açar; konsol hatalarını, başarısız istekleri ve ekran görüntüsünü kaydeder
+# Tek seferlik: canlı site, Android öykünmesi; önce ana sayfa (service worker kurulur), sonra aynı bağlamda tarihçe; hızlı ve yavaş ağ
 import json, os, time
 from playwright.sync_api import sync_playwright
 os.makedirs("tarama/a", exist_ok=True)
-SAYFALAR = ["tarihce.html", "", "raporlar.html", "almanak.html", "en/tarihce.html"]
+YUK = "() => [...document.querySelectorAll('body *')].filter(e => e.children.length===0 && /Yükleniyor|Loading|yükleniyor/.test(e.textContent) && e.offsetParent).map(e => e.className || e.tagName).slice(0,5)"
 rapor = []
+def bekle_icerik(p, sec, sel):
+    t0 = time.time()
+    while time.time() - t0 < sec:
+        try:
+            if p.evaluate(sel): return round(time.time() - t0, 1)
+        except Exception: pass
+        p.wait_for_timeout(500)
+    return None
 with sync_playwright() as pw:
     b = pw.chromium.launch()
-    for cihaz in ["Pixel 7", "Galaxy S9+"]:
-        for s in SAYFALAR:
-            for tur in ("ilk", "ikinci"):
-                c = b.new_context(**pw.devices[cihaz]) if tur == "ilk" or s == SAYFALAR[0] else None
-                if c is None: continue
-                p = c.new_page(); kayit = {"cihaz": cihaz, "sayfa": s, "tur": tur, "konsol": [], "hata": [], "istek": [], "yavas": []}
-                p.on("console", lambda m, k=kayit: k["konsol"].append(m.type + ": " + m.text[:300]) if m.type in ("error", "warning") else None)
-                p.on("pageerror", lambda e, k=kayit: k["hata"].append(str(e)[:400]))
-                p.on("requestfailed", lambda r, k=kayit: k["istek"].append(r.url[:160] + " " + str(r.failure)))
-                p.on("response", lambda r, k=kayit: k["istek"].append(str(r.status) + " " + r.url[:160]) if r.status >= 400 else None)
-                t0 = time.time()
-                try:
-                    p.goto("https://alborotonews.com/" + s, wait_until="domcontentloaded", timeout=60000)
-                except Exception as e:
-                    kayit["hata"].append("goto: " + str(e)[:200])
-                for sn in (3, 8, 20):
-                    p.wait_for_timeout((sn - (time.time() - t0)) * 1000 if sn > time.time() - t0 else 0)
-                    kayit[f"yukleniyor_{sn}s"] = p.evaluate("() => [...document.querySelectorAll('body *')].filter(e => e.children.length===0 && /Yükleniyor|Loading/.test(e.textContent) && e.offsetParent).length")
-                kayit["sw"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null")
-                ad = f"{cihaz.replace(' ', '')}-{(s or 'ana').replace('/', '_')}-{tur}"
-                p.screenshot(path=f"tarama/a/{ad}.png")
-                if tur == "ilk" and s == SAYFALAR[0]:
-                    # ikinci açılış: aynı bağlamda (service worker devrede) yeniden yükle
-                    t0 = time.time(); k2 = {"cihaz": cihaz, "sayfa": s, "tur": "yeniden", "konsol": [], "hata": [], "istek": []}
-                    p.on("pageerror", lambda e, k=k2: k["hata"].append(str(e)[:400]))
-                    try: p.reload(wait_until="domcontentloaded", timeout=60000)
-                    except Exception as e: k2["hata"].append("reload: " + str(e)[:200])
-                    p.wait_for_timeout(12000)
-                    k2["yukleniyor_12s"] = p.evaluate("() => [...document.querySelectorAll('body *')].filter(e => e.children.length===0 && /Yükleniyor|Loading/.test(e.textContent) && e.offsetParent).length")
-                    k2["sw"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null")
-                    p.screenshot(path=f"tarama/a/{ad}-yeniden.png"); rapor.append(k2)
-                rapor.append(kayit); c.close()
+    for ag in ("normal", "yavas"):
+        c = b.new_context(**pw.devices["Pixel 7"]); p = c.new_page()
+        k = {"ag": ag, "hata": [], "konsol": [], "olay": []}
+        p.on("pageerror", lambda e: k["hata"].append(str(e)[:300]))
+        p.on("console", lambda m: k["konsol"].append(m.type + ": " + m.text[:200]) if m.type == "error" and "cloudflareinsights" not in m.text else None)
+        p.on("requestfailed", lambda r: k["olay"].append("FAIL " + r.url[:140] + " " + str(r.failure)))
+        cdp = c.new_cdp_session(p)
+        if ag == "yavas":
+            cdp.send("Network.enable"); cdp.send("Network.emulateNetworkConditions", {"offline": False, "latency": 400, "downloadThroughput": 400 * 1024 / 8, "uploadThroughput": 400 * 1024 / 8})
+        p.goto("https://alborotonews.com/", wait_until="domcontentloaded", timeout=120000)
+        k["ana_icerik_s"] = bekle_icerik(p, 60, "() => document.querySelectorAll('.hb-kart, .kart, article').length > 3")
+        p.wait_for_timeout(4000)
+        k["sw_ana"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? 'var' : 'yok'")
+        p.screenshot(path=f"tarama/a/{ag}-ana.png")
+        for tur in ("tarihce-1", "tarihce-2"):
+            t0 = time.time()
+            p.goto("https://alborotonews.com/tarihce.html", wait_until="domcontentloaded", timeout=120000)
+            k[tur + "_dom_s"] = round(time.time() - t0, 1)
+            k[tur + "_icerik_s"] = bekle_icerik(p, 90, "() => document.querySelectorAll('.ta-kart').length > 10")
+            k[tur + "_sw"] = p.evaluate("() => navigator.serviceWorker && navigator.serviceWorker.controller ? 'var' : 'yok'")
+            k[tur + "_yukleniyor"] = p.evaluate(YUK)
+            p.screenshot(path=f"tarama/a/{ag}-{tur}.png")
+        # kaydırma: haritaların ve görsellerin yüklenmesi
+        for i in range(25):
+            p.mouse.wheel(0, 2500); p.wait_for_timeout(300)
+        k["kaydirma_sonu_hata"] = len(k["hata"])
+        p.screenshot(path=f"tarama/a/{ag}-kaydirma.png")
+        rapor.append(k); c.close()
     b.close()
-json.dump(rapor, open("tarama/a/rapor.json", "w"), ensure_ascii=False, indent=1)
-for r in rapor: print(r["cihaz"], r["sayfa"], r["tur"], {k: v for k, v in r.items() if k.startswith("yukleniyor")}, len(r["hata"]), r["hata"][:2])
+json.dump(rapor, open("tarama/a/rapor2.json", "w"), ensure_ascii=False, indent=1)
+for r in rapor: print(json.dumps(r, ensure_ascii=False)[:1500])
