@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip install -q pillow
-      - run: python toplayici/commons_tarama.py
+      - run: TUR=2 python toplayici/commons_tarama.py
       - run: |
           git init -q d && cd d && git checkout -q -b yz-tarama && cp -r ../tarama . && git add tarama
           git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "tarama"

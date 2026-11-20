@@ -16,6 +16,10 @@ SORGULAR = [
     "Jerusalem 1917 surrender", "Ottoman Jerusalem 1900 photochrom", "Jaffa 1900 photochrom", "Arab revolt 1936 Palestine strike",
     "Land Day 1976", "Karameh 1968", "Beirut 1982 PLO evacuation", "Sabra Shatila memorial", "Arafat United Nations 1974",
 ]
+if os.environ.get("TUR") == "2":
+    SORGULAR = ["Jenin refugee camp 2002", "Muqata Ramallah 2002 Arafat", "Muhammad al-Durrah", "Second Intifada Palestinian demonstration 2001",
+                "Arafat funeral Ramallah 2004", "Ralph Bunche Rhodes 1949", "Gush Katif evacuation 2005", "Gaza blockade Rafah crossing", "Gaza flotilla 2010 Mavi Marmara",
+                "Arafat UN 1974 General Assembly", "Sabra Shatila 1982", "Beirut siege 1982", "West Bank barrier Bethlehem wall", "Gaza 2014 Shujaiya", "Deir Yassin village"]
 YASAK = re.compile(r"IDF|Israel Defense Forces|Government Press Office|GPO|\bצה\"ל|Hamas|al-Qassam Brigades|Qassam Brigades|Quds Brigades|CCTV|Hezbollah media", re.I)
 
 
@@ -77,6 +81,18 @@ for si, s in enumerate(SORGULAR):
     tab.save(f"tarama/{si:02d}.jpg", quality=80)
     print(si, s, len(hucre), flush=True)
 json.dump(liste, open("tarama/liste.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+
+# taksim haritaları (izlemek için büyük boy)
+for i, dosya in enumerate(["File:UN Partition Plan For Palestine 1947.svg", "File:1947-UN-Partition-Plan-1949-Armistice-Comparison.png", "File:UN Palestine Partition Versions 1947.jpg",
+                           "File:United Nations Partition Plan for Palestine (1947).svg", "File:Palestine 1947 UN Partition Plan.png"]):
+    v = api({"action": "query", "format": "json", "titles": dosya, "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": 2400})
+    for p in (v.get("query") or {}).get("pages", {}).values():
+        ii = (p.get("imageinfo") or [{}])[0]
+        b = al(ii.get("thumburl") or ii.get("url") or "")
+        if b:
+            open(f"tarama/plan-{i}.png", "wb").write(b)
+            md = ii.get("extmetadata") or {}
+            print("plan", i, dosya, ii.get("width"), ii.get("height"), (md.get("LicenseShortName") or {}).get("value"), (md.get("Artist") or {}).get("value", "")[:80])
 
 # 1947 taksim planı: açık sınır verisi
 sinir = {}
