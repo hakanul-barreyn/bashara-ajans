@@ -1362,7 +1362,13 @@ def main():
                 if not h or (_kmap.get(h.get("kaynak")) or {}).get("silahli") or not str(h.get("url", "")).startswith("http"):
                     return None
                 return (h.get("sayfa") or hid) + ".html"
-            dosya_veri = dosyalar.site_verisi(KOK, dosya_d, SIMDI, _sayfa_adi)
+            def _gorsel_bul(hid):
+                h = _tut.get(hid)
+                k = _kmap.get((h or {}).get("kaynak")) or {}
+                if not h or k.get("silahli") or h.get("gorsel_ok") is not True or not str(h.get("gorsel", "")).startswith("http"):
+                    return None
+                return {"u": h["gorsel"], "k": k.get("ad")}
+            dosya_veri = dosyalar.site_verisi(KOK, dosya_d, SIMDI, _sayfa_adi, _gorsel_bul)
             for h in tut:
                 h.pop("dosya", None)
                 if h["id"] in dosya_veri["haber"]:

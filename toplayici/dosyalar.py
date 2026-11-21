@@ -505,7 +505,7 @@ def buda(d, simdi):
     d["oneriler"] = [p for p in d["oneriler"] if p["durum"] == "bekliyor" or (p.get("tarih") or "") >= esik]
 
 
-def site_verisi(kok, d, simdi, sayfa_adi=None):
+def site_verisi(kok, d, simdi, sayfa_adi=None, gorsel_bul=None):
     """data/dosyalar-site.json: açık dosyalar, dallar (durum, olaylar), haber kimliği → [dosya, dal]."""
     bugun = simdi.date()
     cikti, harita = [], {}
@@ -540,7 +540,14 @@ def site_verisi(kok, d, simdi, sayfa_adi=None):
             gunluk[o["g"]] = gunluk.get(o["g"], 0) + 1
         nabiz = [gunluk.get((bugun - dt.timedelta(days=13 - i)).isoformat(), 0) for i in range(14)]
         son = max(tum, key=lambda o: (o["g"], o["a"]))
-        cikti.append({"id": ds["id"], "ad": ds["ad"], "ad_en": ds.get("ad_en"), "ozet": ds.get("ozet"), "ozet_en": ds.get("ozet_en"),
+        # kapak: en yeni olaylardan, denetimden geçmiş ilk haber görseli
+        gorsel = None
+        if gorsel_bul:
+            for o in sorted(tum, key=lambda o: (o["g"], o.get("k") or 0), reverse=True)[:12]:
+                gorsel = next((g for g in (gorsel_bul(h) for h in d["olaylar"].get(o["a"], {}).get("h", [])) if g), None)
+                if gorsel:
+                    break
+        cikti.append({"gorsel": gorsel,"id": ds["id"], "ad": ds["ad"], "ad_en": ds.get("ad_en"), "ozet": ds.get("ozet"), "ozet_en": ds.get("ozet_en"),
                       "ozet_tarih": ds.get("ozet_tarih"), "ilk": min(o["g"] for o in tum), "son": son["g"], "son_b": son["b"], "son_be": son.get("be"),
                       "olay": len({o["a"] for o in tum}), "sicak": sum(1 for x in dallar if x["durum"] == "sicak"), "nabiz": nabiz,
                       "dallar": dallar})

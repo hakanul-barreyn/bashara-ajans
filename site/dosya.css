@@ -24,23 +24,66 @@ a.dosya-satir em.ds-geri{flex-basis:100%}
 .kp-ic a.dosya-satir b{color:inherit}
 .kp-ic a.dosya-satir .ds-et,.kp-ic a.dosya-satir .ds-ok{color:inherit;opacity:.75}
 
-/* ana sayfa şeridi */
-.dosya-serit{grid-column:1/-1;margin:22px 0 24px;min-width:0}
-.dsr-bas{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.dsr-bas h2{margin:0;font:700 1.12rem/1.2 var(--ds-serif);color:var(--ds-murekkep)}
-.dsr-bas a{font:600 .82rem "Plus Jakarta Sans",system-ui,sans-serif;color:var(--ds-yesil);text-decoration:none}
-.dsr-kartlar{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:thin}
-.dsr-kart{scroll-snap-align:start;display:grid;align-content:start;gap:7px;padding:13px 14px;background:var(--ds-kagit);border:1px solid var(--ds-cizgi);border-radius:10px;color:var(--ds-murekkep);text-decoration:none;min-width:0}
-.dsr-kart:hover{border-color:var(--ds-soluk)}
-.dsr-kart:focus-visible{outline:2px solid var(--ds-yesil);outline-offset:2px}
-.dsr-kart b{font:700 1rem/1.25 var(--ds-serif)}
-.dsr-son{font-size:.82rem;line-height:1.4;color:var(--ds-ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.dsr-alt{display:flex;justify-content:space-between;align-items:end;gap:8px;font:500 .7rem var(--ds-mono);color:var(--ds-soluk);margin-top:2px}
-.ds-nb{fill:var(--ds-murekkep)} .ds-nb0{fill:var(--ds-cizgi)}
-@media (max-width:700px){
-  .dosya-serit{margin:6px 0 14px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
-  .dsr-kartlar{grid-auto-columns:78%}
+/* ana sayfa: "Süren hikâyeler" bölümü. Masaüstünde büyük bir kapak kartı ve yanında dört kart; telefonda kaydırılan kartlar.
+   Kartın alt yarısındaki küçük ağaç: her dal son 14 günde bir çizgi, her olay bir nokta (dosya sayfasının özeti). */
+.dosya-bolum{grid-column:1/-1;margin:34px 0 30px;min-width:0;--dk-koyu:#0f1311}
+.dsb-bas{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.dsb-bas>div{display:grid;gap:4px;max-width:40rem}
+.dsb-etiket{font:600 .7rem var(--ds-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ds-sicak)}
+.dsb-bas h2{margin:0;font:700 clamp(1.6rem,3vw,2.2rem)/1.05 var(--ds-serif);color:var(--ds-murekkep);letter-spacing:-.01em}
+.dsb-bas p{margin:0;font-size:.92rem;line-height:1.5;color:var(--ds-soluk)}
+.dsb-tum{font:700 .86rem "Plus Jakarta Sans",system-ui,sans-serif;color:var(--ds-murekkep);text-decoration:none;border-bottom:2px solid var(--ds-yesil);padding-bottom:2px;white-space:nowrap}
+.dsb-izgara{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) minmax(0,1fr);grid-auto-rows:minmax(0,auto);gap:14px}
+.dsk{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:14px;background:var(--dk-koyu);color:#f4f2ec;text-decoration:none;isolation:isolate;min-height:300px}
+.dsk-buyuk{grid-row:span 2;min-height:560px}
+.dsk:focus-visible{outline:3px solid var(--ds-yesil);outline-offset:3px}
+.dsk-kapak{position:absolute;inset:0;z-index:-1;overflow:hidden;background:#1b2420}
+.dsk-kapak img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;transform:scale(1.02);transition:transform .6s ease}
+.dsk:hover .dsk-kapak img{transform:scale(1.06)}
+.dsk-kapak::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,12,.05) 0%,rgba(10,13,12,.35) 22%,rgba(10,13,12,.82) 42%,rgba(10,13,12,.95) 60%,rgba(10,13,12,.98) 100%)}
+.dsk-kapak.dsk-desen{background:radial-gradient(120% 80% at 85% 0%,#2a5a45 0%,transparent 60%),repeating-radial-gradient(circle at 80% 20%,rgba(255,255,255,.06) 0 1px,transparent 1px 14px),#14201b}
+.dsk-kunye{position:absolute;top:10px;right:12px;z-index:1;font:500 .62rem var(--ds-mono);color:rgba(255,255,255,.75);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.dsk-ic{margin-top:auto;display:grid;gap:9px;padding:18px 18px 16px}
+.dsk-buyuk .dsk-ic{padding:24px 24px 20px;gap:12px}
+.dsk-ust{display:flex;flex-wrap:wrap;gap:6px}
+.dsk-rozet{display:inline-flex;align-items:center;gap:6px;font:600 .66rem/1 var(--ds-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff}
+.dsk-rozet.sicak::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff6b5e;box-shadow:0 0 0 3px rgba(255,107,94,.25)}
+.dsk-rozet.geri{background:#c9302c}
+.dsk h3,.dsk-oz,.dsk-son{text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.dsk h3{color:#fff;margin:0;font:700 1.28rem/1.18 var(--ds-serif);letter-spacing:-.005em;text-wrap:balance}
+.dsk-buyuk h3{font-size:clamp(1.7rem,2.6vw,2.3rem)}
+.dsk-oz{margin:0;font:400 .98rem/1.5 var(--ds-serif);color:rgba(244,242,236,.88);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.dsk-son{margin:0;font-size:.82rem;line-height:1.4;color:rgba(244,242,236,.78);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dsk-agac{display:grid;gap:5px;padding-top:10px;border-top:1px solid rgba(255,255,255,.14)}
+.dsk-agac.isimli .dsk-dal{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr);align-items:center;gap:10px}
+.dsk-dal-ad{display:flex;align-items:center;gap:7px;min-width:0;font:600 .76rem/1.25 "Plus Jakarta Sans",system-ui,sans-serif;color:rgba(244,242,236,.9)}
+.dsk-dal-ad span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.dsk-nokta{flex:none;width:7px;height:7px;border-radius:50%;background:#9aa39e}
+.dsk-nokta.dsk-sicak{background:#ff6b5e} .dsk-nokta.dsk-suruyor{background:#f0b44c}
+.dsk-cizgi{width:100%;height:12px;display:block;overflow:visible}
+.dsk-zemin{stroke:rgba(255,255,255,.12);stroke-width:1}
+.dsk-kol{stroke-width:1.6;stroke:currentColor;opacity:.55}
+.dsk-olay{fill:currentColor}
+.dsk-cizgi.dsk-sicak{color:#ff6b5e} .dsk-cizgi.dsk-suruyor{color:#f0b44c} .dsk-cizgi.dsk-sessiz{color:#aab3ae}
+.dsk-alt{font:500 .66rem var(--ds-mono);letter-spacing:.04em;color:rgba(244,242,236,.6)}
+@media (max-width:1000px){
+  .dsb-izgara{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .dsk-buyuk{grid-column:1/-1;grid-row:auto;min-height:440px}
 }
+@media (max-width:700px){
+  .dosya-bolum{margin:8px 0 26px;padding:22px 0 0;border-top:1px solid var(--ds-cizgi)}
+  .dsb-bas{padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .dsb-izgara{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px));scrollbar-width:none}
+  .dsb-izgara::-webkit-scrollbar{display:none}
+  .dsk,.dsk-buyuk{flex:0 0 84%;min-height:0;scroll-snap-align:center}
+  /* telefonda görsel kartın üst yarısında, yazı altında koyu zeminde: parlak fotoğraf yazıyı boğmasın */
+  .dsk-kapak{bottom:auto;height:210px}
+  .dsk-kapak::after{background:linear-gradient(180deg,rgba(15,19,17,0) 0%,rgba(15,19,17,.35) 55%,var(--dk-koyu) 100%)}
+  .dsk-ic,.dsk-buyuk .dsk-ic{margin-top:150px;padding:16px 16px 14px}
+  .dsk-oz{-webkit-line-clamp:3}
+  .dsk-agac.isimli .dsk-dal{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.dsk-kapak img{transition:none}.dsk:hover .dsk-kapak img{transform:scale(1.02)}}
 
 /* d/<kimlik>.html */
 .ds-govde{background:var(--ds-zemin);color:var(--ds-murekkep);margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
