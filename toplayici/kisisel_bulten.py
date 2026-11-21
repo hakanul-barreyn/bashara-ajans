@@ -7,7 +7,9 @@ Her sabah 08.00'de (bulten-eposta.yml) çalışır; veri dalındaki olay arşivi
 Her madde için iki cümlelik özet, "kim nasıl yazdı" farkı ve farklı tonlarda tweet taslakları (yapay zekâ, Haiku; yedek Gemini).
 Taslaklarda Alboroto bağlantısı yok (editörün kararı: hesap büyüyene kadar site ilan edilmez); kaynak bağlantısı ilk yanıta konur.
 
-Gizliler (yalnızca GitHub Secrets): BULTEN_SMTP_KULLANICI, BULTEN_SMTP_SIFRE (Gmail uygulama şifresi), BULTEN_ALICI (boşsa kullanıcıya),
+Teslim: Telegram'da yöneticiye özel mesaj (TELEGRAM_BOT_TOKEN, TELEGRAM_YONETICI; editör bota bir kez /start yazmış olmalı).
+Taslak metinleri <code> içinde: telefonda dokununca kopyalanır; "X'te aç" bağlantısı taslağı X'in yazma ekranına doldurur.
+İsteğe bağlı e-posta, gizliler (yalnızca GitHub Secrets): BULTEN_SMTP_KULLANICI, BULTEN_SMTP_SIFRE (Gmail uygulama şifresi), BULTEN_ALICI (boşsa kullanıcıya),
 isteğe bağlı BULTEN_SMTP_SUNUCU (smtp.gmail.com), BULTEN_SMTP_PORT (465). Biri eksikse e-posta gönderilmez, iş hata vermez.
 """
 import datetime as dt
@@ -64,10 +66,14 @@ def kaynak_listesi():
     return k if isinstance(k, list) else k.get("kaynaklar", [])
 
 
+_KMAP = {}
+
+
 def kaynak(K, i):
-    if isinstance(i, int) and 0 <= i < len(K):
-        return K[i]
-    return next((x for x in K if x.get("id") == i), None)
+    """Olay arşivindeki "k" kaynağın kimliğidir (liste sırası değil)."""
+    if not _KMAP:
+        _KMAP.update({x.get("id"): x for x in K})
+    return _KMAP.get(i)
 
 
 def topla(simdi):
@@ -225,12 +231,77 @@ def metin_yap(gunun, yok, dsy, simdi):
     return "\n".join(s)
 
 
+def _tg(token, sohbet, metin):
+    import urllib.request
+    govde = json.dumps({"chat_id": sohbet, "text": metin, "parse_mode": "HTML", "link_preview_options": {"is_disabled": True}}).encode()
+    istek = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=govde, headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(istek, timeout=20) as r:
+            return json.loads(r.read()).get("ok", False), ""
+    except Exception as e:
+        aciklama = ""
+        try:
+            aciklama = json.loads(e.read().decode()).get("description", "")
+        except Exception:
+            pass
+        return False, f"{getattr(e, 'code', type(e).__name__)} {aciklama}".strip()
+
+
+def telegram_iletileri(gunun, yok, dsy, simdi):
+    """Her madde ayrı ileti (Telegram'ın 4096 karakter sınırı); en başta kısa bir içindekiler."""
+    E = lambda t: html.escape(str(t or ""), quote=False)
+    bas = [f"<b>Sabah bülteni · {E(_gun(simdi))}</b>"]
+    for ad, liste in (("Günün olayları", gunun), ("Türkçe yayınlarda yok", yok), ("Dosyalar", dsy)):
+        if liste:
+            bas.append(f"\n<b>{ad}</b>")
+            bas += [f"• {E(m['baslik'])}" for m in liste]
+    bas.append("\n<i>Taslağa dokununca kopyalanır; “X’te aç” taslağı X’e doldurur. Atmadan önce kaynaktan doğrula.</i>")
+    iletiler = ["\n".join(bas)]
+    etiket = {"gunun": "GÜNÜN OLAYI", "yok": "TÜRKÇE YAYINLARDA YOK", "dosya": "DOSYA"}
+    for m in gunun + yok + dsy:
+        p = [f"<b>{etiket[m['tur']]}</b>" + (f" · {m['yeniden']} gün sonra yeniden gündemde" if m.get("yeniden") else ""),
+             f"<b>{E(m['baslik'])}</b>", E(m.get("ozet") or m.get("not") or "")]
+        if m.get("fark"):
+            p.append(f"<i>Kim nasıl yazdı:</i> {E(m['fark'])}")
+        for t, metin in (m.get("tweetler") or {}).items():
+            p.append(f"\n<b>{TON.get(t, t)}</b> · {len(metin)} karakter\n<code>{E(metin)}</code>\n<a href=\"{html.escape(_x(metin))}\">X’te aç →</a>")
+        if m.get("flood"):
+            p.append("\n<b>Flood</b>")
+            for i, x in enumerate(m["flood"], 1):
+                p.append(f"{i}/{len(m['flood'])} <code>{E(x)}</code>")
+        bag = [h for h in m.get("yayinlar", []) if h.get("url")][:5]
+        if bag:
+            p.append("\n<i>Kaynaklar (ilk yanıta):</i> " + " · ".join(f'<a href="{html.escape(h["url"])}">{E(h["yayin"])}</a>' for h in bag))
+        metin = "\n".join(x for x in p if x)
+        iletiler.append(metin[:4000])
+    return iletiler
+
+
+def telegram_gonder(iletiler):
+    import re
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    m = re.search(r"\d{6,12}:[A-Za-z0-9_-]{30,}", token)
+    token = m.group(0) if m else ""
+    sohbet = os.environ.get("TELEGRAM_YONETICI", "").strip()
+    if not token or not sohbet:
+        print("::notice::Telegram'a gönderilmedi: TELEGRAM_BOT_TOKEN ve TELEGRAM_YONETICI (senin Telegram kimlik numaran) gizlileri gerekli.")
+        return False
+    import time
+    for i, t in enumerate(iletiler):
+        ok, hata = _tg(token, sohbet, t)
+        if not ok:
+            ipucu = " → bota bir kez /start yazman gerekiyor" if "chat not found" in hata or "blocked" in hata or "403" in hata else ""
+            print(f"::warning::Telegram iletisi gönderilemedi ({i + 1}/{len(iletiler)}): {hata}{ipucu}")
+            return False
+        time.sleep(1.1)
+    print(f"Bülten Telegram'a gönderildi ({len(iletiler)} ileti)")
+    return True
+
+
 def gonder(konu, html_govde, duz):
     kul, sifre = os.environ.get("BULTEN_SMTP_KULLANICI", "").strip(), os.environ.get("BULTEN_SMTP_SIFRE", "").replace(" ", "").strip()
     alici = os.environ.get("BULTEN_ALICI", "").strip() or kul
     if not kul or not sifre:
-        print("::notice::Bülten e-postası gönderilmedi: BULTEN_SMTP_KULLANICI ve BULTEN_SMTP_SIFRE gizlileri gerekli. Önizleme:")
-        print(duz[:3000])
         return False
     e = EmailMessage()
     e["Subject"], e["From"], e["To"] = konu, f"Alboroto bülten <{kul}>", alici
@@ -261,7 +332,11 @@ def main():
     h = html_yap(gunun, yok, dsy, yerel)
     if os.environ.get("BULTEN_ONIZLEME"):
         open(os.environ["BULTEN_ONIZLEME"], "w", encoding="utf-8").write(h)
-    gonder(f"Sabah bülteni · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel))
+    tg = telegram_gonder(telegram_iletileri(gunun, yok, dsy, yerel))
+    ep = gonder(f"Sabah bülteni · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel))
+    if not tg and not ep:
+        print("Bülten hiçbir kanala gönderilemedi. Önizleme:")
+        print(metin_yap(gunun, yok, dsy, yerel)[:3000])
 
 
 if __name__ == "__main__":

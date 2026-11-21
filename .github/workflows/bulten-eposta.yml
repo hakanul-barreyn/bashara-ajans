@@ -1,8 +1,9 @@
-name: Sabah bülteni (e-posta)
+name: Sabah bülteni
 
 # Editörün kendi X hesabı için kişisel bülten: günün olayları, Türkçe yayınlarda olmayanlar, dosyalar ve tweet taslakları.
-# Her sabah 08.00 (Türkiye) civarında e-postayla gelir. GitHub zamanlayıcısı yoğunken birkaç dakika gecikebilir.
-# Gizliler: BULTEN_SMTP_KULLANICI (gönderen Gmail adresi), BULTEN_SMTP_SIFRE (Gmail uygulama şifresi), BULTEN_ALICI (boşsa gönderene).
+# Her sabah 08.00 (Türkiye) civarında Telegram'da yöneticiye özel mesaj olarak gelir. GitHub zamanlayıcısı yoğunken birkaç dakika gecikebilir.
+# Gizliler: TELEGRAM_BOT_TOKEN, TELEGRAM_YONETICI (editörün Telegram kimlik numarası; editör bota bir kez /start yazmış olmalı).
+# İsteğe bağlı e-posta: BULTEN_SMTP_KULLANICI, BULTEN_SMTP_SIFRE (Gmail uygulama şifresi), BULTEN_ALICI.
 
 on:
   schedule:
@@ -34,6 +35,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           YZ_SAGLAYICI: anthropic
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
           BULTEN_SMTP_KULLANICI: ${{ secrets.BULTEN_SMTP_KULLANICI }}
           BULTEN_SMTP_SIFRE: ${{ secrets.BULTEN_SMTP_SIFRE }}
           BULTEN_ALICI: ${{ secrets.BULTEN_ALICI }}
