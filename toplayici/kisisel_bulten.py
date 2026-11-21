@@ -229,7 +229,8 @@ def gonder(konu, html_govde, duz):
     kul, sifre = os.environ.get("BULTEN_SMTP_KULLANICI", "").strip(), os.environ.get("BULTEN_SMTP_SIFRE", "").replace(" ", "").strip()
     alici = os.environ.get("BULTEN_ALICI", "").strip() or kul
     if not kul or not sifre:
-        print("::notice::Bülten e-postası gönderilmedi: BULTEN_SMTP_KULLANICI ve BULTEN_SMTP_SIFRE gizlileri gerekli.")
+        print("::notice::Bülten e-postası gönderilmedi: BULTEN_SMTP_KULLANICI ve BULTEN_SMTP_SIFRE gizlileri gerekli. Önizleme:")
+        print(duz[:3000])
         return False
     e = EmailMessage()
     e["Subject"], e["From"], e["To"] = konu, f"Alboroto bülten <{kul}>", alici
