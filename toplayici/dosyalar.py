@@ -63,7 +63,9 @@ Kurallar:
 - Bir olay ancak dosyanın kapsamına AÇIKÇA giriyorsa o dosyaya konur. Emin değilsen dosya: null.
 - Bir olay en çok iki dosyaya girebilir (örneğin Netanyahu'nun İran'a saldırı çağrısı hem İsrail siyaseti hem İran-ABD savaşı dosyasına). İkinciyi yalnızca gerçekten iki dosyanın da konusuysa yaz.
 - Dal: olayın dosya içindeki alt hikâyesi. Uygun dal varsa onun kimliğini yaz. Yoksa yeni_dal ver: 2-5 kelimelik, tarafsız, Türkçe ad ("Hürmüz ve deniz ablukası", "Knesset'te görev dağılımı"); ad_en İngilizcesi. Aynı turda yeni açtığın bir dala başka olayları da koyabilirsin: aynı adı yaz.
-- Dalları gereksiz bölme: birkaç günde bir haber çıkacak kadar geniş, ama dosyanın tamamı kadar geniş olmayan alt hikâyeler.
+- Dalları gereksiz bölme: birkaç günde bir haber çıkacak kadar geniş, ama dosyanın tamamı kadar geniş olmayan alt hikâyeler. Bir dosyada en fazla 7 dal olsun.
+- Önce mevcut dallara bak; olay bir dala kabaca uyuyorsa oraya koy. Mevcut bir dala benzeyen yeni dal açma ("İsrail'in saldırı hazırlığı" varken "İsrail'in askeri adımları" açma).
+- Tek bir olay için dal açma: yeni dal, bu turda en az iki olayı toplayacaksa ya da dosyanın gerçekten yeni bir yüzüyse açılır; tek seferlik ayrıntıyı en yakın dala koy.
 - Hiçbir dosyaya girmeyen olaylardan, aynı süren hikâyeye ait en az 3 olay (en az 2 farklı gün) görürsen yeni dosya öner (oneriler). Tek seferlik olaylar için öneri yapma. Önerinin adı tarafsız ve kısa olsun.
 - gerekce: en fazla 12 kelime.
 """ + DIL_KURALI + """
@@ -356,6 +358,60 @@ def ozetle(d, cagir, simdi, en_cok=3, log=print):
     return yazilan
 
 
+# ---------------------------------------------------------------- dalları toparla
+
+TOPARLA_TALIMAT = """Alboroto haber sitesindeki bir "dosya"nın (süren büyük olay) dalları fazla bölünmüş. Sana dalların adı, olay sayısı ve son olayları veriliyor.
+Dalları en fazla 7 dala indirecek şekilde birleştirme öner: aynı alt hikâyeyi anlatan ya da tek olaylık dalları en yakın dala kat.
+"sabit": true olan dallar editörün elle düzenlediği dallardır: onları başka dala KATMA (onlara katabilirsin), adlarını değiştirme.
+Gerekirse birleşen dalın yeni, tarafsız, 2-5 kelimelik adını ver.
+""" + DIL_KURALI + """
+
+Yalnızca şu JSON'u döndür: {"birlestir": [{"dal": "<katılacak dal>", "hedef": "<kalacak dal>"}], "ad": [{"dal": "<dal>", "ad": "...", "ad_en": "..."}]}"""
+
+
+def dal_birlestir(d, ds, kaynak, hedef):
+    for o in d["olaylar"].values():
+        o["yer"] = [[y[0], hedef] if y == [ds["id"], kaynak] else y for y in o.get("yer", [])]
+        o["yer"] = [list(x) for x in dict.fromkeys(tuple(y) for y in o["yer"])]
+    ds["dallar"] = [x for x in ds["dallar"] if x["id"] != kaynak]
+
+
+def toparla(d, cagir, simdi, en_cok=2, log=print):
+    """Yedi daldan fazlası ya da üçten fazla tek olaylık dalı olan dosyaların dallarını birleştirir (dosya başına 12 saatte bir)."""
+    n = 0
+    for ds in d["dosyalar"]:
+        if n >= en_cok or ds.get("durum") != "acik":
+            continue
+        sayi = {x["id"]: len(dal_olaylari(d, ds["id"], x["id"])) for x in ds["dallar"]}
+        tekli = sum(1 for v in sayi.values() if v <= 1)
+        tt = ds.get("toparla_tarih")
+        if not (len(ds["dallar"]) > 7 or tekli > 3) or (tt and (simdi - dt.datetime.fromisoformat(tt)).total_seconds() < 12 * 3600):
+            continue
+        girdi = {"dosya": ds["ad"], "kapsam": ds["kapsam"], "dallar": [
+            {"id": x["id"], "ad": x["ad"], "sabit": bool(x.get("elle")), "olay_sayisi": sayi[x["id"]],
+             "son_olaylar": [o.get("b") for _, o in dal_olaylari(d, ds["id"], x["id"])[-3:]]} for x in ds["dallar"]]}
+        kod, s = cagir(TOPARLA_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False))
+        ds["toparla_tarih"] = simdi.isoformat()
+        n += 1
+        if kod != 200 or not isinstance(s, dict):
+            continue
+        once = len(ds["dallar"])
+        for b in s.get("birlestir") or []:
+            if not isinstance(b, dict):
+                continue
+            k, h = _dal(ds, b.get("dal")), _dal(ds, b.get("hedef"))
+            if k and h and k["id"] != h["id"] and not k.get("elle"):
+                dal_birlestir(d, ds, k["id"], h["id"])
+        for a in s.get("ad") or []:
+            dal = _dal(ds, (a or {}).get("dal")) if isinstance(a, dict) else None
+            if dal and not dal.get("elle") and a.get("ad"):
+                dal["ad"] = ekler.guvenli(a["ad"])[:60]
+                if a.get("ad_en"):
+                    dal["ad_en"] = ekler.guvenli(a["ad_en"])[:60]
+        log(f"Dosyalar: {ds['ad']} dalları toparlandı ({once} → {len(ds['dallar'])})")
+    return n
+
+
 # ---------------------------------------------------------------- panel işlemleri
 
 def panel_uygula(d, islemler, simdi, log=print):
@@ -405,13 +461,14 @@ def panel_uygula(d, islemler, simdi, log=print):
                 for a in ("ad", "ad_en"):
                     if i.get(a):
                         dal[a] = ekler.guvenli(i[a])[:60]
+                dal["elle"] = True
             elif tur == "dal_birlestir" and ds and _dal(ds, i.get("dal")) and _dal(ds, i.get("hedef")) and i["dal"] != i["hedef"]:
-                for o in O.values():
-                    o["yer"] = [[y[0], i["hedef"]] if y == [ds["id"], i["dal"]] else y for y in o.get("yer", [])]
-                    o["yer"] = [list(x) for x in dict.fromkeys(tuple(y) for y in o["yer"])]
-                ds["dallar"] = [x for x in ds["dallar"] if x["id"] != i["dal"]]
+                dal_birlestir(d, ds, i["dal"], i["hedef"])
+                _dal(ds, i["hedef"])["elle"] = True
             elif tur == "dal_ekle" and ds and i.get("ad"):
-                _dal_ac(ds, i["ad"], i.get("ad_en"), simdi)
+                dal_id = _dal_ac(ds, i["ad"], i.get("ad_en"), simdi)
+                if dal_id:
+                    _dal(ds, dal_id)["elle"] = True
             elif tur == "olay_tasi" and i.get("olay") in O and ds:
                 o = O[i["olay"]]
                 dal_id = i.get("dal") if _dal(ds, i.get("dal")) else _dal_ac(ds, i.get("yeni_dal") or "", None, simdi)
@@ -646,6 +703,11 @@ def calistir(kok, olaylar, haberler, cagir_yer, cagir_ozet, simdi, panel_yolu=No
         log(f"Dosyalar: {len(sorulacak[:sinir])} olaya bakıldı, {n} olay dosyaya girdi")
         if kod == 200 and not any(not o.get("bakildi") for o in d["olaylar"].values()):
             d["dolduruldu"] = True
+    if cagir_yer and butce():
+        try:
+            toparla(d, cagir_yer, simdi, log=log)
+        except Exception as e:
+            log(f"Dal toparlama hatası: {e}")
     if cagir_ozet and butce():
         try:
             n = ozetle(d, cagir_ozet, simdi, en_cok=2, log=log)
