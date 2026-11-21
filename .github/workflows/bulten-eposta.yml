@@ -1,0 +1,42 @@
+name: Sabah bülteni (e-posta)
+
+# Editörün kendi X hesabı için kişisel bülten: günün olayları, Türkçe yayınlarda olmayanlar, dosyalar ve tweet taslakları.
+# Her sabah 08.00 (Türkiye) civarında e-postayla gelir. GitHub zamanlayıcısı yoğunken birkaç dakika gecikebilir.
+# Gizliler: BULTEN_SMTP_KULLANICI (gönderen Gmail adresi), BULTEN_SMTP_SIFRE (Gmail uygulama şifresi), BULTEN_ALICI (boşsa gönderene).
+
+on:
+  schedule:
+    - cron: "40 4 * * *"   # 04.40 UTC = 07.40 Türkiye; kuyrukla birlikte 08.00 civarı
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bulten-eposta
+  cancel-in-progress: false
+
+jobs:
+  bulten:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Veriyi al
+        run: |
+          git fetch -q --depth 1 origin veri && git checkout FETCH_HEAD -- data && git reset -q
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bülteni yaz ve gönder
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          YZ_SAGLAYICI: anthropic
+          BULTEN_SMTP_KULLANICI: ${{ secrets.BULTEN_SMTP_KULLANICI }}
+          BULTEN_SMTP_SIFRE: ${{ secrets.BULTEN_SMTP_SIFRE }}
+          BULTEN_ALICI: ${{ secrets.BULTEN_ALICI }}
+          BULTEN_SMTP_SUNUCU: ${{ vars.BULTEN_SMTP_SUNUCU }}
+          BULTEN_SMTP_PORT: ${{ vars.BULTEN_SMTP_PORT }}
+        run: python toplayici/kisisel_bulten.py
