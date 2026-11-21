@@ -26,13 +26,26 @@ a.dosya-satir em.ds-geri{flex-basis:100%}
 
 /* ana sayfa: "Süren hikâyeler" bölümü. Masaüstünde büyük bir kapak kartı ve yanında dört kart; telefonda kaydırılan kartlar.
    Kartın alt yarısındaki küçük ağaç: her dal son 14 günde bir çizgi, her olay bir nokta (dosya sayfasının özeti). */
-.dosya-bolum{grid-column:1/-1;margin:34px 0 30px;min-width:0;--dk-koyu:#0f1311}
-.dsb-bas{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px;flex-wrap:wrap}
-.dsb-bas>div{display:grid;gap:4px;max-width:40rem}
-.dsb-etiket{font:600 .7rem var(--ds-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ds-sicak)}
-.dsb-bas h2{margin:0;font:700 clamp(1.6rem,3vw,2.2rem)/1.05 var(--ds-serif);color:var(--ds-murekkep);letter-spacing:-.01em}
-.dsb-bas p{margin:0;font-size:.92rem;line-height:1.5;color:var(--ds-soluk)}
-.dsb-tum{font:700 .86rem "Plus Jakarta Sans",system-ui,sans-serif;color:var(--ds-murekkep);text-decoration:none;border-bottom:2px solid var(--ds-yesil);padding-bottom:2px;white-space:nowrap}
+.dosya-bolum{grid-column:1/-1;margin:38px 0 34px;min-width:0;--dk-koyu:#0f1311}
+/* koyu panel: başlık ve kartlar tek bir modül; arka planda ince ağaç çizgileri */
+.dsb-ic{position:relative;isolation:isolate;overflow:hidden;border-radius:22px;padding:30px 30px 30px;color:#f4f2ec;
+  background:radial-gradient(90% 120% at 100% 0%,rgba(43,138,94,.28) 0%,transparent 55%),radial-gradient(70% 90% at 0% 100%,rgba(201,48,44,.18) 0%,transparent 60%),#0c100e}
+.dsb-ic::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 72px)}
+.dsb-bas{display:flex;justify-content:space-between;align-items:end;gap:20px 28px;margin-bottom:24px;flex-wrap:wrap}
+.dsb-sol{display:grid;gap:8px;max-width:38rem}
+.dsb-etiket{display:inline-flex;align-items:center;gap:8px;font:600 .68rem var(--ds-mono);letter-spacing:.14em;text-transform:uppercase;color:#9fd8bc}
+.dsb-canli{width:8px;height:8px;border-radius:50%;background:#3ddc97;box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:dsb-nabiz 2s infinite}
+@keyframes dsb-nabiz{0%{box-shadow:0 0 0 0 rgba(61,220,151,.55)}70%{box-shadow:0 0 0 9px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+.dsb-bas h2{margin:0;font:700 clamp(2rem,4vw,3rem)/1 var(--ds-serif);letter-spacing:-.02em;color:#fff}
+.dsb-bas p{margin:0;font-size:.95rem;line-height:1.55;color:rgba(244,242,236,.72)}
+.dsb-sag{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.dsb-sayi{display:grid;gap:2px;padding-left:14px;border-left:1px solid rgba(255,255,255,.18)}
+.dsb-sayi b{font:700 1.7rem/1 var(--ds-serif);color:#fff;font-variant-numeric:tabular-nums}
+.dsb-sayi small{font:500 .66rem var(--ds-mono);letter-spacing:.06em;text-transform:uppercase;color:rgba(244,242,236,.6)}
+.dsb-tum{font:700 .86rem "Plus Jakarta Sans",system-ui,sans-serif;color:#0c100e;background:#f4f2ec;text-decoration:none;padding:10px 16px;border-radius:999px;white-space:nowrap}
+.dsb-tum:hover{background:#3ddc97}
+.dosya-bolum .dsk{box-shadow:0 0 0 1px rgba(255,255,255,.07)}
+@media (prefers-reduced-motion:reduce){.dsb-canli{animation:none}}
 .dsb-izgara{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) minmax(0,1fr);grid-auto-rows:minmax(0,auto);gap:14px}
 .dsk{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:14px;background:var(--dk-koyu);color:#f4f2ec;text-decoration:none;isolation:isolate;min-height:300px}
 .dsk-buyuk{grid-row:span 2;min-height:560px}
@@ -71,8 +84,11 @@ a.dosya-satir em.ds-geri{flex-basis:100%}
   .dsk-buyuk{grid-column:1/-1;grid-row:auto;min-height:440px}
 }
 @media (max-width:700px){
-  .dosya-bolum{margin:8px 0 26px;padding:22px 0 0;border-top:1px solid var(--ds-cizgi)}
-  .dsb-bas{padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .dosya-bolum{margin:8px 0 26px}
+  .dsb-ic{border-radius:0;padding:24px 0 22px}
+  .dsb-bas{padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));margin-bottom:18px}
+  .dsb-sag{gap:16px}
+  .dsb-sayi b{font-size:1.35rem}
   .dsb-izgara{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px));scrollbar-width:none}
   .dsb-izgara::-webkit-scrollbar{display:none}
   .dsk,.dsk-buyuk{flex:0 0 84%;min-height:0;scroll-snap-align:center}
@@ -233,3 +249,6 @@ a.br-baslik:hover{text-decoration:underline;text-underline-offset:3px}
   .br-gorseller{grid-template-columns:repeat(2,minmax(0,1fr))}
   .br-gorseller figure:nth-child(3){display:none}
 }
+.dosya-bolum .dsb-tum{color:#0c100e}
+.dosya-bolum .dsb-bas h2,.dosya-bolum .dsb-sayi b,.dosya-bolum .dsk h3{color:#fff}
+.dosya-bolum .dsk,.dosya-bolum .dsk:hover{color:#f4f2ec;text-decoration:none}

@@ -1131,20 +1131,49 @@ tr.karne-ornek td>div{margin-top:4px}tr.karne-ornek a{color:inherit}
 .eylem.hata-bildir:hover{color:var(--kirmizi)}
 @media (max-width:700px){.rl-hata{align-self:flex-start;font-size:.76rem;color:#c3cbc5;text-decoration:underline}}
 html.deste-modu #haritaBolum{display:none!important}
-/* Enine kartlar: karşılaştırmalı haberler (masaüstü; telefonda "Haberin haberi" rafı var) */
-.enine{margin:22px 0 6px}
-.enine-raf{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px;scrollbar-width:thin}
-.enine-kart{position:relative;flex:0 0 auto;width:200px;aspect-ratio:9/14;border-radius:12px;overflow:hidden;scroll-snap-align:start;isolation:isolate;
-  background:#1b2a23;color:#fff;text-decoration:none;box-shadow:0 10px 24px -14px rgba(0,0,0,.6);transition:transform .2s}
-.enine-kart:hover,.enine-kart:focus-visible{transform:translateY(-3px)}
-.enine-kart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.enine-kart::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 30%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.9))}
-.enine-kart.gorselsiz{background:radial-gradient(120% 80% at 20% 0%,#2e5445,#17271f 60%,#0f1a15)}
-.enine-yer{position:absolute;top:9px;left:9px;font:800 .62rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;background:#b3261e;padding:3px 6px;border-radius:4px}
-.enine-say{position:absolute;top:9px;right:9px;font:700 .62rem "Plus Jakarta Sans",system-ui,sans-serif;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:4px}
-.enine-alt{position:absolute;left:0;right:0;bottom:0;padding:12px;display:flex;flex-direction:column;gap:6px}
-.enine-alt b{font:700 1rem/1.25 "Source Serif 4",Georgia,serif;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.enine-zaman{font:600 .7rem "Plus Jakarta Sans",sans-serif;color:#cfd8d3}
+/* Enine kartlar: karşılaştırmalı haberler (masaüstü; telefonda "Haberin haberi" rafı var). Her kart kendi renginde (--r), hafif eğik (--e). */
+.enine{margin:30px 0 10px;padding:22px 0 6px;border-top:0;position:relative}
+.enine::before{content:"";display:block;height:6px;border-radius:3px;margin-bottom:16px;background:linear-gradient(90deg,#e63946 0 14%,#f3722c 14% 28%,#f8961e 28% 42%,#2b9348 42% 56%,#2a9d8f 56% 70%,#3a86ff 70% 84%,#7b2cbf 84% 100%)}
+.enine .bolum{font:800 1.5rem/1.1 "Source Serif 4",Georgia,serif;letter-spacing:-.01em;text-transform:none;border-top:0;padding-top:0;margin-top:0}
+.enine .bolum-ek{font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--soluk)}
+.enine-raf{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 6px 18px;scrollbar-width:thin}
+.enine-kart{--r:#e63946;--e:0deg;position:relative;flex:0 0 auto;width:212px;aspect-ratio:9/13;border-radius:18px;overflow:hidden;scroll-snap-align:start;isolation:isolate;
+  background:var(--r);color:#fff;text-decoration:none;transform:rotate(var(--e));box-shadow:0 14px 28px -16px var(--r),0 2px 0 rgba(0,0,0,.08);transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s}
+.enine-kart:hover,.enine-kart:focus-visible{transform:rotate(0deg) translateY(-6px) scale(1.03);box-shadow:0 22px 34px -16px var(--r)}
+.enine-kart img{position:absolute;inset:0;width:100%;height:58%;object-fit:cover;z-index:-2;filter:saturate(1.15)}
+.enine-kart::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,transparent 22%,transparent 38%,var(--r) 58%,var(--r) 100%)}
+.enine-kart.gorselsiz{background:radial-gradient(90% 60% at 80% 10%,rgba(255,255,255,.28),transparent 60%),var(--r)}
+.enine-kart.gorselsiz::after{background:repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 10px,transparent 10px 20px)}
+.enine-yer{position:absolute;top:10px;left:10px;font:800 .62rem "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--r);padding:4px 7px;border-radius:999px}
+.enine-say{position:absolute;top:10px;right:10px;font:800 .66rem "Plus Jakarta Sans",system-ui,sans-serif;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:999px}
+.enine-alt{position:absolute;left:0;right:0;bottom:0;padding:14px;display:flex;flex-direction:column;gap:8px}
+.enine-alt b{font:800 1.04rem/1.22 "Source Serif 4",Georgia,serif;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.enine-zaman{font:700 .7rem "Plus Jakarta Sans",sans-serif;color:rgba(255,255,255,.82)}
+@media (prefers-reduced-motion:reduce){.enine-kart{transform:none;transition:none}}
+/* ana sayfa: tarihçe kartı */
+.tarihce-kart{grid-column:1/-1;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);min-height:260px;margin:26px 0 30px;border-radius:20px;overflow:hidden;
+  background:#1e1a14;color:#f3ede2;text-decoration:none;isolation:isolate}
+.tk-gorsel{position:relative;overflow:hidden}
+.tk-gorsel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.35) contrast(1.05);transition:transform .8s ease}
+.tarihce-kart:hover .tk-gorsel img{transform:scale(1.05)}
+.tk-gorsel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,#1e1a14)}
+.tk-yazi{display:grid;align-content:center;gap:10px;padding:28px 30px 54px 10px}
+.tk-yazi small{font:600 .68rem "JetBrains Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#e0b56a}
+.tk-yazi b{font:700 clamp(1.7rem,3vw,2.5rem)/1.05 "Source Serif 4",Georgia,serif;letter-spacing:-.015em}
+.tk-yazi span{font-size:.95rem;line-height:1.55;color:rgba(243,237,226,.78);max-width:34rem}
+.tk-yazi i{font:700 .86rem "Plus Jakarta Sans",system-ui,sans-serif;font-style:normal;color:#1e1a14;background:#e0b56a;justify-self:start;padding:9px 15px;border-radius:999px}
+.tarihce-kart:hover .tk-yazi i{background:#f3ede2}
+.tk-cizgi{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding:10px 24px;border-top:1px solid rgba(243,237,226,.14);background:rgba(20,16,12,.82)}
+/* telefonda (deste) kart haber akışının içine taşınır (site/dosya-serit.js); yerinde kalırsa gizli */
+html.deste-modu main.duzen > .tarihce-kart{display:none}
+.tk-cizgi em{font:600 .66rem "JetBrains Mono",ui-monospace,monospace;font-style:normal;color:rgba(243,237,226,.6)}
+@media (max-width:700px){
+  .tarihce-kart{grid-template-columns:minmax(0,1fr);border-radius:0;margin:10px 0 24px}
+  .tk-gorsel{height:180px}
+  .tk-gorsel::after{background:linear-gradient(180deg,transparent 40%,#1e1a14)}
+  .tk-yazi{padding:4px 18px 56px}
+  .tk-cizgi em:nth-child(even){display:none}
+}
 @media (max-width:900px){.enine{display:none}}
 /* veri gelmeyince: açıklama ve yeniden dene */
 .hata-kutu p{margin:0 0 10px}
@@ -1165,3 +1194,7 @@ html.deste-modu #haritaBolum{display:none!important}
 .dz-not{margin:0;font-size:.82rem;opacity:.75}
 /* Türkçe yayının kendi spotu (yapay zekâ özeti değil): tırnak içinde, eğik */
 .oz-spot{font-style:italic}
+/* telefon akışının (.hb) genel bağlantı ve kalın yazı renkleri kartın içini boyamasın */
+.tarihce-kart .tk-yazi b{color:#f3ede2}
+.tarihce-kart .tk-yazi span{color:rgba(243,237,226,.78)}
+.tarihce-kart,.tarihce-kart:hover{color:#f3ede2;text-decoration:none}

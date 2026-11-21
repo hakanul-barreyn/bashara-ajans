@@ -617,6 +617,8 @@
   // ---------------------------------------------------- manşet slaytları
   let slaytZaman = null, slaytNo = 0;
   // Enine kartlar: en az üç yayının yazdığı, çevrilmiş ve kendi haber metnimiz olan olaylar, yan yana dikey kartlar (masaüstü)
+  // karşılaştırmalı haberler rafı: her kart başka bir renk (karnaval)
+  const ENINE_RENK = ["#e63946", "#f3722c", "#2a9d8f", "#7b2cbf", "#3a86ff", "#d81b60", "#2b9348", "#f8961e", "#0081a7", "#c1121f"];
   function enineCiz(liste) {
     const kutu = $("enine"); if (!kutu) return;
     kutu.innerHTML = "";
@@ -633,9 +635,9 @@
     bh.appendChild(el("span", "bolum-ek", en ? " · three or more outlets, translated, with our own report" : " · en az üç yayın, çevrilmiş, kendi haber metnimizle"));
     kutu.appendChild(bh);
     const raf = el("div", "enine-raf"); raf.setAttribute("role", "list");
-    uygun.forEach((o) => {
+    uygun.forEach((o, sira) => {
       const kp = o.arsiv ? kapsamaK(o.kaynaklar) : kapsama(o);
-      const a = el("a", "enine-kart"); a.href = "haber.html?o=" + encodeURIComponent(o.id); a.setAttribute("role", "listitem");
+      const a = el("a", "enine-kart"); a.style.setProperty("--r", ENINE_RENK[sira % ENINE_RENK.length]); a.style.setProperty("--e", (sira % 2 ? 1 : -1) * (0.6 + (sira % 3) * 0.4) + "deg"); a.href = "haber.html?o=" + encodeURIComponent(o.id); a.setAttribute("role", "listitem");
       const gd = o.arsiv ? o : (gundemArsiv || []).find((x) => x.id === o.id);
       if (gd && gd.gorsel && gd.gorsel_atif) { const im = document.createElement("img"); im.src = (window.AKTAR || ((u) => u))(gd.gorsel, 480); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; if (gd.odak) im.style.objectPosition = gd.odak; im.onerror = () => { im.remove(); a.classList.add("gorselsiz"); }; a.appendChild(im); }
       else a.classList.add("gorselsiz");

@@ -1,4 +1,4 @@
-/* Dosyalar (süren olaylar): ana sayfadaki dosya şeridi ve kartlardaki "Dosya › dal" satırı.
+/* Dosyalar (haftalarca gündemde kalan hikâyeler): ana sayfadaki dosya şeridi ve kartlardaki "Dosya › dal" satırı.
    Veri: data/dosyalar-site.json (toplayici/dosyalar.py). Kartlar bu dosya gelmeden çizilebilir; satırlar boş
    <a class="dosya-satir" data-d data-dal> olarak eklenir, veri gelince doldurulur (window.DosyaSatir.doldur). */
 (function () {
@@ -73,43 +73,58 @@
     var ic = el("div", "dsk-ic");
     var ust = el("div", "dsk-ust");
     var r = el("span", "dsk-rozet" + (ds.sicak ? " sicak" : ""));
-    r.textContent = ds.sicak ? (EN() ? ds.sicak + " active" : ds.sicak + " dal sıcak") : (EN() ? "ongoing" : "sürüyor");
+    r.textContent = ds.sicak ? (EN() ? "New in " + ds.sicak + (ds.sicak > 1 ? " threads" : " thread") : "Son 48 saat · " + ds.sicak + " başlıkta gelişme")
+      : (EN() ? "Developing" : "Gelişiyor");
     ust.appendChild(r);
     var geri = ds.dallar.find(function (x) { return x.yeniden; });
-    if (geri) ust.appendChild(el("span", "dsk-rozet geri", EN() ? "back after " + geri.yeniden + " days" : geri.yeniden + " gün sonra yeniden"));
+    if (geri) ust.appendChild(el("span", "dsk-rozet geri", EN() ? "Back after " + geri.yeniden + " days" : geri.yeniden + " gün aradan sonra gündemde"));
     ic.appendChild(ust);
     ic.appendChild(el("h3", null, ad(ds)));
     var oz = EN() ? ds.ozet_en : ds.ozet;
     if (buyuk && oz) ic.appendChild(el("p", "dsk-oz", ilkCumleler(oz, 2)));
     ic.appendChild(el("p", "dsk-son", (EN() ? "Latest · " : "Son · ") + ((EN() && ds.son_be) || ds.son_b)));
     ic.appendChild(agac(ds, buyuk ? 5 : 3, buyuk));
-    ic.appendChild(el("span", "dsk-alt", ds.olay + (EN() ? " events · " : " olay · ") + ds.dallar.length + (EN() ? " threads · last 14 days" : " dal · son 14 gün")));
+    ic.appendChild(el("span", "dsk-alt", ds.olay + (EN() ? " events · " : " olay · ") + ds.dallar.length + (EN() ? " threads · last 14 days" : " başlık · son 14 gün")));
     a.appendChild(ic);
     return a;
   }
   var dene = 0;
   function serit() {
     if (!V || !V.dosyalar.length || document.getElementById("dosyaSerit")) return;
-    var s = el("section", "dosya-bolum"); s.id = "dosyaSerit"; s.setAttribute("aria-label", EN() ? "Ongoing files" : "Süren dosyalar");
-    var bas = el("div", "dsb-bas"), sol = el("div");
-    sol.appendChild(el("span", "dsb-etiket", EN() ? "Files" : "Dosyalar"));
-    sol.appendChild(el("h2", null, EN() ? "Stories that keep going" : "Süren hikâyeler"));
-    sol.appendChild(el("p", null, EN() ? "Weeks-long events, branch by branch. Every development comes with how the outlets told it."
-      : "Haftalardır süren olaylar, dal dal. Her gelişme, onu veren yayınların karşılaştırmasıyla."));
+    var s = el("section", "dosya-bolum"); s.id = "dosyaSerit"; s.setAttribute("aria-label", EN() ? "Files" : "Dosyalar");
+    var ic0 = el("div", "dsb-ic");
+    var bas = el("div", "dsb-bas"), sol = el("div", "dsb-sol");
+    var et = el("span", "dsb-etiket"); et.appendChild(el("i", "dsb-canli")); et.appendChild(document.createTextNode(EN() ? "Files · updated every 15 minutes" : "Dosyalar · 15 dakikada bir güncellenir"));
+    sol.appendChild(et);
+    sol.appendChild(el("h2", null, EN() ? "The stories that won’t leave the agenda" : "Gündemden düşmeyenler"));
+    sol.appendChild(el("p", null, EN() ? "Weeks-long stories, thread by thread: every development with how each outlet told it, the original links and an archive copy."
+      : "Haftalardır konuşulan büyük hikâyeler, başlık başlık: her gelişme, onu veren yayınların nasıl anlattığı, özgün bağlantısı ve arşiv kopyasıyla."));
     bas.appendChild(sol);
-    var tum = el("a", "dsb-tum", EN() ? "All files →" : "Tüm dosyalar →"); tum.href = "d/"; bas.appendChild(tum);
-    s.appendChild(bas);
+    var sag = el("div", "dsb-sag");
+    var top = V.dosyalar.reduce(function (t, ds) { return t + ds.olay; }, 0), sicak = V.dosyalar.reduce(function (t, ds) { return t + ds.sicak; }, 0);
+    [[V.dosyalar.length, EN() ? "files" : "dosya"], [top, EN() ? "events" : "olay"], [sicak, EN() ? "moving now" : "hareketli başlık"]].forEach(function (x) {
+      var k = el("span", "dsb-sayi"); k.appendChild(el("b", null, x[0])); k.appendChild(el("small", null, x[1])); sag.appendChild(k);
+    });
+    var tum = el("a", "dsb-tum", EN() ? "All files →" : "Tüm dosyalar →"); tum.href = "d/"; sag.appendChild(tum);
+    bas.appendChild(sag);
+    ic0.appendChild(bas);
     var izgara = el("div", "dsb-izgara");
     V.dosyalar.slice(0, 5).forEach(function (ds, i) { izgara.appendChild(kart(ds, i === 0)); });
-    s.appendChild(izgara);
+    ic0.appendChild(izgara);
+    s.appendChild(ic0);
     // sayfanın ortasına doğru: masaüstünde gündem, karşılaştırmalar ve analizlerden sonra; telefonda ilk haber bölümünden sonra
     var tel = window.matchMedia && matchMedia("(max-width:700px)").matches;
     if (tel) {
       var hb = document.querySelector(".hb > .hb-bolum:not(.hb-son)") || document.querySelector(".hb > .hb-manset");
-      if (hb) { hb.parentNode.insertBefore(s, hb.nextSibling); return; }
+      if (hb) {
+        hb.parentNode.insertBefore(s, hb.nextSibling);
+        var tk = document.querySelector("main.duzen > .tarihce-kart");   // tarihçe kartı da dosyaların ardından
+        if (tk) s.parentNode.insertBefore(tk, s.nextSibling);
+        return;
+      }
       if (dene < 15) return;
     }
-    var hedef = document.getElementById("sayacSerit") || document.getElementById("suzgec");
+    var hedef = document.getElementById("enine") || document.getElementById("sayacSerit") || document.getElementById("suzgec");
     if (hedef) hedef.parentNode.insertBefore(s, hedef);
   }
 

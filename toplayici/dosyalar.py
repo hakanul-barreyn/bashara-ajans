@@ -78,7 +78,7 @@ Yalnızca şu JSON'u döndür:
 
 OZET_TALIMAT = """Alboroto haber sitesi için bir "dosya"nın (süren büyük olay) özetini yaz. Sana dosyanın adı, kapsamı, dalları ve dallardaki olaylar (tarih, başlık, haberi veren yayın sayısı) veriliyor.
 
-- ozet: "Şu ana kadar" paragrafı; 3-5 cümle, Türkçe. Hikâyenin geldiği yeri anlat: en önemli gelişmeler, son durum, hangi dalın ısındığı ya da sustuğu. Tarihleri gün ve ay olarak ver (“12 Kasım”). Yalnızca verilen olaylardan çıkarılabilecekleri yaz.
+- ozet: "Şu ana kadar" paragrafı; 3-5 cümle, Türkçe. Hikâyenin geldiği yeri anlat: en önemli gelişmeler, son durum, hangi konuda gelişmelerin hızlandığı ya da durduğu. Metinde "dosya", "dal", "ısınmak", "sıcak" gibi iç terimleri kullanma; okura doğrudan olayları anlat. Tarihleri gün ve ay olarak ver (“12 Kasım”). Yalnızca verilen olaylardan çıkarılabilecekleri yaz.
 - ozet_en: aynı paragrafın İngilizcesi.
 - onceki: yalnızca istenen dallar için, o dalın “önceki bölümlerde” özeti: iki cümle, Türkçe; dal neden yeniden gündemde, öncesinde ne olmuştu.
 """ + DIL_KURALI + """
@@ -575,7 +575,7 @@ def _gun(g):
         return g or ""
 
 
-DURUM_AD = {"sicak": "sıcak", "suruyor": "sürüyor", "sessiz": "sessiz"}
+DURUM_AD = {"sicak": "son 48 saatte gelişme", "suruyor": "bu hafta gelişme", "sessiz": "bir haftadır sessiz"}
 
 
 KAMP_RENK = {"Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran": "#c39a35", "Yemen": "#8f6a2a", "Türkiye": "#c9544e",
@@ -716,7 +716,7 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
         kapak = [f'<p class="br-ust">Dosya · Durum özeti · {_e(yerel.day)} {AY[yerel.month - 1]} {yerel.year}, {yerel.hour:02d}.{yerel.minute:02d} itibarıyla</p>',
                  f'<h1>{_e(ds["ad"])}</h1>',
                  f'<p class="br-meta"><span>{_e(_gun(ds["ilk"]))}’den bu yana</span><span>{ds["olay"]} olay</span><span>{len(tum_h)} haber</span>'
-                 f'<span>{len(yayinlar)} yayın</span><span>{len(ds["dallar"])} dal{f", {sicak} sıcak" if sicak else ""}</span></p>']
+                 f'<span>{len(yayinlar)} yayın</span><span>{len(ds["dallar"])} başlık{f", {sicak} tanesinde son 48 saatte gelişme" if sicak else ""}</span></p>']
         if maddeler:
             kapak.append('<div class="br-bluf"><h2>Özetle</h2><ul>' + "".join(f"<li>{_e(m)}</li>" for m in maddeler) + "</ul></div>")
         son_kart = (f'<aside class="br-son"><a href="#o-{_e(son_o["a"])}">'
@@ -747,7 +747,7 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
             gorunen, gizli = ol[:3], ol[3:]
             govde = "".join(_olay_html(o, hmap.get(o["a"], []), i == 0) for i, o in enumerate(gorunen))
             if gizli:
-                govde += (f'<details class="br-eski"><summary>Bu dalda önceki {len(gizli)} olay</summary>'
+                govde += (f'<details class="br-eski"><summary>Bu başlıkta önceki {len(gizli)} olay</summary>'
                           + "".join(_olay_html(o, hmap.get(o["a"], []), False) for o in gizli) + "</details>")
             dal_html.append(f'<section class="br-dal" id="dal-{_e(dal["id"])}">{ust}{onceki}<div class="br-akis">{govde}</div></section>')
 
@@ -796,12 +796,12 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
 <main class="br">
 <section class="br-kapak"><div class="br-kapak-sol">{"".join(kapak)}</div>{son_kart}</section>
 {kim}
-<section class="br-agac"><div class="br-bolum-bas"><h2>Dallar zaman çizgisinde</h2><p class="br-alt">Her satır bir dal, her nokta bir olay; nokta büyüdükçe olayı veren yayın sayısı artar. Kırmızı sıcak (son 48 saat), turuncu sürüyor, gri sessiz. Noktaya basınca olay açılır.</p></div>
+<section class="br-agac"><div class="br-bolum-bas"><h2>Başlıklar zaman çizgisinde</h2><p class="br-alt">Her satır dosyanın bir başlığı, her nokta bir olay; nokta büyüdükçe olayı veren yayın sayısı artar. Kırmızı: son 48 saatte gelişme var. Turuncu: bu hafta. Gri: bir haftadır sessiz. Noktaya basınca olay açılır.</p></div>
 <div class="ds-serit-kap" id="dsSerit" hidden></div><div class="ds-secili" id="dsSecili" hidden></div></section>
-<nav class="br-icindekiler" aria-label="Dallar">{icindekiler}</nav>
+<nav class="br-icindekiler" aria-label="Başlıklar">{icindekiler}</nav>
 {"".join(dal_html)}
 {defter_html}
-<p class="ds-not">Olayları dallara yapay zekâ yerleştiriyor, editör denetliyor. Özetler yalnızca dosyadaki olaylardan yazılır. Her bağlantı haberin yayımlandığı yere gider; yayın haberi sonradan değiştirir ya da kaldırırsa “arşiv kopyası” İnternet Arşivi’ndeki ilk kaydı açar. Haber metinleri bu sitede saklanmaz.</p>
+<p class="ds-not">Olayları başlıklara yapay zekâ yerleştiriyor, editör denetliyor. Özetler yalnızca dosyadaki olaylardan yazılır. Her bağlantı haberin yayımlandığı yere gider; yayın haberi sonradan değiştirir ya da kaldırırsa “arşiv kopyası” İnternet Arşivi’ndeki ilk kaydı açar. Haber metinleri bu sitede saklanmaz.</p>
 </main>
 <script type="application/json" id="dsVeri">{veri_js}</script>
 <script src="../site/dosya.js?v={surum}"></script>
@@ -824,9 +824,9 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
                if g else '<div class="dsk-kapak dsk-desen"></div>')
         oz = " ".join(_cumleler(ds.get("ozet"))[:2])
         return (f'<a class="dsk" href="{_e(ds["id"])}.html">{kap}<div class="dsk-ic"><div class="dsk-ust"><span class="dsk-rozet{" sicak" if ds["sicak"] else ""}">'
-                f'{str(ds["sicak"]) + " dal sıcak" if ds["sicak"] else "sürüyor"}</span></div><h3>{_e(ds["ad"])}</h3>'
+                f'{"Son 48 saat · " + str(ds["sicak"]) + " başlıkta gelişme" if ds["sicak"] else "Gelişiyor"}</span></div><h3>{_e(ds["ad"])}</h3>'
                 + (f'<p class="dsk-oz">{_e(oz)}</p>' if oz else "")
-                + f'<p class="dsk-son">Son · {_e(_gun(ds["son"]))} · {_e(ds["son_b"])}</p><span class="dsk-alt">{ds["olay"]} olay · {len(ds["dallar"])} dal</span></div></a>')
+                + f'<p class="dsk-son">Son · {_e(_gun(ds["son"]))} · {_e(ds["son_b"])}</p><span class="dsk-alt">{ds["olay"]} olay · {len(ds["dallar"])} başlık</span></div></a>')
     kartlar = "".join(_dk(ds) for ds in veri["dosyalar"])
     dizin = f'''<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -838,7 +838,7 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
 <link rel="stylesheet" href="../site/haber.css?v={surum}"><link rel="stylesheet" href="../site/dosya.css?v={surum}"></head>
 <body class="ds-govde"><header class="mk-bas"><div class="mk-bas-ic"><a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="32" height="32"><b>Alboroto</b><span>Haberin haberi</span></a>
 <nav class="mk-menu"><a href="../">Akış</a><a href="./" aria-current="page">Dosyalar</a><a href="../arsiv.html">Arşiv</a><a href="../raporlar.html">Raporlar</a></nav></div></header>
-<main class="ds"><p class="ds-etiket">Süren olaylar</p><h1>Dosyalar</h1><p class="br-alt" style="max-width:40rem">Haftalardır süren olaylar, dal dal. Her dosyada özet, son gelişme, yayınların dağılımı ve her haberin özgün bağlantısıyla arşiv kopyası.</p><div class="dsb-izgara ds-dizin-izgara">{kartlar}</div></main></body></html>
+<main class="ds"><p class="ds-etiket">Dosyalar</p><h1>Gündemden düşmeyenler</h1><p class="br-alt" style="max-width:40rem">Haftalardır konuşulan büyük hikâyeler, başlık başlık. Her dosyada özet, son gelişme, yayınların dağılımı ve her haberin özgün bağlantısıyla arşiv kopyası.</p><div class="dsb-izgara ds-dizin-izgara">{kartlar}</div></main></body></html>
 '''
     with open(os.path.join(klasor, "index.html"), "w", encoding="utf-8") as f:
         f.write(dizin)

@@ -17,7 +17,7 @@
   if (son - ilk < 6) ilk = son - 6;
   var gunSay = son - ilk + 1, SOL = 210, SAG = 18, UST = 32, SAT = 44, W = 980, H = UST + D.dallar.length * SAT + 12;
   var x = function (g) { return SOL + (gun(g) - ilk + 0.5) * ((W - SOL - SAG) / gunSay); };
-  var sv = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": D.ad + ": dallar zaman çizgisinde" });
+  var sv = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": D.ad + ": başlıklar zaman çizgisinde" });
   var adim = Math.max(1, Math.ceil(gunSay / 10));
   for (var i = 0; i < gunSay; i++) {
     var g = new Date((ilk + i) * 864e5).toISOString().slice(0, 10), gx = x(g);
