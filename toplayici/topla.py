@@ -12,6 +12,7 @@ Ortam değişkenleri: GEMINI_API_KEY (zorunlu değil; yoksa özet yazılmaz), GE
 OZET_SINIRI (bir çalıştırmada en fazla kaç özet, varsayılan 100), GEMINI_GUNLUK (günlük istek bütçesi, varsayılan 900).
 """
 import datetime as dt
+import glob
 import gzip
 import hashlib
 import html
@@ -1351,7 +1352,7 @@ def main():
     except Exception as e:
         log(f"Sayfa adları verilemedi: {e}")
     # dosya verisi (data/dosyalar-site.json) ve haberlere "dosya": [dosya, dal]
-    dosya_veri, dosya_geri = None, []
+    dosya_veri, dosya_geri, dosya_bilgi = None, [], None
     if dosya_d:
         try:
             _kmap = {k["id"]: k for k in kaynaklar}
@@ -1369,6 +1370,27 @@ def main():
                     return None
                 return {"u": h["gorsel"], "k": k.get("ad")}
             dosya_veri = dosyalar.site_verisi(KOK, dosya_d, SIMDI, _sayfa_adi, _gorsel_bul)
+            # dosya sayfaları için haber bilgisi: güncel haberler, yoksa olay arşivi (son 35 gün); arşiv kopyası Wayback kaydından
+            _ark = {}
+            for _y in sorted(glob.glob(os.path.join(KOK, "data", "olay-arsiv", "*.json")))[-35:]:
+                for _o in oku(_y, []):
+                    for _x in _o.get("haberler", []):
+                        _ark[_x.get("id")] = _x
+            _wb = durum.get("_wayback", {})
+
+            def _bilgi(hid):
+                h, x = _tut.get(hid), _ark.get(hid) or {}
+                k = _kmap.get(h["kaynak"] if h else x.get("k"))
+                if not k or k.get("silahli"):
+                    return None
+                u = (h or {}).get("url") or x.get("u") or ""
+                g = (h or {}).get("gorsel") if (h or {}).get("gorsel_ok") is True else None
+                return {"y": k.get("ad"), "kamp": almanak.kamp(k), "t": (h or {}).get("tarih") or x.get("t"),
+                        "bo": ((h or {}).get("baslik_orj") or x.get("bo") or "")[:220], "bt": ((h or {}).get("baslik_tr") or x.get("bt") or "")[:220],
+                        "u": u if u.startswith("http") and "news.google.com" not in u else None,
+                        "a": (h or {}).get("arsiv") or (_wb.get(hid) or {}).get("url"), "g": g if str(g or "").startswith("http") else None,
+                        "s": _sayfa_adi(hid), "yorum": (x.get("y") or "")[:200]}
+            dosya_bilgi = _bilgi
             for h in tut:
                 h.pop("dosya", None)
                 if h["id"] in dosya_veri["haber"]:
@@ -1416,7 +1438,7 @@ def main():
         sayfalar.yaz(KOK, tut, kaynaklar, SIMDI, log=log)
         if dosya_veri:
             try:
-                log(f"Dosya sayfaları: {dosyalar.sayfalar_yaz(KOK, dosya_veri, marka.site(), sayfalar.surum(KOK))}")
+                log(f"Dosya sayfaları: {dosyalar.sayfalar_yaz(KOK, dosya_veri, marka.site(), sayfalar.surum(KOK), dosya_d, dosya_bilgi, SIMDI)}")
             except Exception as e:
                 log(f"Dosya sayfaları yazılamadı: {e}")
         try:

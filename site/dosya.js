@@ -15,7 +15,7 @@
 
   var bugun = Math.floor(Date.now() / 864e5), ilk = gun(D.ilk), son = Math.max(gun(D.son), Math.min(bugun, gun(D.son) + 3));
   if (son - ilk < 6) ilk = son - 6;
-  var gunSay = son - ilk + 1, SOL = 200, SAG = 18, UST = 32, SAT = 44, W = 980, H = UST + D.dallar.length * SAT + 12;
+  var gunSay = son - ilk + 1, SOL = 210, SAG = 18, UST = 32, SAT = 44, W = 980, H = UST + D.dallar.length * SAT + 12;
   var x = function (g) { return SOL + (gun(g) - ilk + 0.5) * ((W - SOL - SAG) / gunSay); };
   var sv = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": D.ad + ": dallar zaman çizgisinde" });
   var adim = Math.max(1, Math.ceil(gunSay / 10));
@@ -29,14 +29,21 @@
     sec.hidden = false; sec.innerHTML = "";
     sec.appendChild(el("time", null, gk(o.g) + " · " + dal.ad + " · " + (o.k || 2) + " yayın"));
     sec.appendChild(el("b", null, o.b));
+    var git = el("a", null, "Olaya ve kaynaklarına git ↓"); git.href = "#o-" + o.a; sec.appendChild(git);
     if (o.s) { var a = el("a", null, "Kim nasıl yazdı →"); a.href = "../h/" + o.s; sec.appendChild(a); }
     if (o.x && o.x.length) sec.appendChild(el("span", "ds-rozet", "Başka bir dosyada da: " + o.x.join(", ")));
   }
   var enSon = null;
   D.dallar.forEach(function (dal, j) {
     var y = UST + j * SAT + SAT / 2, renk = RENK[dal.durum] || RENK.sessiz;
-    var ad = s("a", { href: "#dal-" + dal.id }), t = s("text", { x: 10, y: y + 4, "font-size": 13, "font-weight": 600, fill: "var(--ds-murekkep)" });
-    t.textContent = dal.ad.length > 25 ? dal.ad.slice(0, 24) + "…" : dal.ad; ad.appendChild(t); sv.appendChild(ad);
+    // dal adı en çok iki satır (sözcük sınırından), sığmazsa sonu üç nokta
+    var ad = s("a", { href: "#dal-" + dal.id }), satirlar = [""], sozler = dal.ad.split(" ");
+    sozler.forEach(function (w) { var son = satirlar[satirlar.length - 1]; if ((son + " " + w).trim().length > 24 && son) satirlar.push(w); else satirlar[satirlar.length - 1] = (son + " " + w).trim(); });
+    if (satirlar.length > 2) { satirlar = satirlar.slice(0, 2); satirlar[1] = satirlar[1].slice(0, 22) + "…"; }
+    var t = s("text", { x: 10, y: y + 4 - (satirlar.length - 1) * 7.5, "font-size": 12.5, "font-weight": 600, fill: "var(--ds-murekkep)" });
+    satirlar.forEach(function (sat, i) { var ts = s("tspan", { x: 10, dy: i ? 15 : 0 }); ts.textContent = sat; t.appendChild(ts); });
+    var tt = s("title", {}); tt.textContent = dal.ad; t.appendChild(tt);
+    ad.appendChild(t); sv.appendChild(ad);
     var ol = dal.olaylar.filter(function (o) { return gun(o.g) >= ilk; });
     if (!ol.length) return;
     sv.appendChild(s("line", { x1: x(ol[0].g), x2: x(ol[ol.length - 1].g), y1: y, y2: y, stroke: renk, "stroke-width": 2, opacity: 0.45 }));

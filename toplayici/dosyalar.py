@@ -20,6 +20,7 @@ import html
 import json
 import os
 import re
+import urllib.parse
 
 import ekler
 
@@ -179,7 +180,7 @@ def olaylari_isle(kok, d, olaylar, haberler):
         tarihler = [t for t in tarihler if t] or [o.get("ilk") or o.get("son") or ""]
         kay["b"] = ekler.guvenli(o.get("baslik"))[:160] or kay.get("b")
         kay["b_en"] = ekler.guvenli(o.get("baslik_en"))[:160] or kay.get("b_en")
-        kay["not"] = ekler.guvenli(o.get("not"))[:300] or kay.get("not")
+        kay["not"] = ekler.guvenli(o.get("not"))[:700] or kay.get("not")
         kay["g"] = min([kay.get("g") or "9999"] + [t[:10] for t in tarihler])
         kay["son"] = max([kay.get("son") or ""] + tarihler)
         kay["n"] = len(kay["h"])
@@ -577,27 +578,196 @@ def _gun(g):
 DURUM_AD = {"sicak": "sıcak", "suruyor": "sürüyor", "sessiz": "sessiz"}
 
 
-def sayfalar_yaz(kok, veri, site_adres, surum):
-    """Her açık dosya için d/<kimlik>.html (arama motoru ve paylaşım için içerik sayfada yazılı) ve d/index.html."""
+KAMP_RENK = {"Filistin": "#2b8a5e", "Arap dünyası": "#8cc2a8", "İran": "#c39a35", "Yemen": "#8f6a2a", "Türkiye": "#c9544e",
+             "İsrail": "#4a72c4", "İsrail’de muhalif basın": "#8a7bc0", "Batı": "#9aa3ab", "Dünya (Batı dışı)": "#5f8f8f", "Diğer": "#6b746f"}
+KAMP_SIRA = ["Filistin", "Arap dünyası", "Türkiye", "İran", "Yemen", "Dünya (Batı dışı)", "Batı", "İsrail", "İsrail’de muhalif basın", "Diğer"]
+
+
+def _saat(t):
+    """ISO zaman → '20 Kasım, 21.40' (Türkiye saati)."""
+    try:
+        z = dt.datetime.fromisoformat(t) + dt.timedelta(hours=3)
+        return f"{z.day} {AY[z.month - 1]}, {z.hour:02d}.{z.minute:02d}"
+    except (TypeError, ValueError):
+        return ""
+
+
+def _cumleler(t):
+    return [c.strip() for c in re.split(r"(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9“\"'])", t or "") if len(c.strip()) > 3]
+
+
+def _aktar(u, w=640):
+    """Görseller kaynak siteden değil wsrv.nl üzerinden (okurun IP adresi yayınlara gitmesin; site/dil.js AKTAR ile aynı)."""
+    if not u or not str(u).startswith("http"):
+        return u
+    return "https://wsrv.nl/?url=" + urllib.parse.quote(u, safe="") + f"&w={w}&we&output=webp&q=78"
+
+
+def _alan(u):
+    try:
+        return urllib.parse.urlparse(u).netloc.replace("www.", "")
+    except Exception:
+        return ""
+
+
+def _olay_html(o, haberler, ilk_mi):
+    """Bir olayın kartı: başlık, çerçeve notu, görseller, kaynak listesi (özgün haber ve arşiv bağlantısı)."""
+    gorseller = [h for h in haberler if h.get("g")][:3]
+    sayfa = next((h["s"] for h in haberler if h.get("s")), None)
+    p = [f'<article class="br-olay{" br-olay-ilk" if ilk_mi else ""}" id="o-{_e(o["a"])}">',
+         f'<div class="br-olay-zaman"><time datetime="{_e(o.get("g"))}">{_e(_gun(o.get("g")))}</time><span>{len(haberler)} haber · {len({h["y"] for h in haberler})} yayın</span></div>',
+         '<div class="br-olay-govde">', f'<h4>{_e(o.get("b"))}</h4>']
+    if o.get("not"):
+        nt = o["not"]
+        if len(nt) > 460:   # cümle sınırından kısalt
+            cs, nt = _cumleler(o["not"]), ""
+            for c in cs:
+                if len(nt) + len(c) > 460 and nt:
+                    break
+                nt = (nt + " " + c).strip()
+        p.append(f'<p class="br-olay-not">{_e(nt)}</p>')
+    if gorseller:
+        p.append('<div class="br-gorseller">' + "".join(
+            f'<figure><img src="{_e(_aktar(h["g"], 480))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><figcaption>{_e(h["y"])}</figcaption></figure>'
+            for h in gorseller) + "</div>")
+    if haberler:
+        p.append('<ul class="br-kaynaklar">')
+        for h in haberler[:12]:
+            renk = KAMP_RENK.get(h.get("kamp"), "#6b746f")
+            bas = h.get("bo") or h.get("bt") or ""
+            satir = f'<li><span class="br-yayin"><i style="background:{renk}" title="{_e(h.get("kamp"))}"></i>{_e(h["y"])}</span>'
+            satir += f'<span class="br-saat">{_e(_saat(h.get("t")))}</span>'
+            if h.get("u"):
+                satir += f'<a class="br-baslik" href="{_e(h["u"])}" target="_blank" rel="noopener nofollow" dir="auto">{_e(bas)}<span class="br-ok" aria-hidden="true">↗</span></a>'
+            else:
+                satir += f'<span class="br-baslik" dir="auto">{_e(bas)}</span>'
+            if h.get("bt") and h.get("bt") != bas:
+                satir += f'<span class="br-ceviri">{_e(h["bt"])}</span>'
+            ek = []
+            if h.get("a"):
+                ek.append(f'<a href="{_e(h["a"])}" target="_blank" rel="noopener nofollow">arşiv kopyası</a>')
+            elif h.get("u") and "t.me/" not in h["u"]:
+                ek.append(f'<a href="https://web.archive.org/web/*/{_e(h["u"])}" target="_blank" rel="noopener nofollow">arşivde ara</a>')
+            if h.get("u"):
+                ek.append(f'<span>{_e(_alan(h["u"]))}</span>')
+            if h.get("yorum"):
+                ek.append(f'<span class="br-yorum">{_e(h["yorum"])}</span>')
+            if ek:
+                satir += '<span class="br-ek">' + " · ".join(ek) + "</span>"
+            p.append(satir + "</li>")
+        if len(haberler) > 12:
+            p.append(f'<li class="br-dahasi">ve {len(haberler) - 12} haber daha</li>')
+        p.append("</ul>")
+    if sayfa:
+        p.append(f'<a class="br-karsilastir" href="../h/{_e(sayfa)}">Kim nasıl yazdı: karşılaştırmanın tamamı →</a>')
+    p.append("</div></article>")
+    return "".join(p)
+
+
+def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
+    """Her açık dosya için d/<kimlik>.html: brifing düzeni (özetle, son gelişme, kim anlattı, dallar, kanıt defteri) ve d/index.html.
+    bilgi(haber kimliği) → {y, kamp, t, bo, bt, u, a, g, s, yorum} ya da None (silahlı grupların kanalları gibi gösterilmeyenler)."""
     klasor = os.path.join(kok, "data", "d")
     os.makedirs(klasor, exist_ok=True)
+    simdi = simdi or dt.datetime.now(dt.timezone.utc)
+    yerel = simdi + dt.timedelta(hours=3)
+    O = (d or {}).get("olaylar", {})
     yazilan = set()
     for ds in veri["dosyalar"]:
+        # olay → haberler (bilgiyle), tekrarsız
+        hmap = {}
+        for dal in ds["dallar"]:
+            for o in dal["olaylar"]:
+                if o["a"] in hmap:
+                    continue
+                hs = []
+                for hid in (O.get(o["a"]) or {}).get("h", []):
+                    b = bilgi(hid) if bilgi else None
+                    if b:
+                        hs.append(b)
+                hs.sort(key=lambda h: h.get("t") or "")
+                # aynı yayının ikinci haberi listede tekrar etmesin
+                gor, tek = set(), []
+                for h in hs:
+                    if h["y"] not in gor:
+                        gor.add(h["y"])
+                        tek.append(h)
+                hmap[o["a"]] = tek
+                o["not"] = (O.get(o["a"]) or {}).get("not")
+        tum_h = [h for hs in hmap.values() for h in hs]
+        yayinlar = {h["y"] for h in tum_h}
+        kamp_say = {}
+        for h in tum_h:
+            kamp_say[h.get("kamp") or "Diğer"] = kamp_say.get(h.get("kamp") or "Diğer", 0) + 1
+        olay_kamp = [{h.get("kamp") for h in hs} for hs in hmap.values() if hs]
+        dis_yok = sum(1 for s in olay_kamp if not (s & {"İsrail", "Batı"}))
+        gun_say = (dt.date.fromisoformat(ds["son"]) - dt.date.fromisoformat(ds["ilk"])).days + 1
+        # son gelişme: en yeni olay
+        son_o = max((o for dal in ds["dallar"] for o in dal["olaylar"]), key=lambda o: (o["g"], o.get("k") or 0))
+        son_dal = next(dal for dal in ds["dallar"] if son_o in dal["olaylar"])
+        son_h = hmap.get(son_o["a"], [])
+        son_g = next((h for h in son_h if h.get("g")), None) or next((h for hs in hmap.values() for h in hs if h.get("g")), None)
+        ozet = ds.get("ozet") or ""
+        maddeler = _cumleler(ozet)[:6]
+        aciklama = (ozet[:200].rsplit(" ", 1)[0] + "…") if len(ozet) > 200 else ozet or f'{ds["ad"]}: süren gelişmeler, dallarıyla birlikte.'
+        adres = f'{site_adres}d/{ds["id"]}.html'
+        sicak = sum(1 for x in ds["dallar"] if x["durum"] == "sicak")
+
+        kapak = [f'<p class="br-ust">Dosya · Durum özeti · {_e(yerel.day)} {AY[yerel.month - 1]} {yerel.year}, {yerel.hour:02d}.{yerel.minute:02d} itibarıyla</p>',
+                 f'<h1>{_e(ds["ad"])}</h1>',
+                 f'<p class="br-meta"><span>{_e(_gun(ds["ilk"]))}’den bu yana</span><span>{ds["olay"]} olay</span><span>{len(tum_h)} haber</span>'
+                 f'<span>{len(yayinlar)} yayın</span><span>{len(ds["dallar"])} dal{f", {sicak} sıcak" if sicak else ""}</span></p>']
+        if maddeler:
+            kapak.append('<div class="br-bluf"><h2>Özetle</h2><ul>' + "".join(f"<li>{_e(m)}</li>" for m in maddeler) + "</ul></div>")
+        son_kart = (f'<aside class="br-son"><a href="#o-{_e(son_o["a"])}">'
+                    + (f'<div class="br-son-gorsel"><img src="{_e(_aktar(son_g["g"], 900))}" alt="" loading="eager" referrerpolicy="no-referrer"><span>{_e(son_g["y"])}</span></div>' if son_g else "")
+                    + f'<div class="br-son-ic"><span class="br-son-et">Son gelişme · {_e(_gun(son_o["g"]))}</span><b>{_e(son_o["b"])}</b>'
+                    + f'<span class="br-son-dal">{_e(son_dal["ad"])} · {len(son_h)} haber</span></div></a></aside>')
+
+        # kim anlattı
+        sirali = sorted(kamp_say.items(), key=lambda x: KAMP_SIRA.index(x[0]) if x[0] in KAMP_SIRA else 99)
+        toplam = sum(kamp_say.values()) or 1
+        cubuk = "".join(f'<i style="flex:{n};background:{KAMP_RENK.get(k, "#6b746f")}" title="{_e(k)}: {n}"></i>' for k, n in sirali)
+        lejant = "".join(f'<li><i style="background:{KAMP_RENK.get(k, "#6b746f")}"></i>{_e(k)} <b>{n}</b> <span>%{round(100 * n / toplam)}</span></li>' for k, n in sirali)
+        kim = (f'<section class="br-kim"><h2>Kim anlattı</h2><p class="br-alt">Bu dosyadaki {len(tum_h)} haberin yayın kümelerine dağılımı. '
+               f'{dis_yok} olayı ({round(100 * dis_yok / max(1, len(olay_kamp)))}%) izlediğimiz İsrail ve Batı yayınlarından hiçbiri vermedi.</p>'
+               f'<div class="br-cubuk">{cubuk}</div><ul class="br-lejant">{lejant}</ul></section>') if tum_h else ""
+
+        # dallar
+        icindekiler = "".join(f'<a href="#dal-{_e(x["id"])}"><i class="dsk-nokta dsk-{x["durum"]}"></i>{_e(x["ad"])} <span>{len(x["olaylar"])}</span></a>' for x in ds["dallar"])
         dal_html = []
         for dal in ds["dallar"]:
+            ol = list(reversed(dal["olaylar"]))
             rozet = f'<span class="ds-rozet ds-{dal["durum"]}">{DURUM_AD[dal["durum"]]}</span>'
             if dal.get("yeniden"):
                 rozet += f'<span class="ds-rozet ds-geri">{dal["yeniden"]} gün sonra yeniden gündemde</span>'
-            ol = "".join(
-                f'<li><time datetime="{_e(o["g"])}">{_e(_gun(o["g"]))}</time>'
-                + (f'<a href="../h/{_e(o["s"])}">{_e(o["b"])}</a>' if o.get("s") else f'<span>{_e(o["b"])}</span>')
-                + f'<small>{int(o.get("k") or 0)} yayın</small></li>' for o in reversed(dal["olaylar"]))
-            onceki = f'<p class="ds-onceki"><b>Önceki bölümlerde.</b> {_e(dal["onceki"])}</p>' if dal.get("onceki") else ""
-            dal_html.append(f'<section class="ds-dal" id="dal-{_e(dal["id"])}"><div class="ds-dal-bas"><h3>{_e(dal["ad"])}</h3>{rozet}</div>'
-                            f'{onceki}<ol class="ds-olaylar">{ol}</ol></section>')
-        ozet = ds.get("ozet") or ""
-        aciklama = (ozet[:200].rsplit(" ", 1)[0] + "…") if len(ozet) > 200 else ozet or f'{ds["ad"]}: süren gelişmeler, dallarıyla birlikte.'
-        adres = f'{site_adres}d/{ds["id"]}.html'
+            ust = (f'<header class="br-dal-bas"><div><h3>{_e(dal["ad"])}</h3><p>{len(ol)} olay · {_e(_gun(ol[-1]["g"]))} – {_e(_gun(ol[0]["g"]))}</p></div>'
+                   f'<div class="br-rozetler">{rozet}</div></header>')
+            onceki = f'<p class="br-onceki"><b>Önceki bölümlerde.</b> {_e(dal["onceki"])}</p>' if dal.get("onceki") else ""
+            gorunen, gizli = ol[:3], ol[3:]
+            govde = "".join(_olay_html(o, hmap.get(o["a"], []), i == 0) for i, o in enumerate(gorunen))
+            if gizli:
+                govde += (f'<details class="br-eski"><summary>Bu dalda önceki {len(gizli)} olay</summary>'
+                          + "".join(_olay_html(o, hmap.get(o["a"], []), False) for o in gizli) + "</details>")
+            dal_html.append(f'<section class="br-dal" id="dal-{_e(dal["id"])}">{ust}{onceki}<div class="br-akis">{govde}</div></section>')
+
+        # kanıt defteri
+        satirlar = sorted(((h, o) for o in (x for dal in ds["dallar"] for x in dal["olaylar"]) for h in hmap.get(o["a"], [])),
+                          key=lambda x: x[0].get("t") or "", reverse=True)
+        gor_u, defter = set(), []
+        for h, o in satirlar:
+            if h.get("u") in gor_u:
+                continue
+            gor_u.add(h.get("u"))
+            defter.append(f'<tr><td>{_e(_saat(h.get("t")))}</td><td><i style="background:{KAMP_RENK.get(h.get("kamp"), "#6b746f")}"></i>{_e(h["y"])}</td>'
+                          f'<td dir="auto">' + (f'<a href="{_e(h["u"])}" target="_blank" rel="noopener nofollow">{_e(h.get("bo") or h.get("bt"))}</a>' if h.get("u") else _e(h.get("bo") or h.get("bt")))
+                          + "</td><td>" + (f'<a href="{_e(h["a"])}" target="_blank" rel="noopener nofollow">arşiv</a>' if h.get("a") else "–") + "</td></tr>")
+        arsivli = sum(1 for h, _ in satirlar if h.get("a"))
+        defter_html = (f'<section class="br-defter"><details><summary><h2>Kanıt defteri</h2><span>{len(defter)} haber bağlantısı, {len(yayinlar)} yayın'
+                       f'{f", {arsivli} tanesinin İnternet Arşivi kopyası" if arsivli else ""}</span></summary>'
+                       f'<div class="br-tablo"><table><thead><tr><th>Zaman</th><th>Yayın</th><th>Özgün başlık</th><th>Arşiv</th></tr></thead><tbody>{"".join(defter)}</tbody></table></div>'
+                       '</details></section>') if defter else ""
+
         veri_js = json.dumps({k: ds[k] for k in ("id", "ad", "dallar", "ilk", "son")}, ensure_ascii=False).replace("</", "<\\/")
         sayfa = f'''<!doctype html>
 <html lang="tr">
@@ -606,13 +776,14 @@ def sayfalar_yaz(kok, veri, site_adres, surum):
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://zbshaber.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="theme-color" content="#faf8f4">
-<title>{_e(ds["ad"])} | Alboroto</title>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>{_e(ds["ad"])} | Alboroto dosyası</title>
 <meta name="description" content="{_e(aciklama)}">
 <link rel="canonical" href="{_e(adres)}">
 <meta property="og:title" content="{_e(ds["ad"])}">
 <meta property="og:description" content="{_e(aciklama)}">
 <meta property="og:url" content="{_e(adres)}">
-<meta property="og:image" content="{_e(site_adres)}site/paylas-2026.png">
+<meta property="og:image" content="{_e(_aktar(son_g["g"], 1200) if son_g else site_adres + "site/paylas-2026.png")}">
 <link rel="icon" href="../site/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500;600&display=swap">
@@ -622,14 +793,15 @@ def sayfalar_yaz(kok, veri, site_adres, surum):
 <body class="ds-govde">
 <header class="mk-bas"><div class="mk-bas-ic"><a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="32" height="32"><b>Alboroto</b><span>Haberin haberi</span></a>
 <nav class="mk-menu"><a href="../">Akış</a><a href="./">Dosyalar</a><a href="../arsiv.html">Arşiv</a><a href="../raporlar.html">Raporlar</a><a href="../almanak.html">Almanak</a></nav></div></header>
-<main class="ds">
-<p class="ds-etiket">Dosya · {_e(_gun(ds["ilk"]))}’den bu yana · {ds["olay"]} olay</p>
-<h1>{_e(ds["ad"])}</h1>
-{f'<div class="ds-suana"><span>Şu ana kadar</span><p>{_e(ozet)}</p></div>' if ozet else ''}
-<div class="ds-serit-kap" id="dsSerit" hidden></div>
-<div class="ds-secili" id="dsSecili" hidden></div>
-<div class="ds-dallar">{"".join(dal_html)}</div>
-<p class="ds-not">Olayları dallara yapay zekâ yerleştiriyor, editör denetliyor. Her olay birden çok yayının aynı gelişmeyi nasıl anlattığının karşılaştırmasıdır; başlığa basınca karşılaştırma açılır.</p>
+<main class="br">
+<section class="br-kapak"><div class="br-kapak-sol">{"".join(kapak)}</div>{son_kart}</section>
+{kim}
+<section class="br-agac"><div class="br-bolum-bas"><h2>Dallar zaman çizgisinde</h2><p class="br-alt">Her satır bir dal, her nokta bir olay; nokta büyüdükçe olayı veren yayın sayısı artar. Kırmızı sıcak (son 48 saat), turuncu sürüyor, gri sessiz. Noktaya basınca olay açılır.</p></div>
+<div class="ds-serit-kap" id="dsSerit" hidden></div><div class="ds-secili" id="dsSecili" hidden></div></section>
+<nav class="br-icindekiler" aria-label="Dallar">{icindekiler}</nav>
+{"".join(dal_html)}
+{defter_html}
+<p class="ds-not">Olayları dallara yapay zekâ yerleştiriyor, editör denetliyor. Özetler yalnızca dosyadaki olaylardan yazılır. Her bağlantı haberin yayımlandığı yere gider; yayın haberi sonradan değiştirir ya da kaldırırsa “arşiv kopyası” İnternet Arşivi’ndeki ilk kaydı açar. Haber metinleri bu sitede saklanmaz.</p>
 </main>
 <script type="application/json" id="dsVeri">{veri_js}</script>
 <script src="../site/dosya.js?v={surum}"></script>
@@ -645,11 +817,17 @@ def sayfalar_yaz(kok, veri, site_adres, surum):
             with open(yol, "w", encoding="utf-8") as f:
                 f.write(sayfa)
         yazilan.add(ds["id"] + ".html")
-    # dizin
-    kartlar = "".join(
-        f'<a class="ds-kart" href="{_e(ds["id"])}.html"><b>{_e(ds["ad"])}</b><span>{ds["olay"]} olay · {len(ds["dallar"])} dal'
-        f'{" · " + str(ds["sicak"]) + " sıcak" if ds["sicak"] else ""}</span><small>Son: {_e(_gun(ds["son"]))} · {_e(ds["son_b"])}</small></a>'
-        for ds in veri["dosyalar"])
+    # dizin: ana sayfadaki görselli kartlarla aynı dil
+    def _dk(ds):
+        g = (ds.get("gorsel") or {}).get("u")
+        kap = (f'<div class="dsk-kapak"><img src="{_e(_aktar(g, 900))}" alt="" loading="lazy" referrerpolicy="no-referrer"><span class="dsk-kunye">{_e((ds.get("gorsel") or {}).get("k"))}</span></div>'
+               if g else '<div class="dsk-kapak dsk-desen"></div>')
+        oz = " ".join(_cumleler(ds.get("ozet"))[:2])
+        return (f'<a class="dsk" href="{_e(ds["id"])}.html">{kap}<div class="dsk-ic"><div class="dsk-ust"><span class="dsk-rozet{" sicak" if ds["sicak"] else ""}">'
+                f'{str(ds["sicak"]) + " dal sıcak" if ds["sicak"] else "sürüyor"}</span></div><h3>{_e(ds["ad"])}</h3>'
+                + (f'<p class="dsk-oz">{_e(oz)}</p>' if oz else "")
+                + f'<p class="dsk-son">Son · {_e(_gun(ds["son"]))} · {_e(ds["son_b"])}</p><span class="dsk-alt">{ds["olay"]} olay · {len(ds["dallar"])} dal</span></div></a>')
+    kartlar = "".join(_dk(ds) for ds in veri["dosyalar"])
     dizin = f'''<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; object-src 'none'; base-uri 'self'; form-action 'none'">
@@ -660,7 +838,7 @@ def sayfalar_yaz(kok, veri, site_adres, surum):
 <link rel="stylesheet" href="../site/haber.css?v={surum}"><link rel="stylesheet" href="../site/dosya.css?v={surum}"></head>
 <body class="ds-govde"><header class="mk-bas"><div class="mk-bas-ic"><a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="32" height="32"><b>Alboroto</b><span>Haberin haberi</span></a>
 <nav class="mk-menu"><a href="../">Akış</a><a href="./" aria-current="page">Dosyalar</a><a href="../arsiv.html">Arşiv</a><a href="../raporlar.html">Raporlar</a></nav></div></header>
-<main class="ds"><p class="ds-etiket">Süren olaylar</p><h1>Dosyalar</h1><div class="ds-dizin">{kartlar}</div></main></body></html>
+<main class="ds"><p class="ds-etiket">Süren olaylar</p><h1>Dosyalar</h1><p class="br-alt" style="max-width:40rem">Haftalardır süren olaylar, dal dal. Her dosyada özet, son gelişme, yayınların dağılımı ve her haberin özgün bağlantısıyla arşiv kopyası.</p><div class="dsb-izgara ds-dizin-izgara">{kartlar}</div></main></body></html>
 '''
     with open(os.path.join(klasor, "index.html"), "w", encoding="utf-8") as f:
         f.write(dizin)
