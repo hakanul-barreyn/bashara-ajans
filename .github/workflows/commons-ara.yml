@@ -2,6 +2,10 @@
 name: commons-ara
 on:
   workflow_dispatch:
+    inputs:
+      kategoriler:
+        description: "Boşlukla ayrılmış Commons kategorileri (Category: olmadan) ya da arama:<sözcükler>"
+        required: false
   push:
     paths: [".github/workflows/commons-ara.yml", "toplayici/commons_ara.py"]
 permissions:
@@ -12,7 +16,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - run: python toplayici/commons_ara.py
+      - run: python toplayici/commons_ara.py ${{ inputs.kategoriler }}
       - run: |
           git init -q d && cd d && git checkout -q -b yz-durum && cp ../commons.json . && git add commons.json
           git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "commons"

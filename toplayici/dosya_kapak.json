@@ -1,0 +1,9 @@
+{
+ "_not": "Dosya kapakları: her dosya için sabit bir Sentinel-2 uydu kesiti (insan yok, kaynak açık). toplayici/gunluk_gorsel.py bir kez üretir, gorsel dalında uydu/dosya/<id>.jpg olarak saklar. bbox: batı, güney, doğu, kuzey (WGS84); cozunurluk metre.",
+ "gazze-ateskesi-sari-hat": {"bbox": [34.20, 31.21, 34.58, 31.60], "cozunurluk": 20, "yer": "Gazze Şeridi", "yer_en": "Gaza Strip"},
+ "bati-seria-yerlesimci": {"bbox": [35.18, 32.08, 35.38, 32.24], "cozunurluk": 10, "yer": "Nablus ve çevresi, Batı Şeria", "yer_en": "Nablus and surroundings, West Bank"},
+ "guney-lubnanin-isgali": {"bbox": [35.18, 33.08, 35.62, 33.38], "cozunurluk": 20, "yer": "Güney Lübnan, Sur ve Litani", "yer_en": "South Lebanon, Tyre and the Litani"},
+ "iran-abd-savasi": {"bbox": [55.70, 25.95, 56.75, 26.85], "cozunurluk": 60, "yer": "Hürmüz Boğazı", "yer_en": "Strait of Hormuz"},
+ "suudi-yemen-savasi": {"bbox": [43.15, 12.40, 43.65, 12.85], "cozunurluk": 30, "yer": "Babülmendep Boğazı", "yer_en": "Bab al-Mandab Strait"},
+ "israilde-secim-sonrasi": {"bbox": [35.16, 31.74, 35.26, 31.81], "cozunurluk": 10, "yer": "Kudüs", "yer_en": "Jerusalem"}
+}

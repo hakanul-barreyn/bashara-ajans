@@ -15,8 +15,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
-<link rel="stylesheet" href="site/stil.css?v=202611211620">
-<link rel="stylesheet" href="site/rapor.css?v=202611161640">
+<link rel="stylesheet" href="site/stil.css?v=202611222300">
+<link rel="stylesheet" href="site/rapor.css?v=202611222300">
 <script src="site/dil.js?v=202611202300"></script>
 <script src="site/marka.js?v=202611150800"></script>
 <style>
@@ -35,6 +35,7 @@
 .hk-izgara i:last-child{background:#fff;animation:nabiz 1.6s ease-in-out infinite}
 @keyframes nabiz{50%{opacity:.35}}
 .hk-izgara-not{font:500 .72rem var(--mono);color:#8f958f;margin:8px 0 0}
+.hk-tarih{margin:14px 0 0;padding-top:20px;border-top:1px solid #2a2f2c;font:500 1.1rem/1.45 var(--f);color:#d7d9d3;max-width:36rem}
 .hk h2{font:700 1.5rem/1.25 "Source Serif 4",Georgia,serif;margin:42px 0 12px;text-wrap:balance}
 .hk p,.hk li{font:400 1.06rem/1.65 "Source Serif 4",Georgia,serif;color:var(--ink)}
 .hk p{margin:0 0 14px;max-width:68ch}
@@ -47,7 +48,7 @@
 .hk-kaynak{font:400 .84rem/1.5 var(--f)!important;color:var(--soluk)!important;padding-left:1.1em}
 .hk-kaynak li{font:inherit!important;color:inherit!important}
 .hk-paylas{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 0}
-.hk-paylas button{border:0;border-radius:999px;padding:10px 18px;font-weight:700;background:#0c0e0d;color:#fff;cursor:pointer}
+.hk-paylas button{border:0;border-radius:3px;padding:10px 18px;font-weight:700;background:#0c0e0d;color:#fff;cursor:pointer}
 .hk-not{font:400 .85rem/1.5 var(--f)!important;color:var(--soluk)!important}
 </style>
 </head>
@@ -67,14 +68,8 @@
     <h1 data-dil="en">Dr. Hussam Abu Safiya</h1>
     <p class="rol" data-dil="tr">Çocuk doktoru · Kuzey Gazze’deki Kemal Advan Hastanesi’nin başhekimi</p>
     <p class="rol" data-dil="en">Paediatrician · Director of Kamal Adwan Hospital in northern Gaza</p>
-    <div class="hk-sayac">
-      <b data-sayac="gun">–</b>
-      <span data-dil="tr">gündür İsrail’in elinde, haksız ve hukuksuz biçimde tutuklu.<small data-sayac="ayrinti"></small></span>
-      <span data-dil="en">days held by Israel, unjustly and unlawfully.<small data-sayac="ayrinti"></small></span>
-    </div>
-    <div class="hk-izgara" id="gunIzgara" aria-hidden="true"></div>
-    <p class="hk-izgara-not" data-dil="tr">Her kare bir gün: 27 Aralık 2024’ten bugüne. Yanıp sönen kare bugün.</p>
-    <p class="hk-izgara-not" data-dil="en">Each square is one day, from 27 December 2024 to today. The blinking square is today.</p>
+    <p class="hk-tarih" data-dil="tr">27 Aralık 2024’ten beri İsrail’in elinde, haksız ve hukuksuz biçimde tutuklu.</p>
+    <p class="hk-tarih" data-dil="en">Held by Israel, unjustly and unlawfully, since 27 December 2024.</p>
   </div>
 </section>
 <main class="hk">
@@ -123,8 +118,8 @@
     <li><time>11 November 2026</time>A rights group warned that Israel is ignoring his deteriorating health (Haaretz).</li>
   </ol>
   <div class="hk-paylas"><button type="button" id="hkKopya"><span data-dil="tr">Bağlantıyı kopyala</span><span data-dil="en">Copy link</span></button></div>
-  <p class="hk-not" data-dil="tr">Bu sayfayı Dr. Ebu Safiye’ye saygımızdan hazırladık. Sayaç her gün kendiliğinden artar; serbest bırakıldığı gün duracak.</p>
-  <p class="hk-not" data-dil="en">We made this page out of respect for Dr. Abu Safiya. The counter rises by itself every day; it will stop on the day he is released.</p>
+  <p class="hk-not" data-dil="tr">Bu sayfayı Dr. Ebu Safiye’ye saygımızdan hazırladık.</p>
+  <p class="hk-not" data-dil="en">We made this page out of respect for Dr. Abu Safiya.</p>
   <h2 data-dil="tr">Kaynaklar</h2><h2 data-dil="en">Sources</h2>
   <ul class="hk-kaynak">
     <li><a href="https://www.amnesty.org/en/latest/news/2026/07/israel-opt-fears-mounting-for-arbitrarily-detained-palestinian-doctor-hussam-abu-safiya-amidst-reports-his-life-is-in-grave-danger/" rel="noopener" target="_blank">Amnesty International, 6 July 2026</a></li>
@@ -134,7 +129,6 @@
     <li><a href="https://haaretz.com/israel-news/israel-crime/2026-11-11/ty-article/.premium/israel-neglecting-deteriorating-health-of-jailed-gaza-doctor-rights-group-says/000001a1-c992-dc22-abe1-f9f61bf10000" rel="noopener" target="_blank">Haaretz, 11 November 2026</a></li>
   </ul>
 </main>
-<script src="site/sayac.js?v=202611112300"></script>
 <script src="site/hekim.js?v=202611112300"></script>
 </body>
 </html>

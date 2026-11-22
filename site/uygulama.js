@@ -617,8 +617,6 @@
   // ---------------------------------------------------- manşet slaytları
   let slaytZaman = null, slaytNo = 0;
   // Enine kartlar: en az üç yayının yazdığı, çevrilmiş ve kendi haber metnimiz olan olaylar, yan yana dikey kartlar (masaüstü)
-  // karşılaştırmalı haberler rafı: her kart başka bir renk (karnaval)
-  const ENINE_RENK = ["#e63946", "#f3722c", "#2a9d8f", "#7b2cbf", "#3a86ff", "#d81b60", "#2b9348", "#f8961e", "#0081a7", "#c1121f"];
   function enineCiz(liste) {
     const kutu = $("enine"); if (!kutu) return;
     kutu.innerHTML = "";
@@ -635,9 +633,9 @@
     bh.appendChild(el("span", "bolum-ek", en ? " · three or more outlets, translated, with our own report" : " · en az üç yayın, çevrilmiş, kendi haber metnimizle"));
     kutu.appendChild(bh);
     const raf = el("div", "enine-raf"); raf.setAttribute("role", "list");
-    uygun.forEach((o, sira) => {
+    uygun.forEach((o) => {
       const kp = o.arsiv ? kapsamaK(o.kaynaklar) : kapsama(o);
-      const a = el("a", "enine-kart"); a.style.setProperty("--r", ENINE_RENK[sira % ENINE_RENK.length]); a.style.setProperty("--e", (sira % 2 ? 1 : -1) * (0.6 + (sira % 3) * 0.4) + "deg"); a.href = "haber.html?o=" + encodeURIComponent(o.id); a.setAttribute("role", "listitem");
+      const a = el("a", "enine-kart"); a.href = "haber.html?o=" + encodeURIComponent(o.id); a.setAttribute("role", "listitem");
       const gd = o.arsiv ? o : (gundemArsiv || []).find((x) => x.id === o.id);
       if (gd && gd.gorsel && gd.gorsel_atif) { const im = document.createElement("img"); im.src = (window.AKTAR || ((u) => u))(gd.gorsel, 480); im.alt = ""; im.loading = "lazy"; im.referrerPolicy = "no-referrer"; if (gd.odak) im.style.objectPosition = gd.odak; im.onerror = () => { im.remove(); a.classList.add("gorselsiz"); }; a.appendChild(im); }
       else a.classList.add("gorselsiz");
@@ -911,25 +909,58 @@
     return b;
   }
 
+  // Son haberler: tek tek, tam cümleyle; her biri yukarıdan aşağı devrilerek gelir. Okları ve kendiliğinden geçişi var.
+  let seritZaman = null;
   function seritCiz() {
     const sd = (h) => kaynaklar[h.kaynak] && kaynaklar[h.kaynak].son_dakika;
     const son = [...haberler.filter((h) => sd(h) && !h.atla && dk(h.tarih) < 180).slice(0, 8),
                  ...haberler.filter((h) => !sd(h) && h.ilgili && !h.atla && dk(h.tarih) < 90)].slice(0, 16);
     const s = $("serit"); s.hidden = !son.length;
-    document.documentElement.style.setProperty("--serit", son.length ? "38px" : "0px");
     const ic = $("seritIc"); ic.innerHTML = "";
-    const parca = () => {
-      const p = el("span", "serit-parca");
-      son.forEach((h) => {
-        const a = el("a", "serit-oge"); a.href = "#h-" + h.id;
-        a.appendChild(el("b", null, kaynaklar[h.kaynak] ? kaynaklar[h.kaynak].ad : ""));
-        const t = el("span", null, BT(h) || h.baslik_orj); if (!BT(h)) t.dir = "auto"; a.appendChild(t);
-        p.appendChild(a);
-      });
-      return p;
+    clearInterval(seritZaman);
+    if (!son.length) { document.documentElement.style.setProperty("--serit", "0px"); return; }
+    // tek cümle: masanın özeti varsa ilk cümlesi (yayının kendi spotu değil), yoksa başlık
+    const cumle = (h) => {
+      const oz = !h.ozet_spot && OZ(h);
+      const ilk = oz ? String(oz).split(/(?<=[.!?])\s+/)[0] : "";
+      return (ilk && ilk.length >= 40 && ilk.length <= 240) ? ilk : (BT(h) || h.baslik_orj);
     };
-    ic.appendChild(parca()); ic.appendChild(parca());
-    ic.style.animationDuration = Math.max(40, son.length * 9) + "s";
+    const ogeler = son.map((h) => {
+      const a = el("a", "serit-oge"); a.href = "#h-" + h.id;
+      const ust = el("span", "serit-kim");
+      ust.appendChild(el("b", null, kaynaklar[h.kaynak] ? kaynaklar[h.kaynak].ad : ""));
+      ust.appendChild(el("time", null, once(h.tarih)));
+      a.appendChild(ust);
+      const t = el("span", "serit-cumle", cumle(h)); if (!BT(h) && !OZ(h)) t.dir = "auto"; a.appendChild(t);
+      return a;
+    });
+    let i = 0;
+    const sira = el("span", "serit-sira");
+    const goster = (yeni, yon) => {
+      const eski = ic.querySelector(".serit-oge.on");
+      const o = ogeler[yeni];
+      o.classList.remove("cik", "gir", "gir-yukari"); o.classList.add("on", yon < 0 ? "gir-yukari" : "gir");
+      ic.appendChild(o);
+      if (eski && eski !== o) { eski.classList.remove("on", "gir", "gir-yukari"); eski.classList.add(yon < 0 ? "cik-yukari" : "cik"); setTimeout(() => eski.remove(), 600); }
+      sira.textContent = (yeni + 1) + " / " + ogeler.length;
+      i = yeni;
+    };
+    const ileri = (d) => goster((i + d + ogeler.length) % ogeler.length, d);
+    const dug = s.querySelector(".serit-dugmeler") || (() => {
+      const k = el("div", "serit-dugmeler");
+      const g = el("button", "serit-geri", "↑"); g.type = "button"; g.setAttribute("aria-label", DL === "tr" ? "Önceki haber" : "Previous");
+      const n = el("button", "serit-ileri", "↓"); n.type = "button"; n.setAttribute("aria-label", DL === "tr" ? "Sonraki haber" : "Next");
+      k.appendChild(g); k.appendChild(sira); k.appendChild(n); s.appendChild(k); return k;
+    })();
+    if (!dug.contains(sira)) dug.replaceChild(sira, dug.querySelector(".serit-sira"));
+    dug.querySelector(".serit-geri").onclick = () => { ileri(-1); basla(); };
+    dug.querySelector(".serit-ileri").onclick = () => { ileri(1); basla(); };
+    let dur = false;
+    s.onmouseenter = s.onfocusin = () => { dur = true; };
+    s.onmouseleave = s.onfocusout = () => { dur = false; };
+    const basla = () => { clearInterval(seritZaman); if (ogeler.length > 1) seritZaman = setInterval(() => { if (!dur && !document.hidden) ileri(1); }, 6500); };
+    goster(0, 1); basla();
+    document.documentElement.style.setProperty("--serit", s.offsetHeight + "px");
   }
 
   function haberCiz(h) {
@@ -1115,10 +1146,9 @@
 
   // Haberlerin arasında tutuklu hekim kartı: Dr. Hüsam Ebu Safiye (27 Aralık 2024'ten bu yana)
   function sayacKartDis() {
-    const EN = window.DIL === "en", s = new Date(), gun = Math.floor((Date.UTC(s.getFullYear(), s.getMonth(), s.getDate()) - Date.UTC(2024, 11, 27)) / 864e5);
+    const EN = window.DIL === "en";
     const a = el("a", "sayac-kart"); a.href = "ebu-safiye.html";
-    a.append(el("span", "sk-ust", EN ? "Detained doctor" : "Tutuklu hekim"), el("b", null, gun.toLocaleString(EN ? "en-GB" : "tr-TR")),
-      el("span", "sk-gun", EN ? "days detained" : "gündür tutuklu"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
+    a.append(el("span", "sk-ust", EN ? "Detained doctor · since 27 December 2024" : "Tutuklu hekim · 27 Aralık 2024'ten beri"), el("strong", null, EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye"),
       el("span", "sk-alt", EN ? "Director of Kamal Adwan Hospital. No charge, no trial, tortured." : "Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok, işkence var."),
       el("i", null, EN ? "His story →" : "Hikâyesi →"), kartPaylas(EN ? "Dr. Hussam Abu Safiya" : "Dr. Hüsam Ebu Safiye", new URL("ebu-safiye.html", location.href).href));
     return a;

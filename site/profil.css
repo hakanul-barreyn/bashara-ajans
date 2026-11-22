@@ -1,7 +1,7 @@
 /* Hesap profili (profil.html) */
 .pf{max-width:640px;margin:0 auto;padding:0 0 64px;display:flex;flex-direction:column;--hesap:#2b8a5e}
 .pf-yukleniyor{padding:40px max(16px,env(safe-area-inset-left,0px));color:var(--soluk)}
-.pf-ust{background:var(--kart);border:1px solid var(--cizgi);border-top:0;border-radius:0 0 18px 18px;overflow:hidden;padding-bottom:16px;display:flex;flex-direction:column;gap:12px}
+.pf-ust{background:var(--kart);border:1px solid var(--cizgi);border-top:0;border-radius:0 0 3px 3px;overflow:hidden;padding-bottom:16px;display:flex;flex-direction:column;gap:12px}
 .pf-kapak{height:104px;background:linear-gradient(135deg,var(--hesap),color-mix(in srgb,var(--hesap) 45%,#0c0e0d))}
 .pf-kimlik{display:flex;align-items:flex-end;gap:14px;margin-top:-46px;padding:0 max(16px,env(safe-area-inset-left,0px))}
 .pf-kimlik .avatar.pf-avatar{width:88px;height:88px;border-radius:50%;font-size:1.6rem;border:4px solid var(--kart);flex:0 0 auto;box-shadow:0 2px 8px rgba(0,0,0,.15)}
@@ -11,8 +11,8 @@
 .pf-resmi-degil{display:block;margin-top:4px;font-size:.72rem;color:var(--soluk);line-height:1.35}
 .pf-eylem,.pf-kunye,.pf-bio,.pf-cizgi,.pf-sayilar{padding:0 max(16px,env(safe-area-inset-left,0px))}
 .pf-eylem{display:flex;flex-wrap:wrap;gap:8px}
-.pf-dugme{display:inline-flex;align-items:center;padding:8px 14px;border-radius:10px;border:1px solid var(--cizgi);font-weight:700;font-size:.84rem;color:var(--ink);text-decoration:none;background:transparent}
-.takip-dugme{font:700 .84rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 16px;border-radius:10px;border:1px solid transparent;background:var(--hesap,#2b8a5e);color:#fff;cursor:pointer}
+.pf-dugme{display:inline-flex;align-items:center;padding:8px 14px;border-radius:3px;border:1px solid var(--cizgi);font-weight:700;font-size:.84rem;color:var(--ink);text-decoration:none;background:transparent}
+.takip-dugme{font:700 .84rem "Plus Jakarta Sans",system-ui,sans-serif;padding:8px 16px;border-radius:3px;border:1px solid transparent;background:var(--hesap,#2b8a5e);color:#fff;cursor:pointer}
 .takip-dugme.takipte{background:transparent;border-color:var(--cizgi);color:var(--ink)}
 .pf-kunye{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.82rem;color:var(--ink2)}
 .pf-kamp{display:inline-flex;align-items:center;gap:6px;font-weight:700}
@@ -20,13 +20,13 @@
 .pf-bio{margin:0;font-size:.92rem;line-height:1.55;max-width:62ch}
 .pf-uyari{margin:0;padding:0 max(16px,env(safe-area-inset-left,0px));font-size:.8rem;font-weight:600;color:#a8741c}
 .pf-cizgi{margin:0;font-size:.74rem;color:var(--soluk);line-height:1.6}
-.pf-cizgi .cz{display:inline-block;font-family:var(--mono);font-size:.66rem;padding:2px 8px;border-radius:999px;color:#fff;font-weight:600}
+.pf-cizgi .cz{display:inline-block;font-family:var(--mono);font-size:.66rem;padding:2px 8px;border-radius:3px;color:#fff;font-weight:600}
 .cz-ad{background:#2b8a5e}.cz-ara{background:#7f8b96}.cz-ik{background:#c9544e}
 .pf-sayilar{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.pf-sayilar div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;background:var(--bg,#f4f2ee)}
+.pf-sayilar div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:3px;background:var(--bg,#f4f2ee)}
 .pf-sayilar b{font:800 1.3rem/1.1 var(--serif)}
 .pf-sayilar span{font-size:.72rem;color:var(--soluk);line-height:1.3}
-.pf-kanit{margin:12px max(16px,env(safe-area-inset-left,0px)) 0;background:var(--kart);border:1px solid var(--cizgi);border-radius:12px;padding:10px 14px;font-size:.86rem}
+.pf-kanit{margin:12px max(16px,env(safe-area-inset-left,0px)) 0;background:var(--kart);border:1px solid var(--cizgi);border-radius:3px;padding:10px 14px;font-size:.86rem}
 .pf-kanit summary{cursor:pointer;font-weight:700}
 .pf-kanit p{margin:8px 0 0;line-height:1.5}.pf-kanit a{color:var(--yesil);font-weight:600}
 .pf-sekmeler{display:flex;position:sticky;top:var(--ust,56px);z-index:5;background:var(--bg,#f4f2ee);margin-top:12px;border-bottom:1px solid var(--cizgi)}
@@ -42,7 +42,7 @@
 .pf-g-baslik{margin:0;font:700 1.05rem/1.35 var(--serif)}
 .pf-g-orj{margin:0;font-size:.82rem;color:var(--soluk);line-height:1.4}
 .pf-g-oz{margin:0;font-size:.9rem;line-height:1.5;color:var(--ink2)}
-.pf-g-gorsel{margin:4px 0 0;border-radius:12px;overflow:hidden;border:1px solid var(--cizgi);width:min(100%,240px);aspect-ratio:16/10}
+.pf-g-gorsel{margin:4px 0 0;border-radius:3px;overflow:hidden;border:1px solid var(--cizgi);width:min(100%,240px);aspect-ratio:16/10}
 .pf-g-gorsel img{display:block;width:100%;height:100%;object-fit:cover}
 .pf-g-alt{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:.8rem}
 .pf-g-alt a{color:var(--yesil);font-weight:700;text-decoration:none}
@@ -52,19 +52,19 @@
 .pf-izgara{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .pf-izgara a{display:block;aspect-ratio:1;overflow:hidden;background:var(--cizgi)}
 .pf-izgara img{width:100%;height:100%;object-fit:cover;display:block}
-@media (min-width:700px){.pf{padding-top:20px}.pf-ust{border-top:1px solid var(--cizgi);border-radius:18px}.pf-gonderiler{border:1px solid var(--cizgi);border-radius:0 0 14px 14px;overflow:hidden}}
+@media (min-width:700px){.pf{padding-top:20px}.pf-ust{border-top:1px solid var(--cizgi);border-radius:3px}.pf-gonderiler{border:1px solid var(--cizgi);border-radius:0 0 3px 3px;overflow:hidden}}
 .pf-g-alt a.pf-hata{color:var(--soluk);font-weight:600}
 @media (max-width:560px){.pf-kimlik{flex-direction:column;align-items:flex-start;gap:8px}.pf-ad{padding-bottom:0}}
 
 /* Yeni taksim çipleri (hesap-ortak.js taksimCip) */
 .tx-cipler{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
-.tx-cip{display:inline-flex;flex-wrap:wrap;align-items:center;font-size:.74rem;padding:2px 9px;border-radius:999px;border:1px solid #cfd5d1;color:#46504a;background:#fff}
+.tx-cip{display:inline-flex;flex-wrap:wrap;align-items:center;font-size:.74rem;padding:2px 9px;border-radius:3px;border:1px solid #cfd5d1;color:#46504a;background:#fff}
 .tx-cip.tutum-yanli{border-color:#2b8a5e;color:#1f6e4b}.tx-cip.tutum-israil{border-color:#4a72c4;color:#3557a0}
 .tx-bilgi{display:inline;margin-left:4px}
 .tx-bilgi summary{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid currentColor;font:italic 700 .62rem/1 Georgia,serif;cursor:pointer;list-style:none;opacity:.75}
 .tx-bilgi summary::-webkit-details-marker{display:none}
-.tx-bilgi>span{display:block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#f3f1ec;border:1px solid #e3dfd6;color:#46504a;font-size:.8rem;line-height:1.45}
-.tx-cip:has(.tx-bilgi[open]){border-radius:10px;flex-basis:100%}
+.tx-bilgi>span{display:block;margin-top:6px;padding:8px 10px;border-radius:3px;background:#f3f1ec;border:1px solid #e3dfd6;color:#46504a;font-size:.8rem;line-height:1.45}
+.tx-cip:has(.tx-bilgi[open]){border-radius:3px;flex-basis:100%}
 .pf-taksim{padding:0 max(16px,env(safe-area-inset-left,0px))}
 .hb-koyu .tx-cip{background:transparent;border-color:#4a554f;color:#c9d1cc}
 .hb-koyu .tx-bilgi>span{background:#1a201d;border-color:#2e3531;color:#c9d1cc}

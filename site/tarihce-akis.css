@@ -94,10 +94,10 @@
 /* ---------- olay kartları ---------- */
 .ta-akis-et{display:inline-flex;align-items:center;gap:6px;margin:0 0 8px;font:700 .64rem var(--ta-sans);letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--renk) 82%,#1d2421)}
 .ta-akis-et::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--renk)}
-.ta-kart{position:relative;margin-bottom:30px;padding:20px 24px 20px;border-radius:6px;background:var(--ta-kagit);color:var(--ta-murekkep);box-shadow:var(--ta-golge);
+.ta-kart{position:relative;margin-bottom:30px;padding:20px 24px 20px;border-radius:3px;background:var(--ta-kagit);color:var(--ta-murekkep);box-shadow:var(--ta-golge);
   border:1px solid var(--ta-cizgi);transform:translateY(calc((1 - var(--p)) * 60px)) rotate(calc((1 - var(--p)) * -2deg));opacity:clamp(0,calc(var(--p) * 1.6),1);transform-origin:0 100%}
 .ta-kart::before{content:"";position:absolute;left:calc(-1 * clamp(0px,4vw,72px) - 31px);top:26px;width:12px;height:12px;border-radius:50%;background:var(--ta-zemin);border:3px solid var(--renk)}
-.ta-kart::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:6px 6px 0 0;background:var(--renk);opacity:.85}
+.ta-kart::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:3px 3px 0 0;background:var(--renk);opacity:.85}
 /* asıl olayın yanında akan olaylar: sağa yaslı */
 .ta-kart.sag{width:min(100%,620px);margin-left:auto;margin-right:0;transform:translateX(calc((1 - var(--p)) * 80px));transform-origin:100% 100%}
 .ta-serit>.ta-kart.sag{margin-left:max(clamp(0px,4vw,72px),calc(800px + clamp(0px,4vw,72px) - 620px))}
@@ -123,12 +123,12 @@
 .ta-terim{display:inline;padding:0;margin:0;border:0;background:none;font:inherit;color:inherit;cursor:help;text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--renk,#46514b) 70%,transparent)}
 .ta-terim:hover,.ta-terim[aria-expanded="true"]{text-decoration-style:solid;color:color-mix(in srgb,var(--renk,#1d2421) 70%,#1d2421)}
 .ta-terim:focus-visible{outline:2px solid var(--renk,#1d2421);outline-offset:2px;border-radius:2px}
-.ta-terim-kutu{position:absolute;z-index:70;box-sizing:border-box;padding:12px 14px 13px;border-radius:8px;background:#1b2420;color:#e8ece9;box-shadow:0 14px 34px -12px rgba(0,0,0,.55);font:500 .86rem/1.55 var(--ta-sans)}
+.ta-terim-kutu{position:absolute;z-index:70;box-sizing:border-box;padding:12px 14px 13px;border-radius:3px;background:#1b2420;color:#e8ece9;box-shadow:0 14px 34px -12px rgba(0,0,0,.55);font:500 .86rem/1.55 var(--ta-sans)}
 .ta-terim-kutu b{display:block;margin:2px 0 4px;font:800 1rem var(--ta-sans);color:#fff}
 .ta-terim-kutu p{margin:0;color:#c9d2cc}
 .ta-terim-et{font:700 .6rem var(--ta-mono);letter-spacing:.14em;text-transform:uppercase;color:#a9b7af}
 /* Sina'nın iki işgali */
-.ta-sina{margin:16px 0 4px;padding:12px 14px 12px;border-radius:6px;background:var(--ta-zemin)}
+.ta-sina{margin:16px 0 4px;padding:12px 14px 12px;border-radius:3px;background:var(--ta-zemin)}
 .ta-sina-et{margin:0 0 12px;font:700 .64rem var(--ta-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ta-ink2)}
 .ta-sina-cubuk{position:relative;margin-top:14px;height:16px;border-radius:3px;background:rgba(29,36,33,.08)}
 .ta-sina-yil{position:absolute;top:-1px;transform:translate(-50%,-100%);font:500 .58rem var(--ta-mono);color:var(--ta-soluk)}
@@ -202,7 +202,7 @@
 .ta-alinti cite{display:block;margin:0 0 12px;font:700 .76rem var(--ta-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ta-soluk);font-style:normal}
 .ta-alinti-ozet{margin:0;padding-top:12px;border-top:1px solid rgba(184,54,44,.25);font-size:.98rem;line-height:1.6;color:var(--ta-ink2)}
 /* biyografi: hayat şeridi satır satır dikilir */
-.ta-bio{margin-bottom:34px;padding:22px;border-radius:6px;background:#eef3ec;border:1px solid rgba(43,122,87,.35);
+.ta-bio{margin-bottom:34px;padding:22px;border-radius:3px;background:#eef3ec;border:1px solid rgba(43,122,87,.35);
   transform:translateY(calc((1 - var(--p)) * 50px));opacity:clamp(0,calc(var(--p) * 1.5),1)}
 .ta-bio-ust{display:flex;gap:18px;align-items:flex-start}
 .ta-bio-foto{width:128px;flex:0 0 auto}
@@ -229,14 +229,14 @@
 
 /* ---------- önce/sonra: harita ve uydu ---------- */
 .ta-serit>.ta-kars{max-width:880px}
-.ta-kars{margin-block:-8px 38px;padding:16px 18px 14px;border-radius:8px;background:#1b2420;color:#e8ece9;box-shadow:0 18px 40px -22px rgba(0,0,0,.6);
+.ta-kars{margin-block:-8px 38px;padding:16px 18px 14px;border-radius:3px;background:#1b2420;color:#e8ece9;box-shadow:0 18px 40px -22px rgba(0,0,0,.6);
   transform:translateY(calc((1 - var(--p)) * 40px));opacity:clamp(0,calc(var(--p) * 1.6),1)}
 .ta-kars .ta-akis-et{color:color-mix(in srgb,var(--renk) 60%,#fff)}
 .ta-kars-ust{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px}
 .ta-kars-et{font:700 .64rem var(--ta-mono);letter-spacing:.14em;text-transform:uppercase;color:#a9b7af}
 .ta-kars-baslik{margin:0;font:700 1.15rem var(--ta-mono);letter-spacing:-.02em;color:#fff}
 .ta-kk-sahne{display:flex;justify-content:center}
-.ta-kk{position:relative;width:min(100%,calc(74vh * var(--oran)));width:min(100%,calc(74svh * var(--oran)));aspect-ratio:var(--oran);border-radius:5px;overflow:hidden;
+.ta-kk{position:relative;width:min(100%,calc(74vh * var(--oran)));width:min(100%,calc(74svh * var(--oran)));aspect-ratio:var(--oran);border-radius:3px;overflow:hidden;
   background:#20303a;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;outline-offset:3px}
 .ta-kk:focus-visible{outline:2px solid #fff}
 .kk-katman{position:absolute;inset:0}
@@ -248,13 +248,13 @@
 .kk-tutamak::before,.kk-tutamak::after{content:"";position:absolute;top:50%;margin-top:-5px;border:5px solid transparent}
 .kk-tutamak::before{left:7px;border-right:7px solid #1b2420}
 .kk-tutamak::after{right:7px;border-left:7px solid #1b2420}
-.kk-et{position:absolute;top:10px;padding:4px 9px;border-radius:5px;background:rgba(16,20,18,.72);color:#fff;font:700 .78rem var(--ta-mono);pointer-events:none;transition:opacity .25s}
+.kk-et{position:absolute;top:10px;padding:4px 9px;border-radius:3px;background:rgba(16,20,18,.72);color:#fff;font:700 .78rem var(--ta-mono);pointer-events:none;transition:opacity .25s}
 .kk-et.sol{left:10px}.kk-et.sag{right:10px}
 .ta-kk.kk-kenar .kk-et{opacity:.45}
 .ta-kk.kk-yumusak .kk-once,.ta-kk.kk-yumusak .kk-cizgi{transition:clip-path .45s cubic-bezier(.3,.7,.2,1),left .45s cubic-bezier(.3,.7,.2,1)}
 .ta-kk.kk-surukle{cursor:grabbing}
 .ta-kk-dugmeler{display:flex;justify-content:center;gap:8px;margin:12px 0 4px}
-.ta-kk-dugmeler button,.ta-kars-sekme-d{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#e8ece9;font:700 .76rem var(--ta-mono);padding:7px 13px;border-radius:999px;cursor:pointer}
+.ta-kk-dugmeler button,.ta-kars-sekme-d{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#e8ece9;font:700 .76rem var(--ta-mono);padding:7px 13px;border-radius:3px;cursor:pointer}
 .ta-kk-dugmeler button[aria-pressed="true"],.ta-kars-sekme-d[aria-selected="true"]{background:#fff;color:#1b2420;border-color:#fff}
 .ta-kars-sekme{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .ta-kars-not{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin:12px 0 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)}

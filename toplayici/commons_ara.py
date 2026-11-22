@@ -14,8 +14,12 @@ KAT = sys.argv[1:] or [
     "Great_March_of_Return", "Shireen_Abu_Akleh", "Gaza_flotilla_raid", "Naji_al-Ali", "Handala"]
 out = {}
 for kat in KAT:
-    q = {"action": "query", "format": "json", "generator": "categorymembers", "gcmtitle": "Category:" + kat, "gcmtype": "file|subcat", "gcmlimit": 80,
-         "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": 1600}
+    if kat.startswith("arama:"):   # dosya adlarında ve açıklamalarda arama (alt çizgi boşluk sayılır)
+        q = {"action": "query", "format": "json", "generator": "search", "gsrsearch": kat[6:].replace("_", " "), "gsrnamespace": 6, "gsrlimit": 50,
+             "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": 1600}
+    else:
+        q = {"action": "query", "format": "json", "generator": "categorymembers", "gcmtitle": "Category:" + kat, "gcmtype": "file|subcat", "gcmlimit": 80,
+             "prop": "imageinfo", "iiprop": "url|extmetadata|size", "iiurlwidth": 1600}
     try:
         with urllib.request.urlopen(urllib.request.Request("https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(q), headers={"User-Agent": UA}), timeout=40) as r:
             v = json.loads(r.read())

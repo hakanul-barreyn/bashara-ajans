@@ -135,10 +135,10 @@ BOLGELER = [
 ONCE_ARALIK = ("2023-08-01T00:00:00Z", "2023-10-06T23:59:59Z")
 
 
-def _stac(gun=60, bulut=8, aralik=None):
+def _stac(gun=60, bulut=8, aralik=None, bbox=None):
     bit = dt.datetime.now(dt.timezone.utc)
     zaman = "/".join(aralik) if aralik else f"{(bit - dt.timedelta(days=gun)).strftime('%Y-%m-%dT00:00:00Z')}/{bit.strftime('%Y-%m-%dT%H:%M:%SZ')}"
-    govde = {"collections": ["sentinel-2-l2a"], "bbox": GAZZE_BBOX, "datetime": zaman,
+    govde = {"collections": ["sentinel-2-l2a"], "bbox": bbox or GAZZE_BBOX, "datetime": zaman,
              "query": {"eo:cloud_cover": {"lt": bulut}}, "sortby": [{"field": "properties.datetime", "direction": "desc"}], "limit": 60}
     istek = urllib.request.Request(STAC, data=json.dumps(govde).encode(), headers={"Content-Type": "application/json", "User-Agent": UA})
     with urllib.request.urlopen(istek, timeout=60) as r:
@@ -162,8 +162,8 @@ def _sari_hat(geo):
     return {**{a: v[a] for a in v if a != "katmanlar"}, "katmanlar": {ad: [cevir(h) for h in hs] for ad, hs in v["katmanlar"].items()}}
 
 
-def _kes(fs, bbox):
-    """Aynı güne ait Sentinel-2 karelerinden bbox'ı keser (10 m). Döndürür: RGB dizisi ya da None (kare eksikse)."""
+def _kes(fs, bbox, res=10):
+    """Aynı güne ait Sentinel-2 karelerinden bbox'ı keser (varsayılan 10 m). Döndürür: RGB dizisi ya da None (kare eksikse)."""
     import numpy as np
     import rasterio
     from rasterio.merge import merge
@@ -171,7 +171,7 @@ def _kes(fs, bbox):
     kaynaklar = [rasterio.open(f["assets"]["visual"]["href"]) for f in fs]
     crs = kaynaklar[0].crs
     kaynaklar = [k for k in kaynaklar if k.crs == crs]
-    dizi, tr = merge(kaynaklar, bounds=transform_bounds("EPSG:4326", crs, *bbox), res=10, nodata=0)
+    dizi, tr = merge(kaynaklar, bounds=transform_bounds("EPSG:4326", crs, *bbox), res=res, nodata=0)
     rgb = np.moveaxis(dizi[:3], 0, -1)
     h, w = rgb.shape[:2]
     GEO[tuple(bbox)] = {"crs": str(crs), "sinir": [tr.c, tr.f + tr.e * h, tr.c + tr.a * w, tr.f]}   # batı, güney, doğu, kuzey (UTM)
@@ -190,14 +190,14 @@ def _kaydet(rgb, yol, en=2200, kontrast=True):
     im.save(yol, quality=84, optimize=True, progressive=True)
 
 
-def _gun_sec(ogeler, bboxlar):
+def _gun_sec(ogeler, bboxlar, res=10):
     """Bütün bbox'ları eksiksiz kapsayan en yeni gün: {gün: kareler}"""
     gunler = {}
     for f in ogeler:
         gunler.setdefault(f["properties"]["datetime"][:10], []).append(f)
     for gun in sorted(gunler, reverse=True):
         try:
-            kesitler = [_kes(gunler[gun], b) for b in bboxlar]
+            kesitler = [_kes(gunler[gun], b, res) for b in bboxlar]
         except Exception as e:   # noqa: BLE001
             print("uydu okunamadı", gun, e); continue
         if all(k is not None for k in kesitler):
@@ -241,6 +241,29 @@ def uydu(cikti):
     print("Uydu görüntüsü:", gun, "· savaş öncesi:", once)
 
 
+def dosya_kapaklari(cikti):
+    """Her dosyaya sabit bir uydu kapağı (toplayici/dosya_kapak.json). Bir kez üretilir; dosya varsa dokunulmaz."""
+    secim = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dosya_kapak.json"), encoding="utf-8"))
+    klasor = os.path.join(cikti, "uydu", "dosya"); os.makedirs(klasor, exist_ok=True)
+    meta_yol = os.path.join(klasor, "dosya.json")
+    meta = json.load(open(meta_yol, encoding="utf-8")) if os.path.exists(meta_yol) else {}
+    for did, v in secim.items():
+        if did.startswith("_") or (did in meta and os.path.exists(os.path.join(klasor, did + ".jpg"))):
+            continue
+        try:
+            gun, _, kes = _gun_sec(_stac(gun=150, bulut=3, bbox=v["bbox"]), [v["bbox"]], res=v.get("cozunurluk", 10))
+        except Exception as e:   # noqa: BLE001
+            print("dosya kapağı alınamadı", did, e); continue
+        if not gun:
+            print("dosya kapağı: uygun görüntü yok", did); continue
+        _kaydet(kes[0], os.path.join(klasor, did + ".jpg"), en=1600)
+        meta[did] = {"dosya": did + ".jpg", "tarih": gun, "yer": v["yer"], "yer_en": v.get("yer_en"),
+                     "atif": f"Copernicus Sentinel-2 verisi ({gun[:4]}), ESA; işleme: Alboroto",
+                     "atif_en": f"Contains Copernicus Sentinel-2 data ({gun[:4]}), ESA; processed by Alboroto"}
+        print("dosya kapağı:", did, gun)
+        json.dump(meta, open(meta_yol, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+
 if __name__ == "__main__":
     cikti = sys.argv[1] if len(sys.argv) > 1 else "cikti"
     os.makedirs(cikti, exist_ok=True)
@@ -248,6 +271,10 @@ if __name__ == "__main__":
         uydu(cikti)
     except Exception as e:   # noqa: BLE001
         print("uydu hatası", e)
+    try:
+        dosya_kapaklari(cikti)
+    except Exception as e:   # noqa: BLE001
+        print("dosya kapakları hatası", e)
     anahtar = os.environ.get("GEMINI_API_KEY")
     if anahtar:
         model = os.environ.get("GEMINI_MODEL")

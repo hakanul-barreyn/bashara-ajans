@@ -30,7 +30,7 @@
 .rk-svg [fill="#1f6e4b"]{fill:#5fbf8f}.rk-ebu .rk-svg [fill="#1f6e4b"]{fill:#1f6e4b}
 /* siyasi çizgi şeridi: aynı ülkede beş çizgi */
 .rk-cizgi{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}
-.rk-cizgi span{font:700 .9rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;padding:6px 12px;border:1.5px solid rgba(241,234,216,.6);border-radius:999px;color:#fbf7ec;background:rgba(13,24,19,.45)}
+.rk-cizgi span{font:700 .9rem "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;padding:6px 12px;border:1.5px solid rgba(241,234,216,.6);border-radius:3px;color:#fbf7ec;background:rgba(13,24,19,.45)}
 .rk-cizgi span:nth-child(4){border-color:#e9a08f;color:#f0b2a4}
 .rk-kunye{max-width:1080px;margin:14px auto 0;padding:0 max(16px,env(safe-area-inset-left,0px));font:400 .72rem/1.5 "Plus Jakarta Sans",sans-serif;color:#6f7772}
 .rk-kunye a{color:inherit}

@@ -131,7 +131,7 @@
       a.appendChild(el("p", "hb-meta", "Alboroto · " + manset.yayinSayisi + tt(" yayından", " outlets") + (vy ? tt(" · haber metni", " · full story") : tt(" · kaynakların anlatımı", " · as reported"))));
       ic.appendChild(a);
       const hh = el("a", "hb-hh"); hh.href = "#";
-      hh.onclick = (e) => { e.preventDefault(); c.hikayeyeGit(manset); };
+      hh.onclick = (e) => { e.preventDefault(); akisAc(); requestAnimationFrame(() => c.hikayeyeGit(manset)); };
       const say = kampSay(manset, c);
       hh.append(el("span", "hb-et", tt("Haberin haberi", "The news about the news")), serit(say));
       const yok = !say["İsrail"] && !say["Batı"];

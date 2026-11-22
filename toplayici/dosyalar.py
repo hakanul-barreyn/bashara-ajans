@@ -818,10 +818,20 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
                 f.write(sayfa)
         yazilan.add(ds["id"] + ".html")
     # dizin: ana sayfadaki görselli kartlarla aynı dil
+    try:   # sabit uydu kapakları (gunluk_gorsel.py, gorsel dalı → data/gorsel/uydu/dosya)
+        uydu = json.load(open(os.path.join(kok, "data", "gorsel", "uydu", "dosya", "dosya.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        uydu = {}
+
     def _dk(ds):
         g = (ds.get("gorsel") or {}).get("u")
-        kap = (f'<div class="dsk-kapak"><img src="{_e(_aktar(g, 900))}" alt="" loading="lazy" referrerpolicy="no-referrer"><span class="dsk-kunye">{_e((ds.get("gorsel") or {}).get("k"))}</span></div>'
-               if g else '<div class="dsk-kapak dsk-desen"></div>')
+        u = uydu.get(ds["id"])
+        if u and os.path.exists(os.path.join(kok, "data", "gorsel", "uydu", "dosya", u["dosya"])):
+            kap = (f'<div class="dsk-kapak dsk-uydu"><img src="../data/gorsel/uydu/dosya/{_e(u["dosya"])}" alt="" loading="lazy">'
+                   f'<span class="dsk-kunye">{_e(u["yer"])} · Copernicus Sentinel-2 (ESA)</span></div>')
+        else:
+            kap = (f'<div class="dsk-kapak"><img src="{_e(_aktar(g, 900))}" alt="" loading="lazy" referrerpolicy="no-referrer"><span class="dsk-kunye">{_e((ds.get("gorsel") or {}).get("k"))}</span></div>'
+                   if g else '<div class="dsk-kapak dsk-desen"></div>')
         oz = " ".join(_cumleler(ds.get("ozet"))[:2])
         return (f'<a class="dsk" href="{_e(ds["id"])}.html">{kap}<div class="dsk-ic"><div class="dsk-ust"><span class="dsk-rozet{" sicak" if ds["sicak"] else ""}">'
                 f'{"Son 48 saat · " + str(ds["sicak"]) + " başlıkta gelişme" if ds["sicak"] else "Gelişiyor"}</span></div><h3>{_e(ds["ad"])}</h3>'
@@ -838,7 +848,7 @@ def sayfalar_yaz(kok, veri, site_adres, surum, d=None, bilgi=None, simdi=None):
 <link rel="stylesheet" href="../site/haber.css?v={surum}"><link rel="stylesheet" href="../site/dosya.css?v={surum}"></head>
 <body class="ds-govde"><header class="mk-bas"><div class="mk-bas-ic"><a class="mk-logo" href="../"><img src="../site/logo.svg" alt="" width="32" height="32"><b>Alboroto</b><span>Haberin haberi</span></a>
 <nav class="mk-menu"><a href="../">Akış</a><a href="./" aria-current="page">Dosyalar</a><a href="../arsiv.html">Arşiv</a><a href="../raporlar.html">Raporlar</a></nav></div></header>
-<main class="ds"><p class="ds-etiket">Dosyalar</p><h1>Gündemden düşmeyenler</h1><p class="br-alt" style="max-width:40rem">Haftalardır konuşulan büyük hikâyeler, başlık başlık. Her dosyada özet, son gelişme, yayınların dağılımı ve her haberin özgün bağlantısıyla arşiv kopyası.</p><div class="dsb-izgara ds-dizin-izgara">{kartlar}</div></main></body></html>
+<main class="ds"><p class="ds-etiket">Süregelen gelişmeler</p><h1>Takip edilen dosyalar</h1><p class="br-alt" style="max-width:40rem">Haftalardır süren konular, başlık başlık. Her dosyada özet, son gelişme, yayınların dağılımı ve her haberin özgün bağlantısıyla arşiv kopyası.</p><div class="dsb-izgara ds-dizin-izgara">{kartlar}</div></main></body></html>
 '''
     with open(os.path.join(klasor, "index.html"), "w", encoding="utf-8") as f:
         f.write(dizin)

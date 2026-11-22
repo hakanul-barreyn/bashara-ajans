@@ -34,32 +34,48 @@
   var NS = "http://www.w3.org/2000/svg";
   function svg(t, a) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); return e; }
   var GUN = 864e5;
-  // Dalların son 14 günü: her dal bir ince çizgi, her olay bir nokta (dosya sayfasındaki ağacın küçüğü)
-  function agac(ds, en, isimli) {
-    var dallar = ds.dallar.slice(0, en), bugun = Math.floor(Date.now() / GUN), bas = bugun - 13;
-    var kap = el("div", "dsk-agac" + (isimli ? " isimli" : ""));
-    dallar.forEach(function (dal) {
-      var sat = el("div", "dsk-dal");
-      var ad_ = el("span", "dsk-dal-ad"); ad_.appendChild(el("i", "dsk-nokta dsk-" + dal.durum)); ad_.appendChild(el("span", null, ad(dal)));
-      if (isimli) sat.appendChild(ad_); else sat.title = ad(dal);
-      var s = svg("svg", { viewBox: "0 0 140 12", preserveAspectRatio: "none", "aria-hidden": "true", class: "dsk-cizgi dsk-" + dal.durum });
-      var xs = dal.olaylar.map(function (o) { return Math.floor(Date.parse(o.g + "T12:00:00Z") / GUN) - bas; }).filter(function (g) { return g >= 0 && g <= 13; });
-      s.appendChild(svg("line", { x1: 0, x2: 140, y1: 6, y2: 6, class: "dsk-zemin" }));
-      if (xs.length) s.appendChild(svg("line", { x1: xs[0] * 10 + 5, x2: xs[xs.length - 1] * 10 + 5, y1: 6, y2: 6, class: "dsk-kol" }));
-      var gor = {};
-      xs.forEach(function (g) { if (gor[g]) return; gor[g] = 1; s.appendChild(svg("circle", { cx: g * 10 + 5, cy: 6, r: 3.2, class: "dsk-olay" })); });
-      sat.appendChild(s);
-      kap.appendChild(sat);
+  // Son 14 günün gelişme sayısı (gün gün çubuk) ve öne çıkan başlıklar: ne kadar hareketli, nerede hareketli
+  function gunFark(g) { return Math.floor(Date.now() / GUN) - Math.floor(Date.parse(g + "T12:00:00Z") / GUN); }
+  function oncesi(g) { var f = gunFark(g); return f <= 0 ? (EN() ? "today" : "bugün") : f === 1 ? (EN() ? "yesterday" : "dün") : f + (EN() ? " days ago" : " gün önce"); }
+  var AYK = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  function agac(ds, en) {
+    var kap = el("div", "dsk-grafik");
+    var say = []; for (var i = 0; i < 14; i++) say.push(0);
+    ds.dallar.forEach(function (dal) { dal.olaylar.forEach(function (o) { var f = gunFark(o.g); if (f >= 0 && f < 14) say[13 - f]++; }); });
+    var tepe = Math.max.apply(null, say.concat([1])), toplam = say.reduce(function (a, b) { return a + b; }, 0);
+    kap.appendChild(el("span", "dsk-g-et", (EN() ? "Developments per day, last 14 days · " : "Son 14 gün, günlük gelişme · ") + toplam));
+    var cubuklar = el("div", "dsk-cubuklar"); cubuklar.setAttribute("role", "img");
+    cubuklar.setAttribute("aria-label", (EN() ? "Developments per day over the last 14 days: " : "Son 14 günde günlük gelişme sayısı: ") + say.join(", "));
+    say.forEach(function (n, j) {
+      var gun = new Date((Math.floor(Date.now() / GUN) - (13 - j)) * GUN);
+      var c = el("i", n ? null : "sifir"); c.style.height = (n ? Math.max(12, Math.round(n / tepe * 100)) : 4) + "%";
+      c.title = gun.getUTCDate() + " " + AYK[gun.getUTCMonth()] + ": " + n + (EN() ? " developments" : " gelişme");
+      cubuklar.appendChild(c);
     });
+    kap.appendChild(cubuklar);
+    var eks = el("div", "dsk-eksen"); eks.appendChild(el("span", null, EN() ? "14 days ago" : "14 gün önce")); eks.appendChild(el("span", null, EN() ? "today" : "bugün")); kap.appendChild(eks);
+    var liste = el("ul", "dsk-basliklar");
+    ds.dallar.map(function (dal) { var son = dal.olaylar.reduce(function (m, o) { return o.g > m ? o.g : m; }, ""); return [dal, son]; })
+      .sort(function (x, y) { return x[1] < y[1] ? 1 : -1; }).slice(0, en).forEach(function (x) {
+        var li = el("li", "dsk-" + x[0].durum);
+        li.appendChild(el("b", null, ad(x[0])));
+        li.appendChild(el("small", null, x[0].olaylar.length + (EN() ? " events · latest " : " olay · son: ") + (x[1] ? oncesi(x[1]) : "–")));
+        liste.appendChild(li);
+      });
+    kap.appendChild(liste);
     return kap;
   }
+  // Sabit kapak: dosyanın yerinin uydu görüntüsü (gorsel dalı, uydu/dosya). Yoksa haberden gelen görsel.
+  var KAPAK = null;
   function kapak(ds, buyuk) {
     var k = el("div", "dsk-kapak");
-    if (ds.gorsel && ds.gorsel.u) {
+    var u = KAPAK && KAPAK[ds.id], src = null, kunye = null;
+    if (u && u.dosya) { src = "data/gorsel/uydu/dosya/" + u.dosya; kunye = ((EN() && u.yer_en) || u.yer) + " · Copernicus Sentinel-2 (ESA)"; k.classList.add("dsk-uydu"); }
+    else if (ds.gorsel && ds.gorsel.u) { src = (window.AKTAR || function (v) { return v; })(ds.gorsel.u, buyuk ? 1200 : 640); kunye = ds.gorsel.k; }
+    if (src) {
       var im = document.createElement("img");
-      im.src = (window.AKTAR || function (v) { return v; })(ds.gorsel.u, buyuk ? 1200 : 640);
-      im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer";
-      var kn = ds.gorsel.k ? el("span", "dsk-kunye", ds.gorsel.k) : null;
+      im.src = src; im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer";
+      var kn = kunye ? el("span", "dsk-kunye", kunye) : null;
       im.onerror = function () { im.remove(); if (kn) kn.remove(); k.classList.add("dsk-desen"); };
       k.appendChild(im);
       if (kn) k.appendChild(kn);
@@ -83,8 +99,8 @@
     var oz = EN() ? ds.ozet_en : ds.ozet;
     if (buyuk && oz) ic.appendChild(el("p", "dsk-oz", ilkCumleler(oz, 2)));
     ic.appendChild(el("p", "dsk-son", (EN() ? "Latest · " : "Son · ") + ((EN() && ds.son_be) || ds.son_b)));
-    ic.appendChild(agac(ds, buyuk ? 5 : 3, buyuk));
-    ic.appendChild(el("span", "dsk-alt", ds.olay + (EN() ? " events · " : " olay · ") + ds.dallar.length + (EN() ? " threads · last 14 days" : " başlık · son 14 gün")));
+    ic.appendChild(agac(ds, buyuk ? 4 : 2));
+    ic.appendChild(el("span", "dsk-alt", ds.olay + (EN() ? " events in total · " : " olay · ") + ds.dallar.length + (EN() ? " threads" : " başlık")));
     a.appendChild(ic);
     return a;
   }
@@ -94,11 +110,11 @@
     var s = el("section", "dosya-bolum"); s.id = "dosyaSerit"; s.setAttribute("aria-label", EN() ? "Files" : "Dosyalar");
     var ic0 = el("div", "dsb-ic");
     var bas = el("div", "dsb-bas"), sol = el("div", "dsb-sol");
-    var et = el("span", "dsb-etiket"); et.appendChild(el("i", "dsb-canli")); et.appendChild(document.createTextNode(EN() ? "Files · updated every 15 minutes" : "Dosyalar · 15 dakikada bir güncellenir"));
+    var et = el("span", "dsb-etiket"); et.appendChild(el("i", "dsb-canli")); et.appendChild(document.createTextNode(EN() ? "Ongoing developments · updated every 15 minutes" : "Süregelen gelişmeler · 15 dakikada bir güncellenir"));
     sol.appendChild(et);
-    sol.appendChild(el("h2", null, EN() ? "The stories that won’t leave the agenda" : "Gündemden düşmeyenler"));
-    sol.appendChild(el("p", null, EN() ? "Weeks-long stories, thread by thread: every development with how each outlet told it, the original links and an archive copy."
-      : "Haftalardır konuşulan büyük hikâyeler, başlık başlık: her gelişme, onu veren yayınların nasıl anlattığı, özgün bağlantısı ve arşiv kopyasıyla."));
+    sol.appendChild(el("h2", null, EN() ? "Files we follow" : "Takip edilen dosyalar"));
+    sol.appendChild(el("p", null, EN() ? "Stories that have been running for weeks, followed thread by thread: every development, how each outlet reported it, the original link and an archive copy."
+      : "Haftalardır süren konular, başlık başlık: her gelişme, onu veren yayınların nasıl anlattığı, özgün bağlantısı ve arşiv kopyasıyla."));
     bas.appendChild(sol);
     var sag = el("div", "dsb-sag");
     var top = V.dosyalar.reduce(function (t, ds) { return t + ds.olay; }, 0), sicak = V.dosyalar.reduce(function (t, ds) { return t + ds.sicak; }, 0);
@@ -128,7 +144,8 @@
     if (hedef) hedef.parentNode.insertBefore(s, hedef);
   }
 
-  fetch("data/dosyalar-site.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) {
+  var kapakSoz = fetch("data/gorsel/uydu/dosya/dosya.json").then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+  fetch("data/dosyalar-site.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) { return kapakSoz.then(function (kp) { KAPAK = kp; return v; }); }).then(function (v) {
     if (!v || !Array.isArray(v.dosyalar)) return;
     v.dmap = {};
     v.dosyalar.forEach(function (ds) { ds.dalmap = {}; ds.dallar.forEach(function (x) { ds.dalmap[x.id] = x; }); v.dmap[ds.id] = ds; });
