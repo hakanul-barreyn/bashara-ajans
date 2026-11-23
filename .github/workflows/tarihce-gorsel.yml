@@ -3,7 +3,7 @@ name: tarihce-gorsel
 on:
   workflow_dispatch:
   push:
-    paths: [".github/workflows/tarihce-gorsel.yml", "toplayici/tarihce_gorsel.json", "toplayici/kapak_indir.py"]
+    paths: [".github/workflows/tarihce-gorsel.yml", "toplayici/tarihce_gorsel.json", "toplayici/dosya_foto.json", "toplayici/kapak_indir.py"]
 permissions:
   contents: write
 concurrency:
@@ -20,6 +20,8 @@ jobs:
           if git fetch -q --depth 1 origin gorsel 2>/dev/null; then git archive FETCH_HEAD | tar -x -C cikti; fi
           rm -rf cikti/tarihce && python toplayici/kapak_indir.py cikti/tarihce toplayici/tarihce_gorsel.json
           ls -la cikti/tarihce
+          # dosya kapakları (ana sayfadaki "Takip edilen dosyalar" ve /d/ dizini)
+          rm -rf cikti/dosya-foto && python toplayici/kapak_indir.py cikti/dosya-foto toplayici/dosya_foto.json && ls -la cikti/dosya-foto
       - run: |
           cd cikti && git init -q -b gorsel && git add -A
           git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Tarihçe görselleri"

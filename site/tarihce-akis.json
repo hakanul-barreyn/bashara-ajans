@@ -341,7 +341,6 @@
     },
     {
      "ref": "1916-06",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Eugene Rogan, The Fall of the Ottomans: The Great War in the Middle East (Basic Books, 2015)",
@@ -431,7 +430,6 @@
     },
     {
      "ref": "1922-11-01",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Erik-Jan Zürcher, Turkey: A Modern History (I.B. Tauris, 2004)",
@@ -477,6 +475,55 @@
      ]
     },
     {
+     "yeni": true,
+     "tarih": "1924-03-03",
+     "ortak": [
+      "parsel"
+     ],
+     "baslik": "Hilafet kaldırıldı, boşluğu yeni dernekler doldurdu",
+     "baslik_en": "The caliphate is abolished; new associations fill the gap",
+     "metin": "TBMM 3 Mart 1924’te hilafeti kaldırdı. Müslüman dünyası ilk kez ortak bir dinî-siyasi merkezden yoksun kaldı; bu boşluğu kısa sürede yeni dernekler doldurdu. 1927’de Kahire’de Genç Müslümanlar Cemiyeti, 1928’de İsmailiye’de Hasan el-Benna’nın Müslüman Kardeşler’i kuruldu. Hayfa’da Kassam 1928’den itibaren Genç Müslümanlar Cemiyeti’nin şubesini yönetti; köylüleri ve demiryolu işçilerini bu dernekte ve camide örgütledi. Kudüs’te Hacı Emin el-Hüseynî Aralık 1931’de bütün İslam dünyasından temsilcileri Genel İslam Kongresi’nde topladı: Filistin, kaybedilen hilafetin yerine Müslümanları birleştiren dava oldu.",
+     "metin_en": "On 3 March 1924 the Turkish Grand National Assembly abolished the caliphate. For the first time the Muslim world had no common religious-political centre, and new associations soon filled the gap: the Young Men’s Muslim Association was founded in Cairo in 1927 and Hasan al-Banna’s Muslim Brotherhood in Ismailia in 1928. In Haifa Qassam led the local branch of the Young Men’s Muslim Association from 1928, organising peasants and railway workers through it and the mosque. In Jerusalem Hajj Amin al-Husseini gathered delegates from across the Muslim world at the General Islamic Congress in December 1931: Palestine became the cause that united Muslims in place of the lost caliphate.",
+     "kaynakca": [
+      {
+       "ad": "Weldon C. Matthews, Confronting an Empire, Constructing a Nation (2006)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Martin Kramer, Islam Assembled: The Advent of the Muslim Congresses (1986)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Richard P. Mitchell, The Society of the Muslim Brothers (1969)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1935-08-03",
+     "baslik": "Müslüman Kardeşler’in ilk heyeti Filistin’de",
+     "baslik_en": "The Muslim Brotherhood’s first delegation in Palestine",
+     "metin": "Hasan el-Benna’nın kardeşi Abdurrahman el-Benna’nın başında olduğu İhvan heyeti 3-6 Ağustos 1935’te Filistin’i dolaştı; Kassam’ın Yabed’e çekilmesinden üç ay önceydi. 1936 isyanı boyunca İhvan Mısır’da Filistin için para topladı, bildiriler ve dergiler yaydı. Filistin davası hareketin Mısır dışına yayılmasının en büyük sebebi oldu. Ancak Filistin’deki şubeler 1945’te açıldı; 1936 isyanını İhvan örgütlemedi, isyanın en çok beslendiği kaynak Kassam’ın çevresiydi.",
+     "metin_en": "A Brotherhood delegation led by Hasan al-Banna’s brother Abd al-Rahman al-Banna toured Palestine from 3 to 6 August 1935, three months before Qassam withdrew to Ya‘bad. Throughout the 1936 revolt the Brotherhood raised money for Palestine in Egypt and spread leaflets and magazines; the Palestinian cause was the main reason the movement spread beyond Egypt. Its branches in Palestine opened only in 1945, however: the Brotherhood did not organise the 1936 revolt, whose main source was Qassam’s circle.",
+     "kaynaklar": [
+      {
+       "ad": "Massimo Introvigne, Bitter Winter",
+       "url": "https://bitterwinter.org/?p=41724"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Abd al-Fattah Muhammad El-Awaisi, The Muslim Brothers and the Palestine Question 1928–1947 (1998)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Azzam Tamimi, “Palestine Question and Islamic Movement”, Kyoto Bulletin of Islamic Area Studies 1-1 (2007)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
      "ref": "1935-11-20",
      "baslik": "Yabed tepelerinde son çatışma",
      "baslik_en": "The last stand in the Ya‘bad hills",
@@ -491,6 +538,21 @@
       {
        "ad": "Ghassan Kanafani, The 1936–39 Revolt in Palestine (Committee for a Democratic Palestine, 1972)",
        "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1935-11-22",
+     "gazete_kars": "falastin-1935",
+     "baslik": "“Otuz bin kişi aziz şehitlerin cenazesini uğurluyor”",
+     "baslik_en": "“Thirty thousand escort the funeral of the righteous martyrs”",
+     "metin": "Yafa’da çıkan Filastin gazetesi Kassam’ın Hayfa’daki cenazesini 22 Kasım 1935’te birinci sayfadan verdi. Gazete, İngiliz yönetiminin “eşkıya” dediği Kassam ve arkadaşları için “bunlar dinî ve millî bir davanın takipçileriydi, yol kesen eşkıya değillerdi” diye yazdı. Hayfa’da dükkânlar kapandı; kalabalık İngilizler ve sömürgecilik aleyhine sloganlar attı, polis karakolunu taşladı. Tabutlar Arap bayrağının renkleriyle örtüldü.",
+     "metin_en": "Filastin, published in Jaffa, put Qassam’s Haifa funeral on its front page on 22 November 1935. Of the men the British administration called “bandits”, the paper wrote: “they were followers of a religious and national cause, not highwaymen.” Haifa’s shops shut; the crowd chanted against the British and colonialism and stoned the police station. The coffins were draped in the colours of the Arab flag.",
+     "kaynaklar": [
+      {
+       "ad": "Filastin, 22 Kasım 1935 · Jrayed arşivi",
+       "url": "https://www.nli.org.il/en/newspapers/falastin/1935/11/22/01/"
       }
      ]
     },
@@ -828,7 +890,6 @@
     },
     {
      "ref": "1948-09-22",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Avi Shlaim, “The Rise and Fall of the All-Palestine Government in Gaza”, Journal of Palestine Studies 20:1 (1990)",
@@ -838,7 +899,6 @@
     },
     {
      "ref": "1948-10",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Benny Morris, 1948: A History of the First Arab-Israeli War (Yale University Press, 2008)",
@@ -878,7 +938,6 @@
     },
     {
      "yeni": true,
-     "yan": true,
      "tarih": "1948-05-17",
      "baslik": "Akka’nın düşüşü",
      "baslik_en": "The fall of Acre",
@@ -939,7 +998,8 @@
    "ad_en": "Partition and the Nakba",
    "tez_en": "Britain handed the question to the UN. The partition plan adopted on 29 November 1947 gave about 55 per cent of the country to Jews, who made up about a third of the population and owned about 7 per cent of the land. In the war that followed, some 750,000 Palestinians were driven from their homes.",
    "gecis_en": "Defeat brought down the old regimes; Arab nationalism took the stage.",
-   "gorsel": "hayfa-1948-surgun"
+   "gorsel": "hayfa-1948-surgun",
+   "karanlik": true
   },
   {
    "anahtar": "baas",
@@ -1175,7 +1235,8 @@
      "metin_en": "After Egypt asked UNEF to leave and closed the Straits of Tiran, Israel destroyed the Egyptian air force on the ground on the morning of 5 June 1967. In six days it occupied Sinai for the second time, along with Gaza, the West Bank, East Jerusalem and the Golan; the front reached the Suez Canal, which stayed closed for eight years. Some 300,000 more Palestinians were displaced.",
      "sina": 2,
      "sonuc": "Arap orduları ağır bir yenilgi aldı: Mısır Sina’yı ve Gazze’yi, Ürdün Batı Şeria’yı ve Doğu Kudüs’ü, Suriye Golan’ı kaybetti. Abdünnasır istifasını açıkladı, halk sokağa dökülünce görevde kaldı. Hartum Zirvesi “barış yok, tanıma yok, müzakere yok” dedi. Arap ordularına güveni kalmayan Filistinliler mücadeleyi kendi örgütleriyle sürdürdü.",
-     "sonuc_en": "The Arab armies suffered a crushing defeat: Egypt lost Sinai and Gaza, Jordan the West Bank and East Jerusalem, Syria the Golan. Nasser announced his resignation and stayed in office when crowds filled the streets. The Khartoum summit said “no peace, no recognition, no negotiation”. Palestinians who had lost faith in the Arab armies carried on the struggle through their own organisations."
+     "sonuc_en": "The Arab armies suffered a crushing defeat: Egypt lost Sinai and Gaza, Jordan the West Bank and East Jerusalem, Syria the Golan. Nasser announced his resignation and stayed in office when crowds filled the streets. The Khartoum summit said “no peace, no recognition, no negotiation”. Palestinians who had lost faith in the Arab armies carried on the struggle through their own organisations.",
+     "karanlik": true
     },
     {
      "ref": "1973-10-06",
@@ -1231,7 +1292,6 @@
     },
     {
      "ref": "1969-03-09",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Yaacov Bar-Siman-Tov, The Israeli-Egyptian War of Attrition, 1969–1970 (Columbia University Press, 1980)",
@@ -1243,7 +1303,6 @@
     },
     {
      "ref": "1973-10-17",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Daniel Yergin, The Prize: The Epic Quest for Oil, Money, and Power (Simon & Schuster, 1991)",
@@ -1294,7 +1353,6 @@
     },
     {
      "ref": "1955-02-28",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Jean-Pierre Filiu, Gaza: A History (Hurst / Oxford University Press, 2014)",
@@ -1308,7 +1366,6 @@
     },
     {
      "ref": "1956-10-29",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Shira Robinson, “Local Struggle, National Struggle: Palestinian Responses to the Kafr Qasim Massacre and Its Aftermath, 1956–66”, International Journal of Middle East Studies 35:3 (2003)",
@@ -1557,10 +1614,15 @@
      "tarih": "1970-09-16",
      "baslik": "Kara Eylül",
      "gorsel": "amman-1970",
-     "metin": "Ürdün ordusu Eylül 1970’te fedai örgütlerine ve kamplara saldırdı; binlerce kişi öldü. Çatışmaların sonunda FKÖ ve örgütler Ürdün’den çıkarılarak Lübnan’a taşındı.",
-     "kaynaklar": [],
+     "metin": "Ürdün topraklarındaki bir pistin fedailerin elinde “devrim havaalanı”na dönmesi, Kral Hüseyin’in gözünde fedailerin ülkede devlet içinde devlet kurduğunun ve Ürdün’ün egemenliğini açıkça çiğnediğinin kanıtıydı. Kral 16 Eylül’de sıkıyönetim ilan edip askerî bir hükümet kurdu; ertesi gün ordu Amman’daki fedai mevzilerine ve kamplara saldırdı. Binlerce kişi öldü.",
+     "kaynaklar": [
+      {
+       "ad": "FRUS 1969–76, c. XXIII, belge 161",
+       "url": "https://history.state.gov/historicaldocuments/frus1969-76v23/d161"
+      }
+     ],
      "baslik_en": "Black September",
-     "metin_en": "In September 1970 the Jordanian army attacked the fedayeen organisations and the camps; thousands were killed. At the end of the fighting the PLO and the organisations were driven out of Jordan and moved to Lebanon.",
+     "metin_en": "For King Hussein, an airstrip on Jordanian soil turned into the fedayeen’s “revolutionary airport” was proof that they had built a state within the state and openly defied Jordan’s sovereignty. On 16 September he declared martial law and formed a military government; the next day the army attacked fedayeen positions and the camps in Amman. Thousands were killed.",
      "kaynakca": [
       {
        "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
@@ -1722,7 +1784,6 @@
     },
     {
      "ref": "1976-03-30",
-     "yan": true,
      "gorsel": "toprak-gunu-afis",
      "kaynakca": [
       {
@@ -1733,7 +1794,6 @@
     },
     {
      "ref": "1987-07-22",
-     "yan": true,
      "gorsel": "naci-ali",
      "kaynakca": [
       {
@@ -1744,7 +1804,6 @@
     },
     {
      "ref": "1988-04-16",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
@@ -2007,28 +2066,6 @@
     },
     {
      "yeni": true,
-     "yan": true,
-     "tarih": "2003-03-16",
-     "gorsel": "rachel-corrie-2003",
-     "baslik": "Rachel Corrie Refah’ta öldürüldü",
-     "baslik_en": "Rachel Corrie is killed in Rafah",
-     "metin": "Uluslararası Dayanışma Hareketi (ISM) gönüllüsü 23 yaşındaki Amerikalı Rachel Corrie, Refah’ta bir Filistinli ailenin evinin yıkılmasını önlemeye çalışırken İsrail ordusuna ait zırhlı bir buldozerin altında kalarak öldürüldü. Sonraki haftalarda aynı kampta İngiliz Tom Hurndall ve James Miller da İsrail askerlerinin ateşiyle vuruldu.",
-     "metin_en": "Rachel Corrie, a 23-year-old American volunteer with the International Solidarity Movement (ISM), was killed in Rafah when an Israeli army armoured bulldozer crushed her as she tried to stop the demolition of a Palestinian family’s home. In the following weeks, the Britons Tom Hurndall and James Miller were shot by Israeli soldiers in the same camp.",
-     "sonuc": "Ailesinin açtığı tazminat davası 2012’de Hayfa’da reddedildi; Yüksek Mahkeme 12 Şubat 2015’te kararı onadı ve devleti “savaş faaliyeti” gerekçesiyle sorumlu tutmadı. Kimse yargılanmadı.",
-     "sonuc_en": "The family’s civil suit was rejected in Haifa in 2012; on 12 February 2015 the Supreme Court upheld the ruling, exempting the state on grounds of “wartime activity”. No one was prosecuted.",
-     "kaynaklar": [
-      {
-       "ad": "Human Rights Watch",
-       "url": "https://www.hrw.org/news/2015/02/17/israel-dangerous-ruling-rachel-corrie-case"
-      },
-      {
-       "ad": "Rapor: Rachel Corrie ve ötekiler",
-       "url": "rachel-corrie.html"
-      }
-     ]
-    },
-    {
-     "yeni": true,
      "tarih": "2004-03-22",
      "baslik": "Şeyh Ahmed Yasin öldürüldü",
      "metin": "Hamas’ın kurucusu Şeyh Ahmed Yasin, Gazze’de sabah namazından çıkarken İsrail helikopterlerinin attığı füzelerle öldürüldü; saldırıda dokuz kişi daha öldü.",
@@ -2124,11 +2161,6 @@
      "vurgu_en": [
       "in place ever since"
      ],
-     "karsilastir": {
-      "once": "cekilme",
-      "sonra": "abluka",
-      "kesit": "gz"
-     },
      "kaynakca": [
       {
        "ad": "Sara Roy, Hamas and Civil Society in Gaza: Engaging the Islamist Social Sector (Princeton University Press, 2011)",
@@ -2153,19 +2185,7 @@
      "sonuc_en": "The fighting lasted eleven days and ended with an Egyptian-brokered ceasefire on 21 May. Hamas gained political weight in Palestine and the region as the force that had opened fire for Jerusalem; there were also mass protests in Palestinian towns inside Israel."
     },
     {
-     "ref": "2010-05-31",
-     "yan": true,
-     "kaynakca": [
-      {
-       "ad": "BM İnsan Hakları Konseyi, filoya yapılan saldırıyla ilgili uluslararası olgu bulma heyeti raporu (A/HRC/15/21, 2010)",
-       "tur": "birincil",
-       "ad_en": "UN Human Rights Council, report of the international fact-finding mission on the flotilla attack (A/HRC/15/21, 2010)"
-      }
-     ]
-    },
-    {
      "yeni": true,
-     "yan": true,
      "tarih": "2014-09-21",
      "baslik": "Ensarullah Sana’da",
      "metin": "Yemen’deki Ensarullah (Husiler) başkent Sana’nın denetimini ele geçirdi.",
@@ -2181,7 +2201,6 @@
     },
     {
      "ref": "2017-12-06",
-     "yan": true,
      "kaynakca": [
       {
        "ad": "BM Genel Kurulu, ES-10/19 sayılı karar, 21 Aralık 2017",
@@ -2192,7 +2211,6 @@
     },
     {
      "ref": "2022-05-11",
-     "yan": true,
      "gorsel": "sirin-nasira",
      "kaynakca": [
       {
@@ -2263,7 +2281,92 @@
    "ad_en": "The rebirth of the Islamic movements",
    "tez_en": "Where the left and nationalism stalled, a new generation emerged from mosques, charities and universities. The Mujamma founded by Sheikh Ahmed Yassin in Gaza became Hamas with the Intifada; Islamic Jihad organised along a line influenced by the Iranian revolution. Together with Hezbollah in Lebanon, Ansarullah in Yemen and Iran, a front later called the “axis of resistance” took shape.",
    "gecis_en": "On 7 October this front took the stage as a whole.",
-   "gorsel": "kubbetussahra"
+   "gorsel": "satila-sokak"
+  },
+  {
+   "anahtar": "dayanisma",
+   "ad": "Uluslararası dayanışma",
+   "ad_en": "International solidarity",
+   "ar": "التضامن الدولي",
+   "yillar": [
+    2003,
+    2025
+   ],
+   "renk": "#6b4e9b",
+   "tez": "Filistin’in yanında duranlar yalnızca Araplar ve Müslümanlar olmadı. Evleri yıkılmasın diye buldozerin önünde duran, ablukayı kırmak için denize açılan, işgale karşı Filistinlilerle yürüyen insanlar dünyanın dört bir yanından geldi. İsrail bu dayanışmayı da aynı şiddetle karşıladı.",
+   "tez_en": "Those who stood with Palestine were not only Arabs and Muslims. People came from every corner of the world to stand in front of bulldozers so homes would not be demolished, to sail out to break the blockade, to march with Palestinians against the occupation. Israel met this solidarity with the same violence.",
+   "gecis": "Her filo durduruldu, her gönüllü sınır dışı edildi; ama arkasından yenisi yola çıktı.",
+   "gecis_en": "Every flotilla was stopped and every volunteer deported, yet another set out after them.",
+   "gorsel": "rachel-corrie-2003",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "2003-03-16",
+     "gorsel": "rachel-corrie-2003",
+     "baslik": "Rachel Corrie Refah’ta öldürüldü",
+     "baslik_en": "Rachel Corrie is killed in Rafah",
+     "metin": "Uluslararası Dayanışma Hareketi (ISM) gönüllüsü 23 yaşındaki Amerikalı Rachel Corrie, Refah’ta bir Filistinli ailenin evinin yıkılmasını önlemeye çalışırken İsrail ordusuna ait zırhlı bir buldozerin altında kalarak öldürüldü. Sonraki haftalarda aynı kampta İngiliz Tom Hurndall ve James Miller da İsrail askerlerinin ateşiyle vuruldu.",
+     "metin_en": "Rachel Corrie, a 23-year-old American volunteer with the International Solidarity Movement (ISM), was killed in Rafah when an Israeli army armoured bulldozer crushed her as she tried to stop the demolition of a Palestinian family’s home. In the following weeks, the Britons Tom Hurndall and James Miller were shot by Israeli soldiers in the same camp.",
+     "sonuc": "Ailesinin açtığı tazminat davası 2012’de Hayfa’da reddedildi; Yüksek Mahkeme 12 Şubat 2015’te kararı onadı ve devleti “savaş faaliyeti” gerekçesiyle sorumlu tutmadı. Kimse yargılanmadı.",
+     "sonuc_en": "The family’s civil suit was rejected in Haifa in 2012; on 12 February 2015 the Supreme Court upheld the ruling, exempting the state on grounds of “wartime activity”. No one was prosecuted.",
+     "kaynaklar": [
+      {
+       "ad": "Human Rights Watch",
+       "url": "https://www.hrw.org/news/2015/02/17/israel-dangerous-ruling-rachel-corrie-case"
+      },
+      {
+       "ad": "Rapor: Rachel Corrie ve ötekiler",
+       "url": "rachel-corrie.html"
+      }
+     ]
+    },
+    {
+     "ref": "2010-05-31",
+     "kaynakca": [
+      {
+       "ad": "BM İnsan Hakları Konseyi, filoya yapılan saldırıyla ilgili uluslararası olgu bulma heyeti raporu (A/HRC/15/21, 2010)",
+       "tur": "birincil",
+       "ad_en": "UN Human Rights Council, report of the international fact-finding mission on the flotilla attack (A/HRC/15/21, 2010)"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2024-09-06",
+     "baslik": "Ayşenur Ezgi Eygi Beyta’da öldürüldü",
+     "baslik_en": "Ayşenur Ezgi Eygi is killed in Beita",
+     "metin": "Didimli 26 yaşındaki Türkiye ve ABD vatandaşı Ayşenur Ezgi Eygi, Uluslararası Dayanışma Hareketi gönüllüsü olarak Nablus yakınlarındaki Beyta’da, Evyatar yerleşim karakoluna karşı her cuma yapılan gösteriye katılmıştı. Bir İsrail askerinin ateşiyle başından vurularak öldürüldü. İsrail ordusu dört gün sonra Eygi’nin “büyük ihtimalle dolaylı ve kasıtsız” ateşle vurulduğunu açıkladı; Washington Post’un ve B’Tselem’in incelemeleri bu anlatımı çürüttü: Eygi, çatışmaların durulmasından yarım saat sonra, askerlerden yaklaşık 180 metre uzakta vurulmuştu. Kimse yargılanmadı. Eygi Didim’de toprağa verildi; Türkiye’de savcılık soruşturması sürüyor.",
+     "metin_en": "Ayşenur Ezgi Eygi, a 26-year-old Turkish and US citizen from Didim, had joined the weekly Friday protest against the Evyatar outpost in Beita, near Nablus, as an International Solidarity Movement volunteer. She was shot in the head and killed by an Israeli soldier. Four days later the Israeli army said she had been hit “highly likely… indirectly and unintentionally”; investigations by the Washington Post and B’Tselem refuted this account: she was shot half an hour after the clashes had died down, about 180 metres from the soldiers. No one has been prosecuted. She was buried in Didim; a prosecutor’s investigation in Turkey is ongoing.",
+     "kaynaklar": [
+      {
+       "ad": "B’Tselem / ReliefWeb",
+       "url": "https://reliefweb.int/report/occupied-palestinian-territory/israeli-soldiers-shot-and-killed-american-turkish-protester-endangering-no-one-town-beita-enarhe"
+      },
+      {
+       "ad": "Al Jazeera",
+       "url": "https://www.aljazeera.com/news/2024/9/13/whats-being-said-about-israel-killing-aysenur-turkish-american-activist"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2025-10-01",
+     "baslik": "Küresel Sumud Filosu durduruldu",
+     "baslik_en": "The Global Sumud Flotilla is intercepted",
+     "metin": "Gazze ablukasını kırmak için Eylül 2025’te Barselona’dan, Tunus’tan ve İtalya’dan yola çıkan kırktan fazla tekneden oluşan Küresel Sumud Filosu, 1 Ekim gecesi Gazze kıyısına yaklaşırken uluslararası sularda İsrail donanmasının baskınına uğradı. Greta Thunberg, Avrupa Parlamentosu üyeleri ve aralarında Türkiye vatandaşlarının da bulunduğu yaklaşık 450 kişi gözaltına alınıp Aşdod’a götürüldü; son tekne 3 Ekim’de durduruldu. Gözaltına alınanların çoğu sonraki günlerde sınır dışı edildi. Avrupa’nın birçok kentinde on binler filo için yürüdü.",
+     "metin_en": "The Global Sumud Flotilla, more than forty boats that set out from Barcelona, Tunisia and Italy in September 2025 to break the Gaza blockade, was raided by the Israeli navy in international waters on the night of 1 October as it approached Gaza. About 450 people, among them Greta Thunberg, members of the European Parliament and Turkish citizens, were detained and taken to Ashdod; the last boat was stopped on 3 October. Most were deported in the following days. Tens of thousands marched for the flotilla in cities across Europe.",
+     "kaynaklar": [
+      {
+       "ad": "NPR",
+       "url": "https://www.npr.org/2025/10/01/g-s1-91522/gaza-aid-flotilla-sumud-israel"
+      },
+      {
+       "ad": "CBC",
+       "url": "https://www.cbc.ca/lite/story/9.6931358"
+      }
+     ]
+    }
+   ]
   },
   {
    "anahtar": "enerji",
@@ -2533,12 +2636,10 @@
      "yan": true
     },
     {
-     "ref": "2024-12-08",
-     "yan": true
+     "ref": "2024-12-08"
     },
     {
-     "ref": "2024-12-27",
-     "yan": true
+     "ref": "2024-12-27"
     },
     {
      "yeni": true,
@@ -2706,5 +2807,128 @@
    "not": "1940’ta Irgun’dan ayrılan örgüt; İngilizler “Stern Çetesi” diyordu. 1944’te İngiliz bakan Lord Moyne’u, Eylül 1948’de BM arabulucusu Folke Bernadotte’yi öldürdü. Liderlerinden İzhak Şamir 1983’te başbakan oldu.",
    "not_en": "An organisation that split from the Irgun in 1940; the British called it the “Stern Gang”. It killed the British minister Lord Moyne in 1944 and the UN mediator Folke Bernadotte in September 1948. One of its leaders, Yitzhak Shamir, became prime minister in 1983."
   }
- ]
+ ],
+ "gazeteler": {
+  "falastin-1935": {
+   "ad": "Filastin",
+   "ad_ar": "فلسطين",
+   "yer": "Yafa",
+   "yer_en": "Jaffa",
+   "tarih": "22 Kasım 1935",
+   "tarih_en": "22 November 1935",
+   "sayi": "Yıl 19 · Sayı 225-3109",
+   "sayi_en": "Year 19 · No. 225-3109",
+   "kaynak": {
+    "ad": "İsrail Ulusal Kütüphanesi, Jrayed arşivi (Osmanlı ve Manda dönemi Filistin Arapça gazeteleri)",
+    "ad_en": "National Library of Israel, Jrayed archive (Arabic newspapers of Ottoman and Mandatory Palestine)",
+    "url": "https://www.nli.org.il/en/newspapers/falastin/1935/11/22/01/"
+   },
+   "lisans": "1935 tarihli imzasız gazete sayfası; İsrail telif yasasına göre kamu malı.",
+   "lisans_en": "Unsigned 1935 newspaper page; public domain under Israeli copyright law.",
+   "sayfalar": [
+    {
+     "no": 1,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s1.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "ثلاثون الفا يشيعون جنازة الشهداء الابرار",
+       "tr": "Otuz bin kişi aziz şehitlerin cenazesini uğurluyor",
+       "en": "Thirty thousand escort the funeral of the righteous martyrs"
+      },
+      {
+       "tip": "alt",
+       "ar": "رجم دائرة البوليس وسياراتها بالحجارة وجرح ضابطين",
+       "tr": "Polis karakolu ve araçları taşlandı, iki subay yaralandı",
+       "en": "Police station and its cars stoned, two officers wounded"
+      },
+      {
+       "tip": "alt",
+       "ar": "الهتاف بسقوط الانكليز والاستعمار - مصادمات بين الاهلين والبوليس",
+       "tr": "“Kahrolsun İngilizler, kahrolsun sömürgecilik” sloganları · halkla polis arasında çatışmalar",
+       "en": "Chants of “Down with the English, down with colonialism” · clashes between the people and the police"
+      },
+      {
+       "tip": "kutu",
+       "ar": "المرحوم الشيخ عز الدين القسام، اجتهد ومات في سبيل فكرته",
+       "tr": "Merhum Şeyh İzzeddin el-Kassam: davası uğruna çalıştı ve o yolda öldü",
+       "en": "The late Sheikh Izz ad-Din al-Qassam: he strove and died for his cause"
+      },
+      {
+       "tip": "kutu",
+       "ar": "رحمه الله لقد كان مسلما صحيح الاسلام",
+       "tr": "Allah rahmet eylesin; o, İslam’ı doğru yaşayan bir Müslümandı",
+       "en": "May God have mercy on him; he was a Muslim of true Islam"
+      },
+      {
+       "tip": "yan",
+       "ar": "هؤلاء اتباع فكرة دينية وقومية وما كانوا «اشقياء» يقطعون الطرق",
+       "tr": "Bunlar dinî ve millî bir davanın takipçileriydi, yol kesen “eşkıya” değillerdi",
+       "en": "These were followers of a religious and national cause, not “bandits” robbing the roads"
+      },
+      {
+       "tip": "yan",
+       "ar": "نذير صارخ للسياسة الاستعمارية الصهيونية",
+       "tr": "Sömürgeci-Siyonist siyasete yüksek sesli bir uyarı",
+       "en": "A loud warning to the colonialist-Zionist policy"
+      }
+     ]
+    },
+    {
+     "no": 5,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s5.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "ثلاثون الفا يشيعون جنازة الشهداء الابرار في حيفا",
+       "tr": "Hayfa’da otuz bin kişi aziz şehitlerin cenazesini uğurluyor",
+       "en": "Thirty thousand escort the funeral of the righteous martyrs in Haifa"
+      },
+      {
+       "tip": "alt",
+       "ar": "الجماهير الهائجة ترجم دائرة البوليس بالحجارة وتجرح ضابطين انكليزيين وبعض الجنود الانكليز",
+       "tr": "Öfkeli kalabalık polis karakolunu taşladı; iki İngiliz subayı ve bazı İngiliz askerleri yaralandı",
+       "en": "The angry crowd stones the police station, wounding two British officers and some British soldiers"
+      },
+      {
+       "tip": "alt",
+       "ar": "الهتاف بسقوط الانكليز والاستعمار - اتلاف سيارة ودراجة - انهزام قوة بوليس - حيفا تضرب حدادا",
+       "tr": "İngilizler ve sömürgecilik aleyhine sloganlar · bir otomobil ve bir motosiklet parçalandı · bir polis birliği geri çekildi · Hayfa yas için kepenk kapattı",
+       "en": "Chants against the English and colonialism · a car and a motorcycle wrecked · a police unit routed · Haifa strikes in mourning"
+      },
+      {
+       "tip": "kutu",
+       "ar": "وصول جثث الشهداء الى حيفا",
+       "tr": "Şehitlerin naaşları Hayfa’ya ulaştı",
+       "en": "The martyrs’ bodies arrive in Haifa"
+      },
+      {
+       "tip": "kutu",
+       "ar": "حيفا تضرب اضرابا عاما شاملا",
+       "tr": "Hayfa’da genel grev",
+       "en": "Haifa on general strike"
+      },
+      {
+       "tip": "kutu",
+       "ar": "تغطية النعوش بالوان العلم العربي",
+       "tr": "Tabutlar Arap bayrağının renkleriyle örtüldü",
+       "en": "Coffins draped in the colours of the Arab flag"
+      },
+      {
+       "tip": "kutu",
+       "ar": "صلاة الغائب على ارواح الشهداء",
+       "tr": "Şehitler için gıyabi cenaze namazı",
+       "en": "Funeral prayers in absentia for the martyrs"
+      },
+      {
+       "tip": "kutu",
+       "ar": "الاجتماعات بغزة والناصرة ونابلس",
+       "tr": "Gazze, Nasıra ve Nablus’ta toplantılar",
+       "en": "Meetings in Gaza, Nazareth and Nablus"
+      }
+     ]
+    }
+   ]
+  }
+ }
 }

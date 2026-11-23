@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=13").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=14").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -80,8 +80,8 @@
     harfle(h, EN ? "Currents of a century" : "Bir yüzyılın akışları");
     ic.append(el("p", "ta-ust", EN ? "Palestine · 1914–2026" : "Filistin · 1914–2026"), h, el("p", "ta-ar", "تيارات قرن"),
       el("p", "ta-dek", EN
-        ? "The Ottoman era was over. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. The currents flow on a single timeline and overlap where history did; whenever the land changed hands, a before-and-after map lets you compare the two."
-        : "Osmanlı artık geride kalmıştı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Akışlar tek bir zaman çizgisinde ilerler, tarihin iç içe geçtiği yerde birbirine karışır. Toprak her el değiştirdiğinde önce ve sonra haritası gelir; çizgiyi sürükleyip iki hâli karşılaştırabilirsiniz."));
+        ? "The Ottomans marched on Suez to win back British-held Egypt; within four years they had lost every Arab land Selim I had taken from the Mamluks in 1516–17. Gaza, Jerusalem, Damascus and Aleppo fell within a year, and in October 1918 the Committee of Union and Progress government laid down its arms at Mudros. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. The currents flow on a single timeline and overlap where history did; whenever the land changed hands, a before-and-after map lets you compare the two."
+        : "Osmanlı, İngiliz elindeki Mısır’ı geri almak için Süveyş’e yürüdü; dört yıl dolmadan Yavuz Selim’in 1516-17’de Memlüklerden aldığı Arap topraklarının tamamını kaybetmişti. Gazze, Kudüs, Şam ve Halep bir yıl içinde düştü, Ekim 1918’de İttihat ve Terakki yönetimi Mondros’ta silah bıraktı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Akışlar tek bir zaman çizgisinde ilerler, tarihin iç içe geçtiği yerde birbirine karışır. Toprak her el değiştirdiğinde önce ve sonra haritası gelir; çizgiyi sürükleyip iki hâli karşılaştırabilirsiniz."));
     ic.appendChild(tatriz(46, "ta-tatriz son"));
     ic.appendChild(el("p", "ta-ipucu", EN ? "Scroll ↓" : "Kaydır ↓"));
     giris.appendChild(ic);
@@ -116,13 +116,15 @@
     akis.appendChild(serit);
     sira.forEach(function (x, n) {
       var a = x.a;
-      if (ilk[a.anahtar] === n) serit.appendChild(acilis(a, x.ai));
+      if (ilk[a.anahtar] === n) { var ac0 = acilis(a, x.ai); if (a.karanlik) ac0.dataset.karanlik = "1"; serit.appendChild(ac0); }
       var e = oge(x.o, a);
       boya(e, a, x.t);
+      if ((a.karanlik || x.o.karanlik) && e.nodeType === 1) e.dataset.karanlik = "1";
       serit.appendChild(e);
       if (x.o.karsilastir) serit.appendChild(boya(haritaKars(x.o.karsilastir), a, x.t));
       if (x.o.uydu) serit.appendChild(boya(uyduKars(x.o.uydu), a, x.t));
       if (x.o.hava) serit.appendChild(boya(havaKars(x.o.hava), a, x.t));
+      if (x.o.gazete_kars && A.gazeteler && A.gazeteler[x.o.gazete_kars]) serit.appendChild(boya(gazeteKars(A.gazeteler[x.o.gazete_kars]), a, x.t));
       if (x.o.uydu_gazze && U && U.gazze_once && U.sari) serit.appendChild(boya(uyduGazze(U, x.o.uydu_gazze), a, x.t));
       if (son[a.anahtar] === n && a.gecis) serit.appendChild(boya(gecis(a, x.ai), a, x.t));
     });
@@ -336,6 +338,47 @@
       });
     }
 
+    // --- gazete sayfası: solda özgün Arapça sayfa, sağda aynı başlıkların Türkçesi (EN: İngilizcesi) ---
+    function gazeteKars(G) {
+      var f = el("figure", "ta-kars ta-gz izle");
+      var ust = el("div", "ta-kars-ust");
+      ust.append(el("span", "ta-kars-et", EN ? "Newspaper · original and translation" : "Gazete · özgün ve çeviri"),
+        el("p", "ta-kars-baslik", G.ad + " · " + (EN ? G.tarih_en : G.tarih)));
+      f.appendChild(ust);
+      var sekme = el("div", "ta-kars-sekme"), sahne = el("div", "ta-kk-sahne"), dgYer = el("div");
+      function goster(S) {
+        sahne.innerHTML = ""; dgYer.innerHTML = "";
+        var kutu = el("div", "ta-kk ta-gz-kk");
+        var im = new Image(); im.alt = (EN ? "Original page: " : "Özgün sayfa: ") + G.ad + ", " + (EN ? G.tarih_en : G.tarih) + ", " + (EN ? "p. " : "s. ") + S.no;
+        im.onload = function () { kutu.style.setProperty("--oran", (im.naturalWidth / im.naturalHeight).toFixed(4)); };
+        kutu.style.setProperty("--oran", "0.665");
+        im.src = S.gorsel; im.decoding = "async";
+        var once = el("div", "kk-katman kk-once"); once.appendChild(im);
+        var ceviri = el("div", "kk-katman kk-sonra ta-gz-ceviri");
+        var bas = el("div", "ta-gz-kunye");
+        bas.append(el("span", null, (EN ? G.yer_en : G.yer) + " · " + (EN ? G.tarih_en : G.tarih)), el("b", null, G.ad_ar + " · " + G.ad.toUpperCase()), el("span", null, (EN ? G.sayi_en : G.sayi) + " · " + (EN ? "p. " : "s. ") + S.no));
+        ceviri.appendChild(bas);
+        S.satirlar.forEach(function (x) { var t = el(x.tip === "manset" ? "h4" : "p", "ta-gz-" + x.tip, EN ? x.en : x.tr); t.lang = EN ? "en" : "tr"; ceviri.appendChild(t); });
+        kutu.append(ceviri, once);
+        var dg = kaydirici(kutu, EN ? "Original · Arabic" : "Özgün · Arapça", EN ? "English" : "Türkçe", EN ? "Compare original and translation" : "Özgün ve çeviriyi karşılaştır");
+        sahne.appendChild(kutu); dgYer.appendChild(dg);
+      }
+      G.sayfalar.forEach(function (S, i) {
+        var b = el("button", "ta-kars-sekme-d", (EN ? "Page " : "Sayfa ") + S.no); b.type = "button"; b.setAttribute("role", "tab");
+        b.onclick = function () { sekme.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); }); goster(S); };
+        if (!i) b.setAttribute("aria-selected", "true");
+        sekme.appendChild(b);
+      });
+      if (G.sayfalar.length > 1) f.appendChild(sekme);
+      f.append(sahne, dgYer);
+      goster(G.sayfalar[0]);
+      var kk = el("p", "ta-kars-kaynak");
+      kk.appendChild(dis(el("a", null, (EN ? G.kaynak.ad_en : G.kaynak.ad) + " ↗"), G.kaynak.url));
+      kk.appendChild(document.createTextNode(" · " + (EN ? G.lisans_en : G.lisans) + (EN ? " Headlines translated by Alboroto." : " Başlıkları Alboroto çevirdi.")));
+      f.appendChild(kk);
+      return f;
+    }
+
     // --- önce/sonra haritası ---
     function haritaKars(k) {
       var m1 = A.haritalar[k.once], m2 = A.haritalar[k.sonra];
@@ -516,6 +559,23 @@
 
     terimKur(A.sozluk || []);
     ilerlemeKur();
+    karanlikKur(serit);
+  }
+
+  // --- Nekbe ve Nekse: bu olaylar ekranın ortasına geldiğinde sayfa siyaha döner ---
+  function karanlikKur(serit) {
+    if (!("IntersectionObserver" in window)) return;
+    var gorunen = new Set();
+    var io = new IntersectionObserver(function (xs) {
+      xs.forEach(function (x) { if (x.isIntersecting) gorunen.add(x.target); else gorunen.delete(x.target); });
+      var koyu = false; gorunen.forEach(function (e) { if (e.dataset.karanlik) koyu = true; });
+      document.body.classList.toggle("ta-karanlik", koyu);
+    }, { rootMargin: "-42% 0px -42% 0px" });
+    Array.prototype.forEach.call(serit.children, function (e) {
+      // karşılaştırma figürleri de bir önceki olayın hâlini alır
+      if (!e.dataset.karanlik) { var p = e.previousElementSibling; if (p && p.dataset.karanlik && /ta-kars/.test(e.className)) e.dataset.karanlik = "1"; }
+      io.observe(e);
+    });
   }
 
   // --- bilgi notları: sözlükteki örgüt ve kavram adları her kartta ilk geçtiği yerde işaretlenir; dokununca kısa not açılır ---
