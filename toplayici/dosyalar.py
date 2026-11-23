@@ -553,6 +553,13 @@ def site_verisi(kok, d, simdi, sayfa_adi=None, gorsel_bul=None):
                       "olay": len({o["a"] for o in tum}), "sicak": sum(1 for x in dallar if x["durum"] == "sicak"), "nabiz": nabiz,
                       "dallar": dallar})
     cikti.sort(key=lambda x: (x["son"], x["sicak"], sum(x["nabiz"][-3:])), reverse=True)
+    try:   # bölge etiketi (toplayici/dosya_kapak.json); yeni dosyalarda yoksa boş kalır
+        secim = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dosya_kapak.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        secim = {}
+    for x in cikti:
+        b = secim.get(x["id"]) or {}
+        x["bolge"], x["bolge_en"] = b.get("bolge"), b.get("bolge_en")
     veri = {"guncellendi": simdi.isoformat(), "dosyalar": cikti, "haber": harita}
     _yaz(os.path.join(kok, SITE), veri, sik=True)
     return veri

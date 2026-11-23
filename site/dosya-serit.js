@@ -34,107 +34,92 @@
   var NS = "http://www.w3.org/2000/svg";
   function svg(t, a) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); return e; }
   var GUN = 864e5;
-  // Son 14 günün gelişme sayısı (gün gün çubuk) ve öne çıkan başlıklar: ne kadar hareketli, nerede hareketli
-  function gunFark(g) { return Math.floor(Date.now() / GUN) - Math.floor(Date.parse(g + "T12:00:00Z") / GUN); }
+  // Takip edilen dosyalar: açık zeminli, gazete düzeni. Solda bir büyük dosya, sağda kompakt satırlar.
+  // Fotoğraflar: her dosyaya sabit bir Commons fotoğrafı (toplayici/dosya_foto.json → gorsel dalı dosya-foto/); yoksa haberin görseli.
+  var FOTO = {};
+  function gunFark(g) { return Math.floor(Date.now() / 864e5) - Math.floor(Date.parse(g + "T12:00:00Z") / 864e5); }
   function oncesi(g) { var f = gunFark(g); return f <= 0 ? (EN() ? "today" : "bugün") : f === 1 ? (EN() ? "yesterday" : "dün") : f + (EN() ? " days ago" : " gün önce"); }
-  var AYK = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
-  function agac(ds, en) {
-    var kap = el("div", "dsk-grafik");
-    var say = []; for (var i = 0; i < 14; i++) say.push(0);
-    ds.dallar.forEach(function (dal) { dal.olaylar.forEach(function (o) { var f = gunFark(o.g); if (f >= 0 && f < 14) say[13 - f]++; }); });
-    var tepe = Math.max.apply(null, say.concat([1])), toplam = say.reduce(function (a, b) { return a + b; }, 0);
-    kap.appendChild(el("span", "dsk-g-et", (EN() ? "Developments per day, last 14 days · " : "Son 14 gün, günlük gelişme · ") + toplam));
-    var cubuklar = el("div", "dsk-cubuklar"); cubuklar.setAttribute("role", "img");
-    cubuklar.setAttribute("aria-label", (EN() ? "Developments per day over the last 14 days: " : "Son 14 günde günlük gelişme sayısı: ") + say.join(", "));
-    say.forEach(function (n, j) {
-      var gun = new Date((Math.floor(Date.now() / GUN) - (13 - j)) * GUN);
-      var c = el("i", n ? null : "sifir"); c.style.height = (n ? Math.max(12, Math.round(n / tepe * 100)) : 4) + "%";
-      c.title = gun.getUTCDate() + " " + AYK[gun.getUTCMonth()] + ": " + n + (EN() ? " developments" : " gelişme");
-      cubuklar.appendChild(c);
-    });
-    kap.appendChild(cubuklar);
-    var eks = el("div", "dsk-eksen"); eks.appendChild(el("span", null, EN() ? "14 days ago" : "14 gün önce")); eks.appendChild(el("span", null, EN() ? "today" : "bugün")); kap.appendChild(eks);
-    var liste = el("ul", "dsk-basliklar");
-    ds.dallar.map(function (dal) { var son = dal.olaylar.reduce(function (m, o) { return o.g > m ? o.g : m; }, ""); return [dal, son]; })
-      .sort(function (x, y) { return x[1] < y[1] ? 1 : -1; }).slice(0, en).forEach(function (x) {
-        var li = el("li", "dsk-" + x[0].durum);
-        li.appendChild(el("b", null, ad(x[0])));
-        li.appendChild(el("small", null, x[0].olaylar.length + (EN() ? " events · latest " : " olay · son: ") + (x[1] ? oncesi(x[1]) : "–")));
-        liste.appendChild(li);
-      });
-    kap.appendChild(liste);
-    return kap;
-  }
-  // Sabit kapak: dosyanın yerinin uydu görüntüsü (gorsel dalı, uydu/dosya). Yoksa haberden gelen görsel.
-  var KAPAK = null;
-  function kapak(ds, buyuk) {
-    var k = el("div", "dsk-kapak");
-    var u = KAPAK && KAPAK[ds.id], src = null, kunye = null;
-    if (u && u.dosya) { src = "data/gorsel/uydu/dosya/" + u.dosya; kunye = ((EN() && u.yer_en) || u.yer) + " · Copernicus Sentinel-2 (ESA)"; k.classList.add("dsk-uydu"); }
-    else if (ds.gorsel && ds.gorsel.u) { src = (window.AKTAR || function (v) { return v; })(ds.gorsel.u, buyuk ? 1200 : 640); kunye = ds.gorsel.k; }
+  function kisaKredi(y) { y = String(y || "").replace(/<[^>]+>/g, ""); if (y.indexOf("@") >= 0) y = y.split(/[.,;(]\s|\s\S+@/)[0]; return y.replace(/\s+/g, " ").trim().slice(0, 60); }
+  function foto(ds, genis) {
+    var f = el("figure", "dsg-foto");
+    var k = FOTO[ds.id], src = null, yazi = "", kredi = "";
+    if (k && k.dosya) { src = "data/gorsel/dosya-foto/" + k.dosya; yazi = EN() ? k.en : k.tr; kredi = kisaKredi(k.yazar) + (k.lisans ? " · " + k.lisans : ""); }
+    else if (ds.gorsel && ds.gorsel.u) { src = (window.AKTAR || function (v) { return v; })(ds.gorsel.u, genis ? 1200 : 480); kredi = ds.gorsel.k || ""; }
+    var kutu = el("div", "dsg-cerceve");
     if (src) {
-      var im = document.createElement("img");
-      im.src = src; im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer";
-      var kn = kunye ? el("span", "dsk-kunye", kunye) : null;
-      im.onerror = function () { im.remove(); if (kn) kn.remove(); k.classList.add("dsk-desen"); };
-      k.appendChild(im);
-      if (kn) k.appendChild(kn);
-    } else k.classList.add("dsk-desen");
-    return k;
+      var im = document.createElement("img"); im.src = src; im.alt = yazi; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer";
+      im.onerror = function () { im.remove(); kutu.classList.add("bos"); };
+      kutu.appendChild(im);
+    } else kutu.classList.add("bos");
+    f.appendChild(kutu);
+    if (genis && (yazi || kredi)) {
+      var fc = el("figcaption");
+      if (yazi) fc.appendChild(el("span", null, yazi));
+      if (kredi) fc.appendChild(el("small", null, (EN() ? "Photo: " : "Fotoğraf: ") + kredi));
+      f.appendChild(fc);
+    }
+    return f;
+  }
+  function ust(ds) {
+    var p = el("p", "dsg-ust");
+    var b = (EN() && ds.bolge_en) || ds.bolge; if (b) p.appendChild(el("span", "dsg-bolge", b));
+    if (ds.sicak) p.appendChild(el("span", "dsg-taze", EN() ? "Updated " + oncesi(ds.son) : "Güncellendi: " + oncesi(ds.son)));
+    else p.appendChild(el("span", null, (EN() ? "Latest: " : "Son gelişme: ") + oncesi(ds.son)));
+    var geri = ds.dallar.find(function (x) { return x.yeniden; });
+    if (geri) p.appendChild(el("span", "dsg-geri", EN() ? "back after " + geri.yeniden + " days" : geri.yeniden + " gün aradan sonra yeniden gündemde"));
+    return p;
   }
   function ilkCumleler(t, n) { var p = String(t || "").split(/(?<=[.!?])\s+/); return p.slice(0, n).join(" "); }
-  function kart(ds, buyuk) {
-    var a = el("a", "dsk" + (buyuk ? " dsk-buyuk" : "")); a.href = "d/" + encodeURIComponent(ds.id) + ".html";
-    a.appendChild(kapak(ds, buyuk));
-    var ic = el("div", "dsk-ic");
-    var ust = el("div", "dsk-ust");
-    var r = el("span", "dsk-rozet" + (ds.sicak ? " sicak" : ""));
-    r.textContent = ds.sicak ? (EN() ? "New in " + ds.sicak + (ds.sicak > 1 ? " threads" : " thread") : "Son 48 saat · " + ds.sicak + " başlıkta gelişme")
-      : (EN() ? "Developing" : "Gelişiyor");
-    ust.appendChild(r);
-    var geri = ds.dallar.find(function (x) { return x.yeniden; });
-    if (geri) ust.appendChild(el("span", "dsk-rozet geri", EN() ? "Back after " + geri.yeniden + " days" : geri.yeniden + " gün aradan sonra gündemde"));
-    ic.appendChild(ust);
+  function buyukKart(ds) {
+    var a = el("a", "dsg-buyuk"); a.href = "d/" + encodeURIComponent(ds.id) + ".html";
+    a.appendChild(foto(ds, true));
+    var ic = el("div", "dsg-metin");
+    ic.appendChild(ust(ds));
     ic.appendChild(el("h3", null, ad(ds)));
-    var oz = EN() ? ds.ozet_en : ds.ozet;
-    if (buyuk && oz) ic.appendChild(el("p", "dsk-oz", ilkCumleler(oz, 2)));
-    ic.appendChild(el("p", "dsk-son", (EN() ? "Latest · " : "Son · ") + ((EN() && ds.son_be) || ds.son_b)));
-    ic.appendChild(agac(ds, buyuk ? 4 : 2));
-    ic.appendChild(el("span", "dsk-alt", ds.olay + (EN() ? " events in total · " : " olay · ") + ds.dallar.length + (EN() ? " threads" : " başlık")));
+    var oz = EN() ? ds.ozet_en : ds.ozet; if (oz) ic.appendChild(el("p", "dsg-oz", ilkCumleler(oz, 2)));
+    var son = el("p", "dsg-son"); son.appendChild(el("b", null, EN() ? "Latest" : "Son gelişme")); son.appendChild(document.createTextNode(" " + ((EN() && ds.son_be) || ds.son_b))); ic.appendChild(son);
+    var ul = el("ul", "dsg-basliklar");
+    ds.dallar.map(function (d) { return [d, d.olaylar.reduce(function (m, o) { return o.g > m ? o.g : m; }, "")]; })
+      .sort(function (x, y) { return x[1] < y[1] ? 1 : -1; }).slice(0, 3)
+      .forEach(function (x) { var li = el("li"); li.appendChild(el("span", null, ad(x[0]))); li.appendChild(el("time", null, oncesi(x[1]))); ul.appendChild(li); });
+    ic.appendChild(ul);
+    a.appendChild(ic);
+    return a;
+  }
+  function satirKart(ds) {
+    var a = el("a", "dsg-satir"); a.href = "d/" + encodeURIComponent(ds.id) + ".html";
+    a.appendChild(foto(ds, false));
+    var ic = el("div", "dsg-metin");
+    ic.appendChild(ust(ds));
+    ic.appendChild(el("h3", null, ad(ds)));
+    ic.appendChild(el("p", "dsg-son", (EN() && ds.son_be) || ds.son_b));
     a.appendChild(ic);
     return a;
   }
   var dene = 0;
   function serit() {
     if (!V || !V.dosyalar.length || document.getElementById("dosyaSerit")) return;
-    var s = el("section", "dosya-bolum"); s.id = "dosyaSerit"; s.setAttribute("aria-label", EN() ? "Files" : "Dosyalar");
-    var ic0 = el("div", "dsb-ic");
-    var bas = el("div", "dsb-bas"), sol = el("div", "dsb-sol");
-    var et = el("span", "dsb-etiket"); et.appendChild(el("i", "dsb-canli")); et.appendChild(document.createTextNode(EN() ? "Ongoing developments · updated every 15 minutes" : "Süregelen gelişmeler · 15 dakikada bir güncellenir"));
-    sol.appendChild(et);
+    var s = el("section", "dosya-bolum dsg"); s.id = "dosyaSerit"; s.setAttribute("aria-label", EN() ? "Files we follow" : "Takip edilen dosyalar");
+    var bas = el("div", "dsg-bas");
+    var sol = el("div");
+    sol.appendChild(el("p", "dsg-etiket", EN() ? "Ongoing developments" : "Süregelen gelişmeler"));
     sol.appendChild(el("h2", null, EN() ? "Files we follow" : "Takip edilen dosyalar"));
-    sol.appendChild(el("p", null, EN() ? "Stories that have been running for weeks, followed thread by thread: every development, how each outlet reported it, the original link and an archive copy."
-      : "Haftalardır süren konular, başlık başlık: her gelişme, onu veren yayınların nasıl anlattığı, özgün bağlantısı ve arşiv kopyasıyla."));
     bas.appendChild(sol);
-    var sag = el("div", "dsb-sag");
-    var top = V.dosyalar.reduce(function (t, ds) { return t + ds.olay; }, 0), sicak = V.dosyalar.reduce(function (t, ds) { return t + ds.sicak; }, 0);
-    [[V.dosyalar.length, EN() ? "files" : "dosya"], [top, EN() ? "events" : "olay"], [sicak, EN() ? "moving now" : "hareketli başlık"]].forEach(function (x) {
-      var k = el("span", "dsb-sayi"); k.appendChild(el("b", null, x[0])); k.appendChild(el("small", null, x[1])); sag.appendChild(k);
-    });
-    var tum = el("a", "dsb-tum", EN() ? "All files →" : "Tüm dosyalar →"); tum.href = "d/"; sag.appendChild(tum);
-    bas.appendChild(sag);
-    ic0.appendChild(bas);
-    var izgara = el("div", "dsb-izgara");
-    V.dosyalar.slice(0, 5).forEach(function (ds, i) { izgara.appendChild(kart(ds, i === 0)); });
-    ic0.appendChild(izgara);
-    s.appendChild(ic0);
-    // sayfanın ortasına doğru: masaüstünde gündem, karşılaştırmalar ve analizlerden sonra; telefonda ilk haber bölümünden sonra
+    var tum = el("a", "dsg-tum", EN() ? "All files →" : "Tüm dosyalar →"); tum.href = "d/"; bas.appendChild(tum);
+    s.appendChild(bas);
+    var izgara = el("div", "dsg-izgara");
+    izgara.appendChild(buyukKart(V.dosyalar[0]));
+    var yan = el("div", "dsg-yan");
+    V.dosyalar.slice(1, 5).forEach(function (ds) { yan.appendChild(satirKart(ds)); });
+    izgara.appendChild(yan);
+    s.appendChild(izgara);
+    // masaüstünde karşılaştırmalardan önce; telefonda ilk haber bölümünden sonra
     var tel = window.matchMedia && matchMedia("(max-width:700px)").matches;
     if (tel) {
       var hb = document.querySelector(".hb > .hb-bolum:not(.hb-son)") || document.querySelector(".hb > .hb-manset");
       if (hb) {
         hb.parentNode.insertBefore(s, hb.nextSibling);
-        var tk = document.querySelector("main.duzen > .tarihce-kart");   // tarihçe kartı da dosyaların ardından
+        var tk = document.querySelector("main.duzen > .tarihce-kart");
         if (tk) s.parentNode.insertBefore(tk, s.nextSibling);
         return;
       }
@@ -144,8 +129,8 @@
     if (hedef) hedef.parentNode.insertBefore(s, hedef);
   }
 
-  var kapakSoz = fetch("data/gorsel/uydu/dosya/dosya.json").then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
-  fetch("data/dosyalar-site.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) { return kapakSoz.then(function (kp) { KAPAK = kp; return v; }); }).then(function (v) {
+  var kapakSoz = fetch("data/gorsel/dosya-foto/kapak.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
+  fetch("data/dosyalar-site.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) { return kapakSoz.then(function (kp) { (kp || []).forEach(function (k) { FOTO[k.ad] = k; }); return v; }); }).then(function (v) {
     if (!v || !Array.isArray(v.dosyalar)) return;
     v.dmap = {};
     v.dosyalar.forEach(function (ds) { ds.dalmap = {}; ds.dallar.forEach(function (x) { ds.dalmap[x.id] = x; }); v.dmap[ds.id] = ds; });
