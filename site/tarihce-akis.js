@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=14").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=15").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -559,7 +559,6 @@
 
     terimKur(A.sozluk || []);
     ilerlemeKur();
-    karanlikKur(serit);
   }
 
   // --- Nekbe ve Nekse: bu olaylar ekranın ortasına geldiğinde sayfa siyaha döner ---
