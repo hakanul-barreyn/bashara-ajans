@@ -123,7 +123,65 @@
     }).catch(() => {}); };
   }
 
+  // Haritanın altındaki arşiv penceresi: geçmiş günlerin haberleri, haritada seçili şehre ve bölgeye göre süzülür
+  const ARSIV_GUN = {}; let arsivDizin = null, arsivSecGun = null, arsivKutu = null;
+  function arsivPencereKur() {
+    if (arsivKutu || !HARITA_BOLUM) return;
+    arsivKutu = el("div", "harita-arsiv");
+    const bas = el("div", "ha-bas");
+    bas.appendChild(el("h3", null, DL === "tr" ? "Arşiv" : "Archive"));
+    bas.appendChild(el("span", "ha-ne", ""));
+    const tum = el("a", "ha-tum", DL === "tr" ? "Tüm arşiv →" : "Full archive →"); tum.href = "arsiv.html"; bas.appendChild(tum);
+    arsivKutu.appendChild(bas);
+    arsivKutu.appendChild(el("div", "ha-gunler"));
+    const liste = el("ol", "ha-liste"); liste.setAttribute("aria-live", "polite"); arsivKutu.appendChild(liste);
+    HARITA_BOLUM.appendChild(arsivKutu);
+    fetch("data/arsiv/dizin.json", { cache: "no-cache" }).then((r) => r.ok ? r.json() : []).then((d) => {
+      arsivDizin = (d || []).slice(0, 14);
+      const gunler = arsivKutu.querySelector(".ha-gunler");
+      const AY = DL === "tr" ? ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"] : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      arsivDizin.forEach((g, i) => {
+        const p = g.gun.split("-"), b = el("button", "ha-gun", +p[2] + " " + AY[+p[1] - 1]); b.type = "button"; b.dataset.gun = g.gun;
+        b.onclick = () => { arsivSecGun = g.gun; arsivPencereCiz(); };
+        gunler.appendChild(b);
+        if (i === 0) arsivSecGun = g.gun;
+      });
+      arsivPencereCiz();
+    }).catch(() => { arsivKutu.hidden = true; });
+  }
+  function arsivPencereCiz() {
+    if (!arsivKutu || !arsivSecGun) return;
+    arsivKutu.querySelectorAll(".ha-gun").forEach((b) => b.setAttribute("aria-pressed", b.dataset.gun === arsivSecGun));
+    const ne = [bolge !== "Tümü" ? ((window.BOLGE_EN && DL === "en" && window.BOLGE_EN[bolge]) || bolge) : null, sehir].filter(Boolean).join(" · ");
+    arsivKutu.querySelector(".ha-ne").textContent = ne ? (DL === "tr" ? "süzgeç: " : "filter: ") + ne : (DL === "tr" ? "bir şehre dokunun, liste süzülsün" : "tap a city to filter");
+    const yaz = (gunluk) => {
+      const liste = arsivKutu.querySelector(".ha-liste"); liste.innerHTML = "";
+      const uygun = gunluk.filter((h) => {
+        const k = kaynaklar[h.kaynak]; if (!k || k.silahli) return false;
+        if (sehir && k.sehir !== sehir) return false;
+        if (bolge !== "Tümü" && (k.kamp || k.bolge) !== bolge) return false;
+        if (bolge === "Tümü" && (h.dil || k.dil) === "tr" && (k.bolge === "Anadolu-Türkiye" || k.grup === "Türkiye")) return false;   // akıştaki kural
+        return true;
+      }).sort((a, b) => (a.tarih < b.tarih ? 1 : -1)).slice(0, 60);
+      if (!uygun.length) { liste.appendChild(el("li", "ha-bos", DL === "tr" ? "Bu gün için bu süzgeçte haber yok." : "No stories for this day and filter.")); return; }
+      uygun.forEach((h) => {
+        const li = el("li"), k = kaynaklar[h.kaynak];
+        const t = new Date(h.tarih); li.appendChild(el("time", null, t.toTimeString().slice(0, 5)));
+        const a = el("a", null, (DL === "tr" ? (h.ozet_spot ? null : h.ozet_tr) : h.ozet_en) || h.baslik_tr || h.baslik_orj || "");
+        a.href = h.url; a.target = "_blank"; a.rel = "noopener noreferrer"; a.referrerPolicy = "no-referrer";
+        if (!h.ozet_tr && !h.baslik_tr) a.dir = "auto";
+        li.appendChild(a);
+        li.appendChild(el("span", "ha-kim", k.ad + (k.sehir ? " · " + k.sehir : "")));
+        liste.appendChild(li);
+      });
+    };
+    if (ARSIV_GUN[arsivSecGun]) return yaz(ARSIV_GUN[arsivSecGun]);
+    fetch("data/arsiv/" + arsivSecGun + ".json").then((r) => r.ok ? r.json() : []).then((d) => {
+      ARSIV_GUN[arsivSecGun] = Array.isArray(d) ? d : (d.haberler || []); yaz(ARSIV_GUN[arsivSecGun]);
+    }).catch(() => {});
+  }
   function haritaCiz(liste) {
+    if (!desteModu()) { arsivPencereKur(); arsivPencereCiz(); }
     const sayac = {};
     liste.forEach((h) => {
       const k = kaynaklar[h.kaynak]; if (!k || k.lat == null) return;

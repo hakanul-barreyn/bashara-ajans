@@ -1211,3 +1211,21 @@ html.deste-modu main.duzen > .tarihce-kart{display:none}
 .tarihce-kart .tk-yazi b{color:#f3ede2}
 .tarihce-kart .tk-yazi span{color:rgba(243,237,226,.78)}
 .tarihce-kart,.tarihce-kart:hover{color:#f3ede2;text-decoration:none}
+
+/* Haritanın altındaki arşiv penceresi (site/uygulama.js arsivPencereKur) */
+.harita-arsiv{margin-top:14px;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:3px}
+.ha-bas{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;padding:12px 16px 8px;border-bottom:1px solid var(--cizgi)}
+.ha-bas h3{margin:0;font:700 1rem var(--serif,Georgia,serif)}
+.ha-ne{font-size:.76rem;color:var(--soluk)}
+.ha-tum{margin-left:auto;font-size:.8rem;font-weight:600;color:var(--ink)}
+.ha-gunler{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--cizgi);scrollbar-width:thin}
+.ha-gun{flex:none;font:500 .74rem var(--mono);padding:5px 9px;border:1px solid var(--cizgi);border-radius:2px;background:var(--bg);color:var(--ink2);cursor:pointer}
+.ha-gun[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ha-liste{list-style:none;margin:0;padding:0 16px;max-height:380px;overflow-y:auto;overscroll-behavior:contain}
+.ha-liste li{display:grid;grid-template-columns:3.2rem minmax(0,1fr);gap:2px 10px;padding:9px 0;border-bottom:1px solid var(--cizgi)}
+.ha-liste li:last-child{border-bottom:0}
+.ha-liste time{grid-row:span 2;font:500 .72rem var(--mono);color:var(--soluk);padding-top:2px}
+.ha-liste a{color:var(--ink);text-decoration:none;font-size:.88rem;line-height:1.4}
+.ha-liste a:hover{text-decoration:underline}
+.ha-kim{font-size:.72rem;color:var(--soluk)}
+.ha-liste .ha-bos{display:block;color:var(--soluk);font-size:.85rem}

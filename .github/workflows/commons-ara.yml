@@ -6,6 +6,9 @@ on:
       kategoriler:
         description: "Boşlukla ayrılmış Commons kategorileri (Category: olmadan) ya da arama:<sözcükler>"
         required: false
+      onizle:
+        description: "'|' ile ayrılmış Commons dosya adları: küçük önizlemeleri yz-durum dalına iner"
+        required: false
   push:
     paths: [".github/workflows/commons-ara.yml", "toplayici/commons_ara.py"]
 permissions:
@@ -17,7 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python toplayici/commons_ara.py ${{ inputs.kategoriler }}
+      - if: ${{ inputs.onizle != '' }}
+        env:
+          ONIZLE: ${{ inputs.onizle }}
+        run: python toplayici/commons_onizle.py
       - run: |
           git init -q d && cd d && git checkout -q -b yz-durum && cp ../commons.json . && git add commons.json
+          if [ -d ../onizleme ]; then cp -r ../onizleme . && git add onizleme; fi
           git -c user.name=yz -c user.email=yz@users.noreply.github.com commit -qm "commons"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" yz-durum
