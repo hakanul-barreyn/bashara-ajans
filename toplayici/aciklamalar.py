@@ -26,7 +26,9 @@ Her biri için, bizim haber dilimizle kısa bir haber yaz. Kurallar:
 - Her bilgiyi sahibine bağla: "... açıkladı", "... iddia etti", "... duyurdu". Açıklamayı olgu gibi yazma.
 - Saldırı, kayıp, ele geçirme, vurulan araç gibi askerî iddialarda özetin sonuna "Bu iddia bağımsız olarak doğrulanamadı." ekle.
 - Slogan, dua, ayet, övgü, şehitlik övgüsü, tehdit, intikam yemini ve şiddet çağrısı ÇEVRİLMEZ ve aktarılmaz.
-  Yalnızca bunlardan oluşan iletiyi "atla": true yap. Silahlı eylemleri yüceltme; örgütün kendi sıfatlarını ("kahraman", "mücahit",
+  Yalnızca bunlardan oluşan iletiyi "atla": true yap. Şunları da atla: anma ve ölüm yıldönümü iletileri, öldürülen üye ya da
+  komutanların biyografisi ve övgüsü, geçmiş çatışmaların ya da eylemlerin kahramanlık anlatısı, propaganda videosu duyurusu.
+  Haber değeri olan açıklamalar kalsın: güncel saldırı iddiası, kınama, müzakere/ateşkes tutumu, esir, insani durum. Silahlı eylemleri yüceltme; örgütün kendi sıfatlarını ("kahraman", "mücahit",
   "şehit") kullanma: üyeleri için "üye", "militan" ya da "savaşçı"; ölenler için "öldürüldü".
 - İsrail ordusu için "işgal ordusu" yazma; "İsrail ordusu" yaz. Taraf İsrail'i nasıl nitelediyse tırnak içinde aktarabilirsin.
 - Verilmeyen bilgi, rakam, yer, isim ekleme. Rakamları açıklamada nasılsa öyle ver ve sahibine bağla.
