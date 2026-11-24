@@ -41,13 +41,15 @@ Her madde için yaz:
   "ciddi": net, ağırbaşlı, bilgi veren.
   "genc": canlı, doğrudan, gündelik konuşma diline yakın; ama ciddiyeti kaybetmeyen.
   "igneli": hafif ironik, zekice; ancak YALNIZCA konu buna uygunsa (bir siyasetçinin çelişkisi, bir yayının tuhaf kelime seçimi, propaganda dili). Ölüm, yaralanma, kurbanlar, yıkım, açlık anlatan haberlerde "igneli": null.
+- post: Instagram / Facebook / LinkedIn için tek gönderi metni, 450-800 karakter, 2-3 kısa paragraf, bağlantısız, en fazla 3 hashtag sonda.
+  İlk cümle olayı söyler; ikinci paragraf yayınların nasıl farklı anlattığını yayın adıyla verir. Ölüm ve yıkım haberinde ağırbaşlı.
 - flood: yalnızca dosya maddelerinde, 3-4 tweetlik zincir (liste), her biri en fazla 260 karakter. Diğerlerinde null.
 
 Ton: genç, akıllı, ciddi bir gazeteci sesi. Kaçınılacaklar: "değerli takipçilerim", "sizlerle paylaşmak isterim", "bilgilerinize", "maalesef", ünlem yağmuru, emoji kalabalığı (en fazla bir), birden fazla hashtag, "Allah'ım", "vay be". Klişe açılış yok ("Dikkat!", "Son dakika!" ancak gerçekten son dakikaysa). Kendinden "ben" diye bahsetme gereği yok.
 Tweet, yayın adını vermeli ("Al Jazeera 'katliam' derken Times of Israel 'operasyon' dedi" gibi): karşılaştırma bu hesabın imzası.
 """ + """Dil kuralları: Bölgeye “Orta Doğu” deme (bölge, Batı Asya). Kendi sesinle niyet yükleyen etiket kullanma (“katil”, “hain”, “terörist” yok); bir tarafın nitelemesini aktarıyorsan tırnak içinde ve kime ait olduğunu söyleyerek. Ölümleri “öldürüldü” diye yaz, “şehit” deme. İddiaları sahibine bağla. Verilmeyen bilgiyi, rakamı, ismi ekleme.
 
-Yalnızca şu JSON'u döndür: {"maddeler": [{"no": <no>, "ozet": "...", "fark": "..." ya da null, "tweetler": {"ciddi": "...", "genc": "...", "igneli": "..." ya da null}, "flood": [...] ya da null}]}"""
+Yalnızca şu JSON'u döndür: {"maddeler": [{"no": <no>, "ozet": "...", "fark": "..." ya da null, "tweetler": {"ciddi": "...", "genc": "...", "igneli": "..." ya da null}, "post": "...", "flood": [...] ya da null}]}"""
 
 
 def _oku(yol, vars_):
@@ -150,6 +152,8 @@ def yazdir(maddeler, simdi):
             m["fark"] = ekler.guvenli(c.get("fark"))[:300] or None
             tw = c.get("tweetler") if isinstance(c.get("tweetler"), dict) else {}
             m["tweetler"] = {t: ekler.guvenli(tw.get(t))[:280] for t in ("ciddi", "genc", "igneli") if tw.get(t)}
+            if c.get("post"):
+                m["post"] = ekler.guvenli(c.get("post"))[:1200]
             if isinstance(c.get("flood"), list):
                 m["flood"] = [ekler.guvenli(x)[:280] for x in c["flood"][:5] if x]
 
@@ -186,6 +190,8 @@ def html_yap(gunun, yok, dsy, simdi):
             p.append(f'<p style="margin:6px 0;font-size:14px;color:#2f3532;background:#f1eee7;padding:8px 10px;border-radius:8px"><b>Kim nasıl yazdı:</b> {_e(m["fark"])}</p>')
         for t, metin in (m.get("tweetler") or {}).items():
             p.append(tweet(metin, TON.get(t, t)))
+        if m.get("post"):
+            p.append(f'<div style="border:1px solid #e3dfd6;border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff"><div style="font:600 11px monospace;color:#5d6560;letter-spacing:.06em;text-transform:uppercase">Post · Instagram / Facebook / LinkedIn · {len(m["post"])} karakter</div><div style="font-size:15px;line-height:1.5;margin:6px 0;white-space:pre-wrap">{_e(m["post"])}</div></div>')
         if m.get("flood"):
             p.append('<div style="font:600 12px monospace;color:#5d6560;margin-top:10px">FLOOD</div>')
             for i, x in enumerate(m["flood"], 1):
@@ -227,6 +233,9 @@ def metin_yap(gunun, yok, dsy, simdi):
                 s.append("Kim nasıl yazdı: " + m["fark"])
             for t, x in (m.get("tweetler") or {}).items():
                 s += [f"[{TON.get(t, t)}] {x}"]
+            if m.get("post"):
+                s += ["[Post] " + m["post"]]
+            s += [f"Orijinal: {h['yayin']} {h['url']}" for h in m.get("yayinlar", []) if h.get("url")][:5]
             s.append("")
     return "\n".join(s)
 
@@ -265,13 +274,15 @@ def telegram_iletileri(gunun, yok, dsy, simdi):
             p.append(f"<i>Kim nasıl yazdı:</i> {E(m['fark'])}")
         for t, metin in (m.get("tweetler") or {}).items():
             p.append(f"\n<b>{TON.get(t, t)}</b> · {len(metin)} karakter\n<code>{E(metin)}</code>\n<a href=\"{html.escape(_x(metin))}\">X’te aç →</a>")
+        if m.get("post"):
+            p.append(f"\n<b>Post (Instagram / Facebook / LinkedIn)</b> · {len(m['post'])} karakter\n<code>{E(m['post'])}</code>")
         if m.get("flood"):
             p.append("\n<b>Flood</b>")
             for i, x in enumerate(m["flood"], 1):
                 p.append(f"{i}/{len(m['flood'])} <code>{E(x)}</code>")
         bag = [h for h in m.get("yayinlar", []) if h.get("url")][:5]
         if bag:
-            p.append("\n<i>Kaynaklar (ilk yanıta):</i> " + " · ".join(f'<a href="{html.escape(h["url"])}">{E(h["yayin"])}</a>' for h in bag))
+            p.append("\n<b>Orijinal haberler</b> (tweette ilk yanıta, postta ilk yoruma koy):\n" + "\n".join(f'• <a href="{html.escape(h["url"])}">{E(h["yayin"])}</a>: {E((h.get("baslik") or "")[:90])}' for h in bag))
         metin = "\n".join(x for x in p if x)
         iletiler.append(metin[:4000])
     return iletiler

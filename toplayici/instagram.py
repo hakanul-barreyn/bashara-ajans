@@ -35,6 +35,7 @@ import ekler
 import dogrulama
 import ig_foto
 import ig_harita
+import ig_dunya
 import ig_kart
 import ig_video
 import marka
@@ -42,7 +43,7 @@ import marka
 # Deneysel dönem: günde tek gönderi, yalnızca Türkiye saatiyle akşam (izlenmenin en yüksek olduğu saatler).
 IG_GUNLUK = int(os.environ.get("IG_GUNLUK") or 1)
 IG_SAAT = (19, 22)                # Türkiye saati; gönderi bu aralıkta çıkar
-KART_SURUM = 4                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
+KART_SURUM = 5                    # kart tasarımı değişince artır: eski tasarımla hazırlanmış kuyruk ögeleri atılır
 # Actions'tan elle "şimdi gönder": saat aralığı ve iki gönderi arası bekleme bir kerelik atlanır; IG_OGE verilirse o öge gönderilir
 IG_SIMDI = os.environ.get("IG_SIMDI", "").lower() == "true"
 # Deneysel dönem: her gönderi önce yöneticiye Telegram'dan gider (Yayımla / Atla); onaylanmayan hiçbir şey Instagram'a gitmez.
@@ -201,10 +202,14 @@ Kurallar:
   gerekirse + işaretinden oluşur; "birim" en çok 4 kelime. Böyle bir sayı yoksa null.
 - "govde": rakam kartı için bağlamı veren 1-2 cümle, en çok 170 karakter.
 - "etiketler": 3-5 Türkçe hashtag, # işareti olmadan ve boşluksuz (Gazze, Filistin, BatıŞeria, Lübnan …).
+- "uc_dil": gönderi üç dilde de okunacak. Olayı anlatan aynı 1-2 cümlelik özet (en çok 200 karakter) üç dilde:
+  {"tr": "...", "en": "...", "ar": "..."} ve kancanın İngilizcesi ve Arapçası: "kanca_en", "kanca_ar".
+  Çeviriler aynı bilgiyi verir, ekleme yapmaz. Arapçada ölenler için "استشهد" değil "قُتل" kullan; yüceltme yok.
 
 Yalnızca şu JSON'u döndür:
 {"kanca": "...", "ton": "yas|medya", "duello": {"a": "haberId", "b": "haberId"} | null,
- "rakam": {"deger": "...", "birim": "...", "kaynak": "..."} | null, "govde": "...", "etiketler": ["..."]}
+ "rakam": {"deger": "...", "birim": "...", "kaynak": "..."} | null, "govde": "...", "etiketler": ["..."],
+ "uc_dil": {"tr": "...", "en": "...", "ar": "..."}, "kanca_en": "...", "kanca_ar": "..."}
 """
 
 _SAYI = re.compile(r"(\d{1,3}(?:[.,]\d{3})+|\d+)(?:[.,](\d+))?\s*(bin|milyon)?", re.I)
@@ -254,6 +259,14 @@ def _plan_dogrula(p, o, yayinlar, haberler, girdi_metni):
         if re.fullmatch(r"[0-9A-Za-zÇĞİÖŞÜçğıöşüÂâÎîÛû]{2,30}", e) and e not in plan["etiketler"]:
             plan["etiketler"].append(e)
     plan["etiketler"] = plan["etiketler"][:5]
+    u = p.get("uc_dil") if isinstance(p.get("uc_dil"), dict) else {}
+    uc = {d: temiz(u.get(d), 260) for d in ("tr", "en", "ar")}
+    # Arapça gerçekten Arapça harfle, İngilizce Latin harfle yazılmış olmalı; rakamlar kaynakta geçmeli
+    if all(uc.values()) and ig_kart.arapca_mi(uc["ar"]) and not ig_kart.arapca_mi(uc["en"]) and \
+            all(n in _sayilar(girdi_metni) for n in _sayilar(uc["tr"] + " " + uc["en"]) if n > 31):
+        plan["uc_dil"] = uc
+        plan["kanca_en"] = temiz(p.get("kanca_en"), 90)
+        plan["kanca_ar"] = temiz(p.get("kanca_ar"), 90) if ig_kart.arapca_mi(p.get("kanca_ar")) else ""
     return plan
 
 
@@ -311,13 +324,16 @@ def gonderi_kur(kok, tur, o, yayinlar, sayi, plan, alan, marka_ad, kullanici):
         return None
     if ton == "yas" and kapaklar[-1][0] == "rakam":
         kapaklar.insert(0, kapaklar.pop())          # acı haberde önce rakam: okur ilk karede neyin yaşandığını görsün
+    if plan.get("uc_dil"):
+        u = plan["uc_dil"]
+        kapaklar.append(("uc_dil", lambda a: ig_kart.uc_dil(u["tr"], u["en"], u["ar"], ton, a)))
     girdiler = sorted(yayinlar.values(), key=lambda y: (sira.get(y["kamp"], 99), {"filistin": 0, "aktarim": 1, "israil": 2}.get(y["bakis"], 3)))
     sayfalar = ig_kart.liste_sayfalari(girdiler)[:6]
     toplam = len(kapaklar) + len(sayfalar) + 1
     alt = lambda n: ig_kart.alt(ton if n > 1 or kapaklar[0][0] != "sessiz" else "medya", n, toplam, marka_ad, kullanici)
     svgler = [f(alt(n)) for n, (_, f) in enumerate(kapaklar, 1)]
     for n, bl in enumerate(sayfalar, len(kapaklar) + 1):
-        svgler.append(ig_kart.liste(bl, ton, "Kim nasıl yazdı", alt(n)))
+        svgler.append(ig_kart.liste(bl, ton, "Kim nasıl yazdı · Who wrote what", alt(n)))
     soru = (f"Bölge basınından {len(yayinlar)} yayın yazdı. İsrail ve Batı basını yazmadı." if tur == "sessiz"
             else f"Aynı olayı {len(yayinlar)} yayın nasıl yazdı?")
     svgler.append(ig_kart.son(ton, soru, alan, alt(toplam)))
@@ -339,8 +355,20 @@ def aciklama(tur, o, yayinlar, sayi, plan, alan, kunye=""):
     if kunye:
         satir += [kunye.replace("Fotoğraf:", "Kapak fotoğrafı:")]
     etiket = ["Filistin"] + [e for e in plan.get("etiketler", []) if e != "Filistin"]
-    satir += ["", " ".join("#" + e for e in etiket[:6])]
-    return "\n".join(satir)[:2150]
+    u = plan.get("uc_dil")
+    if u:   # aynı gönderi İngilizce ve Arapça okura da: kısa blok, aynı bilgi
+        satir += ["", "— English —"] + ([plan["kanca_en"]] if plan.get("kanca_en") else []) + [u["en"],
+                  f"How each outlet framed it: link in bio ({alan})"]
+        satir += ["", "— العربية —"] + ([plan["kanca_ar"]] if plan.get("kanca_ar") else []) + [u["ar"],
+                  f"كيف كتبت كل وسيلة إعلام؟ الرابط في الملف الشخصي ({alan})"]
+    satir += ["", " ".join("#" + e for e in etiket[:6]) + (" #Gaza #Palestine #غزة #فلسطين" if u else "")]
+    metin = "\n".join(satir)
+    if len(metin) > 2150:   # önce yayın listesi, sonra çerçeve notu kısalır; üç dilin bloğu kesilmesin
+        satir = [x for x in satir if not x.startswith("🗞")]
+        metin = "\n".join(satir)
+        if len(metin) > 2150 and o.get("not"):
+            metin = metin.replace(o["not"], o["not"][:max(0, len(o["not"]) - (len(metin) - 2150) - 2)] + "…", 1)
+    return metin[:2150]
 
 
 def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, log=print):
@@ -368,9 +396,14 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
         ig_foto.kutuphane_doldur(kok, simdi, en_cok_yer=2, log=log)
     except Exception as e:
         log(f"Fotoğraf kütüphanesi hatası: {type(e).__name__}")
-    if len(kay["kuyruk"]) >= 3 or not shutil.which("rsvg-convert"):
-        return 0
     yeni = 0
+    try:
+        yeni += dunya_hazirla(kok, kay, olaylar, haberler, kaynaklar, simdi, gemini, alan, log)
+    except Exception as e:
+        log(f"Dünya videosu hatası: {type(e).__name__}: {e}")
+    if len(kay["kuyruk"]) >= 3 or not shutil.which("rsvg-convert"):
+        onaya_gonder(kok, kay, log)
+        return yeni
     sirada = [set(q.get("haberler", [])) for q in kay["kuyruk"]]
     # Almanak bültenleri (kesinleşmiş): var olan kare kartı JPEG'e çevir
     klasor = os.path.join(kok, "data", "bulten")
@@ -463,6 +496,46 @@ def hazirla(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, gemini=None, 
     return yeni
 
 
+def dunya_hazirla(kok, kay, olaylar, haberler, kaynaklar, simdi, gemini, alan, log=print):
+    """Günde bir "Dünya bu haberi nasıl yazdı?" Reels videosu (harita üzerinde yayınların ülkelerine uçan kamera).
+    Türkiye saatiyle 15.00'ten sonra, günün en çok ülkeden yayının yazdığı olay için hazırlanır; onaya gider."""
+    tr = simdi + dt.timedelta(hours=3)
+    gun = tr.date().isoformat()
+    if kay.get("dunya") == gun or tr.hour < 15 or not shutil.which("ffmpeg") or not shutil.which("rsvg-convert"):
+        return 0
+    secim = ig_dunya.sec(olaylar, haberler, kaynaklar)
+    if not secim:
+        return 0
+    o, duraklar = secim
+    eksik = [i for i, d in enumerate(duraklar) if not d["ar"]]
+    ar = [d["ar"] for d in duraklar]
+    olay_ar = ""
+    if gemini:
+        girdi = [o["baslik"]] + [duraklar[i]["tr"] for i in eksik]
+        kod, s_ = gemini(ig_dunya.CEVIRI_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False))
+        liste = (s_ or {}).get("ar") if kod == 200 and isinstance(s_, dict) else None
+        if isinstance(liste, list) and len(liste) == len(girdi):
+            liste = [ekler.guvenli(x)[:220] if ig_kart.arapca_mi(x) else "" for x in liste]
+            olay_ar = liste[0]
+            for i, x in zip(eksik, liste[1:]):
+                ar[i] = x
+    kimlik = "w-" + gun.replace("-", "")
+    k = _klasor(kok, kimlik)
+    os.makedirs(k, exist_ok=True)
+    M = marka.oku(kok)
+    ay = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+    tarih = ig_kart.buyuk(f"{tr.day} {ay[tr.month - 1]} {tr.year}")
+    if not ig_dunya.uret(kok, o, duraklar, {"olay_ar": olay_ar, "ar": ar}, k, M["ad"], kay.get("kullanici"), alan, tarih, log=log):
+        shutil.rmtree(k, ignore_errors=True)
+        return 0
+    kay["dunya"] = gun
+    kay["kuyruk"].append({"id": kimlik, "tur": "dunya", "olay": o["id"], "haberler": [d["hid"] for d in duraklar], "kart": 1,
+                          "surum": KART_SURUM, "onay": "bekliyor" if ONAY_MODU else "otomatik", "reel": True,
+                          "aciklama": ig_dunya.aciklama(o, duraklar, alan, ar), "hazir": simdi.isoformat()})
+    log(f"Instagram: dünya videosu hazırlandı ({len(duraklar)} ülke)")
+    return 1
+
+
 def onaya_gonder(kok, kay, log=print):
     """Onay bekleyen ve henüz yöneticiye gösterilmemiş gönderileri Telegram'dan yöneticiye gönderir."""
     if not ONAY_MODU:
@@ -484,6 +557,8 @@ def onaya_gonder(kok, kay, log=print):
         metin = ("📸 Instagram gönderisi onay bekliyor" + (" (Reels videosu da hazır)" if q.get("reel") else "") + "\n\n"
                  + q["aciklama"][:3000] + "\n\nYayımla dersen bir sonraki çalıştırmada (15 dk içinde) gider. 24 saat içinde karar "
                  "verilmezse gönderi düşer.")
+        if q.get("reel"):   # önce videonun kendisi: onaylanacak olan bu
+            dogrulama.yonetici_video(token, yonetici, os.path.join(_klasor(kok, q["id"]), "video.mp4"))
         if dogrulama.yonetici_album(token, yonetici, yollar, metin,
                                     [{"text": "✅ Yayımla", "callback_data": f"i:yay:{q['id']}"},
                                      {"text": "Atla", "callback_data": f"i:atla:{q['id']}"}]):
@@ -693,6 +768,10 @@ def yayinla(kok, durum, simdi, log=print):
     if token.startswith("IG"):
         _jeton_yenile(kay, token, simdi, log)
     _hatirlat(kay, simdi, log)
+    # Kullanıcı adı değişebilir (Kasım 2026: zbs1news → alborotonews): günde bir kez hesaptan yeniden oku
+    if kay.get("kullanici_t", "")[:10] != simdi.date().isoformat():
+        kay.pop("kullanici", None)
+        kay["kullanici_t"] = simdi.date().isoformat()
     if not kay.get("kullanici"):
         h_ = _hesap(kay, sunucu, token)
         if h_:
@@ -739,7 +818,7 @@ def yayinla(kok, durum, simdi, log=print):
             kimlik = _gonder_reel(sunucu, hesap, token, video, q["aciklama"]) if _herkese_acik(video) else None
             if not kimlik:
                 log("Instagram: Reels gönderilemedi (" + _gizle(SON_HATA, token) + "); kaydırmalı gönderiyle deneniyor")
-        if not kimlik:
+        if not kimlik and q["tur"] != "dunya":       # dünya turu yalnızca video olarak anlamlı
             kimlik = _gonder(sunucu, hesap, token, gorseller, q["aciklama"])
         if kimlik:
             kay["gonderim"].append(simdi.isoformat())

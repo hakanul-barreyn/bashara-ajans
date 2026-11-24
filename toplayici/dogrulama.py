@@ -45,6 +45,26 @@ def _api(token, yontem, veri=None, zaman=25):
         return None
 
 
+def yonetici_video(token, yonetici, yol):
+    """Reels videosunun önizlemesi (en çok 50 MB). Döndürür: başarılı mı"""
+    global SON_HATA
+    if not os.path.isfile(yol) or os.path.getsize(yol) > 49 * 1024 * 1024:
+        return False
+    sinir = "----zbs" + os.urandom(8).hex()
+    govde = (f'--{sinir}\r\nContent-Disposition: form-data; name="chat_id"\r\n\r\n{yonetici}\r\n'
+             f'--{sinir}\r\nContent-Disposition: form-data; name="supports_streaming"\r\n\r\ntrue\r\n'
+             f'--{sinir}\r\nContent-Disposition: form-data; name="video"; filename="video.mp4"\r\nContent-Type: video/mp4\r\n\r\n').encode() \
+        + open(yol, "rb").read() + f"\r\n--{sinir}--\r\n".encode()
+    istek = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendVideo", data=govde,
+                                   headers={"Content-Type": f"multipart/form-data; boundary={sinir}"})
+    try:
+        with urllib.request.urlopen(istek, timeout=180) as r:
+            return bool(json.loads(r.read()).get("ok"))
+    except Exception as e:
+        SON_HATA = type(e).__name__
+        return False
+
+
 def yonetici_album(token, yonetici, yollar, aciklama, dugmeler):
     """Kartları albüm olarak (sendMediaGroup, en çok 10) ve ardından düğmeli bir mesaj olarak yöneticiye gönderir.
     Döndürür: başarılı mı"""

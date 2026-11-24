@@ -21,6 +21,9 @@ AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağusto
 _FONT_DOSYA = {900: "Inter-Black.otf", 800: "Inter-ExtraBold.otf", 700: "Inter-Bold.otf", 500: "Inter-Medium.otf", 400: "Inter-Regular.otf"}
 _FONT_DIZIN = ["/usr/share/fonts/opentype/inter", "/usr/share/fonts/truetype/inter", os.path.expanduser("~/.local/share/fonts")]
 _onbellek = {}
+FA = "Noto Naskh Arabic, Noto Sans Arabic, DejaVu Sans, sans-serif"   # Arapça satırlar (Inter'de Arapça harf yok)
+_ARAP_DOSYA = ["/usr/share/fonts/truetype/noto/NotoNaskhArabic-Bold.ttf", "/usr/share/fonts/truetype/noto/NotoSansArabic-Bold.ttf",
+               "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]
 
 
 def _font(agirlik, boy):
@@ -41,7 +44,27 @@ def _font(agirlik, boy):
     return f
 
 
+def _arap_font(boy):
+    if ("ar", boy) not in _onbellek:
+        f = None
+        try:
+            from PIL import ImageFont
+            yol = next((y for y in _ARAP_DOSYA if os.path.isfile(y)), None)
+            f = ImageFont.truetype(yol, boy) if yol else None
+        except Exception:
+            f = None
+        _onbellek[("ar", boy)] = f
+    return _onbellek[("ar", boy)]
+
+
+def arapca_mi(metin):
+    return any("\u0600" <= c <= "\u06ff" for c in str(metin or ""))
+
+
 def olc(metin, boy, agirlik=400, aralik=0):
+    if arapca_mi(metin):
+        f = _arap_font(boy)
+        return (f.getlength(metin) * 1.12 if f is not None else len(metin) * boy * 0.5) + aralik * len(metin)
     f = _font(agirlik, boy)
     if f is not None:
         return f.getlength(metin) + aralik * len(metin)
@@ -310,3 +333,37 @@ def son(ton, soru, alan, alt_):
     p.append(s)
     p.append(alt_)
     return svg("".join(p))
+
+
+def uc_dil(tr, en, ar, ton, alt_, ust="Türkçe · English · العربية"):
+    """Aynı haberin Türkçe, İngilizce ve Arapça özeti tek kartta, alt alta. Arapça blok sağa yaslı (sağdan sola)."""
+    p = [zemin(ton, tohum=4)]
+    p.append(ust_yas("Üç dilde") if ton == "yas" else etiket(70, 90, "ÜÇ DİLDE · THREE LANGUAGES", BEYAZ))
+    renk = KAN if ton == "yas" else ALTIN
+    yazirenk = SIS_YAZI if ton == "yas" else BEYAZ
+    bloklar = [(x, ad) for x, ad in ((tr, "TÜRKÇE"), (en, "ENGLISH"), (ar, "العربية")) if x]
+    # üç blok 200..1200 arasına sığsın: ortak yazı boyu
+    for boy in [54, 50, 46, 42, 38, 34, 31, 28]:
+        satirlar = [sar(x.replace('،', ' ،').replace(' ،', '،'), boy, 700, (W - 140) * (0.86 if ad == 'العربية' else 1), 5) for x, ad in bloklar]
+        yuk = sum(60 + boy + (len(sl) - 1) * boy * 1.25 + 40 for sl in satirlar)
+        if 200 + yuk <= 1210:
+            break
+    y = 205
+    for (x, ad), sl in zip(bloklar, satirlar):
+        arap = ad == "العربية"
+        if arap:
+            p.append(f'<text x="{W - 70}" y="{y}" text-anchor="end" font-family="{FA}" font-weight="700" font-size="28" fill="{renk}">{_e(ad)}</text>')
+        else:
+            p.append(f'<text x="70" y="{y}" font-family="{F}" font-weight="900" font-size="24" letter-spacing="3" fill="{renk}">{_e(ad)}</text>')
+        p.append(f'<line x1="70" y1="{y + 16}" x2="{W - 70}" y2="{y + 16}" stroke="{renk}" stroke-opacity=".3" stroke-width="2"/>')
+        yy = y + 30 + boy
+        for i, st in enumerate(sl):
+            if arap:
+                p.append(f'<text x="{W - 70}" y="{yy + i * boy * 1.25:.0f}" text-anchor="end" font-family="{FA}" '
+                         f'font-weight="700" font-size="{boy}" fill="{yazirenk}">\u200f{_e(st)}\u200f</text>')
+            else:
+                p.append(f'<text x="70" y="{yy + i * boy * 1.25:.0f}" font-family="{F}" font-weight="700" font-size="{boy}" fill="{yazirenk}">{_e(st)}</text>')
+        y = yy + (len(sl) - 1) * boy * 1.25 + 70
+    p.append(alt_)
+    return svg("".join(p))
+
