@@ -765,7 +765,10 @@
       }
      ],
      "sonuc": "İsrail, tarihî Filistin’in yaklaşık yüzde 78’ini ele geçirdi; Batı Şeria Ürdün’ün, Gazze Şeridi Mısır’ın yönetimine geçti. Filistinliler devlet kuramadı; mülteciler o günden beri geri dönemiyor.",
-     "sonuc_en": "Israel took about 78 per cent of historic Palestine; the West Bank came under Jordan and the Gaza Strip under Egypt. The Palestinians did not get a state; the refugees have not been able to return since."
+     "sonuc_en": "Israel took about 78 per cent of historic Palestine; the West Bank came under Jordan and the Gaza Strip under Egypt. The Palestinians did not get a state; the refugees have not been able to return since.",
+     "ortak": [
+      "tanima"
+     ]
     },
     {
      "yeni": true,
@@ -1264,10 +1267,19 @@
      "yeni": true,
      "tarih": "1979-03-26",
      "baslik": "Mısır İsrail’le barış antlaşması imzaladı",
-     "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı. Antlaşmaya göre İsrail Sina’dan üç yıl içinde çekilecekti. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı.",
-     "kaynaklar": [],
+     "metin": "Camp David görüşmelerinin ardından Mısır, İsrail’le barış antlaşması imzaladı. Antlaşmaya göre İsrail Sina’dan üç yıl içinde çekilecekti. En büyük Arap ordusu Filistin cephesinden çekilmiş oldu; Mısır Arap Birliği’nden uzaklaştırıldı. Büyükelçiler Şubat 1980’de değiştirildi; Kahire’deki İsrail büyükelçiliği bir Arap başkentinde açılan ilk İsrail büyükelçiliği oldu.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Egypt–Israel peace treaty",
+       "url": "https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty"
+      },
+      {
+       "ad": "FRUS 1977–80 IX, Editorial Note 239",
+       "url": "https://history.state.gov/historicaldocuments/frus1977-80v09Ed2/d239"
+      }
+     ],
      "baslik_en": "Egypt signs a peace treaty with Israel",
-     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel, under which Israel would withdraw from Sinai within three years. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League.",
+     "metin_en": "After the Camp David talks Egypt signed a peace treaty with Israel, under which Israel would withdraw from Sinai within three years. The largest Arab army had left the Palestinian front; Egypt was suspended from the Arab League. Ambassadors were exchanged in February 1980; the Israeli embassy in Cairo was the first in any Arab capital.",
      "gorseller": [
       "camp-david-1978",
       "baris-1979"
@@ -1279,7 +1291,10 @@
       }
      ],
      "sonuc": "Mısır Sina’yı geri aldı ama Arap cephesinden koptu: Arap Birliği’nden uzaklaştırıldı, Sedat 1981’de bir askerî geçit töreninde öldürüldü. Antlaşmadaki Filistin özerkliği maddeleri hiç uygulanmadı.",
-     "sonuc_en": "Egypt regained Sinai but broke away from the Arab front: it was suspended from the Arab League, and Sadat was killed at a military parade in 1981. The treaty’s clauses on Palestinian autonomy were never implemented."
+     "sonuc_en": "Egypt regained Sinai but broke away from the Arab front: it was suspended from the Arab League, and Sadat was killed at a military parade in 1981. The treaty’s clauses on Palestinian autonomy were never implemented.",
+     "ortak": [
+      "tanima"
+     ]
     },
     {
      "ref": "1991-01-18",
@@ -1761,7 +1776,10 @@
       }
      ],
      "sonuc": "FKÖ İsrail’i tanıdı, İsrail FKÖ’yü muhatap kabul etti ve Filistin Yönetimi kuruldu. Filistin devleti kurulmadı: Batı Şeria’daki yerleşimci sayısı 1993’te yaklaşık 110 binken bugün Doğu Kudüs hariç yarım milyonu aştı.",
-     "sonuc_en": "The PLO recognised Israel, Israel accepted the PLO as a counterpart, and the Palestinian Authority was set up. No Palestinian state came into being: the number of settlers in the West Bank, about 110,000 in 1993, today exceeds half a million, not counting East Jerusalem."
+     "sonuc_en": "The PLO recognised Israel, Israel accepted the PLO as a counterpart, and the Palestinian Authority was set up. No Palestinian state came into being: the number of settlers in the West Bank, about 110,000 in 1993, today exceeds half a million, not counting East Jerusalem.",
+     "ortak": [
+      "tanima"
+     ]
     },
     {
      "yeni": true,
@@ -2402,6 +2420,338 @@
    ]
   },
   {
+   "anahtar": "tanima",
+   "ad": "İsrail’i tanımak ya da tanımamak",
+   "ad_en": "To recognise Israel or not",
+   "ar": "الاعتراف بإسرائيل",
+   "yillar": [
+    1948,
+    2025
+   ],
+   "renk": "#3d5a80",
+   "tez": "İsrail’in varlığı ilk günden bir tanınma meselesiydi. Büyük güçler onu dakikalar içinde tanıdı; Arap devletleri onlarca yıl tanımadı, tanıyanlar da bunun karşılığını Filistin devleti olarak alamadı. Türkiye tanıyan ilk Müslüman çoğunluklu ülke oldu. Tanıma kararları kadar ilişki kesmeler de birer siyasi mesajdı; diplomatlar ve büyükelçilikler de zaman zaman silahlı saldırıların hedefi oldu.",
+   "tez_en": "Israel’s existence was a question of recognition from the first day. The great powers recognised it within minutes; the Arab states withheld recognition for decades, and those who granted it did not receive a Palestinian state in return. Turkey was the first Muslim-majority country to recognise it. Breaking off relations was as much a political message as recognition; diplomats and embassies were at times the targets of armed attacks.",
+   "gecis": "Tanıyanların listesi uzadıkça, Filistin’i tanıyanların listesi de uzamaya başladı.",
+   "gecis_en": "As the list of those recognising Israel grew longer, so did the list of those recognising Palestine.",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "1948-05-14",
+     "baslik": "İsrail ilan edildi, ABD on bir dakika sonra tanıdı",
+     "baslik_en": "Israel is proclaimed; the US recognises it eleven minutes later",
+     "metin": "İngiliz mandasının bittiği 14 Mayıs 1948’de Tel Aviv’de İsrail Devleti ilan edildi. ABD Başkanı Truman geçici hükümeti aynı gün «fiilî otorite» olarak tanıdı; açıklamayı BM’deki kendi heyetine bile haber vermeden yaptı. Ertesi gün Arap orduları ülkeye girdi. Nekbe o sırada sürüyordu: sürgün ilandan aylar önce başlamıştı.",
+     "metin_en": "On 14 May 1948, the day the British Mandate ended, the State of Israel was proclaimed in Tel Aviv. US President Truman recognised the provisional government as the “de facto authority” the same day, without even telling his own delegation at the UN. The next day Arab armies entered the country. The Nakba was already under way: the expulsions had begun months before the proclamation.",
+     "kaynaklar": [
+      {
+       "ad": "US National Archives: Press release announcing US recognition of Israel (1948)",
+       "url": "https://www.archives.gov/milestone-documents/press-release-announcing-us-recognition-of-Israel"
+      },
+      {
+       "ad": "Truman Library: Recognition of the State of Israel",
+       "url": "https://www.trumanlibrary.gov/library/online-collections/recognition-of-state-of-israel"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1948-05-17",
+     "baslik": "Hukuken ilk tanıyan Sovyetler Birliği oldu",
+     "baslik_en": "The Soviet Union is the first to grant de jure recognition",
+     "metin": "İsrail’i hukuken (de jure) tanıyan ilk devlet 17 Mayıs 1948’de Sovyetler Birliği oldu. Ardından Nikaragua, Çekoslovakya, Yugoslavya ve Polonya geldi. 1948 savaşında İsrail’e giden silahların önemli bölümü Çekoslovakya’dan sağlandı. ABD’nin hukuken tanıması ancak ilk İsrail seçimlerinden sonra, 31 Ocak 1949’da geldi.",
+     "metin_en": "The first state to grant Israel de jure recognition was the Soviet Union, on 17 May 1948, followed by Nicaragua, Czechoslovakia, Yugoslavia and Poland. Much of the weaponry that reached Israel in the 1948 war came from Czechoslovakia. US de jure recognition came only after the first Israeli election, on 31 January 1949.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: International recognition of Israel",
+       "url": "https://en.wikipedia.org/wiki/International_recognition_of_Israel"
+      },
+      {
+       "ad": "DocsTeach (US National Archives): De jure recognition of Israel",
+       "url": "https://docsteach.org/document/de-jure-recognition-israel/"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1949-03-28",
+     "baslik": "Türkiye İsrail’i tanıyan ilk Müslüman çoğunluklu ülke oldu",
+     "baslik_en": "Turkey becomes the first Muslim-majority country to recognise Israel",
+     "metin": "1947’de BM taksim planına hayır oyu veren Türkiye, 28 Mart 1949’da İsrail’i tanıdı ve İsrail’i tanıyan ilk Müslüman çoğunluklu ülke oldu. İsrail’in BM üyeliği oylamasında ise çekimser kaldı. Dışişleri Bakanı Necmettin Sadak kararı, İsrail’in otuzdan fazla ülkenin tanıdığı bir gerçek olduğunu ve Arapların da Rodos’ta İsrail’le görüştüğünü söyleyerek savundu. Ankara’nın Tel Aviv’deki ilk temsilciliği Ocak 1950’de açıldı.",
+     "metin_en": "Turkey, which had voted against the UN partition plan in 1947, recognised Israel on 28 March 1949, becoming the first Muslim-majority country to do so. It abstained, however, when Israel’s UN membership came to a vote. Foreign Minister Necmettin Sadak defended the decision by saying that Israel was a reality recognised by more than thirty countries and that the Arabs themselves were negotiating with Israel at Rhodes. Ankara’s first mission in Tel Aviv opened in January 1950.",
+     "kaynaklar": [
+      {
+       "ad": "Journal of Conflict Studies 15/2 (1995): Turkey and Israel",
+       "url": "https://www.erudit.org/fr/revues/jcs/1995-v15-n2-jcs_15_2/jcs15_02art06.pdf"
+      },
+      {
+       "ad": "Otago Daily Times, 30 Mart 1949: Turkey recognises Israel",
+       "url": "https://paperspast.natlib.govt.nz/newspapers/ODT19490330.2.40"
+      },
+      {
+       "ad": "Wikipedia: Israel–Turkey relations",
+       "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Turkey_relations"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1949-05-11",
+     "baslik": "İsrail BM’ye üye oldu",
+     "baslik_en": "Israel is admitted to the UN",
+     "metin": "BM Genel Kurulu 273 sayılı kararla İsrail’i 37’ye karşı 12 oyla üyeliğe kabul etti. İsrail üyelik başvurusunu ilanın ertesi günü yapmıştı; Güvenlik Konseyi başvuruyu bir yıl bekletti. Kararın metni İsrail’in mültecilerin geri dönüşünü öngören 194 sayılı karara uyacağı beyanına atıf yapıyordu; o geri dönüş hiç gerçekleşmedi.",
+     "metin_en": "By Resolution 273 the UN General Assembly admitted Israel by 37 votes to 12. Israel had applied the day after its proclamation; the Security Council held the application for a year. The resolution referred to Israel’s undertakings to implement Resolution 194, which provided for the return of the refugees; that return never took place.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: International recognition of Israel – United Nations membership",
+       "url": "https://en.wikipedia.org/wiki/International_recognition_of_Israel"
+      },
+      {
+       "ad": "Wikipedia: UN General Assembly Resolution 273",
+       "url": "https://en.wikipedia.org/wiki/United_Nations_General_Assembly_Resolution_273"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1967-06-10",
+     "baslik": "Doğu Bloku ilişkileri kesti",
+     "baslik_en": "The Eastern Bloc breaks off relations",
+     "metin": "Altı Gün Savaşı’ndan sonra Sovyetler Birliği ve Romanya dışındaki Varşova Paktı ülkeleri İsrail’le diplomatik ilişkilerini kesti. İsrail’i ilk tanıyan blok, yirmi yıl sonra ilk ilişki kesen blok oldu. İlişkiler ancak 1989–1991’de, Doğu Bloku dağılırken yeniden kuruldu.",
+     "metin_en": "After the Six-Day War the Soviet Union and the Warsaw Pact countries except Romania broke off diplomatic relations with Israel. The bloc that had been first to recognise Israel was, twenty years later, the first to cut ties. Relations were restored only in 1989–1991, as the Eastern Bloc dissolved.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: International recognition of Israel",
+       "url": "https://en.wikipedia.org/wiki/International_recognition_of_Israel"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1971-05-17",
+     "baslik": "İsrail Başkonsolosu Efraim Elrom İstanbul’da kaçırıldı",
+     "baslik_en": "Israeli Consul General Efraim Elrom is kidnapped in Istanbul",
+     "metin": "THKP-C militanları Mahir Çayan, Hüseyin Cevahir, Ulaş Bardakçı ve arkadaşları, İsrail’in İstanbul Başkonsolosu Efraim Elrom’u 17 Mayıs 1971’de Nişantaşı’ndaki evinden kaçırdı. Örgüt Elrom’un serbest bırakılmasını Deniz Gezmiş ve arkadaşlarının salıverilmesine bağladı. 12 Mart muhtırasının hükümeti talebi reddetti; İstanbul’da sokağa çıkma yasağı ilan edilip ev ev arama yapıldı. Elrom’un cesedi 23 Mayıs sabahı Nişantaşı’nda bir dairede, başına üç kurşun sıkılmış olarak bulundu. Olay, Türkiye’de bir İsrail diplomatına yönelik ilk ölümcül saldırıydı ve sol hareketin tasfiyesinin gerekçelerinden biri oldu.",
+     "metin_en": "THKP-C militants Mahir Çayan, Hüseyin Cevahir, Ulaş Bardakçı and others kidnapped Efraim Elrom, Israel’s Consul General in Istanbul, from his home in Nişantaşı on 17 May 1971. The group tied his release to the freeing of Deniz Gezmiş and his comrades. The government installed after the 12 March memorandum refused; a curfew was declared in Istanbul and a house-to-house search began. Elrom’s body was found on the morning of 23 May in a flat in Nişantaşı, shot three times in the head. It was the first deadly attack on an Israeli diplomat in Turkey and became one of the justifications for the crushing of the left.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Assassination of Efraim Elrom",
+       "url": "https://en.wikipedia.org/wiki/Assassination_of_Efraim_Elrom"
+      },
+      {
+       "ad": "JTA, 24 Mayıs 1971: Israeli leaders shocked, outraged at Elrom’s assassination",
+       "url": "https://www.jta.org/archive/israeli-leaders-shocked-outraged-at-elroms-assassination-funeral-arrangements-made"
+      },
+      {
+       "ad": "Turkey and the Elrom Affair (HaMizrah HeHadash 52)",
+       "url": "https://www.openu.ac.il/new-east/vol52/turky_elrom-eng.html"
+      },
+      {
+       "ad": "Rıfat N. Bali, İsrail Başkonsolosu Ephraim Elrom’un İnfazı (Libra, 2016); değerlendirme: Middle Eastern Studies 13/2",
+       "url": "https://dergipark.org.tr/en/download/article-file/1540428"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1979-02-18",
+     "baslik": "İran ilişkileri kesti, büyükelçilik FKÖ’ye verildi",
+     "baslik_en": "Iran cuts ties and hands the embassy to the PLO",
+     "metin": "Şah döneminde İran, İsrail’i fiilen tanıyan ve ona petrol satan ender bölge ülkelerindendi. Devrimden bir hafta sonra, 18 Şubat 1979’da İsrail büyükelçisi ve personeli ülkeden ayrıldı. Ertesi gün Tahran’a gelen Arafat’a eski İsrail büyükelçiliğinin anahtarları törenle teslim edildi; önündeki caddenin adı Filistin Caddesi oldu. İran o günden beri İsrail’i tanımıyor.",
+     "metin_en": "Under the Shah, Iran was one of the few states in the region that recognised Israel in practice and sold it oil. A week after the revolution, on 18 February 1979, the Israeli ambassador and staff left the country. The next day Arafat arrived in Tehran and was ceremonially handed the keys of the former Israeli embassy; the street in front of it was renamed Palestine Street. Iran has not recognised Israel since.",
+     "kaynaklar": [
+      {
+       "ad": "USIP Iran Primer: Iran and the Palestinians",
+       "url": "https://iranprimer.usip.org/resource/iran-and-palestinians"
+      },
+      {
+       "ad": "Wikipedia: Embassy of Israel, Tehran",
+       "url": "https://en.wikipedia.org/wiki/Embassy_of_Israel,_Tehran"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1982-06-03",
+     "baslik": "Büyükelçi Argov’a saldırı ve Lübnan işgali",
+     "baslik_en": "The attack on Ambassador Argov and the invasion of Lebanon",
+     "metin": "İsrail’in Londra Büyükelçisi Şlomo Argov, Dorchester Oteli’nden çıkarken başından vuruldu; ölmedi ama ömrünün sonuna kadar felçli kaldı. Saldırıyı Arafat’ın amansız düşmanı Ebu Nidal’in örgütü yaptı. İsrail hükümeti saldırıyı FKÖ’ye bağladı ve üç gün sonra Lübnan’ı işgal etti; Begin’e itiraz edildiğinde «Ebu Nidal, Ebu Şmidal» dediği aktarılır. Argov bir yıl sonra verdiği röportajda saldırının savaşı haklı çıkarmadığını söyledi.",
+     "metin_en": "Israel’s ambassador in London, Shlomo Argov, was shot in the head as he left the Dorchester Hotel; he survived but remained paralysed for the rest of his life. The attack was carried out by the organisation of Abu Nidal, Arafat’s deadly enemy. The Israeli government blamed the PLO and invaded Lebanon three days later; when this was pointed out to Begin, he reportedly said “Abu Nidal, Abu Shmidal”. A year later Argov said in an interview that the attack did not justify the war.",
+     "kaynaklar": [
+      {
+       "ad": "JTA (2025): In 1982, the shooting of an Israeli diplomat led to war",
+       "url": "https://www.jta.org/2025/05/22/israel/in-1982-the-shooting-of-an-israeli-diplomat-led-to-war"
+      },
+      {
+       "ad": "Wikipedia: Shlomo Argov",
+       "url": "https://en.wikipedia.org/wiki/Shlomo_Argov"
+      }
+     ],
+     "ortak": [
+      "fedai"
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1992-01-24",
+     "baslik": "Çin ve Hindistan ilişki kurdu",
+     "baslik_en": "China and India establish relations",
+     "metin": "Soğuk Savaş’ın bitimi ve Madrid Konferansı’nın ardından Çin 24 Ocak 1992’de İsrail’le diplomatik ilişki kurdu; Hindistan aynı yıl izledi. İki ülke de uzun süre Filistin davasını destekleyen Bağlantısızlar çizgisindeydi. Bu yıl Sovyet sonrası cumhuriyetler ve Afrika’dan pek çok ülke de İsrail’le ilişki kurdu.",
+     "metin_en": "After the end of the Cold War and the Madrid Conference, China established diplomatic relations with Israel on 24 January 1992; India followed the same year. Both had long stood in the Non-Aligned camp supporting the Palestinian cause. That year many post-Soviet republics and African states also established relations with Israel.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: 1992 in Israel",
+       "url": "https://en.wikipedia.org/wiki/1992_in_Israel"
+      },
+      {
+       "ad": "Wikipedia: International recognition of Israel",
+       "url": "https://en.wikipedia.org/wiki/International_recognition_of_Israel"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1992-03-07",
+     "baslik": "Ankara’da İsrail Büyükelçiliği güvenlik şefi öldürüldü",
+     "baslik_en": "Israeli embassy security chief killed in Ankara",
+     "metin": "İsrail’in Ankara Büyükelçiliği güvenlik şefi Ehud Sadan, Çankaya’da pazardan çıkıp arabasını çalıştırdığı sırada araca yerleştirilen bombayla öldürüldü; aralarında dokuz yaşında bir çocuğun da bulunduğu üç kişi yaralandı. Saldırıyı İslami Cihad, Hizbullah ve «İslami İntikam Örgütü» adlı gruplar üstlendi; İsrail Hizbullah’ı sorumlu tuttu, Hizbullah ilgisini reddetti. Saldırı, İsrail’in Hizbullah lideri Abbas Musavi’yi öldürmesinden üç hafta sonra geldi. Türk mahkemesi 2002’de iki sanığı ölüm cezasına çarptırdı.",
+     "metin_en": "Ehud Sadan, security chief at Israel’s embassy in Ankara, was killed in Çankaya by a bomb in his car as he started the engine after shopping at a market; three people were injured, among them a nine-year-old boy. Islamic Jihad, Hezbollah and a group calling itself the Islamic Revenge Organisation claimed responsibility; Israel blamed Hezbollah, which denied involvement. The attack came three weeks after Israel killed Hezbollah leader Abbas Musawi. A Turkish court sentenced two defendants to death in 2002.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Assassination of Ehud Sadan",
+       "url": "https://en.wikipedia.org/wiki/Assassination_of_Ehud_Sadan"
+      },
+      {
+       "ad": "JTA: Israeli diplomat in Turkey slain in car bombing blamed on Hezbollah",
+       "url": "https://www.jta.org/archive/israeli-diplomat-in-turkey-slain-in-car-bombing-blamed-on-hezbollah"
+      },
+      {
+       "ad": "JTA: A Turkish court sentenced two men to death",
+       "url": "https://www.jta.org/archive/a-turkish-court-sentenced-two-men-to-death"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1992-03-17",
+     "baslik": "Buenos Aires’te büyükelçilik bombalandı",
+     "baslik_en": "The embassy in Buenos Aires is bombed",
+     "metin": "Buenos Aires’teki İsrail Büyükelçiliği bombalı bir araçla yerle bir edildi; aralarında büyükelçilik çalışanları ve yakındaki bir kilisenin ve huzurevinin sakinleri bulunan 29 kişi öldürüldü, yaklaşık 300 kişi yaralandı. Saldırıyı İslami Cihad Örgütü adıyla Hizbullah’a bağlı bir grup üstlendi. Arjantin Yüksek Mahkemesi 1999’da sorumluluğu Hizbullah’a verdi.",
+     "metin_en": "Israel’s embassy in Buenos Aires was flattened by a car bomb; 29 people were killed, among them embassy staff and residents of a nearby church and old people’s home, and about 300 were injured. A group linked to Hezbollah claimed it under the name Islamic Jihad Organisation. Argentina’s Supreme Court attributed responsibility to Hezbollah in 1999.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: 1992 attack on Israeli embassy in Buenos Aires",
+       "url": "https://en.wikipedia.org/wiki/1992_attack_on_Israeli_embassy_in_Buenos_Aires"
+      },
+      {
+       "ad": "Wikipedia: List of attacks against Israeli embassies and diplomats",
+       "url": "https://en.wikipedia.org/wiki/List_of_attacks_against_Israeli_embassies_and_diplomats"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1993-09-09",
+     "baslik": "FKÖ İsrail’i tanıdı",
+     "baslik_en": "The PLO recognises Israel",
+     "metin": "Oslo imzalarından dört gün önce Arafat, Rabin’e yazdığı mektupta FKÖ’nün «İsrail Devleti’nin barış ve güvenlik içinde var olma hakkını» tanıdığını, 242 ve 338 sayılı kararları kabul ettiğini ve şiddetten vazgeçtiğini bildirdi. Rabin’in yanıtı tek cümleydi: İsrail, FKÖ’yü Filistin halkının temsilcisi olarak tanıyordu. Filistin devleti tanınmadı; tanıma karşılıklı değil, eşitsizdi.",
+     "metin_en": "Four days before the Oslo signing, Arafat wrote to Rabin that the PLO recognised “the right of the State of Israel to exist in peace and security”, accepted Resolutions 242 and 338 and renounced violence. Rabin’s reply was a single sentence: Israel recognised the PLO as the representative of the Palestinian people. No Palestinian state was recognised; the recognition was mutual in name but unequal in substance.",
+     "kaynaklar": [
+      {
+       "ad": "UNISPAL: Israel–PLO Recognition, exchange of letters",
+       "url": "https://www.un.org/unispal/?p=205528"
+      },
+      {
+       "ad": "Wikipedia: Israel–PLO letters of recognition",
+       "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Palestine_Liberation_Organization_letters_of_recognition"
+      }
+     ],
+     "ortak": [
+      "fedai"
+     ],
+     "vurgu": [
+      "Filistin devleti tanınmadı"
+     ],
+     "vurgu_en": [
+      "No Palestinian state was recognised"
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1994-10-26",
+     "baslik": "Ürdün İsrail’le barış antlaşması imzaladı",
+     "baslik_en": "Jordan signs a peace treaty with Israel",
+     "metin": "Ürdün, Akabe ile Eilat arasındaki Arava sınır kapısında İsrail’le barış antlaşması imzaladı ve Mısır’dan sonra bunu yapan ikinci Arap ülkesi oldu. Büyükelçiler Kasım 1994’te atandı. Nüfusunun büyük bölümü Filistin kökenli olan ülkede antlaşma bugüne kadar halk arasında tartışmalı kaldı.",
+     "metin_en": "Jordan signed a peace treaty with Israel at the Arava crossing between Aqaba and Eilat, becoming the second Arab country after Egypt to do so. Ambassadors were appointed in November 1994. In a country where much of the population is of Palestinian origin, the treaty has remained contested among the public.",
+     "kaynaklar": [
+      {
+       "ad": "UNISPAL: Treaty of Peace between Jordan and Israel",
+       "url": "https://www.un.org/unispal/document/auto-insert-179122/"
+      },
+      {
+       "ad": "Wikipedia: Israel–Jordan peace treaty",
+       "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Jordan_peace_treaty"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1999-10-28",
+     "baslik": "Moritanya üçüncü Arap ülkesi oldu",
+     "baslik_en": "Mauritania becomes the third Arab country",
+     "metin": "Moritanya, Mısır ve Ürdün’den sonra İsrail’le tam diplomatik ilişki kuran üçüncü Arap Birliği üyesi oldu. Başkent Nouakchott’taki İsrail büyükelçiliği ülkede hep tartışma konusuydu; 2008’de silahlı kişiler büyükelçiliğe ateş açtı.",
+     "metin_en": "Mauritania became the third Arab League member, after Egypt and Jordan, to establish full diplomatic relations with Israel. The Israeli embassy in the capital Nouakchott was always controversial in the country; in 2008 gunmen fired on it.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Israel–Mauritania relations",
+       "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Mauritania_relations"
+      },
+      {
+       "ad": "GlobalSecurity: Mauritania and Israel",
+       "url": "https://www.globalsecurity.org/military/world/africa/mr-forrel-is.htm"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2009-03-06",
+     "baslik": "Gazze savaşından sonra üç ülke ilişki kesti",
+     "baslik_en": "After the Gaza war, three countries cut ties",
+     "metin": "2008–2009 Gazze saldırısına tepki olarak Venezuela ve Bolivya Ocak 2009’da İsrail’le ilişkilerini kesti. Moritanya önce ilişkileri dondurdu, 6 Mart 2009’da İsrail diplomatlarına ülkeyi terk etmeleri için 48 saat verdi ve Mart 2010’da ilişkileri tamamen bitirdi. Bolivya 2023’te Gazze savaşı sırasında ilişkileri yeniden kesti.",
+     "metin_en": "In reaction to the 2008–2009 assault on Gaza, Venezuela and Bolivia cut relations with Israel in January 2009. Mauritania first froze ties, gave Israeli diplomats 48 hours to leave on 6 March 2009 and ended relations entirely in March 2010. Bolivia cut ties again in 2023 during the Gaza war.",
+     "kaynaklar": [
+      {
+       "ad": "VOA, 21 Mart 2010: Mauritania affirms break with Israel",
+       "url": "https://www.globalsecurity.org/military/library/news/2010/03/mil-100321-voa06.htm"
+      },
+      {
+       "ad": "Wikipedia: Israel–Mauritania relations",
+       "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Mauritania_relations"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2025-05-21",
+     "baslik": "Washington’da iki büyükelçilik çalışanı öldürüldü",
+     "baslik_en": "Two embassy staff are killed in Washington",
+     "metin": "İsrail’in Washington Büyükelçiliği’nde çalışan Yaron Lischinsky (30) ile Sarah Milgrim (26), Capital Jewish Museum’daki bir etkinlikten çıkarken silahlı bir saldırganın ateşiyle öldürüldü. İkisi diplomat değildi: Lischinsky araştırma görevlisiydi, Milgrim İsrail’e ziyaret heyetleri düzenliyordu. Polis, gözaltına alınan saldırganın «Özgür Filistin» diye bağırdığını açıkladı.",
+     "metin_en": "Yaron Lischinsky (30) and Sarah Milgrim (26), staff of Israel’s embassy in Washington, were shot dead by a gunman as they left an event at the Capital Jewish Museum. Neither was a diplomat: Lischinsky was a research assistant and Milgrim organised visits to Israel. Police said the suspect shouted “Free Palestine” after his arrest.",
+     "kaynaklar": [
+      {
+       "ad": "AP / PBS NewsHour: 2 Israeli Embassy staff members killed in DC shooting",
+       "url": "https://www.pbs.org/newshour/nation/2-israeli-embassy-staff-members-killed-in-dc-shooting"
+      },
+      {
+       "ad": "CBS News: Sarah Milgrim and Yaron Lischinsky",
+       "url": "https://www.cbsnews.com/amp/news/yaron-lischinsky-sarah-lynn-milgrim-washington-dc-israeli-embassy-jewish-museum-shooting"
+      }
+     ],
+     "ortak": [
+      "tufan"
+     ]
+    }
+   ]
+  },
+  {
    "anahtar": "enerji",
    "ad": "Gaz ve normalleşme",
    "ad_en": "Gas and normalisation",
@@ -2509,6 +2859,9 @@
        "ad": "Wikipedia: Abraham Accords",
        "url": "https://en.wikipedia.org/wiki/Abraham_Accords"
       }
+     ],
+     "ortak": [
+      "tanima"
      ]
     },
     {
@@ -3087,6 +3440,761 @@
      ]
     },
     {
+     "no": 2,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s2.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "أتخرج العراق على النفوذ الانكليزي",
+       "tr": "Irak İngiliz nüfuzundan çıkacak mı?",
+       "en": "Will Iraq break free of English influence?"
+      },
+      {
+       "tip": "alt",
+       "ar": "انكلترا والعراق والممالك العربية المجاورة",
+       "tr": "İngiltere, Irak ve komşu Arap krallıkları",
+       "en": "England, Iraq and the neighbouring Arab kingdoms"
+      },
+      {
+       "tip": "manset",
+       "ar": "الطلبة يرسلون وفداً الى جنيف",
+       "tr": "Öğrenciler Cenevre’ye heyet gönderiyor",
+       "en": "Students send a delegation to Geneva"
+      },
+      {
+       "tip": "alt",
+       "ar": "توقع استقالة ثلاثة من الوزارة",
+       "tr": "Üç bakanın istifası bekleniyor",
+       "en": "Three ministers expected to resign"
+      },
+      {
+       "tip": "alt",
+       "ar": "البوليس والمظاهرات · المناورات البحرية",
+       "tr": "Polis ve gösteriler · Deniz manevraları",
+       "en": "The police and the demonstrations · The naval manoeuvres"
+      },
+      {
+       "tip": "alt",
+       "ar": "اذا اردتم الاقتصاد اقصدوا المحل الوطني الجديد",
+       "tr": "Tasarruf istiyorsanız yeni yerli dükkâna gidin",
+       "en": "If you want to save, go to the new national shop"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 2",
+       "en": "Falastin, 22 November 1935 · Page 2"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Irak İngiliz nüfuzundan çıkacak mı? İngiltere, Irak ve komşu Arap krallıkları",
+       "en": "Will Iraq break free of English influence? England, Iraq and the neighbouring Arab kingdoms"
+      },
+      {
+       "tip": "metin",
+       "tr": "Bağdat, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Filastin gazetesi son sayılarından birinde «Irak İngiliz nüfuzundan çıkacak mı?» başlıklı bir makale yayımladı. Makale, Türkiye Dışişleri Bakanı Dr. Tevfik Rüştü Aras’ın yakında Bağdat’a yapacağı ziyaret vesilesiyle yazılmıştı. Aras’ın amacı, Irak’ın dış politikada Türkiye ve İran’a katılması gerektiğine, yani uluslararası çıkarlarını İngiltere’ye değil Rusya’ya bağlamasına ve İngiltere’yle hiçbir ilgisi olmayan bir doğu İslam cephesi kurulmasına yetkilileri ikna etmekti. (Çevirmenin notu: Söz konusu görüşmeler 1937’de Türkiye, İran, Irak ve Afganistan arasında imzalanan Sadabat Paktı’na giden süreçtir.) Gazete şöyle devam ediyordu: Irak İngiliz nüfuzunu üzerinden atıp ilişkilerini İngilizlerle rekabet eden ve onlara düşman olan başka bir devletin nüfuzuna bağlayabilseydi, Irak’ın fiilî desteğinden, bugüne kadar tanıdığımız manevi desteğinden başka bir şey elde ederdik…",
+       "en": "Baghdad, 21 November – From Falastin’s special correspondent – In one of its recent issues Falastin published an article entitled “Will Iraq break free of English influence?”. It was written on the occasion of the forthcoming visit to Baghdad of Dr Tevfik Rüştü Aras, Foreign Minister of Turkey, whose aim was to persuade officials that Iraq should join Turkey and Iran in foreign policy, that is, tie its international interests to Russia rather than to England, and form an eastern Islamic front having nothing to do with England. (Translator’s note: these talks led to the Saadabad Pact signed in 1937 by Turkey, Iran, Iraq and Afghanistan.) The paper went on: if Iraq could shake off English influence and attach its ties to the influence of another state that competes with the English and is hostile to them, we would receive from Iraq practical support, something other than the moral support we have known so far…"
+      },
+      {
+       "tip": "metin",
+       "tr": "Bu makale Irak’ın siyasi kulüplerinde büyük etki yaptı. Neredeyse bütün gazeteler makaleyi yeniden yayımlayıp yorumladı. Bunlardan biri olan el-İstiklal gazetesi «İngiltere, bağımsız Irak ve komşu Arap krallıklarıyla ilişkiler» başlıklı bir başyazıyla yorum yaptı. Başyazının metni şöyledir:",
+       "en": "The article made a great impression in Iraq’s political clubs. Almost every newspaper reprinted it and commented on it. Among them al-Istiqlal answered with an editorial entitled “England, independent Iraq and relations with the neighbouring Arab kingdoms”. Its text is as follows:"
+      },
+      {
+       "tip": "metin",
+       "tr": "«Hiç kimse Irak’ın bağımsızlığını inkâr etmiyor. Bu bağımsızlık Irak’ı nüfuzlu ve hırslı devletler düzeyine çıkardı; onu, Yarımada’nın yakın uzak bütün krallıklarının özlediği bir Arap birliğinin elçisi yaptı. İngiltere’nin Irak’la ilişkilerinde bu bağımsızlığı tam anlamıyla gölgeleyen bazı şeyler varsa bile, Irak kardeş ülkelerin evlatlarının dilinden düşürmediği bu güvene layıktır. Bağımsızlık ve özgürlük anlamlarına bağlı bu önderliğe layıktır. Var gücümüzle çağrısını yaptığımız bu Arap varlığını kurmaya layıktır; çünkü bunun ardından Yarımada’nın dağınık parçalarının toplanması, ulaşımda, ekonomik, toplumsal ve siyasi amaçlarda birlik gelecektir.",
+       "en": "“No one denies Iraq its independence. That independence raised it to the level of influential and ambitious states and made it the herald of an Arab unity to which all the kingdoms of the Peninsula, near and far, aspire. Even if something in England’s relations with Iraq clouds this independence in its full sense, Iraq deserves the confidence the sons of the sister countries speak of. It deserves this leadership, bound up with the meanings of independence and freedom. It deserves to form this Arab entity we call for with all our strength, for it would bring the gathering of the Peninsula’s scattered parts and union in communications and in economic, social and political aims."
+      },
+      {
+       "tip": "metin",
+       "tr": "Irak, demek ki bu Arap halkının aklından çıkmayan düşü gerçekleştirmeye, dil ve din bağlarıyla, ruhlara, kalplere ve fikirlere dokunan her şeyle birbirine bağlı bu milyonlara önderlik etmeye layıktır. Avrupa sömürgeci siyasetinin Yarımada’da ve onun kıyılarında, birliğin kurulmasıyla bağdaşmayan amaçları ve hırsları varsa, Arap milletinin yaratılışındaki özgürlük sevgisi ve bağımsızlık arzusu, yabancı hırslarla savaşmayı ve yabancı nüfuzun nedenlerine ve Yarımada’ya sızmasına karşı birleşmeyi güvence altına alır. (Çevirmenin notu: Baskıda «Arap nüfuzu» yazıyor; bağlamdan dizgi hatası olduğu, «yabancı nüfuz» kastedildiği anlaşılıyor.)",
+       "en": "Iraq, then, deserves to realise the dream that haunts this Arab people and to lead these millions joined by the bonds of language and religion and by all that touches souls, hearts and ideas. If European colonial policy has aims and ambitions in the Peninsula and along its coasts that do not agree with the forming of a union, then the love of freedom and the desire for independence born into the Arab nation guarantee that it will fight foreign ambitions and unite against the causes of foreign influence and its penetration of the Peninsula. (Translator’s note: the print reads “Arab influence”; the context shows a typesetting error for “foreign influence”.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yaptığımız işin gerekliliği üzerine birden çok kişi yazdı. Gazetelerin tekrarladığını tekrarlamayacağız. Bu yazıya bizi çağıran, Filastin gazetesinin yayımladığı yazıdır: Filastin, Irak’tan Filistin davasına bağlılığını kanıtlayacak bir «fiilî destek» istiyor; ama Irak’ın manevi desteğini, Filistin’in uğradığı haksızlığa ve davasına, iktidardaki makamların desteklediği adaletsizliğe karşı ateşli savunmasını da anmayı unutmuyor. Filastin, Türkiye Dışişleri Bakanı’nın Irak ziyaretinden ne umduğunu da hemen açıklıyor: iki krallık ile İran Krallığı arasında dış politikada bir anlaşma; bunun ardından da «İngiltere’yle ilgisi olmayan bir doğu İslam cephesi» kurulması.",
+       "en": "More than one writer has argued for the necessity of what we are striving for. We will not repeat what the newspapers have said. What prompts these words is what Falastin published: Falastin appeals to Iraq for “practical support” to prove its devotion to the Palestinian cause, without forgetting the moral support it receives from Iraq and Iraq’s fervent defence against the wrong done to Palestine and the injustice to its cause backed by the ruling authorities. Falastin is also quick to say what it hopes from the Turkish Foreign Minister’s visit to Iraq: an agreement in foreign policy between the two kingdoms and the Kingdom of Iran, and through it the forming of “an eastern Islamic front having nothing to do with England”."
+      },
+      {
+       "tip": "metin",
+       "tr": "Başında sevgili genç kralının bulunduğu Irak hükümetinin, Arapların bu «cephe»deki özlemini gerçekleştirme görevine bağlılığından da daha az emin değiliz. (Çevirmenin notu: Kral Gazi, 1933–1939.) Bu cepheyle, hâlâ ruhları saran, derinlere işleyen ve dillerde dolaşan bir düş olan Arap imparatorluğunu kurabiliriz.",
+       "en": "We are no less confident of the devotion of the Government of Iraq, headed by its beloved young king, to realising the Arabs’ hope in this “front”. (Translator’s note: King Ghazi, r. 1933–1939.) Through it we could create the Arab empire that is still a dream haunting souls, sinking deep and passing from tongue to tongue."
+      },
+      {
+       "tip": "metin",
+       "tr": "Irak son dönemde Arap milletlerine önderlik edebileceğini ve bu önderliği tek başına üstlenebileceğini kanıtladı. Söz birliği edildiği gün, Arapçılığın kıvrımlarında çömelmiş sesler yükseldiği gün, kavimler birbirini çağırıp Arap fikrinin önderine tezahürat ettiği gün Irak, cesurların kararlılığıyla kalabalıklara önderlik edebilir; Arapların haklarını korumak, hayatlarını ve güneşin altındaki yerlerini savunmak gibi millî görevini yerine getirebilir.",
+       "en": "Iraq has lately proven able to lead the Arab nations and to hold that leadership alone. On the day the word is agreed, the day the voices crouching in the folds of Arabism rise, the day the peoples call to one another and cheer the champion of the Arab idea, Iraq can lead the crowds with the resolve of the brave and do its national duty: guarding the rights of the Arabs and defending their lives and their place under the sun."
+      },
+      {
+       "tip": "metin",
+       "tr": "Filastin gazetesi ülkesinin bugünkü durumundan yakınıp Irak’a ve Irak dışındakilere yardım için seslendiğinde, onu komşularına bağlayan bu millî bağı güçle hissediyoruz. Onların, Filistin’in başına gelen felaketlere ve Araplarının gördüğü zulme, öldürülmeye, yurtlarından edilmeye ve haklarının gasp edilmesine kulak vermesi gerekir: sömürgeci devletlerin çıkarları… Filistin’deki Siyonist hırslar… Ve Büyük Savaş’tan önce de sonra da bu Yarımada için tasarlanan siyaset… Bunların hepsi Arap birliğini parçalamakta birleşiyor.",
+       "en": "When Falastin laments the present state of its country and calls on Iraq and others for help, we feel strongly the national bond that joins it to its neighbours. They must heed the calamities falling on Palestine and the oppression its Arabs suffer: killing, expulsion and the seizure of their rights. The interests of the colonial powers… Zionist ambitions in Palestine… the policy drawn up for this Peninsula before the Great War and after it… all of these agree on tearing Arab unity apart."
+      },
+      {
+       "tip": "metin",
+       "tr": "Sömürgeci siyasetin ne istediğini anlıyoruz; ama bu, savaş kapıdayken, dedikleri gibi, millî çıkarları gözetmemize, bu milletin özgür evlatlarının yüreğine yapışmış umut kırıntısıyla ayağa kalkıp her yabancı saldırıyı püskürtmemize ve hakkını isteyen bu uyanmış ruhu küçümseyen herkesin karşısına çıkmamıza engel değildir… (Çevirmenin notu: «Savaş kapıda» sözü, Ekim 1935’te başlayan İtalya’nın Habeşistan işgaline ve Akdeniz’deki gerginliğe gönderme.)",
+       "en": "We understand what colonial policy wants. But that does not stop us, with war at the gates, as they say, from heeding our national interests, from rising on the remnant of hope still clinging to the hearts of this nation’s free sons to repel every foreign aggression, and from standing up to anyone who belittles this awakened spirit that demands its right… (Translator’s note: “war at the gates” refers to Italy’s invasion of Ethiopia from October 1935 and the tension in the Mediterranean.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yarımada’nın evlatlarını çağırıyoruz… Yüce Arap fikrinin sahiplerinden yardım istiyoruz… Çünkü hakka çağırmak kutsal bir görevdir… Allah’tan ve özgür, onurlu insanlardan yardım istemek büyük bir kazançtır…»",
+       "en": "We call on the sons of the Peninsula… we ask the help of the bearers of the noble Arab idea… for the call to right is a sacred duty… and seeking help from God and from the free and proud is a great gain…”"
+      },
+      {
+       "tip": "metin",
+       "tr": "Bu, el-İstiklal gazetesinin «Arabi» imzasıyla Filastin’in makalesine yorum olarak yayımladığı makalenin metnidir. Özeti, harekete geçmek isteyen iyi ve atak bir ruhu gösteriyor; ama bu ruh, bir kenara atılamayacak antlaşmalara ve sözleşmelere bağlı. Öte yandan resmî çevreler Dr. Tevfik Rüştü Aras’ın Irak başkentine geleceğini ve bu fikri Iraklılar arasında yayacağını henüz doğrulamış değil.",
+       "en": "This is the text of the article that al-Istiqlal published under the signature “Arabi” as a comment on Falastin’s article. In short, it shows a good and eager spirit that wants to act, but one bound by treaties and covenants that cannot be thrown against the wall. Official circles, however, have not yet confirmed that Dr Tevfik Rüştü Aras will come to the Iraqi capital and spread this idea among the Iraqis."
+      },
+      {
+       "tip": "metin",
+       "tr": "Bu vesileyle bildirelim: Bağdat’taki Genç Müslümanlar Cemiyeti, İngiltere’nin Filistin’de Yahudilerin silahlanmasına açıkça göz yummasını ve Araplara baskı yapmasını protesto eden konuşmaların yapılacağı genel bir toplantı düzenlemeyi düşünüyor. Cemiyet bu konuda Milletler Cemiyeti’ne de bir protesto gönderecek. (Çevirmenin notu: Ekim 1935’te Yafa limanında çimento varilleri içinde kaçak silah bulunmuştu; Araplar İngiliz yönetimini Yahudi yerleşimcilerin silahlanmasına göz yummakla suçluyordu.)",
+       "en": "On this occasion we report that the Young Men’s Muslim Association in Baghdad is considering a public meeting with speeches and protests against England’s open tolerance of the arming of the Jews in Palestine and its pressure on the Arabs. The Association will also send a protest to the League of Nations. (Translator’s note: in October 1935 smuggled arms were found hidden in cement barrels at the port of Jaffa; Arabs accused the British administration of tolerating the arming of Jewish settlers.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Mısır mektubu · Öğrenciler Cenevre’ye heyet gönderiyor · Üç bakanın istifası bekleniyor",
+       "en": "Letter from Egypt · Students send a delegation to Geneva · Three ministers expected to resign"
+      },
+      {
+       "tip": "metin",
+       "tr": "Genel grev, manevraların boykotu, gösterilerin bastırılması",
+       "en": "The general strike, the boycott of the manoeuvres, the suppression of demonstrations"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kahire, 20 Kasım – Filastin’in özel muhabiri bildiriyor – Yüksek Öğrenci Komitesi bir toplantı yaparak ülkenin haklarını savunmak ve İngiliz siyasetinin ülkedeki uygulamalarını protesto etmek üzere Cenevre’ye bir öğrenci heyeti göndermeye karar verdi. Komite heyetin masraflarını karşılamak için bir bağış kampanyası açtı ve partisi ve sınıfı ne olursa olsun bütün Mısırlıları bu fikre yardım etmeye çağırdı. Fikir bütün çevrelerde büyük ilgi gördü, millî siyasi çevreler de destekledi. (Çevirmenin notu: İngiliz Dışişleri Bakanı Hoare’un 9 Kasım 1935 tarihli açıklamasından sonra Mısır’da öğrenci gösterileri başladı; 13–14 Kasım’da polisin ateş açması sonucu öğrenciler öldürüldü.)",
+       "en": "Cairo, 20 November – From Falastin’s special correspondent – The Supreme Students’ Committee met and decided to send a delegation of students to Geneva to defend the country’s rights and protest against the conduct of English policy there. The committee opened a subscription to meet the delegation’s costs and called on all Egyptians, whatever their party or class, to help. The idea has been widely welcomed in every circle and endorsed by the national political circles. (Translator’s note: student demonstrations broke out in Egypt after British Foreign Secretary Hoare’s statement of 9 November 1935; students were killed when police opened fire on 13–14 November.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Komitenin yayımladığı bildirinin metni şöyle: Komite 20 Kasım Çarşamba sabahı toplandı ve şunlara karar verdi: Birincisi: (1) Mısır’ın ve Sudan’ın haklarını istemek ve İngilizlerin Mısırlılara karşı davranışlarını yüksek sesle protesto etmek üzere Cenevre’ye bir öğrenci heyeti göndermek, (2) şehit ailelerine yardım etmek için bağış kampanyası açılması. Komite Mısır halkının bütün kesimlerini bu kampanyaya katılmaya çağırıyor. İkincisi: Komite, İskenderiye’deki İngiliz filosunu ziyarete davet edilen herkesi daveti reddetmeye ve protesto etmeye çağırıyor. Üçüncüsü: Komite, liderlerin dayanışma ve birleşme yolunda gösterdiği içten istekten memnundur; bunun en kısa sürede eyleme dönüşmesini ve Mısır milletinin sömürgecilere karşı tek cephe olmasını yürekten diliyor; Majeste Kral’dan ve hanedan prenslerinden bu isteğin gerçekleşmesi için çalışmalarını bekliyor. Dördüncüsü: Komite, Mısır gençliği adına, hareketinin baştan sona sömürgeciliğe karşı ve Mısır ile Sudan’ın tam bağımsızlığını istemek için olduğunu en açık biçimde ilan ediyor. Beşincisi: Komite, şehit kardeşlerine ateş açılan olaylarda sorumluların bulunması için hükümetin hemen soruşturma açmasını ve onları yargılamasını bütün gücüyle istiyor.",
+       "en": "Here is the text of the statement the committee issued: The committee met on the morning of Wednesday 20 November and resolved as follows. First: to open a subscription (1) to send a delegation of students to Geneva to demand the rights of Egypt and the Sudan and to protest loudly against the conduct of the English towards the Egyptians, and (2) to help the families of the martyrs. The committee calls on every class of the Egyptian people to contribute. Second: the committee calls on everyone invited to visit the British fleet at Alexandria to refuse the invitation and protest against it. Third: the committee welcomes the sincere wish the leaders have shown for solidarity and coalition, hopes with all its heart that it will soon turn into action so that the Egyptian nation stands as one front against the colonisers, and looks to His Majesty the King and the princes of the ruling house to work for it. Fourth: the committee declares, in the name of Egypt’s youth and in the plainest terms, that its movement is aimed first and last against colonialism and at the complete independence of Egypt and the Sudan. Fifth: the committee demands with all its strength that the government open an inquiry without delay to find those responsible for the shootings against their martyred brothers and bring them to trial."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Bakanların istifası",
+       "en": "The ministers’ resignation"
+      },
+      {
+       "tip": "metin",
+       "tr": "Dün ve bugün, Maliye Bakanı Ahmed Abdülvehhab Paşa’nın bugünkü siyasi durum yüzünden istifa ettiği ve tutumunu gerekçelendirip istifasının nedenlerini açıklayacağı uzun bir bildiriyi Mısırlılara yönelteceği söylentisi yayıldı. Kabineden istifa edeceklerin üç kişi olduğu da söylendi: Ahmed Abdülvehhab Paşa, Aziz İzzet Paşa (Dışişleri Bakanı) ve Kâmil Bey İbrahim (Tarım Bakanı). Ama Abdülvehhab Paşa istifa ettiğini ya da istifayı düşündüğünü hemen yalanladı. Kabinenin siyasi durumu henüz her yönüyle incelemediğini, gerekirse topluca istifaya hazır olduğunu söyledi. Bu da daha önceki bir mektubumda yazdığımı doğruluyor: İstifayı ciddi olarak düşünen iki bakan Aziz İzzet Paşa ile Kâmil Bey İbrahim’dir; Ahmed Abdülvehhab Paşa ise gösterileri kuvvet ve şiddetle bastırmada en sert davranan bakanlardandır.",
+       "en": "Rumours spread yesterday and today that the Finance Minister, Ahmad Abd al-Wahhab Pasha, had resigned over the present political situation and had prepared a long statement to the Egyptians justifying his position and explaining his reasons. It was also said that three ministers would leave the cabinet: Ahmad Abd al-Wahhab Pasha, Aziz Izzet Pasha (Foreign Minister) and Kamil Bey Ibrahim (Minister of Agriculture). But Abd al-Wahhab Pasha quickly denied that he had resigned or was thinking of it. He said the cabinet had not yet examined the political situation in all its aspects and was ready to resign together if need be. This bears out what I wrote in an earlier letter: the two ministers seriously thinking of resigning are Aziz Izzet Pasha and Kamil Bey Ibrahim, while Ahmad Abd al-Wahhab Pasha is among the ministers harshest in putting down demonstrations by force and violence."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Polis ve gösteriler",
+       "en": "The police and the demonstrations"
+      },
+      {
+       "tip": "metin",
+       "tr": "İçişleri Bakanlığı bugün öğleden sonra şu resmî bildiriyi yayımladı: Hükümet, Toplantılar Kanunu gereğince her türlü gösterinin yasak olduğunu halkın dikkatine sunar. Polis her gösteriyi ve izinsiz her toplantıyı dağıtacaktır. Bu gösterilerde ya da toplantılarda güvenliği ve düzeni tehdit eden ya da insanların canını ve malını tehlikeye atan bir şey olursa polis güvenliği korumak için harekete geçecektir. Göstericiler polise kuvvetle karşı koyarsa, kuvveti kanun sınırları içinde misliyle geri püskürtmekten başka çare kalmayacaktır.",
+       "en": "The Ministry of the Interior issued the following official communiqué this afternoon: The government reminds the public that demonstrations of every kind are banned under the Assemblies Law. The police will disperse every demonstration and every unlicensed gathering. If anything happens at these demonstrations or gatherings that threatens security and order or endangers people’s lives or property, the police will act to protect security. If demonstrators resist the police by force, there will be no choice but to repel force with force within the limits of the law."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Deniz manevraları",
+       "en": "The naval manoeuvres"
+      },
+      {
+       "tip": "metin",
+       "tr": "Filo komutanlığı, bakanlık ve Yüksek Komiserlik konutu aracılığıyla liderlere, eski bakanlara ve ülkenin ileri gelenlerine Perşembe günü İskenderiye’de yapılacak deniz manevraları törenine davetiye dağıttı. Liderler, eski bakanlar ve ülkenin ileri gelenleri, partileri ne olursa olsun, İngilizlerin ülkedeki davranışlarını protesto etmek için bu daveti reddetti. Törene yalnızca görevdeki bakanlar, üst düzey memurlar ve İngilizler katılacak.",
+       "en": "Through the ministry and the High Commissioner’s residence, the fleet command sent invitation cards to the leaders, former ministers and notables of the country for the naval manoeuvres ceremony at Alexandria on Thursday. The leaders, former ministers and notables, of every party, refused the invitation in protest against the conduct of the English in the country. Only the serving ministers, senior officials and the English will attend."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · En iyisini tercih edenlere: Atkinsons Gold Medal kolonyası",
+       "en": "Advertisement · For those who prefer the best: Atkinsons Gold Medal Eau-de-Cologne"
+      },
+      {
+       "tip": "metin",
+       "tr": "En iyisini tercih edenlere bu hoş kokulu İngiliz kolonyasını sunuyoruz. Atkinson, Gold Medal kolonyasını çıkardığında tek bir şeyi hedefledi: mümkün olan en iyi kolonyayı yapmak. Başardı da: geçen yüzyılda Atkinson kolonyası dünyanın en sevilen kolonyasıydı, şimdi de her şık çevrede kullanılıyor. Atkinson her duruma uyar. Banyoda kullanın, gün içinde saçınıza biraz serpin. Bu kokulu sıvı serinletir, yumuşatır ve neşe verir. (Görselin üstünde İngilizce: «By appointment» – kraliyet tedarikçisi; «Made in England», J. & E. Atkinson Limited, Londra.)",
+       "en": "For those who prefer the best we offer this fragrant British eau-de-cologne. When Atkinson brought out Gold Medal cologne he set himself one aim: to make the best cologne possible. He succeeded: in the last century Atkinson’s cologne was the best-loved cologne in the world, and today it is used in every elegant circle. Atkinson suits every occasion. Use it in the bath and sprinkle a little on your hair during the day. This scented liquid cools, softens and gives a cheerful feeling. (Printed in English on the image: “By appointment”; “Made in England”, J. & E. Atkinson Limited, London.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Tasarruf istiyorsanız Selim Baba’nın yeni yerli dükkânına gidin",
+       "en": "Advertisement · If you want to save, go to Selim Baba’s new national shop"
+      },
+      {
+       "tip": "metin",
+       "tr": "Tasarruf istiyorsanız sahibi Mitri Selim Baba olan yeni yerli dükkâna gidin. Burada en iyi İngiliz yünlüleri ve güzel renklerde, en son modaya uygun yeni bir koleksiyon var; İngiltere’nin en ünlü fabrikalarından yeni geldi, her üç yardada bir İngiliz damgası var. «Guaranteed made in England» (İngiltere’de yapılmıştır, garantilidir). Fiyatlar son derece uygun. Gelin bu yünlüleri görün; almayan da seyreder. Toptan ve perakende satış. Yafa, Butrus Caddesi’nin sonu, gezinti otomobilleri durağının karşısı.",
+       "en": "If you want to save, go to the new national shop owned by Mitri Salim Baba. Here are the finest English woollens and a new collection in lovely colours and the latest fashion, just arrived from England’s most famous mills, with the English stamp every three yards. “Guaranteed made in England.” Prices are most reasonable. Come and see these woollens; those who do not buy can look. Wholesale and retail. Jaffa, end of Butrus Street, opposite the pleasure-car stand."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Banco di Roma",
+       "en": "Advertisement · Banco di Roma"
+      },
+      {
+       "tip": "metin",
+       "tr": "Modern yaşamın gerektirdiği bütün bankacılık işlemleri. Gezginler için: akreditifler, kambiyo, çekler, yabancı menkul kıymetler, bilgi. İthalat ve ihracat ticareti için: akreditif açma, ticari taahhütler, döviz alım satımı, telgraf havaleleri, poliçe ve konşimento tahsili vb. Tasarruf sahipleri için: mevduat ve cari hesaplar, menkul kıymet işlemleri, kupon ödemesi, emanet saklama, tahvil çekilişlerinin takibi vb. Banco di Roma – sermayesi 200.000.000 İtalyan lirası.",
+       "en": "All the banking services that modern life requires. For travellers: letters of credit, exchange, cheques, foreign securities, information. For import and export trade: opening credits, commercial undertakings, buying and selling foreign currency, telegraphic transfers, collection of bills and bills of lading, etc. For savers: deposits and current accounts, securities business, payment of coupons, safe custody, checking bond draws, etc. Banco di Roma – capital 200,000,000 Italian lire."
+      }
+     ]
+    },
+    {
+     "no": 3,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s3.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "عملية تسليح الاحباش كادت تتم",
+       "tr": "Habeşlerin silahlandırılması neredeyse tamamlandı",
+       "en": "The arming of the Abyssinians is almost complete"
+      },
+      {
+       "tip": "alt",
+       "ar": "الموقف الحربي في الشمال وفي الجنوب - وجود اوربيين في الجيش الحبشي",
+       "tr": "Kuzeyde ve güneyde savaş durumu · Habeş ordusunda Avrupalılar",
+       "en": "The war in the north and the south · Europeans in the Abyssinian army"
+      },
+      {
+       "tip": "alt",
+       "ar": "بنك ايطاليا يتوقف عن اصدار نشرته - جريدة ايطالية تهدد بالحرب",
+       "tr": "İtalya Bankası bültenini durdurdu · Bir İtalyan gazetesi savaşla tehdit ediyor",
+       "en": "Bank of Italy stops its bulletin · An Italian paper threatens war"
+      },
+      {
+       "tip": "manset",
+       "ar": "معلومات عن الطيار الزنجي",
+       "tr": "Siyah pilot hakkında bilgiler",
+       "en": "About the Negro airman"
+      },
+      {
+       "tip": "alt",
+       "ar": "النسر الاسود افاق من الدرجة الاولى",
+       "tr": "«Kara Kartal» birinci sınıf bir şarlatan",
+       "en": "The “Black Eagle”, a first-class charlatan"
+      },
+      {
+       "tip": "manset",
+       "ar": "رؤساء الاساقفة في ايطاليا يؤيدون موسوليني ويتناسون المبادىء المسيحية",
+       "tr": "İtalya’daki başpiskoposlar Mussolini’yi destekliyor, Hristiyan ilkelerini unutuyor",
+       "en": "Italy’s archbishops back Mussolini and forget Christian principles"
+      },
+      {
+       "tip": "alt",
+       "ar": "١٣٠ الف حبشي في الجنوب",
+       "tr": "Güneyde 130 bin Habeş",
+       "en": "130,000 Abyssinians in the south"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 3",
+       "en": "Falastin, 22 November 1935 · Page 3"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Habeşlerin silahlandırılması neredeyse tamamlandı",
+       "en": "The arming of the Abyssinians is almost complete"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kuzeyde ve güneyde savaş durumu · Habeş ordusunda Avrupalılar var · İtalya Bankası bültenini durdurdu · Bir İtalyan gazetesi savaşla tehdit ediyor (Çevirmenin notu: Sayfanın büyük bölümü, İtalya’nın Ekim 1935’te başlattığı Habeşistan işgaline ayrılmış.)",
+       "en": "The war situation in the north and the south · Europeans in the Abyssinian army · The Bank of Italy stops issuing its bulletin · An Italian newspaper threatens war (Translator’s note: most of the page is given to Italy’s invasion of Ethiopia, launched in October 1935.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Son hava saldırısı üzerine yorumlar",
+       "en": "Comments on the latest air raid"
+      },
+      {
+       "tip": "metin",
+       "tr": "Habeş birliklerine yapılan şiddetli hava saldırısına katılan İtalyan pilotlar, Habeş askerleri arasında açıkça Avrupalılar gördüklerini söylüyor. Bu kişilerin kuzey cephesinde savaşa katılan subaylar olduğu sanılıyor. Bu cephede Avrupalı subayların bulunması, Habeş kuvvetlerinin son günlerde gösterdiği düzenli ilerleyişi açıklıyor.",
+       "en": "The Italian airmen who took part in the fierce air attack on the Abyssinian divisions say they clearly saw Europeans among the Abyssinian troops. These men are thought to be officers taking part in the war on the northern front. The presence of European officers there explains the orderly advance the Abyssinian forces have shown in recent days."
+      },
+      {
+       "tip": "metin",
+       "tr": "Pilotlar savunma amaçlı bir manevra yaptıklarını, görevlerinin bu hava saldırısıyla, General Santini’nin ordusunun yerli askerlerle bağlantısını kesmek isteyen Ras Seyum kuvvetlerini geri püskürtmek olduğunu söylüyor. Pilotlar çok sayıda bomba attı ve makineli tüfeklerle 30 bin el ateş etti; ama Habeşler son derece düzenli ve şiddetli bir direniş gösterdi. Bu ciddi saldırı Habeşlerin harekete geçtiğini ve İtalyanların Gondar’a doğru ilerleyişini durdurmaya çalıştıklarını gösteriyor.",
+       "en": "The airmen say they carried out a defensive manoeuvre: their task in this air attack was to drive back the forces of Ras Seyum, which wanted to cut General Santini’s army off from the native troops. The airmen dropped a great number of bombs and fired 30,000 rounds from machine guns, but the Abyssinians put up a fierce and thoroughly organised resistance. This serious attack shows that the Abyssinians have gone into action and are trying to stop the Italian advance on Gondar."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Habeşlerin silahlandırılması neredeyse tamamlandı",
+       "en": "The arming of the Abyssinians is almost complete"
+      },
+      {
+       "tip": "metin",
+       "tr": "Addis Ababa’da, halkın silah ve cephaneyle donatılmasının neredeyse tamamlandığı açıklandı. Necaşi’ye yakın olanlar, Habeş kuvvetlerinin İtalyan ordusuyla karşılaşıp büyük muharebelerde onunla göğüs göğüse gireceği zamanın yaklaştığını doğruluyor.",
+       "en": "It was announced in Addis Ababa that the supply of arms and ammunition to the population is almost complete. Those close to the Negus confirm that the time is near when the Abyssinian forces will face the Italian army and close with it in great battles."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Ras Seyum nerede?",
+       "en": "Where is Ras Seyum?"
+      },
+      {
+       "tip": "metin",
+       "tr": "Addis Ababa’dan son saatte gelen bir mesaja göre: Ras Seyum’un ve ordusunun yeri üzerine pek çok tahmin yürütüldü, ama artık ordusunun Tembien dağ silsilesinde, General Maravigna’nın komutasında Tekeze nehri boyunca uzanan İtalyan sağ kanadı ile General Pirzio Biroli’nin komutasındaki Danakil bölgesindeki sol kanat arasında mevzilendiği biliniyor. İki İtalyan ordusunun birbirine bağlanamamasının sırrı da budur.",
+       "en": "A message from Addis Ababa at the last hour says: there has been much guessing about the whereabouts of Ras Seyum and his army, but it is now known that his army is entrenched in the Tembien range, between the Italian right wing under General Maravigna along the Tekeze river and the left wing under General Pirzio Biroli in the Danakil region. That is the secret of why the two Italian armies have been unable to link up."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Güneyde 130 bin Habeş",
+       "en": "130,000 Abyssinians in the south"
+      },
+      {
+       "tip": "metin",
+       "tr": "İtalyanlar güney cephesinde hâlâ Gorrahei’nin birkaç kilometre kuzeyinde duruyor. General Graziani’nin ordusunun geçen hafta ele geçirdiği Sasabaneh’ten geri çekilmek zorunda kaldığını kabul ettiler. Habeş kuvvetleri son dönemde Dagabur ile Gorrahei arasında büyük bir faaliyet gösterdi. Küçük Habeş çeteleri, İtalyan ordularına geceleri düzenledikleri baskınlarla hiç de küçümsenemeyecek kayıplar verdirdi. Habeş kuvvetleri Dagabur’u sonuna kadar savunmaya kararlı. Bu kuvvetlerin sayısı yüz yirmi bine ulaşıyor; İtalyan kuvvetleri ise elli bini geçmiyor.",
+       "en": "On the southern front the Italians are still a few kilometres north of Gorrahei. They have admitted that General Graziani’s army had to fall back from Sasabaneh, which it took last week. Abyssinian forces have lately been very active between Dagabur and Gorrahei. Small Abyssinian bands have inflicted losses on the Italian armies in their night raids that are by no means negligible. The Abyssinian forces mean to defend Dagabur to the end. They number one hundred and twenty thousand, while the Italian forces do not exceed fifty thousand."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Mallar, sığırlar ve hemşireler",
+       "en": "Goods, cattle and nurses"
+      },
+      {
+       "tip": "metin",
+       "tr": "Campidoglio vapuru geçenlerde mallar, sığırlar ve hemşirelerle dolu olarak Napoli limanından Doğu Afrika’ya hareket etti.",
+       "en": "The steamer Campidoglio recently left the port of Naples for East Africa carrying goods, cattle and nurses."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İtalya Bankası bültenini yayımlamıyor",
+       "en": "The Bank of Italy is not publishing its bulletin"
+      },
+      {
+       "tip": "metin",
+       "tr": "İtalya Bankası 20 Ekim’den beri haftalık bültenini yayımlamıyor. Avrupa gazeteleri bu önemli olayı, İtalya’nın şimdi karşı karşıya olduğu mali tehlikeler listesine eklenen yeni bir madde olarak yorumladı.",
+       "en": "The Bank of Italy has not published its weekly bulletin since 20 October. European newspapers commented on this significant event as a new item on the list of financial dangers Italy now faces."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Bir İtalyan gazetesi savaşla tehdit ediyor",
+       "en": "An Italian newspaper threatens war"
+      },
+      {
+       "tip": "metin",
+       "tr": "İtalyan Tevere gazetesi yaptırımların uygulanması üzerine bir makale yayımladı. Kuşatılanların dışarı çıkıp saldırmaktan başka yol görmeyeceği bir günün geleceğini yazdı ve dolaylı yoldan savaşla tehdit etti.",
+       "en": "The Italian paper Il Tevere published an article on the application of sanctions. It wrote that a day would come when the besieged would see no way but to break out and attack, and so threatened war by implication."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Barış görüşmeleri yeniden başlayacak mı?",
+       "en": "Will peace talks resume?"
+      },
+      {
+       "tip": "metin",
+       "tr": "Londra’da bilgili bir kaynak, Mussolini’nin Habeşistan’daki seferi aceleye getirmeye niyetli olmadığını, kuzeydeki İtalyan mevzilerini sağlamlaştırmak istediğini doğruluyor; Ogaden’de ise yeni bir saldırı kaçınılmaz. Aynı kaynak, Mareşal De Bono’nun geri çağrılıp yerine Badoglio’nun atanmasının gazetelerin yazdığı gibi saldırının şiddetle yeniden başlayacağını göstermediğini söylüyor; bunun, en azından şimdilik askerî harekâtın durduğunu ve İtalya’nın görüşmelere girmeye hazır olduğunu gösterdiğini belirtiyor. Çünkü askerî hedeflerinin büyük bölümü gerçekleşti. İngiliz Dışişleri Bakanlığı’nın Habeşistan masası şefi Mr. Peterson, İtalya ile Habeşistan arasındaki barış görüşmelerini Fransız Dışişleri Bakanlığı’ndaki meslektaşıyla konuşmak için Paris’e gidecek. (Çevirmenin notu: Bu temaslar Aralık 1935’te ortaya çıkan Hoare-Laval planının hazırlığıdır.)",
+       "en": "An informed source in London confirms that Mussolini does not intend to hurry the campaign in Abyssinia but wants to consolidate the Italian positions in the north; in the Ogaden, however, a new attack is inevitable. The same source says that the recall of Marshal De Bono and the appointment of Badoglio in his place does not mean, as the papers have said, that the attack will resume in force; rather it shows that military movements have stopped, at least for now, and that Italy is ready to enter negotiations, since most of its military aims have been achieved. Mr Peterson, head of the Abyssinian department at the British Foreign Office, will travel to Paris to discuss peace talks between Italy and Abyssinia with his colleague at the French Foreign Ministry. (Translator’s note: these contacts prepared the Hoare–Laval plan that emerged in December 1935.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Cenevre çevreleri ise Roma ile Addis Ababa arasında yeniden arabuluculuk denemesi için fırsatın uygun olduğu görüşünde. Ama bu çevreler, Necaşi’yi barışa ikna etmenin zor olduğunu kabul ediyor, çünkü zamanın onun lehine işlediğini düşünüyor; Mussolini’yi barışa ikna etmek de zor, çünkü İtalya’daki nüfuzunu kaybetme tehlikesiyle karşı karşıya.",
+       "en": "Circles in Geneva think the moment is right to try mediation between Rome and Addis Ababa once more. But they admit it will be hard to persuade the Negus to make peace, since he believes time is working for him, and equally hard to persuade Mussolini, who risks losing his standing in Italy."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Habeşistan propaganda yöntemlerinde ustalaşıyor",
+       "en": "Abyssinia masters the methods of propaganda"
+      },
+      {
+       "tip": "metin",
+       "tr": "Eritre ve Somali halkının Habeş kardeşlerine gösterdiği yakınlık, Habeş hükümetini propaganda yaymada İtalya’yı taklit etmeye cesaretlendirmiş görünüyor. Addis Ababa’dan gelen habere göre, başkentteki birkaç matbaa günlerdir gece gündüz Eritre ve Somali halkının konuştuğu bütün lehçelerde Habeş propaganda bildirileri basıyor. Bunların uçaklardan İtalyan ordusunun hatları gerisine atılması ve gizli ajanlar aracılığıyla halka ulaştırılması amaçlanıyor. Hükümet bu bildirilerde Habeş imparatorluğunu övdü, onu siyahların sığınağı ve Afrika’daki son bağımsız ülke diye andı. Bildiriler, onunla savaşmanın bağışlanmaz bir suç olduğunu söylüyor ve yurttaşları kendilerini İtalyanlara satmamaları için uyarıyor; ödüllerinin İtalyan sömürgeciliği uğruna boğazlanmak olacağını yazıyor.",
+       "en": "The sympathy the people of Eritrea and Somaliland show for their Abyssinian brothers seems to have encouraged the Abyssinian government to copy Italy in spreading propaganda. According to news from Addis Ababa, the few printing presses in the capital have for days been printing, night and day, Abyssinian leaflets in all the dialects spoken in Eritrea and Somaliland. They are meant to be dropped from aircraft behind the Italian lines and smuggled to the population by secret agents. In these leaflets the government praised the Abyssinian empire, calling it the refuge of the black peoples and the last independent country in Africa. The leaflets say that fighting it is an unforgivable crime and warn the people not to sell themselves to the Italians, for their reward would be slaughter for the sake of Italian colonialism."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Badoglio iki oğlunu da yanında götürüyor",
+       "en": "Badoglio takes his two sons with him"
+      },
+      {
+       "tip": "metin",
+       "tr": "Roma’dan gelen habere göre Mareşal Badoglio, biri havacılıkta diğeri topçuda subay olan iki oğlu Paolo ve Mario’yu Doğu Afrika’ya yanında götürdü.",
+       "en": "News from Rome says that Marshal Badoglio has taken his two sons, Paolo and Mario, with him to East Africa; the first is an officer in the air force, the second in the artillery."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yaptırımlar komitesinin toplantısı",
+       "en": "Meeting of the sanctions committee"
+      },
+      {
+       "tip": "metin",
+       "tr": "Milletler Cemiyeti Yaptırımlar Komitesi Başkanı Senyor Vasconcellos, ayın 25’inde yaptırımları uygulama komitesinin toplanması için çeşitli hükümetlerle yazışmaya başladı. Toplantının amacı yaptırımların işleyişini incelemek; İtalya’ya ihracat yasağının petrol, kömür, çelik ve bakırı kapsayacak biçimde genişletilmesi de gündeme gelebilir.",
+       "en": "Señor Vasconcellos, chairman of the League of Nations sanctions committee, has begun writing to the various governments to convene the committee for applying sanctions on the 25th of this month. The purpose is to study how the sanctions are working, and perhaps also to widen the ban on exports to Italy to cover oil, coal, steel and copper."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Almanya’nın İtalya’ya ihracatı arttı",
+       "en": "German exports to Italy rise"
+      },
+      {
+       "tip": "metin",
+       "tr": "İtalyan gümrük istatistikleri Almanya’dan İtalya’ya ihracatın arttığını gösteriyor; artış bazı kalemlerde yüzde elliyi buldu.",
+       "en": "Italian customs statistics show that exports from Germany to Italy have risen; in some cases the increase reached fifty per cent."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Siyah pilot hakkında bilgiler: «Kara Kartal» birinci sınıf bir şarlatan",
+       "en": "About the Negro airman: the “Black Eagle”, a first-class charlatan"
+      },
+      {
+       "tip": "metin",
+       "tr": "Geçmiş bir sayımızda, «Kara Kartal» lakaplı Amerikalı zenci pilot Hubert Julian’ın Habeş İmparatoru’nun hizmetinden istifa ettiğini yazmıştık. (Çevirmenin notu: Metinde dönemin dili olan «zenci» sözcüğü kullanılıyor.) Adı geçen Julian Jamaika adasında doğdu, ticaretle uğraştı, sonra New York’a yerleşti; orada serserilik ve dolandırıcılıkla tanındı. Orada kendisine uçuşun temellerini öğreten bir pilotla tanıştı, onunla bir kez uçtu ve uçaktan paraşütle atladı. O günden sonra kendine «Kara Kartal» adını taktı, bu adla kartvizit bastırdı ve bir arkadaşının uçağının üzerine tebeşirle «(Kara Kartal)» yazıp yanında fotoğraf çektirdi.",
+       "en": "We reported in an earlier issue that the American Negro airman Hubert Julian, known as the “Black Eagle”, had resigned from the service of the Emperor of Abyssinia. (Translator’s note: the text uses the period term “Negro”.) Julian was born on the island of Jamaica and worked in trade, then settled in New York, where he became known for vagrancy and swindling. There he met an airman who taught him the rudiments of flying; he flew with him once and jumped from the plane by parachute. From then on he called himself the “Black Eagle”, had visiting cards printed with that name, and was photographed beside a friend’s plane after chalking “(The Black Eagle)” on it."
+      },
+      {
+       "tip": "metin",
+       "tr": "Julian, Necaşi’nin taç giyme töreni haberini alınca Addis Ababa’ya gitti ve tören sırasında İmparator’un önüne uçaktan paraşütle indi. İmparator ona iki bin riyal bağışladı, hayranları da o zaman ona büyük bir yardım topladı. Beş hafta sonra Amerika’ya döndü ve İmparator’un kendisini uçak satın almak ve memur seçmek için gönderdiğini iddia etti! Habeşistan ile İtalya arasındaki anlaşmazlık başlayınca İmparator’un dostu olduğunu ve kendisinden Habeşistan’a gelmesini istediğini öne sürdü. Gerçekten de gitmekte acele etti; birçok aracı devreye girdikten sonra İmparator onu piyadede eğitim subayı yaptı, ama hava kuvvetlerinde görevlendirmeyi reddetti, ona silah teslim etmeyi de reddetti.",
+       "en": "When Julian heard of the Negus’s coronation he went to Addis Ababa and, during the ceremony, came down by parachute in front of the Emperor, who gave him two thousand riyals; admirers also collected a large sum for him. Five weeks later he returned to America and claimed that the Emperor had sent him to buy aircraft and choose staff! When the dispute between Abyssinia and Italy began, he claimed the Emperor was his friend and had asked him to come to Abyssinia. He did hurry there, and after much intercession the Emperor made him a training officer in the infantry, but refused to post him to the air arm, just as he refused to hand him weapons."
+      },
+      {
+       "tip": "metin",
+       "tr": "Julian gösterişe düşkünlüğüyle tanındı. Ona «Nereden geliyorsun?» diye sorsanız hemen «İmparator’un yanından» gibi cevaplar verirdi. Piyadede subay olarak kaldı, ta ki başına yeni bir olay gelene kadar. Amerika’daki Pittsburgh Courier gazetesi, Julian’ın Amerika’da 27 yıl yaşamış ve Chicago’da uçuş öğretmenliği yapmış Habeş asıllı bir adamın kimliğine büründüğünü yazan bir makale yayımladı; makalede adı (Hubert Julian) olarak geçiyor. (Çevirmenin notu: Burada adı karışmış görünüyor. Chicago’da uçuş okulu yöneten ve Habeş hava kuvvetlerine katılan pilot, «Kahverengi Kondor» lakaplı Afrikalı Amerikalı John C. Robinson’dı; Julian ile Robinson 1935 yazında Addis Ababa’da kavga etmişti.)",
+       "en": "Julian became known for his love of showing off: ask him “Where have you come from?” and he would answer at once, “From the Emperor’s,” and the like. He stayed an infantry officer until another incident befell him. The American paper the Pittsburgh Courier published an article saying that Julian had assumed the identity of an Abyssinian-born man who had lived in America for 27 years and taught flying in Chicago, named in the article as (Hubert Julian). (Translator’s note: the names appear confused here. The pilot who ran a flying school in Chicago and joined the Ethiopian air arm was the African American John C. Robinson, the “Brown Condor”; Julian and Robinson fought in Addis Ababa in the summer of 1935.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Julian makaleyi okuyunca gazetenin Addis Ababa muhabiri Mr. Robinson’a gitti ve makaleyi onun yazıp yazmadığını sordu. Muhabir makaleden haberi olmadığını söyledi. Julian’ın tek yaptığı ona vurmak oldu. Robinson o anda bıçağını çekip Julian’a saldırdı; Julian bıçağı görür görmez yardım diye bağırdı ve masanın altına saklandı. Haber İmparator’a ulaşınca öfkelendi; Julian’ın rütbesini orduda basit bir eğitmenliğe indirdi ve maaşını düşürdü. O günden beri Julian yakınıp söyleniyordu. İstifa etmekten başka çare bulamadı ve Addis Ababa’da kötü bir ün ve kötü bir iz bırakıp gitti. ***",
+       "en": "When Julian read the article he went to Mr Robinson, the paper’s correspondent in Addis Ababa, and asked whether he had written it. The correspondent said he knew nothing of it. Julian’s only response was to hit him. Robinson at once drew his knife and went for Julian, who no sooner saw the knife than he cried for help and hid under the table. When the news reached the Emperor he was angry; he reduced Julian to a simple instructor in the army and cut his pay. Since then Julian had been complaining and grumbling. Finding no way out but to resign, he left, having made a bad name and a poor impression in Addis Ababa. ***"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İtalya’daki başpiskoposlar Mussolini’yi destekliyor ve Hristiyan ilkelerini unutuyor",
+       "en": "The archbishops in Italy back Mussolini and forget Christian principles"
+      },
+      {
+       "tip": "metin",
+       "tr": "Papa sömürge savaşının Hristiyanlık ruhuna aykırı olduğunu açıkça ilan ederken, Fransa’daki önde gelen Katolikler bir dernek kurup uzun bir bildiri yayımladı. Bildiri Mussolini’nin Habeşistan tasarısına sert bir kampanya açıyor, bunun Hristiyanlığın en kutsal ilkelerine aykırı olduğunu ve siyahın ruhunun beyazın ruhu kadar kutsal olduğunu ilan ediyor. Oysa İtalya’daki din adamlarının Mussolini’ye hizmet etmek ve amaçlarını gerçekleştirmek için yarıştığını görüyoruz.",
+       "en": "While the Pope openly declares that a colonial war is contrary to the spirit of Christianity, and leading Catholics in France have formed an association that issued a long statement attacking Mussolini’s Abyssinian project, declaring it contrary to the holiest principles of Christianity and the soul of the black man as sacred as the soul of the white, we see the clergy in Italy vying to serve Mussolini and carry out his aims."
+      },
+      {
+       "tip": "metin",
+       "tr": "Bazı başpiskoposlar papazlarına pastoral mektuplar gönderdi. Mektuplarda şöyle dediler: «Bu ayın 18’inde, İngiliz bencilliğinin ve hırsının adalete, eşitliğe ve haklara aykırı olarak vatanımıza karşı ilan ettiği yaptırımlar başladı. Bu yaptırımlar köleliğe sarılan, yarı vahşi ve tebaasına zulmeden bir kralı desteklemek için. Biz de vatana altınlarımızı sunuyoruz; böylece medeniyeti, vahşetin ve köleliğin hâlâ hüküm sürdüğü ülkelere taşımak için gereken büyük masrafları karşılayabiliriz ve her şeyini vatan uğruna feda eden eski Romalıların izinden gideriz.» Messina başpiskoposu cemaatini, ellerindeki değerli hatıra eşyalarından gönül hoşluğuyla vazgeçmeye çağırdı, çünkü bu kıymetli şeylerin değeri vatan uğruna feda edildiklerinde çok büyük olurmuş: «Milletler Cemiyeti’nin taraftarları ekonomik cezanın başımıza bir felaket olmasını istiyor, ama bu acı tehdit bizi korkutmuyor. Halkının her kesiminde görülen haklı ve doğru tepki karşısında kayıtsız kalamayız. Askerlerimizin ailelerine yardım edin, gayrette yarışın ve her yönden, özellikle ev masraflarınızda tasarruf edin.» (Çevirmenin notu: Alıntıdaki aşağılayıcı nitelemeler başpiskoposlara ait; gazete bunları eleştirmek için aktarıyor.)",
+       "en": "Several archbishops sent pastoral letters to their priests, saying: “On the 18th of this month began the sanctions that British selfishness and greed have declared against our country, contrary to justice, equality and right, in support of a king who clings to slavery, half savage and a tyrant over his subjects. So we offer our gold to the homeland, so that we can meet the great costs of carrying civilisation to lands where savagery and slavery still reign, following the example of the ancient Romans who sacrificed all they had for their country.” The Archbishop of Messina urged his flock to give up willingly the valuable keepsakes they own, because the value of such treasures becomes very great when they are sacrificed for the homeland: “The partisans of the League of Nations want economic punishment to be a disaster for us, but this bitter threat does not frighten us. We cannot stand unmoved before the just and proper reaction seen in every class of the people. Help the families of our soldiers, vie with one another in zeal, and economise in every way, especially in your household spending.” (Translator’s note: the demeaning terms in the quotation are the archbishops’; the paper quotes them in order to criticise them.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Aranıyor",
+       "en": "Wanted"
+      },
+      {
+       "tip": "metin",
+       "tr": "Derby piyango biletleri, Lüksemburg Ulusal Piyangosu (Loterie Nationale), Koloni Piyangosu (Loterie Coloniale), Muvasat piyangosu, Belçika tahvilleri satışını bilen, her türlü sigortayı peşin ve taksitle satabilecek bir genç aranıyor. Bu işleri yapabileceğine inanan Yafa, P.K. 292’ye başvursun. Maaş ve satış komisyonu ödenecek. (Çevirmenin notu: Piyango adları baskıda bozuk; okunabildiği kadarıyla verildi.)",
+       "en": "Wanted: a young man familiar with selling Derby sweepstake tickets, the Luxembourg National Lottery (Loterie Nationale), the Colonial Lottery (Loterie Coloniale), the Muwasat lottery and Belgian bonds, and able to sell insurance of every kind for cash or by instalments. Anyone who feels competent for this work should write to P.O. Box 292, Jaffa. Salary and commission on sales. (Translator’s note: the lottery names are blurred in the print and are given as far as they can be read.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "İlan: Hayfa’da Filistin Ajansı – Telefon 1080.",
+       "en": "Advertisement: Palestine Agency, Haifa – Telephone 1080."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Ulusal Mühendislik Bürosu",
+       "en": "Advertisement · National Engineering Office"
+      },
+      {
+       "tip": "metin",
+       "tr": "Sahipleri Alfred ve Albert Atallah, Londra Kraliyet Üniversitesi mühendislik bölümü mezunları. Yafa – Post binası. Evler, depolar ve kamu binaları için planlar; iş denetimi, danışmanlık ve öneri.",
+       "en": "Proprietors Alfred and Albert Atallah, of the engineering department of the Royal University of London. Jaffa – Post building. Plans for houses, warehouses and public buildings; supervision of works, consultation and advice."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Vitamin çocukların büyümesi için gereklidir: Kepler balık yağı ve malt hülasası",
+       "en": "Advertisement · Vitamins are essential to children’s growth: Kepler cod liver oil with malt extract"
+      },
+      {
+       "tip": "metin",
+       "tr": "Tescilli marka «Kepler» balık yağı ve malt hülasası, onlara mevcut besinlerin en iyisini verir: en iyi cinsinden morina karaciğeri yağı ile en iyi arpanın hülasası. Sağlıklı biçimde mühürlenmiş şişelerde bulunur; bütün eczanelerde ve ilaç depolarında iki boyda satılır. Burroughs Wellcome & Co., Londra.",
+       "en": "The registered brand “Kepler” cod liver oil with malt extract gives them the best nourishment there is: the finest cod liver oil with an extract of the finest barley. It comes in hygienically sealed bottles and can be had in two sizes from all chemists and drug stores. Burroughs Wellcome & Co., London."
+      }
+     ]
+    },
+    {
+     "no": 4,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s4.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "وفاة الزعيم الكبير ابراهيم هنانو",
+       "tr": "Büyük önder İbrahim Hananu öldü",
+       "en": "Death of the great leader Ibrahim Hananu"
+      },
+      {
+       "tip": "alt",
+       "ar": "سوريا تعلن الحداد القومي العام",
+       "tr": "Suriye genel millî yas ilan ediyor",
+       "en": "Syria declares general national mourning"
+      },
+      {
+       "tip": "manset",
+       "ar": "الامبراطور يعود الى العاصمة سالما",
+       "tr": "İmparator başkente sağ salim dönüyor",
+       "en": "The Emperor returns safely to the capital"
+      },
+      {
+       "tip": "manset",
+       "ar": "مخابرات بين القدس ولندن باللاسلكي",
+       "tr": "Kudüs ile Londra arasında telsiz yazışmaları",
+       "en": "Wireless exchanges between Jerusalem and London"
+      },
+      {
+       "tip": "alt",
+       "ar": "رأي الحكومة في حوادث حيفا",
+       "tr": "Hükümetin Hayfa olayları hakkındaki görüşü",
+       "en": "The government’s view of the Haifa events"
+      },
+      {
+       "tip": "alt",
+       "ar": "اعتذار عن حضور جنازة الشهداء",
+       "tr": "Şehitlerin cenazesine katılamamaktan dolayı özür",
+       "en": "An apology for not attending the martyrs’ funeral"
+      },
+      {
+       "tip": "manset",
+       "ar": "المظاهرات تتخذ في القطر المصري",
+       "tr": "Mısır’da gösteriler yayılıyor",
+       "en": "Demonstrations spread across Egypt"
+      },
+      {
+       "tip": "alt",
+       "ar": "مندوبو الاحزاب يقابلون المندوب",
+       "tr": "Parti temsilcileri Yüksek Komiser’le görüşüyor",
+       "en": "Party representatives to meet the High Commissioner"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 4",
+       "en": "Falastin, 22 November 1935 · Page 4"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İmparator başkente sağ salim dönüyor · Harar’da İtalyan bombalarına hedef olduktan sonra",
+       "en": "The Emperor returns safely to the capital · After being exposed to Italian bombs at Harar"
+      },
+      {
+       "tip": "metin",
+       "tr": "Addis Ababa, 21 Kasım – İmparator sabah güneydeki gizli gezisinden döndü. Ölümle arasında kıl payı kaldığı öğrenildi: Harar’dan başkente dönmek üzere ayrılır ayrılmaz, altı uçağın eşlik ettiği uçağını iki İtalyan uçağı izledi; ama iki İtalyan uçağı İmparator’un uçağını ayırt edemedi ve geri döndü.",
+       "en": "Addis Ababa, 21 November – The Emperor returned in the morning from his secret tour in the south. It is now known that he came within a hair’s breadth of death: no sooner had he left Harar for the capital than two Italian aircraft followed his plane, which was escorted by six others; but the two Italian aircraft could not tell which was the Emperor’s plane and turned back."
+      },
+      {
+       "tip": "metin",
+       "tr": "İmparator Harar, Jijiga ve Dire Dawa’yı ziyaret etti, Fransız hastanesindeki yaralıları gördü ve Habeşlerin İtalyanlardan ele geçirdiği yedi tankı inceledi. İmparator mareşal üniforması ve havacıların başlığına benzer yünlü bir başlık giyiyordu. Havaalanında onu İmparatoriçe, Veliaht ve prenseslerden biri karşıladı. – Reuters",
+       "en": "The Emperor visited Harar, Jijiga and Dire Dawa, called on the wounded in the French hospital and inspected the seven tanks the Abyssinians had captured from the Italians. He wore a field marshal’s uniform and a woollen cap like those of airmen. At the airfield he was met by the Empress, the Crown Prince and one of the princesses. – Reuters"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Amiral Jellicoe öldü",
+       "en": "Admiral Jellicoe dies"
+      },
+      {
+       "tip": "metin",
+       "tr": "Londra, 21 Kasım – Büyük Savaş sırasında donanmanın komutanı olan Amiral Jellicoe öldü. – Reuters",
+       "en": "London, 21 November – Admiral Jellicoe, who commanded the fleet during the Great War, has died. – Reuters"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İtalya deniz konferansına davetiyi kabul etti",
+       "en": "Italy accepts the invitation to the naval conference"
+      },
+      {
+       "tip": "metin",
+       "tr": "Londra, 21 Kasım – İtalya deniz konferansına katılma davetini kabul etti. Böylece bu konferansa davet edilen bütün devletler daveti kabul etmiş oluyor. – Reuters",
+       "en": "London, 21 November – Italy has accepted the invitation to attend the naval conference. All the states invited to it have now accepted. – Reuters"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İngiliz kabinesinde değişiklik söylentileri",
+       "en": "Rumours of a British cabinet reshuffle"
+      },
+      {
+       "tip": "metin",
+       "tr": "Londra, 20 Kasım – Gazeteler seçimlerden sonra kabinenin yeniden kurulması üzerine tahmin yürütmeyi sürdürüyor. Bazı çevrelerde anlaşıldığına göre Başbakan, parlamento toplandıktan sonra kabinesinde küçük bir değişiklik yapacak; kabinenin yeniden kurulması ise gelecek yıl içinde başka bir zamana ertelenecek. – L.B.",
+       "en": "London, 20 November – The newspapers continue to speculate about re-forming the cabinet after the elections. Some circles understand that the Prime Minister will make a small change in his cabinet after Parliament meets, and that the re-forming of the cabinet will be put off to some other time in the coming year. – L.B."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İtalya ile Macaristan arasında ticaret artıyor",
+       "en": "Trade between Italy and Hungary increases"
+      },
+      {
+       "tip": "metin",
+       "tr": "Roma, 21 Kasım – Senyor Mussolini ile Macar tam yetkili bakanı, İtalya ile Macaristan arasında ticari değişimin artırılmasını kolaylaştıran bir anlaşma imzaladı. – Reuters",
+       "en": "Rome, 21 November – Signor Mussolini and the Hungarian minister plenipotentiary have signed an agreement to make it easier to increase trade between Italy and Hungary. – Reuters"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Üç yüz İtalyan’ın gözleri hasta",
+       "en": "Three hundred Italians with eye disease"
+      },
+      {
+       "tip": "metin",
+       "tr": "Atina, 21 Kasım – Onikiada’dan gelen haberlere göre Doğu Afrika’dan getirilen üç yüz İtalyan askeri İstanköy adasına çıkarıldı; askerler göz hastalıklarına yakalanmış. Onikiada’da büyük bir askerî hareketlilik var, ama adalar denizden ve havadan sıkı biçimde denetleniyor. – Reuters (Çevirmenin notu: Baskıda «Kerpatos» gibi okunuyor; Onikiada’da İtalyan yönetimindeki Kerpe ya da İstanköy kastediliyor olabilir.)",
+       "en": "Athens, 21 November – News from the Dodecanese says that three hundred Italian soldiers brought from East Africa have been landed on the island, suffering from diseases of the eye. There is great military activity in the Dodecanese, but the islands are closely watched from sea and air. – Reuters (Translator’s note: the print reads something like “Karpathos”, one of the Italian-ruled Dodecanese.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Ayin ve cenaze",
+       "en": "Mass and requiem"
+      },
+      {
+       "tip": "metin",
+       "tr": "Gelecek Cumartesi, ayın 23’ünde saat sekizde, şehir dışındaki Aziz Yorgi Kilisesi’nde merhume Zarife Antonius el-Huri’nin ruhu için dokuzuncu gün ayini ve cenaze duası yapılacak. Merhume, merhum Yakub el-Musa’nın kızıdır. Merhumenin eşi, çocukları ve bütün aile fertleri yakınlarını ve dostlarını katılmaya çağırıyor ve bu sözü her birine özel davet saymalarını rica ediyor. Allah onlara sevdiklerinde keder göstermesin.",
+       "en": "Next Saturday, the 23rd, at eight in the morning, a mass and requiem for the ninth day will be held for the soul of the late Zarifa Antonius al-Khuri, daughter of the late Yaqub al-Musa, at the Church of St George outside the town. The husband of the deceased, her children and all her family invite relatives and friends to join them and ask them to take this notice as a personal invitation to each. May God spare them sorrow in those dear to them."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Başyazının devamı",
+       "en": "Editorial continued"
+      },
+      {
+       "tip": "metin",
+       "tr": "…milliyetçi bir duygu; içlerinde en aşırı eğilimleri uyandırıyor. Bu korkunç yolun Şeyh İzzeddin gibi dindar ve yurtsever birinin içindeki duyguları alevlendirmesi ve onu, dinî ve millî eğilimlerinin birlikte yüklediği bir görevi yerine getirdiğine inanarak büyük maceralara atması şaşırtıcı değildir.",
+       "en": "…a national feeling, stirring the most extreme tendencies in them. It is no wonder that this dreadful course stirred the feelings of a pious patriot like Sheikh Izz al-Din and drove him to great adventures, believing he was carrying out a mission imposed on him by his religious and national convictions together."
+      },
+      {
+       "tip": "metin",
+       "tr": "Bu olayın yaşanmasına ve onun yüzünden canların yitmesine ne kadar üzülsek de, hükümetin bundan ders çıkarmasını ve ülkedeki siyasi taşkınlığını frenlemesini umuyoruz. Bu çetenin olayı türünün ilk örneğidir; yalnız Filistin’de değil, öteki bütün Arap ülkelerinde de. Uzantıları ağır, yolu dikenli olan bu trajedinin, hatta olaylarının bütün sertliğine rağmen, hükümetin kulaklarını delip yüreğine işleyen ve onu taşkınlığından vazgeçirecek bir haykırış olması da şaşırtıcı değildir.",
+       "en": "However deeply we regret that this happened and that lives were lost because of it, we hope the government will draw a lesson from it and curb its political recklessness in the country. This band’s affair is the first of its kind, not only in Palestine but in all the other Arab countries too. Nor is it strange that this tragedy, grave in its implications and thorny in its course, may be, for all the harshness of its events, a resounding cry that pierces the ears of the government and reaches its heart, forcing it to turn back from its recklessness."
+      },
+      {
+       "tip": "metin",
+       "tr": "Böyle bir olayın Filistin’in siyasi tarihine geçmesi ne hükümetin, ne Yahudilerin, ne de Arapların çıkarınadır. Hükümet bunu görmezden gelir, inadını ve Arapları yurtlarından etmekteki ısrarını sürdürürse, bu ilk olayın ardından nerede biteceğini Allah’tan başka kimsenin bilmediği başka olaylar gelir. (Çevirmenin notu: Başyazının ilk bölümü 1. sayfadadır; konu, 20 Kasım 1935’te Ya‘bed yakınlarında İngiliz polisiyle çatışmada öldürülen İzzeddin el-Kassam ve arkadaşlarıdır.)",
+       "en": "It is in the interest neither of the government, nor of the Jews, nor of the Arabs that such an event should be written into the political history of Palestine. If the government ignores it and persists in its obstinacy and its determination to drive the Arabs from their land, this first event will be followed by others whose end only God knows. (Translator’s note: the first part of the editorial is on page 1; its subject is Izz al-Din al-Qassam and his companions, killed in a clash with British police near Ya‘bad on 20 November 1935.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Büyük önder İbrahim Hananu öldü · Suriye genel millî yas ilan ediyor",
+       "en": "Death of the great leader Ibrahim Hananu · Syria declares general national mourning"
+      },
+      {
+       "tip": "metin",
+       "tr": "Şam, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Önder İbrahim Bey Hananu bu sabah Kafr Tahrim’deki köyünde ağır bir kalp krizi sonucu öldü. Halep şehri dükkânlarını kapadı ve işlerini durdurdu. Şam’da ve başka şehirlerde eğlence yerleri bu akşam kapandı; gelecek Cumartesi akşamına kadar genel millî yas ilan edildi. (Çevirmenin notu: Hananu, 1919–1921’de kuzey Suriye’de Fransızlara karşı silahlı direnişi yöneten önderdir. Fotoğrafı sayfada yer alıyor.)",
+       "en": "Damascus, 21 November – From Falastin’s special correspondent – The leader Ibrahim Bey Hananu died this morning in his village of Kafr Takharim after a severe heart attack. The city of Aleppo closed its shops and stopped work. Places of entertainment in Damascus and elsewhere closed this evening, and general national mourning has been declared until next Saturday evening. (Translator’s note: Hananu led the armed resistance against the French in northern Syria in 1919–1921. His photograph appears on the page.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Naaşı Halep’e götürülecek ve cenazesi Cumartesi sabahı kaldırılacak. Buradaki Millî Blok etkileyici bir bildiriyle ölümünü duyurdu; bütün camilerde ruhu için gıyabi cenaze namazı kılınmasını ve Cumartesi sabah saat 11’den öğleden sonra saat bire kadar işlerin durdurularak yas tutulmasını istedi. Millî Blok’un bütün üyeleri ve öteki Suriye ve Lübnan şehirlerinden pek çok kişi cenazeye katılmak için Halep’e gidecek. Gazeteler de merhumun yasında Cumartesi günü çıkmama kararı aldı.",
+       "en": "The body will be taken to Aleppo and the funeral held on Saturday morning. The National Bloc here announced his death in a moving statement and asked that prayers for the absent be said for his soul in every mosque, and that mourning be observed by stopping work from 11 in the morning until one in the afternoon on Saturday. All the men of the National Bloc and many others from Syrian and Lebanese towns will travel to Aleppo for the funeral. The newspapers have decided not to appear on Saturday in mourning for him."
+      },
+      {
+       "tip": "metin",
+       "tr": "Ölümünün Suriye’deki gidişat üzerinde büyük siyasi etki yapması bekleniyor; çünkü Millî Blok’un kuzeydeki adamları ona körü körüne bağlıydı. Siyasetinde aşırı olduğu biliniyordu. Manda hükümetiyle uzlaşma siyasetini sürdürmemesinin nedeni de, son antlaşmanın bozulmasının asıl etkeni olduğu gibi, buydu: Şam’daki arkadaşları uzlaşma siyasetinden vazgeçip iktidar koltuklarını bırakmazsa, kuzeydeki kardeşleriyle birlikte Blok’tan çekilmeye karar vermişti. (Çevirmenin notu: Son antlaşma, 1933’te imzalanıp Suriye meclisinin onaylamadığı Fransız-Suriye antlaşma tasarısıdır.)",
+       "en": "His death is expected to have a great political effect on the course of affairs in Syria, since the men of the National Bloc in the north obeyed him blindly. He was known as an extremist in his politics. This was why he would not go along with the policy of understanding with the Mandate government, just as he was the chief factor in wrecking the last treaty: he had decided, with his brothers in the north, to leave the Bloc if his colleagues in Damascus did not abandon the policy of understanding and leave the seats of power. (Translator’s note: the last treaty is the Franco-Syrian draft treaty of 1933, which the Syrian parliament did not ratify.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Kudüs’ten merhum için taziye telgrafı",
+       "en": "A telegram of condolence on the deceased from Jerusalem"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kudüs, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Ahmed Hilmi Paşa, Nebih Bey el-Azme, Avni Bey Abdülhadi, İzzet Derveze, Reşid el-Hac İbrahim, Sami es-Serrac, Subhi el-Hadra, Accac Nuveyhid ve Muin el-Madi şu taziye telgrafını gönderdi: «Sadullah Bey el-Cabiri – Halep. Vatanseverliği ve ölümsüz fedakârlığıyla büyük kahraman kardeşimiz Hananu’yu yitirmemiz büyük bir felakettir. Parçalanan yürekler ve kanlı gözlerle size ve Araplara başsağlığı diliyor, bu ağır yük karşısında sabır diliyoruz.»",
+       "en": "Jerusalem, 21 November – From Falastin’s special correspondent – Ahmad Hilmi Pasha, Nabih Bey al-Azma, Awni Bey Abd al-Hadi, Izzat Darwaza, Rashid al-Hajj Ibrahim, Sami al-Sarraj, Subhi al-Khadra, Ajjaj Nuwayhid and Muin al-Madi sent the following telegram of condolence: “Saadallah Bey al-Jabiri – Aleppo. Our loss of our brother the great hero Hananu, with his patriotism and undying sacrifice, is a grave calamity. With breaking hearts and bleeding eyes we offer condolences to you and to the Arabs and wish you patience under this heavy burden.”"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Mısır’da gösteriler yayılıyor · Dört genç kurşunla yaralandı",
+       "en": "Demonstrations spread across Egypt · Four young men wounded by gunfire"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kahire, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Mısır’da dükkânlar ve fabrikalar bugün bütün gün kapalı kaldı; avukatlar yüzünden yerli mahkemelerin ve şer‘i mahkemelerin davaları ertelendi. Kahire’nin çeşitli yerlerinde şiddetli gösteriler yapıldı. Polis ateş açtı ve dört genç polis coplarıyla ağır yaralandı. Grevi kışkırtma suçlamasıyla pek çok kişi tutuklandı. Ülkenin çeşitli yerlerinde de gösteriler yapıldı, ama önemli bir olay olmadı.",
+       "en": "Cairo, 21 November – From Falastin’s special correspondent – Shops and factories across Egypt stayed shut all day today, and cases in the national and sharia courts were postponed because of the lawyers. Violent demonstrations took place in several parts of Cairo. The police fired shots, and four young men were seriously injured by police batons. Many were arrested on charges of inciting the strike. Demonstrations were also held in various parts of the country, but nothing of note happened."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Hüsnü Ganim cinayeti soruşturması",
+       "en": "The inquiry into the killing of Husni Ghanim"
+      },
+      {
+       "tip": "metin",
+       "tr": "Bu sayının başka bir yerinde, merhum tüccar Hüsnü Efendi Ganim’in Tel Aviv sahilinde öldürülmesi davasındaki soruşturma haberini verdik. Buna şunu ekleyelim: Mr. Rex Yafa’ya geldi ve cinayet soruşturmasına katıldı. Polis, merhumun bir gece kalıp kalmadığını öğrenmek için bütün otellerin defterlerini inceledi, şüpheli otellerin bütün kadın sahiplerini getirtip sorguladı.",
+       "en": "We reported elsewhere in this issue on the inquiry into the killing of the late merchant Husni Effendi Ghanim on the Tel Aviv shore. We can add that Mr Rex came to Jaffa and joined the investigation into the crime. The police searched the registers of all hotels to learn whether the deceased had spent a night in one, and brought in and questioned all the women who keep the suspect hotels."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Bayındırlık müdürü istifa etti",
+       "en": "The Director of Public Works resigns"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudi gazetelerine göre, Ras el-Ayn’dan Kudüs’e su getirme projesinin yönetimini üstlenen Bayındırlık Dairesi Müdürü Mr. Bdisi, Yüksek Komiser’in belirlediği tarihe yetiştiremediği için bu projenin yönetiminden istifa etti. (Çevirmenin notu: Müdürün adı baskıda net okunmuyor.)",
+       "en": "According to the Jewish papers, Mr Bdisi, Director of the Public Works Department, who took charge of the project to pipe water from Ras al-Ayn to Jerusalem, has resigned from managing the project because he did not finish it by the date set by His Excellency the High Commissioner. (Translator’s note: the director’s name is unclear in the print.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Kudüs ile Londra arasında telsiz yazışmaları · Yetkililer çeteyi tutuklamak için işbirliği yapıyor",
+       "en": "Wireless exchanges between Jerusalem and London · The authorities cooperate to arrest the band"
+      },
+      {
+       "tip": "metin",
+       "tr": "Öğrendiğimize göre hükümet dün ve bugün yaşanan olaylar hakkında Londra’ya telsizle bilgi vermeye başladı. Yine anlaşıldığına göre, Suriye ve Lübnan’daki Fransız yetkililer ve Şarkulerdün hükümetiyle de, terör çetesinin geri kalan üyelerinin tutuklanmasında işbirliği için yazışma sürüyor; hükümet onların Filistin’den bu ülkelere geçtiğini sanıyor. (Çevirmenin notu: «Terör çetesi» (el-usbe el-irhabiyye) ifadesi hükümetin ve Yahudi basınının Kassam’ın grubu için kullandığı adlandırmadır; Filastin bu sayfada onu haber başlıklarında aktarıyor, aynı sayfada ise Kassam’ı «şehit şeyh» diye anıyor.)",
+       "en": "We learn that the government has begun informing London by wireless of the events of yesterday and today. It is also understood that correspondence is under way with the French authorities in Syria and Lebanon and with the government of Transjordan to cooperate in arresting the remaining members of the terrorist band, who the government believes have left Palestine for those countries. (Translator’s note: “the terrorist band” (al-usba al-irhabiyya) is the term the government and the Jewish press used for al-Qassam’s group; Falastin repeats it in news headlines on this page, while on the same page it calls al-Qassam “the martyred sheikh”.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Hükümetin Hayfa olayları hakkındaki görüşü",
+       "en": "The government’s view of the Haifa events"
+      },
+      {
+       "tip": "metin",
+       "tr": "Matbuat Bürosu’ndan şu bildiri geldi: Dün Cenin yakınlarında öldürülen üç kişinin cenazesi bu sabah Hayfa’da kaldırıldı. Cenaze alayına büyük bir kalabalık eşlik etti; alay İstiklal Camii yakınından başladı. Alay sakin ve düzenliydi; ama merkez polis karakolunun önünden geçerken alaya katılmayan bazı gençler karakolu taşladı. Polis karakolunun üç penceresinin camları ve dışarıda duran üç otomobilin ön camları kırıldı. Taş atma, alaya katılan bazı Müslüman ileri gelenlerin araya girmesiyle durdu.",
+       "en": "The Press Bureau sent the following: The funeral of three of those killed yesterday near Jenin took place in Haifa this morning. A large crowd went with the procession, which started near the Istiqlal mosque. The procession was calm and orderly, but as it passed the central police post some young men not taking part in it stoned the post. The glass of three windows of the police post and the windscreens of three cars standing outside were broken. The stoning stopped when some Muslim notables in the procession intervened."
+      },
+      {
+       "tip": "metin",
+       "tr": "Ardından seyircilerden bazıları Faysal Meydanı’nda trafiği yöneten polise saldırdı. Polis müdür yardımcısı Mr. James ile İngiliz polis müfettişinin gözetiminde bir grup polis olay yerine gönderildi; bu iki memur taşlandı, ama yaraları hafifti. Bir başka polis ekibi gelince sorumsuz unsurlar ortadan kayboldu. Cenaze alayı yavaşça yoluna devam edip Belde eş-Şeyh’teki mezarlığa sakince ulaştı. Yolda, Akka yolunun yakınında cam fabrikasına birkaç taş atılmasından başka bir olay olmadı. Cenazeden sonra, sayıları birkaç bini bulan katılımcılar geri döndü. Polis büyük sabır ve metanet gösterdi; Matbuat Bürosu’na göre halktan kimse yaralanmadı.",
+       "en": "After that some of the onlookers attacked the police directing traffic in Faisal Square. A number of police were sent to the scene under Mr James, Assistant Superintendent of Police, and the British police inspector; these two officers were stoned, but their injuries were slight. When another police party arrived the irresponsible elements disappeared. The funeral procession went on slowly and reached the cemetery at Balad al-Shaykh calmly. On the way nothing happened except some stones thrown at the glass factory near the Acre road. After the funeral those who had attended, numbering several thousand, went back. The police showed great patience and fortitude, and according to the Press Bureau no member of the public was hurt."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yahudi gazeteleri ve terör çetesi",
+       "en": "The Jewish papers and the terrorist band"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudi gazeteleri, polisin Cenin yakınlarında çatıştığı terör çetesi hakkında pek çok ayrıntı yayımladı. HaYarden, çetenin geri kalanının dağlara sığınmayı başardığını, subaylar Rex, Barker ve Halim Basta’nın büyük bir polis kuvvetiyle onları kovaladığını yazıyor. Teslim olanlardan birinin, Nahalal’de Yakobi’yi ve oğlunu öldürmekle suçlanıp sonra aklandığı ortaya çıktı. (Çevirmenin notu: Aralık 1932’de Nahalal’de bir babayla oğlunun öldürülmesi, sonradan Kassam’ın grubuna bağlanan eylemlerdendir.)",
+       "en": "The Jewish papers published many details about the terrorist band with which the police clashed near Jenin. HaYarden says the rest of the band managed to take refuge in the mountains, and that the officers Rex, Barker and Halim Basta are pursuing them with a large force of police. It turned out that one of those who surrendered had been accused of killing Yaakobi and his son at Nahalal and then acquitted. (Translator’s note: the killing of a father and son at Nahalal in December 1932 was among the acts later attributed to al-Qassam’s group.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Davar ise polisin üç gün önce Cenin köyünden Reşid el-Hebriye’yi tutukladığını ve serbest bıraktığını, çünkü söylendiğine göre polisi çetenin sırlarına ve yerine yönlendirdiğini yazıyor. Haaretz, kuzeyde Yahudilere karşı işlenen cinayetleri ele aldığı bir başyazı yayımladı ve bunlardan bu çeteyi sorumlu tuttu. Davar ayrıca Genel Polis Müfettişi Mr. Spicer’ın Cenin semalarında dolaşan uçaktan çatışmayı yönettiğini yazıyor.",
+       "en": "Davar says the police arrested Rashid al-Hibriyya from a village near Jenin three days ago and released him because, it is said, he had led the police to the band’s secrets and its hiding place. Haaretz published an editorial on the killings of Jews in the north and blamed this band for them. Davar also says that Mr Spicer, Inspector-General of Police, directed the battle from the aircraft circling over Jenin."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Şehitlerin cenazesine katılamamaktan dolayı özür",
+       "en": "An apology for not attending the martyrs’ funeral"
+      },
+      {
+       "tip": "metin",
+       "tr": "Aşağıda imzası olanlar, şehit Şeyh İzzeddin Efendi el-Kassam’ın başkanlık ettiği İslam Cemiyeti’ne ve Genç Müslümanlar Cemiyeti’ne şu telgrafı gönderdi: «Elde olmayan nedenler şehitlerin cenazesine katılmamızı engelledi. Size başsağlığı diliyor, ümmeti istiklal ve özgürlüğün temel taşının konmasından dolayı kutluyoruz.» Hamdi en-Nablusi, Said ed-Dabbağ, Halil Ebu Şamis, İbrahim Necm, Mustafa el-Kayyali, Musa Abdünnebi, Mustafa er-Reşid, Hamad el-Hüseyni, Ali Ganim, Şurrab, Halil Habib, İsa es-Sefri. (Çevirmenin notu: Telgraf sahiplerinin bir kısmının adları baskının kenarında kesik; okunabildiği kadarıyla verildi.)",
+       "en": "The undersigned sent the following telegram to the Islamic Society and the Young Men’s Muslim Association, headed by the martyred Sheikh Izz al-Din Effendi al-Qassam: “Compelling reasons prevented us from attending the martyrs’ funeral. We offer you our condolences and congratulate the nation on the laying of the foundation stone of independence and freedom.” Hamdi al-Nabulsi, Said al-Dabbagh, Khalil Abu Shamis, Ibrahim Najm, Mustafa al-Kayyali, Musa Abd al-Nabi, Mustafa al-Rashid, Hamad al-Husayni, Ali Ghanim, Shurrab, Khalil Habib, Isa al-Safari. (Translator’s note: some names are cut at the edge of the print and are given as far as they can be read.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Gençlik Kongresi Başkanı da İslam Cemiyeti’ne şu telgrafı gönderdi: «Felaket haberinin geç ulaşması, aziz şehitlerin cenazesini uğurlama görevini yerine getirmemizi engelledi. Allah bize yeter, O ne güzel vekildir.»",
+       "en": "The President of the Youth Congress sent the Islamic Society the following telegram: “The late arrival of the news of the calamity kept us from the duty of escorting the funeral of the righteous martyrs. God is sufficient for us, and He is the best of guardians.”"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Genç Müslümanlar Cemiyeti törenini erteliyor",
+       "en": "The Young Men’s Muslim Association postpones its celebration"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yafa’daki Genç Müslümanlar Cemiyeti, bugün yapılması kararlaştırılan yeni binasının açılış törenini son olaylarda şehit düşenlerin yasından dolayı belirsiz bir tarihe erteledi.",
+       "en": "The Young Men’s Muslim Association in Jaffa has postponed to an unspecified date the opening celebration of its new building, set for today, in mourning for those who fell as martyrs in the recent events."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Parti temsilcileri Yüksek Komiser’le görüşüyor",
+       "en": "Party representatives to meet the High Commissioner"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kudüs, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Gelecek Pazartesi öğle vakti, Arap partilerinin başkanlarının Yüksek Komiser hazretleriyle görüşmesi için belirlendi. Partilerin temsilcileri bu görüşmede ülkenin taleplerini içeren muhtırayı ona teslim edecek. (Çevirmenin notu: 25 Kasım 1935’te verilen muhtıra, Yahudi göçünün durdurulması, toprak satışının yasaklanması ve demokratik bir hükümet kurulması isteklerini içeriyordu.)",
+       "en": "Jerusalem, 21 November – From Falastin’s special correspondent – Noon next Monday has been fixed for the heads of the Arab parties to meet His Excellency the High Commissioner. At the meeting the parties’ representatives will hand him the memorandum they have drawn up with the country’s demands. (Translator’s note: the memorandum, presented on 25 November 1935, demanded an end to Jewish immigration, a ban on land sales and the establishment of democratic government.)"
+      }
+     ]
+    },
+    {
      "no": 5,
      "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s5.jpg",
      "satirlar": [
@@ -3434,6 +4542,659 @@
        "tip": "metin",
        "tr": "Filistin Resmî Gazetesi (el-Vekayi‘ el-Filistiniyye), Nablus, Nasıra ve Gazze kazalarındaki polis müdür vekillerinin ilanlarını yayımladı. İlanlarda, toplantı ya da gösteri düzenlemek isteyenlerin belirlenen tarihten en az üç gün önce izin için başvurmaları isteniyor.",
        "en": "The Palestine Gazette published notices by the acting district police superintendents of Nablus, Nazareth and Gaza, requiring anyone who wishes to organise meetings or demonstrations to apply for a permit no less than three days before the date set."
+      }
+     ]
+    },
+    {
+     "no": 6,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s6.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "حوادث واخبار محلية",
+       "tr": "Yerel olaylar ve haberler",
+       "en": "Local events and news"
+      },
+      {
+       "tip": "alt",
+       "ar": "الهجرة اليهودية وتشدد القناصل",
+       "tr": "Yahudi göçü ve konsoloslukların sıkılığı",
+       "en": "Jewish immigration and the consuls’ strictness"
+      },
+      {
+       "tip": "alt",
+       "ar": "هجرة الشيوعيين! · الى فلسطين طبعا!",
+       "tr": "Komünistlerin göçü! · Elbette Filistin’e!",
+       "en": "Immigration of communists! · To Palestine, of course!"
+      },
+      {
+       "tip": "alt",
+       "ar": "حادث القتل في تل ابيب · هياج البحر",
+       "tr": "Tel Aviv’deki cinayet · Dalgalı deniz",
+       "en": "The murder in Tel Aviv · Rough seas"
+      },
+      {
+       "tip": "manset",
+       "ar": "الزعيم هتلر في بلدية القدس",
+       "tr": "Önder Hitler Kudüs Belediyesi’nde",
+       "en": "Leader Hitler in the Jerusalem Municipality"
+      },
+      {
+       "tip": "alt",
+       "ar": "بين المعرض اليهودي واعطاء مقاولة لالماني",
+       "tr": "Yahudi fuarı ile bir Alman’a verilen ihale arasında",
+       "en": "Between the Jewish fair and a contract given to a German"
+      },
+      {
+       "tip": "alt",
+       "ar": "بيع ملابس، جاكتات، بدلات",
+       "tr": "Giysi, ceket ve takım elbise satışı",
+       "en": "Sale of clothes, jackets and suits"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 6",
+       "en": "Falastin, 22 November 1935 · Page 6"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yerel olaylar ve haberler",
+       "en": "Local events and news"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yahudi göçü ve konsoloslukların sıkılığı",
+       "en": "Jewish immigration and the consuls’ strictness"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudi gazetelerine göre İngiltere’nin Polonya’daki konsolosları, Filistin’i gezmek isteyen Yahudilere karşı sıkı davranmaya başladı ve onlara pek çok zorluk çıkarıyor. Bunların arasında 70 sterlinlik mali teminat ve gezginin Filistin’de üç aydan fazla kalmayacağını, gezi süresinin uzatılmasını ve Filistin hükümetinden orada kalma izni istemeyeceğini taahhüt ettiği bir senet imzalaması var. (Çevirmenin notu: «Turist» vizesiyle gelip kalanlar, kotanın dışından yapılan göçün başlıca yollarındandı.)",
+       "en": "According to the Jewish papers, Britain’s consuls in Poland have begun to be strict with Jews wishing to tour Palestine and are putting many difficulties in their way, among them a financial guarantee of 70 pounds and the signing of a bond in which the tourist undertakes not to stay in Palestine more than three months, not to ask for an extension of the visit and not to ask the Palestine government for leave to remain. (Translator’s note: “tourists” who stayed on were one of the main routes of immigration outside the quota.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Komünistlerin göçü!",
+       "en": "Immigration of communists!"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudi Ajansı önümüzdeki altı ayın resmî göç çizelgesinden bin göç sertifikası aldı. HaYarden, çizelgenin geri kalanının verilmesinin dünyadaki bugünkü durum yüzünden ertelendiğini yazıyor. Yüksek Komiser’in Londra’dayken Ajansa yalnızca bin sertifika verilmesini emrettiği söylentileri var. Yine söylendiğine göre Yüksek Komiser yolculuğundan önce, Yahudi Ajansı’na verilen göç sertifikalarıyla Filistin’e giren komünistlerin adlarını toplayıp Sömürgeler Bakanlığı’na sundu. Konu incelendikten sonra, Yahudi Ajansı’nın sertifikaları alırken bunlarla hiçbir komünisti ülkeye sokmaması şartı konmasına karar verildi. Hükümet ile Ajans arasında bu konuda görüşmeler sürüyor; Weizmann da araya girdi, ama hükümet görüşünde ısrarlı.",
+       "en": "The Jewish Agency has received one thousand immigration certificates from the official schedule for the next six months. HaYarden says the rest of the schedule has been held back because of the present situation in the world. There are rumours that the High Commissioner, while in London, ordered that only one thousand certificates be given to the Agency. It is also said that before his journey the High Commissioner collected the names of communists who had entered Palestine on certificates granted to the Jewish Agency and presented them to the Colonial Office. After study it was decided to require the Agency, on receiving certificates, not to bring in any communist with them. Negotiations are going on between the government and the Agency on this; Weizmann has intervened, but the government holds to its view."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Elbette Filistin’e!",
+       "en": "To Palestine, of course!"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudilere yönelik baskı son zamanlarda Almanya’dan Polonya’ya geçti. Son iki günde orada Yahudilere karşı en büyük kötülüklerin habercisi olan birkaç saldırı oldu. Siyonist dernekler Polonya halkına bu saldırıları durdurmalarını isteyen bir bildiri yayımlamaya karar verdi. Varşova’da kurulan bir Nazi derneği de Milletler Cemiyeti’ne bir muhtıra göndererek Yahudilerin Polonya’dan çıkarılmasını ve göç edecekleri bir yurt bulunmasını istedi. (Çevirmenin notu: Başlık gazetenin acı alaycılığıdır: Avrupa’da kovulan Yahudilerin yönlendirildiği yer Filistin’dir.)",
+       "en": "Persecution of the Jews has lately moved from Germany to Poland. In the last two days several attacks on Jews took place there, portending the gravest evils. The Zionist societies decided to issue a statement to the people of Poland asking them to stop these attacks. A Nazi society founded in Warsaw sent a memorandum to the League of Nations asking that the Jews be expelled from Poland and a homeland found for them to emigrate to. (Translator’s note: the headline is the paper’s bitter irony: Palestine is where Jews driven out of Europe are being sent.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Deli hırsız kız",
+       "en": "The mad thief"
+      },
+      {
+       "tip": "metin",
+       "tr": "İngiliz yargıç, hırsızlıkla suçlanan Meryem Paşat adlı Yahudi kızın tutukluluk süresini uzattı. Kızın aklında bir «bozukluk» olduğu anlaşıldı; bir inceleme kuruluna gösterilecek.",
+       "en": "The British judge extended the detention of a Jewish girl named Miriam Pashat, accused of theft. It turned out that her mind is “disturbed”, and she will be examined by a committee."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yahudi dolandırıcı",
+       "en": "A Jewish swindler"
+      },
+      {
+       "tip": "metin",
+       "tr": "İngiliz yargıç dün Aşer Karlinski’yi, Frankel adlı bir Yahudiyi dolandırmaktan on sterlin para cezasına ya da bir ay hapse mahkûm etti. Karlinski ona İsrail Ulusal Bankası’na 180 sterlinlik bir çek vermişti, oysa o bankada hiç parası yoktu. (Çevirmenin notu: Banka adı baskıda böyle; büyük olasılıkla Anglo-Palestine Bank kastediliyor.)",
+       "en": "Yesterday the British judge sentenced Asher Karlinsky to a fine of ten pounds or a month in prison for swindling a Jew named Frankel, to whom he gave a cheque for 180 pounds on the Israelite National Bank, though he had no money in that bank. (Translator’s note: the bank’s name is printed thus; the Anglo-Palestine Bank is probably meant.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Tel Aviv’deki cinayet",
+       "en": "The murder in Tel Aviv"
+      },
+      {
+       "tip": "metin",
+       "tr": "Öğrendiğimize göre merhum Hüsnü Efendi Ganim’in Tel Aviv’de öldürülmesine ilişkin soruşturma, failleri bulmak üzere. Polis köpekleri cesedin yanında bulunan izi sürdü, deniz kıyısı boyunca yürüyüp Belabse çarşısına ulaştı. Polis o çarşıya dağılıp aramaya başladı ve önceki günden beri kapalı olan bir berber dükkânı buldu. Dükkân sahibinin maktulle ilişkisi ve dostluğu olduğu ortaya çıktı. Soruşturmadan maktulün Salı gecesi Yafa’daki eğlence yerlerinden birinde olduğu, saat ona kadar orada kalıp iki arkadaşıyla birlikte çıktığı da anlaşıldı.",
+       "en": "We learn that the inquiry into the killing of the late Husni Effendi Ghanim in Tel Aviv is close to finding the culprits. The police dogs followed the trail found near the body along the seashore until they reached the Balabsa market. The police spread through that market searching, and found a barber’s shop closed since the day before yesterday. Its owner turned out to have had dealings and a friendship with the victim. The inquiry also showed that on Tuesday night the victim was in one of Jaffa’s night spots, stayed there until about ten o’clock and left with two of his friends."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Dalgalı deniz",
+       "en": "Rough seas"
+      },
+      {
+       "tip": "metin",
+       "tr": "Dün deniz çok dalgalandı. Bu yüzden Yafa açıklarında demirli Maria, Stalheim, Wabzabron, Sarmashia, Carol Dorian ve Kana vapurları ile bazı yelkenli gemiler tehlikeden korunmak için kıyıdan uzaklaşıp açık denize çıkmak zorunda kaldı. Dalgalar yüzünden liman işlerinin hepsi durdu, ama turunçgil sandıklarının şehirden depolara taşınması sürdü. Dün öğle vakti Fransız vapuru Mariette Pacha 200 Yahudi göçmenle geldi; dalgalar yüzünden Yafa’da duramadı ve Hayfa limanına doğru yoluna devam etti. (Çevirmenin notu: Gemi adlarının bir kısmı baskıda bozuk; okunabildiği kadarıyla verildi.)",
+       "en": "The sea was very rough yesterday. It forced the steamers anchored off Jaffa, the Maria, Stalheim, Wabzabron, Sarmashia, Carol Dorian and Kana, and some sailing vessels, to move away from the shore into the open sea to be safe from danger. All harbour work stopped because of the waves, but the carrying of citrus boxes from the town to the stores went on. At noon yesterday the French steamer Mariette Pacha arrived with 200 Jewish immigrants; because of the waves she could not stop at Jaffa and went on to the port of Haifa. (Translator’s note: some ships’ names are blurred in the print and are given as far as they can be read.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "el-İrfan dergisi",
+       "en": "Al-Irfan magazine"
+      },
+      {
+       "tip": "metin",
+       "tr": "Sayda’da çıkan, büyük Arap dergileri arasında önemli bir yeri olan el-İrfan dergisinin kuruluşunun yirmi beşinci yılı vesilesiyle, yurtta ve göçteki ülke edipleri gelecek ilkbaharda derginin gümüş yıldönümünü kutlamak ve sahibi, değerli meslektaşımız üstat Şeyh Arif ez-Zeyn’i onurlandırmak istedi. Komite, bu onurlandırmanın nedenlerini ve el-İrfan’ın kültür uğrundaki mücadelesini anlatan bir bildiri hazırladı.",
+       "en": "On the twenty-fifth anniversary of the founding of al-Irfan, the magazine published in Sidon that holds an important place among the great Arab magazines, writers of the country at home and in the diaspora wished to celebrate its silver jubilee next spring and to honour its owner, our esteemed colleague Sheikh Arif al-Zayn. The committee has prepared a statement on the reasons for this tribute and on al-Irfan’s struggle for culture."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yahudi karı koca",
+       "en": "Two Jewish spouses"
+      },
+      {
+       "tip": "metin",
+       "tr": "Davar’a göre Yahudi bir mühendis Polonyalı Yahudilerden bir kızla evlendi. İki ay sonra mühendis karısından para istemeye başladı; kadın istediğini veremeyince boşanmak istedi. Kadın da ona nafaka davası açtı ve dinî mahkeme ayda sekiz sterlin nafakaya hükmetti. Sonra karısı boşanma istedi; mahkeme ona boşanmanın kocanın huzurunda olması gerektiğini bildirdi. Oysa koca Polonya’ya kaçmıştı.",
+       "en": "Davar says a Jewish engineer married a girl from the Jews of Poland. Two months later the engineer began asking his wife for money, and when she could not give him what he asked he demanded a divorce. She sued him for maintenance and the religious court awarded her eight pounds a month. Then the wife asked for a divorce, and the court told her that a divorce required the presence of the husband, who had fled to Poland."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Davar HaYom’un ne dediğini dinleyin",
+       "en": "Hear what Davar HaYom says"
+      },
+      {
+       "tip": "metin",
+       "tr": "Tel Aviv polisi King George Caddesi’nde sırtında bir çuval taşıyan bir Arabı tutukladı. Çuval arandığında, genellikle dinamit ve hafif el bombası yapımında kullanılan demir parçalarıyla dolu olduğu görüldü. Soruşturmada adamın adının Abdürrauf Halave olduğu ve içlerinden birinin ona çuvalı Yafa’ya taşıması için verdiği ortaya çıktı. Davar HaYom, polis bu davanın ardına düşerse bir silah atölyesi bulacağını ileri sürüyor.",
+       "en": "The Tel Aviv police arrested an Arab on King George Street carrying a sack on his back. When the sack was searched it was found to hold pieces of iron of the kind usually used for making dynamite and light hand grenades. The inquiry showed that his name is Abd al-Rauf Halawa and that one of them had given him the sack to carry to Jaffa. Davar HaYom claims that if the police follow up this case they will discover a weapons workshop."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Ortodoks misakı",
+       "en": "The Orthodox covenant"
+      },
+      {
+       "tip": "metin",
+       "tr": "Arap Ortodoks Gençleri Kongresi’nin kararlaştırdığı Arap misakı fikri Yafa gençleri arasında iyi karşılandı. Pek çok kişi misakı benimsemeye yöneldi; bunlar, kongre bürosunun misakı benimseyenlerin göğsüne takılacak rozetin biçimi hakkındaki kararını bekliyor.",
+       "en": "The idea of the Arab covenant adopted by the Congress of Arab Orthodox Youth has been well received among the young men of Jaffa. Many have come forward to embrace it and are waiting for the decision of the congress bureau on the design of the badge to be worn on the breast of those who embrace the covenant."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Kabahat davaları",
+       "en": "Contravention cases"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yafa Sulh Mahkemesi taşıma kanunlarına aykırılıktan 95 davayı karara bağladı; failler hakkındaki cezalar 25 kuruş ile 8 sterlin arasında değişti. İngiliz yargıç da bu türden on davayı karara bağladı.",
+       "en": "The Jaffa Magistrate’s Court decided 95 cases of breaches of the transport laws; the penalties ranged from 25 piastres to 8 pounds. The British judge also decided ten cases of this kind."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Nişanın bozulması",
+       "en": "An engagement annulled"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yafa’daki Ortodoks kilise mahkemesi, Selim Corci Haddad’ın Bayan Viktorya Yakub el-Gazzavi ile nişanını bozmak için açtığı davaya baktı. Duruşmaya nişanlı kızın kardeşi Kostandi ve vekili İlyas Ahnuh katıldı. Mahkeme davacının gösterdiği nedenleri ve savunmayı inceledikten sonra nişanın bozulmasına, nişanlının verdiği paranın ve mücevherlerin nişanlıya geri verilmesine karar verdi; nişanlının harcadığı elbise ve masraflar ise geri verilmeyecek. (Çevirmenin notu: Davacının soyadı baskıda kısmen okunuyor.)",
+       "en": "The Orthodox ecclesiastical court in Jaffa heard the suit brought by Salim Jurji Haddad asking to annul his engagement to Miss Victoria Yaqub al-Ghazzawi. The fiancée’s brother Constandi and her counsel Elias Akhnukh attended. After examining the plaintiff’s reasons and the defence, the court annulled the engagement and ruled that the fiancée return the money and jewellery the fiancé had given her; the clothes and expenses he had paid for are not to be returned. (Translator’s note: the plaintiff’s surname is only partly legible in the print.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Portakal sandıkları",
+       "en": "Orange boxes"
+      },
+      {
+       "tip": "metin",
+       "tr": "Önceki gün vapurlara yüklenen turunçgil sandıklarının toplamı 18.529 sandığa ulaştı.",
+       "en": "The citrus boxes loaded on to the steamers the day before yesterday totalled 18,529."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Teşekkür",
+       "en": "Thanks"
+      },
+      {
+       "tip": "metin",
+       "tr": "Merhum Hanna Süleyman eş-Şemma’ın oğulları, damatları Astauri ve Isleyh aileleri ile Kudüs’teki eşi, merhumun ölümünde cenazeye katılarak ya da mektup ve telgraf göndererek kendilerine başsağlığı dileyen herkese yürekten teşekkür ediyor ve Allah’tan onlara hiçbir keder göstermemesini diliyor.",
+       "en": "The sons of the late Hanna Suleiman al-Shamma, their in-laws of the Astaouri and Isleih families and his widow in Jerusalem thank with all their hearts everyone who condoled with them on his death, whether by attending the funeral or by sending letters and telegrams, and pray God to spare them all sorrow."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Önder Hitler Kudüs Belediyesi’nde · Yahudi fuarı ile bir Alman’a verilen ihale arasında",
+       "en": "Leader Hitler in the Jerusalem Municipality · Between the Jewish fair and a contract given to a German"
+      },
+      {
+       "tip": "metin",
+       "tr": "Davar HaYom gazetesi, Kudüs Belediyesi’nde geçtiğini ileri sürdüğü bir olay üzerine bir başyazı yayımladı. Şöyle diyordu: «Kudüs Belediyesi, Doğu Fuarı’nın belediye yazışmalarına bir tanıtım damgası konması önerisini reddetti; oysa bu, siyasetin karışmadığı ekonomik bir projedir. Fuarın siyasetle bir ilgisi varsa, bunu bulanlar Araplardır, çünkü ‹memleketimize› büyük faydası olmasına rağmen katılmayı reddettiler -!!- (Çevirmenin notu: Ünlemler Filastin’in; Levant Fuarı, 1934 ve 1936’da Tel Aviv’de düzenlenen ve Arapların boykot ettiği uluslararası fuardır.)",
+       "en": "The newspaper Davar HaYom published an editorial on an incident it claims took place in the Jerusalem Municipality. It said: “The Jerusalem Municipality rejected the proposal of the Levant Fair to put an advertising stamp on the municipality’s letters, although it is an economic project with no politics in it. If the fair has anything to do with politics, it is the Arabs who found it there, since they refused to take part in it despite the great good it brings to ‘our country’ -!!- (Translator’s note: the exclamation marks are Falastin’s. The Levant Fair was the international fair held in Tel Aviv in 1934 and 1936, which the Arabs boycotted.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Bir de başka bir mesele var: Belediye bahçesinin düzenlenmesi bir Hristiyan Alman’a verildi. Alman müteahhit belediyeye 40 sterlin kazandırmış olabilir; ama bu işi Hitler’le karıştırmak ve Filistin’deki Arapların, Araplara da kötülük edip onları yerin dibine indiren (sic.) Almanları savunması gerektiğini ilan etmek çok tuhaf bir şey. Bunu da, başka meselelerde, örneğin otomobil grevinde, bundan daha güçlü bir siyasi kavrayış göstermiş olan avukat Hasan Sıdkı ed-Dacani gönüllü olarak üstlendi. Görünen o ki İsrail düşmanlığı sağlam gözleri bile kör ediyor.» (Çevirmenin notu: «İsrail» burada Davar HaYom’un Yahudi halkı için kullandığı addır.)",
+       "en": "There is another matter too: the laying out of the municipal garden was given to a German Christian. The German contractor may have saved the municipality 40 pounds; but to mix this up with Hitler and to declare that the Arabs in Palestine must defend the Germans, who have also ill-treated the Arabs and brought them down to the lowest depths (sic.), is a very strange thing. And the advocate Hasan Sidqi al-Dajani volunteered for this, he who in other matters, such as the car strike, showed a sharper political sense than this. It seems that hatred of Israel blinds even sound eyes.” (Translator’s note: “Israel” here is Davar HaYom’s name for the Jewish people.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Ardından Davar HaYom dünkü sayısında Kudüs Belediye Başkanı’nın yazısına şu yanıtı yayımladı: «Kudüs Belediyesi’nin düzenleme ihalesinin verilmesi görüşülürken belediye üyelerinden hiçbiri Hitler’i ya da Almanları savunmamız gerektiğini söylemedi. Belki Arap üyelerden biri bu sözü özel bir konuşmada Yahudi üyelerden birine şaka yollu söylemiştir; ama ihalenin Alman’a verilmesinin nedeni bu değildi. Verildi, çünkü onun teklifi ötekilerden ucuzdu ve o, yapı işlerinde ustadır.» ***",
+       "en": "Then Davar HaYom published in yesterday’s issue a reply from the Mayor of Jerusalem to its article: “While the award of the Jerusalem Municipality’s laying-out contract was being discussed, no member of the municipality said that we must defend Hitler or the Germans. Perhaps one of the Arab members said such a sentence to one of the Jewish members by way of a joke in private conversation; but that was not the reason the contract went to the German. It went to him because his offer was cheaper than the others and because he is skilled in building work.” ***"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Bir memur görevden uzaklaştırıldı",
+       "en": "An official suspended"
+      },
+      {
+       "tip": "metin",
+       "tr": "Öğrendiğimize göre hükümet, Göç ve Seyahat Dairesi memurlarından Mr. Laşinski’yi görevden uzaklaştırdı ve hakkındaki soruşturma bitene kadar yerine Mr. Yosef Aharoni’yi atadı.",
+       "en": "We learn that the government has suspended Mr Lashinsky, an official of the Department of Immigration and Travel, and appointed Mr Yosef Aharoni in his place until the inquiry into his case is over."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Depo hırsızlığı",
+       "en": "A store burgled"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kimliği belirsiz hırsızlar Hasan Muhammed el-Abyad’ın deposunun arka kapısının kilitlerini kırıp içeri girdi ve 85 sterlin çaldı. Araştırma sürüyor.",
+       "en": "Unknown thieves broke the locks of the back door of Hasan Muhammad al-Abyad’s store, got in and stole 85 pounds. Inquiries are continuing."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · «Kok yakısı»: Mızrak gibi dimdik durabilir oldum, neredeyse kötürüm olmuşken…",
+       "en": "Advertisement · “Kok plaster”: I could stand straight as a spear after being almost crippled…"
+      },
+      {
+       "tip": "metin",
+       "tr": "Çok şiddetli ağrılar yarım saatte geçiyor… Kok delikli yakısı ile çeşitli hastalıklardan kurtulan binlerce kişiden biri olan Mr. H. Y.’den şu mektup geldi: «Köylerden birindeyken sırtımda şiddetli bir ağrı başladı, ayağa kalkamaz oldum. Tek tedavim olan şifalı Kok yakısına başvurduğumda ne yazık ki elimdekinin bittiğini gördüm. Köydeki tek eczacıda da yoktu. Ertesi günü beklemedim; tren kondüktöründen öğleden sonra bana bir yakı getirmesini istedim. Getirdi, kullandıktan yarım saat sonra dimdik ayağa kalktım, hiç ağrı duymadım ve işime döndüm. Artık bu şaşırtıcı yakıyı evimde de yanımda da bulunduruyorum.» Kok yakısının bu etkisi şaşırtıcıdır, çünkü şifa veren maddelerden yapılmıştır. Her türlü ağrı için şifalı «Kok yakısı»nı bütün eczanelerden tanesi dört kuruşa isteyin ve taklitlerinden sakının. Kartal ve kırmızı daire markalı, delikli orijinal yakıyı isteyin.",
+       "en": "Very severe pains vanish in half an hour… We have received the following letter from Mr H. Y., one of the thousands cured of various ailments by the perforated Kok plaster: “While I was in one of the villages I was seized by a severe pain in my back and could not stand. When I turned to my only remedy, the healing Kok plaster, I found to my misfortune that I had run out, and the only chemist in the village had none. I did not wait for the next day but asked the train conductor to bring me a plaster in the afternoon. He brought it, and half an hour after using it I stood upright, felt no pain and went back to work. I now keep this wonderful plaster with me and at home.” The effect of the Kok plaster is wonderful because it is made of healing ingredients. Ask for the healing “Kok plaster” for all pains at every chemist’s, four piastres each, and beware of imitations. Ask for the original perforated plaster with the eagle and red circle trade mark."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Müflisin alacaklılarına",
+       "en": "Notice · To the creditors of the bankrupt"
+      },
+      {
+       "tip": "metin",
+       "tr": "Remle’den portakal tüccarı Mahmud Halil el-Cemmal’in alacaklıları bilsin ki Yafa Merkez Mahkemesi adı geçen tüccarın iflasını ilan etti; Sayın Dr. Selim Efendi Şehade iflas yargıcı, Yakub Efendi Hanna geçici sendik, Ömer Efendi Haşim de iflas kâtibi olarak atandı. Müflisten alacağı olan herkes belgelerini Yafa Merkez Mahkemesi iflas kalemindeki kâtibe vermeli ve 27 Kasım 1935 Çarşamba günü öğleden sonra saat üçte yapılacak daimi sendik seçimi toplantısına katılmalıdır. Belgeler toplantı tarihinden önce verilmelidir; belgesini vermeyen kimsenin oyu toplantıda kabul edilmeyecektir. Bilginize sunulur. 20 Kasım 1935. İflas kâtibi Ömer Haşim.",
+       "en": "Let the creditors of Mahmud Khalil al-Jammal of Ramla, orange merchant, know that the Central Court of Jaffa has declared the said merchant bankrupt and appointed Dr Salim Effendi Shehadeh as judge in bankruptcy, Yaqub Effendi Hanna as provisional syndic and Omar Effendi Hashem as secretary in bankruptcy. Every creditor of the bankrupt must submit his documents to the secretary at the bankruptcy office of the Central Court of Jaffa and attend the meeting to elect a permanent syndic on Wednesday 27 November 1935 at three in the afternoon. Documents must be submitted before that date; anyone who has not submitted his documents will not be allowed to vote. 20 November 1935. Secretary in bankruptcy, Omar Hashem."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Brasso metal cilası",
+       "en": "Advertisement · Brasso metal polish"
+      },
+      {
+       "tip": "metin",
+       "tr": "Metalleri parlatır. Kullanımı kolaydır; sarıya, pirince ve bakıra kalıcı bir parlaklık verir. Reckitt and Sons Ltd., Hull ve Londra.",
+       "en": "Polishes metals. Easy to use, it gives brass and copper a lasting shine. Reckitt and Sons Ltd., Hull and London."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Orient Sineması, Kudüs · Alman Kolonisi",
+       "en": "Advertisement · Cinema Orient, Jerusalem · German Colony"
+      },
+      {
+       "tip": "metin",
+       "tr": "22 Kasım Cuma’dan 28 Kasım’a kadar: 1) Karmel haftalık haber filmi 2) Fox haftalık haber filmi 3) Kafalkad: eğlence ve güldürü filmi. Her akşam iki seans, 6.45 ve 9’da; Cuma, Cumartesi ve Pazar öğleden sonra saat 3’te yarı fiyatına. (Buster Keaton) Yatak odasında ve banyoda bir konuşma. Gelecek hafta: Kadetten; başrolde Albert Bassermann. (Çevirmenin notu: Film adları baskıdaki Arapça yazımdan çıkarıldı; bazıları belirsiz.)",
+       "en": "From Friday 22 November until the 28th: 1) Carmel weekly newsreel 2) Fox weekly newsreel 3) Kafalkad: an entertainment and comedy film. Two shows every evening, at 6.45 and 9; Friday, Saturday and Sunday afternoon at 3 at half price. (Buster Keaton) A conversation in the bedroom and the bath. Next week: Kadetten, starring Albert Bassermann. (Translator’s note: the film titles are worked out from their Arabic spelling in the print; some are uncertain.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Giysi, ceket ve takım elbise satışı",
+       "en": "Advertisement · Sale of clothes, jackets and suits"
+      },
+      {
+       "tip": "metin",
+       "tr": "Ceketlerden ve çocuk giysilerinden tam bir koleksiyon, son derece düşük fiyatlarla. Amerikan Giyim Şirketi. Kudüs: Storrs Caddesi, Ermeni binası. Hayfa: Yafa Caddesi, Aziz Hayyat binası.",
+       "en": "A full range of jackets and children’s clothes at greatly reduced prices. The American Clothing Company. Jerusalem: Storrs Street, the Armenian building. Haifa: Jaffa Street, Aziz Khayyat building."
+      }
+     ]
+    },
+    {
+     "no": 7,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s7.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "مراقبة البواخر والبضائع في حيفا",
+       "tr": "Hayfa’da vapurların ve malların denetimi",
+       "en": "Ships and goods watched at Haifa"
+      },
+      {
+       "tip": "alt",
+       "ar": "الهجرة اليهودية لا تطبق عليها العقوبات",
+       "tr": "Yaptırımlar Yahudi göçüne uygulanmıyor",
+       "en": "The sanctions do not apply to Jewish immigration"
+      },
+      {
+       "tip": "alt",
+       "ar": "زيادة قوة البوليس في فلسطين",
+       "tr": "Filistin’de polis kuvvetinin artırılması",
+       "en": "Strengthening the police in Palestine"
+      },
+      {
+       "tip": "manset",
+       "ar": "حوادث راح ضحيتها فلسطينيون",
+       "tr": "Filistinlilerin kurban gittiği olaylar",
+       "en": "Incidents with Palestinian victims"
+      },
+      {
+       "tip": "alt",
+       "ar": "ذهبوا للزواج بقبرص فطارت اموالهم",
+       "tr": "Kıbrıs’a evlenmeye gittiler, paraları uçtu gitti",
+       "en": "They went to Cyprus to marry and their money flew away"
+      },
+      {
+       "tip": "manset",
+       "ar": "ابحاث المجلس الزراعي العام",
+       "tr": "Genel Tarım Meclisi’nin görüşmeleri",
+       "en": "Deliberations of the General Agricultural Council"
+      },
+      {
+       "tip": "alt",
+       "ar": "الوفر في الخزينة",
+       "tr": "Hazinede fazla",
+       "en": "The surplus in the treasury"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 7",
+       "en": "Falastin, 22 November 1935 · Page 7"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Hayfa’da vapurların ve malların denetimi",
+       "en": "Ships and goods watched at Haifa"
+      },
+      {
+       "tip": "metin",
+       "tr": "Hayfa, 20 Kasım – Filastin’in özel muhabiri bildiriyor – Hükümet, İtalyan vapurlarını ve İtalyan limanlarından geçen ya da oradan mal getiren öteki vapurları ve taşıdıklarını sıkı biçimde denetlemeye başladı. Vapurların denetimi için özel bir memur atandı ve malların türünü ve kaynağını kaydetmek için özel bir defter hazırlandı. (Çevirmenin notu: Milletler Cemiyeti’nin İtalya’ya uyguladığı yaptırımlar 18 Kasım 1935’te yürürlüğe girmişti.)",
+       "en": "Haifa, 20 November – From Falastin’s special correspondent – The government has begun to watch closely Italian steamers, and other steamers that call at Italian ports or bring goods from them, and what they carry. A special official has been appointed to watch the steamers and a special register prepared to record the kinds of goods and their origin. (Translator’s note: the League of Nations sanctions on Italy came into force on 18 November 1935.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Yaptırımlar Yahudi göçüne uygulanmıyor",
+       "en": "The sanctions do not apply to Jewish immigration"
+      },
+      {
+       "tip": "metin",
+       "tr": "Hayfa – Bu gece Gerusalemme vapuru 187 Yahudi göçmenle geldi. İtalyan vapurlarıyla yapılan Yahudi göçüne yaptırımların uygulanmadığı anlaşılıyor. (Çevirmenin notu: Gemi adı baskıda «el-Sitina» gibi okunuyor; Trieste–Hayfa hattında göçmen taşıyan İtalyan gemisi Gerusalemme olmalı.)",
+       "en": "Haifa – The steamer Gerusalemme arrived tonight with 187 Jewish immigrants. It appears that the sanctions do not apply to Jewish immigration on Italian steamers. (Translator’s note: the ship’s name is printed as something like “al-Sitina”; it is probably the Gerusalemme, an Italian ship carrying immigrants on the Trieste–Haifa line.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Deniz mayını taşımacılığında hareketlilik",
+       "en": "Brisk movement of naval mines"
+      },
+      {
+       "tip": "metin",
+       "tr": "Hayfa – Deniz manevraları her gün sürüyor. Mayınlar doldurulduktan sonra depolardan donanmanın yanında demirli iki gemiye taşınıyor. Son iki günde mayın taşımacılığının çok hızlandığı görülüyor.",
+       "en": "Haifa – Naval manoeuvres go on every day. Mines are being carried from the stores, after being filled, to the two ships moored beside the fleet. The movement of mines has clearly picked up a great deal in the last two days."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Filistin’de polis kuvvetinin artırılması",
+       "en": "Strengthening the police in Palestine"
+      },
+      {
+       "tip": "metin",
+       "tr": "Manda hükümeti, ödenekleri yıllık genel bütçenin yaklaşık üçte birini yutmasına rağmen, mevcut polis kuvvetini yeterli bulmuyor gibi görünüyor. Güvenilir bir kaynaktan öğrendiğimize göre Sömürgeler Bakanlığı Genel Güvenlik Dairesi’nin ödeneklerine 200 bin sterlin eklenmesine karar verdi. Yetkililerin bu (cılız) meblağın nasıl dağıtılacağı konusunda anlaşamadığı söyleniyor: kimi maaşların artırılmasını, kimi kuvvetin sayısının artırılmasını istiyor; ama iki taraf meblağın iki planı birlikte uygulamak için kullanılmasında anlaşabilir. İngilizlerin maaş artışından aslan payını alacaklarını söylersek gerçeği aşmış olmayız; zaten Genel Güvenlik Dairesi’ndeki İngiliz memurların ödenekleri dairenin bütün ödeneklerinin üçte ikisinden az değil. Bu konuya yeniden döneceğiz. (Çevirmenin notu: «Cılız» sözcüğü gazetenin alaycılığıdır.)",
+       "en": "The Mandate government seems not to find the present police force sufficient, although its allocations swallow about a third of the annual general budget. We learn from a reliable source that the Colonial Office has decided to add 200,000 pounds to the allocations of the Department of Public Security. The officials are said to disagree on how to divide this (paltry) sum: some want salaries raised, others want the force enlarged; but the two sides may agree to use the sum for both plans together. We would not exceed the truth in saying that the English will take the lion’s share of the pay rise, given that the allocations of the English officials in the Department of Public Security are no less than two thirds of the whole department’s. We shall return to this subject. (Translator’s note: “paltry” is the paper’s irony.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Hazinede fazla",
+       "en": "The surplus in the treasury"
+      },
+      {
+       "tip": "metin",
+       "tr": "Yahudi gazetelerine göre hükümet kasasındaki fazla bu yılın sonunda altı buçuk milyon sterline ulaşıyor. Hükümet gelecek yılın bütçesini görüşürken beş milyon sterlinlik daimi bir fazla tutmakla yetinmeye ve geri kalanı Hayfa ile Akabe arasında demiryolu yapımı gibi kamu işlerine harcamaya, bayındırlık dairesinin 219 bin sterlinlik bütçesine de bir milyon 167 bin sterlin eklemeye karar verdi.",
+       "en": "According to the Jewish papers the surplus in the government’s treasury will reach six and a half million pounds at the end of this year. In discussing next year’s budget the government decided to be content with keeping a permanent surplus of five million pounds and to spend the rest on public works, such as building a railway between Haifa and Aqaba, and to add one million 167 thousand pounds to the budget of the public works department, which stands at 219 thousand pounds."
+      },
+      {
+       "tip": "baslik",
+       "tr": "Filistinlilerin kurban gittiği olaylar · Kıbrıs’a evlenmeye gittiler, paraları uçtu gitti",
+       "en": "Incidents with Palestinian victims · They went to Cyprus to marry and their money flew away"
+      },
+      {
+       "tip": "metin",
+       "tr": "Magosa’dan (Kıbrıs) bir mektup aldık. Yazarı, Filistin’den o ülkeye kızlarından biriyle evlenmeye giden erkeklerin başına gelen dolandırıcılık olaylarını anlatıyor; bu erkekler paralarını yitirip eli boş dönmekten başka bir şey kazanmamış, aracılar da onlarla alay edip paralarını almış. Yazar bu türden dört olayı ayrıntılı anlatıyor.",
+       "en": "We have received a letter from Famagusta (Cyprus). Its writer describes cases of fraud that befell men from Palestine who went to that island to marry one of its girls: they gained nothing but the loss of their money and a return empty-handed, while the brokers laughed at them and took their cash. The writer sets out four such cases."
+      },
+      {
+       "tip": "metin",
+       "tr": "Birincisi: Kalonya (Kudüs) köyünden Mahmud Said Esad adında bir genç geldi ve «Eşraf»tan bir kızla nikâh kıydı, sonra gidip karısını pasaportuna kaydettirdi ve onunla yola çıktı. Bir süre sonra ikisi birlikte Kıbrıs’a döndüler; nikâh akdinin geçersiz olduğu ortaya çıktı, çünkü akde onun adı yerine başkasının adı yazılmıştı. Bu dava şimdi polisin elinde. (Çevirmenin notu: «Eşraf», bugün Lefkoşa’nın Arabahmet bölgesi yakınındaki Müslüman mahallesinin adı olabilir; baskıda tırnak içinde.)",
+       "en": "The first: a young man named Mahmud Said Asad came from the village of Qalunya (Jerusalem) and married one of the daughters of “al-Ashraf”, then went and entered his wife in his passport and travelled with her. Some time later the two came back to Cyprus, and it turned out the marriage contract was void, because another man’s name had been written into it instead of his. The case is now in the hands of the police. (Translator’s note: “al-Ashraf” may be the name of a Muslim quarter; it is in quotation marks in the print.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "İkincisi: Remle’nin Naane köyünden Mahmud İsmail es-Seyyid Ahmed adında bir genç buraya geldi ve Limasollu bir kızla nikâh kıydı. Mehri ödedikten sonra kız onunla Filistin’e gitmeyi reddetti; masraflar dışında 25 sterlini yandı.",
+       "en": "The second: a young man from Na‘ana (Ramla) named Mahmud Ismail al-Sayyid Ahmad came here and married a girl from Limassol. After he paid the dowry the girl refused to travel with him to Palestine, and he lost 25 pounds besides his expenses."
+      },
+      {
+       "tip": "metin",
+       "tr": "Üçüncüsü: Yafa kazasına bağlı Salame köyünde oturan Gazzeli bir adam Kıbrıs’a geldi ve Eşraf’tan bir kızla nikâh kıydı. Mehri aracılara ödedikten sonra kız yola çıkmayı reddetti, çünkü aracılar ona yalnızca bir sterlin vermiş, gerisini yemişlerdi. Adam onu boşadı ve ülkesine döndü. Kadın da şer‘i haklarını istemek için ona dava açtı.",
+       "en": "The third: a man from Gaza living in the village of Salama in the district of Jaffa came to Cyprus and married a girl of al-Ashraf. After he paid the dowry to the brokers the girl refused to travel, because the brokers had given her only one pound and eaten the rest. He divorced her and went back to his country, and she (the wife) brought a suit against him claiming her lawful rights."
+      },
+      {
+       "tip": "metin",
+       "tr": "Dördüncüsü: Kubeybe köyünden Şeyh Abdülfettah Muhammed el-Hatib geldi, bir kızla nişanlandı ve dokuz sterlinlik mehri peşin ödedi. Ardından kız onu koca olarak kabul etmeyi reddetti; nedenini bilmiyorum, ama oyunun aracıların anlaşmasıyla oynandığı söyleniyor.",
+       "en": "The fourth: Sheikh Abd al-Fattah Muhammad al-Khatib came from the village of Qubeiba, became engaged to a girl and paid the dowry of nine pounds in advance. Then she refused to accept him as husband. I do not know why, but it is said the trick was played with the brokers’ connivance."
+      },
+      {
+       "tip": "metin",
+       "tr": "Bunlar yazarın mektubunda andığı dört olaydır; kuşkusuz başka olaylar da var, kurbanları akranlarının ve dostlarının alayından çekindikleri için gizlemişlerdir. Pek çok kişi, Kıbrıslı kadınlarla evlenenlerin Filistin’e geldikten sonra başına gelen, kimsenin hoşnut olmayacağı biçimde sonuçlanan pek çok olayı biliyor. Bu olayların hepsi, ülkelerinin kızlarını bırakıp yabancı kadınlara sığınanlar için bir ders ve öğüt olamaz mı? Babalar da mehirlerde aşırı gidip gençleri kızlarıyla evlenmekten caydırmalarının sonucunu düşünmüyorlar mı??",
+       "en": "These are the four cases the writer mentions in his letter; no doubt there are others that the victims have hidden for fear of the mockery of their peers and friends. Many people know of numerous cases that befell men married to Cypriot women after they came to Palestine and ended in a way that pleased no one. Are not all these cases a lesson and a warning to those who leave the girls of their own country and turn to foreign women? And do the fathers not consider the result of their excess in dowries, which turns young men away from marrying their daughters??"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Genel Tarım Meclisi’nin görüşmeleri",
+       "en": "Deliberations of the General Agricultural Council"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kudüs, 21 Kasım – Filastin’in özel muhabiri bildiriyor – Matbuat Bürosu bugün şu bildiriyi yayımladı: Genel Tarım Meclisi otuzuncu toplantısını dün Tarım ve Ormancılık Dairesi’nde yaptı ve meclise bağlı olarak geçen Nisan’da, köylerde emlak vergisi kanununun uygulanmasını incelemek üzere kurulan bir alt komitenin önerdiği değişiklikleri görüştü. Bazı bölgelerde köy yollarının yapımı ve onarımı yüzünden doğan mali yükün görüşülmesinden sonra, bu sorunu incelemek ve köy bölgelerinde yolların yapımını ve onarımını kolaylaştırmak için yapılabilecekler hakkında meclise öneriler sunmak üzere bir alt komite kurulmasına karar verildi. Söz konusu alt komite Cemil Efendi eş-Şava, Şeyh Mustafa el-Hayri, Mr. Harry Vitales ve Mr. M. Smilansky’den oluştu.",
+       "en": "Jerusalem, 21 November – From Falastin’s special correspondent – The Press Bureau issued the following statement today: The General Agricultural Council held its thirtieth meeting yesterday at the Department of Agriculture and Forests and considered amendments to the rural property tax law proposed by a sub-committee of the council set up last April to study the application of that law. After discussion of the financial burdens arising in some areas from the building and repair of village roads, it was decided to form a sub-committee to examine this question and to submit to the council recommendations on what could be done to make building and repairing roads in rural areas easier. The sub-committee is made up of Jamil Effendi al-Shawwa, Sheikh Mustafa al-Khayri, Mr Harry Vitales and Mr M. Smilansky."
+      },
+      {
+       "tip": "metin",
+       "tr": "Meclise, Tarım Danışmanı Mr. Stockdale’in geçen Nisan’da Filistin’i ziyareti üzerine Sömürgeler Bakanı’na sunduğu raporun geldiği ve üyelere dağıtılacağı bildirildi. Görüşülen öteki konular arasında meyve muayene servisinin gelir ve giderlerinin hesabı ile tahılları temizlemek ve sınıflandırmak için makine alınması vardı. Gündemdeki kanun tasarısında önerilen değişiklikleri incelemeyi tamamlamaya ve görüşülmeyen başka çeşitli konulara vakit kalmadığından, gündemi bitirmek için 9 Aralık 1935 Pazartesi günü bir toplantı daha yapılmasına karar verildi.",
+       "en": "The council was told that the report of Mr Stockdale, Agricultural Adviser to the Secretary of State for the Colonies, on his visit to Palestine last April had arrived and would be circulated to members. Among the other matters discussed were the accounts of the fruit inspection service and the purchase of machines for cleaning and grading grain. As there was not enough time to finish examining the proposed amendments to the property tax law and other matters on the agenda, it was decided to hold another meeting on Monday 9 December 1935 to complete the agenda."
+      },
+      {
+       "tip": "metin",
+       "tr": "Katılanlar: Tarım ve Ormancılık Müdür Yardımcısı Mr. F. G. Tyler başkan; Rafi Bey el-Fahum, Şeyh Mustafa el-Hayri, Mr. L. Cohen, Abdürrahim Efendi en-Nablusi, Peder Sakit, Cemil Efendi eş-Şava, Mr. Smilansky, Mr. H. Vitales, Mr. Z. Volcani, Mr. J. Wacker, Mr. H. Wilson (kâtip) ve Mr. Brown. Toplantıya üye olmayanlardan Mr. R. A. Williams ve Mr. A. Pollard katıldı. (Çevirmenin notu: Bazı adlar baskıdaki Arapça yazımdan çıkarıldı.)",
+       "en": "Present: Mr F. G. Tyler, Deputy Director of Agriculture and Forests, in the chair; Rafi Bey al-Fahum, Sheikh Mustafa al-Khayri, Mr L. Cohen, Abd al-Rahim Effendi al-Nabulsi, Father Sakit, Jamil Effendi al-Shawwa, Mr Smilansky, Mr H. Vitales, Mr Z. Volcani, Mr J. Wacker, Mr H. Wilson (secretary) and Mr Brown. Non-members present were Mr R. A. Williams and Mr A. Pollard. (Translator’s note: some names are worked out from their Arabic spelling in the print.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Sağır ve dilsizler için tören",
+       "en": "A celebration for the deaf and dumb"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kudüs – Bugün öğleden sonra Hükümet Konağı’nda sağır ve dilsizler için yaklaşık yüz kişinin katıldığı bir tören yapıldı.",
+       "en": "Jerusalem – A celebration for the deaf and dumb was held this afternoon at Government House, attended by about a hundred people."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Turunçgillerinizi İngiltere içlerine ve kuzeyine gönderin",
+       "en": "Advertisement · Ship your citrus to inland and northern England"
+      },
+      {
+       "tip": "metin",
+       "tr": "John Gilroy (Wisbech) firması aracılığıyla: size en iyi sonuçları garanti eder ve turunçgillerinize olabildiğince az masrafla hizmet eder. Bu yeni firmayı bir kez deneyin; emeğinizin boşa gitmediğinden emin olun ve beklenen yüksek fiyatları alın. Yafa’daki acenteye başvurun: Arthur Rock, Bustros binası – Telefon 987 – P.K. 97. (Çevirmenin notu: Firma ve liman adları Arapça yazımdan çıkarıldı.)",
+       "en": "Through the firm of John Gilroy (Wisbech): it guarantees you the best results and handles your citrus at the lowest possible cost. Try this new firm once and be sure your labour is not wasted, and obtain the high prices you hope for. Apply to the agent in Jaffa: Arthur Rock, Bustros building – Telephone 987 – P.O. Box 97. (Translator’s note: the firm’s and port’s names are worked out from their Arabic spelling.)"
+      },
+      {
+       "tip": "metin",
+       "tr": "Turunçgillerinizi İngiltere içlerine ve kuzeyine yeni vapur hattıyla gönderin. Acentesi Yafa’da Arthur Rock. Bu hattın vapurları doğrudan Yafa limanından Wisbech limanına gider; havalandırma şartlarına uygun hızlı vapurlardır. Yafa’daki acentelere başvurun: Bustros binası – Telefon 987 – P.K. 79.",
+       "en": "Ship your citrus to inland and northern England by the new steamer line. Its agents in Jaffa: Arthur Rock. The steamers of this line sail direct from the port of Jaffa to the port of Wisbech; they are fast ships meeting the ventilation requirements. Apply to the agents in Jaffa: Bustros building – Telephone 987 – P.O. Box 79."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Milli Otobüs Şirketi · «Kuzey Ekspresi»",
+       "en": "Advertisement · The National Bus Company · “The Northern Express”"
+      },
+      {
+       "tip": "metin",
+       "tr": "Kuzey Otobüs Şirketi, Yafa’dan Hayfa’ya, Taberiye’ye ve Şam’a düzenli seferler başlattığını bütün halka duyurmaktan onur duyar. Yafa–Hayfa yolunun kötü olduğu bilinirdi; şimdi ise yolun tamamı asfaltlandı ve çok iyi durumda. Usta şoförlerin kullandığı bu lüks otobüslerle yolculuk, yolcunun büyüleyici doğal manzaralar gördüğü güzel bir gezintidir. Mesafe kısaldı, sefer saatleri düzene girdi. Yafa’dan Hayfa’ya: sabah 7’den öğleden sonra 3’e kadar iki saatte bir bir otobüs; Şam’a giden otobüs ise Yafa’dan sabah 8’de kalkar.",
+       "en": "The Northern Bus Company is honoured to announce to the public that it has started regular services from Jaffa to Haifa, Tiberias and Damascus. The Jaffa–Haifa road was known to be bad; now the whole road has been asphalted and is very good. Travel in these luxurious buses, driven by skilled drivers, is a lovely outing in which the passenger sees captivating natural scenery. The distance has shrunk and the times are regular. Jaffa to Haifa: a bus every two hours from 7 in the morning to 3 in the afternoon; the bus for Damascus leaves Jaffa at 8 in the morning."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Lux soğuk suda hızla ve güvenle yıkar!",
+       "en": "Advertisement · Lux washes quickly and safely in cold water!"
+      },
+      {
+       "tip": "metin",
+       "tr": "«Soğuk suda yalnızca 5 dakika yeter.» Lux, işi çok olan modern kadın için bir nimettir; çünkü bütün iç çamaşırları, ipekli ve ince giysileri Lux sayesinde soğuk suda iyice yıkanabilir. Sıcak suya gerek yok! Lux soğuk suda çabucak erir. Lux’ün temizleyici köpüğü ince giysilere hiçbir zarar vermeden yıkar ve temizler. Lux zararlı madde içermez, ellerinizi yumuşak ve pürüzsüz tutar. 1 – Bir litre soğuk suya bir kaşık Lux koyun. 2 – Giysiyi Lux köpüğünde sıkın. 3 – Giysiyi temiz suda iyice çalkalayın, bu kadar. Bütün şık giysileriniz için kullanın. Lever Brothers Limited, Port Sunlight, İngiltere.",
+       "en": "“Needs only 5 minutes in cold water.” Lux is a blessing for the busy modern woman, because all her underclothes, silks and fine garments can be washed thoroughly in cold water thanks to Lux. No need for hot water! Lux dissolves quickly in cold water. The cleansing lather of Lux washes and cleans fine garments without any harm. Lux contains no harmful substances and keeps your hands soft and smooth. 1 – Put a spoonful of Lux in a litre of cold water. 2 – Squeeze the garment in the Lux lather. 3 – Rinse the garment well in clean water, and that is all. Use it for all your elegant clothes. Lever Brothers Limited, Port Sunlight, England."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · el-Ahrar Lokantası",
+       "en": "Advertisement · al-Ahrar Restaurant"
+      },
+      {
+       "tip": "metin",
+       "tr": "Hayfa – Hisbe Caddesi, polis dairesinin yanı. Pazar sabahı modern biçimde açılıyor; mükemmel yemek, olağan fiyatlar, tam temizlik, aylık aboneliklere büyük indirim.",
+       "en": "Haifa – Hisba Street, next to the police station. Opens on Sunday morning in modern style; excellent food, ordinary prices, complete cleanliness, a large discount on monthly subscriptions."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · En son modaya uygun kuaför salonu · Yafa’da yalnızca hanımlar için açıldı",
+       "en": "Advertisement · A hairdressing salon in the latest fashion · Opened in Jaffa for ladies only"
+      },
+      {
+       "tip": "metin",
+       "tr": "Sahibesi: Theresia Rauch. Bu, makineleri ve elektrikli aletleriyle eşi bulunmayan modern bir güzellik salonudur; başlıca uzmanlıkları saç kesimi, ütüsü, maşası ve yıkanmasıdır. Yafa böyle bir salona muhtaçtı; Viyana’da on beş yıl güzellik sanatıyla uğraşmış uzman bir hanım çalışıyor ve yalnızca genç kızları ve hanımları müşteri olarak kabul ediyor. Bu salonu bir kez ziyaret edin, hanımların saç kesimi sorununun sona erdiğini göreceksiniz. Salon Nüzhe Caddesi ile Kudüs Caddesi’nin kavşağında, Yafa’da İlyas ve Halil el-Bahu binasında.",
+       "en": "Proprietress: Theresia Rauch. This is a modern beauty salon without equal, with its machines and electrical apparatus; its chief specialities are cutting, ironing, curling and washing hair. Jaffa needed such a salon; an expert lady who practised the art of beauty in Vienna for fifteen years works here and accepts only young ladies and ladies as clients. Visit this salon once and you will find that the problem of ladies’ haircutting is over. The salon is at the corner of Nuzha Street and Jerusalem Street, in the building of Elias and Khalil al-Bahu, Jaffa."
+      }
+     ]
+    },
+    {
+     "no": 8,
+     "gorsel": "site/tarihce-gazete/falastin-1935-11-22-s8.jpg",
+     "satirlar": [
+      {
+       "tip": "manset",
+       "ar": "لقد انقضت سوق اولمبيا مرة اخرى فهل تعلمت شيئا منها؟",
+       "tr": "Olympia Fuarı bir kez daha bitti; bir şey öğrendiniz mi?",
+       "en": "The Olympia show is over again; did you learn anything?"
+      },
+      {
+       "tip": "alt",
+       "ar": "تعلمت ما كنت اعرفه قبلا من ان موريس احسن من غيره",
+       "tr": "Morris’in ötekilerden iyi olduğunu öğrendim",
+       "en": "I learned that Morris is better than the rest"
+      },
+      {
+       "tip": "manset",
+       "ar": "الاذاعة اللاسلكية المصرية",
+       "tr": "Mısır Telsiz Yayını",
+       "en": "Egyptian Wireless Broadcasting"
+      },
+      {
+       "tip": "alt",
+       "ar": "اعظم دواء للصداع",
+       "tr": "Baş ağrısının en büyük ilacı",
+       "en": "The greatest remedy for headache"
+      },
+      {
+       "tip": "alt",
+       "ar": "الاحسن والارخص",
+       "tr": "En iyisi ve en ucuzu",
+       "en": "The best and the cheapest"
+      }
+     ],
+     "tam": [
+      {
+       "tip": "kunye",
+       "tr": "Filastin, 22 Kasım 1935 · Sayfa 8",
+       "en": "Falastin, 22 November 1935 · Page 8"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Olympia Fuarı bir kez daha bitti; bundan bir şey öğrendiniz mi? Daha önce bilmediğimi öğrendim: Morris ötekilerden daha iyidir",
+       "en": "Advertisement · The Olympia show is over once more; did you learn anything from it? I learned what I did not know before: Morris is better than the rest"
+      },
+      {
+       "tip": "metin",
+       "tr": "«Olympia Fuarı» bir kez daha geldi ve geçti; iki gerçek ortaya çıktı: otomobil alıcıları arasında İngilizler en akıllı alıcılardır ve Morris otomobilleri bu uzmanlıkla yapılmış olduklarından bütün rakip modelleri geride bırakır. Bu iki gerçeği sabit rakamlar doğruluyor: Morris satış rakamları İngiliz otomobil sanayisinin ulaştığı en yüksek düzeye çıktı. Morris, modern otomobil. Acenteler: Kudüs, Freeman ve Ortakları, Jolian yolu, P.K. 35, telefon 61; Hayfa, Lenbi Caddesi, P.K. 408, telefon 1241; Tel Aviv, Liebrecht ve Gutmann, Yafa Caddesi 76, P.K. 1189, telefon 1609. (Çevirmenin notu: Olympia, Londra’daki yıllık otomobil fuarıdır. Ad ve adresler baskıdaki Arapça yazımdan çıkarıldı.)",
+       "en": "“The Olympia show” has come and gone once more, and two facts emerged: among buyers of cars the British are the shrewdest, and Morris cars, built with this expertise, outstrip every rival model. These two facts are confirmed by firm figures: Morris sales have reached the highest level the British motor industry has attained. Morris, the modern car. Agents: Jerusalem, Freeman & Co., Julian’s Way, P.O. Box 35, telephone 61; Haifa, Allenby Street, P.O. Box 408, telephone 1241; Tel Aviv, Liebrecht & Gutmann, 76 Jaffa Road, P.O. Box 1189, telephone 1609. (Translator’s note: Olympia is London’s annual motor show. Names and addresses are worked out from their Arabic spelling in the print.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "Mısır Telsiz Yayını · Cuma 22 Kasım",
+       "en": "Egyptian Wireless Broadcasting · Friday 22 November"
+      },
+      {
+       "tip": "metin",
+       "tr": "Sabah 9: Kur’an-ı Kerim, Şeyh Muhammed Ukkaşe. 10.05: Plaklar: «Ya mu‘tedil el-kadd» kasidesi, Şeyh Ali Mahmud; Sevari Müzika Takımı’ndan «Tafrari» marşı, «Celâlet el-Melik», «ed-Dal‘ el-Mısri»; Muhammed Bedevi’den «Rasıd» taksimi (el mızıkası); Muhammed es-Sabban’dan «Taktuka»; Ümmü Gülsüm’den «Muhtar ya nas». 10.35: Hasan Derviş’in solo piyanosu: «Hamidiye Marşı», Hasan Derviş’in bestesi «Nitnit» tangosu, «Ehven en-nefs» faslı. 11: Seyyid Mustafa ve korosu (Marconi kaydı): «el-Âşık», «Filibbi el-katt», «el-Bahriyye». Öğleden sonra 12.30: Plaklar: Ahmed Abdülkadir’den «el-Ganam» monoloğu; Yusuf Şalom’dan «Kâdeni el-heva» (org); Seyyid Mustafa’dan «el-Fecr» monoloğu; Ümmü Gülsüm’den «Kullema yezdad». 1: Muhammed Hasan eş-Şücai orkestrası: «eş-Şerid» marşı, «Ba‘de’l-hisam», «Kasr el-Hamra’da» (doğu tablosu), İbrahim Fevzi’nin «el-Emire» sahne müziği (Şücai düzenlemesi), «ed-Def es-Sini», «Trovatore» (sahne müziği), «Muvelle‘ el-kalb», «Endülüs çiçekleri», «et-Temasil», «İlk aşkım» (tango), «Fi hevak», «Şebabna» (marş). 2.30–2.40: Haber bülteni ve birinci ticaret bülteni. 4.30: Riyad es-Sunbati’nin solo udu (Marconi kaydı): ud taksimi, «Hida‘» adlı tablo. 5: Dinleyicilerin istediği plaklar. 6: Abduh es-Sarüci ve takımının konseri (Marconi kaydı): «Min yekul en cemalek» monoloğu. 6.30: Çocuklara konuşma, Baba Sadık. 7: Haber bülteni. 7.25: İkinci ticaret bülteni. 7.35: Evkaf Nezareti temsilcisi Üstat Abdurrahman el-Cedili’nin ahlak konuşması. 8: Kur’an-ı Kerim, Şeyh Muhammed Rifat. 8.55: Hasan el-Malevani ve takımının konseri: ud taksimi, mukaddime ve keman taksimi, kanun taksimi, leyali ve mevval, Davud Hüsni’nin bestesi «Evan el-vasl» faslı. 9.50: Üstat Fikri Abaza’nın toplumsal konuşması. 10.10: Hasan el-Malevani ve takımının konseri: ud taksimi, müzikli mukaddime, keman taksimi, kanun taksimi, leyali ve mevval, «Ekzibu nefsi» kasidesi. 11: Haber bülteni. (Çevirmenin notu: Program Kahire radyosunundur; parça adları Arapça okunuşlarıyla verildi.)",
+       "en": "9 a.m.: The Holy Qur’an, Sheikh Muhammad Ukasha. 10.05: Records: the qasida “Ya mu‘tadil al-qadd”, Sheikh Ali Mahmud; from the Sawari military band the march “Tafrari”, “Jalalat al-Malik”, “al-Dal‘ al-Masri”; a “Rasid” improvisation (mouth organ) by Muhammad Badawi; “Taqtuqa” by Muhammad al-Sabban; “Mukhtar ya nas” by Umm Kulthum. 10.35: Piano solo by Hasan Darwish: “Hamidiye March”, the tango “Nitnit” composed by Hasan Darwish, the dawr “Ahwan al-nafs”. 11: Sayyid Mustafa and chorus (Marconi recording): “al-Ashiq”, “Filibbi al-qatt”, “al-Bahriyya”. 12.30 p.m.: Records: the monologue “al-Ghanam” by Ahmad Abd al-Qadir; “Kadani al-hawa” (organ) by Yusuf Shalom; the monologue “al-Fajr” by Sayyid Mustafa; “Kullama yazdad” by Umm Kulthum. 1: The orchestra of Muhammad Hasan al-Shuja‘i: the march “al-Sharid”, “Ba‘d al-khisam”, “In the Alhambra” (oriental tableau), “al-Amira”, stage music by Ibrahim Fawzi arranged by al-Shuja‘i, “The Chinese Tambourine”, “Trovatore” (stage music), “Muwalla‘ al-qalb”, “Flowers of Andalusia”, “al-Tamathil”, “My First Love” (tango), “Fi hawak”, “Shababna” (march). 2.30–2.40: News bulletin and first commercial bulletin. 4.30: Oud solo by Riyad al-Sunbati (Marconi recording): oud improvisation, a tableau, “Khida‘”. 5: Records requested by listeners. 6: Concert by Abduh al-Saruji and his ensemble (Marconi recording): the monologue “Min yaqul inn jamalak”. 6.30: Talk to children by Baba Sadiq. 7: News bulletin. 7.25: Second commercial bulletin. 7.35: Moral talk by Professor Abd al-Rahman al-Jadili, representative of the Ministry of Awqaf. 8: The Holy Qur’an, Sheikh Muhammad Rifaat. 8.55: Concert by Hasan al-Malawani and his ensemble: oud improvisation, overture and violin improvisation, qanun improvisation, layali and mawwal, and the dawr “Awan al-wasl” composed by Dawud Husni. 9.50: Social talk by Professor Fikri Abaza. 10.10: Concert by Hasan al-Malawani and his ensemble: oud improvisation, musical overture, violin improvisation, qanun improvisation, layali and mawwal, the qasida “Akdhibu nafsi”. 11: News bulletin. (Translator’s note: this is the Cairo radio programme; titles are given in their Arabic pronunciation.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Hayfa İcra Dairesi: Hüküm yerine getirme ihtarı",
+       "en": "Notice · Haifa Execution Office: Warning to execute a judgment"
+      },
+      {
+       "tip": "metin",
+       "tr": "Dosya no. 2613, 1935 yılı. Hayfalı, ikametgâhı bilinmeyen Süleyman Ahmed Abdülgani’ye: Avukatlar Mr. Kaiserman ile Mr. Kitay’ın müvekkili İbrahim Kolotman lehine Hayfa Sulh Mahkemesi’nin aleyhinize 28.4.1935 tarihinde verdiği hüküm uyarınca, bu daireye 16 Filistin lirası 460 mil ile 13 lira 500 milin 14.2.1935’ten itibaren yasal faizini, bu ihtarın yayımından başlayarak bir ay içinde ödemeniz bildirilir. Ödemezseniz hakkınızda yasal işlem yapılacaktır. Hayfa İcra Memuru.",
+       "en": "File no. 2613, year 1935. To Suleiman Ahmad Abd al-Ghani of Haifa, address unknown: under the judgment given against you by the Haifa Magistrate’s Court on 28.4.1935 in favour of Ibrahim Kolotman, client of the advocates Mr Kaiserman and Mr Kitay, you are notified to pay this office 16 Palestinian pounds 460 mils, with legal interest on 13 pounds 500 mils from 14.2.1935, within one month of the publication of this notice. If you fail to pay, legal proceedings will be taken against you. Haifa Execution Officer."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · En iyisi ve en ucuzu: Rotbart jiletleri",
+       "en": "Advertisement · The best and the cheapest: Rotbart razor blades"
+      },
+      {
+       "tip": "metin",
+       "tr": "Rotbart jiletleri en iyi çelik türlerinden yapılmıştır; her kutudaki her jiletin keskin ve uzun ömürlü olduğu garanti edilir. Her yerde ucuz fiyatla satılır.",
+       "en": "Rotbart blades are made of the finest kinds of steel, and every blade in every box is guaranteed to be sharp and long-lasting. Sold everywhere at low prices."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Ruhsat yenileme",
+       "en": "Notice · Renewal of a licence"
+      },
+      {
+       "tip": "metin",
+       "tr": "1935 tarihli Müskirat Kanunu uyarınca, Safed’deki Yahudi Mahallesi’nde Musa Fadise’nin mülkü olan dükkânımda, içeride ve dışarıda tüketilmek üzere alkollü içki satış ruhsatımın 1936 yılı için yenilenmesini istiyorum. 3.11.1935. Hanna el-Huri.",
+       "en": "Under the Intoxicating Liquors Ordinance of 1935, I apply to renew for the year 1936 my licence to sell spirituous liquors for consumption on and off the premises in my shop in the Jewish Quarter of Safed, the property of Musa Fadisa. 3.11.1935. Hanna al-Khuri."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Butterfly ayakkabı boyası: Ayakkabınızı koruyan cila",
+       "en": "Advertisement · Butterfly boot polish: the polish that protects your shoes"
+      },
+      {
+       "tip": "metin",
+       "tr": "Butterfly Boot Polish, siyah.",
+       "en": "Butterfly Boot Polish, black."
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Karlsburg & Kozenicki: Her sanayi için makineler",
+       "en": "Advertisement · Karlsburg & Kozenicki: machines for every industry"
+      },
+      {
+       "tip": "metin",
+       "tr": "Tel Aviv, Herzl Caddesi 67. Her sanayi için makineler: marangozluk, demircilik, tenekecilik, tornacılık; motorlar, otomatik kaynak makineleri, elektrikli kaynak makineleri, aletler vb. (Çevirmenin notu: Firma adı Arapçada «Karlsburg», Latin harfleriyle «Krezburg» yazılmış.)",
+       "en": "Tel Aviv, 67 Herzl Street. Machines for every industry: carpentry, smithing, tinsmithing, turning; motors, automatic welding machines, electric welding machines, apparatus, etc. (Translator’s note: the firm’s name is spelt “Karlsburg” in Arabic and “Krezburg” in Latin letters.)"
+      },
+      {
+       "tip": "baslik",
+       "tr": "İlan · Baş ağrısının en büyük ilacı: Harikulade Rozina kâğıtları",
+       "en": "Advertisement · The greatest remedy for headache: the wonderful Rozina papers"
+      },
+      {
+       "tip": "metin",
+       "tr": "Baş ağrısını bir anda geçirir, nezleyi ve gribi durdurur, kalbi canlandırır, sinirleri ve mideyi güçlendirir. Tadı gül şerbeti gibi lezzetlidir. Düzinesi 8 kuruş sağ, tanesi 1 kuruş; tüccarlara özel fiyatlar. Filistin’deki eczanelerden ve ilaç depolarından, Kudüs, Hayfa ve Tel Aviv’deki Salmon Levin ve Şatin efendilerin dükkânlarındaki genel depodan ya da doğrudan mucidinden isteyin: İskender Hazbun, kimyager, Tanta, Mısır. (Resimdeki yazı: «Après traitement» – Rozina kâğıtları kullanıldıktan sonra.)",
+       "en": "It cures headache in an instant, stops colds and influenza, revives the heart and strengthens the nerves and the stomach. It tastes as delicious as rose syrup. Price per dozen 8 piastres sagh, one piastre each; special prices for merchants. Ask for it at the pharmacies and drug stores of Palestine and at the general depot in the shops of Messrs Salmon Levin and Shatin in Jerusalem, Haifa and Tel Aviv, or directly from the inventor: Iskandar Hazbun, chemist, Tanta, Egypt. (Text on the picture: “Après traitement” – after using Rozina papers.)"
+      },
+      {
+       "tip": "kunye",
+       "tr": "Filastin Gazetesi Matbaası – Yafa",
+       "en": "Printed at the Falastin Press – Jaffa"
       }
      ]
     }

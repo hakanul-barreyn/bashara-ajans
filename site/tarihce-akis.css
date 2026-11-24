@@ -469,3 +469,8 @@ html.ta-lb-acik{overflow:hidden}
 .ta-kars-nasil b{display:block;font:700 .72rem var(--ta-mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
 .ta-kars-nasil p{margin:0;font:400 .92rem/1.55 var(--ta-sans);color:var(--ta-ink2)}
 .ta-kk.kk-kenar .kk-et{opacity:.75}
+.ta-gz-git{position:sticky;top:var(--ta-ust,64px);z-index:3;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 0;margin:6px 0 10px;background:var(--ta-zemin,#faf8f4);border-bottom:1px solid var(--ta-cizgi)}
+.ta-gz-git span{font:600 .74rem var(--ta-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ta-ink2)}
+.ta-gz-git button{min-width:32px;padding:5px 9px;border:1px solid var(--ta-cizgi);border-radius:2px;background:transparent;color:var(--ta-murekkep);font:600 .82rem var(--ta-sans);cursor:pointer}
+.ta-gz-git button:hover{border-color:var(--ta-murekkep)}
+.ta-gz-sayfa{scroll-margin-top:120px}

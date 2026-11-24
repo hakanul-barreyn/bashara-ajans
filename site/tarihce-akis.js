@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=18").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=19").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -345,9 +345,20 @@
       ust.append(el("span", "ta-kars-et", EN ? "Newspaper · original and translation" : "Gazete · özgün ve çeviri"),
         el("p", "ta-kars-baslik", G.ad + " · " + (EN ? G.tarih_en : G.tarih)));
       f.appendChild(ust);
-      // sayfalar alt alta: her sayfa kendi kaydırıcısı ve altında eksiksiz çevirisiyle
+      // sayfalar alt alta: her sayfa kendi kaydırıcısı ve altında eksiksiz çevirisiyle; üstte sayfaya atlama çubuğu
+      var EK = { 1: "’in", 2: "’nin", 3: "’ün", 4: "’ün", 5: "’in", 6: "’nın", 7: "’nin", 8: "’in", 9: "’un", 10: "’un" };
+      if (G.sayfalar.length > 2) {
+        var git = el("nav", "ta-gz-git"); git.setAttribute("aria-label", EN ? "Jump to page" : "Sayfaya git");
+        git.appendChild(el("span", null, EN ? "Pages:" : "Sayfalar:"));
+        G.sayfalar.forEach(function (S) {
+          var d = el("button", null, String(S.no)); d.type = "button";
+          d.onclick = function () { var h = f.querySelector('[data-gz-sayfa="' + S.no + '"]'); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); };
+          git.appendChild(d);
+        });
+        f.appendChild(git);
+      }
       G.sayfalar.forEach(function (S) {
-        var blok = el("section", "ta-gz-sayfa");
+        var blok = el("section", "ta-gz-sayfa"); blok.dataset.gzSayfa = S.no;
         blok.appendChild(el("h4", "ta-gz-sayfa-no", (EN ? "Page " : "Sayfa ") + S.no));
         var sahne = el("div", "ta-kk-sahne");
         var kutu = el("div", "ta-kk ta-gz-kk");
@@ -367,7 +378,7 @@
         blok.append(sahne, dg);
         if (S.tam && S.tam.length) {
           var ic = el("div", "ta-gz-tam-ic"); ic.lang = EN ? "en" : "tr";
-          ic.appendChild(el("p", "ta-gz-tam-et", EN ? "Full translation of page " + S.no : "Sayfa " + S.no + "’in tam çevirisi"));
+          ic.appendChild(el("p", "ta-gz-tam-et", EN ? "Full translation of page " + S.no : "Sayfa " + S.no + (EK[S.no] || "’in") + " tam çevirisi"));
           S.tam.forEach(function (x) { ic.appendChild(el(x.tip === "baslik" ? "h5" : "p", "ta-gz-t-" + x.tip, EN ? x.en : x.tr)); });
           blok.appendChild(ic);
         }
