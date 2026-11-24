@@ -220,7 +220,7 @@ def _gunler(bas, bit):
 
 
 def istatistik(kok, bas, bit, kaynaklar):
-    K = {k["id"]: k for k in kaynaklar}
+    K = {k["id"]: k for k in kaynaklar if not k.get("dusunce")}   # düşünce kuruluşları basın istatistiğine girmez
     haberler, olaylar = [], []
     for g in _gunler(bas, bit):
         haberler += _oku(os.path.join(kok, "data", "arsiv", g + ".json"), [])

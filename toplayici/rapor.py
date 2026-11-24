@@ -69,6 +69,8 @@ def kirilmalar(haftalar, kelime, esik=10, en_az_n=0.5):
 
 
 def grup(k):
+    if (k or {}).get("dusunce"):
+        return None   # düşünce kuruluşları ve akademik yayınlar basın ölçümlerine girmez
     c = almanak.kamp(k)
     if c in almanak.BOLGE_ICI:
         return "bolge" if k.get("cizgi") != "ik" else None

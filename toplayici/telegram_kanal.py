@@ -192,7 +192,7 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
         adaylar.append(("olay", o.get("son") or "", o, None))
     for h in haberler.values():
         k = kaynaklar.get(h["kaynak"])
-        if (k and k.get("oncelik") and h.get("nitelik") == "analiz" and h.get("ozet_tr") and not h.get("ozet_spot") and h.get("ilgili")
+        if (k and (k.get("oncelik") or k.get("dusunce")) and h.get("nitelik") == "analiz" and h.get("ozet_tr") and not h.get("ozet_spot") and h.get("ilgili")
                 and h["id"] not in kay["haber"]):
             adaylar.append(("analiz", h["tarih"], h, k))
     klasor = os.path.join(kok, "data", "bulten")

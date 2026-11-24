@@ -1,7 +1,7 @@
 // kaynaklar.html sayfasının kodu (güvenlik politikası satır içi kodu yasakladığı için ayrı dosyada)
 (function(){
   const REG=["Filistin","Meşrik","Körfez","Mısır","İran","Yemen","Mağrip","Anadolu-Türkiye","İsrail","İsrail’de muhalif basın","ABD","İngiltere","İspanya","İtalya","Almanya","Fransa","Asya ve diğer"];
-  const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:""};
+  const TUR={resmi:"devlet",grup:"bağlı",bagimsiz:"bağımsız",koop:"kooperatif",ozel:"özel",izle:"",dusunce:"düşünce kuruluşu"};
   const DIL={ar:"Arapça",en:"İngilizce",fr:"Fransızca",tr:"Türkçe",he:"İbranice",es:"İspanyolca",ca:"Katalanca",it:"İtalyanca",de:"Almanca"};
   const CIZ={ad:"Antiemperyalist / dekolonyal",ara:"Ara / ana akım",ik:"İsrail ve Batı ana akımı"};
   const YOL={harita:"haber site haritası",besleme:"RSS / Atom",wp:"WordPress",gnews:"Google Haberler araması (son çare)"};

@@ -15,7 +15,7 @@ ORDU = re.compile(r"israil ordusu|idf|israeli army|israeli military|tsahal|ordu 
 
 
 def hesapla(kok, kaynaklar, simdi, log=print):
-    kmap = {k["id"]: k for k in kaynaklar}
+    kmap = {k["id"]: k for k in kaynaklar if not k.get("dusunce")}
     olaylar = {}
     for n in range(120, -1, -1):
         g = (simdi - dt.timedelta(days=n)).date().isoformat()

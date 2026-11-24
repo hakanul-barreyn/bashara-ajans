@@ -37,7 +37,7 @@ Sana günün maddeleri veriliyor: olay başlığı, çerçeve notu ve her yayın
 Her madde için yaz:
 - ozet: iki cümle, Türkçe, ne oldu. Yalnızca verilenlerden.
 - fark: bir cümle, yayınların olayı nasıl farklı anlattığı (özgün kelimeyi tırnak içinde, en fazla 4 kelime; hangi yayının kullandığını söyle). Fark yoksa null.
-- tweetler: üç taslak, her biri en fazla 260 karakter, bağlantısız:
+- tweetler: üç taslak, her biri en fazla 250 karakter, bağlantısız (bağlantıyı sistem ekler):
   "ciddi": net, ağırbaşlı, bilgi veren.
   "genc": canlı, doğrudan, gündelik konuşma diline yakın; ama ciddiyeti kaybetmeyen.
   "igneli": hafif ironik, zekice; ancak YALNIZCA konu buna uygunsa (bir siyasetçinin çelişkisi, bir yayının tuhaf kelime seçimi, propaganda dili). Ölüm, yaralanma, kurbanlar, yıkım, açlık anlatan haberlerde "igneli": null.
@@ -86,6 +86,82 @@ def kaynak(K, i):
     return _KMAP.get(i)
 
 
+def kaynak_sec(hs):
+    """Tweete eklenecek özgün kaynak: Türk dijital medyası dışında (Türk düşünce kuruluşları olur), önce öncelikli yayınlar."""
+    uygun = [h for h in hs if h.get("url") and (h.get("ulke") != "Türkiye" or h.get("dusunce"))]
+    uygun.sort(key=lambda h: (not h.get("oncelik"), not h.get("dusunce"), h.get("kamp") == "İsrail"))
+    return {"yayin": uygun[0]["yayin"], "url": uygun[0]["url"]} if uygun else None
+
+
+ANALIZ_TALIMAT = """Bir editör kendi X (Twitter) hesabında son dakikanın ötesine geçmek istiyor: "Burada aslında ne oluyor, bu olaylar neden oluyor?"
+Sana düşünce kuruluşları, akademik yayınlar ve gazetelerin analiz yazılarının Türkçe özetleri veriliyor.
+Her biri için yaz:
+- neden: 2-3 cümle, Türkçe. Yazının olayların arka planı ve nedenleri hakkındaki ana tezi; yazarına/kurumuna bağla
+  ("Chatham House'tan X'e göre ..."). Yalnızca özette olanı yaz, ekleme yapma.
+- tweet: tek tweet, en fazla 250 karakter, bağlantısız; kurumun adını ver; okurun "neden" sorusuna cevap veren tek fikir.
+- flood: 3 tweetlik zincir (liste), her biri en fazla 250 karakter: 1) olay, 2) yazının açıklaması, 3) neden önemli / ne izlenmeli.
+Dil kuralları: "Orta Doğu" deme (bölge, Batı Asya). Niyet yükleyen etiket ("katil", "hain", "terörist") kullanma; bir tarafın
+nitelemesini tırnakla ve sahibine bağlayarak aktar. Ölümler için "öldürüldü" de. Kurumun çizgisi belirgin biçimde taraflıysa
+(örneğin İsrail güvenlik kurumuna yakın) bunu bir kelimeyle belirt ("İsrail ordusuna yakın INSS").
+Yalnızca şu JSON'u döndür: {"analizler": [{"no": 0, "neden": "...", "tweet": "...", "flood": ["...", "...", "..."]}]}"""
+
+
+def analiz_topla(simdi, gunun, en_cok=4):
+    """Son 48 saatin analiz yazıları: düşünce kuruluşları ve öncelikli yayınlar önde; Türk dijital medyası hariç."""
+    K = {k.get("id"): k for k in kaynak_listesi()}
+    d = _oku(os.path.join(KOK, "data", "haberler.json"), {})
+    H = d.get("haberler", []) if isinstance(d, dict) else d
+    esik = (simdi - dt.timedelta(hours=48)).isoformat()
+    import re
+    kok = lambda t: {w[:5] for w in re.findall(r"\w+", str(t or "").lower()) if len(w) >= 5}
+    gundem = set().union(*[kok(m["baslik"]) for m in gunun]) if gunun else set()
+    aday = []
+    for h in H:
+        k = K.get(h.get("kaynak")) or {}
+        if (h.get("nitelik") != "analiz" or not h.get("ozet_tr") or h.get("ozet_spot") or not h.get("ilgili")
+                or (h.get("tarih") or "") < esik or k.get("silahli") or (k.get("ulke") == "Türkiye" and not k.get("dusunce"))
+                or not str(h.get("url", "")).startswith("http")):
+            continue
+        ilgi = len(kok((h.get("baslik_tr") or "") + " " + h["ozet_tr"]) & gundem)
+        if not ilgi and not k.get("dusunce"):
+            continue                      # gazetenin gündemle ilgisiz yazısı (vefat, kültür haberi) arka plan değil
+        aday.append(((bool(k.get("dusunce")), ilgi, bool(k.get("oncelik")), h.get("tarih")), h, k))
+    aday.sort(key=lambda x: x[0], reverse=True)
+    secilen, gorulen = [], set()
+    for _, h, k in aday:
+        if k.get("ad") in gorulen:
+            continue                      # her kurumdan bir yazı
+        gorulen.add(k.get("ad"))
+        secilen.append({"tur": "analiz", "baslik": h.get("baslik_tr") or h.get("baslik_orj"), "not": h["ozet_tr"][:900],
+                        "kurum": k.get("ad"), "kamp": kamp(k), "dusunce": bool(k.get("dusunce")),
+                        "yayinlar": [{"yayin": k.get("ad"), "url": h["url"], "baslik": h.get("baslik_orj") or ""}],
+                        "kaynak": {"yayin": k.get("ad"), "url": h["url"]}})
+        if len(secilen) >= en_cok:
+            break
+    return secilen
+
+
+def analiz_yazdir(anl, simdi):
+    if not anl:
+        return
+    anahtar = os.environ.get("GEMINI_API_KEY", "").strip()
+    model = os.environ.get("GEMINI_MODEL") or "gemini-3.5-flash-lite"
+    girdi = [{"no": i, "kurum": a["kurum"], "kurum_turu": "düşünce kuruluşu / akademik" if a["dusunce"] else "gazete",
+              "kamp": a["kamp"], "baslik": a["baslik"], "ozet": a["not"]} for i, a in enumerate(anl)]
+    kod, s = ekler.gemini_cagir(anahtar, model, ANALIZ_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False), zaman=150, gorev="kisisel")
+    if kod != 200 or not isinstance(s, dict):
+        print(f"Analiz taslakları yazılamadı ({kod})")
+        return
+    for c in s.get("analizler") or []:
+        if isinstance(c, dict) and isinstance(c.get("no"), int) and 0 <= c["no"] < len(anl):
+            a = anl[c["no"]]
+            a["ozet"] = ekler.guvenli(c.get("neden"))[:600]
+            if c.get("tweet"):
+                a["tweetler"] = {"ciddi": ekler.guvenli(c["tweet"])[:260]}
+            if isinstance(c.get("flood"), list):
+                a["flood"] = [ekler.guvenli(x)[:260] for x in c["flood"][:4] if x]
+
+
 def topla(simdi):
     K = kaynak_listesi()
     esik = (simdi - dt.timedelta(hours=26)).isoformat()
@@ -101,16 +177,18 @@ def topla(simdi):
             k = kaynak(K, x.get("k"))
             if not k or k.get("silahli"):
                 continue   # silahlı grupların kanalları hiçbir yerde gösterilmez
-            if k.get("dil") == "tr":
+            if k.get("dil") == "tr" and not k.get("dusunce"):
                 tr = True
             if k.get("ad") in kaynaklar:
                 continue
             kaynaklar.add(k.get("ad"))
             hs.append({"yayin": k.get("ad"), "kamp": kamp(k), "baslik": (x.get("bo") or "")[:160], "anlatim": (x.get("y") or "")[:160],
+                       "ulke": k.get("ulke"), "dusunce": bool(k.get("dusunce")), "oncelik": bool(k.get("oncelik")),
                        "url": x.get("u") if str(x.get("u", "")).startswith("http") and "t.me/" not in str(x.get("u")) else None})
         if len(hs) < 2:
             continue
         maddeler.append({"baslik": o.get("baslik"), "not": (o.get("not") or "")[:400], "son": o.get("son"), "yayinlar": hs,
+                         "kaynak": kaynak_sec(hs),
                          "yayin_sayisi": len(hs), "turkce_var": tr, "kampler": sorted({h["kamp"] for h in hs})})
     maddeler.sort(key=lambda m: (m["yayin_sayisi"], m["son"]), reverse=True)
     gunun = maddeler[:5]
@@ -172,14 +250,14 @@ def _e(s):
     return html.escape(str(s or ""), quote=True)
 
 
-def _x(metin):
-    return "https://x.com/intent/post?text=" + urllib.parse.quote(metin)
+def _x(metin, url=None):
+    return "https://x.com/intent/post?text=" + urllib.parse.quote(metin) + ("&url=" + urllib.parse.quote(url, safe="") if url else "")
 
 
 TON = {"ciddi": "Ciddi", "genc": "Genç", "igneli": "İğneli"}
 
 
-def html_yap(gunun, yok, dsy, simdi):
+def html_yap(gunun, yok, dsy, simdi, anl=()):
     def tweet(metin, etiket):
         return (f'<div style="border:1px solid #e3dfd6;border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff">'
                 f'<div style="font:600 11px monospace;color:#5d6560;letter-spacing:.06em;text-transform:uppercase">{_e(etiket)} · {len(metin)} karakter</div>'
@@ -204,7 +282,7 @@ def html_yap(gunun, yok, dsy, simdi):
             p.append('<div style="font:600 12px monospace;color:#5d6560;margin-top:10px">FLOOD</div>')
             for i, x in enumerate(m["flood"], 1):
                 p.append(tweet(x, f"{i}/{len(m['flood'])}"))
-        bag = [h for h in m.get("yayinlar", []) if h.get("url")][:6]
+        bag = [h for h in m.get("yayinlar", []) if h.get("url") and (h.get("ulke") != "Türkiye" or h.get("dusunce"))][:6]
         if bag:
             p.append('<p style="margin:8px 0 2px;font-size:12px;color:#5d6560">Kaynaklar (bağlantıyı ana tweete değil ilk yanıta koy):</p><ul style="margin:0;padding-left:18px;font-size:13px">')
             p += [f'<li><a href="{_e(h["url"])}" style="color:#1f6e4b">{_e(h["yayin"])}</a>: {_e(h["baslik"][:110])}</li>' for h in bag]
@@ -225,13 +303,14 @@ def html_yap(gunun, yok, dsy, simdi):
             + bolum("Günün olayları", "Son 24 saatte en çok yayının verdiği olaylar", gunun)
             + bolum("Türkçe yayınlarda yok", "En az üç yayının verdiği, izlediğimiz Türkçe yayınların hiçbirinde çıkmayan olaylar", yok)
             + bolum("Dosyalar", "Süren hikâyelerde son 24 saat", dsy)
+            + bolum("Arka plan: burada aslında ne oluyor?", "Düşünce kuruluşları, akademik yayınlar ve analiz yazıları", list(anl))
             + '<p style="margin-top:34px;font-size:12px;color:#5d6560">Taslakları yapay zekâ yazdı; atmadan önce kaynaktan doğrula. '
               'Ölüm ve kayıp rakamlarını kaynağın kendisinden kontrol et.</p></div></body></html>')
 
 
-def metin_yap(gunun, yok, dsy, simdi):
+def metin_yap(gunun, yok, dsy, simdi, anl=()):
     s = [f"{_ad(simdi)} · {_gun(simdi)}", ""]
-    for ad, liste in (("GÜNÜN OLAYLARI", gunun), ("TÜRKÇE YAYINLARDA YOK", yok), ("DOSYALAR", dsy)):
+    for ad, liste in (("GÜNÜN OLAYLARI", gunun), ("TÜRKÇE YAYINLARDA YOK", yok), ("DOSYALAR", dsy), ("ARKA PLAN", list(anl))):
         if not liste:
             continue
         s += [ad, ""]
@@ -264,31 +343,35 @@ def _tg(token, sohbet, metin):
         return False, f"{getattr(e, 'code', type(e).__name__)} {aciklama}".strip()
 
 
-def telegram_iletileri(gunun, yok, dsy, simdi):
+def telegram_iletileri(gunun, yok, dsy, simdi, anl=()):
     """Her madde ayrı ileti (Telegram'ın 4096 karakter sınırı); en başta kısa bir içindekiler."""
     E = lambda t: html.escape(str(t or ""), quote=False)
     bas = [f"<b>{E(_ad(simdi))} · {E(_gun(simdi))}</b>"]
-    for ad, liste in (("Günün olayları", gunun), ("Türkçe yayınlarda yok", yok), ("Dosyalar", dsy)):
+    for ad, liste in (("Günün olayları", gunun), ("Türkçe yayınlarda yok", yok), ("Dosyalar", dsy), ("Arka plan: burada aslında ne oluyor?", anl)):
         if liste:
             bas.append(f"\n<b>{ad}</b>")
             bas += [f"• {E(m['baslik'])}" for m in liste]
     bas.append("\n<i>Taslağa dokununca kopyalanır; “X’te aç” taslağı X’e doldurur. Atmadan önce kaynaktan doğrula.</i>")
     iletiler = ["\n".join(bas)]
-    etiket = {"gunun": "GÜNÜN OLAYI", "yok": "TÜRKÇE YAYINLARDA YOK", "dosya": "DOSYA"}
-    for m in gunun + yok + dsy:
+    etiket = {"gunun": "GÜNÜN OLAYI", "yok": "TÜRKÇE YAYINLARDA YOK", "dosya": "DOSYA", "analiz": "ARKA PLAN · ANALİZ"}
+    for m in list(gunun) + list(yok) + list(dsy) + list(anl):
         p = [f"<b>{etiket[m['tur']]}</b>" + (f" · {m['yeniden']} gün sonra yeniden gündemde" if m.get("yeniden") else ""),
              f"<b>{E(m['baslik'])}</b>", E(m.get("ozet") or m.get("not") or "")]
         if m.get("fark"):
             p.append(f"<i>Kim nasıl yazdı:</i> {E(m['fark'])}")
         for t, metin in (m.get("tweetler") or {}).items():
-            p.append(f"\n<b>{TON.get(t, t)}</b> · {len(metin)} karakter\n<code>{E(metin)}</code>\n<a href=\"{html.escape(_x(metin))}\">X’te aç →</a>")
+            kay = m.get("kaynak")
+            p.append(f"\n<b>{TON.get(t, t)}</b> · {len(metin)} karakter\n<code>{E(metin)}</code>\n<a href=\"{html.escape(_x(metin))}\">X’te aç →</a>"
+                     + (f" · <a href=\"{html.escape(_x(metin, kay['url']))}\">kaynakla aç ({E(kay['yayin'])}) →</a>" if kay else ""))
+        if m.get("kaynak"):
+            p.append(f"\n<b>Kaynak</b> (tweete ekle): {E(m['kaynak']['yayin'])} {E(m['kaynak']['url'])}")
         if m.get("post"):
             p.append(f"\n<b>Post (Instagram / Facebook / LinkedIn)</b> · {len(m['post'])} karakter\n<code>{E(m['post'])}</code>")
         if m.get("flood"):
             p.append("\n<b>Flood</b>")
             for i, x in enumerate(m["flood"], 1):
                 p.append(f"{i}/{len(m['flood'])} <code>{E(x)}</code>")
-        bag = [h for h in m.get("yayinlar", []) if h.get("url")][:5]
+        bag = [h for h in m.get("yayinlar", []) if h.get("url") and (h.get("ulke") != "Türkiye" or h.get("dusunce"))][:5]
         if bag:
             p.append("\n<b>Orijinal haberler</b> (tweette ilk yanıta, postta ilk yoruma koy):\n" + "\n".join(f'• <a href="{html.escape(h["url"])}">{E(h["yayin"])}</a>: {E((h.get("baslik") or "")[:90])}' for h in bag))
         # Telegram sınırı 4096: madde uzunsa (post + bağlantılar) parçalara böl; HTML etiketi asla ortadan kesilmesin
@@ -360,6 +443,11 @@ def gonder(konu, html_govde, duz):
 def main():
     simdi = dt.datetime.now(dt.timezone.utc)
     gunun, yok, dsy = topla(simdi)
+    try:
+        anl = analiz_topla(simdi, gunun)
+    except Exception as e:
+        print(f"Analiz seçimi hatası: {e}")
+        anl = []
     tum = gunun + yok + dsy
     print(f"Bülten: {len(gunun)} günün olayı, {len(yok)} Türkçede yok, {len(dsy)} dosya")
     if not tum:
@@ -369,12 +457,16 @@ def main():
         yazdir(tum, simdi)
     except Exception as e:
         print(f"Taslak hatası: {e}")
+    try:
+        analiz_yazdir(anl, simdi)
+    except Exception as e:
+        print(f"Analiz taslağı hatası: {e}")
     yerel = simdi + dt.timedelta(hours=3)
-    h = html_yap(gunun, yok, dsy, yerel)
+    h = html_yap(gunun, yok, dsy, yerel, anl)
     if os.environ.get("BULTEN_ONIZLEME"):
         open(os.environ["BULTEN_ONIZLEME"], "w", encoding="utf-8").write(h)
-    tg = telegram_gonder(telegram_iletileri(gunun, yok, dsy, yerel))
-    ep = gonder(f"{_ad(yerel)} · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel))
+    tg = telegram_gonder(telegram_iletileri(gunun, yok, dsy, yerel, anl))
+    ep = gonder(f"{_ad(yerel)} · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel, anl))
     if not tg and not ep:
         print("Bülten hiçbir kanala gönderilemedi. Önizleme:")
         print(metin_yap(gunun, yok, dsy, yerel)[:3000])
