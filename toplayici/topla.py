@@ -490,12 +490,12 @@ GN_DIL = {"ar": ("ar", "EG", "EG:ar"), "en": ("en-US", "US", "US:en"), "fr": ("f
           "de": ("de", "DE", "DE:de")}
 
 
-def gnews_adresi(k):
+def gnews_adresi(k, gun=2):
     """Kaynağın kendi sitesine ulaşılamadığında son çare: Google Haberler'in o alan adı için RSS araması."""
     p = urllib.parse.urlsplit(k["url"])
     alan = p.netloc.lower().removeprefix("www.")
     yol = p.path.strip("/")
-    q = f"site:{alan}" + (f"/{yol}" if yol and len(yol.split("/")[0]) == 2 else "") + " when:2d"
+    q = f"site:{alan}" + (f"/{yol}" if yol and len(yol.split("/")[0]) == 2 else "") + f" when:{gun}d"
     hl, gl, ceid = GN_DIL.get(k["dil"], GN_DIL["en"])
     return "https://news.google.com/rss/search?" + urllib.parse.urlencode({"q": q, "hl": hl, "gl": gl, "ceid": ceid})
 
@@ -740,7 +740,11 @@ def kaynak_isle(k, durum):
             d["hata"] = d.get("hata", 0) + 1
         tg.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
         return k, d, tg[:KAYNAK_BASINA]
-    if k.get("genel_harita"):
+    if k.get("gnews_zorla"):
+        # Sitesinde besleme ve güncel site haritası olmayan kurum: Google Haberler'in o alan adı için RSS araması
+        d["yontem"] = {"tip": "gnews", "url": gnews_adresi(k, 14 if k.get("dusunce") else 2)}
+        d.update({"surum": KESIF_SURUMU, "kesif": d.get("kesif") or SIMDI.isoformat()})
+    elif k.get("genel_harita"):
         # Elle tanımlanmış sıradan site haritası (RSS'i olmayan düşünce kuruluşları)
         og = cek_genel_harita(k["genel_harita"], d)
         d.update({"yontem": {"tip": "genel_harita", "url": str(k["genel_harita"]["url"])}, "surum": KESIF_SURUMU, "son_oge": len(og)})
@@ -766,6 +770,8 @@ def kaynak_isle(k, durum):
     imza = "|".join(k.get("besleme") or [])
     if imza and not d.get("yontem") and d.get("besleme_imza") != imza:
         gerek = True
+    if k.get("gnews_zorla"):
+        gerek = False
     if gerek:
         d["besleme_imza"] = imza or None
         s = kesfet(k)

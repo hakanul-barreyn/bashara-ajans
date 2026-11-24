@@ -6414,12 +6414,7 @@
   "liste": false,
   "notu": "",
   "id": 245,
-  "besleme": [
-    "https://orsam.org.tr/tr/rss",
-    "https://orsam.org.tr/rss",
-    "https://orsam.org.tr/en/rss",
-    "https://orsam.org.tr/rss.xml"
-  ],
+  "gnews_zorla": true,
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6465,12 +6460,7 @@
   "liste": false,
   "notu": "",
   "id": 247,
-  "besleme": [
-    "https://edam.org.tr/feed/",
-    "https://edam.org.tr/en/feed/",
-    "https://edam.org.tr/tr/feed/",
-    "https://edam.org.tr/rss"
-  ],
+  "gnews_zorla": true,
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6493,12 +6483,7 @@
   "liste": false,
   "notu": "",
   "id": 248,
-  "besleme": [
-    "https://insamer.com/tr/rss",
-    "https://insamer.com/rss.xml",
-    "https://insamer.com/tr/rss.xml",
-    "https://insamer.com/rss"
-  ],
+  "gnews_zorla": true,
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [

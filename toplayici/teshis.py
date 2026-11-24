@@ -81,3 +81,12 @@ for k in ks:
         if not og:
             for b in (d.get("gh_bellek") or [])[:4]: print("   bellek:", str(b)[:200])
             for a in (d.get("gh_aday") or [])[:8]: print("   aday:", a)
+
+# Dördüncü kip: Google Haberler zorunlu kaynaklar
+for k in ks:
+    if k["id"] in ids and k.get("gnews_zorla"):
+        u = topla.gnews_adresi(k, 14)
+        kod, m, _ = topla.getir(u)
+        og = topla.gnews_coz(m) if kod == 200 else []
+        print(f"\n### GNEWS {k['id']} {k['ad']}: kod {kod}, öğe {len(og)}")
+        for o in og[:6]: print("   *", o["tarih"], o["baslik"][:90])
