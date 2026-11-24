@@ -33,7 +33,7 @@ TURLER = [(t[0], t[1]) for t in OT.TURLER] + [(a, ad) for a, ad, _ in OT.TUREV]
 # Olay kataloğuna girmeyen, yalnızca dikkat çizgisi çizilen türler (olay değil, durum)
 DURUM = {"kitlik", "katliam"}
 ESIK_KAT, PENCERE_ONCE, PENCERE_SONRA, TABAN_GUN = 2.5, 1, 2, 28
-ALISMA_SURUM = 12
+ALISMA_SURUM = 13
 TR_OLAYLAR = [("2024-03-31", "Türkiye’de yerel seçim"), ("2024-05-02", "Türkiye İsrail’le ticareti durdurdu")]
 
 
@@ -221,22 +221,56 @@ def _sessiz(S, gk, tur, w):
     return say
 
 
-def _sessizlik_donem(olaylar, donemler, anahtar):
+# Yeni yöntem (Kasım 2026): payda yalnızca o pencerede Filistin bağlamında en az FILISTIN_EN_AZ başlık atan yayınlar.
+# Eski yöntem bölgeyi hiç izlemeyen yayınları da "sustu" sayıyordu; küçük olaylarda oranı şişiriyordu. Eski sayı "sessiz"de duruyor.
+FILISTIN_EN_AZ = 5
+KUCUK_OLAY = 20   # bölge basınında bundan az başlık: yüzde verilmez, "küçük olay"
+
+
+def _filistin_pencere(S, w):
+    """Pencerede her yayının izlenen türlerden (Filistin bağlamı) attığı başlık sayısı."""
+    say = {}
+    for tur_kayit in S["yo"].values():
+        for kid, gunler in tur_kayit.items():
+            say[kid] = say.get(kid, 0) + sum(gunler.get(i, 0) for i in w)
+    return say
+
+
+def _sessiz2(S, gk, tur, w, fp):
+    """_sessiz gibi, ama yalnız o günlerde Filistin'i izleyen yayınlar paydaya girer: {grup: [susan, izleyen]}."""
+    say = {g: [0, 0] for g in GK}
+    yo = S["yo"][tur]
+    for kid in S["yn"]:
+        g = gk.get(kid)
+        if not g or kid in SEYREK:
+            continue
+        yazdi = sum((yo.get(kid) or {}).get(i, 0) for i in w) > 0
+        if not yazdi and fp.get(kid, 0) < FILISTIN_EN_AZ:
+            continue
+        say[g][1] += 1
+        if not yazdi:
+            say[g][0] += 1
+    return say
+
+
+def _sessizlik_donem(olaylar, donemler, anahtar, alan="sessiz"):
     """Dönem dönem (ay): o dönemde başlayan olaylarda yayında olup susan yayınların payı (grup grup) ve tam sessiz olaylar."""
     h = {x: {"olay": 0, "buyuk": 0, "tam_sessiz": 0, **{g: [0, 0] for g in GK}} for x in donemler}
     for o in olaylar:
         r = h.get(anahtar(o["bas"]))
         if r is None:
             continue
+        if alan == "sessiz2" and o.get("kucuk"):
+            continue
         r["olay"] += 1
         bolge_yazan = sum(o["sessiz"][g][1] - o["sessiz"][g][0] for g in ("bolge", "turkiye"))
         if bolge_yazan >= 4:
             r["buyuk"] += 1
-            dis = sum(o["sessiz"][g][1] - o["sessiz"][g][0] for g in ("israil", "bati_ana", "bati_muhalif"))
+            dis = sum(o[alan][g][1] - o[alan][g][0] for g in ("israil", "bati_ana", "bati_muhalif"))
             r["tam_sessiz"] += dis == 0
         for g in GK:
-            r[g][0] += o["sessiz"][g][0]
-            r[g][1] += o["sessiz"][g][1]
+            r[g][0] += o[alan][g][0]
+            r[g][1] += o[alan][g][1]
     cikti = []
     for x in donemler:
         r = h[x]
@@ -509,7 +543,8 @@ def hesapla(kok, kaynaklar, simdi, log=print):
                             "izleme": round(tep["bati_ana"] / bolge_tum, 2) if tep.get("bati_ana") is not None and bolge_tum else None,
                             "olu": max(olu[i] for i in range(max(0, b - 1), min(N, e + 2))),
                             "lider": {lgk: _artis(lg[lgk], b, e, N)[0] for lgk in OT.LIDER_GRUP},
-                            "sessiz": _sessiz(S, gk, tur, w), "kim": _sessiz_kim(S, gk, tur, w, K),
+                            "sessiz": _sessiz(S, gk, tur, w), "sessiz2": _sessiz2(S, gk, tur, w, _filistin_pencere(S, w)),
+                            "kucuk": sum(r[i] for i in range(b, e + 1)) < KUCUK_OLAY, "kim": _sessiz_kim(S, gk, tur, w, K),
                             "ornek": _ornekler(oz, D, K, gk, b, e, tur)})
         # referans: bölge basınında en büyük olayın en az %40'ı kadar yer bulan ilk olay
         ref = None
@@ -576,7 +611,9 @@ def hesapla(kok, kaynaklar, simdi, log=print):
                                                     (max(y + "-01-01", "2023-10-07"), y + "-12-31")) if r["hukum"]]
                           for y in sorted({g[:4] for g in D if g >= "2023-10-07"})},
             "toplum": _toplum(tp, S, D), "toplum_indirildi": tp.get("indirildi"),
-            "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]), "aktif_en_az": AKTIF_EN_AZ, "aktif_esik": {"pay": AKTIF_PAY, "alt": AKTIF_ALT},
+            "sessizlik": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7]),
+            "sessizlik2": _sessizlik_donem(tum_olaylar, sorted({g[:7] for g in D}), lambda g: g[:7], "sessiz2"),
+            "sessiz_yontem": {"filistin_en_az": FILISTIN_EN_AZ, "kucuk_olay": KUCUK_OLAY}, "aktif_en_az": AKTIF_EN_AZ, "aktif_esik": {"pay": AKTIF_PAY, "alt": AKTIF_ALT},
             "dis": {"kaynak": dis.get("kaynak"), "indirildi": dis.get("indirildi")}}
     almanak._yaz(os.path.join(kok, "data", "bulten", "alisma.json"), veri)
     log(f"Alışma: {len(tum_olaylar)} olay, {len(olum_gunleri)} kitlesel ölüm günü")

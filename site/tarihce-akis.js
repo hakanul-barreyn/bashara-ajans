@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=17").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=18").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -450,7 +450,7 @@
        ["turuncu", EN ? "Edge of the restricted area, November 2026" : "Kısıtlı alanın sınırı, Kasım 2026"],
        ["kisitli", EN ? "Restricted: about 65% of Gaza" : "Kısıtlı: Gazze’nin yaklaşık %65’i"]].forEach(function (x) { var s = el("span", "lej-" + x[0]); s.appendChild(el("i")); s.appendChild(document.createTextNode(x[1])); lej.appendChild(s); });
       f.appendChild(lej);
-      f.appendChild(el("p", "ta-kars-not tek", D2(m, "not")));
+      nasilEkle(f, m); f.appendChild(el("p", "ta-kars-not tek", D2(m, "not")));
       f.appendChild(el("p", "ta-kars-kaynak", (EN ? "Images: Copernicus Sentinel-2 (ESA), " : "Görüntüler: Copernicus Sentinel-2 (ESA), ") + t1 + ", " + t2 + (EN ? ". Lines: " : ". Çizgiler: ") + "OCHA oPt, " + tarihAd(S.tarih) + (EN ? ", approximate." : ", yaklaşık.")));
       tembel(kutu);
       return f;
@@ -498,7 +498,7 @@
       kutu.yap = function () { goster(secili); };
       bas.textContent = h.ciftler[0].join(" → ");
       f.append(sahne, dg);
-      f.appendChild(el("p", "ta-kars-not tek", D2(h, "not")));
+      nasilEkle(f, h); f.appendChild(el("p", "ta-kars-not tek", D2(h, "not")));
       var kay = el("p", "ta-kars-kaynak", D2(h, "kaynak") + " ");
       if (h.sayfa) kay.appendChild(dis(el("a", null, EN ? "Source ↗" : "Kaynak ↗"), h.sayfa));
       f.appendChild(kay);
@@ -507,6 +507,13 @@
       return f;
     }
 
+    // "Neye bakıyorsunuz?": görüntüyü okumayı bilmeyen okur için kısa bir rehber
+    function nasilEkle(f, x) {
+      var t = D2(x, "nasil"); if (!t) return;
+      var k = el("div", "ta-kars-nasil");
+      k.append(el("b", "", EN ? "What am I looking at?" : "Neye bakıyorsunuz?"), el("p", "", t));
+      f.appendChild(k);
+    }
     function uyduKars(u) {
       var f = el("figure", "ta-kars uydu izle");
       var t1 = tarihAd(u.tarih_once), t2 = tarihAd(u.tarih_sonra);
@@ -537,7 +544,7 @@
       });
       kutu.yap = function () { goster(secili); };
       f.append(sahne, dg);
-      f.appendChild(el("p", "ta-kars-not tek", D2(u, "not")));
+      nasilEkle(f, u); f.appendChild(el("p", "ta-kars-not tek", D2(u, "not")));
       f.appendChild(el("p", "ta-kars-kaynak", D2(u, "kaynak")));
       Array.prototype.forEach.call(sekme.children, function (b, j) { b.setAttribute("aria-selected", String(j === 0)); });
       tembel(kutu);

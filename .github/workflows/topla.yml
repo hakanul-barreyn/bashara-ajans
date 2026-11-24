@@ -65,8 +65,8 @@ jobs:
         run: |
           (command -v rsvg-convert >/dev/null && fc-list | grep -qi 'Inter Display') || (sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null 2>&1 || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends librsvg2-bin fonts-inter >/dev/null)) || true
           pip install -q pillow telethon || true
-          # dosya dizini uydu kapaklarını görsün (gorsel dalı yayından önce yine tamamen açılır)
-          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD uydu/dosya | tar -x -C data/gorsel) || true
+          # dosya dizini sabit fotoğrafları görsün (gorsel dalı yayından önce yine tamamen açılır)
+          mkdir -p data/gorsel && (git fetch -q --depth 1 origin gorsel && git archive FETCH_HEAD dosya-foto | tar -x -C data/gorsel) || true
 
       - name: Haberleri çek ve özetle
         env:

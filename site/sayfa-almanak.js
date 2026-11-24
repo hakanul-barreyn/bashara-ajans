@@ -142,7 +142,11 @@
   const TUR_EN = { hastane: "Attacks on hospitals", cadir: "Tents hit", yardim: "Fire on people waiting for aid", keskin: "Sniper fire", bas: "Shot in the head", cocuk: "Children killed", su: "People seeking water shot", guvenli: "Attacks on “safe zones”", okul: "Attacks on schools and shelters", ibadet: "Attacks on mosques and churches", aksa: "Raids on Al-Aqsa", saglik: "Health workers killed", yardimci: "Aid workers killed", iskence: "Torture and rape in prisons", asagilama: "Humiliation", aclik: "Starvation deaths", kitlik: "Famine and hunger", sel: "Flooded tents and winter storms", mezar: "Mass graves", bayrak: "Fire on people carrying white flags", katliam: "Attacks called “massacres”", cocuk_keskin: "Children shot by snipers", cocuk_bas: "Children shot in the head", cocuk_su: "Children carrying water shot", yardim_asagilama: "Humiliation for food" };
   const turAd = (t) => (EN ? TUR_EN[t] : TUR_ADLARI[t]) || TUR_ADLARI[t] || t;
   function olaylarArasi(b, s) { return ((ALISMA && ALISMA.olaylar) || []).filter((o) => o.bas >= b && o.bas < s && o.sessiz); }
-  function oran(o, g) { const x = o.sessiz && o.sessiz[g]; return x && x[1] >= 3 ? 100 * x[0] / x[1] : null; }
+  // İki ölçü: "eski" (o günlerde yayında olan bütün yayınlar; Kasım 2026'ya kadar yayımlanan sayılar) ve
+  // "yeni" (yalnız o günlerde Filistin'i izleyen yayınlar; bölge basınında 20 başlıktan küçük olaylara yüzde verilmez).
+  let SMOD = "eski";
+  const sAlan = () => (SMOD === "yeni" ? "sessiz2" : "sessiz");
+  function oran(o, g) { if (SMOD === "yeni" && o.kucuk) return null; const x = o[sAlan()] && o[sAlan()][g]; return x && x[1] >= 3 ? 100 * x[0] / x[1] : null; }
   function topluOran(olaylar, g) { let a = 0, b = 0; olaylar.forEach((o) => { const x = o.sessiz && o.sessiz[g]; if (x) { a += x[0]; b += x[1]; } }); return b >= 5 ? Math.round(100 * a / b) : null; }
 
   // olay olay nokta bulutu: her nokta bir yayın; dolu = yazdı, boş = o günlerde yayındaydı ama tek başlık atmadı
@@ -199,7 +203,7 @@
 
   // ---------------------------------------------------------------- grafikler: sessizlik endeksi
   function sessizlikGrafik(buyuk) {
-    const ay = (ALISMA && ALISMA.sessizlik) || [], ol = ((ALISMA && ALISMA.olaylar) || []).filter((o) => o.sessiz);
+    const ay = (ALISMA && (SMOD === "yeni" && ALISMA.sessizlik2 ? ALISMA.sessizlik2 : ALISMA.sessizlik)) || [], ol = ((ALISMA && ALISMA.olaylar) || []).filter((o) => o[sAlan()]);
     if (ay.length < 3) return el("p", "bekliyor", T("Endeks için yeterli veri yok.", "Not enough data for the index yet."));
     const W = buyuk ? 1200 : 720, H = buyuk ? 520 : 300, P = { s: 38, sg: 12, u: 14, a: 30 };
     const t0 = Date.parse(ay[0].donem + "-01T00:00:00Z"), t1 = Date.parse(gunEkle(ay[ay.length - 1].donem + "-28", 4) + "T00:00:00Z");
@@ -217,8 +221,8 @@
       ol.forEach((o) => {
         const v = oran(o, g); if (v == null) return;
         const c = sv("circle", { cx: X(Date.parse(o.bas + "T12:00:00Z")).toFixed(1), cy: Y(v).toFixed(1), r: 3.2, fill: renk, "fill-opacity": g === "bati_ana" ? 0.5 : 0.32 });
-        const x = o.sessiz[g];
-        ipucu(c, () => { const b = el("b", null, turAd(o.tur) + " · " + tarih(o.bas)); const p = el("span", null, (o.yer || []).join(", ")); const q = el("div", null, GRK[g][1] + ": " + T(`${x[1]} yayından ${x[0]} tanesi tek başlık atmadı`, `${x[0]} of ${x[1]} outlets ran no headline`)); return [b, p, q]; });
+        const x = o[sAlan()][g], kim = SMOD === "yeni" ? T("Filistin’i izleyen ", "following Palestine: ") : "";
+        ipucu(c, () => { const b = el("b", null, turAd(o.tur) + " · " + tarih(o.bas)); const p = el("span", null, (o.yer || []).join(", ")); const q = el("div", null, GRK[g][1] + ": " + T(`${kim}${x[1]} yayından ${x[0]} tanesi tek başlık atmadı`, `${x[0]} of ${x[1]} outlets ${kim}ran no headline`)); return [b, p, q]; });
         s.appendChild(c);
       });
     });
@@ -348,7 +352,21 @@
     const ks = el("div", "kisimlar");
     const k1 = kisim(T("Ay ay sessizlik ve her olay bir nokta", "Silence month by month, each event a dot"));
     k1.appendChild(el("p", null, T("Her olayda şunu sorduk: o günlerde haber yayınlayan yayınların yüzde kaçı bu olayı hiç başlığa taşımadı? Grafik bu “susma oranını” gösteriyor; yukarı çıktıkça sessizlik artıyor. Her nokta tek bir olay, çizgiler aylık ortalama. Bir noktanın üzerine gelince hangi olay olduğu çıkar.", "For every event we asked: what share of the outlets publishing at the time ran no headline about it at all? The chart shows this “silence rate”; higher means more silence. Each dot is one event; the lines are monthly averages. Hover a dot to see the event.")));
-    k1.appendChild(sessizlikGrafik());
+    // ölçü seçici: eski sayılar korunur, yeni ölçü yanında
+    const sec2 = el("div", "sk-yontem"); sec2.setAttribute("role", "group"); sec2.setAttribute("aria-label", T("Ölçü", "Measure"));
+    const yAc = el("p", "sk-yontem-not");
+    const yAcik = { eski: T("Payda: o günlerde yayında olan bütün yayınlar. Kasım 2026’ya kadar yayımladığımız sayılar bu ölçüyle hesaplandı. Gazze’yi hiç ya da çok az izleyen yayınlar da “sustu” sayıldığı için, özellikle küçük olaylarda oran yüksek çıkar.", "Denominator: every outlet publishing at the time. The figures we published until November 2026 use this measure. Outlets that barely follow Gaza also count as silent, so the rate runs high, especially for small events."),
+      yeni: T(`Payda: yalnız o günlerde Filistin’le ilgili en az ${(ALISMA.sessiz_yontem || {}).filistin_en_az || 5} başlık atan yayınlar. Bölge basınında ${(ALISMA.sessiz_yontem || {}).kucuk_olay || 20} başlığın altında kalan olaylara yüzde verilmez. Bu ölçü “konuyu izleyenler bu olayı atladı mı?” sorusunu yanıtlar; İsrail ve Batı muhalif basınında payda çoğu olayda bir iki yayına düşer.`, `Denominator: only outlets that ran at least ${(ALISMA.sessiz_yontem || {}).filistin_en_az || 5} Palestine-related headlines in those days. Events with fewer than ${(ALISMA.sessiz_yontem || {}).kucuk_olay || 20} regional headlines get no percentage. This measure asks “did the outlets following the story skip this event?”; for the Israeli and Western dissenting press the denominator is one or two outlets for most events.`) };
+    let grafik = sessizlikGrafik();
+    [["eski", T("Bütün yayınlar (eski ölçü)", "All outlets (original measure)")], ["yeni", T("Filistin’i izleyen yayınlar (yeni ölçü)", "Outlets following Palestine (new measure)")]].forEach(([m, ad]) => {
+      if (m === "yeni" && !ALISMA.sessizlik2) return;
+      const d = el("button", null, ad); d.type = "button"; d.setAttribute("aria-pressed", String(m === SMOD));
+      d.onclick = () => { SMOD = m; sec2.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === d))); yAc.textContent = yAcik[m]; const g2 = sessizlikGrafik(); grafik.replaceWith(g2); grafik = g2; };
+      sec2.appendChild(d);
+    });
+    yAc.textContent = yAcik[SMOD];
+    if (sec2.children.length > 1) k1.append(sec2, yAc);
+    k1.appendChild(grafik);
     ks.appendChild(k1);
     const son = olaylarArasi(gunEkle(new Date().toISOString().slice(0, 10), -120), "9999").reverse();
     if (son.length) {
@@ -367,6 +385,7 @@
     [T("Olaylar basından bulunur: bir olay türünün (hastane, çadır, yardım bekleyenler, cami, okul …) bölge basınındaki payı önceki dört haftanın ortancasının iki buçuk katına çıktığı günler bir olaydır. Bu yüzden bu endeks yalnızca basına zaten yansımış olayları sayar; hiç haber olmamış saldırıları (örneğin her gün süren gözaltı işkencesini) görmez. Gerçek olay kayıtlarıyla (BM, Sağlık Bakanlığı, insan hakları örgütleri) yapılacak karşılaştırma ayrı bir bölüm olarak eklenecek.",
       "Events are found from the press: an event is a day on which one type of event (hospital, tent, people waiting for aid, mosque, school …) rises to two and a half times the median of the previous four weeks in the regional press. The index therefore counts only events that already reached the press; it does not see attacks that never became news (such as daily torture in detention). A comparison with real-world incident records (UN, the Ministry of Health, human rights groups) will be added as a separate chapter."),
      T("Sayım tür düzeyindedir: o günlerde aynı türden başka bir olayı yazan yayın “yazdı” sayılır. Yani gerçek sessizlik burada görünenden büyüktür.", "Counting is by type: an outlet that wrote about another event of the same type in those days counts as having covered it. The real silence is larger than shown."),
+     T("İki ölçü iki ayrı soruyu yanıtlar. Eski ölçü “o günlerde haber yapan yayınların ne kadarı bu olayı başlığa taşımadı?” diye sorar; Gazze’yi gündemine hiç almayan yayınların sessizliğini de sayar. Yeni ölçü yalnız konuyu izleyen yayınlara bakar; o yayınların çoğu bir olay türünü er geç yazdığı için oranı düşük çıkar ve payda küçüktür. Gerçek sessizlik ikisinin arasındadır. Kasım 2026’ya kadar yayımlanan sayılar eski ölçüyle hesaplandı ve aynen duruyor.", "The two measures answer two different questions. The original asks “what share of outlets publishing at the time ran no headline on this event?”, and so also counts the silence of outlets that never put Gaza on their agenda. The new one looks only at outlets following the story; most of them cover a type of event sooner or later, so the rate runs low and the denominator is small. The real silence lies between the two. Figures published until November 2026 used the original measure and remain unchanged."),
      T("Geriye dönük taramada yayınların arşivlerinin ne kadarına ulaşılabildiği yayından yayına değişir; o yüzden yalnızca o günlerde en az 15 başlığı bulunan yayınlar sayılır. İsrail basınında örneklem küçüktür.", "How much of each outlet’s archive could be reached in the backfill varies; only outlets with at least 15 headlines in the window count. The Israeli press sample is small.")].forEach((t) => k4.appendChild(el("p", null, t)));
     ks.appendChild(k4);
     s.appendChild(ks);

@@ -298,3 +298,7 @@ td.sayi{font-family:var(--mono);font-size:.8rem;text-align:right;white-space:now
 .kisim-sekil .gp-dugme{top:-34px}.kisim-sekil .sk-buyut{right:76px}
 .sk-buyuk{width:min(1400px,100%)}.sk-buyuk h3{margin:0 40px 10px 0;font:700 1.2rem var(--serif,Georgia,serif)}
 .sk-kaydir{overflow-x:auto}.sk-kaydir .kisim-sekil{min-width:820px}
+.sk-yontem{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.sk-yontem button{font:600 .8rem "Plus Jakarta Sans",system-ui,sans-serif;padding:6px 11px;border:1px solid var(--cizgi);border-radius:2px;background:transparent;color:var(--murekkep);cursor:pointer}
+.sk-yontem button[aria-pressed="true"]{border-color:var(--murekkep);box-shadow:inset 0 -2px 0 var(--murekkep)}
+.sk-yontem-not{font-size:.84rem;color:var(--murekkep2);margin:0 0 10px;max-width:46rem}

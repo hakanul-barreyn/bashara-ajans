@@ -460,3 +460,12 @@ html.ta-lb-acik{overflow:hidden}
 .ta-gz-sayfa-no{margin:0 0 10px;font:800 .78rem var(--ta-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ta-murekkep)}
 .ta-gz .ta-gz-tam-ic{max-height:none;overflow:visible;margin-top:14px}
 .ta-gz-tam-et{margin:4px 0 6px;font:700 .72rem var(--ta-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ta-soluk)}
+
+/* sade karşılaştırma: koyu kutular yerine ince, açık etiketler */
+.kk-et{background:rgba(255,255,255,.88);color:#1b2420;font:600 .74rem var(--ta-mono);padding:3px 8px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.ta-kk-dugmeler button,.ta-kars-sekme-d{background:transparent;border:1px solid var(--ta-cizgi);border-radius:2px;color:var(--ta-murekkep);font-weight:600}
+.ta-kk-dugmeler button[aria-pressed="true"],.ta-kars-sekme-d[aria-selected="true"]{background:transparent;color:var(--ta-murekkep);border-color:var(--ta-murekkep);box-shadow:inset 0 -2px 0 var(--ta-murekkep)}
+.ta-kars-nasil{margin:14px 0 4px;padding:10px 14px;border-left:3px solid var(--ta-murekkep);background:rgba(0,0,0,.025)}
+.ta-kars-nasil b{display:block;font:700 .72rem var(--ta-mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.ta-kars-nasil p{margin:0;font:400 .92rem/1.55 var(--ta-sans);color:var(--ta-ink2)}
+.ta-kk.kk-kenar .kk-et{opacity:.75}

@@ -883,7 +883,9 @@
       "not_en": "In January 1945 Gaza was a town ringed by gardens and orchards. In 1948 more than 200,000 refugees fled into the Strip; the city and the camps grew over those gardens. The mosaic is a British army map printed with Palestine Grid coordinates; it was converted to today’s coordinates and fitted to the satellite image. There may be a shift of a few tens of metres near the edges. The satellite image has a 10-metre resolution.",
       "kaynak": "Hava fotoğrafları: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, Ocak 1946 (fotoğraflar Ocak 1945), İsrail Milli Kütüphanesi Eran Laor koleksiyonu, Wikimedia Commons üzerinden, kamu malı. Uydu: Copernicus Sentinel-2 (ESA).",
       "kaynak_en": "Aerial photographs: 512 Field Survey Coy., R.E., “Gaza, 1:10,000 Mosaic”, January 1946 (photographs January 1945), National Library of Israel, Eran Laor collection, via Wikimedia Commons, public domain. Satellite: Copernicus Sentinel-2 (ESA).",
-      "sayfa": "https://commons.wikimedia.org/wiki/File:Great_Britain_army_517_Field_Survey_Company,_Gaza_(FL53910466_2714141).jpg"
+      "sayfa": "https://commons.wikimedia.org/wiki/File:Great_Britain_army_517_Field_Survey_Company,_Gaza_(FL53910466_2714141).jpg",
+      "nasil": "Bu bir yukarıdan bakış: üstte kuzey var. Soldaki gri görüntü 1945’te uçaktan çekilmiş fotoğraflardan birleştirilmiş, sağdaki 2023 uydu görüntüsü. Ortadaki çizgiyi sağa sola sürükleyin ya da alttaki tarih düğmelerine basın. Gri görüntüde koyu lekeler bahçe ve bağlar, açık renkli küçük bloklar evler. 2023’te aynı yerin neredeyse tamamı yapılarla dolu.",
+      "nasil_en": "This is a view from above, with north at the top. The grey image on the left is stitched together from aerial photographs taken in 1945; the one on the right is a 2023 satellite image. Drag the line in the middle, or press the date buttons below. In the grey image the dark patches are gardens and orchards and the small light blocks are houses. By 2023 almost the same ground is covered with buildings."
      },
      "sonuc": "Mütareke büyük ölçüde savaşın sonucunu kayda geçirdi: Hayfa 22 Nisan, Yafa 13 Mayıs, Lidda ve Ramle Temmuz 1948’de düşmüş, halkları sürülmüştü. Taksim planında Arap devletine ayrılan Akka bile 17-18 Mayıs 1948’de alınmıştı. Rodos yalnızca güney cephesini, Necef ile Gazze’yi belirledi; Mısır Faluce cebini bırakıp Gazze Şeridi’ni elinde tuttu. Lübnan (23 Mart), Ürdün (3 Nisan) ve Suriye (20 Temmuz 1949) mütarekeleri bunu izledi. Bir istisna vardı: Ürdün’le yapılan mütarekeyle, savaşta hiç el değiştirmemiş Vadi Ara bölgesi ve köyleri İsrail’e bırakıldı.",
      "sonuc_en": "The armistice largely recorded the outcome of the war: Haifa had fallen on 22 April, Jaffa on 13 May, Lydda and Ramle in July 1948, and their people had been driven out. Even Acre, allotted to the Arab state under the partition plan, had been taken on 17–18 May 1948. Rhodes settled only the southern front, the Negev and Gaza; Egypt gave up the Faluja pocket and kept the Gaza Strip. The armistices with Lebanon (23 March), Jordan (3 April) and Syria (20 July 1949) followed. There was one exception: under the armistice with Jordan, the Wadi Ara area and its villages, which had not changed hands in the fighting, were handed to Israel."
@@ -2108,7 +2110,9 @@
       "not": "Guş Katif bloğunun seraları ve evleri Ocak 2005’te Han Yunus ile Refah’ın batısındaki kumullarda; Haziran 2007’de yerlerinde boş arazi var. Netzarim, Gazze kentinin güneyinde.",
       "not_en": "In January 2005 the greenhouses and houses of the Gush Katif bloc stand on the dunes west of Khan Yunis and Rafah; by June 2007 there is empty ground in their place. Netzarim lies south of Gaza City.",
       "kaynak": "Landsat 5 (USGS/NASA), Microsoft Planetary Computer üzerinden; 30 m çözünürlük",
-      "kaynak_en": "Landsat 5 (USGS/NASA) via Microsoft Planetary Computer; 30 m resolution"
+      "kaynak_en": "Landsat 5 (USGS/NASA) via Microsoft Planetary Computer; 30 m resolution",
+      "nasil": "Üstte kuzey var. Soldaki koyu alan Akdeniz, kıyı boyunca uzanan açık sarı şerit kumul. 2005 görüntüsünde bu kumulların içinde gri-beyaz, düzgün dikdörtgenler görünüyor: bunlar Guş Katif yerleşimlerinin seraları ve evleri. Çizgiyi sola çekip 2007’ye geçince aynı dikdörtgenlerin yerinde düz, boş kum kalıyor. Kumulun doğusundaki dağınık gri doku Han Yunus ve Refah. Görüntünün bir pikseli 30 metre olduğu için tek tek binalar seçilmez.",
+      "nasil_en": "North is at the top. The dark area on the left is the Mediterranean; the pale yellow strip along the coast is dunes. In the 2005 image you can see neat grey-white rectangles in the dunes: the greenhouses and houses of the Gush Katif settlements. Move to 2007 and flat, empty sand remains where they stood. The scattered grey texture east of the dunes is Khan Yunis and Rafah. One pixel covers 30 metres, so individual buildings cannot be made out."
      },
      "kaynakca": [
       {
@@ -2272,6 +2276,37 @@
        "ad": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
        "ad_en": "Tareq Baconi, Hamas Contained: The Rise and Pacification of Palestinian Resistance (Stanford University Press, 2018)",
        "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2016-12-15",
+     "baslik": "Muhammed Zevari Sfaks’ta öldürüldü",
+     "baslik_en": "Mohamed Zouari killed in Sfax",
+     "metin": "Tunuslu havacılık mühendisi Muhammed Zevari, 15 Aralık 2016’da Sfaks’taki evinin önünde arabasındayken yaklaşık yirmi kurşunla öldürüldü. Tunus İçişleri Bakanlığı saldırıda yabancıların rol aldığını açıkladı. Kassam Tugayları iki gün sonra Zevari’nin on yıldır kendi saflarında olduğunu ve insansız hava aracı programını yönettiğini duyurdu; 2014 savaşında kullanılan Ebabil İHA’ları bu programdan çıkmıştı. Hamas saldırıdan İsrail’i sorumlu tuttu, İsrail yorum yapmadı. Sfaks’ta ve Tunus’ta binlerce kişi yürüdü.",
+     "metin_en": "Tunisian aviation engineer Mohamed Zouari was shot about twenty times in his car outside his home in Sfax on 15 December 2016. Tunisia’s interior ministry said foreigners had taken part in the attack. Two days later the Qassam Brigades announced that Zouari had been in their ranks for ten years and had run their drone programme; the Ababil drones used in the 2014 war came out of it. Hamas blamed Israel; Israel did not comment. Thousands marched in Sfax and Tunis.",
+     "vurgu": [
+      "insansız hava aracı programını yönettiğini"
+     ],
+     "vurgu_en": [
+      "had run their drone programme"
+     ],
+     "ortak": [
+      "tufan"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera: Hamas blames Israel for assassination of drone chief",
+       "url": "https://www.aljazeera.com/news/2016/12/18/hamas-blames-israel-for-assassination-of-drone-chief"
+      },
+      {
+       "ad": "Middle East Eye: Killing of Hamas-linked drone expert in Tunisia draws public anger",
+       "url": "https://www.middleeasteye.net/news/killing-hamas-linked-drone-expert-tunisia-draws-public-anger"
+      },
+      {
+       "ad": "Al Jazeera World: Who killed Tunisian drone expert Mohammed al-Zawari? (2018)",
+       "url": "https://www.aljazeera.com/program/al-jazeera-world/2018/12/12/who-killed-tunisian-drone-expert-mohammed-al-zawari"
       }
      ]
     }
@@ -2616,7 +2651,9 @@
      "sonuc_en": "The war officially stopped but did not end: the Israeli army stayed in more than half of Gaza, the line moved west in the following months, and by November 2026 about two thirds of Gaza was a restricted zone.",
      "uydu_gazze": {
       "not": "Sarı çizgi 10 Ekim 2025 anlaşmasındaki hattır. Turuncu kesik çizgi ve gölgeli alan, Kasım 2026’da insani hareketin İsrail ordusuyla koordinasyona bağlı olduğu bölgeyi gösterir. Çizgiler OCHA haritasından çıkarıldı ve Gazze sınırına oturtuldu; yaklaşıktır. 10 metre çözünürlükte beton bloklar görünmez; görünen, hattın doğusundaki yıkılıp düzlenmiş kuşaktır. Sağdaki görüntü her gün güncellenir.",
-      "not_en": "The yellow line is the line of the 10 October 2025 agreement. The dashed orange line and shaded area show where, in November 2026, humanitarian movement must be coordinated with the Israeli army. The lines were extracted from the OCHA map and fitted to Gaza’s boundary; they are approximate. At 10-metre resolution the concrete blocks are not visible; what you see is the razed belt east of the line. The right-hand image is updated daily."
+      "not_en": "The yellow line is the line of the 10 October 2025 agreement. The dashed orange line and shaded area show where, in November 2026, humanitarian movement must be coordinated with the Israeli army. The lines were extracted from the OCHA map and fitted to Gaza’s boundary; they are approximate. At 10-metre resolution the concrete blocks are not visible; what you see is the razed belt east of the line. The right-hand image is updated daily.",
+      "nasil": "Üstte kuzey var; soldaki koyu alan deniz. 2023 görüntüsünde kıyıdaki gri-beyaz alanlar kentler, doğudaki yeşil ve kahverengi kareler tarlalar. 2026 görüntüsünde sarı çizgi ile Gazze’nin doğu sınırı arasındaki kuşak açık kahverengi, düz bir yüzeye dönmüş: oradaki tarlalar, seralar ve yapılar silinmiş. Görüntünün sağ kenarındaki yeşil ve sarı tarlalar Gazze’nin dışında kalıyor. Çizgileri gizle düğmesiyle görüntüyü çizgisiz görebilirsiniz.",
+      "nasil_en": "North is at the top; the dark area on the left is the sea. In the 2023 image the grey-white areas along the coast are towns and the green and brown squares to the east are fields. In the 2026 image the belt between the yellow line and Gaza’s eastern edge has turned into a flat light-brown surface: the fields, greenhouses and buildings there have been wiped away. The green and yellow fields at the right-hand edge lie outside Gaza. Use the hide-lines button to see the image without the lines."
      },
      "kaynaklar": []
     },
@@ -2718,6 +2755,31 @@
       {
        "ad": "Al Jazeera (14 Aralık 2024)",
        "url": "https://www.aljazeera.com/news/2024/12/14/jenin-brigades-commander-killed-as-pa-forces-raid-occupied-west-bank-camp"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2023-10-08",
+     "baslik": "Zevari’nin adı 7 Ekim’de yeniden duyuldu",
+     "baslik_en": "Zouari’s name resurfaces after 7 October",
+     "metin": "Kassam Tugayları 8 Ekim 2023’te, saldırının ilk saatlerinde sınırdaki gözetleme kulelerini ve iletişim donanımını vuran tek kullanımlık İHA’ların görüntülerini yayımladı. Bu İHA’lara 2016’da Tunus’ta öldürülen mühendis Muhammed Zevari’nin adı verilmişti. Kassam 35 Zevari İHA’sı kullandığını açıkladı; bu sayı bağımsız olarak doğrulanamadı.",
+     "metin_en": "On 8 October 2023 the Qassam Brigades released footage of the single-use drones that hit surveillance towers and communications equipment on the border in the first hours of the attack. The drones were named after Mohamed Zouari, the engineer killed in Tunisia in 2016. Qassam said it had used 35 Zouari drones; the figure could not be independently verified.",
+     "ortak": [
+      "islami"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "The National: How drones changed the Israel-Gaza war (2023)",
+       "url": "https://www.thenationalnews.com/weekend/2023/11/03/drones-israel-palestine-gaza-hamas-iran"
+      },
+      {
+       "ad": "James M. Page, “Drones and the Hamas-led Attack of 7 October 2023”, Perspectives on Terrorism 19/1 (2025)",
+       "url": "https://durham-repository.worktribe.com/OutputFile/4088364"
+      },
+      {
+       "ad": "Al Majalla: Mohamed Zouari, the Tunisian engineer behind Hamas drones",
+       "url": "https://en.majalla.com/node/301776/profiles/mohamed-zouari-tunisian-engineer-behind-hamas-drones"
       }
      ]
     }
