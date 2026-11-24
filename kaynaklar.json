@@ -6442,7 +6442,7 @@
   "liste": false,
   "notu": "",
   "id": 246,
-  "genel_harita": {"url": "https://www.iramcenter.org/tr/sitemap.xml"},
+  "genel_harita": {"url": "https://www.iramcenter.org/tr/sitemap.xml", "suz": "/yazilar/", "sira": "id"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [

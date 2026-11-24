@@ -622,10 +622,13 @@ def _sayfa_bilgi(url):
             if len(kuyruk) <= 40 and len(bas) >= 15:
                 b = bas.strip()
                 break
-    return [temiz(b, 300), temiz(meta("og:description") or meta("description"), 400)]
+    yt = meta("article:published_time") or meta("datePublished") or \
+        ((re.search(r'"datePublished"\s*:\s*"([^"]+)"', m) or re.search(r'<time[^>]+datetime="([^"]+)"', m) or [None, ""])[1])
+    t = tarih_coz(yt) if yt else None
+    return [temiz(b, 300), temiz(meta("og:description") or meta("description"), 400), t.isoformat() if t else None]
 
 
-def _harita_url_topla(adres, derin=0):
+def _harita_url_topla(adres, derin=0, tarihsiz=False):
     """Site haritası ya da dizini: (adres, tarih) çiftleri; dizinde en yeni alt haritalara iner."""
     if derin > 2 or not izinli(adres):
         return []
@@ -640,9 +643,9 @@ def _harita_url_topla(adres, derin=0):
     if alt:
         cikti = []
         for a in alt[-2:] if derin else alt[:6]:
-            cikti += _harita_url_topla(a, derin + 1)
+            cikti += _harita_url_topla(a, derin + 1, tarihsiz)
         return cikti
-    return [(o["url"], o["tarih"]) for o in og if o["tarih"]]
+    return [(o["url"].replace(":443/", "/"), o["tarih"]) for o in og if o["tarih"] or tarihsiz]
 
 
 def cek_genel_harita(cfg, d):
@@ -655,11 +658,21 @@ def cek_genel_harita(cfg, d):
         sinir = SIMDI - dt.timedelta(days=GH_GUN)
         suz = re.compile(cfg["suz"]) if cfg.get("suz") else None
         ciftler = {}
+        id_sira = cfg.get("sira") == "id"   # haritada tarih yok: adresin sonundaki yazı numarası en büyük olanlar en yeni
         for adres in cfg["url"] if isinstance(cfg["url"], list) else [cfg["url"]]:
-            for u, t in _harita_url_topla(adres):
-                if sinir <= t <= SIMDI + dt.timedelta(hours=2) and not u.endswith(".xml") and (not suz or suz.search(u)):
+            for u, t in _harita_url_topla(adres, tarihsiz=id_sira):
+                if u.endswith(".xml") or (suz and not suz.search(u)):
+                    continue
+                if id_sira:
+                    n = re.search(r"-(\d+)/?$", u)
+                    if n:
+                        ciftler[u] = int(n.group(1))
+                elif sinir <= t <= SIMDI + dt.timedelta(hours=2):
                     ciftler[u] = max(t, ciftler.get(u, t))
-        adaylar = sorted(([u, t.isoformat()] for u, t in ciftler.items()), key=lambda x: x[1], reverse=True)[:12]
+        if id_sira:
+            adaylar = [[u, None] for u, _ in sorted(ciftler.items(), key=lambda x: x[1], reverse=True)[:8]]
+        else:
+            adaylar = sorted(([u, t.isoformat()] for u, t in ciftler.items()), key=lambda x: x[1], reverse=True)[:12]
         d["gh_aday"], d["gh_son"] = adaylar, SIMDI.isoformat()
     acilan = 0
     ogeler = []
@@ -672,8 +685,12 @@ def cek_genel_harita(cfg, d):
             if not bilgi or not bilgi[0]:
                 continue
             bellek[u] = bilgi
-        b, g = bellek[u][0], bellek[u][1] if len(bellek[u]) > 1 else ""
-        ogeler.append({"url": u, "baslik": b, "tarih": tarih_coz(t), "giris": g, "gorsel": None})
+        b = bellek[u][0]
+        g = bellek[u][1] if len(bellek[u]) > 1 else ""
+        tt = tarih_coz(t) or (tarih_coz(bellek[u][2]) if len(bellek[u]) > 2 and bellek[u][2] else None)
+        if not tt or tt < SIMDI - dt.timedelta(days=GH_GUN):
+            continue   # tarihi bilinmeyen ya da eski yazı alınmaz
+        ogeler.append({"url": u, "baslik": b, "tarih": tt, "giris": g, "gorsel": None})
     canli = {u for u, _ in adaylar}
     d["gh_bellek"] = [[u] + v for u, v in bellek.items() if u in canli][:40]
     return ogeler
