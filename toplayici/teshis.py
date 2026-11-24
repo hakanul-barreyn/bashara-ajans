@@ -68,6 +68,8 @@ for u in [x.strip() for x in (os.environ.get("TESHIS_URL") or "").split(",") if 
     og.sort(key=lambda o: o["tarih"] or topla.SIMDI.replace(year=2000), reverse=True)
     print("  url sayısı", len(og), "| tarihli", sum(1 for o in og if o["tarih"]))
     for o in og[:10]: print("   *", o["tarih"], o["url"][:140])
+    if not any(o["tarih"] for o in og):
+        for o in og[-8:] + og[len(og)//2:len(og)//2 + 6]: print("   ~", o["url"][:140])
 
 # Üçüncü kip: genel_harita tanımlı kaynakları gerçekten okumayı dene
 for k in ks:
