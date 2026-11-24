@@ -291,8 +291,16 @@ def telegram_iletileri(gunun, yok, dsy, simdi):
         bag = [h for h in m.get("yayinlar", []) if h.get("url")][:5]
         if bag:
             p.append("\n<b>Orijinal haberler</b> (tweette ilk yanıta, postta ilk yoruma koy):\n" + "\n".join(f'• <a href="{html.escape(h["url"])}">{E(h["yayin"])}</a>: {E((h.get("baslik") or "")[:90])}' for h in bag))
-        metin = "\n".join(x for x in p if x)
-        iletiler.append(metin[:4000])
+        # Telegram sınırı 4096: madde uzunsa (post + bağlantılar) parçalara böl; HTML etiketi asla ortadan kesilmesin
+        parca = ""
+        for x in (x for x in p if x):
+            x = x[:3800]
+            if parca and len(parca) + len(x) + 1 > 3900:
+                iletiler.append(parca)
+                parca = ""
+            parca = (parca + "\n" + x) if parca else x
+        if parca:
+            iletiler.append(parca)
     return iletiler
 
 
