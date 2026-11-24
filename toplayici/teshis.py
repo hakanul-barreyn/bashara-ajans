@@ -76,3 +76,6 @@ for k in ks:
         og = topla.cek_genel_harita(k["genel_harita"], d)
         print(f"\n### GENEL HARİTA {k['id']} {k['ad']}: aday {len(d.get('gh_aday') or [])}, okunan {len(og)}")
         for o in og[:6]: print("   *", o["tarih"], o["baslik"][:80], "|", o["url"][:90], "|", (o["giris"] or "")[:60])
+        if not og:
+            for b in (d.get("gh_bellek") or [])[:4]: print("   bellek:", str(b)[:200])
+            for a in (d.get("gh_aday") or [])[:8]: print("   aday:", a)
