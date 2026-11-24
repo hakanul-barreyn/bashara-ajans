@@ -48,3 +48,23 @@ for k in ks:
             print("  robots sitemap:", s, "→", ozet(s))
     except Exception as e:
         print("  robots HATA", e)
+
+# İkinci kip: verilen site haritası / besleme adreslerinin yapısını dök
+for u in [x.strip() for x in (os.environ.get("TESHIS_URL") or "").split(",") if x.strip()]:
+    print(f"\n### DÖKÜM {u}")
+    if not topla.izinli(u):
+        print("  robots YASAK"); continue
+    kod, m, son = topla.getir(u, zaman=25)
+    print("  kod", kod, len(m), "B")
+    alt = topla.harita_dizini_alt(m)
+    if alt:
+        print("  alt haritalar:", len(alt))
+        for a in alt[:25]: print("   -", a)
+        continue
+    if re.search(r"<(rss|feed)\b", m[:3000]):
+        for o in topla.besleme_coz(m)[:8]: print("   *", o["tarih"], o["url"][:110], "|", o["baslik"][:70])
+        print("  öğe sayısı", len(topla.besleme_coz(m))); continue
+    og = topla.site_haritasi_coz(m)
+    og.sort(key=lambda o: o["tarih"] or topla.SIMDI.replace(year=2000), reverse=True)
+    print("  url sayısı", len(og), "| tarihli", sum(1 for o in og if o["tarih"]))
+    for o in og[:10]: print("   *", o["tarih"], o["url"][:140])

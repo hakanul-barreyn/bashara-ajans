@@ -6,7 +6,10 @@ on:
     inputs:
       idler:
         description: "Kaynak kimlikleri, virgülle"
-        required: true
+        required: false
+      adresler:
+        description: "Dökülecek site haritası / besleme adresleri, virgülle"
+        required: false
 
 permissions:
   contents: read
@@ -23,3 +26,4 @@ jobs:
       - run: python toplayici/teshis.py
         env:
           TESHIS_ID: ${{ inputs.idler }}
+          TESHIS_URL: ${{ inputs.adresler }}
