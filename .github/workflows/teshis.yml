@@ -1,0 +1,25 @@
+name: Kaynak teşhisi
+
+# Elle çalıştırılır: okunamayan kaynakların ana sayfa ve aday besleme adreslerinin ne döndürdüğünü log'a yazar.
+on:
+  workflow_dispatch:
+    inputs:
+      idler:
+        description: "Kaynak kimlikleri, virgülle"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  teshis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python toplayici/teshis.py
+        env:
+          TESHIS_ID: ${{ inputs.idler }}
