@@ -684,6 +684,8 @@ def cek_genel_harita(cfg, d):
             bilgi = _sayfa_bilgi(u)
             if not bilgi or not bilgi[0]:
                 continue
+            if not bilgi[2] and cfg.get("sira") == "id":
+                bilgi[2] = SIMDI.isoformat()   # sayfada tarih yok: ilk görüldüğü an
             bellek[u] = bilgi
         b = bellek[u][0]
         g = bellek[u][1] if len(bellek[u]) > 1 else ""
