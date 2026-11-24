@@ -616,6 +616,7 @@ def _sayfa_bilgi(url):
             or re.search(r'<meta[^>]+content=["\']([^"\']*)["\'][^>]*(?:property|name)=["\']%s["\']' % ad, m, re.I)
         return html.unescape(r.group(1)).strip() if r else ""
     b = meta("og:title") or html.unescape((re.search(r"<title[^>]*>([^<]+)", m, re.I) or [None, ""])[1]).strip()
+    b = re.sub(r"\s+", " ", b).strip()          # &nbsp; dahil
     for ayrac in (" | ", " – ", " — ", " - "):   # "Başlık | Kurum" kuyruğunu at
         if ayrac in b:
             bas, kuyruk = b.rsplit(ayrac, 1)
