@@ -291,6 +291,14 @@ def telegram_gonder(iletiler):
         ok, hata = _tg(token, sohbet, t)
         if not ok:
             ipucu = " → bota bir kez /start yazman gerekiyor" if "chat not found" in hata or "blocked" in hata or "403" in hata else ""
+            if ipucu:   # hangi bota yazılacağını ve kimlik numarasının biçimini söyle (numaranın kendisi yazılmaz)
+                try:
+                    import urllib.request
+                    with urllib.request.urlopen(f"https://api.telegram.org/bot{token}/getMe", timeout=20) as r:
+                        ben = json.loads(r.read()).get("result") or {}
+                    ipucu += f" (bot: @{ben.get('username')}; TELEGRAM_YONETICI {len(sohbet)} karakter, " + ("yalnızca rakam" if sohbet.lstrip('-').isdigit() else "RAKAM DIŞI KARAKTER VAR") + ")"
+                except Exception:   # noqa: BLE001
+                    pass
             print(f"::warning::Telegram iletisi gönderilemedi ({i + 1}/{len(iletiler)}): {hata}{ipucu}")
             return False
         time.sleep(1.1)
