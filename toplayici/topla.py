@@ -599,6 +599,81 @@ def cek(yontem):
     return None
 
 
+GH_YENILE_SAAT = 2      # sıradan site haritası en çok iki saatte bir indirilir (büyük dosyalar)
+GH_SAYFA_TUR = 4        # bir turda başlığı için açılan en çok yeni sayfa
+GH_GUN = 14
+
+
+def _sayfa_bilgi(url):
+    """Yazı sayfasından yalnızca başlık ve yayıncının kendi kısa tanıtımı (og:description); metin alınmaz."""
+    if not izinli(url):
+        return None
+    kod, m, _ = getir(url, en_fazla=600_000)
+    if kod != 200 or not m:
+        return None
+    def meta(ad):
+        r = re.search(r'<meta[^>]+(?:property|name)=["\']%s["\'][^>]*content=["\']([^"\']*)' % ad, m, re.I) \
+            or re.search(r'<meta[^>]+content=["\']([^"\']*)["\'][^>]*(?:property|name)=["\']%s["\']' % ad, m, re.I)
+        return html.unescape(r.group(1)).strip() if r else ""
+    b = meta("og:title") or html.unescape((re.search(r"<title[^>]*>([^<]+)", m, re.I) or [None, ""])[1]).strip()
+    b = re.split(r"\s+[|–-]\s+(?=[^|–-]{2,40}$)", b)[0].strip()   # "Başlık | Kurum" kuyruğunu at
+    return [temiz(b, 300), temiz(meta("og:description") or meta("description"), 400)]
+
+
+def _harita_url_topla(adres, derin=0):
+    """Site haritası ya da dizini: (adres, tarih) çiftleri; dizinde en yeni alt haritalara iner."""
+    if derin > 2 or not izinli(adres):
+        return []
+    kod, m, _ = getir(adres, zaman=25, en_fazla=8_000_000)
+    if kod != 200:
+        return []
+    alt = harita_dizini_alt(m)
+    og = site_haritasi_coz(m) if not alt else []
+    if not alt and og and all(o["url"].endswith(".xml") for o in og[:20]):
+        og.sort(key=lambda o: o["tarih"] or SIMDI.replace(year=2000), reverse=True)
+        alt = [o["url"] for o in og[:2]]
+    if alt:
+        cikti = []
+        for a in alt[-2:] if derin else alt[:6]:
+            cikti += _harita_url_topla(a, derin + 1)
+        return cikti
+    return [(o["url"], o["tarih"]) for o in og if o["tarih"]]
+
+
+def cek_genel_harita(cfg, d):
+    """RSS'i olmayan kurumlar (düşünce kuruluşları): sıradan site haritasındaki son yazılar.
+    Başlık yazının sayfasından alınır; her sayfa bir kez açılır, sonucu durumda saklanır."""
+    bellek = {x[0]: x[1:] for x in d.get("gh_bellek") or []}
+    son = tarih_coz(d.get("gh_son"))
+    adaylar = d.get("gh_aday") or []
+    if not son or SIMDI - son >= dt.timedelta(hours=GH_YENILE_SAAT):
+        sinir = SIMDI - dt.timedelta(days=GH_GUN)
+        suz = re.compile(cfg["suz"]) if cfg.get("suz") else None
+        ciftler = {}
+        for adres in cfg["url"] if isinstance(cfg["url"], list) else [cfg["url"]]:
+            for u, t in _harita_url_topla(adres):
+                if sinir <= t <= SIMDI + dt.timedelta(hours=2) and not u.endswith(".xml") and (not suz or suz.search(u)):
+                    ciftler[u] = max(t, ciftler.get(u, t))
+        adaylar = sorted(([u, t.isoformat()] for u, t in ciftler.items()), key=lambda x: x[1], reverse=True)[:12]
+        d["gh_aday"], d["gh_son"] = adaylar, SIMDI.isoformat()
+    acilan = 0
+    ogeler = []
+    for u, t in adaylar:
+        if u not in bellek:
+            if acilan >= GH_SAYFA_TUR:
+                continue
+            acilan += 1
+            bilgi = _sayfa_bilgi(u)
+            if not bilgi or not bilgi[0]:
+                continue
+            bellek[u] = bilgi
+        b, g = bellek[u][0], bellek[u][1] if len(bellek[u]) > 1 else ""
+        ogeler.append({"url": u, "baslik": b, "tarih": tarih_coz(t), "giris": g, "gorsel": None})
+    canli = {u for u, _ in adaylar}
+    d["gh_bellek"] = [[u] + v for u, v in bellek.items() if u in canli][:40]
+    return ogeler
+
+
 TG_HESAP = {}   # Telegram API'siyle (hesapla) önceden okunan kanallar: web önizlemesi kapalı olanlar için
 
 
@@ -640,6 +715,17 @@ def kaynak_isle(k, durum):
             d["hata"] = d.get("hata", 0) + 1
         tg.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
         return k, d, tg[:KAYNAK_BASINA]
+    if k.get("genel_harita"):
+        # Elle tanımlanmış sıradan site haritası (RSS'i olmayan düşünce kuruluşları)
+        og = cek_genel_harita(k["genel_harita"], d)
+        d.update({"yontem": {"tip": "genel_harita", "url": str(k["genel_harita"]["url"])}, "surum": KESIF_SURUMU, "son_oge": len(og)})
+        d.setdefault("kesif", SIMDI.isoformat())
+        if og or d.get("gh_aday"):
+            d["son_basari"], d["hata"] = SIMDI.isoformat(), 0
+        else:
+            d["hata"] = d.get("hata", 0) + 1
+        og.sort(key=lambda o: o["tarih"] or SIMDI, reverse=True)
+        return k, d, og[:KAYNAK_BASINA]
     son_kesif = tarih_coz(d.get("kesif")) or SIMDI - dt.timedelta(days=99)
     gecen = SIMDI - son_kesif
     if d.get("surum") != KESIF_SURUMU and (not d.get("son_basari") or (SIMDI - tarih_coz(d["son_basari"])).days >= 1):

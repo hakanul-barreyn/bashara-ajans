@@ -68,3 +68,11 @@ for u in [x.strip() for x in (os.environ.get("TESHIS_URL") or "").split(",") if 
     og.sort(key=lambda o: o["tarih"] or topla.SIMDI.replace(year=2000), reverse=True)
     print("  url sayısı", len(og), "| tarihli", sum(1 for o in og if o["tarih"]))
     for o in og[:10]: print("   *", o["tarih"], o["url"][:140])
+
+# Üçüncü kip: genel_harita tanımlı kaynakları gerçekten okumayı dene
+for k in ks:
+    if k["id"] in ids and k.get("genel_harita"):
+        d = {}
+        og = topla.cek_genel_harita(k["genel_harita"], d)
+        print(f"\n### GENEL HARİTA {k['id']} {k['ad']}: aday {len(d.get('gh_aday') or [])}, okunan {len(og)}")
+        for o in og[:6]: print("   *", o["tarih"], o["baslik"][:80], "|", o["url"][:90], "|", (o["giris"] or "")[:60])

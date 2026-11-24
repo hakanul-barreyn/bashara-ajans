@@ -6391,13 +6391,7 @@
   "liste": false,
   "notu": "",
   "id": 244,
-  "besleme": [
-    "https://www.setav.org/rss",
-    "https://www.setav.org/feed",
-    "https://www.setav.org/rss.xml",
-    "https://www.setav.org/en/rss",
-    "https://www.setav.org/en/feed"
-  ],
+  "genel_harita": {"url": "https://www.setav.org/sitemap/yayinlar", "suz": "^https://www\\.setav\\.org/(?!etkinlikler/)"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6448,12 +6442,7 @@
   "liste": false,
   "notu": "",
   "id": 246,
-  "besleme": [
-    "https://iramcenter.org/rss",
-    "https://iramcenter.org/feed",
-    "https://iramcenter.org/rss.xml",
-    "https://iramcenter.org/en/rss"
-  ],
+  "genel_harita": {"url": "https://www.iramcenter.org/tr/sitemap.xml"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6603,12 +6592,7 @@
   "liste": false,
   "notu": "",
   "id": 252,
-  "besleme": [
-    "https://al-shabaka.org/en/feed/",
-    "https://al-shabaka.org/feed/",
-    "https://al-shabaka.org/briefs/feed/",
-    "https://al-shabaka.org/commentaries/feed/"
-  ],
+  "genel_harita": {"url": "https://al-shabaka.org/analysis-sitemap.xml"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6676,11 +6660,7 @@
   "liste": false,
   "notu": "",
   "id": 255,
-  "besleme": [
-    "https://www.dohainstitute.org/en/rss",
-    "https://www.dohainstitute.org/en/rss.xml",
-    "https://www.dohainstitute.org/rss"
-  ],
+  "genel_harita": {"url": "https://www.dohainstitute.org/sitemap.xml", "suz": "/en/"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6726,11 +6706,7 @@
   "liste": false,
   "notu": "",
   "id": 257,
-  "besleme": [
-    "https://carnegieendowment.org/rss/solr?lang=en&center=middle-east",
-    "https://carnegieendowment.org/middle-east/rss",
-    "https://carnegieendowment.org/rss"
-  ],
+  "genel_harita": {"url": ["https://carnegieendowment.org/sitemaps/posts-index.xml", "https://carnegieendowment.org/sitemaps/research-index.xml"], "suz": "(middle-east|diwan|sada|/research/)"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
