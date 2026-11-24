@@ -6391,6 +6391,13 @@
   "liste": false,
   "notu": "",
   "id": 244,
+  "besleme": [
+    "https://www.setav.org/rss",
+    "https://www.setav.org/feed",
+    "https://www.setav.org/rss.xml",
+    "https://www.setav.org/en/rss",
+    "https://www.setav.org/en/feed"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6413,6 +6420,12 @@
   "liste": false,
   "notu": "",
   "id": 245,
+  "besleme": [
+    "https://orsam.org.tr/tr/rss",
+    "https://orsam.org.tr/rss",
+    "https://orsam.org.tr/en/rss",
+    "https://orsam.org.tr/rss.xml"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6435,6 +6448,12 @@
   "liste": false,
   "notu": "",
   "id": 246,
+  "besleme": [
+    "https://iramcenter.org/rss",
+    "https://iramcenter.org/feed",
+    "https://iramcenter.org/rss.xml",
+    "https://iramcenter.org/en/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6457,6 +6476,12 @@
   "liste": false,
   "notu": "",
   "id": 247,
+  "besleme": [
+    "https://edam.org.tr/feed/",
+    "https://edam.org.tr/en/feed/",
+    "https://edam.org.tr/tr/feed/",
+    "https://edam.org.tr/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6479,6 +6504,12 @@
   "liste": false,
   "notu": "",
   "id": 248,
+  "besleme": [
+    "https://insamer.com/tr/rss",
+    "https://insamer.com/rss.xml",
+    "https://insamer.com/tr/rss.xml",
+    "https://insamer.com/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6545,6 +6576,10 @@
   "liste": false,
   "notu": "",
   "id": 251,
+  "besleme": [
+    "https://www.palestine-studies.org/en/rss.xml",
+    "https://www.palestine-studies.org/rss.xml"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6568,6 +6603,12 @@
   "liste": false,
   "notu": "",
   "id": 252,
+  "besleme": [
+    "https://al-shabaka.org/en/feed/",
+    "https://al-shabaka.org/feed/",
+    "https://al-shabaka.org/briefs/feed/",
+    "https://al-shabaka.org/commentaries/feed/"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6635,6 +6676,11 @@
   "liste": false,
   "notu": "",
   "id": 255,
+  "besleme": [
+    "https://www.dohainstitute.org/en/rss",
+    "https://www.dohainstitute.org/en/rss.xml",
+    "https://www.dohainstitute.org/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6680,6 +6726,11 @@
   "liste": false,
   "notu": "",
   "id": 257,
+  "besleme": [
+    "https://carnegieendowment.org/rss/solr?lang=en&center=middle-east",
+    "https://carnegieendowment.org/middle-east/rss",
+    "https://carnegieendowment.org/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6747,6 +6798,10 @@
   "liste": false,
   "notu": "",
   "id": 260,
+  "besleme": [
+    "https://www.chathamhouse.org/rss.xml",
+    "https://www.chathamhouse.org/rss"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6881,6 +6936,10 @@
   "liste": false,
   "notu": "",
   "id": 266,
+  "besleme": [
+    "https://www.washingtoninstitute.org/rss.xml",
+    "https://www.washingtoninstitute.org/policy-analysis/rss.xml"
+  ],
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [

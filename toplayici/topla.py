@@ -62,6 +62,7 @@ OLAYLAR = os.path.join(KOK, "data", "olaylar.json")
 MARKA = marka.oku()
 UA = (re.sub(r"[^A-Za-z0-9]+", "-", MARKA["kisa_ad"]).strip("-") or "haber") + "-haber-toplayici/1.0 (+https://github.com)"
 SAKLA_GUN = 2
+DUSUNCE_GUN = 14   # düşünce kuruluşları seyrek yayımlıyor: yazıları daha uzun tutulur (basın ölçümlerine girmiyorlar)
 EN_FAZLA_HABER = 6000
 KAYNAK_BASINA = 60  # bir kaynaktan bir çalıştırmada alınacak en yeni haber sayısı
 KESIF_SURUMU = 7
@@ -650,7 +651,12 @@ def kaynak_isle(k, durum):
         gerek = d.get("hata", 0) >= 3 or gecen.days >= YENIDEN_KESIF_GUN
     else:
         gerek = gecen >= dt.timedelta(hours=24)  # yol bulunamadıysa günde bir kez yeniden dene
+    # Kaynak listesine elle besleme adresi eklendiyse (ya da değiştiyse) yol bulunamamış kaynakta hemen dene
+    imza = "|".join(k.get("besleme") or [])
+    if imza and not d.get("yontem") and d.get("besleme_imza") != imza:
+        gerek = True
     if gerek:
+        d["besleme_imza"] = imza or None
         s = kesfet(k)
         d["yontem"] = s["yontem"]
         d["telegram"] = s["telegram"] or d.get("telegram")
@@ -975,6 +981,8 @@ def main():
     kidler = {k["id"] for k in kaynaklar}
     eski = {i: h for i, h in eski.items() if h.get("kaynak") in kidler}
     sinir = SIMDI - dt.timedelta(days=SAKLA_GUN)
+    sinir_d = SIMDI - dt.timedelta(days=DUSUNCE_GUN)
+    dusunce_id = {k["id"] for k in kaynaklar if k.get("dusunce")}
     # Gemini kotası dolduğunda başka yoldan (elle ya da başka bir modelle) yapılmış başlık çevirileri:
     # ceviri/*.json = {haber_id: türkçe başlık}. Yalnızca Türkçe başlığı olmayan haberlere uygulanır.
     try:
@@ -1049,7 +1057,7 @@ def main():
         durum[str(k["id"])] = d
         for o in ogeler:
             t = o["tarih"] or SIMDI
-            if t < sinir or t > SIMDI + dt.timedelta(hours=2):
+            if t < (sinir_d if k.get("dusunce") else sinir) or t > SIMDI + dt.timedelta(hours=2):
                 continue
             if not str(o.get("url") or "").startswith(("https://", "http://")):
                 continue   # yalnızca web bağlantıları: "javascript:" gibi adresler sayfaya girmesin
@@ -1069,6 +1077,9 @@ def main():
                 "oncelik": bool(k.get("oncelik")) or None,
                 "resmi_grup": k.get("resmi_grup"),
             }
+            if k.get("dusunce"):   # düşünce kuruluşu her konuda yazar: bölge adı geçmiyorsa konu dışı
+                import analizler
+                eski[hid]["ilgili"] = bool(analizler.CEKIRDEK.search((o["baslik"] + " " + o.get("giris", "")).lower()))
             if o.get("telegram") and o.get("baglantilar"):
                 site = alan_adi(k.get("url"))
                 w = next((b for b in o["baglantilar"] if site and alan_adi(b) == site), None)
@@ -1333,7 +1344,8 @@ def main():
         log(f"Telegram → site eşlemesi yapılamadı: {e}")
 
     # Kaydet: eski haberleri at, ham metinleri temizle
-    tut = [h for h in eski.values() if (tarih_coz(h["tarih"]) or SIMDI) >= sinir]
+    tut = [h for h in eski.values()
+           if (tarih_coz(h["tarih"]) or SIMDI) >= (sinir_d if h.get("kaynak") in dusunce_id else sinir)]
     # Sınır dolunca önce konu dışı haberler düşer: ilgili ve özeti yazılmış haberler atılıp bir sonraki
     # çalıştırmada "yeni" diye yeniden gelmesin (özet ve çeviri emeği kaybolmasın)
     tut.sort(key=lambda h: h["tarih"], reverse=True)
@@ -1468,6 +1480,12 @@ def main():
                 durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
         except Exception as e:
             log(f"Açıklamalar hatası: {e}")
+        # Analiz arşivi: düşünce kuruluşları ve yayınların analiz yazıları (aylarca saklanır)
+        try:
+            import analizler
+            analizler.guncelle(KOK, tut, kaynaklar, SIMDI, log=log)
+        except Exception as e:
+            log(f"Analiz arşivi hatası: {e}")
         karne.hesapla(KOK, kaynaklar, SIMDI, log=log)
     except Exception as e:  # arşiv hatası toplamayı durdurmasın
         log(f"Arşiv/RSS hatası: {e}")
