@@ -503,7 +503,11 @@ def gnews_adresi(k, gun=2):
 def gnews_coz(metin):
     ogeler = besleme_coz(metin)
     for o in ogeler:
-        o["baslik"] = re.sub(r"\s+-\s+[^-]{2,80}$", "", o["baslik"]).strip()  # sondaki " - Yayın Adı"
+        m = re.search(r"\s+-\s+([^-]{2,80})$", o["baslik"])   # sondaki " - Yayın Adı" (kurum kendi adını da eklediyse iki kez)
+        if m:
+            o["baslik"] = o["baslik"][:m.start()].strip()
+            if o["baslik"].endswith(" - " + m.group(1).strip()):
+                o["baslik"] = o["baslik"][:-(len(m.group(1).strip()) + 3)].strip()
         o["giris"] = ""
         o["gorsel"] = None
         o["gnews"] = True
