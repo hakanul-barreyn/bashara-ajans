@@ -289,6 +289,12 @@ def telegram_gonder(iletiler):
     import time
     for i, t in enumerate(iletiler):
         ok, hata = _tg(token, sohbet, t)
+        for _ in range(4):   # 429: Telegram'ın istediği kadar bekleyip yeniden dene (bot kanal gönderimiyle paylaşılıyor)
+            if ok or "429" not in hata:
+                break
+            bekle = re.search(r"retry after (\d+)", hata)
+            time.sleep(min(60, int(bekle.group(1)) if bekle else 5) + 1)
+            ok, hata = _tg(token, sohbet, t)
         if not ok:
             ipucu = " → bota bir kez /start yazman gerekiyor" if "chat not found" in hata or "blocked" in hata or "403" in hata else ""
             if ipucu:   # hangi bota yazılacağını ve kimlik numarasının biçimini söyle (numaranın kendisi yazılmaz)
