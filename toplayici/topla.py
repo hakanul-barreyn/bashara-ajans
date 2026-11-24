@@ -1461,7 +1461,9 @@ def main():
         try:
             import aciklamalar
             _gm = gemini_model(os.environ.get("GEMINI_API_KEY", "")) if os.environ.get("GEMINI_API_KEY") and not (tarih_coz(durum.get("_gemini_bekle")) and tarih_coz(durum.get("_gemini_bekle")) > SIMDI) else None
-            if aciklamalar.guncelle(KOK, tut, kaynaklar, SIMDI, os.environ.get("GEMINI_API_KEY", "") if _gm else "", _gm or "",
+            # Gemini beklemedeyse de dene: ekler.gemini_cagir ara katman açıksa önce Claude'u kullanır
+            if aciklamalar.guncelle(KOK, tut, kaynaklar, SIMDI, os.environ.get("GEMINI_API_KEY", "") or "yok",
+                                    _gm or os.environ.get("GEMINI_MODEL") or "gemini-3.5-flash-lite",
                                     log=log, sayac=lambda: gunluk_istek(durum, 1)) == -1:
                 durum["_gemini_bekle"] = (SIMDI + dt.timedelta(minutes=60)).isoformat()
         except Exception as e:
