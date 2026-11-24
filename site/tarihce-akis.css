@@ -455,3 +455,8 @@ html.ta-lb-acik{overflow:hidden}
 .ta-gz-t-kunye{margin:0 0 8px;font:500 .78rem/1.45 var(--ta-sans);color:var(--ta-soluk)}
 .ta-gz-tam-ic h5{margin:16px 0 6px;font:800 1.02rem/1.3 var(--ta-serif);color:var(--ta-murekkep)}
 .ta-gz-t-metin{margin:0 0 10px;font-size:.95rem;line-height:1.6;color:var(--ta-ink2);max-width:68ch}
+.ta-gz-sayfa{margin-top:18px;padding-top:16px;border-top:2px solid var(--ta-murekkep)}
+.ta-gz-sayfa:first-of-type{margin-top:8px}
+.ta-gz-sayfa-no{margin:0 0 10px;font:800 .78rem var(--ta-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ta-murekkep)}
+.ta-gz .ta-gz-tam-ic{max-height:none;overflow:visible;margin-top:14px}
+.ta-gz-tam-et{margin:4px 0 6px;font:700 .72rem var(--ta-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ta-soluk)}

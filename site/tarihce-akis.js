@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=16").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=17").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -345,21 +345,16 @@
       ust.append(el("span", "ta-kars-et", EN ? "Newspaper · original and translation" : "Gazete · özgün ve çeviri"),
         el("p", "ta-kars-baslik", G.ad + " · " + (EN ? G.tarih_en : G.tarih)));
       f.appendChild(ust);
-      var sekme = el("div", "ta-kars-sekme"), sahne = el("div", "ta-kk-sahne"), dgYer = el("div"), tamYer = el("div");
-      function goster(S) {
-        sahne.innerHTML = ""; dgYer.innerHTML = ""; tamYer.innerHTML = "";
-        if (S.tam && S.tam.length) {   // sayfanın eksiksiz çevirisi
-          var det = el("details", "ta-gz-tam");
-          det.appendChild(el("summary", null, (EN ? "Full translation of page " : "Sayfa " ) + S.no + (EN ? "" : "’in tam çevirisi")));
-          var ic = el("div", "ta-gz-tam-ic"); ic.lang = EN ? "en" : "tr";
-          S.tam.forEach(function (x) { ic.appendChild(el(x.tip === "baslik" ? "h5" : "p", "ta-gz-t-" + x.tip, EN ? x.en : x.tr)); });
-          det.appendChild(ic); tamYer.appendChild(det);
-        }
+      // sayfalar alt alta: her sayfa kendi kaydırıcısı ve altında eksiksiz çevirisiyle
+      G.sayfalar.forEach(function (S) {
+        var blok = el("section", "ta-gz-sayfa");
+        blok.appendChild(el("h4", "ta-gz-sayfa-no", (EN ? "Page " : "Sayfa ") + S.no));
+        var sahne = el("div", "ta-kk-sahne");
         var kutu = el("div", "ta-kk ta-gz-kk");
         var im = new Image(); im.alt = (EN ? "Original page: " : "Özgün sayfa: ") + G.ad + ", " + (EN ? G.tarih_en : G.tarih) + ", " + (EN ? "p. " : "s. ") + S.no;
         im.onload = function () { kutu.style.setProperty("--oran", (im.naturalWidth / im.naturalHeight).toFixed(4)); };
         kutu.style.setProperty("--oran", "0.665");
-        im.src = S.gorsel; im.decoding = "async";
+        im.src = S.gorsel; im.decoding = "async"; im.loading = "lazy";
         var once = el("div", "kk-katman kk-once"); once.appendChild(im);
         var ceviri = el("div", "kk-katman kk-sonra ta-gz-ceviri");
         var bas = el("div", "ta-gz-kunye");
@@ -368,17 +363,16 @@
         S.satirlar.forEach(function (x) { var t = el(x.tip === "manset" ? "h4" : "p", "ta-gz-" + x.tip, EN ? x.en : x.tr); t.lang = EN ? "en" : "tr"; ceviri.appendChild(t); });
         kutu.append(ceviri, once);
         var dg = kaydirici(kutu, EN ? "Original · Arabic" : "Özgün · Arapça", EN ? "English" : "Türkçe", EN ? "Compare original and translation" : "Özgün ve çeviriyi karşılaştır");
-        sahne.appendChild(kutu); dgYer.appendChild(dg);
-      }
-      G.sayfalar.forEach(function (S, i) {
-        var b = el("button", "ta-kars-sekme-d", (EN ? "Page " : "Sayfa ") + S.no); b.type = "button"; b.setAttribute("role", "tab");
-        b.onclick = function () { sekme.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); }); goster(S); };
-        if (!i) b.setAttribute("aria-selected", "true");
-        sekme.appendChild(b);
+        sahne.appendChild(kutu);
+        blok.append(sahne, dg);
+        if (S.tam && S.tam.length) {
+          var ic = el("div", "ta-gz-tam-ic"); ic.lang = EN ? "en" : "tr";
+          ic.appendChild(el("p", "ta-gz-tam-et", EN ? "Full translation of page " + S.no : "Sayfa " + S.no + "’in tam çevirisi"));
+          S.tam.forEach(function (x) { ic.appendChild(el(x.tip === "baslik" ? "h5" : "p", "ta-gz-t-" + x.tip, EN ? x.en : x.tr)); });
+          blok.appendChild(ic);
+        }
+        f.appendChild(blok);
       });
-      if (G.sayfalar.length > 1) f.appendChild(sekme);
-      f.append(sahne, dgYer, tamYer);
-      goster(G.sayfalar[0]);
       var kk = el("p", "ta-kars-kaynak");
       kk.appendChild(dis(el("a", null, (EN ? G.kaynak.ad_en : G.kaynak.ad) + " ↗"), G.kaynak.url));
       kk.appendChild(document.createTextNode(" · " + (EN ? G.lisans_en : G.lisans) + (EN ? " Translated from the Arabic by Alboroto; illegible words are marked." : " Arapçadan Alboroto çevirdi; okunamayan sözcükler belirtildi.")));
