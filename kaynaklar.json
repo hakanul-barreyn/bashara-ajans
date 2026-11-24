@@ -6660,7 +6660,7 @@
   "liste": false,
   "notu": "",
   "id": 255,
-  "genel_harita": {"url": "https://www.dohainstitute.org/sitemap.xml", "suz": "/en/"},
+  "genel_harita": {"url": "https://www.dohainstitute.org/sitemap.xml", "suz": "/en/(?!News/|Lists/|Events/|Pages/)"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
@@ -6706,7 +6706,7 @@
   "liste": false,
   "notu": "",
   "id": 257,
-  "genel_harita": {"url": ["https://carnegieendowment.org/sitemaps/posts-index.xml", "https://carnegieendowment.org/sitemaps/research-index.xml"], "suz": "(middle-east|diwan|sada|/research/)"},
+  "genel_harita": {"url": ["https://carnegieendowment.org/sitemaps/posts-index.xml", "https://carnegieendowment.org/sitemaps/research-index.xml"], "suz": "(/middle-east/|/diwan/|/sada/)"},
   "telegram": null,
   "dusunce": true,
   "analiz_yolu": [
