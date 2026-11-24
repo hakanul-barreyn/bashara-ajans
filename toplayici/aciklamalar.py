@@ -16,7 +16,8 @@ import re
 import ekler
 
 SAKLA_GUN = 14
-PARTI = 15
+KURAL_SURUM = 2   # yazım kuralları değişince artır: eldeki açıklamalar yeni kurallarla yeniden yazılır
+PARTI = 20
 
 TARAF = {"Hamas (resmî kanal)": ("Hamas", "Hamas"), "FHKC Gazze": ("FHKC (Gazze)", "PFLP (Gaza)"),
          "İslami Cihad (kanal)": ("İslami Cihad", "Islamic Jihad")}
@@ -54,6 +55,8 @@ def guncelle(kok, haberler, kaynaklar, simdi, anahtar="", model="", log=print, s
         veri = {"aciklamalar": [], "atlanan": []}
     kmap = {k["id"]: k for k in kaynaklar}
     sinir = (simdi - dt.timedelta(days=SAKLA_GUN)).isoformat()
+    if veri.get("surum") != KURAL_SURUM:
+        veri = {"aciklamalar": [], "atlanan": []}
     eldeki = {a["id"]: a for a in veri.get("aciklamalar", []) if a.get("tarih", "") >= sinir}
     atlanan = {i for i in veri.get("atlanan", [])}
     bekleyen = []
@@ -96,7 +99,7 @@ def guncelle(kok, haberler, kaynaklar, simdi, anahtar="", model="", log=print, s
         log("Açıklamalar: yapay zekâ anahtarı yok; açıklamalar yazılmadı")
     liste = sorted(eldeki.values(), key=lambda a: a["tarih"], reverse=True)
     os.makedirs(os.path.dirname(yol), exist_ok=True)
-    json.dump({"guncellendi": simdi.isoformat(), "aciklamalar": liste, "atlanan": sorted(atlanan)[-2000:],
+    json.dump({"guncellendi": simdi.isoformat(), "surum": KURAL_SURUM, "aciklamalar": liste, "atlanan": sorted(atlanan)[-2000:],
                "bekleyen": max(0, len(bekleyen) - PARTI)}, open(yol, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     if yeni:
         log(f"Açıklamalar: {yeni} yeni açıklama yazıldı ({len(liste)} kayıt)")
