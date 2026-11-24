@@ -8,7 +8,13 @@ name: Sabah bülteni
 on:
   schedule:
     - cron: "40 4 * * *"   # 04.40 UTC = 07.40 Türkiye; kuyrukla birlikte 08.00 civarı
+    - cron: "40 15 * * *"  # 15.40 UTC = 18.40 Türkiye: akşam bülteni
   workflow_dispatch:
+    inputs:
+      istek:
+        description: "Bot üzerinden /brifing ile istendi"
+        required: false
+        default: "0"
 
 permissions:
   contents: read
@@ -37,6 +43,7 @@ jobs:
           YZ_SAGLAYICI: anthropic
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_YONETICI: ${{ secrets.TELEGRAM_YONETICI }}
+          BULTEN_ISTEK: ${{ inputs.istek }}
           BULTEN_SMTP_KULLANICI: ${{ secrets.BULTEN_SMTP_KULLANICI }}
           BULTEN_SMTP_SIFRE: ${{ secrets.BULTEN_SMTP_SIFRE }}
           BULTEN_ALICI: ${{ secrets.BULTEN_ALICI }}

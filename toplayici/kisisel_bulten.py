@@ -30,7 +30,7 @@ from almanak import kamp  # noqa: E402
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
-TALIMAT = """Bir editör her sabah kendi X (Twitter) hesabından Filistin ve bölge haberleri paylaşıyor. Hesap küçük (yaklaşık 100 takipçi) ve Türkçe.
+TALIMAT = """Bir editör her gün kendi X (Twitter) hesabından Filistin ve bölge haberleri paylaşıyor. Hesap küçük (yaklaşık 100 takipçi) ve Türkçe.
 Okurları Türk basınında olmayan uluslararası haberleri ve aynı olayın farklı yayınlarda nasıl farklı anlatıldığını görmek için takip edecek.
 Sana günün maddeleri veriliyor: olay başlığı, çerçeve notu ve her yayının adı, bulunduğu kamp, özgün başlığı ve nasıl anlattığı.
 
@@ -57,6 +57,14 @@ def _oku(yol, vars_):
         return json.load(open(yol, encoding="utf-8"))
     except (OSError, ValueError):
         return vars_
+
+
+def _ad(t):
+    """Bülten adı yerel saate göre: öğleden önce sabah, sonra akşam (ya da elle istenen ara brifing)."""
+    import os as _o
+    if _o.environ.get("BULTEN_ISTEK") == "1":
+        return "Brifing"
+    return "Sabah bülteni" if t.hour < 12 else "Akşam bülteni"
 
 
 def _gun(t):
@@ -222,7 +230,7 @@ def html_yap(gunun, yok, dsy, simdi):
 
 
 def metin_yap(gunun, yok, dsy, simdi):
-    s = [f"Sabah bülteni · {_gun(simdi)}", ""]
+    s = [f"{_ad(simdi)} · {_gun(simdi)}", ""]
     for ad, liste in (("GÜNÜN OLAYLARI", gunun), ("TÜRKÇE YAYINLARDA YOK", yok), ("DOSYALAR", dsy)):
         if not liste:
             continue
@@ -259,7 +267,7 @@ def _tg(token, sohbet, metin):
 def telegram_iletileri(gunun, yok, dsy, simdi):
     """Her madde ayrı ileti (Telegram'ın 4096 karakter sınırı); en başta kısa bir içindekiler."""
     E = lambda t: html.escape(str(t or ""), quote=False)
-    bas = [f"<b>Sabah bülteni · {E(_gun(simdi))}</b>"]
+    bas = [f"<b>{E(_ad(simdi))} · {E(_gun(simdi))}</b>"]
     for ad, liste in (("Günün olayları", gunun), ("Türkçe yayınlarda yok", yok), ("Dosyalar", dsy)):
         if liste:
             bas.append(f"\n<b>{ad}</b>")
@@ -358,7 +366,7 @@ def main():
     if os.environ.get("BULTEN_ONIZLEME"):
         open(os.environ["BULTEN_ONIZLEME"], "w", encoding="utf-8").write(h)
     tg = telegram_gonder(telegram_iletileri(gunun, yok, dsy, yerel))
-    ep = gonder(f"Sabah bülteni · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel))
+    ep = gonder(f"{_ad(yerel)} · {_gun(yerel)}" + (f" · {gunun[0]['baslik'][:60]}" if gunun else ""), h, metin_yap(gunun, yok, dsy, yerel))
     if not tg and not ep:
         print("Bülten hiçbir kanala gönderilemedi. Önizleme:")
         print(metin_yap(gunun, yok, dsy, yerel)[:3000])

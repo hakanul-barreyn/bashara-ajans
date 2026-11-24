@@ -210,8 +210,21 @@ def _komut(metin, kim, kok, veri, haberler, kaynaklar, simdi, site):
         return ("Doğrulama komutları:\n/yanlis &lt;haber&gt; &lt;kanıt bağlantısı&gt; &lt;açıklama&gt;\n/celiskili &lt;haber&gt; &lt;açıklama&gt;\n"
                 "/dogrulanmamis &lt;haber&gt; &lt;açıklama&gt;\n/kaldir &lt;haber&gt;\n/liste\n"
                 "&lt;haber&gt;: sitedeki haber bağlantısı ya da 12 haneli kimlik.\n\n"
+                "/brifing: X hesabın için gündem ve tweet taslakları şimdi gelsin\n\n"
                 "Kişi fotoğrafları (Gündem görselleri için):\n/foto Ad, diğer yazılış = &lt;Commons dosya bağlantısı&gt;\n"
                 "/fotolar: listeyi göster\n/fotosil Ad: o kişinin bütün fotoğraflarını sil (ya da /fotosil Ad 2: yalnızca ikincisini)")
+    if komut in ("/brifing", "/bulten", "/bülten"):
+        depo, jeton = os.environ.get("GITHUB_REPOSITORY", ""), os.environ.get("GITHUB_TOKEN", "")
+        if not depo or not jeton:
+            return "Brifing başlatılamadı: GitHub bilgisi yok."
+        istek = urllib.request.Request(f"https://api.github.com/repos/{depo}/actions/workflows/bulten-eposta.yml/dispatches",
+                                       data=json.dumps({"ref": "main", "inputs": {"istek": "1"}}).encode(), method="POST",
+                                       headers={"Authorization": f"Bearer {jeton}", "Accept": "application/vnd.github+json"})
+        try:
+            urllib.request.urlopen(istek, timeout=20).close()
+            return "🗞 Brifing hazırlanıyor; birkaç dakika içinde burada olur."
+        except Exception as e:
+            return f"Brifing başlatılamadı ({_e(type(e).__name__)})."
     if komut in ("/foto", "/fotolar", "/fotosil"):
         return _foto_komut(komut, geri, kok, simdi)
     if komut == "/liste":
