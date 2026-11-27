@@ -292,6 +292,57 @@ def yerlestir(kok, d, anahtarlar, cagir, simdi, log=print, butce=lambda: True):
 
 # ---------------------------------------------------------------- durum
 
+HABER_PARTI = 80         # bir eşleştirme çağrısındaki en çok haber
+HABER_GUN = 2            # son kaç günün haberleri eşleştirilir
+HABER_TUT = 10           # eşleştirme kaydı kaç gün tutulur
+
+ESLE_TALIMAT = """Alboroto haber sitesinde "dosyalar" var: haftalarca süren büyük olaylar. Sana dosyalar (kimlik, ad, kapsam) ve tek tek haber başlıkları veriliyor.
+Her haberin hangi dosyaya ait olduğunu söyle. Kurallar:
+- Bir haber ancak dosyanın kapsamına AÇIKÇA giriyorsa o dosyaya konur. Emin değilsen, ya da haber bölgeyle ilgili ama hiçbir dosyanın konusu değilse: null.
+- Başlıktaki yer, aktör ve olaya bak; aynı ülkenin başka bir konusu (ör. İsrail'de ekonomi haberi, İran'da deprem) o ülkenin dosyasına girmez.
+- Her habere en çok bir dosya ver.
+Yanıt yalnızca JSON: {"es": [{"i": <haber sırası>, "d": "<dosya kimliği>" ya da null}]}"""
+
+
+def haberleri_esle(d, haberler, cagir, simdi, log=print, butce=lambda: True):
+    """Olay kümesine girmemiş tek tek haberleri dosyalara yerleştirir (turda en çok bir çağrı).
+    Sonuç d["haber_es"]: {haber kimliği: [dosya kimliği ya da None, gün]}. Döndürür: eşleşen sayısı."""
+    es = d.setdefault("haber_es", {})
+    acik = [x for x in d["dosyalar"] if x.get("durum") == "acik"]
+    if not acik or not haberler:
+        return 0
+    olayda = {h for o in d["olaylar"].values() if o.get("yer") for h in o.get("h", [])}
+    esik = (simdi - dt.timedelta(days=HABER_GUN)).isoformat()
+    aday = [h for h in haberler if isinstance(h, dict) and h.get("id") and h.get("ilgili", True) and not h.get("atla")
+            and (h.get("tarih") or "") >= esik and h["id"] not in es and h["id"] not in olayda
+            and (h.get("baslik_tr") or h.get("baslik_orj"))]
+    aday.sort(key=lambda h: h.get("tarih") or "", reverse=True)
+    parti = aday[:HABER_PARTI]
+    if not parti or not butce():
+        return 0
+    girdi = {"dosyalar": [{"id": x["id"], "ad": x["ad"], "kapsam": x["kapsam"], "dallar": [dl["ad"] for dl in x.get("dallar", [])]} for x in acik],
+             "haberler": [{"i": i, "baslik": (h.get("baslik_tr") or h.get("baslik_orj") or "")[:220]} for i, h in enumerate(parti)]}
+    kod, sonuc = cagir(ESLE_TALIMAT + "\n\n" + json.dumps(girdi, ensure_ascii=False))
+    if kod != 200 or not isinstance(sonuc, dict):
+        log(f"Haber eşleştirme yapılamadı ({kod})")
+        return 0
+    gecerli = {x["id"] for x in acik}
+    bugun = simdi.date().isoformat()
+    n = 0
+    for r in sonuc.get("es") or []:
+        try:
+            i = int(r.get("i"))
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if 0 <= i < len(parti):
+            did = r.get("d") if r.get("d") in gecerli else None
+            es[parti[i]["id"]] = [did, bugun]
+            n += 1 if did else 0
+    for h in parti:   # yanıtta unutulanlar dosyasız sayılır, yeniden sorulmaz
+        es.setdefault(h["id"], [None, bugun])
+    return n
+
+
 def dal_olaylari(d, did, dal_id):
     return sorted([(k, o) for k, o in d["olaylar"].items() if [did, dal_id] in o.get("yer", [])], key=lambda x: (x[1].get("g") or "", x[1].get("son") or ""))
 
@@ -504,6 +555,8 @@ def buda(d, simdi):
     for k in [k for k, o in d["olaylar"].items() if o.get("bakildi") and not o.get("yer") and not o.get("oneride") and (o.get("g") or "") < esik]:
         del d["olaylar"][k]
     d["oneriler"] = [p for p in d["oneriler"] if p["durum"] == "bekliyor" or (p.get("tarih") or "") >= esik]
+    esik_h = (simdi - dt.timedelta(days=HABER_TUT)).date().isoformat()
+    d["haber_es"] = {k: v for k, v in (d.get("haber_es") or {}).items() if (v[1] or "") >= esik_h}
 
 
 def site_verisi(kok, d, simdi, sayfa_adi=None, gorsel_bul=None):
@@ -560,6 +613,11 @@ def site_verisi(kok, d, simdi, sayfa_adi=None, gorsel_bul=None):
     for x in cikti:
         b = secim.get(x["id"]) or {}
         x["bolge"], x["bolge_en"] = b.get("bolge"), b.get("bolge_en")
+    acik_id = {x["id"] for x in cikti}
+    esik8 = (bugun - dt.timedelta(days=8)).isoformat()
+    for h, (did, g) in (d.get("haber_es") or {}).items():
+        if did in acik_id and (g or "") >= esik8:
+            harita.setdefault(h, [did, None])
     veri = {"guncellendi": simdi.isoformat(), "dosyalar": cikti, "haber": harita}
     _yaz(os.path.join(kok, SITE), veri, sik=True)
     return veri
@@ -921,6 +979,14 @@ def calistir(kok, olaylar, haberler, cagir_yer, cagir_ozet, simdi, panel_yolu=No
         log(f"Dosyalar: {len(sorulacak[:sinir])} olaya bakıldı, {n} olay dosyaya girdi")
         if kod == 200 and not any(not o.get("bakildi") for o in d["olaylar"].values()):
             d["dolduruldu"] = True
+    if cagir_yer and butce():
+        try:
+            liste = list(haberler.values()) if isinstance(haberler, dict) else list(haberler or [])
+            n = haberleri_esle(d, liste, cagir_yer, simdi, log=log, butce=butce)
+            if n:
+                log(f"Dosyalar: {n} haber tek tek dosyaya bağlandı")
+        except Exception as e:
+            log(f"Haber eşleştirme hatası: {e}")
     if cagir_yer and butce():
         try:
             toparla(d, cagir_yer, simdi, log=log)

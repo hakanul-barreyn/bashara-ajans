@@ -10,7 +10,7 @@
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Newsreader:opsz,wght@6..72,400..800&family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="site/yeni.css?v=3">
+<link rel="stylesheet" href="site/yeni.css?v=4">
 </head>
 <body>
 <div class="on-serit"><div class="kap">
@@ -52,31 +52,31 @@
 </section>
 <main class="kap">
 
+  <section class="blok" id="dosyalar">
+    <div class="blok-bas">
+      <h2 class="bolum-b" data-tr="Süren hikâyeler" data-en="Ongoing stories">Süren hikâyeler</h2>
+      <a class="ok-bag" href="d/" data-tr="Bütün dosyalar →" data-en="All files →">Bütün dosyalar →</a>
+    </div>
+    <p class="bolum-a" data-tr="Haberler tek tek değil, ait oldukları hikâyenin içinde: her dosya, haftalardır süren bir olayın bütün gelişmelerini toplar" data-en="Stories are not shown one by one but inside the larger story they belong to: each file gathers every development of an event that has been running for weeks">Haberler tek tek değil, ait oldukları hikâyenin içinde: her dosya, haftalardır süren bir olayın bütün gelişmelerini toplar</p>
+    <div class="hub" id="hub"></div>
+    <div class="hub-kucuk" id="hubKucuk"></div>
+  </section>
+
   <section class="blok">
     <div class="blok-bas">
-      <h2 class="bolum-b" data-tr="Gündem" data-en="Top stories">Gündem</h2>
-      <p class="bolum-a" data-tr="Birden çok yayının verdiği olaylar; çubuk, kimin yazdığını gösterir" data-en="Events covered by several outlets; the bar shows who reported them">Birden çok yayının verdiği olaylar; çubuk, kimin yazdığını gösterir</p>
+      <h2 class="bolum-b" data-tr="Diğer gelişmeler" data-en="Other developments">Diğer gelişmeler</h2>
     </div>
+    <p class="bolum-a" data-tr="Henüz bir dosyaya girmeyen, birden çok yayının verdiği olaylar" data-en="Events covered by several outlets that do not belong to a file yet">Henüz bir dosyaya girmeyen, birden çok yayının verdiği olaylar</p>
     <div class="gundem" id="gundem"></div>
   </section>
 
-  <section class="blok iki">
-    <div>
-      <div class="blok-bas">
-        <h2 class="bolum-b" data-tr="Arka plan" data-en="Background">Arka plan</h2>
-        <a class="ok-bag" href="analizler.html" data-tr="Bütün analizler →" data-en="All analysis →">Bütün analizler →</a>
-      </div>
-      <p class="bolum-a" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
-      <div class="analiz" id="analiz"></div>
+  <section class="blok">
+    <div class="blok-bas">
+      <h2 class="bolum-b" data-tr="Arka plan" data-en="Background">Arka plan</h2>
+      <a class="ok-bag" href="analizler.html" data-tr="Bütün analizler →" data-en="All analysis →">Bütün analizler →</a>
     </div>
-    <div>
-      <div class="blok-bas">
-        <h2 class="bolum-b" data-tr="Dosyalar" data-en="Files">Dosyalar</h2>
-        <a class="ok-bag" href="d/" data-tr="Hepsi →" data-en="All →">Hepsi →</a>
-      </div>
-      <p class="bolum-a" data-tr="Süregelen gelişmeler ve son halkaları" data-en="Ongoing stories and their latest turn">Süregelen gelişmeler ve son halkaları</p>
-      <ol class="dosya" id="dosya"></ol>
-    </div>
+    <p class="bolum-a" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
+    <div class="analiz" id="analiz"></div>
   </section>
 
   <section class="blok" id="akis">
@@ -86,9 +86,9 @@
     </div>
     <div class="arac">
       <input type="search" id="ara" placeholder="Haber ya da yayın ara" aria-label="Ara">
-      <select id="bolge" aria-label="Bölge"></select>
       <button type="button" class="daha-suz" id="dahaSuz" aria-expanded="false" data-tr="Süzgeçler +" data-en="Filters +">Süzgeçler +</button>
     </div>
+    <div class="dosya-suz" id="dosyaSuz" role="group" aria-label="Dosya"></div>
     <div class="suz-ek" id="suzEk" hidden>
       <label><input type="checkbox" id="sAnaliz"> <span data-tr="Yalnız analiz" data-en="Analysis only">Yalnız analiz</span></label>
       <label><input type="checkbox" id="sTg"> <span data-tr="Telegram'ı gizle" data-en="Hide Telegram">Telegram'ı gizle</span></label>
@@ -121,6 +121,6 @@
   <p data-tr="Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur." data-en="Sharing a story does not mean we endorse it; stories are placed side by side to show how the press frames them.">Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur.</p>
   <nav><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a><a href="duzeltmeler.html" data-tr="Düzeltmeler" data-en="Corrections">Düzeltmeler</a><a href="aciklamalar.html" data-tr="Açıklamalar" data-en="Statements">Açıklamalar</a><a href="arsiv.html" data-tr="Arşiv" data-en="Archive">Arşiv</a></nav>
 </div></footer>
-<script src="site/yeni.js?v=3"></script>
+<script src="site/yeni.js?v=4"></script>
 </body>
 </html>
