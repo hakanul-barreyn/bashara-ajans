@@ -10,7 +10,7 @@ on:
       pg: {description: "Palestine Grid noktaları (km): 126,114;127,115", required: false}
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   kes:
@@ -27,7 +27,7 @@ jobs:
           PG: ${{ inputs.pg }}
           GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
           AWS_NO_SIGN_REQUEST: "YES"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: uydu-kesit
-          path: cikti/
+      - run: |
+          cd cikti && git init -q -b uydu-kesit && git add -A
+          git -c user.name="zbs-gorsel" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Uydu kesiti"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" HEAD:uydu-kesit
