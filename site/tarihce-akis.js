@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=19").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=20").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -470,7 +470,7 @@
     // eski hava fotoğrafı mozaiği ile uydu: birkaç çift arasında sekmeler; "bugün" günlük uydu karesinden kesilir
     function havaKars(h) {
       var gun = new Date().toISOString().slice(0, 10), K = h.katmanlar;
-      var ad = function (k) { return k === "bugun" ? (EN ? "Today" : "Bugün") : K[k].tarih.length === 7 ? tarihAd(K[k].tarih) : tarihAd(K[k].tarih); };
+      var ad = function (k) { return k === "bugun" ? (EN ? "Today" : "Bugün") : K[k].etiket ? D2(K[k], "etiket") : tarihAd(K[k].tarih); };
       var f = el("figure", "ta-kars uydu izle");
       var ust = el("div", "ta-kars-ust"), bas = el("p", "ta-kars-baslik");
       ust.append(el("span", "ta-kars-et", EN ? "Aerial photograph and satellite · before and after" : "Hava fotoğrafı ve uydu · önce ve sonra"), bas);
@@ -482,7 +482,7 @@
       var secili = 0;
       function resim(k) {
         var L = K[k], im = new Image(); im.decoding = "async"; im.draggable = false;
-        im.src = L.src + (L.gunluk ? "?t=" + gun : ""); im.alt = (EN ? "Gaza City, " : "Gazze kenti, ") + ad(k);
+        im.src = L.src + (L.gunluk ? "?t=" + gun : ""); im.alt = (h.yer ? D2(h, "yer") : (EN ? "Gaza City" : "Gazze kenti")) + ", " + ad(k);
         if (L.gri) im.className = "kk-gri";
         if (L.kesit) {   // kare içinden kesit: [x, y, genişlik, yükseklik] oran olarak
           var c = L.kesit;

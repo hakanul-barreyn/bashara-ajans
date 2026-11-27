@@ -894,6 +894,66 @@
      "sonuc_en": "The armistice largely recorded the outcome of the war: Haifa had fallen on 22 April, Jaffa on 13 May, Lydda and Ramle in July 1948, and their people had been driven out. Even Acre, allotted to the Arab state under the partition plan, had been taken on 17–18 May 1948. Rhodes settled only the southern front, the Negev and Gaza; Egypt gave up the Faluja pocket and kept the Gaza Strip. The armistices with Lebanon (23 March), Jordan (3 April) and Syria (20 July 1949) followed. There was one exception: under the armistice with Jordan, the Wadi Ara area and its villages, which had not changed hands in the fighting, were handed to Israel."
     },
     {
+     "yeni": true,
+     "tarih": "1949-02-26",
+     "baslik": "Faluca cebi boşaltıldı, köy haritadan silindi",
+     "baslik_en": "The Faluja pocket is evacuated and the village erased",
+     "metin": "Ekim 1948’den beri yaklaşık 4.000 Mısır askeri Faluca ile komşu Irak el-Menşiyye köylerinde İsrail kuşatması altındaydı; kuşatılanlar arasında genç bir binbaşı, Cemal Abdünnasır da vardı. 24 Şubat ateşkesi Mısır birliğinin çekilmesini ve iki köyde kalan yaklaşık 3.140 sivilin can ve mal güvenliğini güvenceye aldı. Birlik 26 Şubat’ta çekildi. Ardından İsrail askerleri köylüleri dövdü, soydu ve korkuttu; BM ve Quaker gözlemcileri bunları raporladı. Dışişleri Bakanı Moşe Şaret, ordunun kabine onayı olmadan hareket ettiğini söyleyerek itiraz etti; tarihçi Benny Morris’e göre kararı Ben Gurion onaylamıştı. Son siviller 22 Nisan’da ayrıldı, beş gün sonra Yitzhak Rabin köylerin yıkılmasını emretti. 1945’te 4.670 kişinin yaşadığı Faluca’nın toprakları bugün Kiryat Gat kentinin ve çevresindeki yerleşimlerin altında.",
+     "metin_en": "Since October 1948 some 4,000 Egyptian troops had been besieged by Israeli forces in al-Faluja and neighbouring Iraq al-Manshiyya; among them was a young major, Gamal Abdel Nasser. The 24 February armistice provided for the Egyptian brigade’s withdrawal and guaranteed the safety and property of about 3,140 civilians remaining in the two villages. The brigade left on 26 February. Israeli soldiers then beat, robbed and intimidated the villagers; UN and Quaker observers reported it. Foreign Minister Moshe Sharett protested that the army had acted without cabinet approval; according to historian Benny Morris, Ben-Gurion had approved the decision. The last civilians left on 22 April, and five days later Yitzhak Rabin ordered the villages demolished. The lands of al-Faluja, home to 4,670 people in 1945, now lie under the city of Kiryat Gat and the settlements around it.",
+     "vurgu": [
+      "can ve mal güvenliğini güvenceye aldı"
+     ],
+     "vurgu_en": [
+      "guaranteed the safety and property"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: al-Faluja",
+       "url": "https://en.wikipedia.org/wiki/Al-Faluja"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Benny Morris, The Birth of the Palestinian Refugee Problem Revisited (Cambridge University Press, 2004)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Walid Khalidi (ed.), All That Remains (Institute for Palestine Studies, 1992)",
+       "tur": "akademik"
+      }
+     ],
+     "hava": {
+      "yer": "Faluca",
+      "yer_en": "al-Faluja",
+      "katmanlar": {
+       "1940": {
+        "src": "site/tarihce-uydu/faluca-1940.jpg",
+        "tarih": "1940",
+        "etiket": "1940’lar haritası",
+        "etiket_en": "1940s map"
+       },
+       "2026": {
+        "src": "site/tarihce-uydu/faluca-2026.jpg",
+        "tarih": "2026-11-20"
+       }
+      },
+      "ciftler": [
+       [
+        "1940",
+        "2026"
+       ]
+      ],
+      "oran": 0.9959,
+      "nasil": "Üstte kuzey var. Haritanın ortasındaki taralı leke Faluca köyü (El Falûje); çevresindeki ince çizgiler tarla sınırları ve patikalar, kırmızı kesikli çizgiler yükselti eğrileri. Çizgiyi sürükleyince aynı alanın bugünkü uydu görüntüsü açılır: köyün yerinde koyu yeşil bir orman var, kuzeybatısında su havuzları, kuzeyinde bir sanayi bölgesi, sağ altta Kiryat Gat’ın sokakları. Köyün hemen doğusundan geçen iki otoyol, haritadaki eski yolların izini kesiyor.",
+      "nasil_en": "North is at the top. The hatched patch in the middle of the map is the village of al-Faluja (El Falûje); the thin lines around it are field boundaries and paths, the dashed red lines are contours. Drag the line to reveal today’s satellite image of the same area: a dark green forest stands where the village was, with water reservoirs to the north-west, an industrial zone to the north and the streets of Kiryat Gat at the bottom right. Two motorways east of the village cut across the old roads on the map.",
+      "not": "Harita, üzerindeki Filistin Izgarası çizgilerinden bugünkü koordinatlara çevrildi ve uydu görüntüsüne oturtuldu; kenarlarda birkaç on metrelik kayma olabilir. Uydu görüntüsü 10 metre çözünürlüklüdür.",
+      "not_en": "The map was converted to today’s coordinates using the Palestine Grid lines printed on it and fitted to the satellite image; there may be a shift of a few tens of metres near the edges. The satellite image has a 10-metre resolution.",
+      "kaynak": "Harita: Survey of Palestine, 1:20.000, 1940’lar; Wikimedia Commons, kamu malı. Uydu: Copernicus Sentinel-2 verisi, 20 Kasım 2026, ESA; işleme: Alboroto.",
+      "kaynak_en": "Map: Survey of Palestine, 1:20,000, 1940s; Wikimedia Commons, public domain. Satellite: Copernicus Sentinel-2 data, 20 November 2026, ESA; processed by Alboroto.",
+      "sayfa": "https://commons.wikimedia.org/wiki/File:Historical_map_series_for_the_area_of_al-Faluja_(1940s).jpg"
+     }
+    },
+    {
      "ref": "1948-09-22",
      "kaynakca": [
       {
@@ -1297,6 +1357,34 @@
      ]
     },
     {
+     "yeni": true,
+     "tarih": "1981-10-06",
+     "baslik": "Enver Sedat Kahire’de öldürüldü",
+     "baslik_en": "Anwar Sadat is assassinated in Cairo",
+     "metin": "Ekim 1973 savaşının yıl dönümü için düzenlenen askerî geçit töreninde bir kamyon tribünün önünde durdu. Mısır İslami Cihad örgütüne bağlı Teğmen Halid İslambuli ve arkadaşları tribüne el bombası atıp ateş açtı; Sedat ile birlikte on kişi öldü. İslambuli eylemin başlıca nedeni olarak Camp David anlaşmalarını ve İsrail’le barışı gösterdi; Nisan 1982’de idam edildi. Sedat’ın yerine geçen Hüsnü Mübarek antlaşmayı korudu: Mısır’ın İsrail’le savaş cephesinden çekilişi kalıcı oldu.",
+     "metin_en": "At the military parade marking the anniversary of the October 1973 war, a truck stopped in front of the reviewing stand. Lieutenant Khalid al-Islambouli of Egyptian Islamic Jihad and his comrades threw grenades and opened fire; Sadat and ten others were killed. Islambouli named the Camp David Accords and peace with Israel as his main motive; he was executed in April 1982. Hosni Mubarak, who succeeded Sadat, kept the treaty: Egypt’s exit from the front against Israel was permanent.",
+     "vurgu": [
+      "Camp David anlaşmalarını ve İsrail’le barışı"
+     ],
+     "vurgu_en": [
+      "the Camp David Accords and peace with Israel"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Assassination of Anwar Sadat",
+       "url": "https://en.wikipedia.org/wiki/Assassination_of_Anwar_Sadat"
+      },
+      {
+       "ad": "UPI, 6 Ekim 1981: Anwar Sadat assassinated",
+       "url": "https://www.upi.com/Archives/1981/10/06/Anwar-Sadat-assassinated/7987171420281/"
+      },
+      {
+       "ad": "Wikipedia: Khalid al-Islambuli",
+       "url": "https://en.wikipedia.org/wiki/Khalid_Al-Islambuli"
+      }
+     ]
+    },
+    {
      "ref": "1991-01-18",
      "kaynakca": [
       {
@@ -1377,6 +1465,9 @@
        "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
        "tur": "akademik"
       }
+     ],
+     "gorseller": [
+      "gazze-tren-1935"
      ]
     },
     {
@@ -1585,6 +1676,34 @@
     },
     {
      "yeni": true,
+     "tarih": "1969-02-22",
+     "baslik": "Demokratik Cephe kuruldu",
+     "baslik_en": "The Democratic Front is founded",
+     "metin": "Nayif Havatme ve Yasir Abed Rabbo’nun çevresindeki grup, iç tartışmaların ardından Halk Cephesi’nden (FHKC) ayrıldı ve Filistin’in Kurtuluşu için Halk Demokratik Cephesi’ni kurdu; adı sonradan Demokratik Cephe oldu. Marksist-Leninist çizgideki örgüt Arap rejimlerine mesafeli durdu. 1974’te Batı Şeria ve Gazze’de bir “ulusal otorite” kurulmasını öneren FKÖ kararını ilk savunanlardan oldu: kurtarılan her toprak parçasında devlet fikrinin başlangıcı buydu. Merkezi Şam’dadır, silahlı kanadının adı Ulusal Direniş Tugayları’dır.",
+     "metin_en": "After internal disputes, the group around Nayef Hawatmeh and Yasser Abed Rabbo left the Popular Front (PFLP) and founded the Popular Democratic Front for the Liberation of Palestine, later the Democratic Front. The Marxist-Leninist organisation kept its distance from Arab regimes. In 1974 it was among the first to champion the PLO resolution calling for a “national authority” in the West Bank and Gaza: the start of the idea of a state on any liberated piece of land. It is based in Damascus; its armed wing is the National Resistance Brigades.",
+     "vurgu": [
+      "“ulusal otorite”"
+     ],
+     "vurgu_en": [
+      "“national authority”"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "ECFR, Mapping Palestinian Politics: DFLP",
+       "url": "https://ecfr.eu/mapping_palestinian_politics/detail/democratic_front_for_the_liberation_of_palestine"
+      },
+      {
+       "ad": "Britannica: Democratic Front for the Liberation of Palestine",
+       "url": "https://www.britannica.com/topic/Democratic-Front-for-the-Liberation-of-Palestine"
+      },
+      {
+       "ad": "GlobalSecurity: DFLP",
+       "url": "https://www.globalsecurity.org/military/world/para/dflp.htm"
+      }
+     ]
+    },
+    {
+     "yeni": true,
      "tarih": "1969-08-29",
      "baslik": "Leyla Halid ve TWA 840",
      "gorsel": "leyla-halid",
@@ -1621,6 +1740,115 @@
       {
        "ad": "Sarah Irving, Leila Khaled: Icon of Palestinian Liberation (Pluto Press, 2012)",
        "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "tur": "biyografi",
+     "kisi": "Vedi Haddad",
+     "kisi_en": "Wadie Haddad",
+     "yillar": "1927–1978",
+     "gorsel": "haddad",
+     "ozet": "Halk Cephesi’nin dış operasyonlarını yöneten doktor. 1968–1976 arasındaki uçak kaçırmaların planlayıcısıydı; örgütü bu yöntemden vazgeçtiğinde o devam etti.",
+     "ozet_en": "The doctor who ran the Popular Front’s external operations. He planned the hijackings of 1968–1976; when the organisation gave up the method, he carried on.",
+     "satirlar": [
+      [
+       "1927",
+       "Safed’de doğdu."
+      ],
+      [
+       "1950’ler",
+       "Beyrut Amerikan Üniversitesi’nde tıp okudu; Corc Habeş’le birlikte Arap Milliyetçileri Hareketi’nin kurucuları arasında yer aldı."
+      ],
+      [
+       "1967",
+       "Halk Cephesi’nin (FHKC) kuruluşunda Habeş’in yanındaydı; örgütün dış operasyonlarının başına geçti."
+      ],
+      [
+       "Temmuz 1968",
+       "İlk kaçırmayı planladı: Roma’dan Tel Aviv’e giden El Al uçağı Cezayir’e indirildi, pazarlık 39 gün sürdü."
+      ],
+      [
+       "Ağustos 1969",
+       "Leyla Halid’in TWA 840’ı kaçırdığı eylemi örgütledi."
+      ],
+      [
+       "Eylül 1970",
+       "Dört uçağın kaçırılıp üçünün Ürdün çölündeki Dawson pistine indirildiği eylemi yönetti; Kara Eylül’ün kıvılcımlarından biri oldu."
+      ],
+      [
+       "Kasım 1970",
+       "FHKC merkez komitesi uçak kaçırmayı ve dış operasyonları askıya aldı. Haddad sol kanattan sert eleştiri aldı, ama “Dış Operasyonlar” adıyla ayrı çalışmayı sürdürdü; örgüt sonradan onunla bağını kopardığını açıkladı."
+      ],
+      [
+       "Haziran 1976",
+       "Air France’ın Tel Aviv–Paris seferini Uganda’daki Entebbe’ye kaçıran eylemi örgütledi."
+      ],
+      [
+       "28 Mart 1978",
+       "Doğu Berlin’de bir hastanede öldü; resmî açıklama lösemiydi. İsrailli gazeteciler Aaron Klein (2006) ve Ronen Bergman (2018), Mossad’ın onu diş macununa konan zehirle öldürdüğünü yazdı."
+      ]
+     ],
+     "satirlar_en": [
+      [
+       "1927",
+       "Born in Safed."
+      ],
+      [
+       "1950s",
+       "Studied medicine at the American University of Beirut; with George Habash, one of the founders of the Arab Nationalist Movement."
+      ],
+      [
+       "1967",
+       "At Habash’s side when the Popular Front (PFLP) was founded; took charge of its external operations."
+      ],
+      [
+       "July 1968",
+       "Planned the first hijacking: an El Al flight from Rome to Tel Aviv was diverted to Algiers; negotiations lasted 39 days."
+      ],
+      [
+       "August 1969",
+       "Organised Leila Khaled’s hijacking of TWA 840."
+      ],
+      [
+       "September 1970",
+       "Directed the hijacking of four aircraft, three of them landed on Dawson’s Field in the Jordanian desert; one of the sparks of Black September."
+      ],
+      [
+       "November 1970",
+       "The PFLP central committee suspended hijackings and external operations. Haddad was sharply criticised by the left, but carried on separately as “External Operations”; the organisation later said it had cut ties with him."
+      ],
+      [
+       "June 1976",
+       "Organised the hijacking of the Air France Tel Aviv–Paris flight to Entebbe in Uganda."
+      ],
+      [
+       "28 March 1978",
+       "Died in a hospital in East Berlin; the official cause was leukaemia. Israeli journalists Aaron Klein (2006) and Ronen Bergman (2018) wrote that Mossad killed him with poisoned toothpaste."
+      ]
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Wadie Haddad",
+       "url": "https://en.wikipedia.org/wiki/Wadie_Haddad"
+      },
+      {
+       "ad": "Wikipedia: PFLP – External Operations",
+       "url": "https://en.wikipedia.org/wiki/Popular_Front_for_the_Liberation_of_Palestine_%E2%80%93_External_Operations"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Yezid Sayigh, Armed Struggle and the Search for State: The Palestinian National Movement, 1949–1993 (Oxford University Press, 1997)",
+       "tur": "akademik"
+      },
+      {
+       "ad": "Aaron J. Klein, Striking Back (Random House, 2006)",
+       "tur": "gazetecilik"
+      },
+      {
+       "ad": "Ronen Bergman, Rise and Kill First (Random House, 2018)",
+       "tur": "gazetecilik"
       }
      ]
     },
@@ -1779,6 +2007,34 @@
      "sonuc_en": "The PLO recognised Israel, Israel accepted the PLO as a counterpart, and the Palestinian Authority was set up. No Palestinian state came into being: the number of settlers in the West Bank, about 110,000 in 1993, today exceeds half a million, not counting East Jerusalem.",
      "ortak": [
       "tanima"
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1998-11-24",
+     "baslik": "Gazze Uluslararası Havalimanı açıldı",
+     "baslik_en": "Gaza International Airport opens",
+     "metin": "Oslo anlaşmalarının en somut ürünlerinden biri olan havalimanı, Refah ile Dahaniye arasında, Mısır sınırının yakınında hizmete girdi. Açılışı Arafat yaptı; Aralık’ta ABD Başkanı Bill Clinton buraya indi. Filistin Havayolları El-Ariş’ten Gazze’ye taşındı; havalimanı Filistinliler için kurulacak devletin dünyaya açılan kapısı sayıldı. Ömrü üç yıl sürmedi: İkinci İntifada’da yolcu uçuşları Şubat 2001’de durdu, İsrail 4 Aralık 2001’de radar istasyonunu ve kontrol kulesini bombaladı, 10 Ocak 2002’de pisti iş makineleriyle parçaladı. Arafat’ın ölümünden sonra adı Yaser Arafat Uluslararası Havalimanı oldu; bugün harabe.",
+     "metin_en": "One of the most tangible products of the Oslo Accords, the airport opened between Rafah and Dahaniya, close to the Egyptian border. Arafat inaugurated it; in December US President Bill Clinton landed there. Palestinian Airlines moved from El Arish to Gaza; the airport was seen as the future state’s gateway to the world. It lasted less than three years: passenger flights stopped in February 2001 during the Second Intifada, Israel bombed the radar station and control tower on 4 December 2001 and tore up the runway with bulldozers on 10 January 2002. After Arafat’s death it was renamed Yasser Arafat International Airport; today it is in ruins.",
+     "vurgu": [
+      "Ömrü üç yıl sürmedi"
+     ],
+     "vurgu_en": [
+      "It lasted less than three years"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Yasser Arafat International Airport",
+       "url": "https://en.wikipedia.org/wiki/Yasser_Arafat_International_Airport"
+      },
+      {
+       "ad": "Al Jazeera: Gaza Airport, the legacy of a Palestinian dream",
+       "url": "https://www.aljazeera.com/features/2020/12/27/gaza-airport-the-legacy-of-a-palestinian-dream"
+      },
+      {
+       "ad": "The National: Destroyed Gaza airport symbolises grounded peace hopes",
+       "url": "https://www.thenationalnews.com/world/mena/destroyed-gaza-airport-symbolises-grounded-peace-hopes-1.769412"
+      }
      ]
     },
     {
@@ -2081,6 +2337,41 @@
      ],
      "sonuc": "İsrail 2002’de Batı Şeria kentlerini yeniden işgal etti ve ayırma duvarını örmeye başladı; Arafat Ramallah’ta kuşatıldı, Kasım 2004’te öldü. İntifada 2005 başında Şarm el-Şeyh’te ilan edilen ateşkesle fiilen sona erdi. Aynı yıl İsrail Gazze’den çekildi; silahlı direniş Hamas ve İslami Cihad’ın ağırlığına geçti.",
      "sonuc_en": "In 2002 Israel reoccupied the West Bank cities and began building the separation wall; Arafat was besieged in Ramallah and died in November 2004. The intifada effectively ended with the ceasefire announced at Sharm el-Sheikh in early 2005. The same year Israel withdrew from Gaza; armed resistance shifted towards Hamas and Islamic Jihad."
+    },
+    {
+     "yeni": true,
+     "tarih": "2001-10-17",
+     "ortak": [
+      "fedai"
+     ],
+     "baslik": "FHKC, İsrail Turizm Bakanı Rehavam Zeevi’yi öldürdü",
+     "baslik_en": "The PFLP kills Israeli tourism minister Rehavam Ze’evi",
+     "metin": "Uçak kaçırmalarıyla tanınan Halk Cephesi, İkinci İntifada’da da silahlı eylemi sürdürdü. İsrail 27 Ağustos 2001’de örgütün genel sekreteri Ebu Ali Mustafa’yı Ramallah’taki bürosuna füze atarak öldürdü. Örgütün Ebu Ali Mustafa Tugayları’ndan dört kişilik bir ekip, 17 Ekim sabahı Turizm Bakanı Rehavam Zeevi’yi Doğu Kudüs’teki Hyatt otelinde susturuculu tabancayla vurarak öldürdü; FHKC eylemi Ebu Ali Mustafa’ya karşılık olarak üstlendi. Zeevi, Filistinlilerin topluca sürülmesini (“transfer”) savunan aşırı sağcı Moledet partisinin kurucusuydu ve hedefli öldürmelerin destekçisiydi. İsrail, yeni genel sekreter Ahmed Saadat’ın teslimini istedi; Saadat Filistin Yönetimi’nin Eriha’daki cezaevine kondu, Mart 2006’da İsrail ordusu cezaevini kuşatıp onu aldı.",
+     "metin_en": "Known for its hijackings, the Popular Front kept up armed action during the Second Intifada. On 27 August 2001 Israel killed its secretary-general Abu Ali Mustafa with missiles fired into his office in Ramallah. On the morning of 17 October a four-man team from the group’s Abu Ali Mustafa Brigades shot tourism minister Rehavam Ze’evi dead with a silenced pistol at the Hyatt hotel in East Jerusalem; the PFLP claimed it as retaliation for Abu Ali Mustafa. Ze’evi had founded the far-right Moledet party, which advocated the mass expulsion (“transfer”) of Palestinians, and supported targeted killings. Israel demanded the handover of the new secretary-general Ahmad Sa’adat; he was held in a Palestinian Authority prison in Jericho, and in March 2006 the Israeli army besieged the prison and took him.",
+     "vurgu": [
+      "Ebu Ali Mustafa’ya karşılık olarak"
+     ],
+     "vurgu_en": [
+      "retaliation for Abu Ali Mustafa"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Assassination of Rehavam Ze’evi",
+       "url": "https://en.wikipedia.org/wiki/Assassination_of_Rehavam_Ze%27evi"
+      },
+      {
+       "ad": "PBS NewsHour, 17 Ekim 2001",
+       "url": "https://www.pbs.org/newshour/politics/middle_east-july-dec01-mideast_10-17"
+      },
+      {
+       "ad": "Institute for Palestine Studies, kronoloji: 17 Ekim 2001",
+       "url": "https://chronology.palestine-studies.org/node/6236"
+      },
+      {
+       "ad": "Wikipedia: Rehavam Ze’evi",
+       "url": "https://en.wikipedia.org/wiki/Rehavam_Ze%27evi"
+      }
+     ]
     },
     {
      "yeni": true,
@@ -3133,6 +3424,91 @@
       {
        "ad": "Al Majalla: Mohamed Zouari, the Tunisian engineer behind Hamas drones",
        "url": "https://en.majalla.com/node/301776/profiles/mohamed-zouari-tunisian-engineer-behind-hamas-drones"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2026-05-14",
+     "ortak": [
+      "fedai"
+     ],
+     "baslik": "Fetih’in Sekizinci Konferansı ve içerideki muhalefet",
+     "baslik_en": "Fatah’s Eighth Conference and the opposition within",
+     "metin": "Fetih, 2016’dan bu yana ilk genel konferansını Ramallah’ta topladı; Mahmud Abbas oybirliğiyle yeniden başkan seçildi, konferans uzun süredir ertelenen seçimleri yapma sözü verdi. Hareketin içinde yönetime karşı üç ayrı damar var. İsrail cezaevindeki Mervan Barguti, Fetih’in en tanınan yüzü olmayı sürdürüyor. Muhammed Dahlan’ın Demokratik Reform Akımı, Abbas’la yollarını ayırmış eski Fetih kadrolarından oluşuyor. Nasır el-Kudve’nin reform çizgisi ise iç tüzüğü değiştirme çalışmalarında defalarca engellendi. Abbas Ekim 2025’te Dahlan, Kudve ve başka muhalifleri “affederek” harekete geri almıştı. Eylül 2026’da Barguti bütün akımları tek listede birleştirmeyi, ihraç edilenlerin geri alınmasını, yeni bir genel konferansı ve kendi cumhurbaşkanlığı adaylığını öneren bir girişim sundu.",
+     "metin_en": "Fatah held its first general conference since 2016 in Ramallah; Mahmoud Abbas was re-elected chairman by consensus and the conference pledged to hold the long-delayed elections. Three separate currents within the movement oppose the leadership. Marwan Barghouti, held in an Israeli prison, remains Fatah’s best-known face. Mohammed Dahlan’s Democratic Reform Current is made up of former Fatah officials who broke with Abbas. Nasser al-Qudwa’s reform line was repeatedly blocked in its work on the internal bylaws. In October 2025 Abbas had “pardoned” Dahlan, al-Qudwa and other dissidents and readmitted them. In September 2026 Barghouti put forward an initiative calling for a single list uniting all currents, the reinstatement of expelled members, a new general conference and his own candidacy for president.",
+     "vurgu": [
+      "üç ayrı damar"
+     ],
+     "vurgu_en": [
+      "Three separate currents"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Eighth General Conference of Fatah",
+       "url": "https://en.wikipedia.org/wiki/Eighth_General_Conference_of_Fatah"
+      },
+      {
+       "ad": "Mondoweiss: Inside the historic crossroads facing the Fatah movement",
+       "url": "https://mondoweiss.net/2026/05/inside-the-historic-crossroads-facing-the-fatah-movement/"
+      },
+      {
+       "ad": "Middle East Monitor: Barghouti proposes Fatah reunification",
+       "url": "https://www.middleeastmonitor.com/20260925-barghouti-proposes-fatah-reunification-ahead-of-palestinian-elections/"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2026-10-10",
+     "baslik": "Seçimler yine ertelendi",
+     "baslik_en": "Elections postponed again",
+     "metin": "28 Kasım’da yapılması gereken, 2006’dan bu yana ilk yasama seçimi Abbas’ın kararnamesiyle 11 Eylül 2027’ye ertelendi; cumhurbaşkanlığı seçimi de aynı güne kondu. Kararname gerekçe olarak İsrail’in çıkardığı engelleri gösterdi. Ertelemeden önce Hamas, Dahlan’ın Demokratik Reform bloku, İslami Cihad ve FHKC geniş bir muhalefet listesi için görüşüyordu; anketler bölünmüş bir Fetih’in resmî listesiyle bu ittifakı başa baş gösteriyordu.",
+     "metin_en": "The first legislative election since 2006, due on 28 November, was postponed by Abbas’s decree to 11 September 2027, with the presidential election set for the same day. The decree cited obstacles posed by Israel. Before the postponement, Hamas, Dahlan’s Democratic Reform bloc, Islamic Jihad and the PFLP had been negotiating a broad opposition list; polls showed it running neck and neck with a divided Fatah’s official list.",
+     "kaynaklar": [
+      {
+       "ad": "Al Jazeera: Abbas postpones Palestinian legislative elections to September 2027",
+       "url": "https://www.aljazeera.com/news/2026/10/10/abbas-postpones-palestinian-legislative-elections-to-september-2027"
+      },
+      {
+       "ad": "PCPSR: Palestinian 2026 Legislative Elections, Prospects",
+       "url": "https://www.pcpsr.org/sites/default/files/Brief%202_2026_KS%20on%20Palestinian%20Nov%20Elections_English.pdf"
+      },
+      {
+       "ad": "Al Jazeera: Fatah, Dahlan bloc hold reconciliation talks",
+       "url": "https://www.aljazeera.com/news/2026/8/25/fatah-dahlan-bloc-hold-reconciliation-talks-ahead-of-palestinian-elections"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2026-11-27",
+     "ortak": [
+      "fedai",
+      "islami"
+     ],
+     "baslik": "Bugün: bölünmüş ama örgütlü",
+     "baslik_en": "Today: divided but organised",
+     "metin": "Yüz yıl önce Kassam’ın köylüleriyle başlayan örgütlenme bugün de sürüyor. Filistin siyaseti tek bir yönetimden ibaret değil. Ramallah’ta Fetih’in resmî yönetimi var; karşısında Barguti, Dahlan ve Kudve’nin çevresinde toplanan Fetih içi muhalefet. Gazze’de Hamas ve İslami Cihad var. Solda Halk Cephesi ile 1969’da kurulan Demokratik Cephe duruyor. Demokratik Cephe bugün hem Şam’daki merkeziyle bir siyasi parti hem de Ulusal Direniş Tugayları’yla Gazze’deki Ortak Operasyon Odası’nın bir parçası; işçi sendikalarında örgütlü ve 2021’de kendi listesiyle seçime girmeye hazırlanmıştı. Bu yapılar birbiriyle yarışıyor, zaman zaman çatışıyor. Ama işgale karşı örgütlü bir direniş ve kendi iç tartışmalarını sürdüren bir siyasi toplum var. Ertelenen seçimlerin yeni tarihi 11 Eylül 2027.",
+     "metin_en": "The organising that began a century ago with al-Qassam’s villagers goes on. Palestinian politics is not a single administration. In Ramallah there is Fatah’s official leadership; facing it, the opposition within Fatah gathered around Barghouti, Dahlan and al-Qudwa. In Gaza there are Hamas and Islamic Jihad. On the left stand the Popular Front and the Democratic Front, founded in 1969. Today the Democratic Front is both a political party, headquartered in Damascus, and, through its National Resistance Brigades, part of Gaza’s Joint Operations Room; it is organised in the trade unions and in 2021 had prepared to run in the elections on its own list. These groups compete with each other and at times clash. But there is organised resistance to the occupation and a political society carrying on its own internal debates. The postponed elections are now set for 11 September 2027.",
+     "vurgu": [
+      "işgale karşı örgütlü bir direniş"
+     ],
+     "vurgu_en": [
+      "organised resistance to the occupation"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "ECFR, Mapping Palestinian Politics",
+       "url": "https://ecfr.eu/mapping_palestinian_politics/detail/democratic_front_for_the_liberation_of_palestine"
+      },
+      {
+       "ad": "CEAUP: The Palestinian Left in 2025, the DFLP position",
+       "url": "https://africanos.eu/index.php/en/editions/oral-sources-transcriptions/1296-a-esquerda-palestiniana-5"
+      },
+      {
+       "ad": "Haaretz üzerinden JFJFP: Palestinian elections face indefinite delay",
+       "url": "https://jfjfp.com/palestinian-elections-face-indefinite-delay-amid-efforts-to-reconcile-rival-factions/"
       }
      ]
     }
