@@ -1415,7 +1415,9 @@ def main():
     dosya_d = None
     try:
         _db = tarih_coz(durum.get("_gemini_bekle"))
-        _yz = bool(anahtar and model and not (_db and _db > SIMDI))
+        import yz
+        # Gemini kota beklemesindeyken Claude katmanı açık ve "dosya" payı varsa dosyalar yine çalışır
+        _yz = bool(anahtar and model and (not (_db and _db > SIMDI) or (yz.etkin() and yz.butce_var("dosya"))))
 
         def _dc(gorev, zaman):
             def c(metin):
