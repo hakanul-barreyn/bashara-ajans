@@ -1,0 +1,617 @@
+{
+ "gunler": {
+  "2026-11-16": {
+   "usd": 0.537474,
+   "girdi": 2503852,
+   "cikti": 574221,
+   "istek": 861,
+   "gorev": {
+    "ceviri": {
+     "istek": 87,
+     "usd": 0.184931
+    },
+    "ozet": {
+     "istek": 26,
+     "usd": 0.057803
+    },
+    "olay": {
+     "istek": 12,
+     "usd": 0.123453
+    },
+    "gorsel": {
+     "istek": 692,
+     "usd": 0.092735
+    },
+    "haber_yaz": {
+     "istek": 37,
+     "usd": 0.058084
+    },
+    "almanak": {
+     "istek": 7,
+     "usd": 0.02047
+    }
+   },
+   "yedek": 3773,
+   "hata": 8,
+   "okunamadi": 8,
+   "son_ham": {
+    "gorev": "haber_yaz",
+    "bitis": "max_tokens",
+    "bas": "{\"baslik\": \"İran Devrim Muhafızları Bahreyn'deki ABD radarını İHA'larla hedef aldığını açıkladı\", \"spot\": \"İran Devrim Muhafızları pazar günü Bahreyn'deki ABD radar sistemini altı insansız hava aracıyla hedef aldığını açıkladı. Bahreyn ordusu ve Dışişleri Bakanlığı ise dronların hedeflerine ulaşmada",
+    "son": " çaldığını yazdı. İran ordusu da üç gün içinde ikinci saldırının düzenlendiğini teyit etti. Kaynaklardaki bilgiler, radara isabet edilip edilmediği konusunda birbiriyle çelişiyor. Saldırıda can kaybı ya da hasar bilgisi paylaşılmadı.\", \"kaynaklar\": [1, 6, 7, 9, 14]}, {\"metin\": \"Katar Dışişleri Bakan"
+   },
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/png image\"},\"request_id\":\"req_011Ch6hrn9UTxPiFnQCNuM6g\"}"
+  },
+  "2026-11-17": {
+   "usd": 0.561662,
+   "girdi": 3390371,
+   "cikti": 445263,
+   "istek": 1168,
+   "gorev": {
+    "ceviri": {
+     "istek": 113,
+     "usd": 0.168794
+    },
+    "ozet": {
+     "istek": 34,
+     "usd": 0.049611
+    },
+    "olay": {
+     "istek": 14,
+     "usd": 0.124531
+    },
+    "gorsel": {
+     "istek": 970,
+     "usd": 0.183758
+    },
+    "haber_yaz": {
+     "istek": 37,
+     "usd": 0.03498
+    }
+   },
+   "yedek": 2319,
+   "hata": 20,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011Ch7wHbXE7UDA2RC8usGNz\"}"
+  },
+  "2026-11-18": {
+   "usd": 0.564295,
+   "girdi": 3329130,
+   "cikti": 462809,
+   "istek": 1158,
+   "gorev": {
+    "ceviri": {
+     "istek": 114,
+     "usd": 0.178326
+    },
+    "ozet": {
+     "istek": 31,
+     "usd": 0.043931
+    },
+    "olay": {
+     "istek": 12,
+     "usd": 0.103278
+    },
+    "gorsel": {
+     "istek": 936,
+     "usd": 0.134112
+    },
+    "haber_yaz": {
+     "istek": 34,
+     "usd": 0.034643
+    },
+    "almanak": {
+     "istek": 28,
+     "usd": 0.068601
+    },
+    "diger": {
+     "istek": 3,
+     "usd": 0.001401
+    }
+   },
+   "yedek": 1331,
+   "hata": 18,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011Ch9uvXj4vPQVJ4wvmWbxp\"}"
+  },
+  "2026-11-19": {
+   "usd": 0.570439,
+   "girdi": 3234482,
+   "cikti": 494043,
+   "istek": 1089,
+   "gorev": {
+    "ceviri": {
+     "istek": 109,
+     "usd": 0.171964
+    },
+    "ozet": {
+     "istek": 33,
+     "usd": 0.049032
+    },
+    "olay": {
+     "istek": 12,
+     "usd": 0.111786
+    },
+    "gorsel": {
+     "istek": 865,
+     "usd": 0.119452
+    },
+    "haber_yaz": {
+     "istek": 39,
+     "usd": 0.044146
+    },
+    "almanak": {
+     "istek": 30,
+     "usd": 0.073627
+    },
+    "diger": {
+     "istek": 1,
+     "usd": 0.000436
+    }
+   },
+   "yedek": 1454,
+   "hata": 11,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChBZPGqCDnMUSaxEnBFk6\"}"
+  },
+  "2026-11-20": {
+   "usd": 0.562188,
+   "girdi": 3330819,
+   "cikti": 458254,
+   "istek": 1130,
+   "gorev": {
+    "ceviri": {
+     "istek": 82,
+     "usd": 0.143956
+    },
+    "ozet": {
+     "istek": 36,
+     "usd": 0.051765
+    },
+    "olay": {
+     "istek": 12,
+     "usd": 0.105998
+    },
+    "gorsel": {
+     "istek": 912,
+     "usd": 0.133264
+    },
+    "haber_yaz": {
+     "istek": 53,
+     "usd": 0.051158
+    },
+    "almanak": {
+     "istek": 30,
+     "usd": 0.073892
+    },
+    "diger": {
+     "istek": 5,
+     "usd": 0.002165
+    }
+   },
+   "yedek": 40,
+   "hata": 43,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChDhMMV8L4BAPRczUW61J\"}",
+   "gemini_hata": 2301
+  },
+  "2026-11-21": {
+   "usd": 0.561592,
+   "girdi": 3330237,
+   "cikti": 457170,
+   "istek": 960,
+   "gorev": {
+    "ceviri": {
+     "istek": 72,
+     "usd": 0.113321
+    },
+    "ozet": {
+     "istek": 24,
+     "usd": 0.039195
+    },
+    "olay": {
+     "istek": 14,
+     "usd": 0.146607
+    },
+    "dosya": {
+     "istek": 9,
+     "usd": 0.026044
+    },
+    "dosya_ozet": {
+     "istek": 11,
+     "usd": 0.008019
+    },
+    "gorsel": {
+     "istek": 764,
+     "usd": 0.12485
+    },
+    "almanak": {
+     "istek": 22,
+     "usd": 0.053472
+    },
+    "diger": {
+     "istek": 3,
+     "usd": 0.001515
+    },
+    "haber_yaz": {
+     "istek": 41,
+     "usd": 0.048564
+    }
+   },
+   "yedek": 35,
+   "hata": 37,
+   "gemini_hata": 2373,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChFSthzmyqqoTwNhvTL5t\"}",
+   "okunamadi": 2,
+   "son_ham": {
+    "gorev": "olay",
+    "bitis": "max_tokens",
+    "bas": "```json\n[{\"baslik\": \"Lübnan Başbakanı İsrail işgalinin sona erdirilmesi sözü verdi\", \"not\": \"Haberler aynı açıklamayı aktarıyor; İktibas Dergisi ve TRT Haber \\\"vaad\\\" ve \\\"söyledi\\\" kelimeleriyle olayı sunuyor. Haberlerin tamamı Lübnan Başbakanı Nevvaf Selam'ın X paylaşımına dayanıyor.\", \"ids\": [\"ef",
+    "son": "}, {\"olgu\": \"Saldırılarda can kaybı olup olmadığı belirtilmedi\", \"ids\": [\"8c2e0a79b073\", \"2aafe7c7468f\"]}], \"golgeleme\": [], \"dogrulanmamis\": null, \"celiski\": null, \"yer\": {\"ad\": \"Haddata\", \"lat\": 33.3, \"lon\": 35.4}, \"yerler\": [], \"ilgisiz\": []}, {\"baslik\": \"İsrail güçleri Gazze'nin kuzeybatısında y"
+   }
+  },
+  "2026-11-22": {
+   "usd": 0.565047,
+   "girdi": 3458415,
+   "cikti": 438459,
+   "istek": 952,
+   "gorev": {
+    "ozet": {
+     "istek": 35,
+     "usd": 0.049361
+    },
+    "ceviri": {
+     "istek": 72,
+     "usd": 0.11651
+    },
+    "dosya": {
+     "istek": 6,
+     "usd": 0.008428
+    },
+    "dosya_ozet": {
+     "istek": 8,
+     "usd": 0.006652
+    },
+    "gorsel": {
+     "istek": 736,
+     "usd": 0.127601
+    },
+    "haber_yaz": {
+     "istek": 49,
+     "usd": 0.052945
+    },
+    "almanak": {
+     "istek": 28,
+     "usd": 0.068594
+    },
+    "diger": {
+     "istek": 4,
+     "usd": 0.001729
+    },
+    "olay": {
+     "istek": 14,
+     "usd": 0.133235
+    }
+   },
+   "yedek": 38,
+   "hata": 34,
+   "gemini_hata": 1546,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChHUs3zW94PRN2uD3d8wX\"}",
+   "okunamadi": 2,
+   "son_ham": {
+    "gorev": "olay",
+    "bitis": "end_turn",
+    "bas": "Bu görev için verilen haber listesi çok büyük ve gruplama, kaynak başına dayanak/fail/rakam çıkarımı, olgu ve gölgeleme analizi gibi çok sayıda alan gerektiriyor. Tam ve doğru bir çıktı üretmek için tüm 300'ü aşkın kaydı tek yanıtta işlemem yanlış ya da eksik sonuçlara yol açardı; bu yüzden yanıtı y",
+    "son": "\"Gazze'de yemek taşıyan araca saldırı, 3 ölü\") için tam JSON çıktısı üretebilirim.\n2. Ardından diğer olay kümelerine sırayla geçebilirim.\n\nHangi olay kümesiyle başlamamı istersiniz? Alternatif olarak, belirli bir konu (ör. yalnızca Gazze ya da yalnızca Lübnan haberleri) için gruplama da yapabilirim."
+   }
+  },
+  "2026-11-23": {
+   "usd": 0.561977,
+   "girdi": 3329928,
+   "cikti": 458016,
+   "istek": 940,
+   "gorev": {
+    "ozet": {
+     "istek": 29,
+     "usd": 0.049729
+    },
+    "olay": {
+     "istek": 13,
+     "usd": 0.12741
+    },
+    "ceviri": {
+     "istek": 76,
+     "usd": 0.130022
+    },
+    "dosya": {
+     "istek": 2,
+     "usd": 0.003073
+    },
+    "dosya_ozet": {
+     "istek": 11,
+     "usd": 0.008272
+    },
+    "gorsel": {
+     "istek": 728,
+     "usd": 0.120663
+    },
+    "almanak": {
+     "istek": 27,
+     "usd": 0.064613
+    },
+    "diger": {
+     "istek": 11,
+     "usd": 0.006392
+    },
+    "haber_yaz": {
+     "istek": 43,
+     "usd": 0.051796
+    }
+   },
+   "yedek": 48,
+   "hata": 29,
+   "gemini_hata": 1787,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChKJR5RBYDCVPRiA7fFrx\"}"
+  },
+  "2026-11-24": {
+   "usd": 0.570007,
+   "girdi": 3441344,
+   "cikti": 451724,
+   "istek": 1009,
+   "gorev": {
+    "ceviri": {
+     "istek": 80,
+     "usd": 0.143556
+    },
+    "ozet": {
+     "istek": 27,
+     "usd": 0.040931
+    },
+    "olay": {
+     "istek": 14,
+     "usd": 0.124847
+    },
+    "dosya_ozet": {
+     "istek": 4,
+     "usd": 0.002847
+    },
+    "gorsel": {
+     "istek": 806,
+     "usd": 0.13484
+    },
+    "almanak": {
+     "istek": 26,
+     "usd": 0.063076
+    },
+    "haber_yaz": {
+     "istek": 46,
+     "usd": 0.055563
+    },
+    "dosya": {
+     "istek": 2,
+     "usd": 0.002057
+    },
+    "diger": {
+     "istek": 4,
+     "usd": 0.002282
+    }
+   },
+   "yedek": 58,
+   "hata": 47,
+   "gemini_hata": 1947,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChM9Aggn5thrPW1XXmVeY\"}",
+   "okunamadi": 1,
+   "son_ham": {
+    "gorev": "olay",
+    "bitis": "max_tokens",
+    "bas": "```json\n[{\"baslik\": \"İran'a saldırı konusunda Eisenkot'un tehdit değerlendirmesi\", \"not\": \"Milliyet, Eisenkot'un açıklamasını doğrudan başlığa taşıyor; Haaretz ise aynı görüşü Netanyahu'ya yönelik eleştiri çerçevesinde sunuyor. Her iki kaynak da Eisenkot'u merkeze alıyor.\", \"ids\": [\"14f2f249ffb8\", \"",
+    "son": "rizm\"}, \"5342803a0955\": {\"dayanak\": \"İsrail muhalefet lideri\", \"fail\": \"acik\", \"baglam\": true, \"rakam\": null, \"kelime\": \"terörizm\"}, \"6afbbe03e78c\": {\"dayanak\": \"Hürriyet yorumu\", \"fail\": \"acik\", \"baglam\": true, \"rakam\": null, \"kelime\": \"terör\"}}, \"ortak\": null, \"fark\": true, \"olgular\": [{\"olgu\": \"E"
+   }
+  },
+  "2026-11-25": {
+   "usd": 0.563441,
+   "girdi": 3099057,
+   "cikti": 507089,
+   "istek": 1014,
+   "gorev": {
+    "ceviri": {
+     "istek": 91,
+     "usd": 0.189552
+    },
+    "ozet": {
+     "istek": 37,
+     "usd": 0.050726
+    },
+    "olay": {
+     "istek": 14,
+     "usd": 0.124843
+    },
+    "gorsel": {
+     "istek": 818,
+     "usd": 0.141633
+    },
+    "haber_yaz": {
+     "istek": 39,
+     "usd": 0.038375
+    },
+    "dosya": {
+     "istek": 5,
+     "usd": 0.007993
+    },
+    "dosya_ozet": {
+     "istek": 3,
+     "usd": 0.002259
+    },
+    "almanak": {
+     "istek": 1,
+     "usd": 0.003554
+    },
+    "diger": {
+     "istek": 6,
+     "usd": 0.004497
+    }
+   },
+   "yedek": 45,
+   "hata": 57,
+   "gemini_hata": 2357,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChP84V5jyMGmMS78aLmhq\"}",
+   "okunamadi": 2,
+   "son_ham": {
+    "gorev": "haber_yaz",
+    "bitis": "end_turn",
+    "bas": "{\"baslik\": \"Husiler Suudi Arabistan'daki Ras Tanura rafinerisini ve Riyad'daki finans merkezini hedef aldığını açıkladı\", \"spot\": \"Husiler, Suudi Arabistan'ın doğusundaki Ras Tanura petrol rafinerisi ile Riyad'daki finans merkezini vurduklarını iddia etti. Olayla ilgili bağımsız bir doğrulama henüz ",
+    "son": "erinleşti. Mart 2015'ten itibaren Suudi Arabistan öncülüğündeki koalisyon, uluslararası alanda tanınan hükümete destek vermeye başladı. Nisan 2022 ateşkesiyle sakinleşen ülkede yeniden çatışmalar yaşanıyor. Milliyet ve Habertürk de iç savaşın bu çerçevede sürdüğünü aktardı.\", \"kaynaklar\": [1, 6, 7]}"
+   }
+  },
+  "2026-11-26": {
+   "usd": 0.562886,
+   "girdi": 3091823,
+   "cikti": 507394,
+   "istek": 897,
+   "gorev": {
+    "ceviri": {
+     "istek": 74,
+     "usd": 0.184708
+    },
+    "ozet": {
+     "istek": 24,
+     "usd": 0.042862
+    },
+    "olay": {
+     "istek": 11,
+     "usd": 0.107096
+    },
+    "dosya": {
+     "istek": 2,
+     "usd": 0.00293
+    },
+    "dosya_ozet": {
+     "istek": 6,
+     "usd": 0.004212
+    },
+    "gorsel": {
+     "istek": 721,
+     "usd": 0.129711
+    },
+    "almanak": {
+     "istek": 21,
+     "usd": 0.052441
+    },
+    "haber_yaz": {
+     "istek": 33,
+     "usd": 0.034573
+    },
+    "diger": {
+     "istek": 5,
+     "usd": 0.004343
+    }
+   },
+   "yedek": 39,
+   "hata": 36,
+   "gemini_hata": 2240,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChQuh7dvqaTzhPDU3mXCf\"}"
+  },
+  "2026-11-27": {
+   "usd": 0.562371,
+   "girdi": 3116404,
+   "cikti": 501455,
+   "istek": 851,
+   "gorev": {
+    "ceviri": {
+     "istek": 71,
+     "usd": 0.170864
+    },
+    "ozet": {
+     "istek": 24,
+     "usd": 0.044036
+    },
+    "olay": {
+     "istek": 13,
+     "usd": 0.127759
+    },
+    "dosya": {
+     "istek": 1,
+     "usd": 0.00094
+    },
+    "dosya_ozet": {
+     "istek": 4,
+     "usd": 0.002882
+    },
+    "gorsel": {
+     "istek": 669,
+     "usd": 0.108678
+    },
+    "almanak": {
+     "istek": 21,
+     "usd": 0.053502
+    },
+    "haber_yaz": {
+     "istek": 44,
+     "usd": 0.050154
+    },
+    "diger": {
+     "istek": 4,
+     "usd": 0.003557
+    }
+   },
+   "yedek": 40,
+   "hata": 47,
+   "gemini_hata": 2255,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/png image\"},\"request_id\":\"req_011ChSp31o4zskaCCqt179mF\"}",
+   "okunamadi": 1,
+   "son_ham": {
+    "gorev": "almanak",
+    "bitis": "end_turn",
+    "bas": "{\"baslik\": \"2026'da Gazze haberleri, İsrail basınından ayrışan kelime seçimi\", \"ozet\": [\"Veri, 1 Ocak – 6 Kasım 2026 arasında 310 günde yayımlanan 878.645 haberin başlıklarını kapsıyor. Bölge grupları arasında en büyük payı Arap dünyası (257.066) alırken Türkiye 151.561, Batı 113.734, İsrail 117.101",
+    "son": " 15,7'ye geriledi.\", ], \"veri_notu\": \"Veri yalnızca başlık sayımına dayanıyor; olay karşılaştırması ve bakış ölçümü yapılmadığı için kelime sıklığındaki farklar kaynakların yorumunu ya da tutumunu doğrudan göstermez, ayrıca Yemen için yalnızca tek bir başlık bulunduğundan o grup değerlendirilemez.\"}"
+   }
+  },
+  "2026-11-28": {
+   "usd": 0.515602,
+   "girdi": 3214394,
+   "cikti": 388340,
+   "istek": 905,
+   "gorev": {
+    "ceviri": {
+     "istek": 58,
+     "usd": 0.071366
+    },
+    "ozet": {
+     "istek": 26,
+     "usd": 0.047852
+    },
+    "olay": {
+     "istek": 12,
+     "usd": 0.125918
+    },
+    "dosya": {
+     "istek": 27,
+     "usd": 0.042075
+    },
+    "dosya_ozet": {
+     "istek": 6,
+     "usd": 0.004129
+    },
+    "gorsel": {
+     "istek": 702,
+     "usd": 0.116341
+    },
+    "almanak": {
+     "istek": 21,
+     "usd": 0.052831
+    },
+    "diger": {
+     "istek": 5,
+     "usd": 0.003667
+    },
+    "haber_yaz": {
+     "istek": 48,
+     "usd": 0.05142
+    }
+   },
+   "yedek": 26,
+   "hata": 49,
+   "gemini_hata": 3321,
+   "son_hata": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"messages.0.content.0.image.source.base64: The image was specified using the image/jpeg media type, but the image appears to be a image/webp image\"},\"request_id\":\"req_011ChUfWcSckCqwfVjF1C2S3\"}"
+  }
+ },
+ "guncellendi": "2026-11-28T15:08:20.967217+00:00",
+ "model": "claude-haiku-5-5",
+ "tavan_usd": 0.66
+}
