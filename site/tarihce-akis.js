@@ -346,27 +346,51 @@
       ust.append(el("span", "ta-kars-et", EN ? "Newspaper · original and translation" : "Gazete · özgün ve çeviri"),
         el("p", "ta-kars-baslik", G.ad + " · " + (EN ? G.tarih_en : G.tarih)));
       f.appendChild(ust);
-      // sayfalar alt alta: her sayfa kendi kaydırıcısı ve altında eksiksiz çevirisiyle; üstte sayfaya atlama çubuğu
+      // gazetelik: solda sayfa küçük resimleri (telefonda üstte yatay şerit), sağda tek sayfa; tam çeviri katlanır
       var EK = { 1: "’in", 2: "’nin", 3: "’ün", 4: "’ün", 5: "’in", 6: "’nın", 7: "’nin", 8: "’in", 9: "’un", 10: "’un" };
-      if (G.sayfalar.length > 2) {
-        var git = el("nav", "ta-gz-git"); git.setAttribute("aria-label", EN ? "Jump to page" : "Sayfaya git");
-        git.appendChild(el("span", null, EN ? "Pages:" : "Sayfalar:"));
-        G.sayfalar.forEach(function (S) {
-          var d = el("button", null, String(S.no)); d.type = "button";
-          d.onclick = function () { var h = f.querySelector('[data-gz-sayfa="' + S.no + '"]'); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); };
-          git.appendChild(d);
+      var N = G.sayfalar.length, aktif = 0;
+      var raf = el("div", "ta-gzl");
+      var rafSerit = el("div", "ta-gzl-raf"); rafSerit.setAttribute("role", "tablist"); rafSerit.setAttribute("aria-label", EN ? "Pages" : "Sayfalar");
+      var okuma = el("div", "ta-gzl-okuma");
+      var kucuk = function (S) { return S.kucuk || String(S.gorsel).replace(/\.jpg$/, "-k.jpg"); };
+      var mansetOf = function (S) { var m = (S.satirlar || []).find(function (x) { return x.tip === "manset"; }) || (S.satirlar || [])[0]; return m ? (EN ? m.en : m.tr) : ""; };
+      var sekmeler = G.sayfalar.map(function (S, i) {
+        var b = el("button", "ta-gzl-sekme"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "gz-" + G.ad + "-" + S.no;
+        var im = new Image(); im.src = kucuk(S); im.alt = ""; im.loading = "lazy"; im.decoding = "async";
+        im.onerror = function () { im.onerror = null; im.src = S.gorsel; };
+        var yazi = el("span", "ta-gzl-sekme-yazi");
+        yazi.append(el("b", null, (EN ? "Page " : "Sayfa ") + S.no), el("span", null, mansetOf(S)));
+        b.append(im, yazi);
+        b.onclick = function () { ac(i, true); };
+        b.onkeydown = function (e) {
+          var k = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+          if (k) { e.preventDefault(); ac((i + k + N) % N, true); sekmeler[(i + k + N) % N].focus(); }
+        };
+        rafSerit.appendChild(b);
+        return b;
+      });
+      function ac(i, kullanici) {
+        aktif = i; var S = G.sayfalar[i];
+        sekmeler.forEach(function (b, j) { b.setAttribute("aria-selected", String(j === i)); b.tabIndex = j === i ? 0 : -1; });
+        if (kullanici) sekmeler[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+        okuma.textContent = "";
+        okuma.setAttribute("role", "tabpanel"); okuma.setAttribute("aria-labelledby", sekmeler[i].id);
+        var ust2 = el("div", "ta-gzl-ust");
+        ust2.append(el("b", null, (EN ? "Page " : "Sayfa ") + S.no), el("span", null, " / " + N));
+        var gez = el("div", "ta-gzl-gez");
+        [[-1, EN ? "◂ Previous" : "◂ Önceki"], [1, EN ? "Next ▸" : "Sonraki ▸"]].forEach(function (x) {
+          var d = el("button", null, x[1]); d.type = "button"; d.disabled = (x[0] < 0 ? i === 0 : i === N - 1);
+          d.onclick = function () { ac(i + x[0], true); var r = raf.getBoundingClientRect(); if (r.top < 0) raf.scrollIntoView({ behavior: "smooth", block: "start" }); };
+          gez.appendChild(d);
         });
-        f.appendChild(git);
-      }
-      G.sayfalar.forEach(function (S) {
-        var blok = el("section", "ta-gz-sayfa"); blok.dataset.gzSayfa = S.no;
-        blok.appendChild(el("h4", "ta-gz-sayfa-no", (EN ? "Page " : "Sayfa ") + S.no));
+        ust2.appendChild(gez);
+        okuma.appendChild(ust2);
         var sahne = el("div", "ta-kk-sahne");
         var kutu = el("div", "ta-kk ta-gz-kk");
         var im = new Image(); im.alt = (EN ? "Original page: " : "Özgün sayfa: ") + G.ad + ", " + (EN ? G.tarih_en : G.tarih) + ", " + (EN ? "p. " : "s. ") + S.no;
         im.onload = function () { kutu.style.setProperty("--oran", (im.naturalWidth / im.naturalHeight).toFixed(4)); };
         kutu.style.setProperty("--oran", "0.665");
-        im.src = S.gorsel; im.decoding = "async"; im.loading = "lazy";
+        im.src = S.gorsel; im.decoding = "async";
         var once = el("div", "kk-katman kk-once"); once.appendChild(im);
         var ceviri = el("div", "kk-katman kk-sonra ta-gz-ceviri");
         var bas = el("div", "ta-gz-kunye");
@@ -376,15 +400,20 @@
         kutu.append(ceviri, once);
         var dg = kaydirici(kutu, EN ? "Original · Arabic" : "Özgün · Arapça", EN ? "English" : "Türkçe", EN ? "Compare original and translation" : "Özgün ve çeviriyi karşılaştır");
         sahne.appendChild(kutu);
-        blok.append(sahne, dg);
+        okuma.append(sahne, dg);
         if (S.tam && S.tam.length) {
+          var det = el("details", "ta-gz-tam");
+          det.appendChild(el("summary", null, EN ? "Read the full translation of page " + S.no : "Sayfa " + S.no + (EK[S.no] || "’in") + " tam çevirisini oku"));
           var ic = el("div", "ta-gz-tam-ic"); ic.lang = EN ? "en" : "tr";
-          ic.appendChild(el("p", "ta-gz-tam-et", EN ? "Full translation of page " + S.no : "Sayfa " + S.no + (EK[S.no] || "’in") + " tam çevirisi"));
           S.tam.forEach(function (x) { ic.appendChild(el(x.tip === "baslik" ? "h5" : "p", "ta-gz-t-" + x.tip, EN ? x.en : x.tr)); });
-          blok.appendChild(ic);
+          det.appendChild(ic); okuma.appendChild(det);
         }
-        f.appendChild(blok);
-      });
+        // bir sonraki sayfanın görselini önceden yükle
+        if (G.sayfalar[i + 1]) { var on = new Image(); on.src = G.sayfalar[i + 1].gorsel; }
+      }
+      raf.append(rafSerit, okuma);
+      f.appendChild(raf);
+      ac(0, false);
       var kk = el("p", "ta-kars-kaynak");
       kk.appendChild(dis(el("a", null, (EN ? G.kaynak.ad_en : G.kaynak.ad) + " ↗"), G.kaynak.url));
       kk.appendChild(document.createTextNode(" · " + (EN ? G.lisans_en : G.lisans) + (EN ? " Translated from the Arabic by Alboroto; illegible words are marked." : " Arapçadan Alboroto çevirdi; okunamayan sözcükler belirtildi.")));
