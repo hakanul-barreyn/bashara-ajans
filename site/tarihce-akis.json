@@ -146,6 +146,214 @@
  },
  "akislar": [
   {
+   "anahtar": "siyonizm",
+   "ad": "Siyonizm ve Abdülhamid Osmanlısı",
+   "ad_en": "Zionism and Abdülhamid’s Ottoman state",
+   "ar": "الصهيونية والعهد الحميدي",
+   "yillar": [
+    1882,
+    1914
+   ],
+   "renk": "#7d4e57",
+   "gorsel": "gazze-tren-1935",
+   "tez": "Siyonist hareket Filistin’i 1880’lerde, henüz Osmanlı toprağıyken hedefledi. Rusya’daki pogromlardan kaçan ilk göçmenler tarım kolonileri kurdu; 1897’de Basel’de toplanan kongre Filistin’de “kamu hukukuyla güvence altına alınmış bir yurt” istedi. Theodor Herzl bu toprağı Osmanlı borçlarını ödeme karşılığında padişahtan almaya çalıştı. II. Abdülhamid reddetti, göçe ve toprak satışına kısıtlamalar koydu; ama kapitülasyonlar ve rüşvet bu kısıtlamaları delmeye yetti.",
+   "tez_en": "The Zionist movement set its sights on Palestine in the 1880s, while it was still Ottoman land. The first immigrants, fleeing pogroms in Russia, founded farming colonies; the congress that met in Basel in 1897 demanded “a home in Palestine secured under public law”. Theodor Herzl tried to obtain the land from the sultan in return for paying off the Ottoman debt. Abdülhamid II refused and restricted immigration and land sales; but capitulations and bribery were enough to get around the restrictions.",
+   "gecis": "Savaş geldi; Filistin’in kaderini artık İstanbul değil cephe belirleyecekti.",
+   "gecis_en": "War came; Palestine’s fate would now be decided at the front, not in Istanbul.",
+   "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "1882",
+     "baslik": "İlk göç dalgası ve Osmanlı’nın ilk yasağı",
+     "baslik_en": "The first wave of immigration and the first Ottoman ban",
+     "metin": "Rusya’daki 1881 pogromlarından sonra “Siyon Sevenler” (Hovevei Zion) cemiyetlerinden göçmenler Filistin’e gelmeye başladı; Rişon Lesiyon ve Zihron Yaakov gibi ilk tarım kolonileri 1882’de kuruldu, kısa süre sonra Baron Edmond de Rothschild bunları parayla ayakta tuttu. II. Abdülhamid yönetimi aynı yıl tavrını belirledi: Yahudi göçmenler imparatorluğun başka yerlerine yerleşebilirdi, Filistin’e yerleşemezdi. Kısıtlamalar sonraki yıllarda toprak alımını da kapsayacak şekilde genişledi. Ama yabancı uyruklu göçmenler konsoloslarının korumasına sığındı, yerel memurlar rüşvetle göz yumdu; yasak kâğıt üzerinde kaldı.",
+     "metin_en": "After the 1881 pogroms in Russia, immigrants from the “Lovers of Zion” (Hovevei Zion) societies began arriving in Palestine; the first farming colonies, such as Rishon LeZion and Zikhron Ya’akov, were founded in 1882, and Baron Edmond de Rothschild soon kept them afloat with money. Abdülhamid II’s government set its position the same year: Jewish immigrants could settle elsewhere in the empire, but not in Palestine. Over the following years the restrictions were extended to land purchases. But immigrants with foreign nationality sheltered behind their consuls and local officials looked away for bribes; the ban stayed on paper.",
+     "vurgu": [
+      "Filistin’e yerleşemezdi"
+     ],
+     "vurgu_en": [
+      "but not in Palestine"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "MESA: The Ottoman government and Jewish settlement in Palestine, 1882–1908",
+       "url": "https://my-mesa.org/program/abstracts/view/eyJpdiI6Ik9YUGZ1YnpRbzRLQWFTV21BMXl2dHc9PSIsInZhbHVlIjoieVhVTVFwNHZUK0xLZi9zYjloRUk2dz09IiwibWFjIjoiZjY5NTQ0Y2E3NTY2ODE1MWIzMjRmY2UyOGI1ZmM3OWRlOTliYzhmYTZiNmQ5YWFjMWU1ZjMyZGYxNDExN2M3MiIsInRhZyI6IiJ9"
+      },
+      {
+       "ad": "Wikipedia: First Aliyah",
+       "url": "https://en.wikipedia.org/wiki/First_Aliyah"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Neville J. Mandel, The Arabs and Zionism before World War I (University of California Press, 1976)",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1896-06",
+     "baslik": "Herzl’in teklifi, padişahın cevabı",
+     "baslik_en": "Herzl’s offer, the sultan’s answer",
+     "metin": "Viyanalı gazeteci Theodor Herzl, Şubat 1896’da yayımladığı “Yahudi Devleti” kitabında Yahudi meselesinin çözümünü ayrı bir devlette gördü. Haziran’da İstanbul’a geldi; aracısı Philip Newlinski üzerinden, Avrupalı alacaklıların denetimindeki Osmanlı borçlarını Yahudi bankerlerin parasıyla düzeltme karşılığında Filistin’in Yahudi göçüne açılmasını önerdi. Bir anlatıma göre teklif 20 milyon sterlindi. Herzl’in günlüğüne göre padişahın cevabı Newlinski’yle geldi.",
+     "metin_en": "In “The Jewish State”, published in February 1896, the Viennese journalist Theodor Herzl saw the answer to the Jewish question in a separate state. In June he came to Istanbul; through his go-between Philip Newlinski he proposed sorting out the Ottoman debt, controlled by European creditors, with money from Jewish bankers in return for opening Palestine to Jewish immigration. By one account the offer was £20 million. According to Herzl’s diary, the sultan’s answer came back through Newlinski.",
+     "kaynaklar": [
+      {
+       "ad": "TRT World: How Theodor Herzl failed to convince the Ottomans to sell Palestine",
+       "url": "https://www.trtworld.com/magazine/how-theodor-herzl-failed-to-convince-the-ottomans-to-sell-palestine-12765755"
+      },
+      {
+       "ad": "Wikipedia: Der Judenstaat",
+       "url": "https://en.wikipedia.org/wiki/Der_Judenstaat"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "The Complete Diaries of Theodor Herzl, cilt 1, 19 Haziran 1896 (Herzl Press, 1960)",
+       "tur": "birincil"
+      }
+     ]
+    },
+    {
+     "tur": "alinti",
+     "kisi": "II. Abdülhamid",
+     "kisi_en": "Abdülhamid II",
+     "eser": "Herzl’in günlüğüne göre, 19 Haziran 1896",
+     "eser_en": "according to Herzl’s diary, 19 June 1896",
+     "alinti": "Bay Herzl sizin dostunuzsa, siz de benim dostum olduğunuz kadar, ona bu konuda bir adım daha atmamasını öğütleyin. Bir karış toprak bile satamam; çünkü o bana değil, halkıma aittir.",
+     "alinti_en": "If Mr Herzl is as much your friend as you are mine, then advise him not to take another step in this matter. I cannot sell even a foot of land, for it does not belong to me, but to my people."
+    },
+    {
+     "yeni": true,
+     "tarih": "1897-08-29",
+     "baslik": "Basel’de Birinci Siyonist Kongresi",
+     "baslik_en": "The First Zionist Congress in Basel",
+     "metin": "Herzl’in topladığı kongre, Basel Programı’nı kabul etti: “Siyonizm, Yahudi halkı için Filistin’de kamu hukukuyla güvence altına alınmış bir yurt kurmayı amaçlar.” Program bunun yollarını da saydı: Filistin’de Yahudi çiftçi ve zanaatkârların yerleştirilmesi, dünyadaki Yahudilerin örgütlenmesi ve hedef için gereken hükümet onaylarının alınması. Dünya Siyonist Örgütü burada kuruldu. Toprak talebi açıktı, ama “devlet” kelimesi Osmanlı’yı ürkütmemek için programa yazılmadı. Herzl günlüğüne başka bir şey yazdı.",
+     "metin_en": "The congress Herzl convened adopted the Basel Programme: “Zionism seeks to establish a home for the Jewish people in Palestine secured under public law.” The programme listed the means: settling Jewish farmers and artisans in Palestine, organising Jews worldwide and obtaining the government consent needed for the goal. The World Zionist Organization was founded here. The claim to the land was explicit, but the word “state” was kept out of the programme so as not to alarm the Ottomans. Herzl wrote something else in his diary.",
+     "vurgu": [
+      "kamu hukukuyla güvence altına alınmış bir yurt"
+     ],
+     "vurgu_en": [
+      "a home for the Jewish people in Palestine secured under public law"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: First Zionist Congress",
+       "url": "https://en.wikipedia.org/wiki/First_Zionist_Congress"
+      },
+      {
+       "ad": "Uri Avnery: The First Zionist Congress and the charter",
+       "url": "https://uriavnery.com/texts/uri_avnery/l020/html/l020p054.htm"
+      }
+     ]
+    },
+    {
+     "tur": "alinti",
+     "kisi": "Theodor Herzl",
+     "kisi_en": "Theodor Herzl",
+     "eser": "Günlük, 3 Eylül 1897",
+     "eser_en": "Diary, 3 September 1897",
+     "alinti": "Basel’de Yahudi devletini kurdum. Bunu bugün yüksek sesle söylesem herkes güler. Belki beş yıl içinde, ama elli yıl içinde mutlaka herkes görecek.",
+     "alinti_en": "At Basel I founded the Jewish State. If I said this out loud today, I would be answered by universal laughter. Perhaps in five years, and certainly in fifty, everyone will know it.",
+     "metin": "Elli yıl sonra, Kasım 1947’de BM taksim kararı çıktı.",
+     "metin_en": "Fifty years later, in November 1947, the UN passed the partition resolution."
+    },
+    {
+     "yeni": true,
+     "tarih": "1898-10",
+     "baslik": "Kayzer Wilhelm’in aracılığı",
+     "baslik_en": "Kaiser Wilhelm’s mediation",
+     "metin": "Alman İmparatoru II. Wilhelm’in İstanbul ve Kudüs gezisi sırasında Herzl, Kayzer’den padişaha ne istemesini istediği sorusuna tek kelimeyle cevap verdi: Alman koruması altında, Filistin’de imtiyazlı bir şirket. Kayzer konuyu padişaha iki kez açtı; Abdülhamid, Yahudilerin Osmanlı’nın büyük dış borcunu üstlenmesi karşılığında bile reddetti. Siyonizmin Filistin’in yerli halkı arasında çok sevilmediği biliniyordu.",
+     "metin_en": "During German Emperor Wilhelm II’s visit to Istanbul and Jerusalem, Herzl answered the Kaiser’s question about what he should ask the sultan in a word: a chartered company in Palestine under German protection. The Kaiser raised the matter twice with the sultan; Abdülhamid refused, even in return for the Jews taking on the Ottoman state’s large foreign debt. Zionism was known to be deeply unpopular among Palestine’s local population.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Wilhelm II’s voyage to the Levant in 1898",
+       "url": "https://en.wikipedia.org/wiki/Wilhelm_II%27s_voyage_to_the_Levant_in_1898"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1899-03-01",
+     "baslik": "Yusuf Ziya el-Halidi: “Filistin’i rahat bırakın”",
+     "baslik_en": "Yusuf Diya al-Khalidi: “Leave Palestine alone”",
+     "metin": "Kudüs’ün eski belediye başkanı ve 1877’de Osmanlı Meclis-i Mebusanı’nda Kudüs mebusu olan Yusuf Ziya el-Halidi, Fransa Hahambaşısı Zadoc Kahn aracılığıyla Herzl’e bir mektup yazdı. Yahudilerin çektiği zulmü kabul etti, Siyonizmin fikir olarak doğal olduğunu söyledi; ama Filistin’in boş olmadığını, halkının bu planı kabul etmeyeceğini ve büyük devletlerin de buna izin vermeyeceğini anlattı. Mektubu şu cümleyle bitirdi: “Allah adına, Filistin’i rahat bıraksınlar.” Herzl 19 Mart’ta cevap verdi: Yahudi göçünün Araplara refah getireceğini yazdı, yerli halkın yerinden edilmesi ihtimaline hiç değinmedi.",
+     "metin_en": "Yusuf Diya al-Khalidi, a former mayor of Jerusalem and Jerusalem’s deputy in the Ottoman parliament of 1877, wrote to Herzl through Zadoc Kahn, the Chief Rabbi of France. He acknowledged the persecution Jews suffered and called Zionism natural as an idea; but he explained that Palestine was not empty, that its people would not accept the plan and that the great powers would not allow it either. He ended with the sentence: “In the name of God, let Palestine be left alone.” Herzl replied on 19 March: he wrote that Jewish immigration would bring prosperity to the Arabs, and did not address the possibility of the local population being displaced at all.",
+     "vurgu": [
+      "“Allah adına, Filistin’i rahat bıraksınlar.”"
+     ],
+     "vurgu_en": [
+      "“In the name of God, let Palestine be left alone.”"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Yusuf Diya al-Khalidi",
+       "url": "https://en.wikipedia.org/wiki/Yusuf_Diya_al-Khalidi"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Rashid Khalidi, The Hundred Years’ War on Palestine (Metropolitan Books, 2020), giriş bölümü",
+       "tur": "akademik"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1901-05",
+     "baslik": "Yıldız Sarayı’nda Herzl: borç karşılığı imtiyaz",
+     "baslik_en": "Herzl at Yıldız Palace: a charter for the debt",
+     "metin": "Herzl Mayıs 1901’de Yıldız Sarayı’nda padişah tarafından kabul edildi, ama Siyonist temsilci olarak değil gazeteci olarak. Görüşmede imtiyazdan söz etmedi; birkaç gün sonra padişahın adamlarına teklifini açtı: Osmanlı kamu borcu birleştirilecek, karşılığında Yahudilerin Filistin’e bir millet olarak yerleşmesine izin veren bir imtiyaz verilecekti. Osmanlı tarafı Yahudi göçmenlerin imparatorluğun başka vilayetlerine dağınık olarak yerleşebileceğini, ama Filistin’e yerleşemeyeceğini söyledi; Herzl reddetti. İmtiyaz yerine bir Mecidiye nişanıyla döndü. 1902’deki ikinci deneme de sonuçsuz kaldı. Herzl bunun üzerine İngiltere’ye yöneldi; 1903’te İngilizlerin Doğu Afrika’da toprak önerisi (“Uganda planı”) kongreyi böldü ve 1905’te reddedildi. Hareket Filistin’den başka bir yeri kabul etmeyecekti.",
+     "metin_en": "In May 1901 Herzl was received by the sultan at Yıldız Palace, but as a journalist rather than as a Zionist envoy. He did not mention the charter at the audience; a few days later he put his offer to the sultan’s officials: the Ottoman public debt would be consolidated, and in return a charter would allow Jews to settle in Palestine as a nation. The Ottoman side said Jewish immigrants could settle scattered across other provinces of the empire, but not in Palestine; Herzl refused. He returned with a Mecidiye decoration instead of a charter. A second attempt in 1902 also failed. Herzl then turned to Britain; in 1903 a British offer of land in East Africa (the “Uganda plan”) split the congress and was rejected in 1905. The movement would accept nowhere but Palestine.",
+     "vurgu": [
+      "Mecidiye nişanıyla döndü"
+     ],
+     "vurgu_en": [
+      "a Mecidiye decoration instead of a charter"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "MESA: Abdülhamid II and Herzl at Yıldız, May 1901",
+       "url": "https://my-mesa.org/program/abstracts/view/eyJpdiI6IlRUVkhqK2pHeG9yL2J4aUtqVURra3c9PSIsInZhbHVlIjoiTXhKQzc3THNKaUM5aHhxV3ZBdWNKQT09IiwibWFjIjoiZjA5NTJlMzY0N2RiNDA4NzkwMzg4M2I3YWU4ZTVlNjE4MDQxMmE5NWIyOTRkMmE4ZmQ3YTMxYzA1YzY2MmQ1NyIsInRhZyI6IiJ9"
+      },
+      {
+       "ad": "Raab Collection: Herzl reports the failure of negotiations with Turkey",
+       "url": "https://www.raabcollection.com/theodor-herzl-autograph/theodor-herzl-reports-failure-negotiation-turkey"
+      },
+      {
+       "ad": "Wikipedia: Uganda Scheme",
+       "url": "https://en.wikipedia.org/wiki/Uganda_Scheme"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1911-05",
+     "baslik": "Arap basınında ve Meclis-i Mebusan’da ilk itirazlar",
+     "baslik_en": "The first objections in the Arab press and the Ottoman parliament",
+     "metin": "1908’de Meşrutiyet’in ilanıyla basın ve meclis açıldı, Siyonist toprak alımları açıkça tartışılmaya başladı. Hayfa’da Necib Nassar’ın 1908’de çıkardığı el-Kermil ve Yafa’da İsa el-İsa ile Yusuf el-İsa’nın 1911’de kurduğu Filastin, Sursuk gibi Beyrutlu toprak sahiplerinin köyleri satması ve köylülerin topraktan çıkarılması üzerine yazdı. Mayıs 1911’de Kudüs mebusları Ruhi el-Halidi ve Said el-Hüseyni Siyonizmi Meclis-i Mebusan’da gündeme getirdi. Tarihçenin gazeteler bölümünde Filastin’in 1935 tarihli bir sayısı bütünüyle çevrildi.",
+     "metin_en": "With the restoration of the constitution in 1908 the press and parliament opened up, and Zionist land purchases began to be debated openly. Al-Karmil, launched by Najib Nassar in Haifa in 1908, and Filastin, founded by Issa al-Issa and Yousef al-Issa in Jaffa in 1911, wrote about absentee landowners in Beirut such as the Sursocks selling villages and peasants being evicted. In May 1911 Jerusalem’s deputies Ruhi al-Khalidi and Said al-Husseini raised Zionism in the Ottoman parliament. The newspapers section of this history has a full translation of a 1935 issue of Filastin.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Filastin (newspaper)",
+       "url": "https://en.wikipedia.org/wiki/Falastin"
+      },
+      {
+       "ad": "Wikipedia: Al-Karmil (newspaper)",
+       "url": "https://en.wikipedia.org/wiki/Al-Karmil_(newspaper)"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Rashid Khalidi, Palestinian Identity: The Construction of Modern National Consciousness (Columbia University Press, 1997)",
+       "tur": "akademik"
+      }
+     ]
+    }
+   ]
+  },
+  {
    "anahtar": "osmanli",
    "ad": "Osmanlı’nın yıkılışı",
    "ar": "العهد العثماني",
@@ -450,11 +658,11 @@
    "alt": "Direnişin kökleri",
    "yillar": [
     1921,
-    1939
+    1945
    ],
    "renk": "#b3261e",
    "tez": "Manda yönetimi Balfour taahhüdünü uygularken Filistinlilere seçimle kurulan bir meclis bile tanımadı. 1930’larda Avrupa’dan gelen göç hızlandı; Yahudi nüfusunun payı 1931’de yüzde 17 iken 1936 sonunda yüzde 28’e çıktı. Vergi ve borç altındaki köylüler Hayfa ile Yafa’nın kenar mahallelerine göç ediyordu. Histadrut’un “İbrani emeği” kampanyası Arap işçileri Yahudi işletmelerinden dışlıyordu. Hayfa’da imam ve öğretmen olan İzzeddin el-Kassam bu insanlar arasında gizli bir örgüt kurdu. Kasım 1935’te öldürülmesi, ertesi bahar genel grevle başlayıp üç yıl süren isyanın kıvılcımı oldu.",
-   "gecis": "İsyan bastırıldı; on yıl sonra toprak BM’de paylaşılacaktı.",
+   "gecis": "Savaş bitti; iki yıl sonra toprak BM’de paylaşılacaktı.",
    "olaylar": [
     {
      "ref": "1921",
@@ -671,12 +879,44 @@
        "tur": "akademik"
       }
      ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1942-02-24",
+     "baslik": "Struma İstanbul açıklarında battı",
+     "baslik_en": "The Struma sinks off Istanbul",
+     "metin": "İsyanın ardından gelen 1939 Beyaz Kitabı Yahudi göçünü beş yılda 75.000 kişiyle sınırladı. Avrupa’da Yahudi soykırımı sürerken Haganah’ın göç örgütü Mossad LeAliyah Bet, kotayı aşan gemilerle mülteci taşıdı; İngilizler gemileri durdurdu, yolcuları kamplara ya da sürgüne gönderdi. Kasım 1940’ta Hayfa limanında sürgün edilmek üzere bekletilen mültecileri taşıyan Patria, Haganah’ın sürgünü engellemek için koyduğu bombayla battı. Romanya’dan kaçan yaklaşık 790 kişiyi taşıyan Struma ise motoru bozuk hâlde Aralık 1941’de İstanbul’a geldi. İngiltere yolcuların Filistin’e girmesine izin vermedi, Türkiye de karaya çıkmalarına; gemi 70 gün limanda bekledi. 23 Şubat 1942’de Türk polisi gemiyi Boğaz’dan Şile açıklarına çekip bıraktı. Ertesi sabah bir Sovyet denizaltısı gemiyi torpidoladı: 781 mülteci ve 10 mürettebat öldü, bir kişi kurtuldu. Filistin’deki Yahudi nüfusu 1931’de yaklaşık 175 bin iken 1945’te 550 bini geçti; savaştan sonra Avrupa’daki kamplarda kalan soykırım kurtulanlarının göçü, taksim tartışmasının merkezine oturdu.",
+     "metin_en": "The 1939 White Paper that followed the revolt capped Jewish immigration at 75,000 over five years. As the Holocaust unfolded in Europe, the Haganah’s immigration arm, Mossad LeAliyah Bet, carried refugees on ships that broke the quota; the British stopped the ships and sent the passengers to camps or into deportation. In November 1940 the Patria, holding refugees in Haifa port pending deportation, sank after a bomb planted by the Haganah to prevent the deportation. The Struma, carrying some 790 people fleeing Romania, reached Istanbul in December 1941 with a broken engine. Britain refused to let the passengers into Palestine, and Turkey refused to let them ashore; the ship waited in port for 70 days. On 23 February 1942 Turkish police towed it through the Bosphorus to waters off Şile and left it adrift. The next morning a Soviet submarine torpedoed it: 781 refugees and 10 crew died, one person survived. The Jewish population of Palestine, about 175,000 in 1931, passed 550,000 by 1945; after the war the immigration of Holocaust survivors held in European camps moved to the centre of the partition debate.",
+     "vurgu": [
+      "Türkiye de karaya çıkmalarına"
+     ],
+     "vurgu_en": [
+      "Turkey refused to let them ashore"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Struma disaster",
+       "url": "https://en.wikipedia.org/wiki/Struma_disaster"
+      },
+      {
+       "ad": "USHMM: Voyage of the Struma",
+       "url": "https://encyclopedia.ushmm.org/content/en/article/voyage-of-the-struma"
+      },
+      {
+       "ad": "Jewish Virtual Library: Struma",
+       "url": "https://www.jewishvirtuallibrary.org/quot-struma-quot-illegal-immigration-ship"
+      },
+      {
+       "ad": "Wikipedia: Demographic history of Palestine",
+       "url": "https://en.wikipedia.org/wiki/Demographic_history_of_Palestine_(region)"
+      }
+     ]
     }
    ],
    "ad_en": "Qassam and the 1936 Revolt",
    "alt_en": "The roots of resistance",
    "tez_en": "While implementing the Balfour pledge, the Mandate denied Palestinians even an elected assembly. Immigration from Europe accelerated in the 1930s; the Jewish share of the population rose from 17 per cent in 1931 to 28 per cent by the end of 1936. Peasants burdened with taxes and debt were drifting to the outskirts of Haifa and Jaffa. The Histadrut’s “Hebrew labour” campaign was pushing Arab workers out of Jewish enterprises. Izz ad-Din al-Qassam, an imam and teacher in Haifa, built a secret organisation among them. His killing in November 1935 sparked the revolt that began with a general strike the following spring and lasted three years.",
-   "gecis_en": "The revolt was crushed; ten years later the land would be divided at the UN.",
+   "gecis_en": "The war ended; two years later the land would be divided at the UN.",
    "gorsel": "isyan-1938"
   },
   {
@@ -1302,6 +1542,87 @@
      "sonuc_en": "The Arab armies suffered a crushing defeat: Egypt lost Sinai and Gaza, Jordan the West Bank and East Jerusalem, Syria the Golan. Nasser announced his resignation and stayed in office when crowds filled the streets. The Khartoum summit said “no peace, no recognition, no negotiation”. Palestinians who had lost faith in the Arab armies carried on the struggle through their own organisations."
     },
     {
+     "yeni": true,
+     "tarih": "1968-01-16",
+     "baslik": "İngiltere “Süveyş’in doğusu”ndan çekiliyor",
+     "baslik_en": "Britain withdraws from “East of Suez”",
+     "metin": "Süveyş 1956’da İngiltere’nin savaş sonrası ilk büyük yenilgisi olmuştu; sonraki on yılda Avrupa’nın bölgedeki sömürge düzeni dağıldı. Cezayir 1962’de sekiz yıllık savaşın sonunda Fransa’dan bağımsızlığını aldı, İngilizler Kasım 1967’de Aden’den çekildi. Sterlinin değer kaybı ve bütçe kesintileri üzerine Harold Wilson hükümeti Ocak 1968’de, Basra Körfezi ve Güneydoğu Asya’daki askerî varlığını 1971 sonuna kadar kaldıracağını, Bahreyn, Katar ve yedi Sahil Emirliği’yle yaptığı koruma antlaşmalarını sona erdireceğini açıkladı. İngiltere’nin Körfez’deki 150 yıllık askerî üstünlüğü bitiyordu.",
+     "metin_en": "Suez in 1956 had been Britain’s first great post-war humiliation; over the next decade Europe’s colonial order in the region came apart. Algeria won independence from France in 1962 after an eight-year war, and the British left Aden in November 1967. Following the devaluation of sterling and spending cuts, Harold Wilson’s government announced in January 1968 that it would withdraw its forces from the Persian Gulf and South-East Asia by the end of 1971 and end its protection treaties with Bahrain, Qatar and the seven Trucial States. Britain’s 150 years of military supremacy in the Gulf were coming to an end.",
+     "vurgu": [
+      "150 yıllık askerî üstünlüğü"
+     ],
+     "vurgu_en": [
+      "150 years of military supremacy"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "The National: Sun sets on British Empire as UAE raises its flag",
+       "url": "https://www.thenationalnews.com/news/uae-news/sun-sets-on-british-empire-as-uae-raises-its-flag"
+      },
+      {
+       "ad": "Hansard, 1 Mart 1971: Persian Gulf States",
+       "url": "https://api.parliament.uk/historic-hansard/commons/1971/mar/01/persian-gulf-states"
+      },
+      {
+       "ad": "Palgrave: The Gulf rulers and the British withdrawal",
+       "url": "https://www.palgrave.com/gb/book/9783030561819"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1971-12-02",
+     "baslik": "Bahreyn, Katar ve Birleşik Arap Emirlikleri bağımsız",
+     "baslik_en": "Bahrain, Qatar and the United Arab Emirates become independent",
+     "metin": "Kuveyt 1961’de bağımsızlığını almıştı. Bahreyn 15 Ağustos, Katar 3 Eylül 1971’de bağımsız oldu; ikisi de başta planlanan dokuz emirlik federasyonuna katılmadı. 2 Aralık 1971’de altı Sahil Emirliği Birleşik Arap Emirlikleri’ni kurdu, Ras el-Hayme Şubat 1972’de katıldı. İngilizlerin çekilmesinden iki gün önce, 30 Kasım’da İran Ebu Musa ile Büyük ve Küçük Tunb adalarını ele geçirdi. İngiltere resmen çekildi ama silah satışları, danışmanları ve şirketleriyle bölgede kaldı; petrol gelirleriyle zenginleşen yeni devletlerin güvenliği giderek ABD’ye bağlandı.",
+     "metin_en": "Kuwait had become independent in 1961. Bahrain became independent on 15 August and Qatar on 3 September 1971; neither joined the nine-emirate federation first planned. On 2 December 1971 six Trucial States founded the United Arab Emirates, and Ras al-Khaimah joined in February 1972. On 30 November, two days before the British left, Iran seized Abu Musa and the Greater and Lesser Tunbs. Britain formally withdrew but stayed in the region through arms sales, advisers and companies; the security of the new states, enriched by oil revenue, was increasingly tied to the United States.",
+     "kaynaklar": [
+      {
+       "ad": "EBSCO: Bahrain and Qatar achieve independence",
+       "url": "https://www.ebsco.com/research-starters/history/bahrain-and-qatar-achieve-independence"
+      },
+      {
+       "ad": "Durham E-Theses: The British withdrawal from the Gulf, 1971",
+       "url": "https://etheses.durham.ac.uk/id/eprint/6021/1/6021_3372.PDF"
+      },
+      {
+       "ad": "Simon C. Smith: Imperialism after decolonization? Britain and Bahrain",
+       "url": "https://hull-repository.worktribe.com/OutputFile/4730855"
+      }
+     ]
+    },
+    {
+     "tur": "alinti",
+     "kisi": "Malik bin Nebi",
+     "kisi_en": "Malek Bennabi",
+     "eser": "Rönesansın Şartları (1949)",
+     "eser_en": "Les conditions de la renaissance (1949)",
+     "alinti": "Sömürülebilirlik olmadan sömürgecilik olmaz. Sonuçtan, yani sömürgecilikten kurtulmak için önce sebebinden, sömürülebilirlikten kurtulmak gerekir.",
+     "alinti_en": "There is no colonisation without colonisability. To free oneself from the effect, colonialism, one must first free oneself from its cause: colonisability.",
+     "metin": "Cezayirli düşünür Malik bin Nebi (1905–1973) “sömürülebilirlik” kavramını Fransız sömürgesi Cezayir’i incelerken ortaya attı: Bir toplumu sömürgeye açık hâle getiren, dışarıdan gelen güçten önce kendi içindeki çözülmedir. Bin Nebi’nin izinden gidenler bu kavramı Avrupa sömürgelerinin çekildiği dönemin sonrasına da taşır: Doğrudan yönetim bitti, ama güvenlik, silah ve para üzerinden kurulan yeni bir bağımlılık başladı. Bu okumaya göre İngiltere ile Fransa’nın bıraktığı boşluğu artık ABD doldurdu; sömürülmeye müsait kalan toplumlar için yalnızca efendi değişti.",
+     "metin_en": "The Algerian thinker Malek Bennabi (1905–1973) coined the concept of “colonisability” while studying French-ruled Algeria: what makes a society open to colonisation is its inner decay, before any outside force. Those who follow Bennabi carry the concept beyond the end of European colonial rule: direct administration ended, but a new dependence built on security, arms and money began. In this reading, the United States filled the vacuum left by Britain and France; for societies that remained colonisable, only the master changed.",
+     "vurgu": [
+      "yalnızca efendi değişti"
+     ],
+     "vurgu_en": [
+      "only the master changed"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Milel ve Nihal: Malik Bin Nebi’de Sömürülebilirlik Olgusu",
+       "url": "https://dergipark.org.tr/en/pub/milel/issue/10464/128123"
+      },
+      {
+       "ad": "Countercurrents: Malek Bennabi, a journey through time",
+       "url": "https://countercurrents.org/2026/04/malek-bennabi-a-journey-through-time-back-to-the-future/"
+      },
+      {
+       "ad": "Akofena: Malek Bennabi, un précurseur des études coloniales",
+       "url": "https://doaj.org/article/2e7bf3f5641f49d1987a7abdd46f9f59"
+      }
+     ]
+    },
+    {
      "ref": "1973-10-06",
      "karsilastir": {
       "once": "g1967",
@@ -1354,6 +1675,34 @@
      "sonuc_en": "Egypt regained Sinai but broke away from the Arab front: it was suspended from the Arab League, and Sadat was killed at a military parade in 1981. The treaty’s clauses on Palestinian autonomy were never implemented.",
      "ortak": [
       "tanima"
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "1980-01-23",
+     "baslik": "Carter Doktrini: Körfez ABD’nin “hayati çıkarı”",
+     "baslik_en": "The Carter Doctrine: the Gulf as a US “vital interest”",
+     "metin": "ABD bölgeye 1957’de Eisenhower Doktrini’yle girmişti: “uluslararası komünizm” tehdidi altındaki Ortadoğu devletlerine askerî yardım ve gerekirse asker gönderme sözü. İran devrimi ve Sovyetlerin Afganistan’a girişinin ardından Başkan Jimmy Carter bir adım daha attı: Herhangi bir dış gücün Basra Körfezi’ni kontrol etme girişimi ABD’nin hayati çıkarlarına saldırı sayılacak ve askerî güç dahil her yolla püskürtülecekti. Bugün ABD Beşinci Filosu’nun karargâhı Bahreyn’de, bölgedeki en büyük ABD üssü Katar’daki El-Udeyd’de.",
+     "metin_en": "The United States had entered the region in 1957 with the Eisenhower Doctrine: a promise of military aid and, if necessary, troops to Middle Eastern states threatened by “international communism”. After the Iranian revolution and the Soviet invasion of Afghanistan, President Jimmy Carter went a step further: any attempt by an outside force to gain control of the Persian Gulf would be regarded as an assault on the vital interests of the United States and repelled by any means necessary, including military force. Today the headquarters of the US Fifth Fleet is in Bahrain, and the largest US base in the region is at Al Udeid in Qatar.",
+     "vurgu": [
+      "askerî güç dahil her yolla"
+     ],
+     "vurgu_en": [
+      "by any means necessary, including military force"
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Office of the Historian: The Eisenhower Doctrine, 1957",
+       "url": "https://history.state.gov/milestones/1953-1960/eisenhower-doctrine"
+      },
+      {
+       "ad": "Wikipedia: Carter Doctrine",
+       "url": "https://en.wikipedia.org/wiki/Carter_Doctrine"
+      },
+      {
+       "ad": "Wikipedia: Al Udeid Air Base",
+       "url": "https://en.wikipedia.org/wiki/Al_Udeid_Air_Base"
+      }
      ]
     },
     {
@@ -2096,13 +2445,123 @@
    "ad": "İslami hareketlerin yeniden doğuşu",
    "ar": "المقاومة الإسلامية",
    "yillar": [
-    1973,
+    1964,
     2023
    ],
    "renk": "#1f6e4b",
    "tez": "Solun ve milliyetçiliğin tıkandığı yerde camiden, hayır kurumlarından ve üniversitelerden yeni bir kuşak çıktı. Gazze’de Şeyh Ahmed Yasin’in kurduğu Mücemma, İntifada’yla Hamas’a dönüştü; İslami Cihad İran devriminden etkilenen bir çizgide örgütlendi. Lübnan’da Hizbullah, Yemen’de Ensarullah ve İran ile birlikte zamanla “direniş ekseni” denen bir cephe oluştu.",
    "gecis": "7 Ekim’de bu cephe sahneye bütün olarak çıktı.",
    "olaylar": [
+    {
+     "yeni": true,
+     "tarih": "1964",
+     "baslik": "Lübnan’da Cemaat-i İslamiye kuruldu",
+     "baslik_en": "Al-Jama’a al-Islamiyya is founded in Lebanon",
+     "metin": "Trablus’taki İbadurrahman cemiyetinden çıkan gençler, Fethi Yeken ve Faysal Mevlevi’nin önderliğinde Müslüman Kardeşler’in Lübnan kolunu kurdu. Mezhep paylaşımına dayalı Lübnan siyasetinde ilk örgütlü Sünni İslamcı hareketti. Hizbullah’tan önce silahlı bir kanadı da oldu: İsrail’in 1982 işgaline karşı Sayda ve çevresinde Fecr Kuvvetleri’ni kurdu, İsrail 2000’de güneyden çekilince bu kanadın etkinliği azaldı. Cemaat 1992’de meclise girdi.",
+     "metin_en": "Young members of the ’Ibad al-Rahman society in Tripoli, led by Fathi Yakan and Faysal Mawlawi, founded the Lebanese branch of the Muslim Brotherhood. It was the first organised Sunni Islamist movement in Lebanon’s sectarian politics. It had an armed wing before Hezbollah did: it formed the Fajr Forces around Sidon against Israel’s 1982 invasion, and the wing’s activity declined after Israel left the south in 2000. The group entered parliament in 1992.",
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Islamic Group (Lebanon)",
+       "url": "https://en.wikipedia.org/wiki/Islamic_Group_(Lebanon)"
+      },
+      {
+       "ad": "Wikipedia: Al-Fajr Forces",
+       "url": "https://en.wikipedia.org/wiki/Al-Fajr_Forces"
+      },
+      {
+       "ad": "AFPC World Almanac of Islamism: Lebanon",
+       "url": "https://almanac.afpc.org/uploads/documents/Lebanon_1.pdf"
+      }
+     ]
+    },
+    {
+     "tur": "biyografi",
+     "kisi": "Fethi Yeken",
+     "kisi_en": "Fathi Yakan",
+     "yillar": "1933–2009",
+     "ozet": "Lübnan Sünni İslamcılığının fikir babası. Cemaat-i İslamiye’nin kurucusu; ömrünün sonunda Hizbullah’la aynı safta yer alan İslami Eylem Cephesi’ni kurdu.",
+     "ozet_en": "The intellectual father of Lebanese Sunni Islamism. Founder of al-Jama’a al-Islamiyya; late in life he founded the Islamic Action Front, which stood on the same side as Hezbollah.",
+     "satirlar": [
+      [
+       "1933",
+       "9 Şubat’ta Trablus’ta doğdu."
+      ],
+      [
+       "1950’ler",
+       "Trablus’taki İbadurrahman merkezine katıldı; Lübnan’daki İslami hareketin öncüleri arasına girdi."
+      ],
+      [
+       "1964",
+       "Faysal Mevlevi’yle birlikte Cemaat-i İslamiye’yi kurdu, uzun yıllar genel sekreteri oldu."
+      ],
+      [
+       "1970’ler",
+       "Kitaplarıyla bütün Arap dünyasında okunan bir hareket düşünürü oldu; en bilineni, Türkçeye de çevrilen “To Be a Muslim” (Müslüman Olmam Neyi Gerektirir?)."
+      ],
+      [
+       "1992",
+       "Trablus’tan milletvekili seçildi; İslamcıların Lübnan meclisine katılmasının yolunu açtı."
+      ],
+      [
+       "Ağustos 2006",
+       "Temmuz Savaşı’ndan sonra Cemaat’in Hariri çizgisine yakınlaşmasına karşı çıkarak ayrıldı, İslami Eylem Cephesi’ni kurdu; Siniora hükümetine karşı Hizbullah’ın önderliğindeki muhalefete katıldı."
+      ],
+      [
+       "13 Haziran 2009",
+       "Beyrut’ta öldü."
+      ]
+     ],
+     "satirlar_en": [
+      [
+       "1933",
+       "Born in Tripoli on 9 February."
+      ],
+      [
+       "1950s",
+       "Joined the ’Ibad al-Rahman centre in Tripoli; became one of the pioneers of Lebanon’s Islamic movement."
+      ],
+      [
+       "1964",
+       "Founded al-Jama’a al-Islamiyya with Faysal Mawlawi and served as its secretary-general for many years."
+      ],
+      [
+       "1970s",
+       "Became a movement thinker read across the Arab world; his best-known book, also translated into Turkish, is “To Be a Muslim”."
+      ],
+      [
+       "1992",
+       "Elected to parliament for Tripoli; opened the way for Islamists to take part in Lebanon’s parliament."
+      ],
+      [
+       "August 2006",
+       "After the July War he broke away in protest at the group’s drift towards the Hariri camp and founded the Islamic Action Front, joining the Hezbollah-led opposition against the Siniora government."
+      ],
+      [
+       "13 June 2009",
+       "Died in Beirut."
+      ]
+     ],
+     "kaynaklar": [
+      {
+       "ad": "Wikipedia: Fathi Yakan",
+       "url": "https://en.wikipedia.org/wiki/Fathi_Yakan"
+      },
+      {
+       "ad": "Wikipedia: Islamic Labor Front",
+       "url": "https://en.wikipedia.org/wiki/Islamic_Labor_Front"
+      },
+      {
+       "ad": "Radiance Weekly: Dr. Fathi Yakan (1933–2009)",
+       "url": "https://radianceweekly.net/dr-fathi-yakan-1933-2009"
+      }
+     ],
+     "kaynakca": [
+      {
+       "ad": "Robert G. Rabil, Salafism in Lebanon (Georgetown University Press, 2014)",
+       "tur": "akademik"
+      }
+     ]
+    },
     {
      "ref": "1973",
      "kaynakca": [
@@ -3229,6 +3688,35 @@
        "ad": "BM Özel Raportörü Francesca Albanese, “Anatomy of a Genocide” raporu (A/HRC/55/73, 2024)",
        "tur": "birincil",
        "ad_en": "UN Special Rapporteur Francesca Albanese, “Anatomy of a Genocide” (A/HRC/55/73, 2024)"
+      }
+     ]
+    },
+    {
+     "yeni": true,
+     "tarih": "2023-10",
+     "ortak": [
+      "islami"
+     ],
+     "baslik": "Lübnan’da Fecr Kuvvetleri yeniden sahnede",
+     "baslik_en": "The Fajr Forces return in Lebanon",
+     "metin": "Hizbullah 8 Ekim’de “destek cephesi”ni açınca Cemaat-i İslamiye’nin silahlı kanadı Fecr Kuvvetleri de Hizbullah’la eşgüdüm içinde güney Lübnan’dan İsrail’e roket atmaya başladı; yirmi yılı aşkın sessizliğin ardından ilk kez. İsrail Cemaat üyelerini defalarca hedef aldı, bazılarını kaçırdı; İsrailli Alma merkezine göre Mayıs 2025’e kadar 15 üyesi öldürüldü. ABD Ocak 2026’da örgütü “Lübnan Müslüman Kardeşleri” adıyla terör örgütü listesine aldı. 3 Mart 2026’da İsrail Cemaat’in Sayda’daki merkezini vurdu. Cemaat’in mecliste bir sandalyesi var.",
+     "metin_en": "When Hezbollah opened its “support front” on 8 October, al-Jama’a al-Islamiyya’s armed wing, the Fajr Forces, also began firing rockets at Israel from south Lebanon in coordination with Hezbollah, for the first time after more than two decades of silence. Israel repeatedly targeted the group’s members and abducted some; according to Israel’s Alma centre, 15 of them had been killed by May 2025. In January 2026 the United States listed the group as a terrorist organisation under the name “Lebanese Muslim Brotherhood”. On 3 March 2026 Israel struck the group’s headquarters in Sidon. The group holds one seat in parliament.",
+     "kaynaklar": [
+      {
+       "ad": "Carnegie, Diwan: Israel strikes Hezbollah’s Muslim Brotherhood-affiliated allies",
+       "url": "https://carnegieendowment.org/middle-east/diwan/2026/03/israel-targets-hezbollahs-sunni-allies"
+      },
+      {
+       "ad": "Federal Register: FTO designation of Lebanese Muslim Brotherhood",
+       "url": "https://regulations.justia.com/regulations/fedreg/2026/01/14/2026-00573.html"
+      },
+      {
+       "ad": "Alma: Will al-Jama’a al-Islamiyya sever ties with Hamas?",
+       "url": "https://israel-alma.org/will-the-al-jamaa-al-islamiyya-movement-in-lebanon-sever-ties-with-hamas/"
+      },
+      {
+       "ad": "Politics & Society Institute: Al-Jama‘a al-Islamiyya in Lebanon",
+       "url": "https://politicsociety.org/2026/02/15/al-jamaa-al-islamiyya-in-lebanon-from-ideological-origins-to-u-s-terror-designation/?lang=en"
       }
      ]
     },

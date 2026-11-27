@@ -22,7 +22,7 @@
   function D2(o, k) { return EN && o[k + "_en"] ? o[k + "_en"] : o[k]; }
 
   Promise.all([
-    fetch("site/tarihce-akis.json?v=20").then(function (r) { return r.json(); }),
+    fetch("site/tarihce-akis.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/donum.json?v=21").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita.json?v=3").then(function (r) { return r.json(); }),
     fetch("site/tarihce-harita-genis.json?v=3").then(function (r) { return r.json(); }),
@@ -78,10 +78,10 @@
     ic.appendChild(tatriz(46, "ta-tatriz ilk"));
     var h = el("h1", "ta-baslik");
     harfle(h, EN ? "Currents of a century" : "Bir yüzyılın akışları");
-    ic.append(el("p", "ta-ust", EN ? "Palestine · 1914–2026" : "Filistin · 1914–2026"), h, el("p", "ta-ar", "تيارات قرن"),
+    ic.append(el("p", "ta-ust", EN ? "Palestine · 1882–2026" : "Filistin · 1882–2026"), h, el("p", "ta-ar", "تيارات قرن"),
       el("p", "ta-dek", EN
-        ? "The Ottomans marched on Suez to win back British-held Egypt; within four years they had lost every Arab land Selim I had taken from the Mamluks in 1516–17. Gaza, Jerusalem, Damascus and Aleppo fell within a year, and in October 1918 the Committee of Union and Progress government laid down its arms at Mudros. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. The currents flow on a single timeline and overlap where history did; whenever the land changed hands, a before-and-after map lets you compare the two."
-        : "Osmanlı, İngiliz elindeki Mısır’ı geri almak için Süveyş’e yürüdü; dört yıl dolmadan Yavuz Selim’in 1516-17’de Memlüklerden aldığı Arap topraklarının tamamını kaybetmişti. Gazze, Kudüs, Şam ve Halep bir yıl içinde düştü, Ekim 1918’de İttihat ve Terakki yönetimi Mondros’ta silah bıraktı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Akışlar tek bir zaman çizgisinde ilerler, tarihin iç içe geçtiği yerde birbirine karışır. Toprak her el değiştirdiğinde önce ve sonra haritası gelir; çizgiyi sürükleyip iki hâli karşılaştırabilirsiniz."));
+        ? "The Zionist movement set its sights on Palestine in the 1880s, while it was still Ottoman land; Abdülhamid II refused to hand it over in return for paying off the debt. Then the Ottomans marched on Suez to win back British-held Egypt; within four years they had lost every Arab land Selim I had taken from the Mamluks in 1516–17. Gaza, Jerusalem, Damascus and Aleppo fell within a year, and in October 1918 the Committee of Union and Progress government laid down its arms at Mudros. The empire’s Arab lands were divided between the colonial powers, and through Balfour’s promise Palestine became the target of the Zionist settlement project. From then on each generation carried the resistance a step further: Qassam’s peasants took to the hills, the nationalism of Nasser and the Ba’ath mobilised armies, the fedayeen and the left carried the struggle into the camps, and the Islamic movements spread it from Gaza across the region. The currents flow on a single timeline and overlap where history did; whenever the land changed hands, a before-and-after map lets you compare the two."
+        : "Siyonist hareket Filistin’i 1880’lerde, henüz Osmanlı toprağıyken hedef aldı; II. Abdülhamid toprağı borç karşılığında vermeyi reddetti. Sonra Osmanlı, İngiliz elindeki Mısır’ı geri almak için Süveyş’e yürüdü; dört yıl dolmadan Yavuz Selim’in 1516-17’de Memlüklerden aldığı Arap topraklarının tamamını kaybetmişti. Gazze, Kudüs, Şam ve Halep bir yıl içinde düştü, Ekim 1918’de İttihat ve Terakki yönetimi Mondros’ta silah bıraktı. İmparatorluğun Arap toprakları sömürgeci güçler arasında paylaşıldı; Filistin ise Balfour’un verdiği sözle Siyonist yerleşim planının hedefi oldu. O günden sonra her kuşak direnişi bir adım ileri taşıdı: Kassam’ın köylüleri dağa çıktı, Nasır’ın ve Baas’ın milliyetçiliği orduları seferber etti, fedailer ve sol mücadeleyi kamplara taşıdı, İslami hareketler onu Gazze’den bütün bölgeye yaydı. Akışlar tek bir zaman çizgisinde ilerler, tarihin iç içe geçtiği yerde birbirine karışır. Toprak her el değiştirdiğinde önce ve sonra haritası gelir; çizgiyi sürükleyip iki hâli karşılaştırabilirsiniz."));
     ic.appendChild(tatriz(46, "ta-tatriz son"));
     ic.appendChild(el("p", "ta-ipucu", EN ? "Scroll ↓" : "Kaydır ↓"));
     giris.appendChild(ic);
@@ -303,7 +303,8 @@
       var gs = gorseller(o, null);
       if (gs.length) { var im = new Image(); im.src = gs[0].src; im.alt = ""; im.className = "ta-alinti-yuz"; im.onerror = function () { im.remove(); }; b.appendChild(im); KUL[o.gorsel] = 1; }
       b.appendChild(el("span", "ta-tirnak", "“"));
-      if (o.alinti) b.appendChild(el("p", "ta-yer dolu" + (o.alinti.length > 400 ? " uzun" : ""), o.alinti));
+      var az = D2(o, "alinti");
+      if (az) b.appendChild(el("p", "ta-yer dolu" + (az.length > 400 ? " uzun" : ""), az));
       else b.appendChild(el("p", "ta-yer", D2(o, "yer_tutucu")));
       b.appendChild(el("cite", null, D2(o, "kisi") + " · " + D2(o, "eser")));
       if (o.metin) b.appendChild(el("p", "ta-alinti-ozet", D2(o, "metin")));
@@ -979,10 +980,10 @@
   // --- zaman şeridi: solda 1910–2030 cetveli, her akış kendi renginde bir dere; o an okunan yıl ve akış üstte ---
   var NH = {};
   function nehirKur(n, L, git) {
-    var Y0 = 1910, Y1 = 2030;
+    var Y0 = 1880, Y1 = 2030;
     function yuzde(t) { return ((t - Y0) / (Y1 - Y0) * 100).toFixed(3) + "%"; }
     var ust = el("div", "tn-ust");
-    var yilE = el("b", "tn-yil", "1914"), adE = el("span", "tn-ad", ""), noE = el("span", "tn-no", "");
+    var yilE = el("b", "tn-yil", "1882"), adE = el("span", "tn-ad", ""), noE = el("span", "tn-no", "");
     ust.append(noE, yilE, adE);
     var cetvel = el("div", "tn-cetvel");
     for (var t = Y0; t <= Y1; t += 10) {
@@ -1005,7 +1006,7 @@
     var mobil = el("div", "tn-mobil");
     var parcalar = el("div", "tn-parca");
     L.forEach(function (a) { var i = el("i"); i.style.background = a.renk; i.dataset.akis = a.anahtar; parcalar.appendChild(i); });
-    var myil = el("b", "tn-myil", "1914"), mad = el("span", "tn-mad", "");
+    var myil = el("b", "tn-myil", "1882"), mad = el("span", "tn-mad", "");
     mobil.append(myil, mad, parcalar);
     n.append(ust, cetvel, mobil);
     var simdiYil = null, simdiAkis = null;
