@@ -1,0 +1,33 @@
+name: Uydu kesiti (tek seferlik)
+
+# Elle çalıştırılır: verilen bbox için Sentinel-2 kesiti ve Palestine Grid dönüşümleri; çıktı iş eseri (artifact) olarak indirilir.
+on:
+  workflow_dispatch:
+    inputs:
+      ad: {description: "Dosya adı", required: true}
+      bbox: {description: "batı,güney,doğu,kuzey", required: true}
+      genislik: {description: "Piksel genişlik", required: false, default: "1600"}
+      pg: {description: "Palestine Grid noktaları (km): 126,114;127,115", required: false}
+
+permissions:
+  contents: read
+
+jobs:
+  kes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q rasterio pillow numpy pyproj
+      - run: python toplayici/uydu_kes.py cikti "${{ inputs.ad }}" "${{ inputs.bbox }}" "${{ inputs.genislik }}"
+        env:
+          PG: ${{ inputs.pg }}
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          AWS_NO_SIGN_REQUEST: "YES"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uydu-kesit
+          path: cikti/
