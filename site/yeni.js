@@ -115,8 +115,9 @@
       var k = kartLink(o.sayfa || "#", "kart"), bb = bolgeBul(o.baslik);
       var e = el("div", "etiket", bb ? (EN ? bb[1] : bb[0]) : t("Gündem", "Top story")); e.appendChild(el("span", null, once(o.son)));
       var s2 = kampSay(o.kaynaklar), alt = el("div", "alt-s");
-      alt.append(serit(s2), el("span", null, o.kaynaklar.length + t(" yayın · ", " outlets · ") + saySatir(s2)));
-      k.append(e, el("h3", null, temiz(EN ? o.baslik_en || o.baslik : o.baslik)), alt);
+      var sy = el("div", "kart-sayi"); sy.append(el("b", null, String(o.kaynaklar.length)), el("span", null, t("yayın", "outlets")));
+      alt.append(serit(s2), el("span", null, saySatir(s2)));
+      k.append(sy, e, el("h3", null, temiz(EN ? o.baslik_en || o.baslik : o.baslik)), alt);
       kap.appendChild(k);
     });
   }
