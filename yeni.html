@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f3f2ee">
+<title>Alboroto · Yeni ana sayfa önizlemesi</title>
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap">
+<link rel="stylesheet" href="site/yeni.css?v=1">
+</head>
+<body>
+<div class="on-serit"><div class="kap">
+  <span data-tr="Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir." data-en="Design preview: runs on live data, not yet the homepage.">Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir.</span>
+  <a href="./" data-tr="Şu anki ana sayfa →" data-en="Current homepage →">Şu anki ana sayfa →</a>
+</div></div>
+
+<header class="bas"><div class="kap bas-ic">
+  <a class="marka" href="yeni.html"><img src="site/logo.svg" alt="" width="28" height="28"><b>ALBOROTO</b><span class="slogan" data-tr="Haberin haberi" data-en="The news about the news">Haberin haberi</span></a>
+  <nav class="menu" aria-label="Ana menü">
+    <a href="analizler.html" data-tr="Analizler" data-en="Analysis">Analizler</a>
+    <a href="d/" data-tr="Dosyalar" data-en="Files">Dosyalar</a>
+    <a href="raporlar.html" data-tr="Raporlar" data-en="Reports">Raporlar</a>
+    <a href="almanak.html" data-tr="Almanak" data-en="Almanac">Almanak</a>
+    <a href="tarihce.html" data-tr="Tarihçe" data-en="History">Tarihçe</a>
+    <a href="kaynaklar.html" data-tr="Kaynaklar" data-en="Sources">Kaynaklar</a>
+  </nav>
+  <div class="bas-sag">
+    <span class="guncel" id="guncel"></span>
+    <div class="dil" role="group" aria-label="Dil"><button type="button" data-dil="tr">TR</button><button type="button" data-dil="en">EN</button></div>
+  </div>
+</div></header>
+
+<main class="kap">
+  <section class="ust-blok">
+    <article class="manset" id="manset"><p class="bekle" data-tr="Yükleniyor…" data-en="Loading…">Yükleniyor…</p></article>
+    <aside class="son" aria-labelledby="sonB">
+      <h2 class="bolum-b" id="sonB"><i class="nabiz"></i><span data-tr="Son dakika" data-en="Latest">Son dakika</span></h2>
+      <ol class="son-liste" id="son"></ol>
+      <a class="ok-bag" href="#akis" data-tr="Bütün akış ↓" data-en="Full feed ↓">Bütün akış ↓</a>
+    </aside>
+  </section>
+
+  <section class="blok">
+    <div class="blok-bas">
+      <h2 class="bolum-b" data-tr="Gündem" data-en="Top stories">Gündem</h2>
+      <p class="bolum-a" data-tr="Birden çok yayının verdiği olaylar; çubuk, kimin yazdığını gösterir" data-en="Events covered by several outlets; the bar shows who reported them">Birden çok yayının verdiği olaylar; çubuk, kimin yazdığını gösterir</p>
+    </div>
+    <div class="gundem" id="gundem"></div>
+  </section>
+
+  <section class="blok iki">
+    <div>
+      <div class="blok-bas">
+        <h2 class="bolum-b" data-tr="Arka plan" data-en="Background">Arka plan</h2>
+        <a class="ok-bag" href="analizler.html" data-tr="Bütün analizler →" data-en="All analysis →">Bütün analizler →</a>
+      </div>
+      <p class="bolum-a" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
+      <div class="analiz" id="analiz"></div>
+    </div>
+    <div>
+      <div class="blok-bas">
+        <h2 class="bolum-b" data-tr="Dosyalar" data-en="Files">Dosyalar</h2>
+        <a class="ok-bag" href="d/" data-tr="Hepsi →" data-en="All →">Hepsi →</a>
+      </div>
+      <p class="bolum-a" data-tr="Süregelen gelişmeler ve son halkaları" data-en="Ongoing stories and their latest turn">Süregelen gelişmeler ve son halkaları</p>
+      <ol class="dosya" id="dosya"></ol>
+    </div>
+  </section>
+
+  <section class="blok" id="akis">
+    <div class="blok-bas">
+      <h2 class="bolum-b" data-tr="Akış" data-en="Feed">Akış</h2>
+      <p class="bolum-a" id="akisSay"></p>
+    </div>
+    <div class="arac">
+      <input type="search" id="ara" placeholder="Haber ya da yayın ara" aria-label="Ara">
+      <select id="bolge" aria-label="Bölge"></select>
+      <button type="button" class="daha-suz" id="dahaSuz" aria-expanded="false" data-tr="Süzgeçler +" data-en="Filters +">Süzgeçler +</button>
+    </div>
+    <div class="suz-ek" id="suzEk" hidden>
+      <label><input type="checkbox" id="sAnaliz"> <span data-tr="Yalnız analiz" data-en="Analysis only">Yalnız analiz</span></label>
+      <label><input type="checkbox" id="sTg"> <span data-tr="Telegram'ı gizle" data-en="Hide Telegram">Telegram'ı gizle</span></label>
+      <label><input type="checkbox" id="sOzet"> <span data-tr="Yalnız özetlenmiş" data-en="Summarized only">Yalnız özetlenmiş</span></label>
+    </div>
+    <div class="akis-duzen">
+      <ol class="akis" id="akisL"></ol>
+      <aside class="yan">
+        <a class="yan-kart tarihce" href="tarihce.html">
+          <span class="ust-e" data-tr="Tarihçe · 1914'ten bugüne" data-en="History · 1914 to today">Tarihçe · 1914'ten bugüne</span>
+          <b data-tr="Bu topraklarda ne oldu?" data-en="What happened on this land?">Bu topraklarda ne oldu?</b>
+          <span data-tr="Haritalar, 1945 hava fotoğrafları ve kaynaklarla" data-en="With maps, 1945 aerial photos and sources">Haritalar, 1945 hava fotoğrafları ve kaynaklarla</span>
+        </a>
+        <a class="yan-kart hekim" href="ebu-safiye.html">
+          <span class="ust-e" data-tr="Tutuklu hekim · 27 Aralık 2024'ten beri" data-en="Detained doctor · since 27 December 2024">Tutuklu hekim · 27 Aralık 2024'ten beri</span>
+          <b>Dr. Hüsam Ebu Safiye</b>
+          <span data-tr="Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok." data-en="Director of Kamal Adwan Hospital. No charge, no trial.">Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok.</span>
+        </a>
+        <a class="yan-kart" href="./#harita">
+          <span class="ust-e" data-tr="Harita" data-en="Map">Harita</span>
+          <b data-tr="Şu an haber gelen şehirler" data-en="Cities reporting right now">Şu an haber gelen şehirler</b>
+        </a>
+      </aside>
+    </div>
+    <button type="button" class="daha" id="daha" hidden data-tr="Daha fazla" data-en="Show more">Daha fazla</button>
+  </section>
+</main>
+
+<footer class="alt"><div class="kap">
+  <p data-tr="Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur." data-en="Sharing a story does not mean we endorse it; stories are placed side by side to show how the press frames them.">Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur.</p>
+  <nav><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a><a href="duzeltmeler.html" data-tr="Düzeltmeler" data-en="Corrections">Düzeltmeler</a><a href="aciklamalar.html" data-tr="Açıklamalar" data-en="Statements">Açıklamalar</a><a href="arsiv.html" data-tr="Arşiv" data-en="Archive">Arşiv</a></nav>
+</div></footer>
+<script src="site/yeni.js?v=1"></script>
+</body>
+</html>
