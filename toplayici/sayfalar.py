@@ -1113,6 +1113,19 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
         h0 = next((dosya_adi(kok, x["id"]) for x in o.get("haberler", []) if x["id"] in sayfa_var), None)
         if h0:
             sayfa_hedef[o["id"]] = h0
+    def _basliklar(o, hidx):
+        cik, gor = [], set()
+        for x in o.get("haberler", []):
+            hx = hidx.get(x["id"])
+            if not hx or hx.get("kaynak") in gor:
+                continue
+            b = hx.get("baslik_tr") or hx.get("baslik_orj")
+            if b:
+                gor.add(hx.get("kaynak"))
+                cik.append({"k": hx.get("kaynak"), "b": b[:220], "be": (hx.get("baslik_en") or "")[:220] or None, "u": hx.get("url")})
+            if len(cik) >= 14:
+                break
+        return cik
     # Ana sayfadaki Gündem slaytı için son 20 karşılaştırma (canlı olaylar bittikten sonra da görünsün)
     try:
         hidx = {h["id"]: h for h in haberler}
@@ -1139,6 +1152,8 @@ def yaz(kok, haberler, kaynaklar, simdi, log=print):
             gundem.append({"id": o["id"], "baslik": o.get("baslik"), "not": o.get("not"), "baslik_en": o.get("baslik_en"), "not_en": o.get("not_en"),
                            "son": o.get("son"), "sayfa": ("h/" + sayfa_hedef[o["id"]]) if o["id"] in sayfa_hedef else "arsiv.html#gun-" + (o.get("ilk") or "")[:10], "kaynaklar": ks,
                            "haberler": [x["id"] for x in o["haberler"]], "gorsel": gorsel, "gorsel_kaynak": gk, "adaylar": adaylar,
+                           # her yayının bu olaydaki başlığı (ana sayfadaki "kim nasıl yazdı" karşılaştırması için; yayın başına bir)
+                           "basliklar": _basliklar(o, hidx),
                            "konum": list(_konum(o)) if _konum(o) else None, "yer_ad": ((o.get("yer") or {}).get("ad") if isinstance(o.get("yer"), dict) else None)})
             if len(gundem) >= 20:
                 break

@@ -5,84 +5,87 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#0b0e0d">
+<meta name="theme-color" content="#ffffff">
 <title>Alboroto · Yeni ana sayfa önizlemesi</title>
 <link rel="icon" href="site/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Newsreader:opsz,wght@6..72,400..800&family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="site/yeni.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,400&family=Schibsted+Grotesk:wght@400..800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="site/yeni.css?v=5">
 </head>
 <body>
 <div class="on-serit"><div class="kap">
   <span data-tr="Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir." data-en="Design preview: runs on live data, not yet the homepage.">Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir.</span>
-  <div class="yazi-sec" role="group" aria-label="Yazı tipi">
-    <span data-tr="Yazı tipi:" data-en="Typeface:">Yazı tipi:</span>
-    <button type="button" data-yazi="a">A · Archivo</button>
-    <button type="button" data-yazi="b">B · Bricolage</button>
-    <button type="button" data-yazi="c">C · Newsreader</button>
-  </div>
   <a href="./" data-tr="Şu anki ana sayfa →" data-en="Current homepage →">Şu anki ana sayfa →</a>
 </div></div>
 
 <header class="bas"><div class="kap bas-ic">
-  <a class="marka" href="yeni.html"><img src="site/logo.svg" alt="" width="28" height="28"><b>ALBOROTO</b><span class="slogan" data-tr="Haberin haberi" data-en="The news about the news">Haberin haberi</span></a>
+  <a class="marka" href="yeni.html"><img src="site/logo.svg" alt="" width="34" height="34"><span><b>ALBOROTO</b><small data-tr="Haberin haberi" data-en="The news about the news">Haberin haberi</small></span></a>
   <nav class="menu" aria-label="Ana menü">
+    <a href="#gundem" data-tr="Gündem" data-en="Top stories">Gündem</a>
+    <a href="#ulkeler" data-tr="Ülke ülke" data-en="By country">Ülke ülke</a>
     <a href="analizler.html" data-tr="Analizler" data-en="Analysis">Analizler</a>
     <a href="d/" data-tr="Dosyalar" data-en="Files">Dosyalar</a>
     <a href="raporlar.html" data-tr="Raporlar" data-en="Reports">Raporlar</a>
-    <a href="almanak.html" data-tr="Almanak" data-en="Almanac">Almanak</a>
     <a href="tarihce.html" data-tr="Tarihçe" data-en="History">Tarihçe</a>
-    <a href="kaynaklar.html" data-tr="Kaynaklar" data-en="Sources">Kaynaklar</a>
   </nav>
   <div class="bas-sag">
     <span class="guncel" id="guncel"></span>
     <div class="dil" role="group" aria-label="Dil"><button type="button" data-dil="tr">TR</button><button type="button" data-dil="en">EN</button></div>
   </div>
-</div></header>
+</div>
+<div class="kap konu-serit" id="konuSerit"></div>
+</header>
 
-<section class="sahne">
-  <div class="kap ust-blok">
-    <article class="manset" id="manset"><p class="bekle" data-tr="Yükleniyor…" data-en="Loading…">Yükleniyor…</p></article>
-    <aside class="son" aria-labelledby="sonB">
-      <h2 class="bolum-b" id="sonB"><i class="nabiz"></i><span data-tr="Son dakika" data-en="Latest">Son dakika</span></h2>
-      <ol class="son-liste" id="son"></ol>
-      <a class="ok-bag" href="#akis" data-tr="Bütün akış ↓" data-en="Full feed ↓">Bütün akış ↓</a>
-    </aside>
-  </div>
-</section>
 <main class="kap">
+  <section class="blok" id="gundem">
+    <h2 class="bb"><span data-tr="Ortak gündem" data-en="Shared agenda">Ortak gündem</span></h2>
+    <div class="gundem-duzen">
+      <div class="one-cikan">
+        <article class="manset" id="manset"><p class="bekle" data-tr="Yükleniyor…" data-en="Loading…">Yükleniyor…</p></article>
+        <ol class="yan-liste" id="yanListe"></ol>
+      </div>
+      <aside class="cok-yazilan">
+        <h2 class="bb kucuk"><span data-tr="En çok yazılan" data-en="Most covered">En çok yazılan</span></h2>
+        <p class="aciklama" data-tr="Kaç ülkenin basını yazdıysa o kadar üstte" data-en="Ranked by how many countries' press covered it">Kaç ülkenin basını yazdıysa o kadar üstte</p>
+        <ol class="sirali" id="sirali"></ol>
+      </aside>
+    </div>
+  </section>
+
+  <section class="blok karsi" id="karsi" hidden>
+    <h2 class="bb"><span data-tr="Kim nasıl yazdı" data-en="Who wrote what">Kim nasıl yazdı</span></h2>
+    <p class="aciklama" id="karsiAlt"></p>
+    <div class="karsi-izgara" id="karsiIzgara"></div>
+    <a class="ok-bag" id="karsiBag" href="#" data-tr="Karşılaştırmanın tamamı →" data-en="Full comparison →">Karşılaştırmanın tamamı →</a>
+  </section>
 
   <section class="blok" id="dosyalar">
-    <div class="blok-bas">
-      <h2 class="bolum-b" data-tr="Süren hikâyeler" data-en="Ongoing stories">Süren hikâyeler</h2>
+    <div class="bb-satir">
+      <h2 class="bb"><span data-tr="Süren hikâyeler" data-en="Ongoing stories">Süren hikâyeler</span></h2>
       <a class="ok-bag" href="d/" data-tr="Bütün dosyalar →" data-en="All files →">Bütün dosyalar →</a>
     </div>
-    <p class="bolum-a" data-tr="Haberler tek tek değil, ait oldukları hikâyenin içinde: her dosya, haftalardır süren bir olayın bütün gelişmelerini toplar" data-en="Stories are not shown one by one but inside the larger story they belong to: each file gathers every development of an event that has been running for weeks">Haberler tek tek değil, ait oldukları hikâyenin içinde: her dosya, haftalardır süren bir olayın bütün gelişmelerini toplar</p>
-    <div class="hub" id="hub"></div>
-    <div class="hub-kucuk" id="hubKucuk"></div>
+    <div class="hikaye" id="hikaye"></div>
   </section>
 
-  <section class="blok">
-    <div class="blok-bas">
-      <h2 class="bolum-b" data-tr="Diğer gelişmeler" data-en="Other developments">Diğer gelişmeler</h2>
-    </div>
-    <p class="bolum-a" data-tr="Henüz bir dosyaya girmeyen, birden çok yayının verdiği olaylar" data-en="Events covered by several outlets that do not belong to a file yet">Henüz bir dosyaya girmeyen, birden çok yayının verdiği olaylar</p>
-    <div class="gundem" id="gundem"></div>
+  <section class="blok" id="ulkeler">
+    <h2 class="bb"><span data-tr="Ülke ülke basın" data-en="The press, country by country">Ülke ülke basın</span></h2>
+    <p class="aciklama" data-tr="Her ülkenin basını bugün ne yazıyor" data-en="What each country's press is writing today">Her ülkenin basını bugün ne yazıyor</p>
+    <div class="ulke-izgara" id="ulkeIzgara"></div>
   </section>
 
-  <section class="blok">
-    <div class="blok-bas">
-      <h2 class="bolum-b" data-tr="Arka plan" data-en="Background">Arka plan</h2>
+  <section class="blok" id="arka">
+    <div class="bb-satir">
+      <h2 class="bb"><span data-tr="Arka plan" data-en="Background">Arka plan</span></h2>
       <a class="ok-bag" href="analizler.html" data-tr="Bütün analizler →" data-en="All analysis →">Bütün analizler →</a>
     </div>
-    <p class="bolum-a" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
+    <p class="aciklama" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
     <div class="analiz" id="analiz"></div>
   </section>
 
   <section class="blok" id="akis">
-    <div class="blok-bas">
-      <h2 class="bolum-b" data-tr="Akış" data-en="Feed">Akış</h2>
-      <p class="bolum-a" id="akisSay"></p>
+    <div class="bb-satir">
+      <h2 class="bb"><span data-tr="Bütün akış" data-en="Full feed">Bütün akış</span></h2>
+      <span class="aciklama" id="akisSay"></span>
     </div>
     <div class="arac">
       <input type="search" id="ara" placeholder="Haber ya da yayın ara" aria-label="Ara">
@@ -92,24 +95,20 @@
     <div class="suz-ek" id="suzEk" hidden>
       <label><input type="checkbox" id="sAnaliz"> <span data-tr="Yalnız analiz" data-en="Analysis only">Yalnız analiz</span></label>
       <label><input type="checkbox" id="sTg"> <span data-tr="Telegram'ı gizle" data-en="Hide Telegram">Telegram'ı gizle</span></label>
-      <label><input type="checkbox" id="sOzet"> <span data-tr="Yalnız özetlenmiş" data-en="Summarized only">Yalnız özetlenmiş</span></label>
+      <label><input type="checkbox" id="sGeri"> <span data-tr="Türk haber sitelerini de göster" data-en="Also show Turkish news sites">Türk haber sitelerini de göster</span></label>
     </div>
     <div class="akis-duzen">
       <ol class="akis" id="akisL"></ol>
       <aside class="yan">
         <a class="yan-kart tarihce" href="tarihce.html">
-          <span class="ust-e" data-tr="Tarihçe · 1914'ten bugüne" data-en="History · 1914 to today">Tarihçe · 1914'ten bugüne</span>
+          <span class="ust-e" data-tr="Tarihçe · 1882'den bugüne" data-en="History · 1882 to today">Tarihçe · 1882'den bugüne</span>
           <b data-tr="Bu topraklarda ne oldu?" data-en="What happened on this land?">Bu topraklarda ne oldu?</b>
-          <span data-tr="Haritalar, 1945 hava fotoğrafları ve kaynaklarla" data-en="With maps, 1945 aerial photos and sources">Haritalar, 1945 hava fotoğrafları ve kaynaklarla</span>
+          <span data-tr="Haritalar, hava fotoğrafları ve kaynaklarla" data-en="With maps, aerial photos and sources">Haritalar, hava fotoğrafları ve kaynaklarla</span>
         </a>
         <a class="yan-kart hekim" href="ebu-safiye.html">
           <span class="ust-e" data-tr="Tutuklu hekim · 27 Aralık 2024'ten beri" data-en="Detained doctor · since 27 December 2024">Tutuklu hekim · 27 Aralık 2024'ten beri</span>
           <b>Dr. Hüsam Ebu Safiye</b>
           <span data-tr="Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok." data-en="Director of Kamal Adwan Hospital. No charge, no trial.">Kemal Advan Hastanesi Başhekimi. Suçlama yok, yargılama yok.</span>
-        </a>
-        <a class="yan-kart" href="./#harita">
-          <span class="ust-e" data-tr="Harita" data-en="Map">Harita</span>
-          <b data-tr="Şu an haber gelen şehirler" data-en="Cities reporting right now">Şu an haber gelen şehirler</b>
         </a>
       </aside>
     </div>
@@ -119,8 +118,8 @@
 
 <footer class="alt"><div class="kap">
   <p data-tr="Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur." data-en="Sharing a story does not mean we endorse it; stories are placed side by side to show how the press frames them.">Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur.</p>
-  <nav><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a><a href="duzeltmeler.html" data-tr="Düzeltmeler" data-en="Corrections">Düzeltmeler</a><a href="aciklamalar.html" data-tr="Açıklamalar" data-en="Statements">Açıklamalar</a><a href="arsiv.html" data-tr="Arşiv" data-en="Archive">Arşiv</a></nav>
+  <nav><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a><a href="kaynaklar.html" data-tr="Kaynaklar" data-en="Sources">Kaynaklar</a><a href="duzeltmeler.html" data-tr="Düzeltmeler" data-en="Corrections">Düzeltmeler</a><a href="aciklamalar.html" data-tr="Açıklamalar" data-en="Statements">Açıklamalar</a><a href="almanak.html" data-tr="Almanak" data-en="Almanac">Almanak</a><a href="arsiv.html" data-tr="Arşiv" data-en="Archive">Arşiv</a></nav>
 </div></footer>
-<script src="site/yeni.js?v=4"></script>
+<script src="site/yeni.js?v=5"></script>
 </body>
 </html>
