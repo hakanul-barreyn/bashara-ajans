@@ -1,6 +1,20 @@
 /* yeni.html: ana sayfa tasarım önizlemesi. Veri: gundem, haberler-ilk (+ akis), analizler, dosyalar-site, kaynaklar. */
 (function () {
   "use strict";
+  // yazı tipi seçeneği (önizleme): ?yazi=a|b|c, seçim tarayıcıda hatırlanır
+  var YZ = (location.search.match(/[?&]yazi=([abc])/) || [])[1];
+  try { if (!YZ) YZ = localStorage.getItem("yeni-yazi"); } catch (e) {}
+  if (!/^[abc]$/.test(YZ || "")) YZ = "a";
+  document.documentElement.classList.add("yazi-" + YZ);
+  document.querySelectorAll("[data-yazi]").forEach(function (b) {
+    b.setAttribute("aria-pressed", String(b.dataset.yazi === YZ));
+    b.onclick = function () {
+      document.documentElement.classList.remove("yazi-a", "yazi-b", "yazi-c");
+      document.documentElement.classList.add("yazi-" + b.dataset.yazi);
+      try { localStorage.setItem("yeni-yazi", b.dataset.yazi); } catch (e) {}
+      document.querySelectorAll("[data-yazi]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    };
+  });
   var EN = /[?&]dil=en/.test(location.search);
   try { if (!/[?&]dil=/.test(location.search) && localStorage.getItem("yeni-dil") === "en") EN = true; } catch (e) {}
   var t = function (tr, en) { return EN ? en : tr; };

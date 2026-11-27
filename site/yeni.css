@@ -7,9 +7,9 @@
   --kirmizi:#e0322b; --yesil:#0f8a4f; --yesil-a:#e5f4ec;
   --sahne:#0b0e0d; --sahne-ink:#f3f5f4; --sahne-ink2:#aab4b0; --sahne-cizgi:#232b28; --sahne-kirmizi:#ff5a4f;
   --s1:8px; --s2:16px; --s3:24px; --s4:56px;
-  --f:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --b:"Inter Tight","Inter",system-ui,sans-serif;
-  --m:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --f:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --b:"Archivo",system-ui,sans-serif;
+  --m:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
   --gen:1240px;
 }
 @media (prefers-color-scheme:dark){:root{
@@ -194,3 +194,40 @@ h1,h2,h3{margin:0;text-wrap:balance}
   .son-liste li:nth-child(n+6){display:none}
   .kart-sayi b{font-size:2.1rem}
 }
+
+/* ---------- yazı tipi seçenekleri ---------- */
+.yazi-sec{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.yazi-sec button{font:600 .72rem var(--m);border:1px solid color-mix(in srgb,var(--bg) 35%,transparent);background:transparent;color:inherit;padding:3px 9px;border-radius:999px;cursor:pointer}
+.yazi-sec button[aria-pressed="true"]{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+
+/* A · Archivo: dar, ağır başlıklar; afiş ve pankart dili */
+.yazi-a{--f:"Archivo",system-ui,sans-serif;--b:"Archivo",system-ui,sans-serif}
+.yazi-a .manset h1,.yazi-a .bolum-b,.yazi-a .kart h3,.yazi-a .kart-sayi b,.yazi-a .ayrica b,.yazi-a .dosya b,.yazi-a .dosya li::before,.yazi-a .akis a.b,.yazi-a .yan-kart b,.yazi-a .marka b{font-stretch:68%}
+.yazi-a .manset h1{font-weight:850;font-size:clamp(2.5rem,5.6vw,4.8rem);line-height:.96;letter-spacing:-.01em;max-width:20ch}
+.yazi-a .bolum-b{font-size:2rem;font-weight:850;letter-spacing:-.005em;text-transform:uppercase}
+.yazi-a .son .bolum-b{font-stretch:100%;font-size:.78rem}
+.yazi-a .kart h3,.yazi-a .ayrica b{font-size:1.38rem;font-weight:750;line-height:1.12;letter-spacing:0}
+.yazi-a .akis a.b{font-size:1.1rem;font-weight:650;line-height:1.22}
+.yazi-a .dosya b,.yazi-a .yan-kart b{font-size:1.22rem;font-weight:750;letter-spacing:0}
+.yazi-a .kart-sayi b{font-size:3.2rem;font-weight:900}
+.yazi-a .marka b{font-weight:900;font-size:1.35rem;letter-spacing:.02em}
+
+/* B · Bricolage Grotesque: karakterli, biraz sıra dışı bir grotesk */
+.yazi-b{--f:"Bricolage Grotesque",system-ui,sans-serif;--b:"Bricolage Grotesque",system-ui,sans-serif}
+.yazi-b body{font-size:15.5px}
+.yazi-b .manset h1{font-weight:800;letter-spacing:-.035em;line-height:.98;font-variation-settings:"opsz" 96}
+.yazi-b .bolum-b{font-weight:800;letter-spacing:-.03em;font-size:1.8rem;font-variation-settings:"opsz" 72}
+.yazi-b .kart h3,.yazi-b .ayrica b,.yazi-b .dosya b,.yazi-b .yan-kart b{font-weight:700;letter-spacing:-.02em;font-variation-settings:"opsz" 36}
+.yazi-b .kart-sayi b{font-weight:800;letter-spacing:-.05em;font-variation-settings:"opsz" 96}
+.yazi-b .akis a.b{font-weight:600;letter-spacing:-.01em}
+
+/* C · Newsreader başlık + Schibsted Grotesk metin: çağdaş gazete */
+.yazi-c{--f:"Schibsted Grotesk",system-ui,sans-serif;--b:"Newsreader",Georgia,serif}
+.yazi-c .manset h1{font-weight:600;letter-spacing:-.022em;line-height:1.02;font-variation-settings:"opsz" 72}
+.yazi-c .bolum-b{font-weight:600;font-size:1.9rem;letter-spacing:-.02em;font-variation-settings:"opsz" 60}
+.yazi-c .son .bolum-b{font-family:var(--m)}
+.yazi-c .kart h3,.yazi-c .ayrica b,.yazi-c .dosya b,.yazi-c .yan-kart b{font-weight:600;font-size:1.3rem;letter-spacing:-.01em;line-height:1.18;font-variation-settings:"opsz" 30}
+.yazi-c .kart-sayi b{font-family:"Schibsted Grotesk",sans-serif;font-weight:800;letter-spacing:-.04em}
+.yazi-c .dosya li::before{font-family:"Schibsted Grotesk",sans-serif}
+.yazi-c .akis a.b{font-family:"Schibsted Grotesk",sans-serif;font-weight:600}
+.yazi-c .marka b{font-family:"Schibsted Grotesk",sans-serif;font-weight:800}
