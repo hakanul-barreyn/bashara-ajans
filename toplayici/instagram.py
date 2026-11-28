@@ -744,6 +744,33 @@ def _hatirlat(kay, simdi, log):
         pass
 
 
+def _yoneticiye(metin):
+    tok = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    yon = re.sub(r"\D", "", os.environ.get("TELEGRAM_YONETICI", ""))
+    if tok and yon:
+        dogrulama._api(tok, "sendMessage", {"chat_id": yon, "text": metin[:3900]})
+
+
+ENGEL_IPUCU = {"5258005": "Meta bu jetonun API erişimini engellemiş (\"API access blocked\"). Kullanıcı adı değişikliği ya da güvenlik "
+                          "denetimi sonrası olur: Instagram'a telefondan girip uyarıları onayla, Meta geliştirici panelinde uygulamanın "
+                          "uyarılarına bak, sonra yeni jeton alıp GitHub'da INSTAGRAM_TOKEN'ı güncelle.",
+               "190": "Jeton geçersiz ya da süresi dolmuş: yeni jeton alıp GitHub'da INSTAGRAM_TOKEN'ı güncelle."}
+
+
+def _engel_bildir(kay, simdi, token, log):
+    """Jeton engelli ya da geçersizse yöneticiye günde bir kez Telegram'dan haber ver."""
+    hata = _gizle(SON_HATA, token)
+    ipucu = next((v for k, v in ENGEL_IPUCU.items() if k in hata), None)
+    if not ipucu:
+        return False
+    log(f"Instagram: hesaba erişilemiyor ({hata})")
+    if kay.get("engel_bildirim", "")[:10] != simdi.date().isoformat():
+        kay["engel_bildirim"] = simdi.isoformat()
+        bekleyen = sum(1 for q in kay.get("kuyruk", []) if q.get("onay") == "onaylandi")
+        _yoneticiye("Alboroto Instagram: gönderi yapılamıyor.\n" + ipucu + (f"\nOnaylı bekleyen gönderi: {bekleyen}" if bekleyen else ""))
+    return True
+
+
 def yayinla(kok, durum, simdi, log=print):
     token = os.environ.get("INSTAGRAM_TOKEN", "").strip()
     m = re.search(r"(IG|EAA)[A-Za-z0-9_-]{40,}", token)
@@ -778,6 +805,8 @@ def yayinla(kok, durum, simdi, log=print):
             r = _istek("GET", f"{sunucu}/{h_}?" + urllib.parse.urlencode({"fields": "username", "access_token": token}))
             if r and r.get("username"):
                 kay["kullanici"] = r["username"]
+            elif _engel_bildir(kay, simdi, token, log):
+                return 0
     tr_saat = (simdi + dt.timedelta(hours=3)).hour
     onayli_var = any(q.get("onay") == "onaylandi" for q in kay["kuyruk"])
     if not IG_SIMDI and not onayli_var and not (IG_SAAT[0] <= tr_saat < IG_SAAT[1]):
@@ -836,6 +865,8 @@ def yayinla(kok, durum, simdi, log=print):
                  "9/": "Instagram'ın günlük gönderi sınırı", "36003": "görsel oranı uygun değil", "2207": "görsel alınamadı ya da işlenemedi"}
         neden = next((v for k, v in ipucu.items() if k in hata), "")
         log(f"Instagram: gönderilemedi: {hata}" + (f" → {neden}" if neden else ""))
+        if q.get("onay") == "onaylandi" and not _engel_bildir(kay, simdi, token, log) and q["deneme"] in (1, 4):
+            _yoneticiye(f"Alboroto Instagram: onayladığın gönderi gönderilemedi ({q['deneme']}. deneme).\nHata: {hata}" + (f"\n→ {neden}" if neden else ""))
         return 0
     return 0
 

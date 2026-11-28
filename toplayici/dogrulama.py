@@ -282,6 +282,7 @@ def calistir(kok, durum, olaylar, haberler, kaynaklar_liste, simdi, log=print):
                     q = next((x for x in durum.get("_instagram", {}).get("kuyruk", []) if x["id"] == parca[2]), None)
                     if q and q.get("onay") == "bekliyor":
                         q["onay"] = "onaylandi" if parca[1] == "yay" else "reddedildi"
+                        log(f"Instagram onayı: {parca[2]} → {q['onay']}")
                         sonuc = ("✅ Onaylandı: bir sonraki çalıştırmada (15 dk içinde) Instagram'a gönderilecek."
                                  if parca[1] == "yay" else "Atlandı; bu gönderi yayımlanmayacak.")
                     else:
