@@ -5,20 +5,15 @@
    Türk haber siteleri (kaynaklar.json "geri") verilerde kalır ama ön planda yer almaz; akışta isteğe bağlı gösterilir. */
 (function () {
   "use strict";
-  var EN = /[?&]dil=en/.test(location.search);
-  try { if (!/[?&]dil=/.test(location.search) && localStorage.getItem("yeni-dil") === "en") EN = true; } catch (e) {}
+  // dil, sitenin kendi dil seçicisinden (dil.js → window.DIL) gelir
+  var EN = window.DIL === "en";
   var t = function (tr, en) { return EN ? en : tr; };
   var $ = function (id) { return document.getElementById(id); };
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function al(u) { return fetch(u, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); }
 
-  document.documentElement.lang = EN ? "en" : "tr";
-  document.querySelectorAll("[data-tr]").forEach(function (n) { n.textContent = EN ? n.getAttribute("data-en") : n.getAttribute("data-tr"); });
+  document.querySelectorAll(".yz [data-tr]").forEach(function (n) { n.textContent = EN ? n.getAttribute("data-en") : n.getAttribute("data-tr"); });
   $("ara").placeholder = t("Haber ya da yayın ara", "Search stories or outlets");
-  document.querySelectorAll(".dil button").forEach(function (b) {
-    b.setAttribute("aria-pressed", String((b.dataset.dil === "en") === EN));
-    b.onclick = function () { try { localStorage.setItem("yeni-dil", b.dataset.dil); } catch (e) {} location.search = b.dataset.dil === "en" ? "?dil=en" : ""; };
-  });
 
   // ---- ülke grupları: "ülke ülke basın" bölümleri ve karşılaştırma kutuları aynı gruplarla
   var GRUPLAR = [
@@ -87,7 +82,7 @@
   function link(href, cls) { var a = el("a", cls); a.href = href || "#"; if (/^https?:/.test(a.getAttribute("href"))) dis(a); return a; }
   function resim(u, w, cls) {   // denetimden geçmiş görsel; yüklenmezse kutusuyla birlikte kalkar
     var f = el("div", cls || "kucuk-gorsel"), im = el("img"); im.src = vekil(u, w); im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer";
-    im.onerror = function () { var li = f.closest("li"); if (li) li.classList.add("gorselsiz"); f.remove(); };
+    im.onerror = function () { var li = f.closest("li"); if (li) li.classList.add("y-gorselsiz"); f.remove(); };
     f.appendChild(im); return f;
   }
   function olayGorsel(o) { return o.gorsel && o.gorsel_atif ? o.gorsel : null; }   // gündem görseli: denetim (gorsel_denetim.py) onayıyla
@@ -131,12 +126,12 @@
     var k = x && FOTO[x.id]; if (!k) return null;
     var f = el("div", "kucuk-gorsel"), im = el("img"); im.alt = EN ? k.en : k.tr; im.loading = "lazy"; im.decoding = "async";
     yerel(im, "data/gorsel/dosya-foto/" + k.dosya, w || 720, function () { f.remove(); });
-    f.append(im, el("span", "kredi", (EN ? k.en : k.tr) + " · " + kunye(k)));
+    f.append(im, el("span", "y-kredi", (EN ? k.en : k.tr) + " · " + kunye(k)));
     return f;
   }
   function etiketOf(o) {   // olayın üst etiketi: dosyası varsa dosya adı (bağlantılı), yoksa bölge
-    if (o._d) { var a = el("a", "etiket", dosyaAd(o._d)); a.href = "d/" + o._d.id + ".html"; return a; }
-    return el("span", "etiket", bolgeBul(o.baslik + " " + (o.not || "")) || t("Bölge", "Region"));
+    if (o._d) { var a = el("a", "y-etiket", dosyaAd(o._d)); a.href = "d/" + o._d.id + ".html"; return a; }
+    return el("span", "y-etiket", bolgeBul(o.baslik + " " + (o.not || "")) || t("Bölge", "Region"));
   }
 
   // ---- 1. ortak gündem
@@ -149,12 +144,13 @@
       var yas = (Date.now() - new Date(o.son)) / 36e5;
       o._p = o._g * 5 + Math.min(o._n, 12) + (bolgeBul(o.baslik + " " + (o.not || "")) ? 4 : 0) + (olayGorsel(o) ? 3 : 0) - Math.min(yas / 6, 8);
     });
-    var m = $("manset"); m.textContent = "";
-    if (!OL.length) { m.appendChild(el("p", "bekle", t("Gündem şu an boş.", "No top stories right now."))); return; }
+    if (!OL.length) return;
     var sira = OL.slice().sort(function (a, b) { return b._p - a._p; });
-    var ana = sira[0];
+    var ana = sira[0], m = $("manset");
+    // manşet yalnızca sayfada manşet kutusu varsa çizilir (üstte gündem kaydırıcısı varken yok)
+    if (m) { m.textContent = "";
     // manşet görseli: olayın denetimden geçmiş görseli; yoksa ya da yüklenmezse dosyanın Commons fotoğrafı
-    var f = el("figure", "gorsel"), im = el("img"), cap = el("figcaption"); im.alt = ""; im.referrerPolicy = "no-referrer";
+    var f = el("figure", "y-gorsel"), im = el("img"), cap = el("figcaption"); im.alt = ""; im.referrerPolicy = "no-referrer";
     var dosyaFotoya = function () {
       var k = ana._d && FOTO[ana._d.id];
       if (!k) { f.remove(); return; }
@@ -167,21 +163,22 @@
     m.appendChild(etiketOf(ana));
     var h = el("h1"), a = el("a", null, obas(ana)); a.href = ana.sayfa || "#"; h.appendChild(a); m.appendChild(h);
     var not = EN ? ana.not_en : ana.not; if (not) m.appendChild(el("p", "not", not));
-    m.appendChild(el("span", "kim", t("Yazan: ", "Covered by: ") + kimSatir(ana.kaynaklar) + " · " + once(ana.son)));
+    m.appendChild(el("span", "y-kim", t("Yazan: ", "Covered by: ") + kimSatir(ana.kaynaklar) + " · " + once(ana.son)));
+    }
 
     var yl = $("yanListe"); yl.textContent = "";
-    sira.slice(1, 5).forEach(function (o) {
+    sira.slice(m ? 1 : 0, m ? 5 : 4).forEach(function (o) {
       var li = el("li"), a2 = el("a"); a2.href = o.sayfa || "#";
       var gs = olayGorsel(o);
-      if (gs) a2.appendChild(resim(gs, 320)); else li.className = "gorselsiz";
-      var ic = el("div"); ic.append(el("b", null, obas(o)), el("span", "kim", kimSatir(o.kaynaklar)));
+      if (gs) a2.appendChild(resim(gs, 320)); else li.className = "y-gorselsiz";
+      var ic = el("div"); ic.append(el("b", null, obas(o)), el("span", "y-kim", kimSatir(o.kaynaklar)));
       a2.appendChild(ic); li.appendChild(a2); yl.appendChild(li);
     });
 
     var sr = $("sirali"); sr.textContent = "";
     OL.slice().sort(function (a, b) { return b._g - a._g || b._n - a._n || String(b.son).localeCompare(String(a.son)); }).slice(0, 6).forEach(function (o) {
       var li = el("li"), a3 = el("a"); a3.href = o.sayfa || "#";
-      var ic = el("div"); ic.append(el("b", null, obas(o)), el("span", "kim", o._g + t(" ülke · ", " countries · ") + o._n + t(" yayın", " outlets")));
+      var ic = el("div"); ic.append(el("b", null, obas(o)), el("span", "y-kim", o._g + t(" ülke · ", " countries · ") + o._n + t(" yayın", " outlets")));
       a3.appendChild(ic); li.appendChild(a3); sr.appendChild(li);
     });
     karsiCiz();
@@ -207,7 +204,7 @@
       var kx = kutular[id], x = kx.L[0], k = K[x.k];
       var d = el("div", "karsi-kutu"); d.style.setProperty("--renk", kx.g.renk);
       var a = link(x.u); a.textContent = temiz(EN ? x.be || x.b : x.b);
-      d.append(el("span", "grup", gAd(kx.g)), a, el("span", "kaynak", k ? k.ad : ""));
+      d.append(el("span", "y-grup", gAd(kx.g)), a, el("span", "kaynak", k ? k.ad : ""));
       if (kx.L.length > 1) d.appendChild(el("span", "digerleri", t("ve ", "and ") + (kx.L.length - 1) + t(" yayın daha: ", " more: ") + kx.L.slice(1, 4).map(function (y) { return (K[y.k] || {}).ad; }).join(", ")));
       iz.appendChild(d);
     });
@@ -217,7 +214,7 @@
 
   // ---- 3. süren hikâyeler (ve başlıktaki konu şeridi)
   function hikayeCiz() {
-    var ks = $("konuSerit"); ks.textContent = "";
+    var ks = $("konuSerit") || el("div"); ks.textContent = "";
     if (DOS_L.length) {
       ks.appendChild(el("b", null, t("Takipte", "Following")));
       DOS_L.forEach(function (x) { var a = el("a", null, dosyaAd(x)); a.href = "d/" + x.id + ".html"; ks.appendChild(a); });
@@ -226,11 +223,11 @@
     DOS_L.slice(0, 6).forEach(function (x) {
       var a = el("a", "hikaye-kart"); a.href = "d/" + x.id + ".html";
       var df = dosyaFoto(x); if (df) a.appendChild(df); else if (x.gorsel && x.gorsel.u) a.appendChild(resim(x.gorsel.u, 640));
-      var e = el("span", "etiket", (EN ? x.bolge_en || x.bolge : x.bolge) || t("Dosya", "File"));
+      var e = el("span", "y-etiket", (EN ? x.bolge_en || x.bolge : x.bolge) || t("Dosya", "File"));
       a.append(e, el("h3", null, dosyaAd(x)));
       var sb = EN ? x.son_be || x.son_b : x.son_b; if (sb) a.appendChild(el("p", null, t("Son: ", "Latest: ") + sb));
       var son14 = (x.nabiz || []).reduce(function (s, v) { return s + v; }, 0);
-      a.appendChild(el("span", "kim", (x.olay || 0) + t(" olay · son 14 günde ", " events · ") + son14 + t("", " in the last 14 days") + " · " + once(x.son + "T12:00:00Z")));
+      a.appendChild(el("span", "y-kim", (x.olay || 0) + t(" olay · son 14 günde ", " events · ") + son14 + t("", " in the last 14 days") + " · " + once(x.son + "T12:00:00Z")));
       kap.appendChild(a);
     });
   }
@@ -309,7 +306,7 @@
     L.sort(function (a, b) { return (b.dusunce ? 1 : 0) - (a.dusunce ? 1 : 0) || String(b.tarih).localeCompare(String(a.tarih)); });
     L.filter(function (a) { if (gor[a.kaynak] || (K[a.kaynak] || {}).geri) return false; gor[a.kaynak] = 1; return true; }).slice(0, 3).forEach(function (a) {
       var k = link(a.url, "analiz-kart");
-      k.append(el("span", "kurum", a.kurum + (a.dusunce ? t(" · düşünce kuruluşu", " · think tank") : "")), el("h3", null, baslik(a)), el("p", null, ozet(a)), el("span", "kim", once(a.tarih)));
+      k.append(el("span", "kurum", a.kurum + (a.dusunce ? t(" · düşünce kuruluşu", " · think tank") : "")), el("h3", null, baslik(a)), el("p", null, ozet(a)), el("span", "y-kim", once(a.tarih)));
       kap.appendChild(k);
     });
     if (!kap.children.length) $("arka").hidden = true;
@@ -333,12 +330,12 @@
   function akisCiz() {
     var g = suzulmus(), ol = $("akisL"); ol.textContent = "";
     $("akisSay").textContent = g.length + t(" haber", " stories") + (tamYuklendi ? "" : t(" · son saatler", " · recent hours"));
-    if (!g.length) ol.appendChild(el("li", "bos", t("Eşleşen haber yok.", "Nothing matches.")));
+    if (!g.length) ol.appendChild(el("li", "y-bos", t("Eşleşen haber yok.", "Nothing matches.")));
     g.slice(0, goster).forEach(function (h) {
       var li = el("li"), k = K[h.kaynak], ust = el("div", "ust-s");
       ust.append(el("b", null, k ? k.ad : h.kaynak_ad || ""), el("span", null, saat(h.tarih)));
-      if (h.nitelik === "analiz") ust.appendChild(el("span", "rozet a", t("Analiz", "Analysis")));
-      else if (sonDakikaMi(h.baslik_orj) || sonDakikaMi(h.baslik_tr)) ust.appendChild(el("span", "rozet", t("Son dakika", "Breaking")));
+      if (h.nitelik === "analiz") ust.appendChild(el("span", "y-rozet a", t("Analiz", "Analysis")));
+      else if (sonDakikaMi(h.baslik_orj) || sonDakikaMi(h.baslik_tr)) ust.appendChild(el("span", "y-rozet", t("Son dakika", "Breaking")));
       var a = link(h.url, "b"); a.textContent = baslik(h);
       li.append(ust, a);
       var dx = DOS[FEED_DOS[h.id]]; if (dx) { var de = el("a", "dosya-et", t("Dosya: ", "File: ") + dosyaAd(dx)); de.href = "d/" + dx.id + ".html"; li.appendChild(de); }
@@ -406,7 +403,7 @@
     });
     al("data/haberler-ilk.json").then(function (d) {
       TUM = (d && d.haberler || []).filter(uygun).sort(function (a, b) { return String(b.tarih).localeCompare(String(a.tarih)); });
-      if (d && d.guncellendi) $("guncel").textContent = t("Güncellendi · ", "Updated · ") + once(d.guncellendi);
+      if (d && d.guncellendi && $("guncel")) $("guncel").textContent = t("Güncellendi · ", "Updated · ") + once(d.guncellendi);
       ulkeCiz(); akisCiz(); sonGelenCiz();
       // ülke bölümleri son saatlerle sınırlı kalmasın: bütün akış arka planda gelir
       setTimeout(function () { tamYukle().then(function () { ulkeCiz(); akisCiz(); }); }, 1200);

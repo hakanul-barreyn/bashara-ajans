@@ -1,61 +1,132 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" class="akis-kok">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://cdn.jsdelivr.net https://zbshaber.goatcounter.com https://tiles.openfreemap.org; object-src 'none'; base-uri 'self'; form-action 'none'; manifest-src 'self'; worker-src 'self' blob:">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#ffffff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#faf8f4">
 <title>Alboroto · Yeni ana sayfa önizlemesi</title>
-<link rel="icon" href="site/amblem-bolunmus.svg" type="image/svg+xml">
+<meta name="description" data-marka-sablon="{aciklama}" data-marka-oznitelik="content" content="Alboroto (Alboroto News): Gazze, Filistin ve bölge haberleri. 240 yayının haberini yan yana koyar, kimin neyi nasıl yazdığını ölçer. News from Gaza and the region, compared across the world press.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alboroto News">
+<meta property="og:title" content="Alboroto" data-marka-sablon="{ad}" data-marka-oznitelik="content">
+<meta property="og:description" content="Haberin haberi: Filistin ve bölge haberlerini dünya basınıyla yan yana koyar, kimin neyi nasıl yazdığını ölçer.">
+<meta property="og:image" content="https://alborotonews.com/site/paylas-2026.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsMediaOrganization", "@id": "https://alborotonews.com/#kurum", "name": "Alboroto", "alternateName": ["Alboroto News", "Alboroto Haber", "alborotonews"], "url": "https://alborotonews.com/", "logo": {"@type": "ImageObject", "url": "https://alborotonews.com/site/simge-192.png"}, "description": "Gazze, Filistin ve bölge haberlerini 240 yayının diliyle karşılaştıran ve basın dilini ölçen bağımsız haber ve araştırma sitesi.", "email": "iletisim@alborotonews.com", "correctionsPolicy": "https://alborotonews.com/duzeltmeler.html", "ethicsPolicy": "https://alborotonews.com/hakkimizda.html", "knowsLanguage": ["tr", "en"], "foundingDate": "2026"}, {"@type": "WebSite", "@id": "https://alborotonews.com/#site", "name": "Alboroto", "alternateName": ["Alboroto News", "Alboroto Haber"], "url": "https://alborotonews.com/", "inLanguage": ["tr", "en"], "publisher": {"@id": "https://alborotonews.com/#kurum"}}]}</script>
+<link rel="icon" href="site/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="site/simge-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="alternate" type="application/rss+xml" data-marka-sablon="{ad}" data-marka-oznitelik="title" title="Alboroto" href="data/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,800&display=swap">
+<link rel="stylesheet" href="site/stil.css?v=202611240200">
+<link rel="stylesheet" href="site/dosya.css?v=202611240109">
+<link rel="stylesheet" href="site/yazi.css?v=202611222300">
+<script src="site/dil.js?v=202611202300"></script>
+<script src="site/marka.js?v=202611150800"></script>
+<script src="site/bolge.js?v=202611161900"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,400&family=Schibsted+Grotesk:wght@400..900&family=Reem+Kufi:wght@500..700&display=swap">
-<link rel="stylesheet" href="site/yeni.css?v=9">
+<link rel="stylesheet" href="site/yeni.css?v=11">
 </head>
 <body>
-<div class="on-serit"><div class="kap">
-  <span data-tr="Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir." data-en="Design preview: runs on live data, not yet the homepage.">Tasarım önizlemesi: gerçek veriyle çalışır, henüz ana sayfa değildir.</span>
-  <span><a href="logo-onizleme.html" data-tr="Logo seçenekleri" data-en="Logo options">Logo seçenekleri</a> · <a href="./" data-tr="Şu anki ana sayfa →" data-en="Current homepage →">Şu anki ana sayfa →</a></span>
-</div></div>
 
-<header class="bas"><div class="kap bas-ic">
-  <a class="marka" href="yeni.html" aria-label="Alboroto">
-    <img class="amblem" src="site/amblem-bolunmus.svg" alt="" width="46" height="46">
-    <span class="yazi"><b class="lat">ALBOROTO</b><b class="ar" lang="ar" dir="rtl">البوروتو</b></span>
-  </a>
-  <nav class="menu" aria-label="Ana menü">
-    <a href="#gundem" data-tr="Gündem" data-en="Top stories">Gündem</a>
-    <a href="#ulkeler" data-tr="Ülke ülke" data-en="By country">Ülke ülke</a>
-    <a href="analizler.html" data-tr="Analizler" data-en="Analysis">Analizler</a>
-    <a href="d/" data-tr="Dosyalar" data-en="Files">Dosyalar</a>
-    <a href="raporlar.html" data-tr="Raporlar" data-en="Reports">Raporlar</a>
-    <a href="tarihce.html" data-tr="Tarihçe" data-en="History">Tarihçe</a>
-  </nav>
-  <div class="bas-sag">
-    <span class="guncel" id="guncel"></span>
-    <div class="dil" role="group" aria-label="Dil"><button type="button" data-dil="tr">TR</button><button type="button" data-dil="en">EN</button></div>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="marka" href="./" data-marka-sablon="{ad} ana sayfa" data-marka-oznitelik="aria-label" aria-label="Alboroto ana sayfa">
+      <img class="logo" src="site/logo.svg?v=202611150230" alt="" width="32" height="32">
+      <span class="marka-ad" data-marka="ad">Alboroto</span>
+    </a>
+    <p class="slogan" data-marka="slogan">Haberin haberi</p>
+    <div class="canli"><span class="nabiz" aria-hidden="true"></span><span id="canliMetin">Yükleniyor</span></div>
+    <nav class="menu"><a href="arsiv.html">Arşiv</a><a href="analizler.html">Analizler</a><a href="raporlar.html">Raporlar</a><a href="almanak.html">Almanak</a><a href="kaynaklar.html">Kaynaklar</a><a href="hakkimizda.html">Hakkımızda</a></nav>
   </div>
-</div>
-<div class="kap konu-serit" id="konuSerit"></div>
+  <div class="serit" id="serit" hidden>
+    <span class="serit-etiket"><span class="nabiz" aria-hidden="true"></span>Son haberler</span>
+    <div class="serit-kutu"><div class="serit-ic" id="seritIc"></div></div>
+  </div>
 </header>
 
-<main>
+<div class="yz-not"><span data-tr="Tasarım önizlemesi: üst kısım bugünkü ana sayfa, altı yeni düzen." data-en="Design preview: the top is today's homepage, below is the new layout.">Tasarım önizlemesi: üst kısım bugünkü ana sayfa, altı yeni düzen.</span> <a href="logo-onizleme.html">Logo seçenekleri</a> · <a href="./">Şu anki ana sayfa →</a></div>
+
+<main class="duzen">
+  <section class="gundem" id="gundem" hidden aria-label="Gündem"></section>
+  <!-- bugünkü ana sayfanın geri kalanı: uygulama.js bu öğelere yazar; önizlemede gizli -->
+  <div class="eski-gizli" hidden>
+  <section class="analizler" id="analizler" hidden aria-label="Analizler"></section>
+  <section class="enine" id="enine" hidden aria-label="Karşılaştırmalı haberler"></section>
+  <a class="tarihce-kart" href="tarihce.html">
+    <span class="tk-gorsel" aria-hidden="true"><img src="site/tarihce-uydu/gazze-1945.jpg" alt="" loading="lazy" decoding="async"></span>
+    <span class="tk-yazi">
+      <small data-dil="tr">Tarihçe · 1914’ten bugüne</small><small data-dil="en">History · 1914 to today</small>
+      <b data-dil="tr">Bu topraklarda ne oldu?</b><b data-dil="en">What happened on this land?</b>
+      <span data-dil="tr">Osmanlı’nın yıkılışından Nekbe’ye, fedailerden Aksa Tufanı’na. Haritalar, 1945 hava fotoğrafları, uydu görüntüleri ve kaynaklarla.</span>
+      <span data-dil="en">From the fall of the Ottomans to the Nakba, from the fedayeen to Al-Aqsa Flood. With maps, 1945 aerial photographs, satellite images and sources.</span>
+      <i data-dil="tr">Tarihçeyi aç →</i><i data-dil="en">Open the history →</i>
+    </span>
+    <span class="tk-cizgi" aria-hidden="true"><em>1914</em><em>1917</em><em>1936</em><em>1948</em><em>1967</em><em>1987</em><em>2005</em><em>2023</em></span>
+  </a>
+  <div class="sayac-serit" id="sayacSerit" aria-live="off">
+    <a class="ss-oge" href="ebu-safiye.html"><span data-dil="tr"><strong>Tutuklu hekim:</strong> Kemal Advan Hastanesi Başhekimi Dr. Hüsam Ebu Safiye. Suçlama yok, yargılama yok, işkence var.</span><span data-dil="en"><strong>Detained doctor:</strong> Dr. Hussam Abu Safiya, director of Kamal Adwan Hospital. No charge, no trial, tortured.</span><i aria-hidden="true">→</i></a>
+    <a class="ss-oge" href="olaylar.html#gercek" hidden><b data-sayac="gun" data-bas="2023-10-07">–</b><span data-dil="tr"><strong>gündür soykırım sürüyor.</strong> Gerçekte ne oldu, ne kadarı haber oldu?</span><span data-dil="en"><strong>days of genocide.</strong> What really happened, and how much of it became news?</span><i aria-hidden="true">→</i></a>
+    <a class="ss-oge" href="isimler.html" hidden><b>∞</b><span data-dil="tr"><strong>İsimleri vardı.</strong> Gazze’de öldürülen ve kimliği belirlenen her insan, adıyla.</span><span data-dil="en"><strong>They had names.</strong> Every identified person killed in Gaza, by name.</span><i aria-hidden="true">→</i></a>
+  </div>
+  <button class="suzgec-ac" id="suzgecAc" type="button" aria-controls="suzgec" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Ara · Süz</span></button>
+  <div class="suzgec" id="suzgec">
+    <button class="suzgec-kapat" id="suzgecKapat" type="button" aria-label="Kapat">×</button>
+    <div class="suzgec-ust">
+      <div class="ara-kutu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="ara" id="fAra" type="search" placeholder="Haberlerde ya da kaynaklarda ara" aria-label="Ara">
+      </div>
+      <label class="secim"><span>Şehir</span><select id="fSehirSec" aria-label="Şehir"><option value="">Tüm şehirler</option></select></label>
+    </div>
+    <div class="bolgeler" id="fBolge" role="group" aria-label="Bölge"></div>
+    <div class="bolgeler konular" id="fKonu" role="group" aria-label="Konu"></div>
+    <div class="secenekler">
+      <label class="anahtar"><input type="checkbox" id="fIlgili" checked><span class="kol" aria-hidden="true"></span>Bölgeyle ilgili</label>
+      <label class="anahtar"><input type="checkbox" id="fAnaliz"><span class="kol" aria-hidden="true"></span>Yalnızca analizler</label>
+      <label class="anahtar"><input type="checkbox" id="fOzet"><span class="kol" aria-hidden="true"></span>Türkçe özetli</label>
+      <label class="anahtar"><input type="checkbox" id="fBulanik"><span class="kol" aria-hidden="true"></span>Görselleri bulanıklaştır</label>
+      <button class="sehir-cip" id="fSehir" type="button" hidden></button>
+      <button class="sehir-cip" id="fKonuSil" type="button" hidden></button>
+      <span class="sayilar" id="sayilar"></span>
+    </div>
+  </div>
+  <div class="akis" id="akis" aria-live="polite"></div>
+  <p class="alt-not"><strong>Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin karşılaştırılması amacıyla paylaşılır.</strong> <span data-marka="ad">Alboroto</span> haberleri kaynaklardan otomatik toplar, Türkçe özetini yapay zekâyla yazar. Özetler kaynağın yerine geçmez; her haberde orijinaline bağlantı var. Yayınların kim olduğunu <a href="kaynaklar.html">Kaynaklar</a> sayfasında bulabilirsin. Türkçe özetleri <a href="data/rss.xml">RSS</a> ile de takip edebilirsin. Sınırlar: <a href="https://www.naturalearthdata.com/">Natural Earth</a>. <a href="hakkimizda.html#kunye">Künye</a> · <a href="duzeltmeler.html">Düzeltmeler</a> · <a href="aciklamalar.html">Tarafların açıklamaları</a> · <a href="hakkimizda.html#gizlilik">Gizlilik</a> · İletişim: iletisim@alborotonews.com</p>
+  <!-- Haber gelen şehirler: şehirler haber geldikçe yanıp söner; bir şehre dokununca akış o şehre süzülür -->
+  <section class="harita-bolum" id="haritaBolum" aria-label="Haber gelen şehirler">
+    <div class="slayt-ust"><h2 class="bolum">Şu an haber gelen şehirler<span class="bolum-ek"> · şehre dokunun, haberler süzülsün</span></h2></div>
+    <div class="harita-kutu">
+      <svg id="zemin" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Haber gelen şehirlerin haritası"></svg>
+      <div class="harita-lejant"><span><i class="lj-nokta"></i>Haber gelen şehir (büyüklük: haber sayısı)</span><span><i class="lj-nabiz"></i>Son bir saatte haber geldi</span><span><i class="lj-sessiz"></i>Bölge basını yazdı, İsrail ve Batı basını yazmadı</span></div>
+    </div>
+  </section>
+  </div>
+</main>
+
+<div class="yz">
   <div class="kap">
-  <section class="blok ilk-blok" id="gundem">
+  <section class="blok ilk-blok" id="yGundem">
     <div class="gundem-duzen">
       <div class="one-cikan">
-        <article class="manset" id="manset"><p class="bekle" data-tr="Yükleniyor…" data-en="Loading…">Yükleniyor…</p></article>
         <div class="orta">
-          <ol class="yan-liste" id="yanListe"></ol>
+          <div class="one-liste">
+            <h2 class="bb y-kucuk"><span data-tr="Öne çıkanlar" data-en="Highlights">Öne çıkanlar</span></h2>
+            <ol class="yan-liste" id="yanListe"></ol>
+          </div>
           <section class="son-gelen" id="sonGelenK" hidden>
-            <h3 class="bb kucuk"><span data-tr="Son gelenler" data-en="Latest">Son gelenler</span></h3>
+            <h3 class="bb y-kucuk"><span data-tr="Son gelenler" data-en="Latest">Son gelenler</span></h3>
             <ol id="sonGelen"></ol>
           </section>
         </div>
       </div>
       <aside class="cok-yazilan">
-        <h2 class="bb kucuk"><span data-tr="En çok yazılan" data-en="Most covered">En çok yazılan</span></h2>
-        <p class="aciklama" data-tr="Kaç ülkenin basını yazdıysa o kadar üstte" data-en="Ranked by how many countries' press covered it">Kaç ülkenin basını yazdıysa o kadar üstte</p>
+        <h2 class="bb y-kucuk"><span data-tr="En çok yazılan" data-en="Most covered">En çok yazılan</span></h2>
+        <p class="y-aciklama" data-tr="Kaç ülkenin basını yazdıysa o kadar üstte" data-en="Ranked by how many countries' press covered it">Kaç ülkenin basını yazdıysa o kadar üstte</p>
         <ol class="sirali" id="sirali"></ol>
       </aside>
     </div>
@@ -75,7 +146,7 @@
       <h2 class="bb"><span data-tr="Takipteki dosyalar" data-en="Stories we follow">Takipteki dosyalar</span></h2>
       <a class="ok-bag" href="d/" data-tr="Bütün dosyalar →" data-en="All files →">Bütün dosyalar →</a>
     </div>
-    <p class="aciklama" data-tr="Haftalardır süren olaylar; her yeni haber kendi dosyasına bağlanır" data-en="Events that have run for weeks; every new story is filed under its own file">Haftalardır süren olaylar; her yeni haber kendi dosyasına bağlanır</p>
+    <p class="y-aciklama" data-tr="Haftalardır süren olaylar; her yeni haber kendi dosyasına bağlanır" data-en="Events that have run for weeks; every new story is filed under its own file">Haftalardır süren olaylar; her yeni haber kendi dosyasına bağlanır</p>
     <div class="hikaye" id="hikaye"></div>
   </section>
   </div>
@@ -88,7 +159,7 @@
         <h2><a href="ebu-safiye.html">Dr. Hüsam Ebu Safiye</a></h2>
         <p class="hekim-alt" data-tr="Kuzey Gazze'deki Kemal Advan Hastanesi'nin başhekimi. 27 Aralık 2024'te görev başındayken hastanesinden alındı. Hakkında iddianame yok, yargılama yok." data-en="Director of Kamal Adwan Hospital in northern Gaza. Taken from his hospital while on duty on 27 December 2024. No indictment, no trial.">Kuzey Gazze'deki Kemal Advan Hastanesi'nin başhekimi. 27 Aralık 2024'te görev başındayken hastanesinden alındı. Hakkında iddianame yok, yargılama yok.</p>
         <blockquote><p data-tr="“Beni buraya öldürmek için getirdiler.”" data-en="“They brought me here to kill me.”">“Beni buraya öldürmek için getirdiler.”</p><cite data-tr="Avukatına, Temmuz 2026 · Uluslararası Af Örgütü" data-en="To his lawyer, July 2026 · Amnesty International">Avukatına, Temmuz 2026 · Uluslararası Af Örgütü</cite></blockquote>
-        <a class="ok-bag acik" href="ebu-safiye.html" data-tr="Dosyanın tamamı →" data-en="The full file →">Dosyanın tamamı →</a>
+        <a class="ok-bag y-acik" href="ebu-safiye.html" data-tr="Dosyanın tamamı →" data-en="The full file →">Dosyanın tamamı →</a>
       </div>
       <figure class="hekim-takvim" aria-hidden="true">
         <div class="haftalar" id="hekimHafta"></div>
@@ -100,7 +171,7 @@
   <div class="kap">
   <section class="blok" id="ulkeler">
     <h2 class="bb"><span data-tr="Ülke ülke basın" data-en="The press, country by country">Ülke ülke basın</span></h2>
-    <p class="aciklama" data-tr="Her ülkenin basını bugün ne yazıyor" data-en="What each country's press is writing today">Her ülkenin basını bugün ne yazıyor</p>
+    <p class="y-aciklama" data-tr="Her ülkenin basını bugün ne yazıyor" data-en="What each country's press is writing today">Her ülkenin basını bugün ne yazıyor</p>
     <nav class="ulke-gez" id="ulkeGez" aria-label="Ülkeler"></nav>
     <div class="ulke-izgara" id="ulkeIzgara"></div>
     <div class="ulke-izgara" id="ulkeDiger" hidden></div>
@@ -115,7 +186,7 @@
         <span class="ust-e" data-tr="Tarihçe · 1882'den bugüne" data-en="History · 1882 to today">Tarihçe · 1882'den bugüne</span>
         <h2 data-tr="Bu topraklarda ne oldu?" data-en="What happened on this land?">Bu topraklarda ne oldu?</h2>
         <p data-tr="Siyonist kolonilerden Nekbe'ye, intifadalardan bugüne. Haritalar, hava fotoğrafları, gazete sayfaları ve kaynaklarla." data-en="From the Zionist colonies to the Nakba, from the intifadas to today. With maps, aerial photos, newspaper pages and sources.">Siyonist kolonilerden Nekbe'ye, intifadalardan bugüne. Haritalar, hava fotoğrafları, gazete sayfaları ve kaynaklarla.</p>
-        <span class="ok-bag acik" data-tr="Tarihçeyi aç →" data-en="Open the history →">Tarihçeyi aç →</span>
+        <span class="ok-bag y-acik" data-tr="Tarihçeyi aç →" data-en="Open the history →">Tarihçeyi aç →</span>
       </div>
     </a>
   </section>
@@ -126,14 +197,14 @@
       <h2 class="bb"><span data-tr="Arka plan" data-en="Background">Arka plan</span></h2>
       <a class="ok-bag" href="analizler.html" data-tr="Bütün analizler →" data-en="All analysis →">Bütün analizler →</a>
     </div>
-    <p class="aciklama" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
-    <div class="analiz" id="analiz"></div>
+    <p class="y-aciklama" data-tr="Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları" data-en="What is actually happening? Think tanks and analysis">Burada aslında ne oluyor? Düşünce kuruluşları ve analiz yazıları</p>
+    <div class="y-analiz" id="analiz"></div>
   </section>
 
-  <section class="blok" id="akis">
+  <section class="blok" id="yAkis">
     <div class="bb-satir">
       <h2 class="bb"><span data-tr="Bütün akış" data-en="Full feed">Bütün akış</span></h2>
-      <span class="aciklama" id="akisSay"></span>
+      <span class="y-aciklama" id="akisSay"></span>
     </div>
     <div class="arac">
       <input type="search" id="ara" placeholder="Haber ya da yayın ara" aria-label="Ara">
@@ -145,17 +216,25 @@
       <label><input type="checkbox" id="sTg"> <span data-tr="Telegram'ı gizle" data-en="Hide Telegram">Telegram'ı gizle</span></label>
       <label><input type="checkbox" id="sGeri"> <span data-tr="Türk haber sitelerini de göster" data-en="Also show Turkish news sites">Türk haber sitelerini de göster</span></label>
     </div>
-    <ol class="akis" id="akisL"></ol>
+    <ol class="y-akis" id="akisL"></ol>
     <button type="button" class="daha" id="daha" hidden data-tr="Daha fazla" data-en="Show more">Daha fazla</button>
   </section>
   </div>
-</main>
 
 <footer class="alt"><div class="kap">
   <div class="alt-marka"><img src="site/amblem-bolunmus.svg" alt="" width="40" height="40"><span><b>ALBOROTO</b><b class="ar" lang="ar" dir="rtl">البوروتو</b></span></div>
   <p data-tr="Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur." data-en="Sharing a story does not mean we endorse it; stories are placed side by side to show how the press frames them.">Paylaşılan her haber görüşümüzü yansıtmaz; haberler fikir vermesi ve basın dilinin görülmesi için yan yana konur.</p>
   <nav><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a><a href="kaynaklar.html" data-tr="Kaynaklar" data-en="Sources">Kaynaklar</a><a href="duzeltmeler.html" data-tr="Düzeltmeler" data-en="Corrections">Düzeltmeler</a><a href="aciklamalar.html" data-tr="Açıklamalar" data-en="Statements">Açıklamalar</a><a href="almanak.html" data-tr="Almanak" data-en="Almanac">Almanak</a><a href="arsiv.html" data-tr="Arşiv" data-en="Archive">Arşiv</a></nav>
 </div></footer>
-<script src="site/yeni.js?v=7"></script>
+</div>
+<script src="site/kutlama.js?v=202611202345"></script>
+<script src="site/hesap-ortak.js?v=202611200700"></script>
+<script src="site/deste.js?v=202611150150"></script>
+<script src="site/haber-once.js?v=202611222300"></script>
+<script src="site/ust-bolge.js?v=202611202300"></script>
+<script src="site/dosya-serit.js?v=202611240109"></script>
+<script src="site/uygulama.js?v=202611240200"></script>
+<script src="site/sayac.js?v=202611112340"></script>
+<script src="site/yeni.js?v=11"></script>
 </body>
 </html>
