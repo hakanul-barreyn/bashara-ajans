@@ -238,6 +238,29 @@
   // ülke bölümleri konuyla ilgili haberleri gösterir (bölge yayınlarının iç haberleri, spor, magazin dışarıda)
   var KONU = /filist|gazze|gaza|batı şeria|west bank|kudüs|jerusalem|israil|israel|siyon|zion|hamas|hizbullah|hezbollah|lübnan|leban|suriye|syria|yemen|husi|houthi|ensarullah|iran|irak|iraq|hürmüz|hormuz|kızıldeniz|red sea|unrwa|işgal|occupation|yerleşimci|settler|netanyahu|ateşkes|ceasefire|soykırım|genocide|mülteci|refugee|فلسطين|غزة|إسرائيل|اسرائيل|الاحتلال|الضفة|القدس|حماس|حزب الله|لبنان|سوري|اليمن|إيران|ايران|العراق|ישראל|עזה|פלסטינ|חמאס/i;
   function konuMu(h) { return !!FEED_DOS[h.id] || KONU.test(baslik(h) + " " + (h.baslik_orj || "")); }
+  // ---- yayın logosu: kaynağın kendi logosu (data/logolar.json) ya da DuckDuckGo simgesi, ikisi de wsrv.nl üzerinden;
+  // İsrail merkezli yayınlarda kaynağın sunucusuna hiç doğrudan gidilmez. Logo yoksa baş harfli rozet.
+  var LOGO = {};
+  function harf(ad) { var p = String(ad || "?").replace(/^(the|al|el)[\s-]+/i, "").split(/[\s-]+/).filter(Boolean); return ((p[0] || "?")[0] + (p[1] ? p[1][0] : "")).toLocaleUpperCase("tr"); }
+  function logo(id, px) {
+    var k = K[id] || {}, s = el("span", "lg"); s.style.setProperty("--lg", (px || 20) + "px"); s.style.setProperty("--renk", grupOf(k).renk); s.title = k.ad || "";
+    s.appendChild(el("i", null, harf(k.ad)));
+    var host = ""; try { host = new URL(k.url).hostname; } catch (e) {}
+    var ddg = host && "https://icons.duckduckgo.com/ip3/" + host + ".ico";
+    var L = [(LOGO[id] || {}).url && vekil(LOGO[id].url, 96), ddg && vekil(ddg, 96), k.bolge !== "İsrail" && ddg].filter(Boolean);
+    if (L.length) {
+      var im = el("img"), n = 0; im.alt = ""; im.loading = "lazy"; im.decoding = "async"; im.referrerPolicy = "no-referrer"; im.src = L[0];
+      im.onerror = function () { n++; if (n < L.length) im.src = L[n]; else im.remove(); };
+      im.onload = function () { if (im.naturalWidth < 8) im.onerror(); else s.classList.add("dolu"); };
+      s.appendChild(im);
+    }
+    return s;
+  }
+  function kaynakSatir(h) {
+    var s = el("span", "uk-kaynak"); s.append(logo(h.kaynak, 18), el("b", null, (K[h.kaynak] || {}).ad || ""), el("time", null, saat(h.tarih)));
+    return s;
+  }
+
   function ulkeCiz() {
     var ana = $("ulkeIzgara"), dig = $("ulkeDiger"), dd = $("ulkeDaha"); ana.textContent = ""; dig.textContent = "";
     var gez = $("ulkeGez"); gez.textContent = "";
@@ -245,7 +268,8 @@
     var kova = {};
     TUM.forEach(function (h) { if (!onde(h.kaynak) || h.nitelik === "analiz" || !konuMu(h)) return; var g = grupOf(K[h.kaynak]); (kova[g.id] = kova[g.id] || []).push(h); });
     GRUPLAR.forEach(function (g) {
-      var L = kova[g.id] || [], gor = {}, sec = [], yayin = {};
+      var L = kova[g.id] || [], gor = {}, sec = [], yayin = {}, tumYayin = {};
+      L.forEach(function (h) { tumYayin[h.kaynak] = (tumYayin[h.kaynak] || 0) + 1; });
       // önce çevrilmiş başlıklar; bir yayından en çok iki haber, böylece tek kaynak bölümü doldurmaz
       var cevrili = function (h) { return EN ? !!h.baslik_en : !!h.baslik_tr; };
       L.filter(cevrili).concat(L.filter(function (h) { return !cevrili(h); })).forEach(function (h) {
@@ -254,27 +278,36 @@
         gor[an] = 1; yayin[h.kaynak] = (yayin[h.kaynak] || 0) + 1; sec.push(h);
       });
       if (sec.length < 2) return;
-      var kutu = el("section", "ulke"); kutu.id = "u-" + g.id; kutu.style.setProperty("--renk", g.renk);
       var kap = say++ < ANA ? ana : dig;
-      var g2 = el("a", null, gKisa(g)); g2.href = "#u-" + g.id; g2.onclick = function () { if (kap === dig) acDiger(); }; g2.style.setProperty("--renk", g.renk); gez.appendChild(g2);
-      var h3 = el("h3"), sol = el("span", null, gAd(g));
-      if (g.yerel) { var y = el("span", "yerel" + (g.lat ? " lat" : ""), g.yerel); if (!g.lat) { y.lang = "ar"; y.dir = "rtl"; } sol.appendChild(y); }
-      h3.append(sol, el("small", null, once(sec[0].tarih)));
-      kutu.appendChild(h3);
-      var ilkG = sec.slice(0, 6).filter(haberGorsel)[0];
-      var ilk = ilkG || sec[0];
-      var a = link(ilk.url, "ilk");
-      if (ilkG) a.appendChild(resim(haberGorsel(ilkG), 560));
-      a.append(el("b", null, baslik(ilk)), el("span", "kaynak", ((K[ilk.kaynak] || {}).ad || "") + " · " + saat(ilk.tarih)));
-      kutu.appendChild(a);
-      var ol = el("ol");
+      var kart = el("article", "ulke-kart"); kart.id = "u-" + g.id; kart.style.setProperty("--renk", g.renk);
+      var g2 = el("a", null, gKisa(g)); g2.href = "#u-" + g.id; g2.style.setProperty("--renk", g.renk);
+      g2.onclick = function () { if (kap === dig) acDiger(); }; gez.appendChild(g2);
+
+      // baş: ülke adı, yerel adı, bugün yazan yayınların logoları
+      var bas = el("header", "uk-bas"), ad = el("div", "uk-ad");
+      ad.appendChild(el("h3", null, gAd(g)));
+      if (g.yerel) { var y = el("span", "yerel" + (g.lat ? " lat" : ""), g.yerel); if (!g.lat) { y.lang = "ar"; y.dir = "rtl"; } ad.appendChild(y); }
+      var yayinlar = Object.keys(tumYayin).sort(function (a, b) { return tumYayin[b] - tumYayin[a]; });
+      var lg = el("div", "uk-logolar");
+      yayinlar.slice(0, 5).forEach(function (id) { lg.appendChild(logo(id, 26)); });
+      if (yayinlar.length > 5) lg.appendChild(el("span", "uk-fazla", "+" + (yayinlar.length - 5)));
+      bas.append(ad, lg); kart.appendChild(bas);
+
+      // öne çıkan: görseli olan ilk haber, yoksa en yeni
+      var ilkG = sec.slice(0, 6).filter(haberGorsel)[0], ilk = ilkG || sec[0];
+      var a = link(ilk.url, "uk-ilk");
+      if (ilkG) a.appendChild(resim(haberGorsel(ilkG), 640, "uk-gorsel"));
+      a.append(kaynakSatir(ilk), el("b", "uk-baslik", baslik(ilk)));
+      kart.appendChild(a);
+
+      var ol = el("ol", "uk-liste");
       sec.filter(function (h) { return h !== ilk; }).slice(0, 2).forEach(function (h) {
-        var li = el("li"), a2 = link(h.url); a2.textContent = baslik(h);
-        li.append(a2, el("span", "kaynak", ((K[h.kaynak] || {}).ad || "") + " · " + saat(h.tarih)));
-        ol.appendChild(li);
+        var li = el("li"), a2 = link(h.url); a2.append(kaynakSatir(h), el("span", "uk-baslik2", baslik(h)));
+        li.appendChild(a2); ol.appendChild(li);
       });
-      kutu.appendChild(ol);
-      kap.appendChild(kutu);
+      kart.appendChild(ol);
+      kart.appendChild(el("footer", "uk-alt", yayinlar.length + t(" yayın · son haber ", " outlets · latest ") + once(sec[0].tarih)));
+      kap.appendChild(kart);
     });
     var n = dig.children.length;
     dd.hidden = !n || !dig.hidden;
@@ -395,6 +428,7 @@
   });
 
   // ---- yükle
+  al("data/logolar.json").then(function (d) { LOGO = d || {}; });
   al("kaynaklar.json").then(function (k) {
     (Array.isArray(k) ? k : (k && k.kaynaklar) || []).forEach(function (x) { K[x.id] = x; });
     Promise.all([al("data/gundem.json"), al("data/dosyalar-site.json"), al("data/gorsel/dosya-foto/kapak.json")]).then(function (r) {
