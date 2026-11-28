@@ -1041,11 +1041,14 @@ def cevirisiz_bildir(durum, olaylar, hidx, kaynaklar, log=print):
     gitti = durum.setdefault("_cevirisiz_bildirim", {})
     sinir = (SIMDI - dt.timedelta(hours=2)).isoformat()
     for o in olaylar:
-        ks = {x.get("k") for x in o.get("haberler", [])}
+        # olay["haberler"] haber kimliklerinin listesi (eski biçimde {"id","k"} sözlükleri)
+        idler = [x.get("id") if isinstance(x, dict) else x for x in o.get("haberler", [])]
+        hs = [hidx[i] for i in idler if i in hidx]
+        ks = {h.get("kaynak") for h in hs}
         if len(ks) < 3 or o.get("id") in gitti:
             continue
-        bek = [hidx[x["id"]] for x in o.get("haberler", []) if x.get("id") in hidx and not hidx[x["id"]].get("baslik_tr")
-               and (km.get(hidx[x["id"]].get("kaynak")) or {}).get("dil") != "tr" and (hidx[x["id"]].get("eklendi") or "") < sinir]
+        bek = [h for h in hs if not h.get("baslik_tr")
+               and (km.get(h.get("kaynak")) or {}).get("dil") != "tr" and (h.get("eklendi") or "") < sinir]
         if not bek:
             continue
         satir = "\n".join(f"• {(km.get(h.get('kaynak')) or {}).get('ad', '?')}: {h.get('baslik_orj', '')[:140]}" for h in bek[:5])
