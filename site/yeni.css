@@ -31,9 +31,9 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .bas-ic{display:flex;align-items:center;gap:28px;min-height:70px}
 .marka{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
 .marka .amblem{width:46px;height:auto}
-.marka .yazi{display:flex;flex-direction:column;align-items:flex-start;line-height:1;padding-left:12px;border-left:1px solid var(--cizgi)}
-.marka .lat{font:900 1.32rem/1 var(--f);letter-spacing:.07em;color:var(--ink)}
-.marka .ar{font:600 1.12rem/1.15 var(--ar);color:var(--vurgu);margin-top:2px;align-self:stretch;text-align:justify;text-align-last:justify}
+.marka .yazi{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.marka .lat{font:800 1.3rem/1 var(--f);letter-spacing:.04em;color:var(--vurgu)}
+.marka .ar{font:500 .9rem/1.2 var(--ar);color:var(--soluk);margin-top:3px}
 .menu{display:flex;gap:24px;margin-left:12px}
 .menu a{text-decoration:none;font:600 1rem var(--f);color:var(--ink)}
 .menu a:hover{color:var(--vurgu)}
@@ -48,12 +48,14 @@ h1,h2,h3{margin:0;text-wrap:balance}
 .konu-serit::-webkit-scrollbar{display:none}
 .konu-serit a{text-decoration:none;color:var(--ink2)}
 .konu-serit a:hover{color:var(--vurgu)}
-.konu-serit b{font-weight:700;color:var(--vurgu);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+.konu-serit b{font:500 .86rem var(--f);color:var(--soluk);display:flex;align-items:center;gap:7px}
+.konu-serit b::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--vurgu)}
 
 .blok{margin-top:88px}
 .bb{display:flex;align-items:center;gap:12px;font:500 2.1rem/1.1 var(--serif);letter-spacing:-.01em;margin-bottom:6px}
 .bb::before{content:"";width:6px;align-self:stretch;min-height:1.1em;background:var(--vurgu);border-radius:3px}
-.bb.kucuk{font:800 1.05rem/1.1 var(--f);letter-spacing:.06em;text-transform:uppercase}
+.bb.kucuk{font:500 1.3rem/1.2 var(--serif);letter-spacing:0;text-transform:none;padding-bottom:10px;border-bottom:1px solid var(--ink);margin-bottom:4px}
+.bb.kucuk::before{display:none}
 .ilk-blok{margin-top:28px}
 .bb-satir{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .aciklama{margin:0 0 18px;color:var(--soluk);font-size:.9rem}
@@ -81,7 +83,7 @@ a.etiket:hover{text-decoration:underline}
 .yan-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px}
 .son-gelen ol{list-style:none;margin:10px 0 0;padding:0}
 .son-gelen li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:8px 0}
-.son-gelen time{font:700 .82rem var(--f);font-variant-numeric:tabular-nums;color:var(--vurgu);padding-top:1px}
+.son-gelen time{font:500 .82rem var(--f);font-variant-numeric:tabular-nums;color:var(--soluk);padding-top:2px}
 .son-gelen a{text-decoration:none;font:500 .95rem/1.35 var(--f)}
 .son-gelen a:hover{text-decoration:underline;text-underline-offset:3px}
 .son-gelen .kaynak{display:block;font:500 .74rem var(--f);color:var(--soluk);margin-top:2px}
@@ -218,8 +220,8 @@ a.etiket:hover{text-decoration:underline}
 .alt .kap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding-block:30px;font-size:.86rem;color:var(--soluk)}
 .alt-marka{display:flex;align-items:center;gap:10px}
 .alt-marka span{display:flex;flex-direction:column;line-height:1.05}
-.alt-marka b{font:900 1rem var(--f);letter-spacing:.07em;color:var(--ink)}
-.alt-marka .ar{font:600 .92rem var(--ar);color:var(--vurgu);text-align:justify;text-align-last:justify}
+.alt-marka b{font:800 1rem var(--f);letter-spacing:.04em;color:var(--vurgu)}
+.alt-marka .ar{font:500 .82rem var(--ar);color:var(--soluk)}
 .alt p{margin:0;max-width:70ch}
 .alt nav{display:flex;gap:18px;flex-wrap:wrap}
 .alt a{font-weight:600;color:var(--ink2);text-decoration:none}
@@ -241,7 +243,7 @@ a.etiket:hover{text-decoration:underline}
   .hekim-sayi b{font-size:4.2rem}
   .hekim-bant h2,.tarihce-yazi h2{font-size:1.8rem}
   .marka .amblem{width:42px}
-  .marka .lat{font-size:1.1rem}
+  .marka .lat{font-size:1.15rem}
   .yan-liste li a{grid-template-columns:110px minmax(0,1fr)}
   .bb{font-size:1.7rem}
   .guncel{display:none}
