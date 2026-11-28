@@ -179,7 +179,7 @@
     });
 
     var sr = $("sirali"); sr.textContent = "";
-    OL.slice().sort(function (a, b) { return b._g - a._g || b._n - a._n || String(b.son).localeCompare(String(a.son)); }).slice(0, 8).forEach(function (o) {
+    OL.slice().sort(function (a, b) { return b._g - a._g || b._n - a._n || String(b.son).localeCompare(String(a.son)); }).slice(0, 6).forEach(function (o) {
       var li = el("li"), a3 = el("a"); a3.href = o.sayfa || "#";
       var ic = el("div"); ic.append(el("b", null, obas(o)), el("span", "kim", o._g + t(" ülke · ", " countries · ") + o._n + t(" yayın", " outlets")));
       a3.appendChild(ic); li.appendChild(a3); sr.appendChild(li);
@@ -242,8 +242,9 @@
   var KONU = /filist|gazze|gaza|batı şeria|west bank|kudüs|jerusalem|israil|israel|siyon|zion|hamas|hizbullah|hezbollah|lübnan|leban|suriye|syria|yemen|husi|houthi|ensarullah|iran|irak|iraq|hürmüz|hormuz|kızıldeniz|red sea|unrwa|işgal|occupation|yerleşimci|settler|netanyahu|ateşkes|ceasefire|soykırım|genocide|mülteci|refugee|فلسطين|غزة|إسرائيل|اسرائيل|الاحتلال|الضفة|القدس|حماس|حزب الله|لبنان|سوري|اليمن|إيران|ايران|العراق|ישראל|עזה|פלסטינ|חמאס/i;
   function konuMu(h) { return !!FEED_DOS[h.id] || KONU.test(baslik(h) + " " + (h.baslik_orj || "")); }
   function ulkeCiz() {
-    var kap = $("ulkeIzgara"); kap.textContent = "";
+    var ana = $("ulkeIzgara"), dig = $("ulkeDiger"), dd = $("ulkeDaha"); ana.textContent = ""; dig.textContent = "";
     var gez = $("ulkeGez"); gez.textContent = "";
+    var say = 0, ANA = 9;   // ilk dokuz ülke açık, gerisi düğmenin arkasında
     var kova = {};
     TUM.forEach(function (h) { if (!onde(h.kaynak) || h.nitelik === "analiz" || !konuMu(h)) return; var g = grupOf(K[h.kaynak]); (kova[g.id] = kova[g.id] || []).push(h); });
     GRUPLAR.forEach(function (g) {
@@ -257,7 +258,8 @@
       });
       if (sec.length < 2) return;
       var kutu = el("section", "ulke"); kutu.id = "u-" + g.id; kutu.style.setProperty("--renk", g.renk);
-      var g2 = el("a", null, gKisa(g)); g2.href = "#u-" + g.id; g2.style.setProperty("--renk", g.renk); gez.appendChild(g2);
+      var kap = say++ < ANA ? ana : dig;
+      var g2 = el("a", null, gKisa(g)); g2.href = "#u-" + g.id; g2.onclick = function () { if (kap === dig) acDiger(); }; g2.style.setProperty("--renk", g.renk); gez.appendChild(g2);
       var h3 = el("h3"), sol = el("span", null, gAd(g));
       if (g.yerel) { var y = el("span", "yerel" + (g.lat ? " lat" : ""), g.yerel); if (!g.lat) { y.lang = "ar"; y.dir = "rtl"; } sol.appendChild(y); }
       h3.append(sol, el("small", null, once(sec[0].tarih)));
@@ -269,7 +271,7 @@
       a.append(el("b", null, baslik(ilk)), el("span", "kaynak", ((K[ilk.kaynak] || {}).ad || "") + " · " + saat(ilk.tarih)));
       kutu.appendChild(a);
       var ol = el("ol");
-      sec.filter(function (h) { return h !== ilk; }).slice(0, 4).forEach(function (h) {
+      sec.filter(function (h) { return h !== ilk; }).slice(0, 2).forEach(function (h) {
         var li = el("li"), a2 = link(h.url); a2.textContent = baslik(h);
         li.append(a2, el("span", "kaynak", ((K[h.kaynak] || {}).ad || "") + " · " + saat(h.tarih)));
         ol.appendChild(li);
@@ -277,7 +279,12 @@
       kutu.appendChild(ol);
       kap.appendChild(kutu);
     });
+    var n = dig.children.length;
+    dd.hidden = !n || !dig.hidden;
+    dd.textContent = t("Diğer " + n + " ülkenin basını", "Press from " + n + " more countries");
+    dd.onclick = acDiger;
   }
+  function acDiger() { $("ulkeDiger").hidden = false; $("ulkeDaha").hidden = true; }
 
   // ---- son gelenler: ön plan yayınlarından konuyla ilgili son başlıklar, yayın başına bir tane
   function sonGelenCiz() {
