@@ -1,0 +1,218 @@
+{
+ "guncellendi": "2026-11-28T13:45:04.262430Z",
+ "durumlar": {
+  "duvar": 197,
+  "ok": 15786,
+  "kisa": 4175,
+  "http": 1437,
+  "robots": 170,
+  "hata": 137
+ },
+ "gruplar": {
+  "bolge": {
+   "haber": 11187,
+   "govde_fail": 64.5,
+   "govde_fail_ga": [
+    63.5,
+    65.6
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    56.2,
+    60.8
+   ],
+   "giris_fail": 55.0,
+   "baslikta_yok_govdede_var": 58.5,
+   "baslik_failsiz_n": 1818,
+   "atif": {
+    "ordu": 50.2,
+    "filistin_yetkili": 15.3,
+    "israil_yetkili": 22.3,
+    "tanik": 10.9,
+    "bakanlik": 26.8,
+    "bm": 25.9
+   },
+   "niteleme_bakanlikla": 6.3,
+   "baglam": {
+    "abluka": 10.5,
+    "isgal": 43.5,
+    "yerlesim": 15.4,
+    "soykirim": 21.0,
+    "yedi_ekim": 22.5,
+    "apartheid": 1.0,
+    "nekbe": 2.4
+   },
+   "olum_govde_n": 8394
+  },
+  "hepsi": {
+   "haber": 15716,
+   "govde_fail": 66.4,
+   "govde_fail_ga": [
+    65.5,
+    67.2
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    56.8,
+    60.2
+   ],
+   "giris_fail": 56.4,
+   "baslikta_yok_govdede_var": 58.5,
+   "baslik_failsiz_n": 3300,
+   "atif": {
+    "ordu": 50.4,
+    "filistin_yetkili": 13.5,
+    "israil_yetkili": 24.5,
+    "tanik": 11.3,
+    "bakanlik": 26.3,
+    "bm": 27.8
+   },
+   "niteleme_bakanlikla": 10.4,
+   "baglam": {
+    "abluka": 9.7,
+    "isgal": 35.2,
+    "yerlesim": 14.4,
+    "soykirim": 17.8,
+    "yedi_ekim": 23.0,
+    "apartheid": 1.1,
+    "nekbe": 2.6
+   },
+   "olum_govde_n": 11977
+  },
+  "bati_ana": {
+   "haber": 1499,
+   "govde_fail": 71.9,
+   "govde_fail_ga": [
+    69.4,
+    74.2
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    55.3,
+    62.9
+   ],
+   "giris_fail": 59.8,
+   "baslikta_yok_govdede_var": 59.2,
+   "baslik_failsiz_n": 637,
+   "atif": {
+    "israil_yetkili": 32.9,
+    "ordu": 50.7,
+    "tanik": 16.1,
+    "bakanlik": 31.6,
+    "filistin_yetkili": 10.7,
+    "bm": 30.5
+   },
+   "niteleme_bakanlikla": 24.1,
+   "baglam": {
+    "isgal": 15.3,
+    "abluka": 6.4,
+    "yerlesim": 12.6,
+    "yedi_ekim": 27.6,
+    "nekbe": 1.9,
+    "soykirim": 8.1,
+    "apartheid": 1.0
+   },
+   "olum_govde_n": 1326
+  },
+  "diger": {
+   "haber": 1367,
+   "govde_fail": 77.8,
+   "govde_fail_ga": [
+    75.3,
+    80.1
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    56.6,
+    66.1
+   ],
+   "giris_fail": 62.8,
+   "baslikta_yok_govdede_var": 61.5,
+   "baslik_failsiz_n": 400,
+   "atif": {
+    "tanik": 12.0,
+    "israil_yetkili": 32.8,
+    "bakanlik": 28.5,
+    "filistin_yetkili": 11.8,
+    "ordu": 52.5,
+    "bm": 37.2
+   },
+   "niteleme_bakanlikla": 26.2,
+   "baglam": {
+    "yedi_ekim": 24.4,
+    "nekbe": 2.3,
+    "abluka": 8.6,
+    "isgal": 15.8,
+    "yerlesim": 9.1,
+    "soykirim": 6.7,
+    "apartheid": 1.2
+   },
+   "olum_govde_n": 1150
+  },
+  "israil": {
+   "haber": 791,
+   "govde_fail": 38.6,
+   "govde_fail_ga": [
+    33.6,
+    43.9
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    30.6,
+    53.1
+   ],
+   "giris_fail": 42.1,
+   "baslikta_yok_govdede_var": 41.4,
+   "baslik_failsiz_n": 70,
+   "atif": {
+    "israil_yetkili": 24.3,
+    "ordu": 41.8,
+    "filistin_yetkili": 6.1,
+    "bakanlik": 3.0,
+    "tanik": 5.4,
+    "bm": 8.5
+   },
+   "niteleme_bakanlikla": 29.2,
+   "baglam": {
+    "nekbe": 2.8,
+    "isgal": 3.2,
+    "yerlesim": 8.2,
+    "yedi_ekim": 14.8,
+    "abluka": 2.9,
+    "apartheid": 1.1,
+    "soykirim": 3.9
+   },
+   "olum_govde_n": 342
+  },
+  "bati_muhalif": {
+   "haber": 872,
+   "govde_fail": 72.2,
+   "govde_fail_ga": [
+    68.9,
+    75.2
+   ],
+   "baslikta_yok_govdede_var_ga": [
+    52.3,
+    62.2
+   ],
+   "giris_fail": 60.8,
+   "baslikta_yok_govdede_var": 57.3,
+   "baslik_failsiz_n": 375,
+   "atif": {
+    "ordu": 55.7,
+    "bakanlik": 27.4,
+    "israil_yetkili": 26.4,
+    "tanik": 12.7,
+    "bm": 43.6,
+    "filistin_yetkili": 4.4
+   },
+   "niteleme_bakanlikla": 7.1,
+   "baglam": {
+    "yedi_ekim": 27.9,
+    "yerlesim": 18.5,
+    "soykirim": 23.7,
+    "isgal": 23.1,
+    "abluka": 14.1,
+    "nekbe": 5.8,
+    "apartheid": 3.2
+   },
+   "olum_govde_n": 765
+  }
+ },
+ "not": "Metin saklanmadan ölçüldü; yüzdeler: haber başına (atıf, bağlam) ya da ölüm geçen haberler içinde (fail)."
+}
